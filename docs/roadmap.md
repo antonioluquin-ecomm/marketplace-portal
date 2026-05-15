@@ -128,6 +128,20 @@ Resultado:
 - Seller Center y Proyecto Marketplace migrados enlazan a la nueva ruta;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 3.5: migracion Gantt Operativo
+
+Objetivo: copiar Gantt Operativo a su ubicacion futura y ajustar navegacion minima desde paginas ya migradas.
+
+Estado: completada.
+
+Resultado:
+
+- `gantt-operativo_v18.html` copiado a `internal/gantt/gantt-operativo.html`;
+- `index.html` enlaza a la nueva ruta;
+- paginas internas ya migradas enlazan al Gantt Operativo nuevo;
+- links hacia backlog siguen apuntando a raiz hasta su migracion;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;

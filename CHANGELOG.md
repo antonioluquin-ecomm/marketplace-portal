@@ -4,6 +4,39 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 3.5 migracion Gantt Operativo
+
+Tipo de cambio: estructural.
+
+Estado: migracion segura completada.
+
+Cambios incluidos:
+
+- Copia de `gantt-operativo_v18.html` hacia `internal/gantt/gantt-operativo.html`.
+- Actualizacion de `index.html` para enlazar preferentemente a la nueva ruta.
+- Actualizacion de enlaces desde paginas internas ya migradas hacia la nueva ruta.
+- Conservacion de links hacia backlog en raiz porque aun no fue migrado.
+- Actualizacion de roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion del archivo original.
+- Sin modificaciones en backlog.
+- Sin modificaciones en formularios.
+- Sin modificaciones en simuladores.
+- Sin modificaciones en gestion de sellers.
+- Sin modificaciones en Apps Script.
+- Sin cambios de logica funcional.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+
+Validacion:
+
+- Se confirmo que la copia existe y carga como HTML.
+- Se confirmo que el original sigue existiendo en raiz.
+- Se confirmo que las dependencias CSV publicadas se mantienen iguales.
+- Se confirmo que los links locales ajustados resuelven.
+
 ## 2026-05-15 - Etapa 3.4 migracion Gantt Seller Center
 
 Tipo de cambio: estructural.
