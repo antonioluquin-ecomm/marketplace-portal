@@ -298,6 +298,33 @@ Incluye:
 - documentar rutas de assets;
 - actualizar referencias solo despues de validar.
 
+## Etapa 5A: auditoria y estrategia de assets compartidos
+
+Objetivo: auditar duplicaciones visuales/tecnicas y definir una estrategia segura antes de extraer CSS, JS o mover assets.
+
+Estado: completada a nivel documental.
+
+Resultado:
+
+- creado `docs/assets-strategy.md`;
+- documentada la repeticion de topbars, sidebars, tokens, botones, cards, KPIs, tablas, modales, filtros, helpers CSV, helpers de `seller_id`, logos, navegacion y rutas;
+- definida estructura futura para `assets/css/`, `assets/js/`, `assets/js/components/`, `assets/js/data/`, `assets/js/pages/` y `assets/logos/`;
+- definido roadmap incremental 5B a 5H;
+- identificadas paginas candidatas para piloto y paginas que no conviene tocar todavia.
+
+Alcance excluido:
+
+- sin modificaciones en paginas HTML;
+- sin extraccion de CSS o JavaScript;
+- sin cambios de diseno, logica, endpoints, payloads o Apps Script;
+- sin movimiento de `Logos/` legacy;
+- sin redirects.
+
+Pendiente:
+
+- ejecutar Etapa 5B solo si se aprueba copia segura de logos hacia `assets/logos/`;
+- mantener `Logos/` y `config.js` raiz como legacy temporal.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.

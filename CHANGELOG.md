@@ -4,6 +4,39 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5A auditoria y estrategia de assets compartidos
+
+Tipo de cambio: documental.
+
+Estado: estrategia preparada sin refactor.
+
+Cambios incluidos:
+
+- Creacion de `docs/assets-strategy.md`.
+- Auditoria documental de repeticion de topbars, sidebars, tokens visuales, botones, cards, KPIs, tablas, modales, filtros, helpers CSV, helpers de `seller_id`, logica de logos, navegacion y rutas.
+- Documentacion del estado actual de `Logos/`, `assets/logos/`, `config.js` y `assets/js/config.js`.
+- Propuesta de estructura futura para CSS compartido, JS modular y assets.
+- Roadmap incremental recomendado para Etapas 5B, 5C, 5D, 5E, 5F, 5G y 5H.
+- Identificacion de paginas candidatas para piloto y paginas que no conviene tocar todavia.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en paginas HTML.
+- Sin extraccion de CSS.
+- Sin extraccion de JavaScript.
+- Sin cambios de diseno.
+- Sin cambios de logica.
+- Sin movimiento de archivos legacy.
+- Sin redirects.
+- Sin modificaciones en Apps Script.
+- Sin cambios de endpoints o payloads.
+
+Validacion:
+
+- Se relevaron patrones repetidos en HTML/JS y estado de carpetas `assets/` y `Logos/`.
+- La etapa queda lista para una 5B de copia segura de logos, si se aprueba.
+
 ## 2026-05-15 - Etapa 4.5 preparacion de smoke test manual
 
 Tipo de cambio: documental.
