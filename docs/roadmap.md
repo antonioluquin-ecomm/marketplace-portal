@@ -267,6 +267,26 @@ Riesgo pendiente:
 
 - validar y corregir en etapa separada la referencia a `pctSec` antes de declaracion dentro de `updateProgress`, si se reproduce en navegador.
 
+## Etapa 4.5: preparacion de smoke test manual
+
+Objetivo: preparar una matriz/checklist documentada para validar manualmente todas las rutas migradas en `/internal/` y `/public/` antes de avanzar con redirects, limpieza legacy o extraccion de CSS/JS.
+
+Estado: completada a nivel documental.
+
+Resultado:
+
+- `docs/test-matrix.md` actualizado con rutas internas y publicas migradas;
+- incluidas rutas publicas con y sin `seller_id=SPT-001`;
+- definidas validaciones visuales, funcionales, dependencias, consola, resultado esperado, resultado real, estado y observaciones;
+- agregados checklists de navegacion, datos, formularios y consola;
+- documentados riesgos conocidos como `pctSec`, `articulos-seller.docx`, formularios con escritura real, duplicidad legacy, CSS/JS inline y redirects pendientes.
+
+Pendiente:
+
+- ejecutar smoke test manual en navegador;
+- completar resultado real, estado y observaciones en la matriz;
+- validar formularios sin submit real y planificar prueba controlada con seller de test.
+
 ## Etapa 5: assets compartidos
 
 Objetivo: ordenar recursos visuales y estaticos.

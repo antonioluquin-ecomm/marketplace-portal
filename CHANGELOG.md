@@ -4,6 +4,38 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 4.5 preparacion de smoke test manual
+
+Tipo de cambio: documental.
+
+Estado: checklist y matriz de smoke test preparados.
+
+Cambios incluidos:
+
+- Actualizacion de `docs/test-matrix.md` como matriz operativa para validar rutas migradas en `/internal/` y `/public/`.
+- Incorporacion de rutas internas, rutas publicas, rutas con `seller_id=SPT-001` y rutas sin `seller_id`.
+- Definicion de columnas para objetivo de prueba, validaciones visuales, validaciones funcionales, dependencias, consola, resultado esperado, resultado real, estado y observaciones.
+- Incorporacion de checklists especificos para navegacion, datos, formularios y consola.
+- Documentacion de riesgos conocidos: `pctSec`, `articulos-seller.docx`, escritura real de formularios, legacy duplicado, CSS/JS inline y redirects pendientes.
+- Actualizacion de roadmap para reflejar la preparacion documental del smoke test manual.
+
+Alcance explicitamente excluido:
+
+- Sin cambios en paginas HTML.
+- Sin cambios de logica funcional.
+- Sin movimiento ni eliminacion de archivos.
+- Sin modificaciones en Apps Script.
+- Sin cambios de endpoints, payloads o submits.
+- Sin ejecucion de submit real.
+- Sin redirects.
+- Sin limpieza legacy.
+- Sin extraccion de CSS o JavaScript.
+
+Validacion:
+
+- La etapa queda preparada para ejecucion manual posterior.
+- Los resultados reales quedan pendientes hasta ejecutar el smoke test en navegador.
+
 ## 2026-05-15 - Etapa 4.4B migracion Formulario de Relevamiento
 
 Tipo de cambio: estructural.
