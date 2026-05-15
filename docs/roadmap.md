@@ -89,10 +89,23 @@ Resultado parcial:
 - `proyecto-marketplace_v3.html` copiado a `internal/estrategia/proyecto-marketplace.html`;
 - `seller-center_v2.html` copiado a `internal/seller-center/index.html`.
 
+## Etapa 3.1: navegacion interna en copias
+
+Objetivo: ajustar solo los links internos de las paginas copiadas para que naveguen correctamente dentro de la estructura nueva.
+
+Estado: completada.
+
+Resultado:
+
+- las paginas copiadas se enlazan entre si usando rutas nuevas cuando existen;
+- los links hacia backlog, Gantt, formularios, simuladores y maquetas aun no migradas apuntan a archivos versionados de raiz;
+- no se modificaron archivos originales de raiz;
+- no se extrajo CSS ni JavaScript.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;
-- revisar rutas internas dentro de las paginas copiadas en una etapa posterior;
+- resolver dependencias heredadas no presentes en el repositorio cuando se aborde Seller Center en detalle;
 - definir estrategia de compatibilidad antes de retirar o redireccionar archivos de raiz.
 
 ## Etapa 4: migracion de paginas publicas

@@ -4,6 +4,36 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 3.1 navegacion interna en copias
+
+Tipo de cambio: estructural.
+
+Estado: ajuste minimo completado sobre copias internas.
+
+Cambios incluidos:
+
+- Ajuste de links entre paginas ya copiadas a `internal/estrategia/` y `internal/seller-center/`.
+- Correccion de links en copias internas que apuntaban a rutas futuras aun vacias.
+- Conservacion de links hacia paginas no migradas apuntando a archivos versionados de raiz.
+- Actualizacion de `index.html`, roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin cambios en archivos originales de raiz.
+- Sin movimiento ni eliminacion de archivos.
+- Sin modificaciones en formularios.
+- Sin modificaciones en simuladores.
+- Sin modificaciones en backlog.
+- Sin modificaciones en Gantt.
+- Sin modificaciones en Apps Script.
+- Sin cambios de diseno ni logica funcional.
+- Sin extraccion de CSS o JavaScript.
+
+Validacion:
+
+- Se confirmo que los links locales de las copias internas resuelven a archivos existentes, salvo dependencias heredadas no presentes en el repositorio.
+- Se confirmo que las paginas no migradas siguen enlazadas hacia sus archivos versionados de raiz.
+
 ## 2026-05-15 - Etapa 3 migracion interna informativa
 
 Tipo de cambio: estructural/documental.
