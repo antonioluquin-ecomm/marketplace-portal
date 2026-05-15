@@ -19,7 +19,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `governance_v3.html` | `/internal/estrategia/governance.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
 | `formulario-calificacion_v2.html` | `/public/formularios/formulario-calificacion.html` | publico | Alta | Formulario publico. No mover sin compatibilidad y validacion de envio. |
 | `formulario-relevamiento_v2.html` | `/public/formularios/formulario-relevamiento.html` | publico | Alta | Formulario publico critico. No tocar inicialmente. |
-| `presentacion-seller_v3.html` | `/public/presentaciones/presentacion-seller.html` | publico | Media | Presentacion compartible con sellers. |
+| `presentacion-seller_v3.html` | `/public/presentaciones/presentacion-seller.html` | publico | Media | Copiado a estructura futura. Mantiene seller_id, logo, CTA y personalizacion. Original en raiz se mantiene como legacy temporal. |
 | `simulador-seller_v12.html` | `/public/simuladores/simulador-seller.html` | publico | Alta | Simulador publico. Evitar cambios sin smoke test detallado. |
 | `simulador-economico_v4.html` | `/internal/simuladores/simulador-economico.html` | interno | Alta | Copiado a estructura futura. Mantiene Sheets/config, formulas, tarifas, overrides y escenarios. Original en raiz se mantiene como legacy temporal. |
 | `config.js` | `/assets/js/config.js` | integracion | Alta | Copiado a ubicacion futura como configuracion central. Original en raiz se mantiene como referencia temporal. |

@@ -208,6 +208,19 @@ Requiere:
 - validacion de query params;
 - confirmacion de endpoints.
 
+## Etapa 4.1: migracion Presentacion Seller
+
+Objetivo: copiar la presentacion publica para sellers a su ubicacion futura sin alterar personalizacion por seller.
+
+Estado: completada.
+
+Resultado:
+
+- `presentacion-seller_v3.html` copiado a `public/presentaciones/presentacion-seller.html`;
+- `index.html` enlaza a la nueva ruta publica;
+- se preservan `seller_id`, logos, CTA y lectura de CSV sellers;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 ## Etapa 5: assets compartidos
 
 Objetivo: ordenar recursos visuales y estaticos.
