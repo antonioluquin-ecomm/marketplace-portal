@@ -142,6 +142,20 @@ Resultado:
 - links hacia backlog siguen apuntando a raiz hasta su migracion;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 3.6: migracion Backlog de Sellers
+
+Objetivo: copiar Backlog de Sellers a su ubicacion futura y ajustar navegacion minima desde paginas ya migradas.
+
+Estado: completada.
+
+Resultado:
+
+- `backlog-sellers_v27.html` copiado a `internal/backlog/backlog-sellers.html`;
+- `index.html` enlaza a la nueva ruta;
+- paginas internas ya migradas enlazan al Backlog nuevo;
+- se preservan CSV, logica de logos, cards, tabla, filtros y modal;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;
