@@ -7,7 +7,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `index.html` | `/index.html` | documentacion | Alta | Entrada institucional oficial creada en Etapa 2. Enlaza a paginas actuales en raiz sin migrarlas. |
 | `sporting-marketplace_hub_v29.html` | `/legacy/root-html-v1/sporting-marketplace_hub_v29.html` | legacy | Alta | Hub central actual versionado. Se mantiene intacto como referencia temporal; no mover hasta definir compatibilidad. |
 | `backlog-sellers_v27.html` | `/internal/backlog/backlog-sellers.html` | interno | Alta | Copiado a estructura futura. Mantiene CSV, logos, cards, tabla, filtros y modal. Original en raiz se mantiene como legacy temporal. |
-| `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Gestion/alta de sellers. Depende de Apps Script y CSV. |
+| `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Copiado a estructura futura. Usa `assets/js/config.js`, Apps Script, CSV sellers, localStorage y submit no-cors. Original en raiz se mantiene como legacy temporal. |
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Copiado a estructura futura. Mantiene dependencias CSV de sellers y timeline. Original en raiz se mantiene como legacy temporal. |
 | `gantt-seller-center_v2.html` | `/internal/gantt/gantt-seller-center.html` | interno | Media | Copiado a estructura futura. Mantiene dependencia CSV publicada de sc_roadmap. Original en raiz se mantiene como legacy temporal. |
 | `seller-center_v2.html` | `/internal/seller-center/index.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
@@ -22,7 +22,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `presentacion-seller_v3.html` | `/public/presentaciones/presentacion-seller.html` | publico | Media | Presentacion compartible con sellers. |
 | `simulador-seller_v12.html` | `/public/simuladores/simulador-seller.html` | publico | Alta | Simulador publico. Evitar cambios sin smoke test detallado. |
 | `simulador-economico_v4.html` | `/internal/simuladores/simulador-economico.html` | interno | Alta | Simulador interno. Depende de datos externos y reglas economicas. |
-| `config.js` | `/assets/js/config.js` | integracion | Alta | Configuracion central propuesta. Debe alinearse con rutas reales antes de activarse globalmente. |
+| `config.js` | `/assets/js/config.js` | integracion | Alta | Copiado a ubicacion futura como configuracion central. Original en raiz se mantiene como referencia temporal. |
 | `Apps_script_v5.js` | `/integrations/apps-script/Apps_script_v5.js` | integracion | Alta | Backend Apps Script. No modificar en etapa documental ni estructural inicial. |
 | `Logos/` | `/assets/logos/` | data | Media | Assets visuales. Migrar con cuidado por sensibilidad de rutas y mayusculas. |
 | `MarketPlace Sporting - Sellers (BD).xlsx` | `/data/MarketPlace Sporting - Sellers (BD).xlsx` | data | Media | Archivo de datos operativo. Evaluar si debe publicarse en GitHub Pages. |

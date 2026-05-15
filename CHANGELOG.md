@@ -4,6 +4,42 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 3.8B config central y Gestion de Sellers
+
+Tipo de cambio: estructural.
+
+Estado: migracion controlada completada sin submit real.
+
+Cambios incluidos:
+
+- Copia de `config.js` hacia `assets/js/config.js`.
+- Copia de `gestion-sellers_v7.html` hacia `internal/backlog/gestion-sellers.html`.
+- Actualizacion de `index.html` para enlazar preferentemente a la nueva ruta.
+- Validacion estatica de dependencias criticas sin ejecutar submit.
+- Actualizacion de roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion de archivos originales.
+- Sin modificaciones en Apps Script.
+- Sin cambios de endpoint.
+- Sin cambios de payload.
+- Sin cambios en generacion o reserva de `seller_id`.
+- Sin cambios en `localStorage`.
+- Sin cambios de validaciones.
+- Sin cambios de diseno.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+- Sin prueba de submit real.
+
+Validacion:
+
+- Se confirmo que `assets/js/config.js` existe.
+- Se confirmo que `config.js` original sigue existiendo en raiz.
+- Se confirmo que `internal/backlog/gestion-sellers.html` existe y carga como HTML.
+- Se confirmo que la ruta `../../assets/js/config.js` resuelve desde la nueva pagina.
+- Se confirmo que Apps Script URL, CSV sellers, `tipo_formulario: "seller"`, `localStorage` y generacion de `seller_id` siguen presentes.
+
 ## 2026-05-15 - Etapa 3.6 migracion Backlog de Sellers
 
 Tipo de cambio: estructural.

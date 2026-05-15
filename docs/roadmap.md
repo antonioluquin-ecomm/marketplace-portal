@@ -156,6 +156,20 @@ Resultado:
 - se preservan CSV, logica de logos, cards, tabla, filtros y modal;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 3.8B: config central y Gestion de Sellers
+
+Objetivo: preparar la ubicacion esperada de configuracion central y copiar Gestion de Sellers a su ruta futura sin ejecutar submit real.
+
+Estado: completada.
+
+Resultado:
+
+- `config.js` copiado a `assets/js/config.js`;
+- `gestion-sellers_v7.html` copiado a `internal/backlog/gestion-sellers.html`;
+- `index.html` enlaza a la nueva ruta;
+- Backlog ya genera la ruta futura para editar sellers;
+- se preservan endpoint, payload, `tipo_formulario`, generacion de IDs, `localStorage`, validaciones y `no-cors`.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;
