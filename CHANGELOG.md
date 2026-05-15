@@ -4,6 +4,37 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5C validacion de carga de logos
+
+Tipo de cambio: validacion/documental.
+
+Estado: validacion local completada.
+
+Cambios incluidos:
+
+- Validacion de existencia de `assets/logos/spt-001.png` a `assets/logos/spt-015.png`.
+- Validacion de firma PNG para los 15 archivos.
+- Validacion de apertura como imagen local para los 15 archivos.
+- Confirmacion de dimensiones `200x200`.
+- Confirmacion de que `assets/logos/spt-001.png` resuelve como ruta relativa desde la raiz del repositorio.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en paginas HTML.
+- Sin cambios de referencias.
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin modificaciones en `config.js` ni `assets/js/config.js`.
+- Sin movimiento ni eliminacion de `Logos/`.
+- Sin modificaciones en Apps Script.
+- Sin redirects.
+
+Pendiente:
+
+- Validar disponibilidad desde GitHub Pages cuando corresponda.
+- Definir en una etapa posterior si se actualizan referencias o configuracion de logos.
+
 ## 2026-05-15 - Etapa 5B copia segura de logos
 
 Tipo de cambio: assets/documental.

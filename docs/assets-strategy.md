@@ -497,6 +497,33 @@ Pendiente:
 - Definir en etapa separada si `LOGO_BASE_URL` debe apuntar a `/assets/logos/`.
 - Migrar referencias por pagina solo despues de smoke test visual.
 
+### Etapa 5C: validacion de carga local de logos
+
+Estado: completada.
+
+Resultado:
+
+- Se validaron los 15 archivos `assets/logos/spt-001.png` a `assets/logos/spt-015.png`.
+- Todos los archivos existen.
+- Todos los archivos tienen firma PNG valida.
+- Todos los archivos abren correctamente como imagen local.
+- Todas las imagenes reportan dimensiones `200x200`.
+- La ruta relativa `assets/logos/spt-001.png` resuelve correctamente desde la raiz del repositorio.
+
+Alcance preservado:
+
+- No se modificaron paginas HTML.
+- No se cambiaron referencias.
+- No se modifico `LOGO_BASE_URL`.
+- No se modificaron `config.js` ni `assets/js/config.js`.
+- No se movio ni elimino `Logos/`.
+- No se tocaron Apps Script ni redirects.
+
+Pendiente:
+
+- Validar disponibilidad desde GitHub Pages cuando la rama correspondiente este publicada.
+- Definir una etapa separada para ajustar referencias o `LOGO_BASE_URL`, si corresponde.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

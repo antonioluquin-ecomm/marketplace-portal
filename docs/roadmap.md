@@ -345,6 +345,27 @@ Pendiente:
 - decidir en una etapa futura si se actualiza `LOGO_BASE_URL`;
 - actualizar referencias solo pagina por pagina y con smoke test visual.
 
+## Etapa 5C: validacion de carga de logos
+
+Objetivo: confirmar que los logos copiados en `assets/logos/` estan disponibles como imagenes locales antes de migrar referencias.
+
+Estado: completada.
+
+Resultado:
+
+- validados `assets/logos/spt-001.png` a `assets/logos/spt-015.png`;
+- existencia confirmada para los 15 archivos;
+- firma PNG valida para los 15 archivos;
+- apertura como imagen local confirmada para los 15 archivos;
+- dimensiones confirmadas: `200x200`;
+- ruta relativa `assets/logos/spt-001.png` resuelve desde la raiz del repositorio;
+- sin cambios en HTML, referencias, `LOGO_BASE_URL`, `config.js`, `assets/js/config.js`, `Logos/`, Apps Script o redirects.
+
+Pendiente:
+
+- validar disponibilidad publicada en GitHub Pages;
+- definir si corresponde actualizar referencias en una etapa posterior.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.
