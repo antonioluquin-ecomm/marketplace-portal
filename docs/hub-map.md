@@ -10,13 +10,13 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Gestion/alta de sellers. Depende de Apps Script y CSV. |
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Gantt operativo. Depende de Google Sheets. |
 | `gantt-seller-center_v2.html` | `/internal/gantt/gantt-seller-center.html` | interno | Media | Roadmap Seller Center. Depende de Google Sheets. |
-| `seller-center_v2.html` | `/internal/seller-center/index.html` | interno | Media | Dashboard interno Seller Center. |
+| `seller-center_v2.html` | `/internal/seller-center/index.html` | interno | Media | Copiado a estructura futura. Original en raiz se mantiene como legacy temporal. |
 | `maqueta-seller-center_v2.html` | `/internal/seller-center/maqueta-seller-center.html` | interno | Media | Maqueta visual/funcional. Evitar cambios visuales durante migracion estructural. |
-| `proyecto-marketplace_v3.html` | `/internal/estrategia/proyecto-marketplace.html` | interno | Media | Pagina ejecutiva/estrategica del proyecto. |
-| `proceso-onboarding_v4.html` | `/internal/estrategia/proceso-onboarding.html` | interno | Media | Documenta flujo de onboarding. Tiene links hacia formularios y herramientas. |
-| `modelo-integracion_v5.html` | `/internal/estrategia/modelo-integracion.html` | interno | Media | Modelo de decision tecnica. |
-| `modelo-economico_v2.html` | `/internal/estrategia/modelo-economico.html` | interno | Media | Modelo economico. Relacionado con simuladores. |
-| `governance_v3.html` | `/internal/estrategia/governance.html` | interno | Media | Governance institucional del marketplace. |
+| `proyecto-marketplace_v3.html` | `/internal/estrategia/proyecto-marketplace.html` | interno | Media | Copiado a estructura futura. Original en raiz se mantiene como legacy temporal. |
+| `proceso-onboarding_v4.html` | `/internal/estrategia/proceso-onboarding.html` | interno | Media | Copiado a estructura futura. Original en raiz se mantiene como legacy temporal. |
+| `modelo-integracion_v5.html` | `/internal/estrategia/modelo-integracion.html` | interno | Media | Copiado a estructura futura. Original en raiz se mantiene como legacy temporal. |
+| `modelo-economico_v2.html` | `/internal/estrategia/modelo-economico.html` | interno | Media | Copiado a estructura futura. Original en raiz se mantiene como legacy temporal. |
+| `governance_v3.html` | `/internal/estrategia/governance.html` | interno | Media | Copiado a estructura futura. Original en raiz se mantiene como legacy temporal. |
 | `formulario-calificacion_v2.html` | `/public/formularios/formulario-calificacion.html` | publico | Alta | Formulario publico. No mover sin compatibilidad y validacion de envio. |
 | `formulario-relevamiento_v2.html` | `/public/formularios/formulario-relevamiento.html` | publico | Alta | Formulario publico critico. No tocar inicialmente. |
 | `presentacion-seller_v3.html` | `/public/presentaciones/presentacion-seller.html` | publico | Media | Presentacion compartible con sellers. |

@@ -4,6 +4,46 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 3 migracion interna informativa
+
+Tipo de cambio: estructural/documental.
+
+Estado: migracion parcial segura completada para paginas internas informativas.
+
+Cambios incluidos:
+
+- Copia de paginas internas informativas desde la raiz hacia `internal/estrategia/`.
+- Copia de `seller-center_v2.html` hacia `internal/seller-center/index.html`.
+- Actualizacion de `index.html` para priorizar las nuevas rutas internas copiadas.
+- Actualizacion de mapa del hub y roadmap.
+
+Paginas copiadas:
+
+- `governance_v3.html` -> `internal/estrategia/governance.html`
+- `proceso-onboarding_v4.html` -> `internal/estrategia/proceso-onboarding.html`
+- `modelo-integracion_v5.html` -> `internal/estrategia/modelo-integracion.html`
+- `modelo-economico_v2.html` -> `internal/estrategia/modelo-economico.html`
+- `proyecto-marketplace_v3.html` -> `internal/estrategia/proyecto-marketplace.html`
+- `seller-center_v2.html` -> `internal/seller-center/index.html`
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion de archivos originales.
+- Sin modificaciones en formularios.
+- Sin modificaciones en simuladores.
+- Sin modificaciones en backlog.
+- Sin modificaciones en Gantt.
+- Sin modificaciones en Apps Script.
+- Sin cambios de logica funcional.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+
+Validacion:
+
+- Se confirmo que cada archivo nuevo existe.
+- Se confirmo que cada archivo original sigue existiendo en raiz.
+- Se confirmo que los links actualizados en `index.html` apuntan a archivos existentes.
+
 ## 2026-05-15 - Etapa 2 index oficial
 
 Tipo de cambio: estructural/documental.

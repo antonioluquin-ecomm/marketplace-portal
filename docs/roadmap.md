@@ -70,6 +70,8 @@ Resultado:
 
 Objetivo: mover/copiar progresivamente paginas internas a `internal/`.
 
+Estado: completada parcialmente para paginas internas informativas y Seller Center base, mediante copia segura.
+
 Prioridad sugerida:
 
 - paginas informativas de estrategia;
@@ -77,6 +79,21 @@ Prioridad sugerida:
 - seller center;
 - gantt;
 - backlog y gestion solo con validacion adicional.
+
+Resultado parcial:
+
+- `governance_v3.html` copiado a `internal/estrategia/governance.html`;
+- `proceso-onboarding_v4.html` copiado a `internal/estrategia/proceso-onboarding.html`;
+- `modelo-integracion_v5.html` copiado a `internal/estrategia/modelo-integracion.html`;
+- `modelo-economico_v2.html` copiado a `internal/estrategia/modelo-economico.html`;
+- `proyecto-marketplace_v3.html` copiado a `internal/estrategia/proyecto-marketplace.html`;
+- `seller-center_v2.html` copiado a `internal/seller-center/index.html`.
+
+Pendiente:
+
+- migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;
+- revisar rutas internas dentro de las paginas copiadas en una etapa posterior;
+- definir estrategia de compatibilidad antes de retirar o redireccionar archivos de raiz.
 
 ## Etapa 4: migracion de paginas publicas
 
