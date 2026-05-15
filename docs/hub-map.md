@@ -9,7 +9,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `backlog-sellers_v27.html` | `/internal/backlog/backlog-sellers.html` | interno | Alta | Pagina operativa critica. Consume datos externos y contiene logica de backlog. |
 | `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Gestion/alta de sellers. Depende de Apps Script y CSV. |
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Gantt operativo. Depende de Google Sheets. |
-| `gantt-seller-center_v2.html` | `/internal/gantt/gantt-seller-center.html` | interno | Media | Roadmap Seller Center. Depende de Google Sheets. |
+| `gantt-seller-center_v2.html` | `/internal/gantt/gantt-seller-center.html` | interno | Media | Copiado a estructura futura. Mantiene dependencia CSV publicada de sc_roadmap. Original en raiz se mantiene como legacy temporal. |
 | `seller-center_v2.html` | `/internal/seller-center/index.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
 | `maqueta-seller-center_v2.html` | `/internal/seller-center/maqueta-seller-center.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
 | `proyecto-marketplace_v3.html` | `/internal/estrategia/proyecto-marketplace.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |

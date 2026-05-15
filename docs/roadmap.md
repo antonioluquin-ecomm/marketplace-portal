@@ -115,6 +115,19 @@ Resultado:
 - `index.html` incluye acceso a la maqueta migrada;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 3.4: migracion Gantt Seller Center
+
+Objetivo: copiar Gantt Seller Center a su ubicacion futura y ajustar navegacion minima.
+
+Estado: completada.
+
+Resultado:
+
+- `gantt-seller-center_v2.html` copiado a `internal/gantt/gantt-seller-center.html`;
+- `index.html` enlaza a la nueva ruta;
+- Seller Center y Proyecto Marketplace migrados enlazan a la nueva ruta;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;
