@@ -2915,6 +2915,12 @@
         return (parts[0][0] + parts[1][0]).toUpperCase();
       }
 
+      function localLogoFallback() {
+        return sellerId
+          ? `../../assets/logos/${encodeURIComponent(sellerId.toLowerCase())}.png`
+          : "";
+      }
+
       function parseCSV(text) {
         const rows = [];
         let row = [],
@@ -2977,9 +2983,9 @@
         const name = readSellerName(seller) || sellerId;
         const category = seller.categoria || seller.categoria_principal || "";
         const site = seller.sitio_objetivo || seller.sitio || "";
-        const logoUrl = safeUrl(
-          seller.logo_url || seller.logo || seller.url_logo,
-        );
+        const logoUrl =
+          safeUrl(seller.logo_url || seller.logo || seller.url_logo) ||
+          localLogoFallback();
 
         sellerNameView.textContent = name;
         sellerMetaView.textContent = [category, site]

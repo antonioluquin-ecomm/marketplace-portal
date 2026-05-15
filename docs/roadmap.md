@@ -480,6 +480,32 @@ Pendiente:
 - validar caso sin logo local para confirmar iniciales;
 - confirmar validaciones sin ejecutar submit real.
 
+## Etapa 5J: fallback local de logos en Formulario de Relevamiento
+
+Objetivo: aplicar fallback local de logo en `public/formularios/formulario-relevamiento.html` sin tocar submit, endpoint, payload, validaciones, condicionales ni el riesgo pendiente `pctSec`.
+
+Estado: completada.
+
+Resultado:
+
+- fallback local aplicado solo en `public/formularios/formulario-relevamiento.html`;
+- prioridad preservada para `logo_url`, `logo` y `url_logo` desde CSV;
+- agregado fallback local `../../assets/logos/{seller_id}.png`;
+- fallback final por iniciales preservado si no carga el logo;
+- `seller_id`, submit, endpoint, payload, validaciones, condicionales y CSV preservados;
+- `pctSec` no fue modificado ni corregido;
+- sin cambios en legacy `formulario-relevamiento_v2.html`;
+- sin cambios en Backlog, Gestion de Sellers, simuladores, Presentacion Seller, `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script o redirects.
+
+Pendiente:
+
+- smoke test manual con `seller_id=SPT-001`;
+- validar caso con logo desde CSV;
+- validar caso sin logo CSV para confirmar fallback local;
+- validar caso sin logo local para confirmar iniciales;
+- revisar condicionales y consola, manteniendo `pctSec` como riesgo conocido;
+- no ejecutar submit real.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.

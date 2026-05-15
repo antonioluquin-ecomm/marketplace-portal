@@ -804,6 +804,41 @@ Validaciones manuales pendientes:
 - Confirmar iniciales si no existe logo local.
 - Confirmar campos obligatorios y validaciones sin ejecutar submit real.
 
+### Etapa 5J: fallback local en Formulario de Relevamiento
+
+Estado: completada.
+
+Resultado:
+
+- Se aplico fallback local solo en `public/formularios/formulario-relevamiento.html`.
+- `logo_url`, `logo` y `url_logo` desde CSV conservan prioridad mediante `safeUrl(...)`.
+- Si no existe logo valido desde CSV, la pagina intenta cargar `../../assets/logos/{seller_id}.png`.
+- El `seller_id` se conserva sin cambios para identidad y payload.
+- Si el logo local falla, se mantiene el fallback visual por iniciales mediante `sellerLogo.onerror`.
+- No se modifico `formulario-relevamiento_v2.html`.
+- No se modificaron submit, endpoint, payload, validaciones, condicionales, `pctSec`, Apps Script, config global, Backlog, Gestion de Sellers, simuladores ni Presentacion Seller.
+
+Validaciones realizadas:
+
+- Prioridad confirmada: `safeUrl(seller.logo_url || seller.logo || seller.url_logo) || localLogoFallback()`.
+- Ruta local confirmada: `../../assets/logos/${sellerId.toLowerCase()}.png`.
+- Fallback final por iniciales preservado mediante `sellerLogo.onerror`.
+- Submit preservado: `fetch(APPS_SCRIPT_URL, ...)` sin cambios.
+- Payload preservado: `tipo_formulario: "relevamiento"` y `seller_id` sin cambios.
+- Condicionales preservados: `applyConditionals()` y atributos `data-show-if` sin cambios.
+- Riesgo `pctSec` preservado sin correccion, por alcance.
+- Archivo legacy en raiz verificado sin modificaciones.
+
+Validaciones manuales pendientes:
+
+- Abrir `public/formularios/formulario-relevamiento.html` sin `seller_id` y confirmar bloqueo esperado.
+- Abrir `public/formularios/formulario-relevamiento.html?seller_id=SPT-001`.
+- Confirmar prioridad de `logo_url` si existe en CSV.
+- Confirmar fallback local si no existe `logo_url`.
+- Confirmar iniciales si no existe logo local.
+- Confirmar condicionales y progreso sin corregir `pctSec`.
+- No ejecutar submit real.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

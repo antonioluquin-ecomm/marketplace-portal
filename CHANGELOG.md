@@ -4,6 +4,51 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5J fallback local Formulario de Relevamiento
+
+Tipo de cambio: piloto controlado.
+
+Estado: completado sin cambios funcionales.
+
+Cambios incluidos:
+
+- Actualizacion acotada de `public/formularios/formulario-relevamiento.html`.
+- Agregado de fallback local `../../assets/logos/{seller_id}.png` solo cuando no exista logo valido desde CSV.
+- Preservacion de prioridad para `logo_url`, `logo` y `url_logo` desde CSV.
+- Preservacion del fallback final por iniciales si el logo local no carga.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin cambios en submit.
+- Sin modificaciones en Apps Script.
+- Sin cambios de endpoints.
+- Sin cambios de payload.
+- Sin cambios de validaciones.
+- Sin correccion de `pctSec`.
+- Sin cambios en logica condicional.
+- Sin cambios en `seller_id`.
+- Sin modificaciones en `config.js` ni `assets/js/config.js`.
+- Sin modificaciones en Backlog, Gestion de Sellers, simuladores o Presentacion Seller.
+- Sin cambios de diseno visual.
+- Sin modificaciones en `formulario-relevamiento_v2.html`.
+
+Validacion:
+
+- Se confirmo que la prioridad queda `safeUrl(seller.logo_url || seller.logo || seller.url_logo) || localLogoFallback()`.
+- Se confirmo que el fallback local apunta a `../../assets/logos/{seller_id}.png`.
+- Se confirmo que el fallback por iniciales sigue asociado a `sellerLogo.onerror`.
+- Se confirmo que submit, endpoint, payload, validaciones, condicionales y `pctSec` no fueron modificados.
+
+Pendiente:
+
+- Smoke test manual con `seller_id=SPT-001`.
+- Validar caso con logo existente desde CSV.
+- Validar caso sin logo CSV para confirmar fallback local.
+- Validar caso sin logo local para confirmar iniciales.
+- Revisar condicionales, progreso y consola sin ejecutar submit real.
+
 ## 2026-05-15 - Etapa 5H fallback local Formulario de Calificacion
 
 Tipo de cambio: piloto controlado.
