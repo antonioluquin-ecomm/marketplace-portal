@@ -457,6 +457,46 @@ Cada extraccion debe poder revertirse por pagina:
 - Formularios no ejecutan submit real salvo etapa autorizada.
 - GitHub Pages conserva rutas existentes.
 
+## Estado de ejecucion
+
+### Etapa 5B: copia segura de logos
+
+Estado: completada.
+
+Resultado:
+
+- Se copiaron 15 archivos `spt-*.png` desde `Logos/` hacia `assets/logos/`.
+- Los nombres se mantuvieron exactamente iguales.
+- La carpeta `Logos/` se mantiene intacta como legacy temporal.
+- No se actualizaron referencias en paginas.
+- No se modifico `LOGO_BASE_URL`.
+- No se modificaron `config.js` ni `assets/js/config.js`.
+- La copia fue validada por cantidad, tamaño y hash SHA256.
+
+Archivos copiados:
+
+- `spt-001.png`
+- `spt-002.png`
+- `spt-003.png`
+- `spt-004.png`
+- `spt-005.png`
+- `spt-006.png`
+- `spt-007.png`
+- `spt-008.png`
+- `spt-009.png`
+- `spt-010.png`
+- `spt-011.png`
+- `spt-012.png`
+- `spt-013.png`
+- `spt-014.png`
+- `spt-015.png`
+
+Pendiente:
+
+- Validar carga directa de `/assets/logos/spt-001.png` en local/GitHub Pages.
+- Definir en etapa separada si `LOGO_BASE_URL` debe apuntar a `/assets/logos/`.
+- Migrar referencias por pagina solo despues de smoke test visual.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

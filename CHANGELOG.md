@@ -4,6 +4,39 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5B copia segura de logos
+
+Tipo de cambio: assets/documental.
+
+Estado: copia segura completada.
+
+Cambios incluidos:
+
+- Copia de 15 archivos `spt-*.png` desde `Logos/` hacia `assets/logos/`.
+- Preservacion exacta de nombres, extensiones, mayusculas/minusculas y contenido binario.
+- Validacion por cantidad, tamaño y hash SHA256.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/hub-map.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion de `Logos/`.
+- Sin modificaciones en paginas HTML.
+- Sin cambios de referencias.
+- Sin cambios en CSS.
+- Sin cambios en JavaScript.
+- Sin modificaciones en `config.js` ni `assets/js/config.js`.
+- Sin modificaciones en Apps Script.
+- Sin redirects.
+- Sin limpieza legacy.
+
+Validacion:
+
+- `Logos/` sigue existiendo.
+- `assets/logos/` contiene 15 archivos `spt-*.png`.
+- Todos los archivos copiados coinciden en tamaño y hash SHA256 con su origen.
+
 ## 2026-05-15 - Etapa 5A auditoria y estrategia de assets compartidos
 
 Tipo de cambio: documental.

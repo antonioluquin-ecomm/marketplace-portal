@@ -325,6 +325,26 @@ Pendiente:
 - ejecutar Etapa 5B solo si se aprueba copia segura de logos hacia `assets/logos/`;
 - mantener `Logos/` y `config.js` raiz como legacy temporal.
 
+## Etapa 5B: copia segura de logos
+
+Objetivo: copiar los logos actuales desde `Logos/` hacia `assets/logos/` sin modificar referencias ni configuracion.
+
+Estado: completada.
+
+Resultado:
+
+- 15 archivos `spt-*.png` copiados desde `Logos/` hacia `assets/logos/`;
+- nombres, mayusculas/minusculas y extensiones preservados;
+- tamanos y hashes SHA256 coinciden entre origen y destino;
+- `Logos/` sigue existiendo como legacy temporal;
+- no se modificaron paginas HTML, CSS, JS, `config.js`, `assets/js/config.js`, Apps Script, endpoints, payloads ni redirects.
+
+Pendiente:
+
+- validar carga directa de los logos desde `/assets/logos/`;
+- decidir en una etapa futura si se actualiza `LOGO_BASE_URL`;
+- actualizar referencias solo pagina por pagina y con smoke test visual.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.

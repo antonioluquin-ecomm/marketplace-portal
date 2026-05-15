@@ -24,7 +24,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `simulador-economico_v4.html` | `/internal/simuladores/simulador-economico.html` | interno | Alta | Copiado a estructura futura. Mantiene Sheets/config, formulas, tarifas, overrides y escenarios. Original en raiz se mantiene como legacy temporal. |
 | `config.js` | `/assets/js/config.js` | integracion | Alta | Copiado a ubicacion futura como configuracion central. Original en raiz se mantiene como referencia temporal. |
 | `Apps_script_v5.js` | `/integrations/apps-script/Apps_script_v5.js` | integracion | Alta | Backend Apps Script. No modificar en etapa documental ni estructural inicial. |
-| `Logos/` | `/assets/logos/` | data | Media | Assets visuales. Migrar con cuidado por sensibilidad de rutas y mayusculas. |
+| `Logos/` | `/assets/logos/` | data | Media | Logos `spt-001.png` a `spt-015.png` copiados a `assets/logos/` en Etapa 5B. Carpeta original se mantiene intacta como legacy temporal; referencias aun no fueron modificadas. |
 | `MarketPlace Sporting - Sellers (BD).xlsx` | `/data/MarketPlace Sporting - Sellers (BD).xlsx` | data | Media | Archivo de datos operativo. Evaluar si debe publicarse en GitHub Pages. |
 | `Mapa del Hub.docx` | `/docs/source/Mapa del Hub.docx` | documentacion | Baja | Documento fuente. Puede mantenerse como referencia historica. |
 | `PROJECT_WORKFLOW.md` | `/PROJECT_WORKFLOW.md` | documentacion | Alta | Metodologia institucional base. Debe permanecer visible en raiz. |
