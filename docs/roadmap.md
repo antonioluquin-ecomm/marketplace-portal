@@ -456,6 +456,30 @@ Pendiente:
 - Etapa 5H: piloto controlado solo en `public/formularios/formulario-calificacion.html`;
 - mantener sin cambios Relevamiento, formularios legacy, Apps Script, endpoints, payloads, validaciones, submit, config global, Backlog, Gestion, simuladores y Presentacion Seller.
 
+## Etapa 5H: fallback local de logos en Formulario de Calificacion
+
+Objetivo: aplicar fallback local de logo en `public/formularios/formulario-calificacion.html` sin tocar submit, endpoint, payload, validaciones ni configuracion global.
+
+Estado: completada.
+
+Resultado:
+
+- fallback local aplicado solo en `public/formularios/formulario-calificacion.html`;
+- prioridad preservada para `logo_url`, `logo` y `url_logo` desde CSV;
+- agregado fallback local `../../assets/logos/{seller_id}.png`;
+- fallback final por iniciales preservado si no carga el logo;
+- `seller_id`, submit, endpoint, payload, validaciones y CSV preservados;
+- sin cambios en legacy `formulario-calificacion_v2.html`;
+- sin cambios en Formulario de Relevamiento, Backlog, Gestion de Sellers, simuladores, Presentacion Seller, `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script o redirects.
+
+Pendiente:
+
+- smoke test manual con `seller_id=SPT-001`;
+- validar caso con logo desde CSV;
+- validar caso sin logo CSV para confirmar fallback local;
+- validar caso sin logo local para confirmar iniciales;
+- confirmar validaciones sin ejecutar submit real.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.

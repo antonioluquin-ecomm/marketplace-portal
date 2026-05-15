@@ -770,6 +770,40 @@ Smoke test posterior recomendado:
 - No ejecutar submit real.
 - Revisar consola por errores JS, 404 inesperados, CORS y fetch fallidos.
 
+### Etapa 5H: fallback local en Formulario de Calificacion
+
+Estado: completada.
+
+Resultado:
+
+- Se aplico fallback local solo en `public/formularios/formulario-calificacion.html`.
+- `logo_url`, `logo` y `url_logo` desde CSV conservan prioridad mediante `safeUrl(...)`.
+- Si no existe logo valido desde CSV, la pagina intenta cargar `../../assets/logos/{seller_id}.png`.
+- El `seller_id` se conserva sin cambios para identidad, validaciones y payload.
+- Si el logo local falla, se mantiene el fallback visual por iniciales mediante `sellerLogo.onerror`.
+- No se modifico `formulario-calificacion_v2.html`.
+- No se modifico Formulario de Relevamiento.
+- No se modificaron submit, endpoint, payload, validaciones, Apps Script, config global, Backlog, Gestion de Sellers, simuladores ni Presentacion Seller.
+
+Validaciones realizadas:
+
+- Prioridad confirmada: `safeUrl(seller.logo_url || seller.logo || seller.url_logo) || localLogoFallback()`.
+- Ruta local confirmada: `../../assets/logos/${sellerId.toLowerCase()}.png`.
+- Fallback final por iniciales preservado mediante `sellerLogo.onerror`.
+- Submit preservado: `fetch(ENDPOINT_URL, ...)` sin cambios.
+- Payload preservado: `seller_id: sellerId` y `tipo_formulario: "calificacion"` sin cambios.
+- Validaciones preservadas: `form.checkValidity()`, `hasCarrier()` y `evaluateSeller()` sin cambios.
+- Archivo legacy en raiz verificado sin modificaciones.
+
+Validaciones manuales pendientes:
+
+- Abrir `public/formularios/formulario-calificacion.html` sin `seller_id` y confirmar bloqueo esperado.
+- Abrir `public/formularios/formulario-calificacion.html?seller_id=SPT-001`.
+- Confirmar prioridad de `logo_url` si existe en CSV.
+- Confirmar fallback local si no existe `logo_url`.
+- Confirmar iniciales si no existe logo local.
+- Confirmar campos obligatorios y validaciones sin ejecutar submit real.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |
