@@ -22,6 +22,8 @@ No incluye cambios funcionales, visuales, de rutas ni de logica.
 
 Objetivo: crear la estructura de carpetas objetivo sin mover paginas criticas todavia.
 
+Estado: completada la creacion fisica de carpetas base con `.gitkeep`.
+
 Incluye:
 
 - `assets/`;
@@ -36,6 +38,13 @@ Validacion esperada:
 - Git limpio antes de iniciar;
 - estructura creada;
 - sin cambios en comportamiento de paginas existentes.
+
+Resultado:
+
+- carpetas base disponibles para migraciones futuras;
+- sin movimiento de HTML existentes;
+- sin cambios de rutas;
+- sin cambios funcionales ni visuales.
 
 ## Etapa 2: index oficial
 
@@ -114,4 +123,3 @@ Incluye:
 - mover versiones historicas a `legacy/`;
 - documentar URLs finales;
 - actualizar changelog y release notes.
-

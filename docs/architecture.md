@@ -13,7 +13,8 @@ Principales caracteristicas actuales:
 - URLs de Google Sheets y Apps Script declaradas en varias paginas;
 - assets concentrados en `Logos/`;
 - documentos operativos y archivos de datos en la raiz;
-- rutas futuras mencionadas en links y configuracion, pero no creadas fisicamente;
+- rutas futuras mencionadas en links y configuracion;
+- estructura fisica futura creada como base, aun sin migracion funcional;
 - ausencia de `index.html` oficial.
 
 ## Problemas arquitectonicos
@@ -59,6 +60,14 @@ Estructura objetivo sugerida:
 └─ PROJECT_WORKFLOW.md
 ```
 
+Estado de implementacion de estructura:
+
+- La estructura base de carpetas ya existe fisicamente.
+- Las carpetas nuevas contienen `.gitkeep` para ser registradas por Git.
+- No se migraron paginas HTML existentes.
+- No se cambiaron rutas actuales.
+- No se copiaron assets, scripts ni integraciones a sus destinos futuros.
+
 ## Separacion propuesta
 
 `internal/`: paginas de operacion interna, backlog, seller center, gantt, governance, modelos y herramientas de gestion.
@@ -78,6 +87,7 @@ Estructura objetivo sugerida:
 ## Criterios de migracion
 
 - Migrar por etapas pequenas.
+- Crear estructura fisica antes de mover paginas.
 - Mantener las paginas actuales hasta validar sus equivalentes nuevos.
 - No cambiar funcionalidad durante cambios puramente estructurales.
 - No cambiar diseno durante cambios documentales o de rutas.
@@ -111,4 +121,3 @@ Riesgo alto:
 - cambiar nombres de columnas o fuentes CSV;
 - extraer logica compleja de simuladores;
 - realizar refactors masivos sin validacion.
-

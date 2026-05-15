@@ -4,6 +4,34 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 1 estructura base
+
+Tipo de cambio: estructural/documental.
+
+Estado: estructura fisica base creada.
+
+Cambios incluidos:
+
+- Creacion de carpetas base `assets/`, `internal/`, `public/`, `integrations/`, `data/` y `legacy/`.
+- Creacion de subcarpetas previstas para CSS, JS, componentes, datos, paginas, logos, imagenes, paginas internas, paginas publicas, integraciones y legacy.
+- Agregado de archivos `.gitkeep` para registrar carpetas vacias en Git.
+- Actualizacion documental para indicar que la estructura existe fisicamente.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento de archivos HTML existentes.
+- Sin eliminacion de archivos.
+- Sin cambios funcionales.
+- Sin cambios visuales.
+- Sin cambios de rutas actuales.
+- Sin modificaciones en formularios, simuladores ni Apps Script.
+- Sin redirects ni aliases para archivos versionados.
+
+Validacion:
+
+- Se verifico que el repositorio estaba limpio antes de iniciar.
+- Se confirmo que los cambios corresponden a carpetas, `.gitkeep` y documentacion.
+
 ## 2026-05-15 - Etapa 0 documental
 
 Tipo de cambio: documentacion.
@@ -31,4 +59,3 @@ Validacion:
 
 - Se verifico que el repositorio no tenia cambios previos antes de iniciar.
 - Se crearon unicamente archivos documentales nuevos y la carpeta `docs/`.
-
