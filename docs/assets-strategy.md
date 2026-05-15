@@ -524,6 +524,94 @@ Pendiente:
 - Validar disponibilidad desde GitHub Pages cuando la rama correspondiente este publicada.
 - Definir una etapa separada para ajustar referencias o `LOGO_BASE_URL`, si corresponde.
 
+### Etapa 5D: auditoria de consumo actual de logos
+
+Estado: completada a nivel documental.
+
+Alcance:
+
+- Solo auditoria de consumo.
+- Sin cambios en HTML, referencias, `LOGO_BASE_URL`, `config.js`, `assets/js/config.js`, `Logos/`, Apps Script o redirects.
+
+Hallazgos principales:
+
+- No se detecto consumo directo de `Logos/` en las paginas auditadas.
+- `assets/logos/` ya existe con los archivos copiados, pero todavia no es consumido por referencias relativas dentro de paginas.
+- `config.js` y `assets/js/config.js` exponen `ASSETS.LOGO_BASE_URL` apuntando a la URL absoluta de GitHub Pages `/assets/logos/`.
+- Backlog y Gestion de Sellers generan candidatos de logo a partir de `seller_id` y `LOGO_BASE_URL`.
+- Presentacion Seller, Simulador Seller y formularios publicos consumen principalmente `logo_url`, `logo`, `url_logo` o variantes desde CSV/query params.
+- Todas las paginas con logo de seller tienen fallback visual por iniciales o bloque equivalente.
+- Las paginas informativas internas no dependen de logos de seller; solo muestran marca textual `Sporting Marketplace`.
+
+Tabla de consumo:
+
+| Pagina | Fuente actual de logo | Fallback | Depende de `seller_id` | Ruta usada | Riesgo de cambio | Observaciones |
+|---|---|---|---|---|---|---|
+| `internal/backlog/backlog-sellers.html` | `LOGO_BASE_URL` + `seller_id` via `logoCandidates()` y `logoHTML()` | Iniciales en cards, tabla y modal | Si | Absoluta GitHub Pages desde config inline | Alto | Afecta cards, tabla, modal y experiencia operativa. No usar como piloto. |
+| `backlog-sellers_v27.html` | Igual que copia migrada | Iniciales | Si | Absoluta GitHub Pages desde config inline | Alto | Legacy raiz; no tocar hasta etapa de compatibilidad. |
+| `internal/backlog/gestion-sellers.html` | `MP_CONFIG.ASSETS.LOGO_BASE_URL` o fallback inline + `seller_id` | `logo-fallback` por iniciales | Si | Absoluta GitHub Pages desde `assets/js/config.js` o fallback | Alto | Pagina con escritura real y reserva de IDs. No usar como piloto. |
+| `gestion-sellers_v7.html` | Igual que copia migrada | `logo-fallback` | Si | Depende de ruta `../../assets/js/config.js` en copia; legacy conserva referencia relativa no ideal | Alto | Legacy raiz no debe tocarse. |
+| `public/presentaciones/presentacion-seller.html` | `logo_url`, `logo`, `url_logo`, `imagen_logo` desde CSV o `logo/logo_url` query param | Iniciales en seller card y ocultamiento de top logo | Si, para buscar seller | URL desde CSV/query; puede ser absoluta o relativa segun dato | Medio | Mejor candidata para piloto de helper de logos porque no escribe datos. |
+| `presentacion-seller_v3.html` | Igual que copia migrada | Iniciales | Si | URL desde CSV/query | Medio | Legacy raiz no tocar. |
+| `public/simuladores/simulador-seller.html` | `logo_url`, `logo`, `url_logo`, `Logo`, `logo_seller`, `imagen`, `image_url` desde CSV/query | Iniciales | Si, para personalizacion y overrides | URL desde CSV/query, con normalizacion Google Drive | Medio | Segunda candidata, pero combina calculos y CTA. |
+| `simulador-seller_v12.html` | Igual que copia migrada | Iniciales | Si | URL desde CSV/query | Medio/Alto | Legacy raiz no tocar. |
+| `public/formularios/formulario-calificacion.html` | `logo_url`, `logo`, `url_logo` desde CSV | Iniciales | Si, obligatorio | URL desde CSV | Alto | Formulario con submit real. No usar como piloto. |
+| `formulario-calificacion_v2.html` | Igual que copia migrada | Iniciales | Si | URL desde CSV | Alto | Legacy raiz no tocar. |
+| `public/formularios/formulario-relevamiento.html` | `logo_url`, `logo`, `url_logo` desde CSV | Iniciales | Si, obligatorio | URL desde CSV | Critico | Formulario mas sensible y riesgo `pctSec`. No usar como piloto. |
+| `formulario-relevamiento_v2.html` | Igual que copia migrada | Iniciales | Si | URL desde CSV | Critico | Legacy raiz no tocar. |
+| `internal/seller-center/index.html` | Marca textual, sin logo seller operativo detectado | No aplica | No | No aplica | Bajo | Puede quedar fuera de migracion de logos seller. |
+| `internal/seller-center/maqueta-seller-center.html` | Logo estatico `AL` textual en maqueta | No aplica | No | No aplica | Bajo | No representa consumo real de logos seller. |
+| `internal/estrategia/*.html` | Marca textual `Sporting Marketplace` | No aplica | No | No aplica | Bajo | Sin consumo de logos seller. |
+| `internal/gantt/*.html` | Marca textual `Sporting Marketplace` | No aplica | No | No aplica | Bajo/Medio | No consume logos seller segun auditoria actual. |
+| `internal/simuladores/simulador-economico.html` | Sin consumo de logo seller detectado | No aplica | No | No aplica | Medio | Tiene datos y formulas; no tocar por logos. |
+
+Riesgos:
+
+- Cambiar `LOGO_BASE_URL` globalmente puede afectar Backlog y Gestion de Sellers de forma inmediata.
+- Cambiar `config.js` raiz puede impactar legacy si alguna pagina lo consume en el futuro.
+- Cambiar `assets/js/config.js` puede afectar Gestion de Sellers migrada.
+- Cambiar formularios puede comprometer flujos publicos con escritura real.
+- Usar rutas relativas desde paginas profundas requiere cuidado: desde `public/presentaciones/`, `../..` llega a raiz; desde `internal/backlog/`, tambien requiere `../../`.
+- Las URL de logos desde CSV pueden ser Google Drive, absolutas o vacias; deben convivir con fallback local.
+
+Estrategia segura recomendada:
+
+1. No cambiar `LOGO_BASE_URL` todavia.
+2. No cambiar `config.js` ni `assets/js/config.js` como primer paso.
+3. Crear primero una funcion piloto local o helper futuro que pruebe `logo_url` de CSV y luego fallback a `/assets/logos/{seller_id}.png`.
+4. Aplicar el primer piloto solo en `public/presentaciones/presentacion-seller.html`.
+5. Mantener fallback por iniciales intacto.
+6. Validar con `seller_id=SPT-001`, `seller_id=SPT-015`, seller sin logo y sin `seller_id`.
+7. Si el piloto funciona, repetir en `public/simuladores/simulador-seller.html`.
+8. Recién despues evaluar Backlog y Gestion de Sellers.
+
+Propuesta de piloto:
+
+- Pagina: `public/presentaciones/presentacion-seller.html`.
+- Riesgo: medio.
+- Motivo: es publica, usa personalizacion por seller, tiene logo principal y `topSellerLogo`, no ejecuta submit ni escribe datos.
+- Enfoque futuro: mantener `logo_url` del CSV como primera prioridad y agregar fallback local a `../../assets/logos/{seller_id}.png`.
+- No cambiar todavia: formularios, Backlog, Gestion de Sellers, `LOGO_BASE_URL`, `config.js`, `assets/js/config.js`.
+
+Validaciones necesarias para el piloto futuro:
+
+- Carga con `?seller_id=SPT-001`.
+- Carga con `?seller_id=SPT-015`.
+- Carga con seller sin `logo_url` en CSV.
+- Carga sin `seller_id`.
+- Logo visible en card principal.
+- `topSellerLogo` visible si corresponde.
+- Fallback por iniciales si falla el logo.
+- Consola sin 404 inesperados ni errores JS.
+- Comparacion visual antes/despues.
+
+Rollback:
+
+- Revertir solo la pagina piloto.
+- Mantener `assets/logos/` sin cambios.
+- No tocar config global.
+- Conservar fallback por iniciales como salida segura.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

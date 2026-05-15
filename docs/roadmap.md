@@ -366,6 +366,27 @@ Pendiente:
 - validar disponibilidad publicada en GitHub Pages;
 - definir si corresponde actualizar referencias en una etapa posterior.
 
+## Etapa 5D: auditoria de consumo actual de logos
+
+Objetivo: auditar como consumen logos las paginas migradas y legacy antes de cambiar referencias hacia `assets/logos/`.
+
+Estado: completada a nivel documental.
+
+Resultado:
+
+- auditadas referencias a `Logos/`, `assets/logos/`, `LOGO_BASE_URL`, `logoCandidates`, `logoHTML`, `sellerLogo`, `topSellerLogo`, `renderSellerIdentity`, `applySellerIdentity` y fallbacks por iniciales;
+- documentado que no hay consumo directo actual de `Logos/` en paginas;
+- documentado que `assets/logos/` todavia no se consume por referencias relativas;
+- identificado que Backlog y Gestion de Sellers usan `LOGO_BASE_URL` + `seller_id`;
+- identificado que Presentacion Seller, Simulador Seller y formularios usan `logo_url`/`logo`/`url_logo` desde CSV o query params;
+- clasificado riesgo por pagina;
+- propuesta como piloto futuro `public/presentaciones/presentacion-seller.html`, sin tocar config global.
+
+Pendiente:
+
+- definir una Etapa 5E para piloto controlado de consumo local de logos;
+- mantener sin cambios `LOGO_BASE_URL`, `config.js`, `assets/js/config.js`, formularios, Backlog y Gestion de Sellers.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.

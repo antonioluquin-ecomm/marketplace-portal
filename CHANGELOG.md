@@ -4,6 +4,36 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5D auditoria de consumo actual de logos
+
+Tipo de cambio: auditoria/documental.
+
+Estado: auditoria completada sin cambios funcionales.
+
+Cambios incluidos:
+
+- Auditoria de referencias a `Logos/`, `assets/logos/`, `LOGO_BASE_URL`, `logoCandidates`, `logoHTML`, `sellerLogo`, `topSellerLogo`, `renderSellerIdentity`, `applySellerIdentity` y fallbacks por iniciales.
+- Tabla por pagina en `docs/assets-strategy.md` con fuente actual de logos, fallback, dependencia de `seller_id`, tipo de ruta y riesgo.
+- Identificacion de `public/presentaciones/presentacion-seller.html` como pagina candidata para piloto futuro.
+- Recomendacion de no cambiar todavia `LOGO_BASE_URL`, `config.js` ni `assets/js/config.js`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en paginas HTML.
+- Sin cambios de referencias.
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin modificaciones en `config.js` ni `assets/js/config.js`.
+- Sin movimiento ni eliminacion de `Logos/`.
+- Sin modificaciones en Apps Script.
+- Sin redirects.
+
+Riesgos documentados:
+
+- Backlog y Gestion de Sellers tienen riesgo alto porque consumen logos por `LOGO_BASE_URL` y `seller_id`.
+- Formularios tienen riesgo alto/critico por escritura real y validaciones.
+- Presentacion Seller es la mejor candidata para un piloto porque no escribe datos y ya usa fallback por iniciales.
+
 ## 2026-05-15 - Etapa 5C validacion de carga de logos
 
 Tipo de cambio: validacion/documental.
