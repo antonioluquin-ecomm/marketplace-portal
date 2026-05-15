@@ -1,0 +1,1310 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Seller v12 | Sporting Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --g:#5ea832;--g2:#4a8a26;--g-dim:rgba(94,168,50,.12);--g-brd:rgba(94,168,50,.28);
+      --k:#0b0f0b;--k2:#101610;--k3:#151c14;--k4:#1b2419;--w:#fff;
+      --t1:#edf3e9;--t2:#a6b79d;--t3:#71816b;--t4:#4f5d49;
+      --bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.05);
+      --warn:#ffb74d;--info:#64b5f6;--danger:#d94040;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Barlow,system-ui,sans-serif;background:radial-gradient(circle at 80% 8%,rgba(94,168,50,.16),transparent 36%),var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
+
+    /* ── TOPBAR ── */
+    .topbar{position:sticky;top:0;z-index:50;height:62px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 28px;background:rgba(11,15,11,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(18px);min-width:0}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0;overflow:hidden}
+    .logo{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .logo span{color:var(--g)}
+    .crumb{border-left:1px solid var(--bdr);padding-left:14px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
+    .tb-right{display:flex;align-items:center;gap:10px;min-width:0;flex-shrink:0}
+    .tb-cta{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;background:var(--g);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:background .15s;white-space:nowrap}
+    .tb-cta:hover{background:var(--g2)}
+    .tb-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--g-brd);background:var(--g-dim);font-size:11px;font-weight:700;color:var(--g)}
+    .tb-chip span{color:var(--t2);font-weight:500}
+    .status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t2)}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px rgba(255,183,77,.14);animation:pulse 2s infinite;flex-shrink:0}
+    .dot.ok{background:var(--g);box-shadow:0 0 0 4px rgba(94,168,50,.18)}
+    .dot.err{background:var(--danger);box-shadow:0 0 0 4px rgba(217,64,64,.15)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+    /* ── LAYOUT ── */
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 22px 60px;overflow-x:hidden}
+    .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin-bottom:18px}
+    .panel{background:linear-gradient(180deg,rgba(21,28,20,.96),rgba(16,22,16,.98));border:1px solid var(--bdr);border-radius:18px;padding:24px;box-shadow:var(--shadow);min-width:0}
+    .panel.soft{box-shadow:none;background:rgba(255,255,255,.028)}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--g);font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase}
+    .eyebrow:before{content:"";width:26px;height:2px;background:var(--g)}
+    h1,h2,h3{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.01em}
+    h1{font-size:clamp(46px,7vw,82px);line-height:.92;font-weight:900;margin-bottom:16px}
+    h1 span{color:var(--g)}
+    h2{font-size:22px;margin-bottom:12px}
+    .lead{font-size:16px;line-height:1.65;color:var(--t2);max-width:690px}
+
+    /* ── SELLER BOX ── */
+    .seller-box{display:flex;align-items:center;gap:16px;margin-top:20px;padding:15px;border-radius:14px;border:1px solid var(--bdr);background:rgba(255,255,255,.035)}
+    .seller-logo{width:64px;height:64px;object-fit:contain;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid var(--bdr);padding:7px}
+    .seller-logo.hidden{display:none}
+    .seller-fallback{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g);font-family:"Barlow Condensed",sans-serif;font-size:25px;font-weight:900;flex-shrink:0}
+    .seller-fallback.hidden{display:none}
+    .seller-for{font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
+    .seller-name{font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:900;text-transform:uppercase}
+    .seller-meta{font-size:12px;color:var(--t3);margin-top:3px}
+
+    /* ── CONDICIONES ── */
+    .cond-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:18px}
+    .cond-card{padding:13px;border-radius:12px;border:1px solid var(--bdr);background:rgba(255,255,255,.028)}
+    .cond-label{font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-bottom:5px}
+    .cond-value{font-size:14px;font-weight:800;color:var(--t1)}
+    .note{margin-top:14px;padding:12px 13px;border-left:3px solid var(--g);background:var(--g-dim);border-radius:10px;color:var(--t2);font-size:12px;line-height:1.5}
+
+    /* ── SIM GRID ── */
+    .sim-grid{display:grid;grid-template-columns:minmax(300px,360px) minmax(0,1fr);gap:18px;min-width:0}
+    .sim-grid > aside{position:sticky;top:82px;align-self:start}
+    .sim-grid > main{min-width:0}
+
+    /* ── FORM ── */
+    .section{padding:18px 0;border-bottom:1px solid var(--bdr2)}
+    .section:first-child{padding-top:0}
+    .section:last-child{border-bottom:0;padding-bottom:0}
+    .section-title{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:12px}
+    .field{margin-bottom:12px}
+    .field:last-child{margin-bottom:0}
+    .field label{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:6px}
+    .field small{font-size:10px;color:var(--t4);font-weight:500}
+    .inp,.sel{width:100%;padding:11px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--t1);font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s}
+    .inp:focus,.sel:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(94,168,50,.13)}
+    .sel option{background:#111711}
+    .mode-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+    .mode-btn{border:1px solid var(--bdr);background:rgba(255,255,255,.035);border-radius:9px;padding:10px;color:var(--t2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;transition:all .15s}
+    .mode-btn.active{border-color:var(--g-brd);background:var(--g-dim);color:var(--g)}
+    .mode-btn:hover:not(.active){color:var(--t1);border-color:rgba(255,255,255,.15)}
+
+    /* derived read-only display */
+    .derived-display{padding:10px 12px;border-radius:9px;border:1px dashed var(--bdr);background:rgba(255,255,255,.02);color:var(--t3);font-size:14px;font-weight:700}
+
+    /* ── CUOTAS CHIPS ── */
+    .cuotas-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+    .cuota-chip{border:1px solid var(--bdr);background:rgba(255,255,255,.035);border-radius:9px;padding:9px 4px;color:var(--t2);font-size:12px;font-weight:800;text-align:center;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+    .cuota-chip.active{border-color:var(--g-brd);background:var(--g-dim);color:var(--g)}
+    .cuota-chip:hover:not(.active){color:var(--t1);border-color:rgba(255,255,255,.15)}
+    .cuota-chip .chip-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:inherit;opacity:.7;display:block;margin-bottom:2px}
+
+    /* ── TOGGLES ── */
+    .svc{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--bdr2);transition:opacity .15s}
+    .svc:last-child{border-bottom:0}
+    .svc.dimmed{opacity:.4}
+    .svc-copy b{display:block;font-size:13px;color:var(--t1);line-height:1.2}
+    .svc-copy span{display:block;font-size:11px;color:var(--t3);margin-top:2px}
+    .tog{position:relative;width:42px;height:23px;flex-shrink:0;cursor:pointer}
+    .tog input{display:none}
+    .tog-track{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.13);transition:.2s}
+    .tog-thumb{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:white;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.28)}
+    .tog input:checked~.tog-track{background:var(--g)}
+    .tog input:checked~.tog-thumb{transform:translateX(19px)}
+
+    /* conditional fields */
+    .conditional-field{overflow:hidden;max-height:0;opacity:0;transition:max-height .25s ease,opacity .2s ease,margin .2s ease;margin-bottom:0}
+    .conditional-field.visible{max-height:80px;opacity:1;margin-bottom:12px}
+
+    /* ── KPIs ── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+    .kpi{padding:20px;border-radius:16px;background:var(--k3);border:1px solid var(--bdr);transition:all .25s}
+    .kpi.primary{grid-column:1/-1;background:linear-gradient(135deg,var(--g),var(--g2));border-color:var(--g)}
+    .kpi.primary.loss{background:linear-gradient(135deg,#c0392b,#922b21);border-color:var(--danger)}
+    .kpi.danger{border-color:rgba(217,64,64,.24);background:rgba(217,64,64,.08)}
+    .kpi-label{font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+    .kpi.primary .kpi-label,.kpi.primary .kpi-sub{color:rgba(255,255,255,.72)}
+    .kpi-val{font-family:"Barlow Condensed",sans-serif;font-size:36px;font-weight:900;line-height:1}
+    .kpi.primary .kpi-val{font-size:44px}
+    .kpi-sub{font-size:12px;color:var(--t3);margin-top:6px}
+
+    /* ── BAR ── */
+    .bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.06);margin-top:12px}
+    .bar-net{background:var(--g);height:100%;transition:width .35s cubic-bezier(.22,1,.36,1)}
+    .bar-cost{background:var(--danger);height:100%;transition:width .35s cubic-bezier(.22,1,.36,1)}
+
+    /* ── BREAKDOWN ── */
+    .breakdown{border:1px solid var(--bdr);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.025);margin-top:18px}
+    .bd-title{padding:14px 16px;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--g);border-bottom:1px solid var(--bdr)}
+    .bd-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 16px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bdr2);font-size:13px}
+    .bd-row:last-child{border-bottom:0}
+    .bd-row .bd-pct{text-align:right;font-size:10px;font-weight:700;color:var(--t4);white-space:nowrap;min-width:38px}
+    .bd-row .bd-amt{text-align:right;font-weight:800;white-space:nowrap}
+    .bd-row.negative .bd-amt{color:#f29a9a}
+    .bd-row.negative .bd-pct{color:rgba(242,154,154,.6)}
+    .bd-row.total{background:rgba(94,168,50,.09);font-weight:900}
+    .bd-row.total .bd-amt{color:var(--g)}
+    .bd-row.total .bd-pct{color:rgba(94,168,50,.6)}
+    .bd-row.total.loss{background:rgba(217,64,64,.09)}
+    .bd-row.total.loss .bd-amt{color:#f29a9a}
+
+    /* ── SERVICES IMPACT ── */
+    /* Replaced table with cleaner card grid */
+    .svc-impact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+    .svc-impact-card{border:1px solid var(--bdr);border-radius:10px;padding:12px 14px;background:rgba(255,255,255,.025);display:flex;align-items:center;gap:10px;transition:border-color .15s,background .15s}
+    .svc-impact-card.active{border-color:var(--g-brd);background:var(--g-dim)}
+    .svc-impact-card.active-warn{border-color:rgba(255,183,77,.3);background:rgba(255,183,77,.06)}
+    .svc-impact-card.off{opacity:.45}
+    .svc-impact-icon{font-size:18px;flex-shrink:0;line-height:1}
+    .svc-impact-body{flex:1;min-width:0}
+    .svc-impact-name{font-size:12px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .svc-impact-base{font-size:10px;color:var(--t3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .svc-impact-amt{font-family:"Barlow Condensed",sans-serif;font-size:16px;font-weight:900;color:var(--g);white-space:nowrap}
+    .svc-impact-card.off .svc-impact-amt{color:var(--t4);font-size:13px;font-weight:600}
+    .svc-impact-card.active-warn .svc-impact-amt{color:var(--warn)}
+
+    /* ── SCENARIOS ── */
+    .mini-scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .scenario{border:1px solid var(--bdr);background:rgba(255,255,255,.025);border-radius:12px;padding:14px;transition:border-color .15s}
+    .scenario.base-scen{border-color:var(--g-brd);background:rgba(94,168,50,.04)}
+    .scenario-label{font-size:10px;color:var(--t4);font-weight:900;letter-spacing:.13em;text-transform:uppercase;margin-bottom:2px}
+    .scenario-label.g{color:var(--g)}
+    .scenario-vol{font-size:10px;color:var(--t4);font-style:italic;margin-bottom:8px}
+    .scenario-value{font-family:"Barlow Condensed",sans-serif;font-size:25px;font-weight:900;color:var(--g);line-height:1;margin-bottom:4px}
+    .scenario-pct{font-size:11px;color:var(--t3)}
+    .scen-bar-wrap{height:4px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;margin-top:8px}
+    .scen-bar-fill{height:100%;background:var(--g);border-radius:999px;transition:width .35s ease}
+
+    /* ── ACTIONS ── */
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .btn{border:0;border-radius:10px;background:var(--g);color:white;padding:12px 18px;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:filter .15s,transform .1s;display:inline-flex;align-items:center;gap:7px}
+    .btn.secondary{background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--t2)}
+    .btn:hover{filter:brightness(1.1)}
+    .btn:active{transform:scale(.97)}
+
+    /* ── EMPTY STATE ── */
+    .empty-state{display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:56px 24px;text-align:center;color:var(--t4);border-radius:16px;border:1px dashed var(--bdr)}
+    .empty-state .ei{font-size:36px;opacity:.45;margin-bottom:4px}
+    .empty-state p{font-size:13px;line-height:1.6;max-width:300px;color:var(--t3)}
+
+    /* ── ALERT ── */
+    .alert-strip{display:none;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;border:1px solid rgba(217,64,64,.35);background:rgba(217,64,64,.1);color:#f29a9a;font-size:12px;margin-bottom:14px;line-height:1.45}
+    .alert-strip.visible{display:flex}
+
+    /* ── TOAST ── */
+    /* ── VIABILITY INDICATOR ── */
+    .viability-bar{display:flex;align-items:center;gap:10px;margin-top:18px;padding:12px 16px;border-radius:10px;border:1px solid;transition:all .3s}
+    .viability-bar.good{background:rgba(94,168,50,.10);border-color:rgba(94,168,50,.28)}
+    .viability-bar.warn{background:rgba(245,158,11,.09);border-color:rgba(245,158,11,.25)}
+    .viability-bar.bad{background:rgba(230,80,80,.09);border-color:rgba(230,80,80,.22)}
+    .viab-icon{font-size:18px;flex-shrink:0}
+    .viab-body{flex:1;min-width:0}
+    .viab-title{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+    .viability-bar.good .viab-title{color:#7ecf50}
+    .viability-bar.warn .viab-title{color:#f59e0b}
+    .viability-bar.bad  .viab-title{color:#e05555}
+    .viab-desc{font-size:11.5px;color:var(--t3);line-height:1.45}
+
+    /* ── CTA PANEL ── */
+    .cta-panel{margin-top:18px;padding:22px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(94,168,50,.12),rgba(94,168,50,.05));border:1px solid rgba(94,168,50,.28)}
+    .cta-panel-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .cta-panel-copy{}
+    .cta-panel-eyebrow{font-size:9.5px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--g);margin-bottom:6px}
+    .cta-panel-title{font-size:16px;font-weight:800;color:var(--t1);line-height:1.25;margin-bottom:5px}
+    .cta-panel-sub{font-size:12px;color:var(--t3);line-height:1.5;max-width:480px}
+    .cta-panel-btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid rgba(94,168,50,.15)}
+    .cta-primary{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:9px;background:var(--g);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:background .15s;font-family:inherit}
+    .cta-primary:hover{background:var(--g2)}
+    .cta-secondary{display:inline-flex;align-items:center;gap:7px;padding:11px 18px;border-radius:9px;background:transparent;color:var(--t2);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(255,255,255,.14);cursor:pointer;transition:all .15s;font-family:inherit}
+    .cta-secondary:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.24);color:var(--t1)}
+    .cta-whatsapp{display:inline-flex;align-items:center;gap:7px;padding:11px 18px;border-radius:9px;background:rgba(37,211,102,.12);color:#25d366;font-size:12px;font-weight:700;border:1px solid rgba(37,211,102,.25);cursor:pointer;text-decoration:none;transition:all .15s;font-family:inherit;letter-spacing:.04em}
+    .cta-whatsapp:hover{background:rgba(37,211,102,.2)}
+    .cta-panel-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+    .cta-step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+    .cta-step-num{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:900;color:rgba(94,168,50,.35);line-height:1}
+    .cta-step-txt{font-size:11px;color:var(--t3);line-height:1.4}
+
+    /* ── DISCLAIMER ── */
+    .disclaimer{margin-top:14px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);font-size:10.5px;color:var(--t4);line-height:1.55;text-align:center}
+
+    .toast-container{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+    .toast{background:var(--k4);border:1px solid var(--g-brd);color:var(--g);padding:9px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.04em;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.err-toast{border-color:rgba(217,64,64,.35);background:rgba(217,64,64,.12);color:#f29a9a}
+
+    /* ── SECTION DIVIDER LABEL ── */
+    .section-divider{display:flex;align-items:center;gap:10px;margin:20px 0 14px;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--t4)}
+    .section-divider::after{content:"";flex:1;height:1px;background:var(--bdr)}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:980px){
+      .hero,.sim-grid{grid-template-columns:1fr}
+      .sim-grid > aside{position:relative;top:auto}
+      .kpi-grid,.cond-grid{grid-template-columns:1fr}
+      .topbar{padding:0 16px}
+      .crumb,.tb-chip{display:none}
+      .wrap{padding:22px 14px 50px}
+      .mini-scenarios{grid-template-columns:1fr}
+      .svc-impact-grid{grid-template-columns:1fr}
+      .cuotas-chips{grid-template-columns:repeat(4,1fr)}
+      .bd-row{grid-template-columns:1fr auto auto}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">Sporting <span>Marketplace</span></div>
+    <div class="crumb">Simulador Seller</div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-chip" id="topbarChip" style="display:none">
+      Comisión <span id="topbarComision">—</span>
+    </div>
+    <div class="status">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Cargando…</span>
+    </div>
+    <a class="tb-btn" href="../../index.html" style="display:none" id="hubLinkInternal" title="Hub Central">← Hub</a>
+    <a class="tb-cta" id="topbarCta" href="../formularios/formulario-calificacion.html">
+      Completar calificación →
+    </a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="panel">
+      <div class="eyebrow">Proyección económica preliminar</div>
+      <h1>Simulá tus ventas en <span>Sporting</span></h1>
+      <p class="lead">Completá tus datos de venta, elegí los servicios a considerar y visualizá una estimación de facturación, deducciones y neto para tu marca.</p>
+      <div class="seller-box">
+        <img id="sellerLogo" class="seller-logo hidden" alt="Logo seller" referrerpolicy="no-referrer" loading="lazy">
+        <div id="sellerFallback" class="seller-fallback" aria-hidden="true">S</div>
+        <div>
+          <div class="seller-for">Simulación para</div>
+          <div id="sellerName" class="seller-name">Seller</div>
+          <div id="sellerMeta" class="seller-meta">Sporting Marketplace</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="panel soft">
+      <h2>Condiciones aplicadas</h2>
+      <div class="cond-grid">
+        <div class="cond-card"><div class="cond-label">Seller</div><div id="infoSellerId" class="cond-value">—</div></div>
+        <div class="cond-card"><div class="cond-label">Comisión</div><div id="infoCommission" class="cond-value">—</div></div>
+        <div class="cond-card"><div class="cond-label">Costo financiero est.</div><div id="infoFinance" class="cond-value">—</div></div>
+      </div>
+      <div class="note">La simulación es orientativa, segura y de uso privado. Los valores pueden variar según condiciones comerciales, servicios seleccionados y validación final de la propuesta.</div>
+    </aside>
+  </section>
+
+  <!-- SIM GRID -->
+  <section class="sim-grid">
+
+    <!-- ── FORM ── -->
+    <aside class="panel">
+
+      <!-- 0. INFORMACIÓN -->
+      <div class="section">
+        <div class="section-title">Información segura</div>
+        <div style="font-size:11.5px;color:var(--t2);margin-bottom:10px;line-height:1.55">Este simulador es seguro y privado. El enlace fue generado para tu marca y la información se utiliza únicamente para estimar condiciones comerciales preliminares dentro de Sporting Marketplace.</div>
+        <div id="sellerLinkWarning" style="display:none;padding:10px 12px;border-radius:9px;border:1px solid rgba(217,64,64,.28);background:rgba(217,64,64,.10);color:#f29a9a;font-size:11.5px;line-height:1.45">No se pudo identificar el seller. Verificá que el link recibido sea correcto.</div>
+      </div>
+
+      <!-- 1. FINANCIACIÓN (moved to top) -->
+      <div class="section">
+        <div class="section-title">Financiación</div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.5">Seleccioná la cantidad máxima de cuotas que querés simular. La opción no viene preseleccionada para que puedas elegir el escenario correcto.</div>
+        <div class="cuotas-chips">
+          <div class="cuota-chip" data-q="1" onclick="setCuota(1)">
+            <span class="chip-label">Contado</span>1
+          </div>
+          <div class="cuota-chip" data-q="3" onclick="setCuota(3)">
+            <span class="chip-label">Hasta</span>3x
+          </div>
+          <div class="cuota-chip" data-q="6" onclick="setCuota(6)">
+            <span class="chip-label">Hasta</span>6x
+          </div>
+          <div class="cuota-chip" data-q="12" onclick="setCuota(12)">
+            <span class="chip-label">Hasta</span>12x
+          </div>
+        </div>
+        <!-- hidden select kept for JS compatibility -->
+        <select id="cuotasMax" style="display:none" aria-hidden="true">
+          <option value="" selected>Sin selección</option>
+          <option value="1">1</option>
+          <option value="3">3</option>
+          <option value="6">6</option>
+          <option value="12">12</option>
+        </select>
+      </div>
+
+      <!-- 2. DATOS DE VENTA -->
+      <div class="section">
+        <div class="section-title">Datos de venta</div>
+        <div class="mode-toggle">
+          <button id="modeTotal" class="mode-btn active" type="button" aria-pressed="true">Venta mensual</button>
+          <button id="modeTicket" class="mode-btn" type="button" aria-pressed="false">Por ticket</button>
+        </div>
+
+        <div class="field" id="monthlySalesField">
+          <label>Venta mensual estimada <small>ARS</small></label>
+          <input id="monthlySales" class="inp" type="number" min="0" step="1000" value="0" aria-label="Venta mensual estimada en ARS">
+        </div>
+        <div class="field" id="ticketField" style="display:none">
+          <label>Ticket promedio <small>ARS</small></label>
+          <input id="ticket" class="inp" type="number" min="0" step="100" value="0" aria-label="Ticket promedio en ARS">
+        </div>
+        <div class="field">
+          <label>Pedidos mensuales estimados <small>cant.</small></label>
+          <input id="orders" class="inp" type="number" min="0" step="1" value="0" aria-label="Pedidos mensuales estimados">
+        </div>
+
+        <!-- derived value: read-only, styled differently so it reads as "calculated" -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:700;color:var(--t3);margin-bottom:6px;display:flex;justify-content:space-between;align-items:baseline">
+            <span id="derivedLabel">Ticket calculado</span>
+            <small style="font-size:10px;color:var(--t4)">estimado</small>
+          </div>
+          <div class="derived-display" id="derivedValue">$ 0</div>
+        </div>
+      </div>
+
+      <!-- 3. SERVICIOS -->
+      <div class="section">
+        <div class="section-title">Servicios a considerar</div>
+
+        <div class="svc">
+          <div class="svc-copy"><b>Catalogación</b><span>Carga y gestión de productos en el catálogo.</span></div>
+          <label class="tog" aria-label="Activar catalogación"><input id="svcCatalog" type="checkbox" onchange="onSvcChange()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+        <!-- SKUs field: only visible when catalogación is active -->
+        <div class="conditional-field" id="skusField">
+          <div class="field" style="margin-bottom:0;padding:4px 0 2px">
+            <label style="font-size:11px">SKUs a catalogar <small>cantidad</small></label>
+            <input id="skus" class="inp" type="number" min="0" step="1" value="0" aria-label="SKUs a catalogar" style="padding:9px 12px;font-size:13px">
+          </div>
+        </div>
+
+        <div class="svc">
+          <div class="svc-copy"><b>Fulfillment / preparación</b><span>Picking, packing y despacho desde depósito.</span></div>
+          <label class="tog" aria-label="Activar fulfillment"><input id="svcFulfillment" type="checkbox" onchange="scheduleRender()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+
+        <div class="svc">
+          <div class="svc-copy"><b>Logística directa</b><span>Entrega al comprador final.</span></div>
+          <label class="tog" aria-label="Activar logística directa"><input id="svcLogDir" type="checkbox" onchange="scheduleRender()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+
+        <div class="svc">
+          <div class="svc-copy"><b>Logística inversa</b><span>Retiro de devolución del comprador.</span></div>
+          <label class="tog" aria-label="Activar logística inversa"><input id="svcLogInv" type="checkbox" onchange="onSvcChange()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+
+        <div class="svc">
+          <div class="svc-copy"><b>Gestión de devoluciones</b><span>Procesamiento operativo de retornos.</span></div>
+          <label class="tog" aria-label="Activar gestión de devoluciones"><input id="svcGestionDevol" type="checkbox" onchange="onSvcChange()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+
+        <!-- Devoluciones % field: only visible when logInv or gestionDevol is active -->
+        <div class="conditional-field" id="devolField">
+          <div class="field" style="margin-bottom:0;padding:4px 0 2px">
+            <label style="font-size:11px">Devoluciones estimadas <small>%</small></label>
+            <input id="returnsPct" class="inp" type="number" min="0" max="100" step="0.1" value="0" aria-label="Porcentaje de devoluciones" style="padding:9px 12px;font-size:13px">
+          </div>
+        </div>
+
+        <div class="svc">
+          <div class="svc-copy"><b>Soporte / onboarding</b><span>Servicio mensual si corresponde.</span></div>
+          <label class="tog" aria-label="Activar soporte"><input id="svcSupport" type="checkbox" onchange="scheduleRender()"><span class="tog-track"></span><span class="tog-thumb"></span></label>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── RESULTS ── -->
+    <main>
+
+      <!-- Alert strip -->
+      <div class="alert-strip" id="alertStrip">
+        <span style="font-size:16px;flex-shrink:0">⚠</span>
+        <span id="alertMsg">Las deducciones superan la facturación bruta. Revisá los servicios seleccionados o el volumen ingresado.</span>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi primary" id="kpiNetCard">
+          <div class="kpi-label">Neto estimado para el seller</div>
+          <div id="kpiNet" class="kpi-val">$ 0</div>
+          <div class="kpi-sub" id="kpiNetSub">Luego de comisión, financiación y servicios.</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Facturación bruta estimada</div>
+          <div id="kpiGross" class="kpi-val">$ 0</div>
+          <div id="kpiGrossSub" class="kpi-sub">Venta mensual estimada.</div>
+        </div>
+        <div class="kpi danger">
+          <div class="kpi-label">Deducciones estimadas</div>
+          <div id="kpiCosts" class="kpi-val">$ 0</div>
+          <div id="kpiCostsSub" class="kpi-sub">0% sobre facturación.</div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="emptyState">
+        <div class="ei">📊</div>
+        <p>Ingresá la venta mensual o el ticket promedio para ver la proyección económica.</p>
+      </div>
+
+      <div id="resultsContent">
+
+        <!-- Composition bar -->
+        <div class="panel soft">
+          <h2>Composición del ingreso</h2>
+          <div class="bar"><div id="barNet" class="bar-net" style="width:0%"></div><div id="barCost" class="bar-cost" style="width:0%"></div></div>
+          <div class="note" id="barLegend" style="margin-top:10px">Neto seller 0% · Deducciones 0%</div>
+        </div>
+
+        <!-- Breakdown detallado -->
+        <div class="breakdown">
+          <div class="bd-title">Detalle de estimación</div>
+          <div class="bd-row">
+            <span>Facturación bruta</span>
+            <span class="bd-pct"></span>
+            <span class="bd-amt" id="bdGross">$ 0</span>
+          </div>
+          <div class="bd-row negative">
+            <span>Comisión Marketplace</span>
+            <span class="bd-pct" id="bdCommissionPct">—</span>
+            <span class="bd-amt" id="bdCommission">-$ 0</span>
+          </div>
+          <div class="bd-row negative">
+            <span>Costo financiero estimado</span>
+            <span class="bd-pct" id="bdFinancePct">—</span>
+            <span class="bd-amt" id="bdFinance">-$ 0</span>
+          </div>
+          <div class="bd-row negative">
+            <span>Servicios seleccionados</span>
+            <span class="bd-pct" id="bdServicesPct">—</span>
+            <span class="bd-amt" id="bdServices">-$ 0</span>
+          </div>
+          <div class="bd-row total" id="bdTotalRow">
+            <span>Neto estimado</span>
+            <span class="bd-pct" id="bdNetPct">—</span>
+            <span class="bd-amt" id="bdNet">$ 0</span>
+          </div>
+        </div>
+
+        <!-- Services impact -->
+        <div class="panel soft" style="margin-top:18px">
+          <h2>Impacto por servicio</h2>
+          <div class="svc-impact-grid" id="svcImpactGrid">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Scenarios -->
+        <div class="panel soft" style="margin-top:18px">
+          <h2>Escenarios rápidos</h2>
+          <div style="font-size:12px;color:var(--t3);margin-bottom:14px">Variando el volumen de ventas mensual manteniendo los mismos servicios y condiciones.</div>
+          <div class="mini-scenarios">
+            <div class="scenario">
+              <div class="scenario-label">Conservador</div>
+              <div class="scenario-vol">−30% de ventas</div>
+              <div id="lowNet" class="scenario-value">$ 0</div>
+              <div id="lowPct" class="scenario-pct">Margen 0%</div>
+              <div class="scen-bar-wrap"><div class="scen-bar-fill" id="lowBar" style="width:0%"></div></div>
+            </div>
+            <div class="scenario base-scen">
+              <div class="scenario-label g">Base</div>
+              <div class="scenario-vol">Datos ingresados</div>
+              <div id="midNet" class="scenario-value">$ 0</div>
+              <div id="midPct" class="scenario-pct">Margen 0%</div>
+              <div class="scen-bar-wrap"><div class="scen-bar-fill" id="midBar" style="width:0%"></div></div>
+            </div>
+            <div class="scenario">
+              <div class="scenario-label">Optimista</div>
+              <div class="scenario-vol">+30% de ventas</div>
+              <div id="highNet" class="scenario-value">$ 0</div>
+              <div id="highPct" class="scenario-pct">Margen 0%</div>
+              <div class="scen-bar-wrap"><div class="scen-bar-fill" id="highBar" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" type="button" onclick="copySummary()">📋 Copiar resumen</button>
+            <button class="btn secondary" type="button" onclick="window.print()">Imprimir / PDF</button>
+          </div>
+        </div>
+
+        <!-- ── VIABILITY INDICATOR ── -->
+        <div class="viability-bar" id="viabilityBar" style="display:none">
+          <div class="viab-icon" id="viabIcon"></div>
+          <div class="viab-body">
+            <div class="viab-title" id="viabTitle"></div>
+            <div class="viab-desc" id="viabDesc"></div>
+          </div>
+        </div>
+
+        <!-- ── CTA PANEL ── -->
+        <div class="cta-panel" id="ctaPanel" style="display:none">
+          <div class="cta-panel-top">
+            <div class="cta-panel-copy">
+              <div class="cta-panel-eyebrow">¿Querés avanzar?</div>
+              <div class="cta-panel-title" id="ctaPanelTitle">Completá el formulario de calificación</div>
+              <div class="cta-panel-sub" id="ctaPanelSub">Esta simulación es orientativa y privada. El equipo de Sporting Marketplace revisará tu operación y te enviará una propuesta personalizada.</div>
+            </div>
+          </div>
+          <div class="cta-panel-steps">
+            <div class="cta-step"><div class="cta-step-num">01</div><div class="cta-step-txt">Completás el formulario con los datos de tu operación</div></div>
+            <div class="cta-step"><div class="cta-step-num">02</div><div class="cta-step-txt">El equipo de Sporting analiza la viabilidad y condiciones</div></div>
+            <div class="cta-step"><div class="cta-step-num">03</div><div class="cta-step-txt">Recibís una propuesta comercial personalizada</div></div>
+          </div>
+          <div class="cta-panel-btns">
+            <a class="cta-primary" id="ctaFormLink" href="#">Completar calificación →</a>
+            <button class="cta-secondary" type="button" onclick="copySummary()">📋 Copiar simulación</button>
+            <a class="cta-whatsapp" id="ctaWhatsapp" href="#" target="_blank" rel="noopener">WhatsApp →</a>
+            <button class="cta-secondary" type="button" onclick="window.print()">Imprimir / PDF</button>
+          </div>
+        </div>
+
+        <!-- ── DISCLAIMER ── -->
+        <div class="disclaimer" id="ctaDisclaimer" style="display:none">
+          Los valores mostrados son orientativos y no constituyen una oferta comercial. Sujeto a validación del equipo de Marketplace Sporting. Comisiones y condiciones pueden variar según categoría, volumen y acuerdo particular.
+        </div>
+
+      </div><!-- /resultsContent -->
+    </main>
+  </section>
+</div>
+
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+/* ═══════════════════════════════════
+   CONFIG
+═══════════════════════════════════ */
+const CONFIG_URL = ""; // Opcional: pegar la URL CSV publicada de la hoja config.
+
+const DIRECT_CSV_URLS = {
+  csv_sellers:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
+  csv_tarifas:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
+  csv_overrides: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv"
+};
+
+const FALLBACK_RATES = {
+  comision_pct: 7,
+  c1_pct: 0,    c3_pct: 8,    c6_pct: 13,    c12_pct: 21,
+  mix_c1: 8.47, mix_c3: 21.33,mix_c6: 52.74, mix_c12: 17.46,
+  t_logistica_dir: 10527,
+  t_logistica_inv: 7260,
+  t_catalogacion:  3000,
+  t_fulfillment:   200,
+  t_gestion_devol: 400,
+  t_soporte:       0,
+  devol_pct_default:  0,
+  cuotas_max_default: 12
+};
+
+const SVC_META = {
+  svcCatalog:     { icon:"📂", name:"Catalogación" },
+  svcFulfillment: { icon:"📦", name:"Fulfillment" },
+  svcLogDir:      { icon:"🚚", name:"Logística directa" },
+  svcLogInv:      { icon:"↩️", name:"Logística inversa" },
+  svcGestionDevol:{ icon:"🔄", name:"Gest. devoluciones" },
+  svcSupport:     { icon:"🎧", name:"Soporte / onboarding" }
+};
+
+let BASE_RATES = {...FALLBACK_RATES};
+let RATES      = {...FALLBACK_RATES};
+let SELLER     = {};
+let SELLERS    = [];
+let OVERRIDES  = [];
+let INPUT_MODE = "total";
+let _rtimer    = null;
+
+const params = new URLSearchParams(window.location.search);
+let CURRENT_SELLER_ID = (params.get("seller_id") || params.get("seller") || params.get("id") || "").trim();
+
+/* ── helpers ── */
+const $     = id => document.getElementById(id);
+const norm  = v  => String(v ?? "").trim().toLowerCase();
+const num   = v  => {
+  if(v === null || v === undefined || v === "") return 0;
+  const s = String(v).replace(/\./g,"").replace(",",".").replace(/[^\d.-]/g,"");
+  const n = parseFloat(s); return Number.isFinite(n) ? n : 0;
+};
+const fmt    = v  => (Number(v)||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0});
+const fmtNum = v  => (Number(v)||0).toLocaleString("es-AR",{maximumFractionDigits:0});
+const fmtPct = v  => Number.isFinite(v) ? v.toFixed(1).replace(".",",")+"%" : "0,0%";
+const pick   = (obj,keys) => {
+  for(const k of keys){ if(obj&&obj[k]!==undefined&&obj[k]!==null&&String(obj[k]).trim()!=="") return obj[k]; }
+  return "";
+};
+const initials = name => String(name||"S").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"S";
+const sel    = id => $(id).checked;
+
+/* ── CSV ── */
+async function getConfigValue(key){
+  if(CONFIG_URL && !CONFIG_URL.includes("PEGAR") && !CONFIG_URL.includes("TU_URL")){
+    try{
+      const rows = await getCSV(CONFIG_URL);
+      const row = rows.find(r => norm(pick(r,["clave","key","campo","nombre"])) === norm(key));
+      const value = row ? pick(row,["valor","url","value","link"]) : "";
+      if(value) return value;
+    }catch(e){
+      console.warn("No se pudo leer CONFIG_URL. Se usan URLs directas.", e);
+    }
+  }
+  return DIRECT_CSV_URLS[key] || "";
+}
+
+async function loadCsvSources(){
+  const sellersUrl = await getConfigValue("csv_sellers");
+  const tarifasUrl = await getConfigValue("csv_tarifas");
+  const overridesUrl = await getConfigValue("csv_overrides");
+  const [sellerRows, tarifaRows, overrideRows] = await Promise.all([
+    sellersUrl ? getCSV(sellersUrl).catch(()=>[]) : Promise.resolve([]),
+    tarifasUrl ? getCSV(tarifasUrl) : Promise.resolve([]),
+    overridesUrl ? getCSV(overridesUrl).catch(()=>[]) : Promise.resolve([])
+  ]);
+  return {sellerRows, tarifaRows, overrideRows};
+}
+
+async function getCSV(url){
+  const sep = String(url).includes("?") ? "&" : "?";
+  const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  return parseCSV(await res.text());
+}
+function parseCSV(text){
+  const rows=[]; let row=[],cur="",q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c==='"'&&q&&n==='"'){cur+='"';i++;continue}
+    if(c==='"'){q=!q;continue}
+    if(c===","&&!q){row.push(cur);cur="";continue}
+    if((c==="\n"||c==="\r")&&!q){if(c==="\r"&&n==="\n")i++;row.push(cur);cur="";if(row.some(v=>String(v).trim()!==""))rows.push(row);row=[];continue}
+    cur+=c;
+  }
+  row.push(cur);if(row.some(v=>String(v).trim()!==""))rows.push(row);
+  if(!rows.length)return[];
+  const headers=rows[0].map(h=>String(h).trim());
+  return rows.slice(1).map(r=>{const obj={};headers.forEach((h,i)=>obj[h]=(r[i]??"").trim());return obj;});
+}
+function canonicalRateKey(key){
+  const raw = String(key || "").trim();
+  const k = raw
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\s-]+/g, "_");
+
+  const aliases = {
+    comision_default: "comision_pct",
+    comision: "comision_pct",
+    comision_pct: "comision_pct",
+    porcentaje_comision: "comision_pct",
+    c1: "c1_pct",
+    c1_pct: "c1_pct",
+    cuota_1: "c1_pct",
+    c3: "c3_pct",
+    c3_pct: "c3_pct",
+    cuota_3: "c3_pct",
+    c6: "c6_pct",
+    c6_pct: "c6_pct",
+    cuota_6: "c6_pct",
+    c12: "c12_pct",
+    c12_pct: "c12_pct",
+    cuota_12: "c12_pct",
+    mix_c1: "mix_c1",
+    mix_c3: "mix_c3",
+    mix_c6: "mix_c6",
+    mix_c12: "mix_c12",
+    t_ld: "t_logistica_dir",
+    t_logistica_dir: "t_logistica_dir",
+    logistica_directa: "t_logistica_dir",
+    tarifa_logistica_directa: "t_logistica_dir",
+    t_li: "t_logistica_inv",
+    t_logistica_inv: "t_logistica_inv",
+    logistica_inversa: "t_logistica_inv",
+    tarifa_logistica_inversa: "t_logistica_inv",
+    t_gd: "t_gestion_devol",
+    t_gestion_devol: "t_gestion_devol",
+    gestion_devoluciones: "t_gestion_devol",
+    tarifa_gestion_devoluciones: "t_gestion_devol",
+    t_ca: "t_catalogacion",
+    t_catalogacion: "t_catalogacion",
+    catalogacion: "t_catalogacion",
+    tarifa_catalogacion: "t_catalogacion",
+    t_ff: "t_fulfillment",
+    t_fulfillment: "t_fulfillment",
+    fulfillment: "t_fulfillment",
+    preparacion: "t_fulfillment",
+    tarifa_fulfillment: "t_fulfillment",
+    t_soporte: "t_soporte",
+    soporte: "t_soporte",
+    devol_pct_default: "devol_pct_default",
+    cuotas_max_default: "cuotas_max_default"
+  };
+
+  return aliases[k] || raw;
+}
+
+function parseRates(rows){
+  const out={};
+  rows.forEach(r=>{
+    const campo=pick(r,["campo","Campo","parametro","Parámetro","Parametro","key","clave","concepto","Concepto"]);
+    const valor=pick(r,["Valor vigente","valor","Valor","value","importe","monto","tarifa","Tarifa"]);
+    const key = canonicalRateKey(campo);
+    if(key&&valor!==""&&Number.isFinite(num(valor)))out[key]=num(valor);
+  });
+  return out;
+}
+function parseOverrides(rows,sellerId){
+  const out={};const id=norm(sellerId);
+  rows.forEach(r=>{
+    const sid=norm(pick(r,["seller_id","Seller ID","id_seller","seller"]));
+    if(!sid||sid!==id)return;
+    const campo=pick(r,["campo","Campo","parametro","Parámetro","Parametro","key","clave","concepto","Concepto"]);
+    const valor=pick(r,["valor","Valor","Valor vigente","value","importe","monto","tarifa","Tarifa"]);
+    const key = canonicalRateKey(campo);
+    if(key&&valor!==""&&Number.isFinite(num(valor))){out[key]=num(valor);return;}
+    Object.entries(r).forEach(([k,v])=>{
+      if(["seller_id","Seller ID","id_seller","seller","nombre","seller_nombre","observaciones"].includes(k))return;
+      const canonical = canonicalRateKey(k);
+      if(v!==""&&Number.isFinite(num(v)))out[canonical]=num(v);
+    });
+  });
+  return out;
+}
+
+/* ── seller info ── */
+function getSellerIdFromRow(row){
+  return String(pick(row,["seller_id","id","id_seller","Seller ID","seller"])).trim();
+}
+function getSellerNameFromRow(row){
+  return pick(row,["seller_nombre","nombre","nombre_seller","marca","Seller","seller"]);
+}
+function getSellerLogoFromRow(row){
+  return pick(row,["logo_url","logo","url_logo","Logo","logo seller","logo_seller","imagen","image","image_url"]);
+}
+function normalizeLogoUrl(url){
+  let raw = String(url || "").trim();
+  if(!raw) return "";
+  raw = raw.replace(/^http:\/\//i,"https://");
+
+  // Google Drive sharing URL -> direct viewable URL
+  const driveFile = raw.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
+  if(driveFile && driveFile[1]) return `https://drive.google.com/uc?export=view&id=${driveFile[1]}`;
+
+  const driveId = raw.match(/[?&]id=([^&]+)/i);
+  if(/drive\.google\.com/i.test(raw) && driveId && driveId[1]) return `https://drive.google.com/uc?export=view&id=${driveId[1]}`;
+
+  return raw;
+}
+function buildSellerSelect(){
+  const select = $("sellerSelect");
+  if(!select) return;
+
+  const sorted = [...SELLERS].sort((a,b)=>String(getSellerNameFromRow(a)).localeCompare(String(getSellerNameFromRow(b)),"es"));
+  select.innerHTML = '<option value="">Completar manualmente / sin seller definido</option>' +
+    sorted.map(row=>{
+      const id = getSellerIdFromRow(row);
+      const name = getSellerNameFromRow(row) || id || "Seller";
+      return `<option value="${escapeHtml(id)}">${escapeHtml(name)}${id ? " · " + escapeHtml(id) : ""}</option>`;
+    }).join("");
+
+  if(CURRENT_SELLER_ID){
+    select.value = CURRENT_SELLER_ID;
+  }
+}
+function escapeHtml(value){
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
+}
+function findSellerById(id){
+  const target = norm(id);
+  if(!target) return {};
+  return SELLERS.find(s => norm(getSellerIdFromRow(s)) === target) || {};
+}
+function applyOverridesForSeller(){
+  const overrides = CURRENT_SELLER_ID ? parseOverrides(OVERRIDES, CURRENT_SELLER_ID) : {};
+  RATES = {...BASE_RATES, ...overrides};
+}
+function applySellerInfo(shouldPrefill = true){
+  SELLER = findSellerById(CURRENT_SELLER_ID);
+  const sellerFound = !!(CURRENT_SELLER_ID && getSellerIdFromRow(SELLER));
+  applyOverridesForSeller();
+
+  const name = pick(SELLER,["seller_nombre","nombre","nombre_seller","marca"]) || params.get("seller_name") || "Tu marca";
+  const logo = normalizeLogoUrl(getSellerLogoFromRow(SELLER) || params.get("logo") || "");
+  const site = pick(SELLER,["sitio_objetivo","sitio"]) || "Sporting";
+
+  $("sellerName").textContent   = name;
+  $("sellerMeta").textContent   = site;
+  $("infoSellerId").textContent = name || CURRENT_SELLER_ID || "—";
+  const linkWarning = $("sellerLinkWarning");
+  if(linkWarning){
+    if(!CURRENT_SELLER_ID){
+      linkWarning.style.display = "block";
+      linkWarning.textContent = "No se pudo identificar el seller. Verificá que el link recibido sea correcto.";
+    }else if(!sellerFound){
+      linkWarning.style.display = "block";
+      linkWarning.textContent = "No encontramos condiciones cargadas para este seller. Podés simular con valores generales, pero la propuesta deberá validarse comercialmente.";
+    }else{
+      linkWarning.style.display = "none";
+    }
+  }
+  $("sellerFallback").textContent = initials(name);
+
+  const logoEl = $("sellerLogo");
+  const fallbackEl = $("sellerFallback");
+  if(logo){
+    logoEl.src = logo;
+    logoEl.classList.remove("hidden");
+    fallbackEl.classList.add("hidden");
+    logoEl.onerror = () => { logoEl.removeAttribute("src"); logoEl.classList.add("hidden"); fallbackEl.classList.remove("hidden"); };
+  }else{
+    logoEl.removeAttribute("src");
+    logoEl.classList.add("hidden");
+    fallbackEl.classList.remove("hidden");
+  }
+
+  const topbarCta = $("topbarCta");
+  if(topbarCta){
+    topbarCta.href = "../formularios/formulario-calificacion.html" + (CURRENT_SELLER_ID ? "?seller_id=" + encodeURIComponent(CURRENT_SELLER_ID) : "");
+  }
+
+  if(shouldPrefill && CURRENT_SELLER_ID){
+    const ticket = num(pick(SELLER,["ticket_promedio","ticket","ticket_medio"]));
+    const gmv    = num(pick(SELLER,["gmv_estimado","gmv","venta_mensual_estimada","venta_mensual"]));
+    const orders = ticket>0&&gmv>0?Math.round(gmv/ticket):num(pick(SELLER,["pedidos_estimados","pedidos_mensuales","ventas_mensuales"]));
+    const skus   = num(pick(SELLER,["skus_estimados","cantidad_skus","skus"]));
+    const devol  = num(pick(SELLER,["devol_pct","devoluciones_pct","tasa_devolucion"]));
+
+    if(gmv) $("monthlySales").value = gmv;
+    if(ticket) $("ticket").value = ticket;
+    if(orders) $("orders").value = orders;
+    if(skus) $("skus").value = skus;
+    if(devol) $("returnsPct").value = devol;
+
+    clearCuotaSelection();
+  }else{
+    clearCuotaSelection();
+  }
+}
+function onSellerSelectChange(){
+  const select = $("sellerSelect");
+  CURRENT_SELLER_ID = select ? select.value : "";
+  applySellerInfo(true);
+  render();
+}
+
+/* ── cuotas chips ── */
+function clearCuotaSelection(){
+  document.querySelectorAll(".cuota-chip").forEach(c=>c.classList.remove("active"));
+  const cuotas = $("cuotasMax");
+  if(cuotas) cuotas.value = "";
+}
+
+function setCuota(q){
+  document.querySelectorAll(".cuota-chip").forEach(c=>{
+    c.classList.toggle("active", parseInt(c.dataset.q)===q);
+  });
+  $("cuotasMax").value=String(q);
+  scheduleRender();
+}
+function setCuotasSelect(q){
+  const allowed=[1,3,6,12];
+  const chosen=allowed.reduce((prev,cur)=>q>=cur?cur:prev,1);
+  setCuota(chosen);
+}
+
+/* ── conditional fields ── */
+function onSvcChange(){
+  const catActive = sel("svcCatalog");
+  const devolActive= sel("svcLogInv")||sel("svcGestionDevol");
+
+  $("skusField").classList.toggle("visible", catActive);
+  $("devolField").classList.toggle("visible", devolActive);
+
+  // dim services that depend on devoluciones if none selected
+  ["svcLogInv","svcGestionDevol"].forEach(id=>{
+    const row=$(id)?.closest(".svc");
+    if(row) row.classList.remove("dimmed");
+  });
+
+  scheduleRender();
+}
+
+/* ── finance ── */
+function effectiveFinancePct(){
+  const cuotasValue = $("cuotasMax").value;
+  if(!cuotasValue) return null;
+  const cuotasMax=num(cuotasValue);
+  const opts=[
+    {q:1, pct:RATES.c1_pct, mix:RATES.mix_c1},
+    {q:3, pct:RATES.c3_pct, mix:RATES.mix_c3},
+    {q:6, pct:RATES.c6_pct, mix:RATES.mix_c6},
+    {q:12,pct:RATES.c12_pct,mix:RATES.mix_c12}
+  ].filter(x=>x.q<=cuotasMax);
+  const totalMix=opts.reduce((a,b)=>a+num(b.mix),0)||1;
+  return opts.reduce((a,b)=>a+(num(b.pct)*(num(b.mix)/totalMix)),0);
+}
+
+/* ── gross / ticket ── */
+function currentGross(){
+  const orders=num($("orders").value);
+  if(INPUT_MODE==="total")return num($("monthlySales").value);
+  return num($("ticket").value)*orders;
+}
+function currentTicket(){
+  const orders=num($("orders").value);
+  if(INPUT_MODE==="ticket")return num($("ticket").value);
+  return orders>0?currentGross()/orders:0;
+}
+
+/* ── service rows ── */
+function serviceRows(mult=1){
+  const orders    =num($("orders").value)*mult;
+  const skus      =num($("skus").value);
+  const retPct    =num($("returnsPct").value)/100;
+  const returns   =orders*retPct;
+  return [
+    {id:"svcCatalog",     name:"Catalogación",          base:`${fmtNum(skus)} SKUs`,           qty:skus,    rate:RATES.t_catalogacion},
+    {id:"svcFulfillment", name:"Fulfillment",            base:`${fmtNum(orders)} pedidos`,       qty:orders,  rate:RATES.t_fulfillment},
+    {id:"svcLogDir",      name:"Logística directa",      base:`${fmtNum(orders)} pedidos`,       qty:orders,  rate:RATES.t_logistica_dir},
+    {id:"svcLogInv",      name:"Logística inversa",      base:`${fmtNum(returns)} devoluciones`, qty:returns, rate:RATES.t_logistica_inv},
+    {id:"svcGestionDevol",name:"Gest. devoluciones",     base:`${fmtNum(returns)} devoluciones`, qty:returns, rate:RATES.t_gestion_devol},
+    {id:"svcSupport",     name:"Soporte / onboarding",   base:"1 mes",                           qty:1,       rate:RATES.t_soporte}
+  ].map(s=>{
+    const total=s.qty*num(s.rate);
+    const active=sel(s.id);
+    return {...s,total,active,applied:active?total:0,isZeroRate:num(s.rate)===0};
+  });
+}
+
+/* ── calculate ── */
+function calculate(mult=1){
+  const gross     =currentGross()*mult;
+  const commission=gross*(num(RATES.comision_pct)/100);
+  const financePct=effectiveFinancePct();
+  const finance   =gross*((financePct||0)/100);
+  const services  =serviceRows(mult).reduce((a,b)=>a+b.applied,0);
+  const costs     =commission+finance+services;
+  const net       =gross-costs;
+  return {gross,commission,finance,services,costs,net,netClamped:Math.max(0,net),financePct};
+}
+
+/* ── render ── */
+/* ── VIABILITY + CTA ─────────────────────────── */
+function updateViabilityAndCTA(r, gross) {
+  if (!gross || gross === 0) {
+    ["viabilityBar","ctaPanel","ctaDisclaimer"].forEach(id => {
+      const el = $(id); if (el) el.style.display = "none";
+    });
+    return;
+  }
+
+  const netPct = gross ? (r.netClamped / gross) * 100 : 0;
+
+  // ── Viability semaphore
+  const bar = $("viabilityBar");
+  const icon = $("viabIcon");
+  const title = $("viabTitle");
+  const desc = $("viabDesc");
+  if (bar) {
+    bar.style.display = "flex";
+    bar.classList.remove("good","warn","bad");
+    if (netPct >= 60) {
+      bar.classList.add("good");
+      icon.textContent = "✓";
+      title.textContent = "Margen saludable";
+      desc.textContent = `Con un margen neto estimado del ${fmtPct(netPct)}, la operación muestra buena viabilidad. Podés avanzar con el proceso de calificación.`;
+    } else if (netPct >= 35) {
+      bar.classList.add("warn");
+      icon.textContent = "⚠";
+      title.textContent = "Margen moderado";
+      desc.textContent = `El margen neto estimado es del ${fmtPct(netPct)}. Revisá los servicios seleccionados o el volumen para optimizar la ecuación antes de avanzar.`;
+    } else {
+      bar.classList.add("bad");
+      icon.textContent = "✗";
+      title.textContent = "Margen bajo — revisá la configuración";
+      desc.textContent = `Con ${fmtPct(netPct)} de margen neto, la operación actual puede no ser viable. Ajustá volumen, ticket o servicios antes de avanzar.`;
+    }
+  }
+
+  // ── CTA panel: personalize with seller name + margin
+  const panel = $("ctaPanel");
+  const disc = $("ctaDisclaimer");
+  if (panel) {
+    panel.style.display = "block";
+    if (disc) disc.style.display = "block";
+
+    const sellerNombre = $("sellerName")?.textContent?.trim();
+    const hasName = sellerNombre && sellerNombre !== "Tu marca" && sellerNombre !== "—";
+
+    // Title: personalized if we know the seller
+    const ctaTitle = $("ctaPanelTitle");
+    if (ctaTitle) {
+      ctaTitle.textContent = hasName
+        ? `${sellerNombre}, ¿querés avanzar con Sporting Marketplace?`
+        : "¿Querés avanzar con Sporting Marketplace?";
+    }
+
+    // Sub: adapt message based on viability
+    const ctaSub = $("ctaPanelSub");
+    if (ctaSub) {
+      if (netPct >= 60) {
+        ctaSub.textContent = "La proyección es positiva. Completá el formulario y el equipo de Sporting te contactará para definir las condiciones y arrancar el proceso.";
+      } else if (netPct >= 35) {
+        ctaSub.textContent = "Los números son razonables. Completá el formulario y el equipo analizará cómo optimizar la propuesta para tu operación.";
+      } else {
+        ctaSub.textContent = "Antes de avanzar, te recomendamos revisar la configuración. Si querés, completá igual el formulario y el equipo puede ayudarte a encontrar el modelo correcto.";
+      }
+    }
+
+    // Wire CTA links
+    const base = "../formularios/formulario-calificacion.html";
+    const qp = CURRENT_SELLER_ID ? "?seller_id=" + encodeURIComponent(CURRENT_SELLER_ID) : "";
+    const formUrl = base + qp;
+    const formLink = $("ctaFormLink");
+    if (formLink) formLink.href = formUrl;
+
+    // WhatsApp: share summary
+    const waLink = $("ctaWhatsapp");
+    if (waLink) {
+      const waText = [
+        "📊 *Simulación económica — Sporting Marketplace*",
+        hasName ? `Seller: ${sellerNombre}` : "",
+        `Facturación bruta estimada: ${fmt(gross)}`,
+        `Neto estimado: ${fmt(r.netClamped)} (${fmtPct(netPct)} margen)`,
+        "",
+        "Valores orientativos sujetos a validación comercial.",
+        formUrl ? `Formulario de calificación: ${new URL(formUrl, window.location.href).href}` : "",
+      ].filter(Boolean).join("\n");
+      waLink.href = "https://wa.me/?text=" + encodeURIComponent(waText);
+    }
+  }
+}
+
+function render(){
+  const r      =calculate();
+  const ticket =currentTicket();
+  const orders =num($("orders").value);
+  const gross  =r.gross;
+  const isZero =gross===0;
+  const isLoss =!isZero&&r.net<0;
+
+  /* derived display */
+  if(INPUT_MODE==="total"){
+    $("derivedLabel").textContent="Ticket calculado";
+    $("derivedValue").textContent=fmt(ticket);
+    $("kpiGrossSub").textContent=orders>0?`${fmt(ticket)} × ${fmtNum(orders)} pedidos`:"Venta mensual estimada.";
+  } else {
+    $("derivedLabel").textContent="Venta mensual calculada";
+    $("derivedValue").textContent=fmt(r.gross);
+    $("kpiGrossSub").textContent=`${fmt(ticket)} × ${fmtNum(orders)} pedidos`;
+  }
+
+  /* conditions cards */
+  const comPct=fmtPct(num(RATES.comision_pct));
+  $("infoCommission").textContent=comPct;
+  $("infoFinance").textContent = r.financePct === null ? "Elegir cuotas" : fmtPct(r.financePct)+" est.";
+
+  /* topbar chip */
+  const chip=$("topbarChip");
+  chip.style.display="flex";
+  $("topbarComision").textContent=comPct;
+
+  /* kpis */
+  $("kpiNet").textContent   =fmt(r.netClamped);
+  $("kpiGross").textContent =fmt(gross);
+  $("kpiCosts").textContent =fmt(r.costs);
+  $("kpiCostsSub").textContent=(gross?fmtPct((r.costs/gross)*100):"0,0%")+" sobre facturación";
+  $("kpiNetSub").textContent =gross?`Margen neto ${fmtPct((r.netClamped/gross)*100)}${r.financePct === null ? " · financiación pendiente" : ""}`:"Luego de comisión, financiación y servicios.";
+
+  /* alert / loss state */
+  $("alertStrip").classList.toggle("visible", isLoss);
+  $("kpiNetCard").classList.toggle("loss", isLoss);
+  $("bdTotalRow").classList.toggle("loss", isLoss);
+
+  /* empty state */
+  $("emptyState").style.display   =isZero?"flex":"none";
+  $("resultsContent").style.display=isZero?"none":"block";
+
+  /* breakdown with % */
+  const pctOf = v => gross ? fmtPct((v/gross)*100) : "—";
+  $("bdGross").textContent      =fmt(gross);
+  $("bdCommission").textContent ="-"+fmt(r.commission);
+  $("bdFinance").textContent    ="-"+fmt(r.finance);
+  $("bdServices").textContent   ="-"+fmt(r.services);
+  $("bdNet").textContent        =fmt(r.netClamped);
+  $("bdCommissionPct").textContent=gross?pctOf(r.commission):"";
+  $("bdFinancePct").textContent   =r.financePct === null ? "Pendiente" : (gross?pctOf(r.finance):"");
+  $("bdServicesPct").textContent  =gross?pctOf(r.services):"";
+  $("bdNetPct").textContent       =gross?fmtPct((r.netClamped/gross)*100):"";
+
+  /* bar */
+  const netP =gross?Math.max(0,Math.min(100,(r.netClamped/gross)*100)):0;
+  const costP=gross?Math.max(0,Math.min(100,(r.costs/gross)*100)):0;
+  $("barNet").style.width =netP+"%";
+  $("barCost").style.width=costP+"%";
+  $("barLegend").textContent=`Neto seller ${fmtPct(netP)} · Deducciones ${fmtPct(costP)}`;
+
+  /* scenarios */
+  function scen(mult){
+    const s=calculate(mult);
+    return {net:s.netClamped,pct:s.gross?((s.netClamped/s.gross)*100):0,gross:s.gross};
+  }
+  const lo=scen(.7),mi=scen(1),hi=scen(1.3);
+  const maxNet=Math.max(lo.net,mi.net,hi.net)||1;
+  [$("lowNet"),$("midNet"),$("highNet")].forEach((el,i)=>el.textContent=fmt([lo,mi,hi][i].net));
+  [$("lowPct"),$("midPct"),$("highPct")].forEach((el,i)=>el.textContent="Margen "+fmtPct([lo,mi,hi][i].pct));
+  [$("lowBar"),$("midBar"),$("highBar")].forEach((el,i)=>el.style.width=fmtPct(([lo,mi,hi][i].net/maxNet)*100));
+
+  /* services impact grid */
+  renderSvcImpact();
+
+  /* viability + CTA panel */
+  updateViabilityAndCTA(r, gross);
+}
+
+function renderSvcImpact(){
+  const rows=serviceRows();
+  $("svcImpactGrid").innerHTML=rows.map(s=>{
+    const meta=SVC_META[s.id]||{icon:"⚙️",name:s.name};
+    let cls="svc-impact-card";
+    let amtTxt;
+    if(!s.active){ cls+=" off"; amtTxt="No incluido"; }
+    else if(s.isZeroRate){ cls+=" active-warn"; amtTxt="A definir"; }
+    else{ cls+=" active"; amtTxt=fmt(s.applied); }
+    return `<div class="${cls}">
+      <div class="svc-impact-icon">${meta.icon}</div>
+      <div class="svc-impact-body">
+        <div class="svc-impact-name">${meta.name}</div>
+        <div class="svc-impact-base">${s.base}</div>
+      </div>
+      <div class="svc-impact-amt">${amtTxt}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ── debounce ── */
+function scheduleRender(){
+  clearTimeout(_rtimer);
+  _rtimer=setTimeout(render,60);
+}
+
+/* ── mode ── */
+function setMode(mode){
+  INPUT_MODE=mode;
+  $("modeTotal").classList.toggle("active",mode==="total");
+  $("modeTotal").setAttribute("aria-pressed",mode==="total");
+  $("modeTicket").classList.toggle("active",mode==="ticket");
+  $("modeTicket").setAttribute("aria-pressed",mode==="ticket");
+  $("monthlySalesField").style.display=mode==="total"?"block":"none";
+  $("ticketField").style.display=mode==="ticket"?"block":"none";
+  render();
+}
+
+/* ── status ── */
+function setStatus(state,text){
+  const dot=$("statusDot");
+  dot.classList.remove("ok","err");
+  if(state==="ok")dot.classList.add("ok");
+  if(state==="err")dot.classList.add("err");
+  $("statusText").textContent=text;
+}
+
+/* ── toast ── */
+function showToast(msg,isError=false,dur=2500){
+  const t=document.createElement("div");
+  t.className="toast"+(isError?" err-toast":"");
+  t.textContent=msg;
+  $("toastContainer").appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add("show")));
+  setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),300);},dur);
+}
+
+/* ── copy ── */
+function copySummary(){
+  const r=calculate();
+  const rows=serviceRows().filter(s=>s.active);
+  const gross=r.gross;
+  const sellerNomCopy = $("sellerName")?.textContent?.trim() || "—";
+  const netPctCopy = gross ? ((r.netClamped/gross)*100) : 0;
+  const viabLabel = netPctCopy >= 60 ? "✓ Margen saludable" : netPctCopy >= 35 ? "⚠ Margen moderado" : "✗ Margen bajo";
+  const txt=[
+    "📊 Simulación económica · Sporting Marketplace",
+    "─────────────────────────────────",
+    `Seller: ${sellerNomCopy}${CURRENT_SELLER_ID?" ("+CURRENT_SELLER_ID+")":""}`,
+    "─────────────────────────────────",
+    `Facturación bruta estimada:   ${fmt(gross)}`,
+    `Deducciones estimadas:        ${fmt(r.costs)} (${gross?fmtPct((r.costs/gross)*100):"0,0%"})`,
+    `  · Comisión marketplace:     ${fmt(r.commission)} (${gross?fmtPct((r.commission/gross)*100):"—"})`,
+    `  · Costo financiero est.:    ${r.financePct === null ? "Pendiente de selección" : fmt(r.finance) + " (" + (gross?fmtPct((r.finance/gross)*100):"—") + ")"}`,
+    `  · Servicios seleccionados:  ${fmt(r.services)}`,
+    "─────────────────────────────────",
+    `Neto estimado para el seller: ${fmt(r.netClamped)} (${gross?fmtPct(netPctCopy):"—"} margen)`,
+    `Viabilidad: ${viabLabel}`,
+    "─────────────────────────────────",
+    `Servicios activos: ${rows.length?rows.map(s=>s.name).join(", "):"Sin servicios adicionales"}`,
+    "",
+    "⚠ Valores orientativos — sujeto a validación comercial.",
+    "Sporting Marketplace"
+  ].join("\n");
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt)
+      .then(()=>showToast("✓ Simulación copiada al portapapeles"))
+      .catch(()=>showToast("No se pudo acceder al portapapeles",true));
+  } else {
+    showToast("Tu navegador no soporta copiado automático",true);
+  }
+}
+
+/* ── init ── */
+async function init(){
+  try{
+    setStatus("loading","Cargando…");
+    const {sellerRows, tarifaRows, overrideRows} = await loadCsvSources();
+    SELLERS = sellerRows || [];
+    OVERRIDES = overrideRows || [];
+    BASE_RATES = {...FALLBACK_RATES, ...parseRates(tarifaRows || [])};
+    applySellerInfo(true);
+    if(!CURRENT_SELLER_ID){
+      setStatus("err", "Link sin seller");
+    }else if(!Object.keys(SELLER || {}).length){
+      setStatus("err", "Seller no encontrado");
+    }else{
+      setStatus("ok", "Datos cargados");
+    }
+  }catch(e){
+    console.warn(e);
+    SELLERS = [];
+    OVERRIDES = [];
+    BASE_RATES = {...FALLBACK_RATES};
+    RATES = {...FALLBACK_RATES};
+    applySellerInfo(false);
+    setStatus("err","No se pudieron cargar condiciones");
+  }
+
+  document.querySelectorAll("input,select").forEach(el=>{
+    el.addEventListener("input",scheduleRender);
+    el.addEventListener("change",scheduleRender);
+  });
+  $("modeTotal").addEventListener("click",()=>setMode("total"));
+  $("modeTicket").addEventListener("click",()=>setMode("ticket"));
+
+  onSvcChange();
+  render();
+}
+init();
+</script>
+</body>
+</html>

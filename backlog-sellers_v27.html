@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Backlog de Sellers v26 Auditado | Sporting Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#5ea832;--g2:#4a8a26;--gd:rgba(94,168,50,.10);--gb:rgba(94,168,50,.24);--gb2:rgba(94,168,50,.12);
+  --k:#0b0f0b;--k2:#0f150f;--k3:#141c13;--k4:#192118;
+  --t1:#edf3e9;--t2:#c4d8bb;--t3:#8fab86;--t4:#5a7054;
+  --b:rgba(255,255,255,.08);--b2:rgba(255,255,255,.05);
+  --wa:#f59e0b;--wad:rgba(245,158,11,.10);--wab:rgba(245,158,11,.25);
+  --in:#38bdf8;--ind:rgba(56,189,248,.10);--inb:rgba(56,189,248,.22);
+  --te:#2dd4bf;--ted:rgba(45,212,191,.10);
+  --vi:#a78bfa;--vid:rgba(167,139,250,.10);
+  --da:#f87171;--dad:rgba(248,113,113,.10);
+  --tb:56px;--sb:232px;--r:8px;--rl:12px;
+  --muted:rgba(255,255,255,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Barlow,system-ui,sans-serif;background:var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select{font-family:inherit}
+
+/* ── TOPBAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--tb);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(11,15,11,.96);border-bottom:1px solid var(--gb2);backdrop-filter:blur(20px)}
+.tb-brand{display:flex;align-items:center;gap:12px}
+.tb-logo{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:18px;text-transform:uppercase;letter-spacing:.04em;color:var(--t1)}
+.tb-logo span{color:var(--g)}
+.tb-crumb{border-left:1px solid var(--b);padding-left:12px;font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-status{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--t4)}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
+.tb-dot.loading{background:var(--wa)}
+.tb-dot.error{background:var(--da);animation:none}
+@keyframes pulse{50%{opacity:.3}}
+.tb-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--b);border-radius:6px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);transition:.15s}
+.tb-btn:hover{color:var(--g);border-color:var(--gb);background:var(--gd)}
+.view-toggle{display:flex;border:1px solid var(--b);border-radius:6px;overflow:hidden}
+.view-btn{padding:5px 12px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t4);transition:.15s}
+.view-btn:hover{color:var(--t2)}
+.view-btn.active{background:var(--g);color:#fff}
+
+/* ── SHELL ── */
+.shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
+
+/* ── SIDEBAR ── */
+.sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow-y:auto;background:rgba(15,21,15,.97);border-right:1px solid var(--b);padding:14px 0 40px;display:flex;flex-direction:column;gap:0}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--b);border-radius:99px}
+.sb-lbl{font-size:8.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4);padding:0 14px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.sb-lbl::after{content:"";flex:1;height:1px;background:var(--b2)}
+.sb-block{padding:0 10px;margin-bottom:16px}
+.search-input{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--b);background:rgba(255,255,255,.04);color:var(--t1);font-size:13px;outline:none;transition:.15s}
+.search-input::placeholder{color:var(--t4)}
+.search-input:focus{border-color:var(--gb);background:rgba(255,255,255,.06)}
+.fi-select{width:100%;padding:7px 9px;border-radius:7px;border:1px solid var(--b);background:var(--k3);color:var(--t2);font-size:12.5px;outline:none;margin-bottom:5px;transition:.15s}
+.fi-select:focus{border-color:var(--gb)}
+.fi-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin:8px 0 3px;display:block}
+.quick-btns{display:flex;flex-direction:column;gap:4px}
+.qbtn{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:7px;border:1px solid var(--b2);background:rgba(255,255,255,.025);font-size:12px;color:var(--t3);transition:.15s;text-align:left}
+.qbtn:hover{border-color:var(--b);color:var(--t1);background:rgba(255,255,255,.05)}
+.qbtn.active{border-color:var(--gb);color:var(--g);background:var(--gd)}
+.qbtn-count{font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;color:var(--t4)}
+.qbtn.active .qbtn-count{color:var(--g)}
+.clear-btn{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--b);background:transparent;color:var(--t4);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:.15s;margin-top:6px}
+.clear-btn:hover{border-color:var(--wa);color:var(--wa)}
+
+/* ── KPI BAR ── */
+.kpi-bar{display:flex;gap:10px;padding:12px 20px;border-bottom:1px solid var(--b2);background:rgba(255,255,255,.015);flex-wrap:wrap}
+.kpi{display:flex;flex-direction:column;gap:2px;min-width:70px}
+.kpi-val{font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:900;line-height:1;color:var(--t1)}
+.kpi-val.g{color:var(--g)}.kpi-val.w{color:var(--wa)}.kpi-val.d{color:var(--da)}.kpi-val.i{color:var(--in)}
+.kpi-lbl{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t4)}
+.kpi-sep{width:1px;background:var(--b);align-self:stretch}
+
+/* ── CONTENT ── */
+.content-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden}
+.content-area{padding:16px 20px 60px;overflow-y:auto}
+.content-area::-webkit-scrollbar{width:4px}
+.content-area::-webkit-scrollbar-thumb{background:var(--b);border-radius:99px}
+
+/* ── KANBAN ── */
+.kanban{display:grid;grid-auto-flow:column;grid-auto-columns:240px;gap:10px;overflow-x:auto;padding-bottom:12px}
+.kanban::-webkit-scrollbar{height:4px}
+.kanban::-webkit-scrollbar-thumb{background:var(--b);border-radius:99px}
+.k-col{}
+.k-col-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:var(--r) var(--r) 0 0;background:var(--k3);border:1px solid var(--b);border-bottom:none}
+.k-col-title{font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--t2)}
+.k-col-count{font-family:"Barlow Condensed",sans-serif;font-size:14px;font-weight:700;color:var(--t4)}
+.k-col-body{display:flex;flex-direction:column;gap:7px;padding:8px;background:rgba(255,255,255,.02);border:1px solid var(--b);border-top:none;border-radius:0 0 var(--r) var(--r);min-height:100px}
+.k-col-empty{font-size:11px;color:var(--t4);text-align:center;padding:16px 8px}
+
+/* ── SELLER CARD ── */
+.scard{background:var(--k3);border:1px solid var(--b);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.scard::before{content:"";position:absolute;top:0;left:0;bottom:0;width:2px;background:transparent;transition:background .15s}
+.scard:hover{border-color:var(--gb2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.scard:hover::before{background:var(--g)}
+.scard.blocked::before{background:var(--da)}
+.scard.blocked{border-color:rgba(248,113,113,.2);background:rgba(248,113,113,.04)}
+.scard.risk-high::before{background:var(--wa)}
+.scard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.scard-brand{display:flex;align-items:center;gap:8px}
+.seller-logo{width:28px;height:28px;border-radius:5px;object-fit:contain;background:rgba(255,255,255,.07);border:1px solid var(--b);flex-shrink:0}
+.seller-initials{width:28px;height:28px;border-radius:5px;background:var(--gd);border:1px solid var(--gb2);display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-size:11px;font-weight:900;color:var(--g);flex-shrink:0}
+.scard-name{font-size:13.5px;font-weight:700;color:var(--t1);line-height:1.2}
+.scard-id{font-family:"Barlow Condensed",sans-serif;font-size:11px;color:var(--t4);font-weight:700;letter-spacing:.06em}
+.scard-entity{font-size:10.5px;color:var(--t3);line-height:1.35;margin:4px 0 7px;display:flex;flex-direction:column;gap:1px}
+.scard-entity b{color:var(--t2);font-weight:700}
+.scard-chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}
+.chip{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;border:1px solid;font-size:9.5px;font-weight:700;letter-spacing:.04em}
+.chip.g{background:var(--gd);border-color:var(--gb);color:var(--g)}
+.chip.w{background:var(--wad);border-color:var(--wab);color:var(--wa)}
+.chip.i{background:var(--ind);border-color:var(--inb);color:var(--in)}
+.chip.d{background:var(--dad);border-color:rgba(248,113,113,.2);color:var(--da)}
+.chip.n{background:rgba(255,255,255,.04);border-color:var(--b);color:var(--t4)}
+.scard-next{display:flex;align-items:flex-start;gap:6px;font-size:11.5px;color:var(--t3);line-height:1.4;padding:7px 9px;background:rgba(255,255,255,.03);border-radius:5px;border-left:2px solid var(--g)}
+.scard-next-arr{color:var(--g);flex-shrink:0;margin-top:1px;font-size:10px}
+.scard-hint{font-size:10px;color:var(--t4);margin-top:8px;text-align:right;opacity:.7}
+
+/* ── PROGRESS BAR ── */
+.prog-bar{height:3px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin-top:8px}
+.prog-fill{height:100%;border-radius:99px;background:var(--g);transition:width .4s}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{padding:8px 12px;border-bottom:1px solid var(--b);background:var(--k3);font-size:8.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);white-space:nowrap;text-align:left;position:sticky;top:0;z-index:1}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--b2);vertical-align:middle;color:var(--t2)}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover td{background:rgba(255,255,255,.03)}
+tbody tr:last-child td{border-bottom:none}
+.td-blk{width:3px;padding:0;border:none}
+.td-blk-bar{width:3px;height:100%;min-height:36px}
+.td-id{font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;color:var(--t4);white-space:nowrap}
+.td-seller{display:flex;align-items:center;gap:8px}
+.td-name{font-weight:700;color:var(--t1);white-space:nowrap}
+.td-cat{font-size:11px;color:var(--t4)}
+.td-next{max-width:220px}
+.td-next-text{font-size:12px;color:var(--t2);line-height:1.4}
+.td-next-resp{font-size:10px;color:var(--t4);margin-top:2px}
+
+/* ── STATUS CHIPS ── */
+.status-pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:800;letter-spacing:.05em;border:1px solid}
+.sp-ident{background:rgba(255,255,255,.04);border-color:var(--b);color:var(--t4)}
+.sp-cont{background:var(--vid);border-color:rgba(167,139,250,.25);color:var(--vi)}
+.sp-eval{background:var(--wad);border-color:var(--wab);color:var(--wa)}
+.sp-def{background:var(--ind);border-color:var(--inb);color:var(--in)}
+.sp-list{background:var(--ted);border-color:rgba(45,212,191,.25);color:var(--te)}
+.sp-int{background:var(--ind);border-color:var(--inb);color:var(--in)}
+.sp-live{background:var(--gd);border-color:var(--gb);color:var(--g)}
+.sp-blk{background:var(--dad);border-color:rgba(248,113,113,.2);color:var(--da)}
+.pri-alta{color:var(--da);font-weight:800}
+.pri-media{color:var(--wa)}
+.pri-baja{color:var(--t4)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.modal{background:var(--k2);border:1px solid var(--b);border-radius:var(--rl);width:100%;max-width:620px;overflow:hidden;animation:mslide .2s ease}
+@keyframes mslide{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+.modal-hdr{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-bottom:1px solid var(--b);background:var(--k3)}
+.modal-logo{width:44px;height:44px;border-radius:9px;object-fit:contain;background:rgba(255,255,255,.07);border:1px solid var(--b);flex-shrink:0}
+.modal-initials{width:44px;height:44px;border-radius:9px;background:var(--gd);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:900;color:var(--g);flex-shrink:0}
+.modal-title-wrap{flex:1;min-width:0}
+.modal-name{font-family:"Barlow Condensed",sans-serif;font-size:24px;font-weight:900;text-transform:uppercase;color:var(--t1);letter-spacing:.02em;line-height:1}
+.modal-id{font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;color:var(--t4);letter-spacing:.08em;margin-top:3px}
+.modal-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.modal-close{width:30px;height:30px;border-radius:6px;border:1px solid var(--b);display:flex;align-items:center;justify-content:center;color:var(--t4);font-size:16px;transition:.15s;flex-shrink:0}
+.modal-close:hover{border-color:var(--da);color:var(--da)}
+.modal-body{padding:16px 20px;display:flex;flex-direction:column;gap:14px}
+.msec{display:flex;flex-direction:column;gap:6px}
+.msec-title{font-size:9px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4);padding-bottom:6px;border-bottom:1px solid var(--b2)}
+.mrow{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--b2);font-size:12.5px;gap:16px}
+.mrow:last-child{border-bottom:none}
+.ml{color:var(--t4);font-weight:500;flex-shrink:0}
+.mv{color:var(--t2);text-align:right;font-weight:600}
+.mnext{padding:10px 12px;border-radius:7px;background:var(--gd);border:1px solid var(--gb2);border-left:3px solid var(--g)}
+.mnext-paso{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:4px;display:flex;gap:7px;align-items:flex-start}
+.mnext-paso-arr{color:var(--g);flex-shrink:0;margin-top:2px}
+.mnext-criterio{font-size:12px;color:var(--t3);line-height:1.5}
+.mnext-resp{display:inline-flex;padding:2px 7px;border-radius:4px;background:var(--gd);border:1px solid var(--gb2);font-size:10px;font-weight:700;color:var(--g);margin-top:5px}
+.modal-note{padding:10px 12px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid var(--b2);font-size:12.5px;color:var(--t3);line-height:1.55}
+.modal-note.warn{background:var(--wad);border-color:var(--wab);color:#d4a84b}
+.share-links{display:flex;flex-direction:column;gap:5px}
+.badge-meta{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:6px;background:rgba(255,255,255,.035);border:1px solid var(--b2);color:var(--t3);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-top:5px}
+.share-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 11px;border:1px solid var(--b);border-radius:7px;background:rgba(255,255,255,.025);transition:.15s}
+.share-row:hover{border-color:var(--gb2);background:rgba(255,255,255,.04)}
+.share-label{font-size:12.5px;font-weight:600;color:var(--t2)}
+.share-desc{font-size:11px;color:var(--t4);margin-top:1px}
+.share-actions{display:flex;gap:5px;flex-shrink:0}
+.share-btn{padding:5px 10px;border-radius:6px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--b);background:rgba(255,255,255,.04);color:var(--t2);transition:.15s}
+.share-btn:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
+.share-btn.primary{background:var(--g);border-color:var(--g);color:#fff}
+.share-btn.primary:hover{background:var(--g2)}
+.modal-actions{display:flex;gap:7px;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--b2)}
+.maction{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--b);background:rgba(255,255,255,.04);color:var(--t2);transition:.15s}
+.maction:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
+.maction.primary{background:var(--g);border-color:var(--g);color:#fff}
+.maction.primary:hover{background:var(--g2)}
+
+/* ── PROG BAR (table) ── */
+.prog-wrap{display:flex;align-items:center;gap:6px}
+.prog-pct{font-family:"Barlow Condensed",sans-serif;font-size:14px;font-weight:700;color:var(--t3);min-width:28px}
+
+/* ── EMPTY / LOADING / ERROR ── */
+.state-box{display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;text-align:center;color:var(--t4)}
+.state-icon{font-size:36px;opacity:.4}
+.state-title{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;color:var(--t3)}
+.state-desc{font-size:13px;line-height:1.6}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--k3);border:1px solid var(--gb);color:var(--t1);padding:9px 18px;border-radius:8px;font-size:12.5px;font-weight:600;z-index:1000;opacity:0;transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:960px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .kanban{grid-auto-columns:85vw}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">Sporting <span>Marketplace</span></div>
+    <div class="tb-crumb">Backlog de Sellers · v26 AUDITADO</div>
+  </div>
+  <div class="tb-right">
+    <div class="tb-status">
+      <span class="tb-dot loading" id="status-dot"></span>
+      <span id="status-txt">Cargando…</span>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
+      <button class="view-btn" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
+    </div>
+    <a class="tb-btn" href="../../index.html">← Hub</a>
+    <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻</button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar">
+
+    <div class="sb-block" style="margin-top:14px">
+      <input class="search-input" id="search-input" type="text" placeholder="Buscar seller, ID…" oninput="renderContent()">
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-lbl">Filtros rápidos</div>
+      <div class="quick-btns" id="quick-btns">
+        <button class="qbtn" onclick="toggleQuick('bloqueados')">
+          <span>🔴 Bloqueados</span><span class="qbtn-count" id="qc-bloqueados">0</span>
+        </button>
+        <button class="qbtn" onclick="toggleQuick('alta')">
+          <span>⚡ Prioridad alta</span><span class="qbtn-count" id="qc-alta">0</span>
+        </button>
+        <button class="qbtn" onclick="toggleQuick('listos')">
+          <span>✓ Listos para integrar</span><span class="qbtn-count" id="qc-listos">0</span>
+        </button>
+        <button class="qbtn" onclick="toggleQuick('sin_relevamiento')">
+          <span>📝 Sin relevamiento</span><span class="qbtn-count" id="qc-sin_relevamiento">0</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-lbl">Filtrar por</div>
+      <label class="fi-label">Pipeline</label>
+      <select class="fi-select" id="sel-pipeline" onchange="renderContent()">
+        <option value="">Todos</option>
+        <option>Identificados</option>
+        <option>Contactados</option>
+        <option>En evaluación</option>
+        <option>En definición técnica</option>
+        <option>Listos para integrar</option>
+        <option>En integración</option>
+        <option>Live</option>
+      </select>
+      <label class="fi-label">Modelo</label>
+      <select class="fi-select" id="sel-modelo" onchange="renderContent()">
+        <option value="">Todos</option>
+        <option>VTEX → VTEX</option>
+        <option>Externo → Seller Center</option>
+        <option>Externo → PIM → VTEX</option>
+        <option>Híbrido / Transitorio</option>
+        <option>Sistemas actuales</option>
+        <option>A definir</option>
+      </select>
+      <label class="fi-label">Empresa / grupo</label>
+      <select class="fi-select" id="sel-empresa" onchange="renderContent()"></select>
+      <label class="fi-label">Marca / seller operativo</label>
+      <select class="fi-select" id="sel-marca" onchange="renderContent()"></select>
+      <label class="fi-label">Prioridad</label>
+      <select class="fi-select" id="sel-prioridad" onchange="renderContent()">
+        <option value="">Todas</option>
+        <option>Alta</option>
+        <option>Media</option>
+        <option>Baja</option>
+      </select>
+      <label class="fi-label">Responsable</label>
+      <select class="fi-select" id="sel-responsable" onchange="renderContent()"></select>
+      <button class="clear-btn" onclick="clearFilters()">✕ Limpiar filtros</button>
+    </div>
+
+    <div class="sb-block">
+      <div class="sb-lbl">Ordenar</div>
+      <select class="fi-select" id="sel-orden" onchange="renderContent()">
+        <option value="prioridad">Prioridad alta primero</option>
+        <option value="bloqueados">Bloqueados primero</option>
+        <option value="avance_asc">Menor avance primero</option>
+        <option value="avance_desc">Mayor avance primero</option>
+        <option value="nombre">Nombre A → Z</option>
+      </select>
+    </div>
+
+  </aside>
+
+  <div class="content-wrap">
+    <div class="kpi-bar">
+      <div class="kpi"><div class="kpi-val" id="kpi-total">—</div><div class="kpi-lbl">Total</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi"><div class="kpi-val g" id="kpi-live">—</div><div class="kpi-lbl">Live</div></div>
+      <div class="kpi"><div class="kpi-val i" id="kpi-int">—</div><div class="kpi-lbl">En integración</div></div>
+      <div class="kpi"><div class="kpi-val w" id="kpi-eval">—</div><div class="kpi-lbl">En evaluación</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi"><div class="kpi-val d" id="kpi-blk">—</div><div class="kpi-lbl">Bloqueados</div></div>
+      <div class="kpi"><div class="kpi-val w" id="kpi-alta">—</div><div class="kpi-lbl">Alta prio</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi"><div class="kpi-val i" id="kpi-grupos">—</div><div class="kpi-lbl">Grupos</div></div>
+      <div class="kpi"><div class="kpi-val g" id="kpi-marcas">—</div><div class="kpi-lbl">Marcas</div></div>
+    </div>
+    <div class="content-area" id="content-area">
+      <div class="state-box"><div class="state-icon">⟳</div><div class="state-title">Cargando sellers</div><div class="state-desc">Conectando con Google Sheets…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <img class="modal-logo hidden" id="m-logo" alt=""/>
+      <div class="modal-initials" id="m-initials">S</div>
+      <div class="modal-title-wrap">
+        <div class="modal-name" id="m-name">—</div>
+        <div class="modal-id" id="m-id">—</div>
+        <div class="modal-chips" id="m-chips"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── CONFIG ── */
+const CONFIG = {
+  SELLERS_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
+  RELEVAMIENTOS_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=233624428&single=true&output=csv",
+  CALIFICACIONES_URL: "", // completar con el CSV publicado de la hoja calificaciones si se quiere cruzar la tercera fuente
+  PUBLIC_BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace",
+  LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/",
+  LOGO_EXTENSIONS: ["png","webp","jpg","jpeg","svg"],
+  PRESENTACION_PATH: "/public/presentaciones/presentacion-seller.html",
+  CALIFICACION_PATH: "/public/formularios/formulario-calificacion.html",
+  RELEVAMIENTO_PATH: "/public/formularios/formulario-relevamiento.html",
+  SIMULADOR_SELLER_PATH: "/public/simuladores/simulador-seller.html",
+};
+
+/* ── ALIASES ── */
+const ALIASES = {
+  seller_id:         ["seller_id","id_unico_del_seller","id_unico"],
+  pipeline_estado:   ["pipeline_estado","estado_pipeline","estado_backlog"],
+  estado_operativo:  ["estado_operativo","operativo_estado"],
+  nombre:            ["nombre","seller_nombre","nombre_marca","nombre___marca","marca"],
+  empresa_grupo:     ["empresa_grupo","empresa","grupo","empresa_o_grupo","grupo_empresa","holding"],
+  marca_seller_operativo:["marca_seller_operativo","marca_operativa","seller_operativo","marca_seller","marca"],
+  categoria:         ["categoria","categoría","categoria_principal","categorias","categoria_estimada"],
+  camino:            ["camino","camino_de_integracion","camino_de_integración"],
+  modelo_integracion:["modelo_integracion","modelo_integracion_estimado","integracion","integración","tipo_de_integracion","metodo_integracion","modelo_sugerido"],
+  etapa_actual:      ["etapa_actual","etapa"],
+  prioridad:         ["prioridad"],
+  responsable:       ["responsable"],
+  progreso_pct:      ["progreso_pct","avance","avance_pct","progreso"],
+  bloqueo_flag:      ["bloqueo_flag","bloqueo"],
+  riesgo_nivel:      ["riesgo_nivel","riesgo"],
+  notas_operativas:  ["notas_operativas","notas","observaciones","comentarios"],
+  proximo_paso:      ["proximo_paso","próximo_paso"],
+  ultima_actualizacion:["ultima_actualizacion","fecha_ultima_actualizacion"],
+  fecha_alta:        ["fecha_alta"],
+  logo_url:          ["logo_url","logo","url_logo"],
+  simulador_url:     ["simulador_url","url_simulador","link_simulador"],
+  url_seller:        ["url_seller","ulr_seller","seller_url","web","website"],
+  sitio_objetivo:    ["sitio_objetivo","sitio"],
+  plataforma:        ["plataforma","plataforma_estimada"],
+  contacto_nombre:   ["contacto_nombre","contacto","nombre_contacto"],
+  contacto_email:    ["contacto_email","email_contacto","email"],
+  gmv_estimado:      ["gmv_estimado","gmv","facturacion_estimada"],
+  ticket_promedio:   ["ticket_promedio","ticket"],
+};
+
+/* ── PROXIMO PASO MAP ── */
+const PROXIMO_PASO_MAP = {
+  "Identificados":         { paso:"Contactar seller y validar interés comercial",  criterio:"Contacto confirmado por el seller",         resp:"Comercial" },
+  "Contactados":           { paso:"Enviar formulario de relevamiento",              criterio:"Formulario completado y recibido",           resp:"Comercial" },
+  "En evaluación":         { paso:"Analizar respuestas y definir modelo operativo", criterio:"Propuesta enviada y aceptada",               resp:"eCommerce" },
+  "En definición técnica": { paso:"Preparar y enviar propuesta comercial",          criterio:"Propuesta aceptada por el seller",           resp:"Comercial" },
+  "Listos para integrar":  { paso:"Gestionar acuerdo, contrato y condiciones",      criterio:"Contrato firmado y condiciones acordadas",   resp:"Comercial + Legal" },
+  "En integración":        { paso:"Ejecutar checklist de integración y pruebas",    criterio:"Catálogo activo y pedido de prueba exitoso", resp:"Técnico" },
+  "Live":                  { paso:"Monitorear operación inicial post go-live",      criterio:"Primera venta real registrada",              resp:"eCommerce" },
+  "Pausado":               { paso:"Revisar bloqueo o decisión de continuidad",      criterio:"Bloqueo resuelto o decisión tomada",         resp:"Comercial" },
+};
+
+/* ── STATE ── */
+let ALL = [], currentView = "kanban", activeQuick = null;
+
+/* ── UTILS ── */
+const $ = id => document.getElementById(id);
+const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const norm = v => String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
+const cap = s => String(s||"").trim().replace(/^\w/,c=>c.toUpperCase());
+const setText = (id,v) => { const el=$(id); if(el) el.textContent = v; };
+const setHTML = (id,v) => { const el=$(id); if(el) el.innerHTML = v; };
+
+function parseCSV(text) {
+  const rows=[]; let row=[],cell="",q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c==='"'){if(q&&n==='"'){cell+='"';i++;}else q=!q;}
+    else if(c===","&&!q){row.push(cell);cell="";}
+    else if((c==="\n"||c==="\r")&&!q){
+      if(c==="\r"&&n==="\n")i++;
+      row.push(cell);
+      if(row.some(v=>v.trim()))rows.push(row);
+      row=[];cell="";
+    }else cell+=c;
+  }
+  row.push(cell);if(row.some(v=>v.trim()))rows.push(row);
+  return rows;
+}
+
+function mapHeader(h){
+  const n=norm(h);
+  for(const[canon,list]of Object.entries(ALIASES))if(list.includes(n))return canon;
+  return n;
+}
+
+function normalizePipeline(v){
+  const n=norm(v||"");
+  if(["identificado","identificados","potencial","nuevo"].includes(n)||n.includes("identificado"))return"Identificados";
+  if(n.includes("contact"))return"Contactados";
+  if(n.includes("evaluacion")||n.includes("relevamiento")||n.includes("calificacion"))return"En evaluación";
+  if(n.includes("definicion")||n.includes("tecnica")||n.includes("acuerdo")||n.includes("propuesta"))return"En definición técnica";
+  if(n.includes("listo")||n.includes("ready"))return"Listos para integrar";
+  if(n.includes("integracion")||n.includes("onboarding")||n.includes("implementacion"))return"En integración";
+  if(n.includes("live")||n.includes("go_live")||n.includes("activo"))return"Live";
+  if(n.includes("pausado")||n.includes("descartado"))return"Pausado";
+  return cap(v)||"Identificados";
+}
+
+function normInteg(v){
+  const n=norm(v||"");
+  if(!n)return "A definir";
+  if(n.includes("vtex") && !n.includes("pim"))return"VTEX → VTEX";
+  if(n.includes("seller_center")||n.includes("seller center")||n.includes("center"))return"Externo → Seller Center";
+  if(n.includes("pim")||n.includes("externo"))return"Externo → PIM → VTEX";
+  if(n.includes("hibrido")||n.includes("transitorio"))return"Híbrido / Transitorio";
+  if(n.includes("sistemas")||n.includes("actuales"))return"Sistemas actuales";
+  if(n.includes("definir")||n.includes("a_definir"))return"A definir";
+  return v||"A definir";
+}
+
+function progressFromPipeline(stage){
+  const map={
+    "Identificados":5,
+    "Contactados":12,
+    "En evaluación":25,
+    "En definición técnica":40,
+    "Listos para integrar":55,
+    "En integración":75,
+    "Live":100,
+    "Pausado":0
+  };
+  return map[stage] ?? 0;
+}
+
+function computeProximoPaso(pipeline, raw){
+  const r=String(raw||"").trim();
+  if(r&&!r.startsWith("=")&&!r.includes("SWITCH(")&&r.length<300)return{paso:r,criterio:"",resp:""};
+  return PROXIMO_PASO_MAP[pipeline]||{paso:"Revisar estado en el backlog",criterio:"",resp:""};
+}
+
+function sellerInitials(name){
+  return String(name||"S").trim().split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase()||"S";
+}
+
+function safeAssetId(id){
+  return String(id||"").trim().toLowerCase().replace(/[^a-z0-9_-]/g,"-");
+}
+
+function logoCandidates(sellerId){
+  const base=String(CONFIG.LOGO_BASE_URL||"").replace(/\/$/,"");
+  const id=safeAssetId(sellerId);
+  if(!base||!id)return[];
+  return (CONFIG.LOGO_EXTENSIONS||["png"]).map(ext=>`${base}/${id}.${ext}`);
+}
+
+function logoHTML(s, cls="seller-logo", fallbackCls="seller-initials", sizeStyle=""){
+  const fallback=`<div class="${fallbackCls}" ${sizeStyle?`style="${sizeStyle}"`:""}>${esc(sellerInitials(s.nombre))}</div>`;
+  const candidates=logoCandidates(s.seller_id);
+  if(!candidates.length)return fallback;
+  const json=esc(JSON.stringify(candidates));
+  return `<img class="${cls}" src="${esc(candidates[0])}" data-logo-candidates="${json}" data-logo-index="0" alt="${esc(s.nombre||s.seller_id)}" loading="lazy" ${sizeStyle?`style="${sizeStyle}"`:""} onerror="handleLogoError(this,'${esc(sellerInitials(s.nombre))}','${fallbackCls}','${esc(sizeStyle)}')">`;
+}
+
+function handleLogoError(img, initials, fallbackCls, sizeStyle){
+  try{
+    const list=JSON.parse(img.dataset.logoCandidates||"[]");
+    const next=(parseInt(img.dataset.logoIndex||"0",10)+1);
+    if(list[next]){img.dataset.logoIndex=String(next);img.src=list[next];return;}
+  }catch(e){}
+  img.outerHTML=`<div class="${fallbackCls}" ${sizeStyle?`style="${sizeStyle}"`:""}>${initials}</div>`;
+}
+
+function publicUrl(path, id){
+  const base=String(CONFIG.PUBLIC_BASE_URL||"").replace(/\/$/,"");
+  const p=String(path||"").startsWith("/")?path:"/"+path;
+  const url=new URL(base+p);
+  if(id)url.searchParams.set("seller_id",id);
+  return url.href;
+}
+
+function transform(rows){
+  const hi=rows.findIndex(r=>r.some(v=>norm(v).includes("seller_id")));
+  if(hi<0)return[];
+  const headers=rows[hi].map(mapHeader);
+  const col=k=>headers.indexOf(k);
+  const pick=(r,k)=>String(r[col(k)]||"").trim();
+
+  return rows.slice(hi+1).map(r=>{
+    const v={};
+    headers.forEach((h,i)=>{v[h]=String(r[i]||"").trim();});
+
+    const id=v.seller_id||"";
+    if(!id||!/^SPT-/i.test(id))return null;
+
+    v.empresa_grupo = v.empresa_grupo || "Sin grupo asignado";
+    v.marca_seller_operativo = v.marca_seller_operativo || v.nombre || "Sin marca asignada";
+    v.simulador_url = v.simulador_url && v.simulador_url.startsWith("http") ? v.simulador_url : publicUrl(CONFIG.SIMULADOR_SELLER_PATH, id);
+
+    v.pipeline_estado=normalizePipeline(v.pipeline_estado||v.etapa_actual||"");
+    v.modelo_integracion=normInteg(v.modelo_integracion||"");
+    v.plataforma=v.plataforma||"—";
+    v.categoria=v.categoria||"—";
+    v.url_seller=v.url_seller||"";
+    v.prioridad=cap(v.prioridad||"Media");
+    v.responsable=v.responsable||"—";
+    const rawProg=parseFloat(v.progreso_pct);
+    v.progreso_pct=Math.min(100,Math.max(0,Number.isFinite(rawProg)&&rawProg>0?rawProg:progressFromPipeline(v.pipeline_estado)));
+    v.riesgo_nivel=cap(v.riesgo_nivel||"Bajo");
+    v.bloqueo_flag=norm(v.bloqueo_flag)==="si"||norm(v.estado_operativo)==="bloqueado";
+    v.activo=v.activo===""||norm(v.activo)!=="no";
+
+    const pp=computeProximoPaso(v.pipeline_estado,v.proximo_paso);
+    v.proximo_paso=pp.paso; v.proximo_paso_criterio=pp.criterio; v.proximo_paso_resp=pp.resp;
+
+    return v.activo?v:null;
+  }).filter(Boolean);
+}
+
+/* ── STATUS PILL CLASS ── */
+function pipelineClass(v){
+  const n=norm(v);
+  if(n.includes("identificado"))return"sp-ident";
+  if(n.includes("contactado"))return"sp-cont";
+  if(n.includes("evaluacion"))return"sp-eval";
+  if(n.includes("definicion"))return"sp-def";
+  if(n.includes("listo"))return"sp-list";
+  if(n.includes("integracion"))return"sp-int";
+  if(n.includes("live"))return"sp-live";
+  return"sp-ident";
+}
+
+/* ── LOAD DATA ── */
+async function loadData(force=false){
+  const dot=$("status-dot"), txt=$("status-txt");
+  dot.className="tb-dot loading"; txt.textContent="Cargando…";
+  try{
+    const res=await fetch(CONFIG.SELLERS_URL+"&_ts="+Date.now(),{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const rows=parseCSV(await res.text());
+    ALL=transform(rows);
+    await mergeRelevamientos();
+    await mergeCalificaciones();
+    dot.className="tb-dot"; txt.textContent="Actualizado "+new Date().toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
+    populateResponsableSelect();
+    updateKPIs();
+    renderContent();
+  }catch(e){
+    dot.className="tb-dot error"; txt.textContent="Error de conexión";
+    setHTML("content-area",`<div class="state-box"><div class="state-icon">⚠</div><div class="state-title">Sin conexión</div><div class="state-desc">${esc(e.message)}<br>Verificá que el Sheet esté publicado como CSV.</div></div>`);
+  }
+}
+
+async function mergeRelevamientos(){
+  if(!CONFIG.RELEVAMIENTOS_URL)return;
+  try{
+    const res=await fetch(CONFIG.RELEVAMIENTOS_URL+"&_ts="+Date.now(),{cache:"no-store"});
+    if(!res.ok)return;
+    const latest=rowsToLatestBySeller(parseCSV(await res.text()));
+    ALL.forEach(s=>{s._rel=latest[s.seller_id]||{has:false,fecha:""}; fillSellerFromExternal(s,s._rel,"relevamiento");});
+  }catch(e){
+    ALL.forEach(s=>{s._rel=s._rel||{has:false,fecha:""};});
+  }
+}
+
+
+function rowsToLatestBySeller(rows){
+  const hi=rows.findIndex(r=>r.some(v=>norm(v).includes("seller_id")));
+  if(hi<0)return {};
+  const headers=rows[hi].map(mapHeader);
+  const idxSeller=headers.indexOf("seller_id");
+  const idxFecha=headers.indexOf("fecha_envio");
+  const latest={};
+  rows.slice(hi+1).forEach(r=>{
+    const obj={}; headers.forEach((h,i)=>obj[h]=String(r[i]||"").trim());
+    const id=String(obj.seller_id||"").trim();
+    if(!id)return;
+    const fecha=String(idxFecha>=0?r[idxFecha]:"").trim();
+    if(!latest[id] || fecha > latest[id].fecha) latest[id]={...obj, has:true, fecha};
+  });
+  return latest;
+}
+
+function fillSellerFromExternal(s, ext, source){
+  if(!ext||!ext.has)return;
+  if(!s.contacto_nombre && ext.contacto_nombre) s.contacto_nombre=ext.contacto_nombre;
+  if(!s.contacto_email && ext.contacto_email) s.contacto_email=ext.contacto_email;
+  if(!s.contacto_tel && ext.contacto_tel) s.contacto_tel=ext.contacto_tel;
+  if((!s.categoria||s.categoria==="—") && ext.categoria) s.categoria=ext.categoria;
+  if((!s.plataforma||s.plataforma==="—") && ext.plataforma) s.plataforma=ext.plataforma;
+  if((!s.url_seller||s.url_seller==="—") && ext.url_seller) s.url_seller=ext.url_seller;
+  if((!s.modelo_integracion||s.modelo_integracion==="A definir"||s.modelo_integracion==="—") && ext.modelo_integracion) s.modelo_integracion=normInteg(ext.modelo_integracion);
+  if(!s.gmv_estimado && ext.gmv_estimado) s.gmv_estimado=ext.gmv_estimado;
+  if(!s.ticket_promedio && ext.ticket_promedio) s.ticket_promedio=ext.ticket_promedio;
+  if(source==="calificacion" && ext.riesgo_logistico && (!s.riesgo_nivel||s.riesgo_nivel==="Bajo")) s.riesgo_nivel=cap(ext.riesgo_logistico);
+}
+
+async function mergeCalificaciones(){
+  if(!CONFIG.CALIFICACIONES_URL)return;
+  try{
+    const res=await fetch(CONFIG.CALIFICACIONES_URL+"&_ts="+Date.now(),{cache:"no-store"});
+    if(!res.ok)return;
+    const latest=rowsToLatestBySeller(parseCSV(await res.text()));
+    ALL.forEach(s=>{s._cal=latest[s.seller_id]||{has:false,fecha:""}; fillSellerFromExternal(s,s._cal,"calificacion");});
+  }catch(e){ ALL.forEach(s=>{s._cal=s._cal||{has:false,fecha:""};}); }
+}
+
+function populateSelect(id, values, allLabel="Todos"){
+  const sel=$(id); if(!sel)return;
+  const current=sel.value;
+  const vals=["", ...new Set(values.filter(v=>v&&v!=="—"&&v!=="Sin grupo asignado"&&v!=="Sin marca asignada"))].sort((a,b)=>a.localeCompare(b,"es"));
+  sel.innerHTML=vals.map(v=>`<option value="${esc(v)}">${v||allLabel}</option>`).join("");
+  sel.value=vals.includes(current)?current:"";
+}
+
+function populateResponsableSelect(){
+  const sel=$("sel-responsable");
+  const current=sel.value;
+  const vals=["", ...new Set(ALL.map(s=>s.responsable).filter(v=>v&&v!=="—")).values()].sort();
+  sel.innerHTML=vals.map(v=>`<option value="${esc(v)}">${v||"Todos"}</option>`).join("");
+  sel.value=current;
+  populateSelect("sel-empresa", ALL.map(s=>s.empresa_grupo));
+  populateSelect("sel-marca", ALL.map(s=>s.marca_seller_operativo));
+}
+
+function updateKPIs(){
+  const bp=l=>ALL.filter(s=>norm(s.pipeline_estado)===norm(l)).length;
+  setText("kpi-total",ALL.length);
+  setText("kpi-live",bp("Live"));
+  setText("kpi-int",bp("En integración"));
+  setText("kpi-eval",bp("En evaluación"));
+  setText("kpi-blk",ALL.filter(s=>s.bloqueo_flag).length);
+  setText("kpi-alta",ALL.filter(s=>norm(s.prioridad)==="alta").length);
+  setText("kpi-grupos",new Set(ALL.map(s=>s.empresa_grupo).filter(v=>v&&v!=="Sin grupo asignado")).size);
+  setText("kpi-marcas",new Set(ALL.map(s=>s.marca_seller_operativo).filter(v=>v&&v!=="Sin marca asignada")).size);
+  // Quick filter counts
+  const qc={
+    bloqueados:   ALL.filter(s=>s.bloqueo_flag).length,
+    alta:         ALL.filter(s=>norm(s.prioridad)==="alta").length,
+    listos:       ALL.filter(s=>s.pipeline_estado==="Listos para integrar").length,
+    sin_relevamiento: ALL.filter(s=>!s._rel||!s._rel.has).length,
+  };
+  Object.entries(qc).forEach(([k,n])=>setText("qc-"+k,n));
+}
+
+/* ── FILTERS ── */
+function toggleQuick(key){
+  activeQuick = activeQuick===key ? null : key;
+  document.querySelectorAll(".qbtn").forEach((b,i)=>{
+    const k=["bloqueados","alta","listos","sin_relevamiento"][i];
+    b.classList.toggle("active",k===activeQuick);
+  });
+  renderContent();
+}
+
+function clearFilters(){
+  activeQuick=null;
+  document.querySelectorAll(".qbtn").forEach(b=>b.classList.remove("active"));
+  ["sel-pipeline","sel-modelo","sel-empresa","sel-marca","sel-prioridad","sel-responsable"].forEach(id=>{const el=$(id);if(el)el.value="";});
+  $("search-input").value="";
+  renderContent();
+}
+
+function applyFilters(sellers){
+  const q=norm($("search-input").value||"");
+  const pipeline=$("sel-pipeline").value;
+  const modelo=$("sel-modelo").value;
+  const empresa=$("sel-empresa").value;
+  const marca=$("sel-marca").value;
+  const prioridad=$("sel-prioridad").value;
+  const responsable=$("sel-responsable").value;
+
+  return sellers.filter(s=>{
+    if(q){
+      const hay=norm([s.seller_id,s.nombre,s.empresa_grupo,s.marca_seller_operativo,s.categoria,s.modelo_integracion,s.responsable,s.url_seller].join(" "));
+      if(!hay.includes(q))return false;
+    }
+    if(activeQuick==="bloqueados"&&!s.bloqueo_flag)return false;
+    if(activeQuick==="alta"&&norm(s.prioridad)!=="alta")return false;
+    if(activeQuick==="listos"&&s.pipeline_estado!=="Listos para integrar")return false;
+    if(activeQuick==="sin_relevamiento"&&s._rel&&s._rel.has)return false;
+    if(pipeline&&s.pipeline_estado!==pipeline)return false;
+    if(modelo&&s.modelo_integracion!==modelo)return false;
+    if(empresa&&s.empresa_grupo!==empresa)return false;
+    if(marca&&s.marca_seller_operativo!==marca)return false;
+    if(prioridad&&s.prioridad!==prioridad)return false;
+    if(responsable&&s.responsable!==responsable)return false;
+    return true;
+  });
+}
+
+function applySort(sellers){
+  const orden=($("sel-orden")||{}).value||"prioridad";
+  const priOrder={"Alta":0,"Media":1,"Baja":2};
+  const copy=[...sellers];
+  if(orden==="prioridad") copy.sort((a,b)=>(priOrder[a.prioridad]??2)-(priOrder[b.prioridad]??2));
+  else if(orden==="bloqueados") copy.sort((a,b)=>(b.bloqueo_flag?1:0)-(a.bloqueo_flag?1:0));
+  else if(orden==="avance_asc") copy.sort((a,b)=>a.progreso_pct-b.progreso_pct);
+  else if(orden==="avance_desc") copy.sort((a,b)=>b.progreso_pct-a.progreso_pct);
+  else if(orden==="nombre") copy.sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
+  return copy;
+}
+
+/* ── RENDER ── */
+function renderContent(){
+  const filtered=applySort(applyFilters(ALL));
+  if(!filtered.length){
+    setHTML("content-area",`<div class="state-box"><div class="state-icon">○</div><div class="state-title">Sin resultados</div><div class="state-desc">Ajustá los filtros o la búsqueda.</div></div>`);
+    return;
+  }
+  currentView==="kanban"?renderKanban(filtered):renderTabla(filtered);
+}
+
+/* ── CARD ── */
+function cardHTML(s){
+  const logo = logoHTML(s);
+
+  const cls=s.bloqueo_flag?"scard blocked":norm(s.riesgo_nivel)==="alto"?"scard risk-high":"scard";
+
+  const chips=[];
+  if(s.modelo_integracion&&s.modelo_integracion!=="—")chips.push(`<span class="chip i">${esc(s.modelo_integracion)}</span>`);
+  if(norm(s.prioridad)==="alta")chips.push(`<span class="chip d">Alta</span>`);
+  if(s.bloqueo_flag)chips.push(`<span class="chip d">Bloqueado</span>`);
+  if(norm(s.riesgo_nivel)==="alto"&&!s.bloqueo_flag)chips.push(`<span class="chip w">Riesgo alto</span>`);
+
+  const prog=s.progreso_pct>0?`<div class="prog-bar"><div class="prog-fill" style="width:${s.progreso_pct}%"></div></div>`:"";
+
+  const next=s.proximo_paso?`<div class="scard-next"><span class="scard-next-arr">→</span><span>${esc(s.proximo_paso)}</span></div>`:"";
+
+  return `<article class="${cls}" onclick="openModal('${esc(s.seller_id)}')">
+    <div class="scard-head">
+      <div class="scard-brand">
+        ${logo}
+        <div>
+          <div class="scard-name">${esc(s.nombre)}</div>
+          <div class="scard-id">${esc(s.seller_id)} ${s.categoria?`· ${esc(s.categoria)}`:""}</div>
+        </div>
+      </div>
+      <span class="status-pill ${pipelineClass(s.pipeline_estado)}">${esc(s.pipeline_estado)}</span>
+    </div>
+    <div class="scard-entity">
+      <span><b>Grupo:</b> ${esc(s.empresa_grupo||"—")}</span>
+      <span><b>Marca:</b> ${esc(s.marca_seller_operativo||s.nombre||"—")}</span>
+    </div>
+    ${chips.length?`<div class="scard-chips">${chips.join("")}</div>`:""}
+    ${next}
+    ${prog}
+    <div class="scard-hint">Ver detalle →</div>
+  </article>`;
+}
+
+/* ── KANBAN ── */
+const STAGES=["Identificados","Contactados","En evaluación","En definición técnica","Listos para integrar","En integración","Live","Pausado"];
+function renderKanban(filtered){
+  const byStage={};
+  STAGES.forEach(s=>byStage[s]=[]);
+  filtered.forEach(s=>{
+    const st=s.pipeline_estado;
+    if(byStage[st])byStage[st].push(s);
+    else{ byStage[st]=[s]; }
+  });
+
+  const cols=STAGES.filter(st=>byStage[st]?.length>0||["Identificados","En evaluación","En integración","Live"].includes(st));
+  const html=cols.map(st=>{
+    const sellers=byStage[st]||[];
+    return `<div class="k-col">
+      <div class="k-col-hdr"><span class="k-col-title">${esc(st)}</span><span class="k-col-count">${sellers.length}</span></div>
+      <div class="k-col-body">${sellers.length?sellers.map(cardHTML).join(""):
+        `<div class="k-col-empty">Sin sellers</div>`}</div>
+    </div>`;
+  }).join("");
+
+  setHTML("content-area",`<div class="kanban">${html}</div>`);
+}
+
+/* ── TABLE ── */
+function renderTabla(filtered){
+  const rows=filtered.map(s=>{
+    const blkColor=s.bloqueo_flag?"var(--da)":norm(s.riesgo_nivel)==="alto"?"var(--wa)":"transparent";
+    const logo=logoHTML(s,"seller-logo","seller-initials","width:22px;height:22px;border-radius:4px;object-fit:contain;background:rgba(255,255,255,.07);flex-shrink:0;font-size:9px");
+    const priCls=norm(s.prioridad)==="alta"?"pri-alta":norm(s.prioridad)==="media"?"pri-media":"pri-baja";
+    const prog=`<div class="prog-wrap"><span class="prog-pct">${Math.round(s.progreso_pct)}%</span><div class="prog-bar" style="flex:1;margin:0"><div class="prog-fill" style="width:${s.progreso_pct}%"></div></div></div>`;
+    return `<tr onclick="openModal('${esc(s.seller_id)}')">
+      <td class="td-blk"><div class="td-blk-bar" style="background:${blkColor}"></div></td>
+      <td class="td-id">${esc(s.seller_id)}</td>
+      <td><div class="td-seller">${logo}<div><div class="td-name">${esc(s.nombre)}</div><div class="td-cat">${esc(s.categoria||"")}</div></div></div></td>
+      <td>${esc(s.empresa_grupo||"—")}</td>
+      <td>${esc(s.marca_seller_operativo||"—")}</td>
+      <td><span class="status-pill ${pipelineClass(s.pipeline_estado)}">${esc(s.pipeline_estado)}</span></td>
+      <td>${s.modelo_integracion&&s.modelo_integracion!=="—"?`<span class="chip i">${esc(s.modelo_integracion)}</span>`:`<span style="color:var(--t4)">—</span>`}</td>
+      <td class="${priCls}">${esc(s.prioridad)}</td>
+      <td>${prog}</td>
+      <td class="td-next"><div class="td-next-text">${esc(s.proximo_paso||"—")}</div>${s.proximo_paso_resp&&s.proximo_paso_resp!=="—"?`<div class="td-next-resp">${esc(s.proximo_paso_resp)}</div>`:""}</td>
+      <td style="color:var(--t4);white-space:nowrap;font-size:12px">${esc(s.responsable)}</td>
+    </tr>`;
+  }).join("");
+
+  setHTML("content-area",`<div class="table-wrap"><table>
+    <thead><tr>
+      <th class="td-blk"></th>
+      <th>ID</th><th>Seller</th><th>Grupo</th><th>Marca operativa</th><th>Pipeline</th><th>Modelo</th>
+      <th>Prioridad</th><th>Avance</th><th>Próximo paso</th><th>Responsable</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`);
+}
+
+/* ── MODAL ── */
+function openModal(id){
+  const s=ALL.find(x=>x.seller_id===id);
+  if(!s)return;
+
+  const logo=$("m-logo"), ini=$("m-initials");
+  ini.textContent=sellerInitials(s.nombre);
+  const candidates=logoCandidates(s.seller_id);
+  if(candidates.length){
+    logo.dataset.logoCandidates=JSON.stringify(candidates);
+    logo.dataset.logoIndex="0";
+    logo.onerror=()=>handleModalLogoError(logo, ini);
+    logo.src=candidates[0]; logo.classList.remove("hidden"); ini.classList.add("hidden");
+  } else { logo.classList.add("hidden"); ini.classList.remove("hidden"); }
+
+  setText("m-name",s.nombre);
+  setText("m-id",s.seller_id);
+
+  // Header chips
+  const chips=[];
+  chips.push(`<span class="chip ${pipelineClass(s.pipeline_estado) .replace('sp-','').slice(0,3)==='liv'?'g':'n'}">${esc(s.pipeline_estado)}</span>`);
+  if(s.modelo_integracion&&s.modelo_integracion!=="—")chips.push(`<span class="chip i">${esc(s.modelo_integracion)}</span>`);
+  if(s.bloqueo_flag)chips.push(`<span class="chip d">Bloqueado</span>`);
+  if(norm(s.prioridad)==="alta")chips.push(`<span class="chip d">Alta prioridad</span>`);
+  setHTML("m-chips",chips.join(""));
+
+  // Modal body
+  const row=(k,v)=>v&&v!=="—"?`<div class="mrow"><span class="ml">${k}</span><span class="mv">${esc(v)}</span></div>`:""
+
+  // Public links
+  const sid=esc(s.seller_id);
+  const links=[
+    {title:"Presentación comercial",  desc:"Para compartir con el seller",           path:CONFIG.PRESENTACION_PATH, primary:true},
+    {title:"Formulario de calificación", desc:"Evaluación inicial del seller",        path:CONFIG.CALIFICACION_PATH},
+    {title:"Formulario de relevamiento", desc:"Relevamiento técnico y operativo",     path:CONFIG.RELEVAMIENTO_PATH},
+    {title:"Simulador de costos", desc:"Calculadora económica del seller", path:CONFIG.SIMULADOR_SELLER_PATH},
+  ];
+  const shareHTML=links.map(l=>{
+    const url=publicUrl(l.path,s.seller_id);
+    return `<div class="share-row">
+      <div><div class="share-label">${l.title}</div><div class="share-desc">${l.desc}</div></div>
+      <div class="share-actions">
+        <button class="share-btn ${l.primary?'primary':''}" onclick="copyLink('${url}')">Copiar</button>
+        <button class="share-btn" onclick="window.open('${url}','_blank')">Abrir</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  setHTML("modal-body",`
+    <div class="msec">
+      <div class="msec-title">Estado</div>
+      ${row("Responsable",s.responsable)}
+      ${row("Prioridad",s.prioridad)}
+      ${row("Riesgo",s.riesgo_nivel)}
+      ${row("Avance",s.progreso_pct+"%")}
+      ${row("Empresa / grupo",s.empresa_grupo)}
+      ${row("Marca / seller operativo",s.marca_seller_operativo)}
+      ${row("Categoría",s.categoria)}
+      ${row("Plataforma",s.plataforma)}
+      ${row("URL seller",s.url_seller)}
+      ${row("Contacto",s.contacto_nombre)}
+      ${row("Email",s.contacto_email)}
+      ${row("Teléfono",s.contacto_tel)}
+      ${row("Última actualización",s.ultima_actualizacion)}
+      ${s.notas_operativas?`<div class="modal-note ${s.bloqueo_flag?'warn':''}">${esc(s.notas_operativas)}</div>`:""}
+    </div>
+    ${s.proximo_paso?`<div class="msec">
+      <div class="msec-title">Próximo paso</div>
+      <div class="mnext">
+        <div class="mnext-paso"><span class="mnext-paso-arr">→</span>${esc(s.proximo_paso)}</div>
+        ${s.proximo_paso_criterio?`<div class="mnext-criterio">Criterio: ${esc(s.proximo_paso_criterio)}</div>`:""}
+        ${s.proximo_paso_resp&&s.proximo_paso_resp!=="—"?`<span class="mnext-resp">${esc(s.proximo_paso_resp)}</span>`:""}
+      </div>
+    </div>`:""}
+    <div class="msec">
+      <div class="msec-title">Links para compartir</div>
+      <div class="share-links">${shareHTML}</div>
+    </div>
+    <div class="modal-actions">
+      <button class="maction primary" onclick="window.open(publicUrl('/internal/backlog/gestion-sellers.html', '${sid}') + '&modo=editar','_blank')">Editar seller</button>
+      ${s.url_seller?`<button class="maction" onclick="window.open('${esc(s.url_seller)}','_blank')">Web seller</button>`:""}
+    </div>
+  `);
+
+  $("modal-overlay").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function handleModalLogoError(logo, ini){
+  try{
+    const list=JSON.parse(logo.dataset.logoCandidates||"[]");
+    const next=(parseInt(logo.dataset.logoIndex||"0",10)+1);
+    if(list[next]){logo.dataset.logoIndex=String(next);logo.src=list[next];return;}
+  }catch(e){}
+  logo.classList.add("hidden");ini.classList.remove("hidden");
+}
+
+function closeModal(e){
+  if(e&&e.target!==$("modal-overlay"))return;
+  $("modal-overlay").classList.remove("open");
+  document.body.style.overflow="";
+}
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+
+/* ── LINK COPY ── */
+function copyLink(url){
+  navigator.clipboard?.writeText(url).then(()=>showToast("✓ Link copiado")).catch(()=>showToast("No se pudo copiar"));
+}
+
+function showToast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+/* ── VIEW TOGGLE ── */
+function setView(v){
+  currentView=v;
+  $("btn-kanban").classList.toggle("active",v==="kanban");
+  $("btn-tabla").classList.toggle("active",v==="tabla");
+  renderContent();
+}
+
+/* ── INIT ── */
+loadData();
+</script>
+</body>
+</html>

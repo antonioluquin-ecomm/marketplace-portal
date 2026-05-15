@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Sellers v6 | Sporting Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="../../assets/js/config.js"></script>
+  <style>
+    :root{--g:#5ea832;--g2:#4a8a26;--g-dim:rgba(94,168,50,.11);--g-brd:rgba(94,168,50,.28);--k:#0b0f0b;--k2:#101610;--k3:#151c14;--k4:#1b2419;--w:#fff;--t1:#edf3e9;--t2:#a6b79d;--t3:#71816b;--t4:#4f5d49;--bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.05);--warn:#ffb74d;--info:#64b5f6;--danger:#d94040;--shadow:0 18px 60px rgba(0,0,0,.34);--tb:60px}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Barlow,system-ui,sans-serif;background:radial-gradient(circle at 20% 0%,rgba(94,168,50,.10),transparent 36%),var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:inherit}
+    .topbar{position:sticky;top:0;z-index:80;height:var(--tb);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;background:rgba(11,15,11,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:14px;min-width:0}.logo{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}.logo span{color:var(--g)}.crumb{border-left:1px solid var(--bdr);padding-left:14px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);white-space:nowrap}.top-actions{display:flex;align-items:center;gap:10px}.status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t2)}.dot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px rgba(255,183,77,.13);animation:pulse 2s infinite}.dot.ok{background:var(--g);box-shadow:0 0 0 4px rgba(94,168,50,.18)}.dot.err{background:var(--danger);box-shadow:0 0 0 4px rgba(217,64,64,.15)}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+    .btn-top{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--bdr);border-radius:8px;color:var(--t2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;transition:.15s}.btn-top:hover{border-color:var(--g-brd);background:var(--g-dim);color:var(--g)}
+    .wrap{max-width:1160px;margin:0 auto;padding:30px 22px 70px}.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-bottom:18px}.panel{background:linear-gradient(180deg,rgba(21,28,20,.96),rgba(16,22,16,.98));border:1px solid var(--bdr);border-radius:18px;padding:22px;box-shadow:var(--shadow)}.panel.soft{box-shadow:none;background:rgba(255,255,255,.028)}.eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:12px;color:var(--g);font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase}.eyebrow:before{content:"";width:26px;height:2px;background:var(--g)}h1,h2,h3{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.01em}h1{font-size:clamp(42px,6vw,72px);line-height:.92;font-weight:900;margin-bottom:14px}h1 span{color:var(--g)}h2{font-size:20px;margin-bottom:12px}.lead{font-size:15px;line-height:1.65;color:var(--t2);max-width:760px}.note{margin-top:14px;padding:12px 14px;border-left:3px solid var(--g);background:var(--g-dim);border-radius:10px;color:var(--t2);font-size:12px;line-height:1.55}.note.warn{border-left-color:var(--warn);background:rgba(255,183,77,.08)}
+    .grid-layout{display:grid;grid-template-columns:380px 1fr;gap:18px}.side{position:sticky;top:82px;align-self:start}.section{padding:18px 0;border-bottom:1px solid var(--bdr2)}.section:first-child{padding-top:0}.section:last-child{border-bottom:0;padding-bottom:0}.section-title{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:12px}.field{margin-bottom:12px}.field:last-child{margin-bottom:0}.field label{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:6px}.field small{font-size:10px;color:var(--t4);font-weight:500}.inp,.sel,textarea{width:100%;padding:11px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--t1);font-size:14px;outline:none;transition:border-color .15s,box-shadow .15s}.inp:focus,.sel:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(94,168,50,.13)}.sel option{background:#111711}textarea{min-height:92px;resize:vertical}.req::after{content:" *";color:var(--warn)}.help{font-size:11px;color:var(--t4);line-height:1.45;margin-top:6px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.full{grid-column:1/-1}.readonly{background:rgba(255,255,255,.025);border-style:dashed;color:var(--t3)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:10px;background:var(--g);color:#fff;padding:12px 18px;font-size:11px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:filter .15s,transform .1s}.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.98)}.btn.secondary{background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--t2)}.btn:disabled{opacity:.55;cursor:progress}.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--g-brd);background:var(--g-dim);color:var(--g);border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.04em}.pill.gray{border-color:var(--bdr);background:rgba(255,255,255,.04);color:var(--t3)}
+    .preview-card{border:1px solid var(--bdr);border-radius:16px;background:rgba(255,255,255,.025);overflow:hidden}.preview-head{display:flex;align-items:center;gap:14px;padding:18px;border-bottom:1px solid var(--bdr)}.logo-box{width:58px;height:58px;border-radius:13px;border:1px solid var(--bdr);background:rgba(255,255,255,.06);display:grid;place-items:center;overflow:hidden;flex-shrink:0}.logo-box img{max-width:100%;max-height:100%;object-fit:contain;padding:6px}.logo-fallback{font-family:"Barlow Condensed",sans-serif;font-size:24px;font-weight:900;color:var(--g)}.preview-name{font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:900;text-transform:uppercase;line-height:1}.preview-meta{font-size:12px;color:var(--t3);margin-top:3px}.preview-body{padding:16px;display:grid;gap:10px}.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--bdr2);font-size:13px}.kv:last-child{border-bottom:0}.kv span:first-child{color:var(--t3)}.kv span:last-child{font-weight:800;color:var(--t1);text-align:right;word-break:break-word}.links{display:grid;gap:8px;margin-top:14px}.link-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--bdr);border-radius:10px;background:rgba(255,255,255,.025);padding:11px 12px}.link-row b{font-size:12px;color:var(--t2)}.link-row button,.link-row a{font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--g);background:transparent;border:0;cursor:pointer;white-space:nowrap}.msg-box{margin-top:14px;border:1px solid var(--bdr);border-radius:12px;background:rgba(255,255,255,.025);padding:14px}.msg-title{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--g);margin-bottom:8px}.msg-preview{font-size:12px;line-height:1.55;color:var(--t2);white-space:pre-wrap;max-height:180px;overflow:auto}.alert{display:none;margin-bottom:14px;padding:12px 14px;border:1px solid rgba(217,64,64,.3);background:rgba(217,64,64,.10);color:#f29a9a;border-radius:10px;font-size:12px;line-height:1.45}.alert.visible{display:block}.success{display:none;margin-bottom:14px;padding:12px 14px;border:1px solid var(--g-brd);background:var(--g-dim);color:#b7e69d;border-radius:10px;font-size:12px;line-height:1.45}.success.visible{display:block}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);opacity:0;z-index:999;padding:10px 18px;border-radius:999px;background:var(--k4);border:1px solid var(--g-brd);color:var(--g);font-size:12px;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:980px){.hero,.grid-layout{grid-template-columns:1fr}.side{position:relative;top:auto}.form-grid{grid-template-columns:1fr}.topbar{height:auto;min-height:var(--tb);padding:12px 16px;align-items:flex-start}.brand,.top-actions{flex-wrap:wrap}.crumb{display:none}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="logo">SPORTING <span>MARKETPLACE</span></div><div class="crumb">Gestión de Sellers · v5 final</div></div>
+    <div class="top-actions"><a class="btn-top" href="../backlog/backlog-sellers.html">← Volver al backlog</a><div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Cargando…</span></div></div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="panel">
+        <div class="eyebrow">Alta y seguimiento</div>
+        <h1>Gestión de <span>Sellers</span></h1>
+        <p class="lead">Usá esta pantalla para crear un seller potencial, completar su información inicial y dejarlo disponible para el backlog, los formularios y el seguimiento operativo.</p>
+        <div class="note">El ID del seller se genera automáticamente. Las fechas de alta y actualización las completa el sistema. Los logos y links públicos se calculan solos a partir del ID.</div>
+      </div>
+      <div class="panel soft">
+        <h2>Cómo usar esta pantalla</h2>
+        <p class="lead" style="font-size:13px">Para un seller nuevo, completá solo los datos iniciales disponibles. Si el seller ya existe, seleccionalo para editar su ficha. La calificación y el relevamiento completarán luego los datos técnicos faltantes.</p>
+        <div class="section" style="padding-bottom:0"><div class="section-title">Seller existente</div>
+          <div class="field"><label>Editar un seller ya creado <small>opcional</small></label><select id="existingSeller" class="sel" onchange="loadSelectedSeller()"><option value="">Cargando sellers…</option></select></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-layout">
+      <aside class="side">
+        <div class="preview-card">
+          <div class="preview-head"><div class="logo-box" id="logoPreview"><span class="logo-fallback">S</span></div><div><div id="pvName" class="preview-name">Nuevo seller</div><div id="pvMeta" class="preview-meta">Sporting Marketplace</div></div></div>
+          <div class="preview-body">
+            <div class="kv"><span>ID del seller</span><span id="pvId">—</span></div>
+            <div class="kv"><span>Empresa / grupo</span><span id="pvGrupo">—</span></div>
+            <div class="kv"><span>Marca / seller</span><span id="pvMarca">—</span></div>
+            <div class="kv"><span>Modelo estimado</span><span id="pvModelo">—</span></div>
+            <div class="kv"><span>Estado</span><span id="pvEstado">identificados</span></div>
+            <div class="kv"><span>Activo</span><span id="pvActivo">SI</span></div>
+          </div>
+        </div>
+        <div class="links">
+          <div class="link-row"><b>Presentación seller</b><button onclick="copyLink('presentacion')">Copiar</button></div>
+          <div class="link-row"><b>Formulario calificación</b><button onclick="copyLink('calificacion')">Copiar</button></div>
+          <div class="link-row"><b>Formulario relevamiento</b><button onclick="copyLink('relevamiento')">Copiar</button></div>
+          <div class="link-row"><b>Simulador seller</b><button onclick="copyLink('simulador')">Copiar</button></div>
+        </div>
+        <div class="msg-box"><div class="msg-title">Mensaje primer contacto</div><div class="msg-preview" id="messagePreview"></div><div class="actions"><button class="btn secondary" onclick="copyFirstContactMessage()" type="button">Copiar mensaje</button></div></div>
+      </aside>
+
+      <div class="panel">
+        <div id="alertBox" class="alert"></div>
+        <div id="successBox" class="success"></div>
+        <form id="sellerForm">
+          <div class="section">
+            <div class="section-title">1. Datos principales</div>
+            <div class="form-grid">
+              <div class="field"><label>ID generado automáticamente</label><input id="seller_id" name="seller_id" class="inp readonly" placeholder="Se genera al crear" autocomplete="off" readonly /><div class="help">Se asigna con la secuencia SPT-001, SPT-002, etc. Este ID conecta sellers, calificaciones y relevamientos.</div></div>
+              <div class="field"><label class="req">Nombre visible del seller</label><input id="seller_nombre" name="seller_nombre" class="inp" placeholder="Ej.: Puma / Asics (Dass)" /></div>
+              <div class="field"><label>Empresa / grupo</label><input id="empresa_grupo" name="empresa_grupo" class="inp" placeholder="Ej.: Grupo Dass / Bisa / Puma" /></div>
+              <div class="field"><label>Marca / seller operativo</label><input id="marca_seller_operativo" name="marca_seller_operativo" class="inp" placeholder="Ej.: Asics / Fila / Under Armour" /></div>
+              <div class="field full"><label>Sitio web del seller</label><input id="url_seller" name="url_seller" class="inp" placeholder="https://..." /></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">2. Información inicial estimada</div>
+            <div class="form-grid">
+              <div class="field"><label>Categoría estimada</label><input id="categoria_estimada" name="categoria_estimada" class="inp" placeholder="Ej.: Calzado · Indumentaria · Accesorios" /></div>
+              <div class="field"><label>Plataforma estimada</label><select id="plataforma_estimada" name="plataforma_estimada" class="sel"><option value="">A definir</option><option>VTEX</option><option>Tiendanube</option><option>WordPress</option><option>Shopify</option><option>WooCommerce</option><option>Magento / Adobe Commerce</option><option>SalesForceCommerce</option><option>ERP / Sistema propio</option><option>Sin plataforma</option><option>Otro</option></select></div>
+              <div class="field"><label>Modelo de integración estimado</label><select id="modelo_integracion_estimado" name="modelo_integracion_estimado" class="sel"><option value="">A definir</option><option>VTEX ↔ VTEX</option><option>API Seller Center</option><option>Híbrido / Transitorio</option><option>Externo → Seller Center</option><option>Externo → PIM → VTEX</option></select></div>
+              <div class="field"><label>Sitio objetivo</label><select id="sitio_objetivo" name="sitio_objetivo" class="sel"><option>Sporting</option><option>Woker</option><option>Ambos</option></select></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">3. Gestión operativa</div>
+            <div class="form-grid">
+              <div class="field"><label>Estado de gestión</label><select id="estado_pipeline" name="estado_pipeline" class="sel"><option value="identificados">Identificado</option><option value="contactos">Contactado</option><option value="evaluación">En evaluación</option><option value="en relevamiento">En relevamiento</option><option value="aprobado para integrar">Aprobado para integrar</option><option value="en integración">En integración</option><option value="live">Live</option><option value="pausado">Pausado</option><option value="descartado">Descartado</option></select></div>
+              <div class="field"><label>Prioridad</label><select id="prioridad" name="prioridad" class="sel"><option>Media</option><option>Alta</option><option>Baja</option></select></div>
+              <div class="field"><label class="req">Creado por / responsable</label><input id="responsable" name="responsable" class="inp" placeholder="Ej.: Gabriel Luna" /><div class="help">Ingresar el nombre de la persona que crea o gestiona el seller.</div></div>
+              <div class="field"><label>¿Sigue activo?</label><select id="activo" name="activo" class="sel"><option>SI</option><option>NO</option></select></div>
+              <div class="field full"><label>Próximo paso</label><input id="proximo_paso" name="proximo_paso" class="inp" placeholder="Ej.: Contactar seller y validar interés comercial" /></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">4. Contacto</div>
+            <div class="form-grid">
+              <div class="field"><label>Nombre del contacto</label><input id="contacto_nombre" name="contacto_nombre" class="inp" /></div>
+              <div class="field"><label>Email del contacto</label><input id="contacto_email" name="contacto_email" class="inp" type="email" /></div>
+              <div class="field"><label>Teléfono / WhatsApp</label><input id="contacto_tel" name="contacto_tel" class="inp" /></div>
+              <div class="field full"><label>Observaciones internas</label><textarea id="observaciones" name="observaciones" placeholder="Notas internas para la gestión del seller"></textarea></div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="submitBtn" type="submit">Guardar seller</button>
+            <button class="btn secondary" onclick="resetForm()" type="button">Limpiar</button>
+            
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast">Copiado</div>
+
+  <script>
+    const FALLBACK_CONFIG = {
+      BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace",
+      APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec",
+      CSV: { SELLERS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv" },
+      ASSETS: { LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/" },
+      ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html" }, INTERNAL:{ BACKLOG_SELLERS:"/internal/backlog/backlog-sellers.html" } },
+      toAbsoluteUrl(path){ const base=this.BASE_URL.replace(/\/$/,""); return /^https?:\/\//i.test(path)?path:base+(String(path).startsWith("/")?path:"/"+path); }
+    };
+    const CFG = window.MP_CONFIG || FALLBACK_CONFIG;
+    const APPS_SCRIPT_URL = CFG.APPS_SCRIPT_URL || FALLBACK_CONFIG.APPS_SCRIPT_URL;
+    const SELLERS_CSV_URL = (CFG.CSV && CFG.CSV.SELLERS) || FALLBACK_CONFIG.CSV.SELLERS;
+    const LOGO_BASE_URL = ((CFG.ASSETS && CFG.ASSETS.LOGO_BASE_URL) || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL).replace(/\/$/,"/");
+    const ROUTE_PUBLIC = (CFG.ROUTES && CFG.ROUTES.PUBLIC) || FALLBACK_CONFIG.ROUTES.PUBLIC;
+    const ROUTES = {
+      presentacion: ROUTE_PUBLIC.PRESENTACION_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.PRESENTACION_SELLER,
+      calificacion: ROUTE_PUBLIC.FORMULARIO_CALIFICACION || FALLBACK_CONFIG.ROUTES.PUBLIC.FORMULARIO_CALIFICACION,
+      relevamiento: ROUTE_PUBLIC.FORMULARIO_RELEVAMIENTO || FALLBACK_CONFIG.ROUTES.PUBLIC.FORMULARIO_RELEVAMIENTO,
+      simulador: ROUTE_PUBLIC.SIMULADOR_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.SIMULADOR_SELLER
+    };
+    const SELLER_FIELDS = ["seller_id","seller_nombre","empresa_grupo","marca_seller_operativo","url_seller","categoria_estimada","plataforma_estimada","modelo_integracion_estimado","estado_pipeline","prioridad","sitio_objetivo","responsable","contacto_nombre","contacto_email","contacto_tel","proximo_paso","observaciones","activo"];
+    const OPTIONAL_ALIASES = {
+      seller_nombre:["seller_nombre","nombre","marca","Seller"],
+      empresa_grupo:["empresa_grupo","grupo_empresa","grupo","empresa","razon_social"],
+      marca_seller_operativo:["marca_seller_operativo","marca_seller_operativa","marca_operativa","marca","nombre"],
+      url_seller:["url_seller","ulr_seller","web","seller_url","website"],
+      estado_pipeline:["estado_pipeline","estado"],
+      observaciones:["observaciones","comentarios"],
+      proximo_paso:["proximo_paso","próximo_paso"]
+    };
+    let SELLERS = [];
+    let SELLERS_LOADED = false;
+    let EDITING_ORIGINAL_ID = "";
+    const $ = id => document.getElementById(id);
+    const norm = v => String(v??"").trim().toLowerCase();
+    const clean = v => String(v??"").trim();
+    const pick = (obj, keys) => { for(const k of keys){ if(obj && obj[k]!==undefined && obj[k]!==null && clean(obj[k])!=="") return clean(obj[k]); } return ""; };
+    const valueFromRow = (row, field) => pick(row, OPTIONAL_ALIASES[field] || [field]);
+    function getQuerySellerId(){
+      const params = new URLSearchParams(window.location.search);
+      return normalizeSellerId(params.get("seller_id") || params.get("id") || params.get("seller") || "");
+    }
+    function isEditModeFromUrl(){
+      const params = new URLSearchParams(window.location.search);
+      const mode = norm(params.get("modo") || params.get("mode") || params.get("accion") || params.get("action"));
+      return !!getQuerySellerId() || ["editar","edit","edicion","edición"].includes(mode);
+    }
+    const escapeHtml = v => String(v??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[ch]);
+    function initials(name){ return String(name || "S").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase() || "S"; }
+    function getReservedIds(){ try{return JSON.parse(localStorage.getItem("mp_reserved_seller_ids")||"[]");}catch(e){return [];} }
+    function reserveSellerId(id){ const sid=normalizeSellerId(id); if(!sid) return; const ids=[...new Set([...getReservedIds(), sid])].slice(-200); localStorage.setItem("mp_reserved_seller_ids", JSON.stringify(ids)); }
+    function nextSellerId(){ const ids=[...SELLERS.map(r=>valueFromRow(r,"seller_id") || r.seller_id), ...getReservedIds()]; const max = ids.map(id=>String(id).match(/^SPT-(\d+)$/i)).filter(Boolean).map(m=>parseInt(m[1],10)).reduce((a,b)=>Math.max(a,b),0); return `SPT-${String(max+1).padStart(3,"0")}`; }
+    function normalizeSellerId(v){ const raw=clean(v).toUpperCase(); if(!raw) return ""; const m=raw.match(/^(?:SPT-?)?(\d+)$/); return m ? `SPT-${String(parseInt(m[1],10)).padStart(3,"0")}` : raw; }
+    function logoCandidates(id){ const sid=clean(id).toLowerCase(); if(!sid) return []; return ["png","webp","jpg","jpeg","svg"].map(ext=>`${LOGO_BASE_URL}${encodeURIComponent(sid)}.${ext}`); }
+    function setStatus(state,text){ const dot=$("statusDot"); dot.classList.remove("ok","err"); if(state==="ok") dot.classList.add("ok"); if(state==="err") dot.classList.add("err"); $("statusText").textContent=text; }
+    function showToast(msg="Copiado"){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
+    function showAlert(msg){ $("alertBox").textContent=msg; $("alertBox").classList.add("visible"); $("successBox").classList.remove("visible"); }
+    function clearAlert(){ $("alertBox").classList.remove("visible"); }
+    function showSuccess(msg){ $("successBox").textContent=msg; $("successBox").classList.add("visible"); }
+    function toAbsolute(path){ return (CFG.toAbsoluteUrl ? CFG.toAbsoluteUrl(path) : FALLBACK_CONFIG.toAbsoluteUrl(path)); }
+    async function getCSV(url){ const sep = url.includes("?") ? "&" : "?"; const res=await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"}); if(!res.ok) throw new Error("HTTP "+res.status); return parseCSV(await res.text()); }
+    function parseCSV(text){ const rows=[]; let row=[],cur="",q=false; for(let i=0;i<text.length;i++){ const c=text[i],n=text[i+1]; if(c==='"'&&q&&n==='"'){cur+='"';i++;continue;} if(c==='"'){q=!q;continue;} if(c===","&&!q){row.push(cur);cur="";continue;} if((c==="\n"||c==="\r")&&!q){ if(c==="\r"&&n==="\n") i++; row.push(cur); cur=""; if(row.some(v=>clean(v)!=="")) rows.push(row); row=[]; continue;} cur+=c; } row.push(cur); if(row.some(v=>clean(v)!=="")) rows.push(row); if(!rows.length) return []; const headers=rows[0].map(h=>clean(h)); return rows.slice(1).map(r=>{ const o={}; headers.forEach((h,i)=>o[h]=clean(r[i]??"")); return o; }); }
+    async function loadSellers(){ try{ setStatus("loading","Cargando sellers…"); SELLERS = SELLERS_CSV_URL ? await getCSV(SELLERS_CSV_URL) : []; SELLERS_LOADED = true; buildExistingSelect(); setStatus("ok",`${SELLERS.length} sellers cargados`); }catch(e){ console.warn(e); SELLERS=[]; SELLERS_LOADED = false; buildExistingSelect(); setStatus("err","No se pudo cargar sellers"); showAlert("No se pudo leer la hoja de sellers. Para evitar IDs duplicados, no crees un seller nuevo hasta corregir la conexión CSV."); } }
+    function buildExistingSelect(){ const s=$("existingSeller"); const sorted=[...SELLERS].sort((a,b)=>String(valueFromRow(a,"seller_nombre")).localeCompare(String(valueFromRow(b,"seller_nombre")),"es")); s.innerHTML='<option value="">Crear nuevo seller</option>'+sorted.map(row=>{const id=valueFromRow(row,"seller_id") || row.seller_id; const name=valueFromRow(row,"seller_nombre")||id||"Seller"; const group=valueFromRow(row,"empresa_grupo"); const label = group && norm(group)!==norm(name) ? `${name} · ${group}` : name; return `<option value="${escapeHtml(id)}">${escapeHtml(label)}${id?" · "+escapeHtml(id):""}</option>`}).join(""); }
+    function loadSelectedSeller(){ const id=$("existingSeller").value; if(!id){ resetForm(false); return; } const row=SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id)); if(!row){ showAlert("No se encontró el seller seleccionado."); return; } EDITING_ORIGINAL_ID=id; SELLER_FIELDS.forEach(f=>{ if($(f)) $(f).value = valueFromRow(row,f); }); if(!$("activo").value) $("activo").value="SI"; updatePreview(); clearAlert(); showToast("Seller cargado para editar"); }
+    function loadSellerById(idFromUrl){
+      const id = normalizeSellerId(idFromUrl);
+      if(!id) return false;
+      const row = SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id));
+      if(!row){
+        $("existingSeller").value = "";
+        resetForm(false);
+        showAlert(`No se encontró el seller ${id} en la hoja. Verificá que exista en Google Sheet o que el CSV publicado esté actualizado.`);
+        return false;
+      }
+      $("existingSeller").value = id;
+      loadSelectedSeller();
+      const title = document.querySelector("h1");
+      if(title) title.innerHTML = 'Editar <span>seller</span>';
+      const submitBtn = $("submitBtn");
+      if(submitBtn) submitBtn.textContent = "Actualizar seller";
+      setStatus("ok", `Editando ${id}`);
+      return true;
+    }
+    function initFromUrl(){
+      const id = getQuerySellerId();
+      if(id){ loadSellerById(id); return; }
+      resetForm();
+    }
+    function getSavedResponsable(){ return localStorage.getItem("mp_responsable_seller") || ""; }
+    function saveResponsable(v){ const val=clean(v); if(val) localStorage.setItem("mp_responsable_seller", val); }
+    function resetForm(resetSelect=true){ $("sellerForm").reset(); $("seller_id").value=nextSellerId(); $("estado_pipeline").value="identificados"; $("prioridad").value="Media"; $("sitio_objetivo").value="Sporting"; $("activo").value="SI"; $("responsable").value=getSavedResponsable(); EDITING_ORIGINAL_ID=""; if(resetSelect) $("existingSeller").value=""; clearAlert(); updatePreview(); }
+    function formToObject(){ const o={ tipo_formulario:"seller" }; SELLER_FIELDS.forEach(f=>{ if($(f)) o[f]=clean($(f).value); }); o.seller_id = normalizeSellerId(o.seller_id); o.seller_nombre = o.seller_nombre || o.marca_seller_operativo || o.empresa_grupo; if(!o.marca_seller_operativo) o.marca_seller_operativo = o.seller_nombre; if(!o.activo) o.activo="SI"; if(EDITING_ORIGINAL_ID) o.seller_id_original = EDITING_ORIGINAL_ID; return o; }
+    function validatePayload(o){ if(!o.seller_id) return "No se pudo generar el ID del seller. Recargá la página e intentá nuevamente."; if(!/^SPT-\d{3,}$/i.test(o.seller_id)) return "El ID generado debe tener formato SPT-001, SPT-016, etc."; if(!o.seller_nombre) return "Completá el nombre visible del seller."; if(!o.marca_seller_operativo) return "Completá la marca o seller operativo."; if(!o.responsable) return "Completá quién crea o gestiona este seller."; if(o.contacto_email && !/^\S+@\S+\.\S+$/.test(o.contacto_email)) return "El email de contacto no tiene un formato válido."; if(!EDITING_ORIGINAL_ID && !SELLERS_LOADED) return "No se pudo validar la secuencia de IDs porque no cargó la hoja de sellers. Revisá la conexión CSV antes de crear un seller nuevo."; if(o.url_seller && !/^https?:\/\//i.test(o.url_seller)) return "La URL del seller debe comenzar con http:// o https://."; return ""; }
+    function updateLogo(box, sellerId, name){ const candidates=logoCandidates(sellerId); let i=0; if(!candidates.length){ box.innerHTML=`<span class="logo-fallback">${escapeHtml(initials(name))}</span>`; return; } box.innerHTML=`<img src="${escapeHtml(candidates[0])}" alt="Logo">`; const img=box.querySelector("img"); img.onerror=()=>{ i++; if(i<candidates.length){ img.src=candidates[i]; } else { box.innerHTML=`<span class="logo-fallback">${escapeHtml(initials(name))}</span>`; } }; }
+    function updatePreview(){ const o=formToObject(); const name=o.seller_nombre||"Nuevo seller"; $("seller_id").value=o.seller_id||""; $("pvName").textContent=name; $("pvMeta").textContent=`${o.sitio_objetivo||"Sporting"} Marketplace`; $("pvId").textContent=o.seller_id||"—"; $("pvGrupo").textContent=o.empresa_grupo||"—"; $("pvMarca").textContent=o.marca_seller_operativo||"—"; $("pvModelo").textContent=o.modelo_integracion_estimado||"A definir"; $("pvEstado").textContent=o.estado_pipeline||"identificados"; $("pvActivo").textContent=o.activo||"SI"; updateLogo($("logoPreview"), o.seller_id, name); $("messagePreview").textContent=buildFirstContactMessage(); }
+    function buildPublicLink(type){ const o=formToObject(); const base = toAbsolute(ROUTES[type]); return o.seller_id ? `${base}?seller_id=${encodeURIComponent(o.seller_id)}` : base; }
+    function buildFirstContactMessage(){ const o=formToObject(); const marca=o.marca_seller_operativo || o.seller_nombre || "tu marca"; const presentacion=buildPublicLink("presentacion"); const calificacion=buildPublicLink("calificacion"); return `Hola, ¿cómo estás?\n\nTe contactamos desde Sporting Marketplace porque nos gustaría evaluar la posibilidad de incorporar ${marca} a nuestro ecosistema de sellers.\n\nTe compartimos una presentación breve del modelo:\n${presentacion}\n\nComo primer paso, necesitamos completar una calificación inicial para entender mejor la operación, plataforma, catálogo y alcance comercial:\n${calificacion}\n\nLa información es de uso interno y nos ayuda a definir si el modelo es viable y cuál sería el mejor camino de integración.\n\nQuedamos atentos.\nSaludos.`; }
+    function copyLink(type){ const link=buildPublicLink(type); navigator.clipboard.writeText(link).then(()=>showToast("Link copiado")); }
+    function copyFirstContactMessage(){ navigator.clipboard.writeText(buildFirstContactMessage()).then(()=>showToast("Mensaje copiado")); }
+    function copyPayload(){ const o=formToObject(); navigator.clipboard.writeText(JSON.stringify(o,null,2)).then(()=>showToast("Datos copiados")); }
+    $("sellerForm").addEventListener("input", updatePreview); $("sellerForm").addEventListener("change", updatePreview);
+    
+    $("sellerForm").addEventListener("submit", async ev=>{ ev.preventDefault(); clearAlert(); const payload=formToObject(); const err=validatePayload(payload); if(err){ showAlert(err); return; } const btn=$("submitBtn"); btn.disabled=true; btn.textContent="Guardando…"; setStatus("loading","Guardando seller…"); try{ saveResponsable(payload.responsable); await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}); reserveSellerId(payload.seller_id); const idx=SELLERS.findIndex(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(payload.seller_id)); if(idx>=0) SELLERS[idx]=Object.assign({}, SELLERS[idx], payload); else SELLERS.push(payload); buildExistingSelect(); $("existingSeller").value=payload.seller_id; EDITING_ORIGINAL_ID=payload.seller_id; showSuccess("Solicitud enviada al Apps Script. El seller quedó marcado como enviado; validá la actualización en Google Sheet y luego refrescá el backlog."); setStatus("ok","Guardado enviado"); }catch(e){ console.error(e); showAlert("No se pudo enviar el alta. Revisá la conexión o la URL del Apps Script."); setStatus("err","Error al guardar"); } finally{ btn.disabled=false; btn.textContent="Guardar seller"; } });
+    loadSellers().then(()=>initFromUrl());
+  </script>
+</body>
+</html>

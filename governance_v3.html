@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Governance | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --g:#5ea832;
+      --g2:#4a8a26;
+      --g-dim:rgba(94,168,50,.10);
+      --g-brd:rgba(94,168,50,.24);
+      --k:#0b0f0b;
+      --k2:#101610;
+      --k3:#151c14;
+      --k4:#1b2419;
+      --w:#ffffff;
+      --t1:#edf3e9;
+      --t2:#a6b79d;
+      --t3:#71816b;
+      --t4:#4f5d49;
+      --bdr:rgba(255,255,255,.08);
+      --bdr2:rgba(255,255,255,.05);
+      --warn:#ffb74d;
+      --info:#64b5f6;
+      --teal:#4db6ac;
+      --violet:#ce93d8;
+      --danger:#d94040;
+      --shadow:0 14px 42px rgba(0,0,0,.34);
+      --tb:58px;
+      --sb:250px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Barlow,system-ui,sans-serif;
+      background:radial-gradient(circle at 20% 0%,rgba(94,168,50,.09),transparent 36%),var(--k);
+      color:var(--t1);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit}
+
+    .topbar{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      height:var(--tb);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 22px;
+      background:rgba(11,15,11,.96);
+      border-bottom:1px solid var(--g-brd);
+      backdrop-filter:blur(18px);
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{
+      font-family:"Barlow Condensed",sans-serif;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-size:20px;
+      color:var(--w);
+    }
+    .logo span{color:var(--g)}
+    .crumb{
+      border-left:1px solid var(--bdr);
+      padding-left:14px;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--t3);
+    }
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .status{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      color:var(--t2);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--g);
+      box-shadow:0 0 0 4px rgba(94,168,50,.18);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+    .btn-top{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 11px;
+      border:1px solid var(--bdr);
+      border-radius:7px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--t2);
+      transition:.15s;
+    }
+    .btn-top:hover{
+      color:var(--g);
+      border-color:var(--g-brd);
+      background:var(--g-dim);
+    }
+
+    .shell{
+      display:grid;
+      grid-template-columns:var(--sb) 1fr;
+      min-height:100vh;
+      padding-top:var(--tb);
+    }
+
+    .sidebar{
+      position:sticky;
+      top:var(--tb);
+      height:calc(100vh - var(--tb));
+      overflow:auto;
+      background:rgba(16,22,16,.96);
+      border-right:1px solid var(--bdr);
+      padding:18px 0;
+    }
+    .sb-section{margin-bottom:18px}
+    .sb-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:0 16px;
+      margin-bottom:7px;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--t4);
+    }
+    .sb-label:after{content:"";height:1px;background:var(--bdr);flex:1}
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      width:100%;
+      padding:8px 16px;
+      border-left:3px solid transparent;
+      font-size:12.5px;
+      color:var(--t2);
+      transition:.15s;
+    }
+    .nav:hover,.nav.active{
+      background:rgba(255,255,255,.04);
+      color:var(--t1);
+      border-left-color:var(--g);
+    }
+    .nav.active{
+      color:var(--g);
+      background:var(--g-dim);
+      font-weight:700;
+    }
+    .nav small{
+      margin-left:auto;
+      color:var(--t4);
+      font-size:9px;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+
+    .main{padding:30px 34px 70px;max-width:1180px}
+    .page-eyebrow{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--g);
+      margin-bottom:8px;
+    }
+    h1{
+      font-family:"Barlow Condensed",sans-serif;
+      font-size:44px;
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+      margin-bottom:8px;
+    }
+    .lead{
+      max-width:860px;
+      font-size:14px;
+      line-height:1.65;
+      color:var(--t2);
+      margin-bottom:24px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.35fr .65fr;
+      gap:16px;
+      margin-bottom:24px;
+    }
+    .panel{
+      background:linear-gradient(180deg,var(--k3),var(--k2));
+      border:1px solid var(--bdr);
+      border-radius:14px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .panel.soft{box-shadow:none;background:rgba(255,255,255,.025)}
+    .panel h2{font-size:16px;margin-bottom:12px}
+    .panel p{font-size:13px;line-height:1.6;color:var(--t2);margin-bottom:10px}
+
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 26px}
+    .kpi{background:var(--k3);border:1px solid var(--bdr);border-radius:12px;padding:16px}
+    .kpi .num{
+      font-family:"Barlow Condensed",sans-serif;
+      font-size:32px;
+      font-weight:900;
+      line-height:1;
+      color:var(--g);
+    }
+    .kpi .lbl{
+      font-size:9.5px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--t4);
+      margin-top:5px;
+    }
+    .kpi.info .num{color:var(--info)}
+    .kpi.warn .num{color:var(--warn)}
+    .kpi.teal .num{color:var(--teal)}
+
+    .section{margin:30px 0}
+    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:12px}
+    .section-title{display:flex;align-items:center;gap:9px}
+    .section-title span{font-size:18px}
+    .section-title h2{font-size:18px}
+    .section-desc{font-size:12.5px;color:var(--t3);max-width:560px;line-height:1.5}
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid.two{grid-template-columns:repeat(2,1fr)}
+    .card{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      min-height:154px;
+      padding:16px;
+      border-radius:12px;
+      border:1px solid var(--bdr);
+      background:var(--k3);
+      overflow:hidden;
+    }
+    .card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--g)}
+    .card.info:before{background:var(--info)}
+    .card.warn:before{background:var(--warn)}
+    .card.teal:before{background:var(--teal)}
+    .card.vio:before{background:var(--violet)}
+    .card.danger:before{background:var(--danger)}
+    .ico{font-size:24px;margin-bottom:10px}
+    .card h3{font-size:14px;color:var(--t1);margin-bottom:8px}
+    .card p{font-size:12.5px;color:var(--t3);line-height:1.5}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--k3);
+      border:1px solid var(--bdr);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    th,td{
+      text-align:left;
+      padding:12px 13px;
+      border-bottom:1px solid var(--bdr2);
+      font-size:12.5px;
+      vertical-align:top;
+    }
+    th{
+      background:var(--k4);
+      color:var(--t3);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    td{color:var(--t2)}
+    tr:last-child td{border-bottom:none}
+    td strong{color:var(--t1)}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:70px;
+      padding:3px 7px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+    .pill.high{background:var(--g-dim);color:var(--g);border:1px solid var(--g-brd)}
+    .pill.mid{background:rgba(255,183,77,.10);color:var(--warn);border:1px solid rgba(255,183,77,.28)}
+    .pill.info{background:rgba(100,181,246,.10);color:var(--info);border:1px solid rgba(100,181,246,.25)}
+    .pill.teal{background:rgba(77,182,172,.10);color:var(--teal);border:1px solid rgba(77,182,172,.26)}
+    .pill.vio{background:rgba(206,147,216,.10);color:var(--violet);border:1px solid rgba(206,147,216,.28)}
+    .pill.danger{background:rgba(217,64,64,.10);color:#f29a9a;border:1px solid rgba(217,64,64,.28)}
+
+    .matrix{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:2px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--bdr);
+      background:var(--bdr);
+    }
+    .matrix-cell{
+      background:var(--k3);
+      padding:14px;
+      min-height:112px;
+    }
+    .matrix-cell.head{
+      background:var(--k4);
+      min-height:auto;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--t3);
+    }
+    .matrix-cell strong{display:block;color:var(--t1);font-size:13px;margin-bottom:6px}
+    .matrix-cell p{font-size:12px;color:var(--t3);line-height:1.45}
+
+    .flow{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:2px;
+      border:1px solid var(--bdr);
+      border-radius:12px;
+      overflow:hidden;
+      background:var(--bdr);
+    }
+    .flow-step{background:var(--k3);padding:16px;min-height:130px}
+    .flow-step .num{font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--g);margin-bottom:7px}
+    .flow-step h3{font-size:14px;margin-bottom:6px;color:var(--t1)}
+    .flow-step p{color:var(--t3);font-size:12.5px;line-height:1.5}
+
+    .callout{
+      background:linear-gradient(180deg,rgba(94,168,50,.12),rgba(94,168,50,.04));
+      border:1px solid var(--g-brd);
+      border-radius:14px;
+      padding:18px;
+      margin-top:20px;
+    }
+    .callout.warn{background:linear-gradient(180deg,rgba(255,183,77,.10),rgba(255,183,77,.035));border-color:rgba(255,183,77,.28)}
+    .callout.danger{background:linear-gradient(180deg,rgba(217,64,64,.10),rgba(217,64,64,.035));border-color:rgba(217,64,64,.28)}
+    .callout h3{font-size:15px;color:var(--g);margin-bottom:8px}
+    .callout.warn h3{color:var(--warn)}
+    .callout.danger h3{color:#f29a9a}
+    .callout p{font-size:13px;color:var(--t2);line-height:1.55}
+
+    .footer-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:32px;
+      padding-top:18px;
+      border-top:1px solid var(--bdr);
+    }
+    .footer-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:11px 14px;
+      border:1px solid var(--bdr);
+      border-radius:9px;
+      color:var(--t2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      transition:.15s;
+    }
+    .footer-btn:hover{border-color:var(--g-brd);color:var(--g);background:var(--g-dim)}
+
+    @media(max-width:1100px){
+      .grid,.grid.two,.matrix,.flow{grid-template-columns:1fr}
+    }
+    @media(max-width:980px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .main{padding:24px 18px 60px}
+      .hero{grid-template-columns:1fr}
+      .kpis{grid-template-columns:repeat(2,1fr)}
+      .topbar{position:sticky}
+    }
+    @media(max-width:620px){
+      h1{font-size:34px}
+      .kpis{grid-template-columns:1fr}
+      .top-actions .status{display:none}
+      .crumb{display:none}
+    }
+
+    .rule-list{display:grid;gap:8px;margin-top:12px}
+    .rule-item{display:flex;gap:10px;align-items:flex-start;background:var(--k3);border:1px solid var(--bdr);border-radius:10px;padding:12px 14px}
+    .rule-mark{width:22px;height:22px;border-radius:6px;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0}
+    .rule-item.danger .rule-mark{background:rgba(217,64,64,.10);border-color:rgba(217,64,64,.28);color:#f29a9a}
+    .rule-item.warn .rule-mark{background:rgba(255,183,77,.10);border-color:rgba(255,183,77,.28);color:var(--warn)}
+    .rule-text strong{display:block;color:var(--t1);font-size:13px;margin-bottom:2px}
+    .rule-text span{display:block;color:var(--t3);font-size:12.5px;line-height:1.45}
+    .link-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+    .link-card{background:var(--k3);border:1px solid var(--bdr);border-radius:10px;padding:13px 14px;transition:.15s;display:block}
+    .link-card:hover{border-color:var(--g-brd);background:var(--g-dim);transform:translateY(-1px)}
+    .link-card strong{display:block;color:var(--t1);font-size:13px;margin-bottom:4px}
+    .link-card span{display:block;color:var(--t3);font-size:11.5px;line-height:1.35}
+    @media(max-width:1100px){.link-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:620px){.link-grid{grid-template-columns:1fr}}
+
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <a class="logo" href="../../index.html">Marketplace <span>Sporting</span></a>
+      <div class="crumb">Marco del Marketplace · Governance v3</div>
+    </div>
+
+    <div class="top-actions">
+      <div class="status"><span class="dot"></span>Gobierno operativo</div>
+      <a class="btn-top" href="../../index.html">← Volver al Hub</a>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sb-section">
+        <div class="sb-label">Contenido</div>
+        <a class="nav active" href="#inicio">Inicio <small>01</small></a>
+        <a class="nav" href="#decision-board">Tablero de decisión <small>02</small></a>
+        <a class="nav" href="#principios">Principios <small>03</small></a>
+        <a class="nav" href="#roles">Roles <small>04</small></a>
+        <a class="nav" href="#gates">Decision Gates <small>05</small></a>
+        <a class="nav" href="#matriz">Matriz de acción <small>06</small></a>
+        <a class="nav" href="#excepciones">Excepciones <small>07</small></a>
+        <a class="nav" href="#seguimiento">Control <small>08</small></a>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Marco</div>
+        <a class="nav" href="./proceso-onboarding.html">Onboarding</a>
+        <a class="nav" href="./modelo-integracion.html">Modelo de Integración</a>
+        <a class="nav" href="./modelo-economico.html">Modelo Económico</a>
+        <a class="nav active" href="./governance.html">Governance</a>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Herramientas</div>
+        <a class="nav" href="../backlog/backlog-sellers.html">Backlog</a>
+        <a class="nav" href="../gantt/gantt-operativo.html">Gantt Operativo</a>
+        <a class="nav" href="../seller-center/index.html">Seller Center</a>
+        <a class="nav" href="../seller-center/maqueta-seller-center.html">Maqueta</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section id="inicio">
+        <div class="page-eyebrow">Gobierno del Marketplace</div>
+        <h1>Governance Operativo</h1>
+        <p class="lead">
+          Página de gobierno para decidir, controlar y escalar la incorporación de sellers en Marketplace Sporting. Define reglas de avance, responsables, decision gates, gestión de excepciones y criterios para mantener trazabilidad desde el primer contacto hasta la operación estable.
+        </p>
+
+        <div class="hero">
+          <div class="panel">
+            <h2>Qué resuelve esta página</h2>
+            <p>
+              Evita que cada seller avance por criterios informales. Todo seller debe tener una evaluación comercial, una definición técnica, una condición económica y un plan operativo antes de pasar a implementación o go live.
+            </p>
+            <p>
+              Governance no reemplaza al Onboarding: lo controla. El Onboarding define el flujo; Governance define cuándo se puede avanzar, pausar, escalar o rechazar.
+            </p>
+            <div class="callout">
+              <h3>Regla central</h3>
+              <p>Sin definición técnica, responsable asignado y decisión registrada en Backlog, el seller no debería avanzar a Gantt.</p>
+            </div>
+          </div>
+
+          <div class="panel soft">
+            <h2>Fuentes de verdad</h2>
+            <p><strong>Backlog:</strong> estado, prioridad, bloqueo y próximo paso.</p>
+            <p><strong>Modelo de Integración:</strong> camino técnico recomendado.</p>
+            <p><strong>Gantt:</strong> ejecución, fechas y responsables.</p>
+            <p><strong>Seller Center:</strong> operación objetivo y evolución de plataforma.</p>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div class="num">5</div><div class="lbl">Decision gates</div></div>
+          <div class="kpi info"><div class="num">6</div><div class="lbl">Roles de control</div></div>
+          <div class="kpi warn"><div class="num">3</div><div class="lbl">Estados críticos</div></div>
+          <div class="kpi teal"><div class="num">1</div><div class="lbl">Backlog como registro</div></div>
+        </div>
+
+        <div class="link-grid">
+          <a class="link-card" href="./proceso-onboarding.html"><strong>Proceso de Onboarding</strong><span>Flujo completo de incorporación.</span></a>
+          <a class="link-card" href="./modelo-integracion.html"><strong>Modelo de Integración</strong><span>Decisión técnica por seller.</span></a>
+          <a class="link-card" href="../backlog/backlog-sellers.html"><strong>Backlog</strong><span>Estado, prioridad y bloqueos.</span></a>
+          <a class="link-card" href="../gantt/gantt-operativo.html"><strong>Gantt Operativo</strong><span>Planificación y ejecución.</span></a>
+        </div>
+      </section>
+
+      <section id="decision-board" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🧭</span><h2>Tablero de decisión rápida</h2></div>
+          <p class="section-desc">Lectura práctica para definir qué hacer con un seller según su estado actual.</p>
+        </div>
+
+        <table>
+          <thead><tr><th>Situación del seller</th><th>Decisión governance</th><th>Acción siguiente</th><th>Herramienta</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Interés comercial, datos mínimos incompletos</strong></td><td>Mantener en captación</td><td>Completar calificación inicial</td><td><span class="pill info">Formulario</span></td></tr>
+            <tr><td><strong>Seller calificado, sin datos técnicos</strong></td><td>Avanzar a relevamiento</td><td>Solicitar relevamiento completo</td><td><span class="pill teal">Relevamiento</span></td></tr>
+            <tr><td><strong>Relevamiento completo, modelo indefinido</strong></td><td>No pasa a Gantt</td><td>Definir modelo de integración</td><td><span class="pill vio">Integración</span></td></tr>
+            <tr><td><strong>Modelo definido, sin responsable ni fechas</strong></td><td>Pendiente de planificación</td><td>Cargar en Gantt con responsable</td><td><span class="pill high">Gantt</span></td></tr>
+            <tr><td><strong>Bloqueo técnico, económico u operativo</strong></td><td>Pausar o escalar</td><td>Registrar bloqueo y decisión</td><td><span class="pill danger">Backlog</span></td></tr>
+            <tr><td><strong>Testing completo y operación validada</strong></td><td>Aprobar Go Live</td><td>Activar seller y monitorear</td><td><span class="pill mid">Go Live</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="principios" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🏛️</span><h2>Principios de gobierno</h2></div>
+          <p class="section-desc">Criterios base para que el Marketplace crezca con control, trazabilidad y escalabilidad.</p>
+        </div>
+
+        <div class="grid">
+          <div class="card"><div class="ico">🎯</div><h3>Estandarizar antes de customizar</h3><p>Priorizar flujos reutilizables sobre desarrollos particulares por seller.</p></div>
+          <div class="card info"><div class="ico">🧾</div><h3>Decisión registrada</h3><p>Cada avance, pausa, bloqueo o excepción debe quedar documentado.</p></div>
+          <div class="card warn"><div class="ico">🚦</div><h3>Avance por gates</h3><p>El seller no pasa de etapa si no cumple las condiciones mínimas definidas.</p></div>
+          <div class="card teal"><div class="ico">🔍</div><h3>Trazabilidad end-to-end</h3><p>Debe poder reconstruirse el camino desde calificación hasta operación.</p></div>
+          <div class="card vio"><div class="ico">🧱</div><h3>Orientación a Seller Center</h3><p>Las decisiones deben favorecer la evolución hacia una plataforma centralizada y escalable.</p></div>
+          <div class="card danger"><div class="ico">🛡️</div><h3>Riesgo explícito</h3><p>Todo riesgo técnico, económico u operativo debe tener responsable y plan de resolución.</p></div>
+        </div>
+      </section>
+
+      <section id="roles" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>👥</span><h2>Roles y responsabilidades</h2></div>
+          <p class="section-desc">Matriz RACI simplificada para evitar zonas grises en decisiones críticas.</p>
+        </div>
+
+        <table>
+          <thead><tr><th>Rol</th><th>Responsabilidad principal</th><th>Decide / Aprueba</th><th>Entregable mínimo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Comercial / Marketplace</strong></td><td>Captación, oportunidad comercial, negociación y prioridad de negocio.</td><td>Potencial comercial, surtido, continuidad de negociación.</td><td><span class="pill info">Calificación / Pipeline</span></td></tr>
+            <tr><td><strong>Plataformas y Procesos</strong></td><td>Gobierno del flujo, definición técnica-operativa y coordinación entre áreas.</td><td>Modelo recomendado, gates, riesgos, estado governance.</td><td><span class="pill teal">Definición técnica</span></td></tr>
+            <tr><td><strong>Tecnología / PIM / VTEX</strong></td><td>Factibilidad técnica, configuración, integraciones y soporte de QA.</td><td>Esfuerzo técnico, bloqueos, solución viable.</td><td><span class="pill vio">Solución / QA</span></td></tr>
+            <tr><td><strong>Operaciones</strong></td><td>Validación de pedidos, facturación, despacho, devoluciones e incidencias.</td><td>Viabilidad operativa y condición para go live.</td><td><span class="pill high">Checklist operativo</span></td></tr>
+            <tr><td><strong>Administración / Finanzas</strong></td><td>Condiciones económicas, liquidación, costos, comisiones y conciliación.</td><td>Modelo económico y reglas de liquidación.</td><td><span class="pill mid">Validación económica</span></td></tr>
+            <tr><td><strong>Seller</strong></td><td>Entrega de información, operación de stock/precio/catálogo, facturación y despacho.</td><td>Compromiso operativo y disponibilidad de datos.</td><td><span class="pill info">Datos / Pruebas</span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="gates" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🚦</span><h2>Decision gates</h2></div>
+          <p class="section-desc">Condiciones mínimas para pasar de una etapa a otra. Si un gate no se cumple, el seller queda en pausa, análisis o excepción documentada.</p>
+        </div>
+
+        <div class="flow">
+          <div class="flow-step"><div class="num">Gate 01</div><h3>Calificación</h3><p>Existe oportunidad comercial, categoría válida y datos básicos del seller.</p></div>
+          <div class="flow-step"><div class="num">Gate 02</div><h3>Relevamiento</h3><p>El seller entrega información técnica, operativa, logística y de catálogo suficiente.</p></div>
+          <div class="flow-step"><div class="num">Gate 03</div><h3>Integración definida</h3><p>Se define modelo técnico: VTEX ↔ VTEX, Seller Center, API o excepción.</p></div>
+          <div class="flow-step"><div class="num">Gate 04</div><h3>Planificación</h3><p>Hay responsable, fechas, tareas, dependencias y riesgos cargados en Gantt.</p></div>
+          <div class="flow-step"><div class="num">Gate 05</div><h3>Go Live</h3><p>Catálogo, stock/precio, pedido, factura, logística y comunicación fueron validados.</p></div>
+        </div>
+
+        <div class="callout warn">
+          <h3>Regla de avance</h3>
+          <p>El seller puede continuar en análisis aunque falte información, pero no debería pasar a ejecución sin gate técnico y responsable asignado.</p>
+        </div>
+      </section>
+
+      <section id="matriz" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>📌</span><h2>Matriz de acción governance</h2></div>
+          <p class="section-desc">Define cómo actuar ante escenarios frecuentes del proceso.</p>
+        </div>
+
+        <div class="rule-list">
+          <div class="rule-item"><div class="rule-mark">✓</div><div class="rule-text"><strong>Avanzar</strong><span>Cuando cumple gate actual, tiene responsable, próximo paso y no hay bloqueo crítico.</span></div></div>
+          <div class="rule-item warn"><div class="rule-mark">!</div><div class="rule-text"><strong>Pausar</strong><span>Cuando falta información, validación económica, decisión técnica o respuesta del seller.</span></div></div>
+          <div class="rule-item warn"><div class="rule-mark">↑</div><div class="rule-text"><strong>Escalar</strong><span>Cuando requiere excepción, desarrollo no estándar, aprobación comercial especial o impacto operativo alto.</span></div></div>
+          <div class="rule-item danger"><div class="rule-mark">×</div><div class="rule-text"><strong>Descartar o dejar en espera</strong><span>Cuando el seller no cumple condiciones mínimas, no responde, no asegura stock/precio o el costo supera el beneficio.</span></div></div>
+        </div>
+
+        <table style="margin-top:16px">
+          <thead><tr><th>Criterio</th><th>Bajo riesgo</th><th>Riesgo medio</th><th>Riesgo alto</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Modelo técnico</strong></td><td>VTEX ↔ VTEX o Seller Center estándar</td><td>API documentada</td><td>Externo → VTEX custom</td></tr>
+            <tr><td><strong>Datos del seller</strong></td><td>Completos y consistentes</td><td>Parciales con responsable</td><td>Incompletos o contradictorios</td></tr>
+            <tr><td><strong>Operación logística</strong></td><td>Proceso claro y probado</td><td>Requiere ajuste menor</td><td>No definido o sin SLA</td></tr>
+            <tr><td><strong>Modelo económico</strong></td><td>Rentable y estándar</td><td>Requiere revisión</td><td>Margen bajo o condición especial</td></tr>
+            <tr><td><strong>Prioridad comercial</strong></td><td>Alto valor estratégico</td><td>Valor moderado</td><td>Bajo valor o sin urgencia</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="excepciones" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>⚠️</span><h2>Gestión de excepciones</h2></div>
+          <p class="section-desc">Las excepciones son válidas solo si están justificadas, registradas y tienen plan de salida.</p>
+        </div>
+
+        <table>
+          <thead><tr><th>Excepción</th><th>Riesgo</th><th>Condición para aprobar</th><th>Plan de salida</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Externo → VTEX directo</strong></td><td>Menor control desde PIM, dependencia externa y baja escalabilidad.</td><td>Justificación comercial fuerte, alcance limitado y responsable técnico.</td><td>Migrar a Seller Center/API-first cuando esté disponible.</td></tr>
+            <tr><td><strong>Go live con validaciones parciales</strong></td><td>Impacto en cliente, pedidos, logística o atención.</td><td>Aprobación explícita y plan de contingencia.</td><td>Monitoreo diario hasta estabilización.</td></tr>
+            <tr><td><strong>Condición económica especial</strong></td><td>Margen insuficiente o conciliación compleja.</td><td>Aprobación comercial/financiera y registro del caso.</td><td>Revisión mensual o por evento.</td></tr>
+            <tr><td><strong>Operación manual temporal</strong></td><td>Dependencia operativa y riesgo de errores.</td><td>Volumen controlado y fecha límite definida.</td><td>Automatizar o migrar a Seller Center.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout danger">
+          <h3>Regla de excepción</h3>
+          <p>Una excepción sin responsable, fecha de revisión y plan de salida no debería aprobarse. Si se aprueba sin estos elementos, se convierte en deuda operativa.</p>
+        </div>
+      </section>
+
+      <section id="seguimiento" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>📊</span><h2>Seguimiento y control</h2></div>
+          <p class="section-desc">Cómo se sostiene el governance durante la operación diaria del Marketplace.</p>
+        </div>
+
+        <div class="grid">
+          <div class="card"><div class="ico">📌</div><h3>Backlog</h3><p>Fuente de verdad del estado, prioridad, bloqueo, responsable y próximo paso del seller.</p></div>
+          <div class="card info"><div class="ico">📅</div><h3>Gantt Operativo</h3><p>Controla ejecución, fechas, tareas, dependencias y avance por seller.</p></div>
+          <div class="card teal"><div class="ico">🧾</div><h3>Definición técnica</h3><p>Registra modelo definido, alcance, riesgos, datos relevados y supuestos.</p></div>
+          <div class="card warn"><div class="ico">💰</div><h3>Modelo económico</h3><p>Valida rentabilidad, costos internos, comisión y condiciones comerciales.</p></div>
+          <div class="card vio"><div class="ico">✅</div><h3>Checklist Go Live</h3><p>Control final antes de activar un seller en producción.</p></div>
+          <div class="card danger"><div class="ico">🚨</div><h3>Bloqueos / Incidencias</h3><p>Registro de problemas técnicos, operativos, logísticos, económicos o comerciales.</p></div>
+        </div>
+
+        <div class="callout">
+          <h3>Cierre governance</h3>
+          <p>El governance no busca frenar el Marketplace. Busca que cada seller avance con una decisión clara, trazable y sostenible.</p>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <a class="footer-btn" href="./proceso-onboarding.html">← Proceso de Onboarding</a>
+        <a class="footer-btn" href="./modelo-economico.html">Modelo Económico →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const links = document.querySelectorAll('.sidebar .sb-section:first-child .nav');
+    const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const onScroll = () => {
+      let current = sections[0]?.id || '';
+      for (const section of sections) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 120) current = section.id;
+      }
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modelo Económico | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --g:#5ea832;
+      --g2:#4a8a26;
+      --g-dim:rgba(94,168,50,.10);
+      --g-brd:rgba(94,168,50,.24);
+      --k:#0b0f0b;
+      --k2:#101610;
+      --k3:#151c14;
+      --k4:#1b2419;
+      --w:#ffffff;
+      --t1:#edf3e9;
+      --t2:#a6b79d;
+      --t3:#71816b;
+      --t4:#4f5d49;
+      --bdr:rgba(255,255,255,.08);
+      --bdr2:rgba(255,255,255,.05);
+      --warn:#ffb74d;
+      --info:#64b5f6;
+      --teal:#4db6ac;
+      --violet:#ce93d8;
+      --danger:#d94040;
+      --shadow:0 14px 42px rgba(0,0,0,.34);
+      --tb:58px;
+      --sb:250px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Barlow,system-ui,sans-serif;
+      background:radial-gradient(circle at 20% 0%,rgba(94,168,50,.09),transparent 36%),var(--k);
+      color:var(--t1);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit}
+
+    .topbar{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      height:var(--tb);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 22px;
+      background:rgba(11,15,11,.96);
+      border-bottom:1px solid var(--g-brd);
+      backdrop-filter:blur(18px);
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{
+      font-family:"Barlow Condensed",sans-serif;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-size:20px;
+      color:var(--w);
+    }
+    .logo span{color:var(--g)}
+    .crumb{
+      border-left:1px solid var(--bdr);
+      padding-left:14px;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--t3);
+    }
+    .top-actions{display:flex;align-items:center;gap:10px}
+    .status{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      color:var(--t2);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--g);
+      box-shadow:0 0 0 4px rgba(94,168,50,.18);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+    .btn-top{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 11px;
+      border:1px solid var(--bdr);
+      border-radius:7px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--t2);
+      transition:.15s;
+    }
+    .btn-top:hover{
+      color:var(--g);
+      border-color:var(--g-brd);
+      background:var(--g-dim);
+    }
+
+    .shell{
+      display:grid;
+      grid-template-columns:var(--sb) 1fr;
+      min-height:100vh;
+      padding-top:var(--tb);
+    }
+
+    .sidebar{
+      position:sticky;
+      top:var(--tb);
+      height:calc(100vh - var(--tb));
+      overflow:auto;
+      background:rgba(16,22,16,.96);
+      border-right:1px solid var(--bdr);
+      padding:18px 0;
+    }
+    .sb-section{margin-bottom:18px}
+    .sb-label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:0 16px;
+      margin-bottom:7px;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--t4);
+    }
+    .sb-label:after{
+      content:"";
+      height:1px;
+      background:var(--bdr);
+      flex:1;
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      width:100%;
+      padding:8px 16px;
+      border-left:3px solid transparent;
+      font-size:12.5px;
+      color:var(--t2);
+      transition:.15s;
+    }
+    .nav:hover,
+    .nav.active{
+      background:rgba(255,255,255,.04);
+      color:var(--t1);
+      border-left-color:var(--g);
+    }
+    .nav.active{
+      color:var(--g);
+      background:var(--g-dim);
+      font-weight:700;
+    }
+    .nav small{
+      margin-left:auto;
+      color:var(--t4);
+      font-size:9px;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+
+    .main{
+      padding:30px 34px 70px;
+      max-width:1180px;
+    }
+
+    .page-eyebrow{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--g);
+      margin-bottom:8px;
+    }
+    h1{
+      font-family:"Barlow Condensed",sans-serif;
+      font-size:44px;
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+      margin-bottom:8px;
+    }
+    .lead{
+      max-width:840px;
+      font-size:14px;
+      line-height:1.65;
+      color:var(--t2);
+      margin-bottom:24px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.35fr .65fr;
+      gap:16px;
+      margin-bottom:24px;
+    }
+    .panel{
+      background:linear-gradient(180deg,var(--k3),var(--k2));
+      border:1px solid var(--bdr);
+      border-radius:14px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .panel.soft{
+      box-shadow:none;
+      background:rgba(255,255,255,.025);
+    }
+    .panel h2{
+      font-size:16px;
+      margin-bottom:12px;
+    }
+    .panel p{
+      font-size:13px;
+      line-height:1.6;
+      color:var(--t2);
+      margin-bottom:10px;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin:22px 0 26px;
+    }
+    .kpi{
+      background:var(--k3);
+      border:1px solid var(--bdr);
+      border-radius:12px;
+      padding:16px;
+    }
+    .kpi .num{
+      font-family:"Barlow Condensed",sans-serif;
+      font-size:32px;
+      font-weight:900;
+      line-height:1;
+      color:var(--g);
+    }
+    .kpi .lbl{
+      font-size:9.5px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--t4);
+      margin-top:5px;
+    }
+    .kpi.info .num{color:var(--info)}
+    .kpi.warn .num{color:var(--warn)}
+    .kpi.teal .num{color:var(--teal)}
+
+    .section{margin:30px 0}
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:12px;
+    }
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:9px;
+    }
+    .section-title span{font-size:18px}
+    .section-title h2{font-size:18px}
+    .section-desc{
+      font-size:12.5px;
+      color:var(--t3);
+      max-width:560px;
+      line-height:1.5;
+    }
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid.two{grid-template-columns:repeat(2,1fr)}
+    .grid.four{grid-template-columns:repeat(4,1fr)}
+    .card{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      min-height:150px;
+      padding:16px;
+      border-radius:12px;
+      border:1px solid var(--bdr);
+      background:var(--k3);
+      transition:.18s;
+      overflow:hidden;
+    }
+    .card:before{
+      content:"";
+      position:absolute;
+      left:0;top:0;bottom:0;
+      width:3px;
+      background:var(--g);
+    }
+    .card.warn:before{background:var(--warn)}
+    .card.info:before{background:var(--info)}
+    .card.teal:before{background:var(--teal)}
+    .card.vio:before{background:var(--violet)}
+    .card h3{
+      font-size:14px;
+      color:var(--t1);
+      margin-bottom:8px;
+    }
+    .card p{
+      font-size:12.5px;
+      color:var(--t3);
+      line-height:1.5;
+    }
+    .ico{font-size:24px;margin-bottom:10px}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--k3);
+      border:1px solid var(--bdr);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    th,td{
+      text-align:left;
+      padding:12px 13px;
+      border-bottom:1px solid var(--bdr2);
+      font-size:12.5px;
+      vertical-align:top;
+    }
+    th{
+      background:var(--k4);
+      color:var(--t3);
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    td{color:var(--t2)}
+    tr:last-child td{border-bottom:none}
+    td strong{color:var(--t1)}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:62px;
+      padding:3px 7px;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+    .pill.high{background:var(--g-dim);color:var(--g);border:1px solid var(--g-brd)}
+    .pill.mid{background:rgba(255,183,77,.10);color:var(--warn);border:1px solid rgba(255,183,77,.28)}
+    .pill.low{background:rgba(217,64,64,.10);color:#f29a9a;border:1px solid rgba(217,64,64,.28)}
+    .pill.info{background:rgba(100,181,246,.10);color:var(--info);border:1px solid rgba(100,181,246,.25)}
+    .pill.teal{background:rgba(77,182,172,.10);color:var(--teal);border:1px solid rgba(77,182,172,.26)}
+
+    .flow{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:2px;
+      border:1px solid var(--bdr);
+      border-radius:12px;
+      overflow:hidden;
+      background:var(--bdr);
+    }
+    .flow-step{
+      background:var(--k3);
+      padding:16px;
+      min-height:128px;
+    }
+    .flow-step .num{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--g);
+      margin-bottom:7px;
+    }
+    .flow-step h3{
+      font-size:13.5px;
+      margin-bottom:6px;
+      color:var(--t1);
+    }
+    .flow-step p{
+      color:var(--t3);
+      font-size:12.5px;
+      line-height:1.5;
+    }
+
+    .formula{
+      background:linear-gradient(180deg,rgba(94,168,50,.12),rgba(94,168,50,.04));
+      border:1px solid var(--g-brd);
+      border-radius:14px;
+      padding:20px;
+    }
+    .formula-title{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--g);
+      margin-bottom:12px;
+    }
+    .formula-line{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      font-family:"Barlow Condensed",sans-serif;
+      font-size:24px;
+      font-weight:900;
+      color:var(--w);
+      line-height:1.2;
+    }
+    .formula-line span{
+      display:inline-flex;
+      padding:7px 10px;
+      border-radius:8px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--bdr);
+    }
+    .formula p{
+      margin-top:12px;
+      color:var(--t2);
+      font-size:12.5px;
+      line-height:1.55;
+    }
+
+    .layers{
+      display:grid;
+      gap:12px;
+    }
+    .layer{
+      display:grid;
+      grid-template-columns:180px 1fr 170px;
+      gap:14px;
+      align-items:start;
+      background:var(--k3);
+      border:1px solid var(--bdr);
+      border-radius:12px;
+      padding:15px;
+    }
+    .layer strong{
+      color:var(--t1);
+      font-size:13px;
+    }
+    .layer p{
+      color:var(--t3);
+      font-size:12.5px;
+      line-height:1.5;
+    }
+    .layer .owner{
+      justify-self:end;
+      color:var(--t2);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:4px 8px;
+      border:1px solid var(--bdr);
+      border-radius:999px;
+      background:rgba(255,255,255,.035);
+      white-space:nowrap;
+    }
+
+    .callout{
+      background:linear-gradient(180deg,rgba(94,168,50,.12),rgba(94,168,50,.04));
+      border:1px solid var(--g-brd);
+      border-radius:14px;
+      padding:18px;
+      margin-top:20px;
+    }
+    .callout.warn{
+      background:linear-gradient(180deg,rgba(255,183,77,.10),rgba(255,183,77,.035));
+      border-color:rgba(255,183,77,.28);
+    }
+    .callout h3{
+      font-size:15px;
+      color:var(--g);
+      margin-bottom:8px;
+    }
+    .callout.warn h3{color:var(--warn)}
+    .callout p{
+      font-size:13px;
+      color:var(--t2);
+      line-height:1.55;
+    }
+
+    .footer-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:32px;
+      padding-top:18px;
+      border-top:1px solid var(--bdr);
+    }
+    .footer-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:11px 14px;
+      border:1px solid var(--bdr);
+      border-radius:9px;
+      color:var(--t2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      transition:.15s;
+    }
+    .footer-btn:hover{
+      border-color:var(--g-brd);
+      color:var(--g);
+      background:var(--g-dim);
+    }
+
+    @media(max-width:1100px){
+      .grid,.grid.two,.grid.four,.flow{grid-template-columns:1fr}
+      .layer{grid-template-columns:1fr}
+      .layer .owner{justify-self:start}
+    }
+
+    @media(max-width:980px){
+      .shell{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .main{padding:24px 18px 60px}
+      .hero{grid-template-columns:1fr}
+      .kpis{grid-template-columns:repeat(2,1fr)}
+      .topbar{position:sticky}
+    }
+
+    @media(max-width:620px){
+      h1{font-size:34px}
+      .kpis{grid-template-columns:1fr}
+      .top-actions .status{display:none}
+      .crumb{display:none}
+      .formula-line{font-size:20px}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <a class="logo" href="../../index.html">Marketplace <span>Sporting</span></a>
+      <div class="crumb">Marco del Marketplace · Modelo Económico</div>
+    </div>
+
+    <div class="top-actions">
+      <div class="status"><span class="dot"></span>Documento interno</div>
+      <a class="btn-top" href="../../index.html">← Volver al Hub</a>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sb-section">
+        <div class="sb-label">Contenido</div>
+        <a class="nav active" href="#inicio">Inicio <small>01</small></a>
+        <a class="nav" href="#regla">Regla económica <small>02</small></a>
+        <a class="nav" href="#componentes">Componentes <small>03</small></a>
+        <a class="nav" href="#ejemplo">Ejemplo <small>04</small></a>
+        <a class="nav" href="#liquidacion">Liquidación <small>05</small></a>
+        <a class="nav" href="#herramientas">Herramientas <small>06</small></a>
+        <a class="nav" href="#criterios">Criterios <small>07</small></a>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Marco</div>
+        <a class="nav" href="./modelo-integracion.html">Modelo de Integración</a>
+        <a class="nav active" href="./modelo-economico.html">Modelo Económico</a>
+        <a class="nav" href="./proceso-onboarding.html">Proceso de Onboarding</a>
+        <a class="nav" href="./governance.html">Governance</a>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Herramientas</div>
+        <a class="nav" href="../simuladores/simulador-economico.html">Simulador Interno</a>
+        <a class="nav" href="../backlog/backlog-sellers.html">Backlog de Sellers</a>
+        <a class="nav" href="../gantt/gantt-operativo.html">Gantt Operativo</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section id="inicio">
+        <div class="page-eyebrow">Marco del Marketplace</div>
+        <h1>Modelo Económico</h1>
+        <p class="lead">
+          Esta página define cómo se analiza la viabilidad económica de un seller dentro del Marketplace Sporting.
+          Su objetivo es ordenar comisiones, costos, servicios, liquidación y uso de simuladores, separando con claridad
+          qué información es interna y qué información puede compartirse con sellers.
+        </p>
+
+        <div class="hero">
+          <div class="panel">
+            <h2>Propósito</h2>
+            <p>
+              Establecer un marco común para evaluar si la incorporación de un seller es rentable, sostenible y coherente
+              con el modelo operativo definido para Sporting.
+            </p>
+            <p>
+              La comisión no debe analizarse de forma aislada. Cada caso debe contemplar financiación, logística,
+              operación, devoluciones, conciliación y nivel de servicio asumido por Sporting.
+            </p>
+          </div>
+
+          <div class="panel soft">
+            <h2>Uso de la página</h2>
+            <p><strong>Interno:</strong> guía para evaluación comercial, técnica y operativa.</p>
+            <p><strong>No reemplaza:</strong> simuladores, contratos ni acuerdos comerciales finales.</p>
+            <p><strong>Conecta con:</strong> Onboarding, Governance, Backlog y Simulador Económico.</p>
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div class="num">%</div><div class="lbl">Comisión</div></div>
+          <div class="kpi info"><div class="num">$</div><div class="lbl">Costos</div></div>
+          <div class="kpi warn"><div class="num">Neto</div><div class="lbl">Liquidación</div></div>
+          <div class="kpi teal"><div class="num">Ctrl</div><div class="lbl">Gobierno interno</div></div>
+        </div>
+      </section>
+
+      <section id="regla" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🧭</span><h2>Regla económica principal</h2></div>
+          <p class="section-desc">Toda evaluación debe partir del neto económico real, no solo de la venta bruta.</p>
+        </div>
+
+        <div class="formula">
+          <div class="formula-title">Estructura de análisis</div>
+          <div class="formula-line">
+            <span>Venta cobrada</span>
+            <span>- Comisión</span>
+            <span>- Costos financieros</span>
+            <span>- Costos operativos</span>
+            <span>= Neto seller / margen Sporting</span>
+          </div>
+          <p>
+            Esta fórmula funciona como marco conceptual. Los valores concretos pueden cambiar según el acuerdo,
+            pero la estructura de análisis debe mantenerse consistente para todos los sellers.
+          </p>
+        </div>
+
+        <div class="callout warn">
+          <h3>Regla de control</h3>
+          <p>
+            Si un seller requiere excepciones comerciales, logísticas o financieras que alteran el modelo estándar,
+            el caso debe pasar por Governance antes de avanzar en planificación o integración.
+          </p>
+        </div>
+      </section>
+
+      <section id="componentes" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🧩</span><h2>Componentes económicos</h2></div>
+          <p class="section-desc">Separar los componentes permite negociar mejor y evitar que costos ocultos afecten la rentabilidad.</p>
+        </div>
+
+        <div class="grid four">
+          <div class="card"><div class="ico">💰</div><h3>Precio de venta</h3><p>Valor publicado y cobrado al cliente en Sporting.</p></div>
+          <div class="card info"><div class="ico">📉</div><h3>Comisión Marketplace</h3><p>Porcentaje retenido por Sporting por plataforma, operación comercial, pagos y experiencia.</p></div>
+          <div class="card warn"><div class="ico">💳</div><h3>Costo financiero</h3><p>Impacto de cuotas, promociones bancarias, pasarelas y medios de pago.</p></div>
+          <div class="card teal"><div class="ico">🚚</div><h3>Logística</h3><p>Costo de envío, preparación, devolución, cambio o recuperación del producto.</p></div>
+        </div>
+
+        <div class="layers">
+          <div class="layer"><strong>Comercialización</strong><p>Exposición, venta, comunicación comercial y operación transaccional.</p><span class="owner">Sporting</span></div>
+          <div class="layer"><strong>Catálogo</strong><p>Puede ser gestionado por el seller, Sporting o en forma mixta.</p><span class="owner">Variable</span></div>
+          <div class="layer"><strong>Logística directa</strong><p>Preparación y entrega del pedido al cliente.</p><span class="owner">Variable</span></div>
+          <div class="layer"><strong>Logística inversa</strong><p>Devoluciones, cambios y recupero de productos.</p><span class="owner">Variable</span></div>
+          <div class="layer"><strong>Postventa</strong><p>Atención al cliente centralizada, con soporte del seller cuando aplique.</p><span class="owner">Sporting</span></div>
+        </div>
+      </section>
+
+      <section id="ejemplo" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🧮</span><h2>Ejemplo de lectura económica</h2></div>
+          <p class="section-desc">Ejemplo simple para entender cómo debe leerse una operación antes de cerrar condiciones con un seller.</p>
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>Concepto</th><th>Ejemplo</th><th>Lectura</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Venta cobrada</strong></td><td>$100.000</td><td>Importe base de análisis.</td></tr>
+            <tr><td><strong>Comisión Marketplace</strong></td><td>7%</td><td>Retención por uso de plataforma y operación comercial.</td></tr>
+            <tr><td><strong>Costo financiero</strong></td><td>Según cuotas/promoción</td><td>Debe definirse si lo absorbe Sporting, seller o se comparte.</td></tr>
+            <tr><td><strong>Costo logístico</strong></td><td>Según acuerdo</td><td>Depende de quién prepara, despacha y gestiona devoluciones.</td></tr>
+            <tr><td><strong>Neto a liquidar</strong></td><td>Variable</td><td>Resultado luego de aplicar deducciones acordadas.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <h3>Uso correcto del ejemplo</h3>
+          <p>
+            El ejemplo no define una tarifa oficial. Sirve para mostrar el orden de análisis que debe replicarse en el simulador interno
+            y en cualquier evaluación previa al alta del seller.
+          </p>
+        </div>
+      </section>
+
+      <section id="liquidacion" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🧾</span><h2>Lógica de liquidación</h2></div>
+          <p class="section-desc">La liquidación debe estar asociada a pedidos válidos y cobrados, contemplando excepciones operativas.</p>
+        </div>
+
+        <div class="flow">
+          <div class="flow-step"><div class="num">01</div><h3>Pedido cobrado</h3><p>Venta efectivamente cobrada dentro del período.</p></div>
+          <div class="flow-step"><div class="num">02</div><h3>Depuración</h3><p>Se excluyen cancelados, no entregados o casos no liquidables.</p></div>
+          <div class="flow-step"><div class="num">03</div><h3>Deducciones</h3><p>Se aplican comisión, costos financieros, servicios y costos operativos.</p></div>
+          <div class="flow-step"><div class="num">04</div><h3>Conciliación</h3><p>Se validan diferencias, devoluciones, notas de crédito y reclamos.</p></div>
+          <div class="flow-step"><div class="num">05</div><h3>Liquidación</h3><p>Se determina el neto a pagar al seller.</p></div>
+        </div>
+
+        <div class="callout">
+          <h3>Criterio recomendado</h3>
+          <p>
+            Trabajar sobre pedidos cobrados, descontando cancelaciones, no entregados, devoluciones y conceptos económicos acordados.
+            Esto permite una conciliación más clara y trazable.
+          </p>
+        </div>
+      </section>
+
+      <section id="herramientas" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>🛠️</span><h2>Herramientas y accesos</h2></div>
+          <p class="section-desc">La documentación interna y las herramientas compartibles deben mantenerse separadas.</p>
+        </div>
+
+        <table>
+          <thead><tr><th>Herramienta</th><th>Ruta</th><th>Uso</th><th>Acceso</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Modelo Económico</strong></td><td>/internal/estrategia/modelo-economico.html</td><td>Marco institucional de reglas y criterios.</td><td><span class="pill high">Interno</span></td></tr>
+            <tr><td><strong>Simulador Económico Interno</strong></td><td>/internal/simuladores/simulador-economico.html</td><td>Evaluación de costos, comisiones y escenarios.</td><td><span class="pill high">Interno</span></td></tr>
+            <tr><td><strong>Simulador Seller</strong></td><td>/public/simuladores/simulador-seller.html</td><td>Versión simplificada para uso comercial externo.</td><td><span class="pill mid">Futuro</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn">
+          <h3>Regla de confidencialidad</h3>
+          <p>
+            El simulador interno no debe compartirse con sellers si contiene costos reales, márgenes internos,
+            criterios de rentabilidad o parámetros sensibles. Para uso externo debe existir una versión simplificada.
+          </p>
+        </div>
+      </section>
+
+      <section id="criterios" class="section">
+        <div class="section-head">
+          <div class="section-title"><span>✅</span><h2>Criterios para avanzar</h2></div>
+          <p class="section-desc">Antes de priorizar un seller, el acuerdo económico debe pasar estos controles mínimos.</p>
+        </div>
+
+        <table>
+          <thead><tr><th>Criterio</th><th>Qué se valida</th><th>Resultado esperado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Rentabilidad</strong></td><td>La comisión y costos permiten una operación viable para Sporting.</td><td><span class="pill high">Viable</span></td></tr>
+            <tr><td><strong>Competitividad</strong></td><td>El precio final resulta atractivo para el cliente y el mercado.</td><td><span class="pill info">Competitivo</span></td></tr>
+            <tr><td><strong>Responsabilidades</strong></td><td>Está claro quién asume catálogo, logística, devoluciones y postventa.</td><td><span class="pill teal">Definido</span></td></tr>
+            <tr><td><strong>Conciliación</strong></td><td>Existen reglas para liquidaciones, diferencias y devoluciones.</td><td><span class="pill high">Trazable</span></td></tr>
+            <tr><td><strong>Excepciones</strong></td><td>Los desvíos fueron aprobados por Governance antes de avanzar.</td><td><span class="pill mid">Controlado</span></td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <h3>Conclusión institucional</h3>
+          <p>
+            El modelo económico funciona como marco de decisión y control. Un seller no debe avanzar solo por potencial comercial:
+            también debe demostrar viabilidad económica, operativa y de conciliación.
+          </p>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <a class="footer-btn" href="./modelo-integracion.html">← Anterior: Modelo de Integración</a>
+        <a class="footer-btn" href="./proceso-onboarding.html">Siguiente: Proceso de Onboarding →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const links = document.querySelectorAll('.sidebar .nav[href^="#"]');
+    const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const setActive = () => {
+      let current = sections[0]?.id || '';
+      for (const section of sections) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 120) current = section.id;
+      }
+      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    };
+    document.addEventListener('scroll', setActive, { passive:true });
+    setActive();
+  </script>
+</body>
+</html>

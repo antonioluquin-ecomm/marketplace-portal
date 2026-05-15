@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gantt Operativo — Panel de Ejecución | Sporting Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g:       #5ea832; --g2:#4a8a26;
+  --g-dim:   rgba(94,168,50,.10); --g-brd:rgba(94,168,50,.22);
+  --k:       #0d0f0d; --k2:#131713; --k3:#181d17; --k4:#1d231c;
+  --w:       #ffffff;
+  --bdr:     rgba(255,255,255,.07); --bdr-l:rgba(255,255,255,.04);
+  --t1:      #e8ede4; --t2:#a1b199; --t3:#6b7b65;
+  --danger:  #d94040; --dng-dim:rgba(217,64,64,.12); --dng-brd:rgba(217,64,64,.28);
+  --info:    #64b5f6; --info-dim:rgba(33,150,243,.12);
+  --teal:    #4db6ac; --teal-dim:rgba(0,150,136,.12);
+  --warn:    #ffb74d; --warn-dim:rgba(255,152,0,.12);
+  --violet:  #ce93d8;
+  --shadow:  0 6px 20px rgba(0,0,0,.22);
+  --f-com:#408ff4; --f-tec:#4db6ac; --f-op:#ce93d8; --f-cie:#5ea832;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px}
+body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:300;height:56px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 22px;background:rgba(13,15,13,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(16px)}
+.tb-brand{display:flex;align-items:center;gap:12px}
+.tb-logo{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:var(--w);white-space:nowrap}
+.tb-logo span{color:var(--g)}
+.tb-module{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);border-left:1px solid var(--bdr);padding-left:12px;white-space:nowrap}
+.tb-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.status-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--t3);flex-shrink:0}
+.dot.live{background:var(--g);box-shadow:0 0 0 3px rgba(94,168,50,.18);animation:pulse 2s infinite}
+.dot.err{background:var(--danger)} .dot.load{background:var(--warn);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-date{font-size:10px;color:var(--t3);white-space:nowrap}
+.btn-sm{background:transparent;border:1px solid var(--bdr);border-radius:6px;color:var(--t2);font-family:'Barlow',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-sm:hover{border-color:var(--g);color:var(--g)} .btn-sm:disabled{opacity:.5;cursor:progress}
+
+/* ── LAYOUT ── */
+.shell{display:grid;grid-template-columns:234px 1fr;min-height:calc(100vh - 56px)}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--k2);border-right:1px solid var(--bdr);padding:16px 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.sb-s{padding:0 13px;margin-bottom:18px}
+.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:7px;padding:0 3px}
+.fi,.sel{width:100%;padding:8px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:7px;color:var(--t1);font-family:'Barlow',sans-serif;font-size:12px}
+.fi:focus,.sel:focus{outline:none;border-color:var(--g)} .fi::placeholder{color:var(--t3)}
+.sel{cursor:pointer} .sel option{background:var(--k2)}
+.fb{display:flex;align-items:center;justify-content:space-between;width:100%;padding:7px 8px;margin-bottom:3px;background:transparent;border:1px solid transparent;border-radius:6px;color:var(--t2);font-family:'Barlow',sans-serif;font-size:12px;cursor:pointer;transition:all .12s;text-align:left}
+.fb:hover{background:rgba(255,255,255,.05);color:var(--t1)} .fb.on{background:var(--g-dim);color:var(--g);border-color:var(--g-brd)}
+.fb-l{display:flex;align-items:center;gap:7px}
+.fc{font-size:10px;font-weight:700;min-width:20px;text-align:center;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--t3)}
+.fb.on .fc{background:rgba(94,168,50,.2);color:var(--g)}
+.sb-div{height:1px;background:var(--bdr);margin:0 13px 16px}
+.fase-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.sb-note{margin:0 13px;padding:10px 12px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);font-size:10px;color:var(--t3);line-height:1.55}
+
+/* ── MAIN ── */
+.main{background:var(--k3);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+
+/* ── ALERT STRIP ── */
+.alert-strip{display:none;align-items:center;gap:8px;padding:7px 22px;background:var(--dng-dim);border-bottom:1px solid var(--dng-brd);font-size:12px;color:#f29a9a;flex-wrap:wrap}
+.alert-strip.visible{display:flex}
+.alert-strip strong{color:var(--w)}
+.alert-item{display:inline-flex;align-items:center;gap:5px;background:rgba(217,64,64,.15);border:1px solid var(--dng-brd);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.alert-item:hover{background:rgba(217,64,64,.25)}
+
+/* ── PANEL MI SEMANA ── */
+.week-panel{border-bottom:1px solid var(--bdr);overflow:hidden;transition:max-height .3s ease}
+.week-panel.collapsed{max-height:36px}
+.week-panel.expanded{max-height:300px}
+.week-panel-hd{display:flex;align-items:center;gap:10px;padding:9px 22px;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
+.week-panel.expanded .week-panel-hd{border-bottom-color:var(--bdr-l)}
+.week-panel-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+.week-chevron{font-size:10px;color:var(--t3);transition:transform .25s;margin-left:auto}
+.week-panel.expanded .week-chevron{transform:rotate(180deg)}
+.week-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px}
+.wb-blk{background:var(--dng-dim);color:#f29a9a;border:1px solid var(--dng-brd)}
+.wb-wip{background:var(--info-dim);color:var(--info)}
+.wb-due{background:var(--warn-dim);color:var(--warn)}
+.week-body{padding:10px 22px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.week-col-title{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
+.week-task{background:var(--k2);border:1px solid var(--bdr);border-radius:6px;padding:8px 10px;cursor:pointer;transition:border-color .12s;margin-bottom:5px}
+.week-task:hover{border-color:var(--g-brd)}
+.week-task:last-child{margin-bottom:0}
+.wt-seller{font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.06em;margin-bottom:2px}
+.wt-tarea{font-size:11px;color:var(--t1);line-height:1.3}
+.wt-resp{font-size:10px;color:var(--t3);margin-top:3px}
+.week-empty{font-size:11px;color:var(--t3);font-style:italic;padding:4px 0}
+
+/* ── SUMMARY ── */
+.summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:14px 22px;border-bottom:1px solid var(--bdr)}
+.kpi{background:var(--k2);border:1px solid var(--bdr);border-radius:9px;padding:11px 14px}
+.kpi-l{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.kpi-n{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--w);line-height:1}
+.kpi-s{font-size:10px;color:var(--t3);margin-top:2px}
+.kpi.rd{border-color:rgba(217,64,64,.28)} .kpi.rd .kpi-n{color:#f29a9a}
+.kpi.gn{border-color:rgba(94,168,50,.28)} .kpi.gn .kpi-n{color:var(--g)}
+.kpi.bl{border-color:rgba(33,150,243,.28)} .kpi.bl .kpi-n{color:var(--info)}
+.kpi.am{border-color:rgba(255,152,0,.28)}  .kpi.am .kpi-n{color:var(--warn)}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.tl-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tl-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.vtog{display:flex;gap:2px;background:rgba(255,255,255,.04);border-radius:7px;padding:3px}
+.vbtn{padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:none;background:transparent;color:var(--t3);border-radius:5px;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .15s}
+.vbtn.on{background:var(--g);color:var(--w)}
+/* escala mes/semana */
+.scale-tog{display:flex;gap:2px;background:rgba(255,255,255,.04);border-radius:7px;padding:3px}
+.sbtn{padding:5px 11px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;background:transparent;color:var(--t3);border-radius:5px;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .15s}
+.sbtn.on{background:rgba(255,255,255,.12);color:var(--t1)}
+.ri{font-size:11px;color:var(--t3)}
+.il{display:flex;align-items:center;gap:6px}
+.il-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;font-weight:700;white-space:nowrap}
+
+/* ── GANTT ── */
+.gantt-wrap{overflow:auto;flex:1}
+.gantt{min-width:900px}
+.gantt-months{display:flex;border-bottom:1px solid var(--bdr);background:var(--k2);position:sticky;top:0;z-index:20}
+.gm-fixed{display:flex;flex-shrink:0}
+.gm-fixed-cell{padding:9px 13px;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);border-right:1px solid var(--bdr);display:flex;align-items:center}
+.gm-cells-wrap{flex:1;overflow:hidden;position:relative}
+.gm-cells{display:flex;height:100%}
+.period-cell{flex-shrink:0;padding:9px 8px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);border-right:1px solid var(--bdr-l);display:flex;align-items:center;justify-content:center}
+.period-cell.current{color:var(--g);background:rgba(94,168,50,.06)}
+.period-cell.weekend{background:rgba(255,255,255,.02)}
+
+/* seller group */
+.seller-group{border-bottom:1px solid var(--bdr)}
+.seller-header{display:flex;background:var(--k2);border-bottom:1px solid var(--bdr);cursor:pointer;transition:background .12s;position:sticky;top:38px;z-index:15}
+.seller-header:hover{background:rgba(255,255,255,.03)}
+.sh-fixed{display:flex;flex-shrink:0;align-items:stretch}
+.sh-name-cell{padding:10px 13px;display:flex;align-items:center;gap:8px;border-right:1px solid var(--bdr)}
+.sh-chevron{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.seller-group.collapsed .sh-chevron{transform:rotate(-90deg)}
+.sh-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;text-transform:uppercase;color:var(--w)}
+.sh-id{font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.08em}
+.sh-prog-cell{padding:10px 13px;display:flex;align-items:center;gap:8px;border-right:1px solid var(--bdr)}
+.sh-prog-bar{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.sh-prog-fill{height:100%;border-radius:3px;transition:width .4s}
+.sh-prog-n{font-size:10px;font-weight:700;color:var(--t2);white-space:nowrap;min-width:32px;text-align:right}
+.sh-gantt-bg{flex:1;position:relative;min-height:40px}
+.task-rows{display:flex;flex-direction:column}
+.seller-group.collapsed .task-rows{display:none}
+
+/* task rows */
+.task-row{display:flex;border-bottom:1px solid var(--bdr-l)}
+.task-row:last-child{border-bottom:none}
+.task-row:hover .tr-fixed{background:rgba(255,255,255,.02)}
+.tr-fixed{display:flex;flex-shrink:0;align-items:stretch}
+.tr-name-cell{padding:6px 13px 6px 30px;border-right:1px solid var(--bdr);display:flex;flex-direction:column;justify-content:center;gap:2px}
+.tr-tarea{font-size:11px;color:var(--t2);line-height:1.3}
+.tr-fase{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--t3)}
+.fase-pip{width:5px;height:5px;border-radius:1px;flex-shrink:0}
+.tr-estado-cell{padding:6px 13px;border-right:1px solid var(--bdr);display:flex;align-items:center;justify-content:center}
+.tr-resp-cell{padding:6px 10px;border-right:1px solid var(--bdr);display:flex;align-items:center;font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.estado-badge{font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:3px;white-space:nowrap}
+.st-done{background:rgba(78,167,106,.18);color:#a5d6a7}
+.st-wip{background:var(--info-dim);color:var(--info)}
+.st-pend{background:rgba(255,255,255,.07);color:var(--t3)}
+.st-blk{background:var(--dng-dim);color:#f29a9a}
+.st-can{background:rgba(255,255,255,.04);color:var(--t3);text-decoration:line-through}
+.tr-gantt{flex:1;position:relative;min-height:36px;overflow:hidden}
+
+/* bars */
+.g-bar{position:absolute;top:6px;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 7px;overflow:hidden;font-size:10px;font-weight:700;white-space:nowrap;transition:opacity .15s;cursor:pointer}
+.g-bar:hover{opacity:.82;filter:brightness(1.1)}
+.g-bar.done{background:linear-gradient(90deg,#3a8a5a,#4ea76a);color:#d4edda}
+.g-bar.wip{background:linear-gradient(90deg,#1a6bc4,#408ff4);color:#cce3ff}
+.g-bar.pend{background:rgba(255,255,255,.14);color:var(--t2)}
+.g-bar.blk{background:linear-gradient(90deg,#b03030,#d94040);color:#ffc8c8}
+.g-bar.can{background:rgba(255,255,255,.06);color:var(--t3)}
+.g-bar.overrun::after{content:'';position:absolute;right:0;top:0;bottom:0;width:8px;background:repeating-linear-gradient(-45deg,rgba(255,80,80,.5),rgba(255,80,80,.5) 2px,transparent 2px,transparent 5px)}
+
+/* grid lines en gantt */
+.g-line{position:absolute;top:0;bottom:0;width:1px;background:var(--bdr-l);pointer-events:none;z-index:0}
+.g-line.month{background:var(--bdr)}
+.g-line.today{background:var(--g);opacity:.7;width:2px;z-index:5}
+
+/* ── LISTA VIEW ── */
+.lista-wrap{overflow:auto;flex:1;padding:16px 22px}
+.lista-seller{margin-bottom:22px;background:var(--k2);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+.lista-seller-hd{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bdr);background:rgba(255,255,255,.02)}
+.lsh-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;text-transform:uppercase;color:var(--w)}
+.lsh-id{font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.08em}
+.lsh-prog{display:flex;align-items:center;gap:8px;margin-left:auto}
+.lsh-pbar{width:80px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.lsh-pfill{height:100%;border-radius:2px}
+.lsh-pn{font-size:10px;font-weight:700;color:var(--t2);white-space:nowrap}
+.lista-table{width:100%;border-collapse:collapse;font-size:12px}
+.lista-table th{padding:8px 12px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);background:rgba(255,255,255,.02);border-bottom:1px solid var(--bdr)}
+.lista-table td{padding:9px 12px;border-bottom:1px solid var(--bdr-l);color:var(--t2);vertical-align:middle}
+.lista-table tr:hover td{background:rgba(255,255,255,.02);cursor:pointer}
+.lista-table tr:last-child td{border-bottom:none}
+.td-tarea{color:var(--t1);font-size:12px;max-width:260px}
+.td-resp{white-space:nowrap;font-size:11px}
+.td-dates{font-size:11px;white-space:nowrap}
+.td-atraso{font-size:11px;font-weight:700;white-space:nowrap}
+.atraso-ok{color:var(--g)} .atraso-warn{color:var(--warn)} .atraso-bad{color:var(--danger)}
+.td-comment{font-size:11px;color:var(--t3);max-width:180px}
+
+/* ── MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.modal-ov.open{display:flex}
+.modal{background:var(--k2);border:1px solid var(--bdr);border-radius:12px;width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal-hd{padding:18px 22px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:sticky;top:0;background:var(--k2);z-index:1}
+.mhd-task{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--w);line-height:1.05}
+.mhd-sub{font-size:11px;color:var(--t3);margin-top:3px}
+.modal-close{background:transparent;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:4px;flex-shrink:0;transition:color .15s}
+.modal-close:hover{color:var(--w)}
+.modal-body{padding:16px 22px}
+.msec-t{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:9px}
+.mrow{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr-l);font-size:12px}
+.mrow:last-child{border-bottom:none}
+.ml{color:var(--t3);flex-shrink:0} .mv{color:var(--t1);font-weight:500;text-align:right}
+.m-comment{font-size:12px;color:var(--t2);line-height:1.65;padding:10px;background:rgba(255,255,255,.03);border-radius:6px;border:1px solid var(--bdr);margin-top:8px}
+.m-blk{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;background:var(--dng-dim);border:1px solid var(--dng-brd);border-radius:7px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.5}
+
+/* ── STATES ── */
+.center-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:280px;gap:14px}
+.spinner{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--g);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.center-state span{font-size:13px;color:var(--t3)}
+.err-box{padding:24px;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.err-title{font-size:14px;font-weight:700;color:#f29a9a}
+.err-body{font-size:12px;color:var(--t3);line-height:1.7}
+.err-url{font-size:10px;font-family:monospace;color:var(--t3);background:rgba(255,255,255,.05);padding:8px 12px;border-radius:5px;word-break:break-all}
+
+
+/* ── OPERATIVE CONTEXT — v17 ── */
+.exec-hero{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;padding:18px 22px;border-bottom:1px solid var(--bdr);background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.012))}
+.exec-card{background:var(--k2);border:1px solid var(--bdr);border-radius:11px;padding:15px 16px;box-shadow:var(--shadow)}
+.exec-eyebrow{font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:5px}
+.exec-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;color:var(--w);line-height:1;margin-bottom:6px}
+.exec-copy{font-size:12.5px;color:var(--t2);line-height:1.55;max-width:720px}
+.exec-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}
+.exec-step{border:1px solid var(--bdr);background:rgba(255,255,255,.025);border-radius:8px;padding:9px 10px;min-height:68px}
+.exec-step-num{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
+.exec-step-title{font-size:12px;font-weight:800;color:var(--t1);margin-bottom:2px}
+.exec-step-desc{font-size:10.5px;color:var(--t3);line-height:1.35}
+.exec-rules{display:grid;gap:8px}
+.exec-rule{display:flex;gap:8px;align-items:flex-start;padding:8px 9px;border-radius:8px;background:rgba(255,255,255,.025);border:1px solid var(--bdr-l);font-size:11.5px;color:var(--t2);line-height:1.42}
+.exec-rule strong{color:var(--t1)}
+.exec-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:0 22px 16px;border-bottom:1px solid var(--bdr);background:rgba(255,255,255,.012)}
+.exec-action{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px;border:1px solid var(--bdr);border-radius:9px;background:var(--k2);color:var(--t2);font-size:12px;font-weight:700;transition:all .15s}
+.exec-action:hover{border-color:var(--g-brd);background:var(--g-dim);color:var(--t1);transform:translateY(-1px)}
+.exec-action span{font-size:16px}
+.exec-section-label{padding:13px 22px 0;color:var(--t3);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.012)}
+@media(max-width:980px){.exec-hero{grid-template-columns:1fr}.exec-flow{grid-template-columns:repeat(2,1fr)}.exec-actions{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.exec-flow,.exec-actions{grid-template-columns:1fr}.exec-hero{padding:14px}.summary{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
+
+@media(max-width:860px){.shell{grid-template-columns:1fr}.sidebar{display:none}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">Sporting <span>Marketplace</span></div>
+    <div class="tb-module">Gantt Operativo · Ejecución</div>
+  </div>
+  <div class="tb-right">
+    <div class="status-row"><div class="dot load" id="status-dot"></div><span id="status-txt">Cargando…</span></div>
+    <div class="tb-date" id="last-update"></div>
+    <button class="btn-sm" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
+    <a class="btn-sm" href="../../index.html" title="Volver al Hub">← Hub</a>
+  </div>
+</header>
+
+<div class="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-s">
+    <div class="sb-lbl">Buscar seller / tarea</div>
+    <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
+  </div>
+
+  <div class="sb-s">
+    <div class="sb-lbl">Vista</div>
+    <div class="vtog" style="width:100%">
+      <button class="vbtn on" style="flex:1" id="btn-gantt" onclick="setView('gantt')">Gantt</button>
+      <button class="vbtn"    style="flex:1" id="btn-lista" onclick="setView('lista')">Lista</button>
+    </div>
+  </div>
+
+  <div class="sb-s">
+    <div class="sb-lbl">Período</div>
+    <select class="sel" id="period-sel" onchange="render()">
+      <option value="3">3 meses</option>
+      <option value="6" selected>6 meses</option>
+      <option value="9">9 meses</option>
+      <option value="12">12 meses</option>
+    </select>
+  </div>
+
+  <div class="sb-div"></div>
+
+  <!-- FILTRO RESPONSABLE — novedad -->
+  <div class="sb-s">
+    <div class="sb-lbl">Responsable</div>
+    <select class="sel" id="resp-sel" onchange="render()">
+      <option value="todos">Todos</option>
+    </select>
+  </div>
+
+  <div class="sb-s">
+    <div class="sb-lbl">Fase</div>
+    <button class="fb on" onclick="setF('fase','todos')" id="ff-todos"><span class="fb-l"><span class="fase-dot" style="background:var(--t3)"></span>Todas</span><span class="fc" id="ffc-todos">0</span></button>
+    <button class="fb" onclick="setF('fase','Comercial')"  id="ff-Comercial"><span class="fb-l"><span class="fase-dot" style="background:var(--f-com)"></span>Comercial</span><span class="fc"  id="ffc-Comercial">0</span></button>
+    <button class="fb" onclick="setF('fase','Técnica')"    id="ff-Técnica"><span class="fb-l"><span class="fase-dot" style="background:var(--f-tec)"></span>Técnica</span><span class="fc"    id="ffc-Técnica">0</span></button>
+    <button class="fb" onclick="setF('fase','Operativa')"  id="ff-Operativa"><span class="fb-l"><span class="fase-dot" style="background:var(--f-op)"></span>Operativa</span><span class="fc"  id="ffc-Operativa">0</span></button>
+    <button class="fb" onclick="setF('fase','Cierre')"     id="ff-Cierre"><span class="fb-l"><span class="fase-dot" style="background:var(--f-cie)"></span>Cierre</span><span class="fc"     id="ffc-Cierre">0</span></button>
+  </div>
+
+  <div class="sb-div"></div>
+
+  <div class="sb-s">
+    <div class="sb-lbl">Estado tarea</div>
+    <button class="fb on" onclick="setF('estado','todos')"      id="fe-todos"><span>Todos</span><span class="fc" id="fec-todos">0</span></button>
+    <button class="fb"    onclick="setF('estado','En curso')"   id="fe-En_curso"><span>En curso</span><span class="fc" id="fec-wip">0</span></button>
+    <button class="fb"    onclick="setF('estado','Bloqueado')"  id="fe-Bloqueado"><span style="color:#f29a9a">⚠ Bloqueado</span><span class="fc" id="fec-blk">0</span></button>
+    <button class="fb"    onclick="setF('estado','Pendiente')"  id="fe-Pendiente"><span>Pendiente</span><span class="fc" id="fec-pend">0</span></button>
+    <button class="fb"    onclick="setF('estado','Completado')" id="fe-Completado"><span>Completado</span><span class="fc" id="fec-done">0</span></button>
+  </div>
+
+  <div class="sb-div"></div>
+  <div class="sb-s"><button class="btn-sm" style="width:100%" onclick="clearFilters()">Limpiar filtros</button></div>
+
+  <div class="sb-note">
+    Datos desde <strong style="color:var(--t2)">sellers</strong> + <strong style="color:var(--t2)">timeline</strong> de Google Sheets.<br><br>
+    El Gantt se usa para ejecución. El Backlog mantiene el pipeline; este panel muestra tareas planificadas y responsables.
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main" id="main-area">
+
+  <div class="alert-strip" id="alert-strip"></div>
+
+  <section class="exec-hero" aria-label="Contexto operativo del Gantt">
+    <div class="exec-card">
+      <div class="exec-eyebrow">Panel de ejecución</div>
+      <div class="exec-title">Del backlog a la implementación</div>
+      <p class="exec-copy">
+        Este Gantt muestra únicamente los sellers que ya tienen planificación operativa. El Backlog define qué sellers avanzan; el Gantt ordena tareas, responsables, fechas, riesgos y bloqueos hasta el Go Live.
+      </p>
+      <div class="exec-flow">
+        <div class="exec-step"><div class="exec-step-num">01</div><div class="exec-step-title">Backlog</div><div class="exec-step-desc">Seller priorizado y validado.</div></div>
+        <div class="exec-step"><div class="exec-step-num">02</div><div class="exec-step-title">Definición</div><div class="exec-step-desc">Modelo y alcance acordado.</div></div>
+        <div class="exec-step"><div class="exec-step-num">03</div><div class="exec-step-title">Plan</div><div class="exec-step-desc">Tareas, fechas y dueños.</div></div>
+        <div class="exec-step"><div class="exec-step-num">04</div><div class="exec-step-title">Ejecución</div><div class="exec-step-desc">Seguimiento diario.</div></div>
+        <div class="exec-step"><div class="exec-step-num">05</div><div class="exec-step-title">Go Live</div><div class="exec-step-desc">Activación y control inicial.</div></div>
+      </div>
+    </div>
+    <div class="exec-card">
+      <div class="exec-eyebrow">Reglas de lectura</div>
+      <div class="exec-rules">
+        <div class="exec-rule">🔴 <div><strong>Bloqueado:</strong> requiere gestión antes de continuar.</div></div>
+        <div class="exec-rule">🟡 <div><strong>En riesgo:</strong> revisar atraso, dependencia o responsable.</div></div>
+        <div class="exec-rule">🟢 <div><strong>Completado:</strong> tarea cerrada y validada.</div></div>
+        <div class="exec-rule">📌 <div><strong>Solo activos:</strong> permite enfocarse en ejecución real.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="exec-section-label">Accesos operativos</div>
+  <section class="exec-actions">
+    <a class="exec-action" href="../backlog/backlog-sellers.html"><div>Ver Backlog de Sellers</div><span>→</span></a>
+    <a class="exec-action" href="../estrategia/proceso-onboarding.html"><div>Consultar Onboarding</div><span>→</span></a>
+    <a class="exec-action" href="../estrategia/modelo-integracion.html"><div>Ver Modelo de Integración</div><span>→</span></a>
+    <a class="exec-action" href="../seller-center/index.html"><div>Ir a Seller Center</div><span>→</span></a>
+  </section>
+
+  <!-- Panel Mi semana -->
+  <div class="week-panel collapsed" id="week-panel">
+    <div class="week-panel-hd" onclick="toggleWeekPanel()">
+      <span class="week-panel-title">Esta semana</span>
+      <span class="week-badge wb-blk" id="wpb-blk" style="display:none">0 bloqueadas</span>
+      <span class="week-badge wb-wip" id="wpb-wip" style="display:none">0 en curso</span>
+      <span class="week-badge wb-due" id="wpb-due" style="display:none">0 vencen hoy</span>
+      <span class="week-chevron">▾</span>
+    </div>
+    <div class="week-body" id="week-body"></div>
+  </div>
+
+  <section class="summary">
+    <div class="kpi"><div class="kpi-l">Sellers en ejecución</div><div class="kpi-n" id="ks-sellers">—</div><div class="kpi-s">Con plan operativo</div></div>
+    <div class="kpi rd"><div class="kpi-l">Bloqueos</div><div class="kpi-n" id="ks-blk">—</div><div class="kpi-s">Requieren gestión</div></div>
+    <div class="kpi am"><div class="kpi-l">En curso</div><div class="kpi-n" id="ks-wip">—</div><div class="kpi-s">Ejecución activa</div></div>
+    <div class="kpi gn"><div class="kpi-l">Completadas</div><div class="kpi-n" id="ks-done">—</div><div class="kpi-s">Del total</div></div>
+    <div class="kpi bl"><div class="kpi-l">Pendientes</div><div class="kpi-n" id="ks-pend">—</div><div class="kpi-s">Próximas tareas</div></div>
+  </section>
+
+  <section class="toolbar">
+    <div class="tl-l">
+      <div class="scale-tog">
+        <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
+        <button class="sbtn"    id="sc-semana" onclick="setScale('semana')">Semana</button>
+      </div>
+      <span class="ri" id="ri-info">—</span>
+    </div>
+    <div class="tl-r">
+      <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
+        <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
+      </label>
+    </div>
+  </section>
+
+  <div id="content" style="flex:1;overflow:auto">
+    <div class="center-state"><div class="spinner"></div><span>Cargando desde Google Sheets…</span></div>
+  </div>
+
+</main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="modal-ov" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-hd">
+      <div><div class="mhd-task" id="m-task">—</div><div class="mhd-sub" id="m-sub">—</div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="m-body">—</div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════ */
+// ── CONFIGURACIÓN DE SHEETS ───────────────────────────────────────────────
+// Si el Gantt no muestra datos, verificar que ambas hojas estén publicadas:
+//   Google Sheets → Archivo → Compartir → Publicar en la web → hoja → CSV
+//   SELLERS_URL : hoja "sellers"   · gid=899415596
+//   TIMELINE_URL: hoja "timeline"  · gid=1623881837
+// Las columnas esperadas en "timeline":
+//   ID Tarea · seller_id · Seller / Marca · Fase · Hito · Tarea · Responsable
+//   Depende de · Inicio plan · Fin plan · Inicio real · Fin real
+//   Estado · Atraso (días) · Comentario · Ver en Gantt
+// ─────────────────────────────────────────────────────────────────────────
+const CONFIG = {
+  SELLERS_URL:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
+  TIMELINE_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1623881837&single=true&output=csv',
+};
+
+/* ── STATE ── */
+let SELLERS  = {};
+let TASKS    = [];
+let currentView  = 'gantt';
+let currentScale = 'mes';   // 'mes' | 'semana'
+let filters = { fase:'todos', estado:'todos' };
+let weekPanelOpen = false;
+
+/* ── UTILS ── */
+const $   = id => document.getElementById(id);
+const esc = s => String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+
+/* ══════════════════════════════════════════
+   FIX: PARSER DE FECHAS SERIALES DE EXCEL
+   Excel almacena fechas como nº de días desde 1900-01-01 (con bug leap-1900).
+   Google Sheets exporta ese mismo número cuando la celda no está formateada como texto.
+   Este parser detecta y convierte ambos formatos.
+══════════════════════════════════════════ */
+function parseDate(raw) {
+  if (!raw || !String(raw).trim() || String(raw).trim() === '—') return null;
+  const s = String(raw).trim();
+
+  // Número serial de Excel (ej: 46113 o 46113.0)
+  const serial = parseFloat(s);
+  if (!isNaN(serial) && serial > 40000 && serial < 60000 && !/[-\/]/.test(s)) {
+    // Excel tiene un bug histórico: cuenta 1900-02-29 como día real (no existió).
+    // La fórmula correcta: restar 25569 días desde epoch Unix y ajustar.
+    const excelEpoch = new Date(1899, 11, 30); // 1899-12-30
+    const ms = Math.round(serial) * 86400000;
+    const d = new Date(excelEpoch.getTime() + ms);
+    d.setHours(0,0,0,0);
+    return d;
+  }
+
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) { const d=new Date(s+'T00:00:00'); return isNaN(d)?null:d; }
+
+  // DD/MM/YYYY
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) {
+    const [dd,mm,yy]=s.split('/');
+    const d=new Date(`${yy}-${mm}-${dd}T00:00:00`); return isNaN(d)?null:d;
+  }
+
+  // Fallback
+  const d=new Date(s); return isNaN(d.getTime())?null:d;
+}
+
+/* ── CSV PARSER ── */
+function parseCSV(text) {
+  const rows=[];let row=[];let cell='';let q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c==='"'){if(q&&n==='"'){cell+='"';i++;}else q=!q;}
+    else if(c===','&&!q){row.push(cell);cell='';}
+    else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&n==='\n')i++;row.push(cell);rows.push(row);row=[];cell='';}
+    else cell+=c;
+  }
+  row.push(cell); if(row.length>1||row[0]!=='')rows.push(row);
+  return rows;
+}
+
+function csvToObjects(text, keyTests) {
+  const matrix=parseCSV(text);
+  const valid=matrix.filter(r=>r.some(v=>String(v||'').trim()));
+  const hi=valid.findIndex(r=>r.some(v=>keyTests.some(t=>norm(v).includes(t))));
+  if(hi===-1) throw new Error('No se encontró fila de encabezados.');
+  const headers=valid[hi].map(h=>norm(h));
+  const out=[];
+  for(let i=hi+1;i<valid.length;i++){
+    const r=valid[i];
+    if(!r.some(v=>String(v||'').trim())) continue;
+    const obj={};
+    headers.forEach((h,idx)=>obj[h]=String(r[idx]||'').trim());
+    out.push(obj);
+  }
+  return out;
+}
+
+/* ── NORMALIZE ── */
+function normalizeSellers(rows) {
+  const map={};
+  rows.forEach(r=>{
+    const id=r.seller_id||r.id_unico_del_seller||r.id_unico;
+    if(!id||!/^SPT-/i.test(id)) return;
+    map[id]={
+      seller_id:id,
+      nombre:   r.nombre||r.seller_nombre||r.nombre_marca||'—',
+      bloqueo_flag: norm(r.bloqueo_flag||r.bloqueo)==='si',
+      bloqueo_res:  r.bloqueo_resumen||'',
+      owner:    r.owner||'',
+      camino:   r.camino||'',
+      go_live:  r.go_live_objetivo||r.fecha_estimada||'',
+    };
+  });
+  return map;
+}
+
+// ── PARSE ATRASO DESDE SHEET ─────────────────────────────────────────────
+// La columna "Atraso (días)" en el Sheet usa fórmulas IFERROR que Google Sheets
+// exporta como texto literal cuando el CSV se descarga sin evaluar.
+// Este helper detecta fórmulas (=IFERROR...) y retorna '' para que el Gantt
+// calcule el atraso en runtime comparando fin_plan vs fecha actual.
+function parseAtrasoSheet(v) {
+  const s = String(v || '').trim();
+  if (!s || s.startsWith('=') || s === '—') return '';
+  const n = parseFloat(s);
+  return isNaN(n) ? '' : String(Math.max(0, Math.round(n)));
+}
+
+function estadoNorm(v) {
+  if(!v||v==='') return 'Pendiente';
+  const n=norm(v);
+  if(n.includes('completado')||n.includes('done')) return 'Completado';
+  if(n.includes('curso')||n.includes('progreso')) return 'En curso';
+  if(n.includes('bloqueado')) return 'Bloqueado';
+  if(n.includes('cancelado')) return 'Cancelado';
+  return 'Pendiente';
+}
+
+function normalizeTasks(rows) {
+  return rows.filter(r=>{
+    const id=r.task_id||r.id_tarea;
+    return id&&String(id).trim()!==''&&/^SPT-/i.test(String(id).trim());
+  }).map(r=>({
+    task_id:   r.task_id||r.id_tarea||'',
+    seller_id: r.seller_id||'',
+    // "Seller / Marca" normaliza a seller_marca en el CSV — alias incluido
+    seller_nombre: r.seller_nombre||r.seller_marca||r.seller___marca||'',
+    fase:      r.fase||'',
+    hito:      r.hito||'',
+    tarea:     r.tarea||'',
+    responsable: r.responsable||'',
+    // "Depende de" normaliza a depende_de en el CSV — alias incluido
+    dependencia: r.dependencia||r.depende_de||'',
+    inicio_plan: parseDate(r.fecha_inicio_plan||r.inicio_plan),
+    fin_plan:    parseDate(r.fecha_fin_plan   ||r.fin_plan),
+    inicio_real: parseDate(r.fecha_inicio_real||r.inicio_real),
+    fin_real:    parseDate(r.fecha_fin_real   ||r.fin_real),
+    estado:      estadoNorm(r.estado_tarea||r.estado),
+    // "Atraso (días)" → el CSV exporta fórmulas IFERROR como texto — ignorar, calcular en runtime
+    atraso_raw:  parseAtrasoSheet(r.atraso_dias_||r.atraso_dias||r.atraso||''),
+    comentario:  r.comentario||'',
+    // "Ver en Gantt" normaliza a ver_en_gantt en el CSV — alias incluido
+    visible:     norm(r.visible_gantt||r.ver_en_gantt||r.visible||'si')!=='no',
+  })).filter(t=>t.visible&&t.inicio_plan&&t.fin_plan);
+}
+
+/* ── PROGRESO AUTOMÁTICO POR SELLER ── */
+function calcProgreso() {
+  const bySeller={};
+  TASKS.forEach(t=>{
+    if(!bySeller[t.seller_id]) bySeller[t.seller_id]={total:0,done:0};
+    bySeller[t.seller_id].total++;
+    if(t.estado==='Completado') bySeller[t.seller_id].done++;
+  });
+  Object.entries(bySeller).forEach(([sid,{total,done}])=>{
+    if(SELLERS[sid]) SELLERS[sid].progreso_pct = total>0 ? Math.round(done/total*100) : 0;
+  });
+}
+
+/* ── RESPONSABLES únicos → poblar select ── */
+function populateResponsables() {
+  const sel=$('resp-sel');
+  const current=sel.value;
+  const resps=[...new Set(TASKS.map(t=>t.responsable).filter(Boolean))].sort();
+  // Mantener "Todos" y agregar opciones
+  while(sel.options.length>1) sel.remove(1);
+  resps.forEach(r=>{
+    const o=document.createElement('option');
+    o.value=r; o.textContent=r; sel.appendChild(o);
+  });
+  if(resps.includes(current)) sel.value=current;
+}
+
+/* ── STATUS ── */
+function setStatus(type,txt){
+  const d=$('status-dot'); d.className='dot';
+  if(type==='live') d.classList.add('live');
+  else if(type==='err') d.classList.add('err');
+  else d.classList.add('load');
+  $('status-txt').textContent=txt;
+}
+
+/* ── LOAD ── */
+async function loadData(manual=false){
+  $('btn-refresh').disabled=true;
+  setStatus('load',manual?'Actualizando…':'Cargando…');
+  try{
+    const ts='&_ts='+Date.now();
+    const [rS,rT]=await Promise.all([
+      fetch(CONFIG.SELLERS_URL+ts,{cache:'no-store'}),
+      fetch(CONFIG.TIMELINE_URL+ts,{cache:'no-store'}),
+    ]);
+    if(!rS.ok) throw new Error('Sellers: HTTP '+rS.status);
+    if(!rT.ok) throw new Error('Timeline: HTTP '+rT.status);
+    const [tS,tT]=await Promise.all([rS.text(),rT.text()]);
+    SELLERS=normalizeSellers(csvToObjects(tS,['seller_id','id_unico']));
+    TASKS=normalizeTasks(csvToObjects(tT,['task_id','id_tarea','id tarea','seller_id']));
+    calcProgreso();
+    populateResponsables();
+    setStatus('live',`Google Sheets · ${Object.keys(SELLERS).length} sellers · ${TASKS.length} tareas`);
+    $('last-update').textContent=new Date().toLocaleString('es-AR',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'});
+    render();
+  }catch(e){
+    console.error(e);
+    setStatus('err','Error al cargar');
+    $('content').innerHTML=`<div class="err-box"><div class="err-title">No se pudieron cargar los datos</div><div class="err-body">Verificá que las hojas estén publicadas como CSV.<br><br><strong>Detalle:</strong> ${esc(e.message)}</div><div class="err-url">${esc(CONFIG.SELLERS_URL)}<br>${esc(CONFIG.TIMELINE_URL)}</div></div>`;
+  }finally{
+    $('btn-refresh').disabled=false;
+  }
+}
+
+/* ── FILTERS ── */
+function setF(type,val){
+  filters[type]=val;
+  document.querySelectorAll(`[id^="f${type[0]}-"]`).forEach(b=>b.classList.remove('on'));
+  const btn=$(`f${type[0]}-${val.replace(' ','_')}`); if(btn) btn.classList.add('on');
+  render();
+}
+function clearFilters(){
+  $('search').value=''; $('resp-sel').value='todos';
+  filters={fase:'todos',estado:'todos'};
+  $('solo-activos').checked=false;
+  document.querySelectorAll('[id^="ff-"],[id^="fe-"]').forEach(b=>b.classList.remove('on'));
+  const ff=$('ff-todos');if(ff)ff.classList.add('on');
+  const fe=$('fe-todos');if(fe)fe.classList.add('on');
+  render();
+}
+function setView(v){
+  currentView=v;
+  $('btn-gantt').classList.toggle('on',v==='gantt');
+  $('btn-lista').classList.toggle('on',v==='lista');
+  render();
+}
+function setScale(s){
+  currentScale=s;
+  $('sc-mes').classList.toggle('on',s==='mes');
+  $('sc-semana').classList.toggle('on',s==='semana');
+  render();
+}
+
+/* ── HELPERS ── */
+const dBetween=(a,b)=>a&&b?Math.round((b-a)/86400000):null;
+function fmtD(d){if(!d)return'—';return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});}
+function fmtDfull(d){if(!d)return'—';return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit'});}
+function isoWeek(d){
+  const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  const day=t.getUTCDay()||7;
+  t.setUTCDate(t.getUTCDate()+4-day);
+  const yr=new Date(Date.UTC(t.getUTCFullYear(),0,1));
+  return Math.ceil(((t-yr)/86400000+1)/7);
+}
+function faseColor(f){
+  const n=norm(f);
+  if(n.includes('comercial')) return 'var(--f-com)';
+  if(n.includes('tecnica')||n.includes('técnica')) return 'var(--f-tec)';
+  if(n.includes('operativa')) return 'var(--f-op)';
+  if(n.includes('cierre')) return 'var(--f-cie)';
+  return 'var(--t3)';
+}
+function estadoClass(e){
+  switch(e){case'Completado':return'st-done';case'En curso':return'st-wip';case'Bloqueado':return'st-blk';case'Cancelado':return'st-can';}
+  return 'st-pend';
+}
+function barClass(e){
+  switch(e){case'Completado':return'done';case'En curso':return'wip';case'Bloqueado':return'blk';case'Cancelado':return'can';}
+  return 'pend';
+}
+function progStyle(pct){
+  if(pct>=100) return 'background:var(--teal)';
+  if(pct>=60)  return 'background:var(--g)';
+  if(pct>=30)  return 'background:var(--warn)';
+  return 'background:var(--t3)';
+}
+
+/* ── RENDER ── */
+function render(){
+  const search=($('search').value||'').trim().toLowerCase();
+  const resp=($('resp-sel')?.value)||'todos';
+  const soloAct=$('solo-activos').checked;
+  const today=new Date(); today.setHours(0,0,0,0);
+
+  let tasks=TASKS.filter(t=>{
+    if(filters.fase!=='todos'&&norm(t.fase)!==norm(filters.fase)) return false;
+    if(filters.estado!=='todos'&&t.estado!==filters.estado) return false;
+    if(resp!=='todos'&&t.responsable!==resp) return false;
+    if(soloAct&&t.estado!=='En curso'&&t.estado!=='Bloqueado') return false;
+    if(search){
+      const hay=[t.seller_id,t.seller_nombre,t.tarea,t.hito,t.fase,t.responsable,t.comentario].join(' ').toLowerCase();
+      if(!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  // Calcular atraso real
+  tasks=tasks.map(t=>{
+    let atr=parseFloat(t.atraso_raw)||0;
+    if(!atr&&t.fin_plan){
+      const finRef=t.fin_real||((['En curso','Bloqueado'].includes(t.estado))?today:null);
+      if(finRef&&finRef>t.fin_plan) atr=dBetween(t.fin_plan,finRef)||0;
+    }
+    return{...t,atraso_calc:atr};
+  });
+
+  const sellerIds=[...new Set(tasks.map(t=>t.seller_id))].filter(Boolean);
+  sellerIds.sort((a,b)=>{
+    const sa=SELLERS[a],sb=SELLERS[b];
+    const ba=sa?.bloqueo_flag?1:0, bb=sb?.bloqueo_flag?1:0;
+    if(ba!==bb) return bb-ba;
+    return(sa?.nombre||a).localeCompare(sb?.nombre||b,'es');
+  });
+
+  updateCounts(tasks,sellerIds.length);
+  renderAlertStrip(tasks);
+  renderWeekPanel(tasks,today);
+
+  if(!TASKS.length){
+    $('content').innerHTML=`<div class="center-state"><div style="font-size:28px;opacity:.3">○</div><span>No hay tareas en el timeline. Agregá filas en la hoja "timeline" del Google Sheet.</span></div>`;
+    return;
+  }
+  if(!tasks.length){
+    $('content').innerHTML=`<div class="center-state"><div style="font-size:28px;opacity:.3">○</div><span>Sin resultados para los filtros aplicados.</span></div>`;
+    return;
+  }
+
+  if(currentView==='gantt') renderGantt(tasks,sellerIds,today);
+  else renderLista(tasks,sellerIds,today);
+}
+
+/* ── COUNTS ── */
+function updateCounts(tasks,nSel){
+  $('ks-sellers').textContent=nSel;
+  $('ks-blk').textContent=tasks.filter(t=>t.estado==='Bloqueado').length;
+  $('ks-wip').textContent=tasks.filter(t=>t.estado==='En curso').length;
+  $('ks-done').textContent=tasks.filter(t=>t.estado==='Completado').length;
+  $('ks-pend').textContent=tasks.filter(t=>t.estado==='Pendiente').length;
+  const by=fn=>TASKS.filter(fn).length;
+  const fc=(id,n)=>{const e=$(id);if(e)e.textContent=n;};
+  fc('ffc-todos',TASKS.length);
+  fc('ffc-Comercial',by(t=>norm(t.fase).includes('comercial')));
+  fc('ffc-Técnica',by(t=>norm(t.fase).includes('tecnica')||norm(t.fase).includes('técnica')));
+  fc('ffc-Operativa',by(t=>norm(t.fase).includes('operativa')));
+  fc('ffc-Cierre',by(t=>norm(t.fase).includes('cierre')));
+  fc('fec-todos',TASKS.length);
+  fc('fec-wip',by(t=>t.estado==='En curso'));
+  fc('fec-blk',by(t=>t.estado==='Bloqueado'));
+  fc('fec-pend',by(t=>t.estado==='Pendiente'));
+  fc('fec-done',by(t=>t.estado==='Completado'));
+  $('ri-info').textContent=`${tasks.length} tareas · ${nSel} sellers`;
+}
+
+/* ── ALERT STRIP ── */
+function renderAlertStrip(tasks){
+  const strip=$('alert-strip');
+  const blk=tasks.filter(t=>t.estado==='Bloqueado');
+  const atr=tasks.filter(t=>t.atraso_calc>0&&!['Completado','Cancelado'].includes(t.estado));
+  if(!blk.length&&!atr.length){strip.classList.remove('visible');return;}
+  let html='<strong>⚠ Alertas:</strong>';
+  blk.forEach(t=>{html+=`<span class="alert-item" onclick="openModal('${esc(t.task_id)}')">🔴 ${esc(t.tarea)}</span>`;});
+  atr.slice(0,3).forEach(t=>{html+=`<span class="alert-item" onclick="openModal('${esc(t.task_id)}')">⏱ ${esc(t.tarea)} (+${t.atraso_calc}d)</span>`;});
+  if(atr.length>3) html+=`<span style="font-size:11px;color:var(--warn)">+${atr.length-3} más con atraso</span>`;
+  strip.innerHTML=html; strip.classList.add('visible');
+}
+
+/* ── PANEL MI SEMANA ── */
+function renderWeekPanel(tasks,today){
+  const startW=new Date(today); startW.setDate(today.getDate()-today.getDay()+1);
+  const endW=new Date(startW); endW.setDate(startW.getDate()+6);
+
+  const blk=tasks.filter(t=>t.estado==='Bloqueado');
+  const wip=tasks.filter(t=>t.estado==='En curso');
+  const due=tasks.filter(t=>t.fin_plan&&t.fin_plan>=startW&&t.fin_plan<=endW&&!['Completado','Cancelado'].includes(t.estado));
+
+  const showBadge=(id,count,label)=>{const e=$(id);if(e){e.textContent=`${count} ${label}`;e.style.display=count>0?'inline-block':'none';}};
+  showBadge('wpb-blk',blk.length,'bloqueadas');
+  showBadge('wpb-wip',wip.length,'en curso');
+  showBadge('wpb-due',due.length,'vencen esta semana');
+
+  const taskCard=t=>{
+    const s=SELLERS[t.seller_id]||{};
+    return`<div class="week-task" onclick="openModal('${esc(t.task_id)}')">
+      <div class="wt-seller">${esc(s.nombre||t.seller_id)}</div>
+      <div class="wt-tarea">${esc(t.tarea)}</div>
+      <div class="wt-resp">${esc(t.responsable||'—')} · ${fmtD(t.fin_plan)}</div>
+    </div>`;
+  };
+
+  $('week-body').innerHTML=`
+    <div>
+      <div class="week-col-title">Bloqueadas</div>
+      ${blk.length?blk.map(taskCard).join(''):'<div class="week-empty">Ninguna ✓</div>'}
+    </div>
+    <div>
+      <div class="week-col-title">En curso</div>
+      ${wip.length?wip.slice(0,5).map(taskCard).join('')+(wip.length>5?`<div class="week-empty">+${wip.length-5} más</div>`:''): '<div class="week-empty">Sin tareas activas</div>'}
+    </div>
+    <div>
+      <div class="week-col-title">Vencen esta semana</div>
+      ${due.length?due.map(taskCard).join(''):'<div class="week-empty">Ninguna esta semana</div>'}
+    </div>`;
+}
+function toggleWeekPanel(){
+  const p=$('week-panel');
+  weekPanelOpen=!weekPanelOpen;
+  p.classList.toggle('expanded',weekPanelOpen);
+  p.classList.toggle('collapsed',!weekPanelOpen);
+}
+
+/* ══════════════════════════════════════════
+   GANTT — soporta escala Mes y Semana
+══════════════════════════════════════════ */
+function renderGantt(tasks,sellerIds,today){
+  const months=parseInt($('period-sel').value)||6;
+
+  // Rango
+  const rangeStart=new Date(today.getFullYear(),today.getMonth()-1,1);
+  const rangeEnd  =new Date(rangeStart.getFullYear(),rangeStart.getMonth()+months+1,0);
+  const totalDays =dBetween(rangeStart,rangeEnd)+1;
+
+  const FIXED_W=currentScale==='semana'?330:310; // px col fija
+  const RESP_W =currentScale==='semana'?90:0;    // col responsable extra en vista semana
+  const COL_W  =currentScale==='semana'?28:3;    // px por día (semana: 4px/día × 7 = 28px/semana, mes: 3px/día)
+
+  const ganttW=totalDays*COL_W;
+  const dateLeft=d=>{
+    if(!d) return null;
+    const days=dBetween(rangeStart,d);
+    return Math.max(0,Math.min(ganttW,days*COL_W));
+  };
+  const todayLeft=dateLeft(today)||0;
+
+  // ── Construir celdas de encabezado ──
+  let periodCells=[];
+  if(currentScale==='mes'){
+    let cur=new Date(rangeStart.getFullYear(),rangeStart.getMonth(),1);
+    while(cur<=rangeEnd){
+      const mEnd=new Date(cur.getFullYear(),cur.getMonth()+1,0);
+      const cStart=cur<rangeStart?rangeStart:cur;
+      const cEnd  =mEnd>rangeEnd?rangeEnd:mEnd;
+      const days=dBetween(cStart,cEnd)+1;
+      const isNow=cur.getMonth()===today.getMonth()&&cur.getFullYear()===today.getFullYear();
+      periodCells.push({label:cur.toLocaleDateString('es-AR',{month:'short',year:'2-digit'}),days,isNow,px:days*COL_W});
+      cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);
+    }
+  } else {
+    // Semanas: agrupar por ISO week
+    let cur=new Date(rangeStart);
+    // Ir al lunes de esa semana
+    const dow=cur.getDay()||7; cur.setDate(cur.getDate()-dow+1);
+    while(cur<=rangeEnd){
+      const wEnd=new Date(cur); wEnd.setDate(cur.getDate()+6);
+      const cStart=cur<rangeStart?rangeStart:cur;
+      const cEnd  =wEnd>rangeEnd?rangeEnd:wEnd;
+      const days=dBetween(cStart,cEnd)+1;
+      const isNow=cur<=today&&today<=wEnd;
+      const wn=isoWeek(cur);
+      periodCells.push({label:`S${wn}`,days,isNow,px:days*COL_W,
+        sub:`${fmtD(cStart)}`});
+      cur=new Date(cur); cur.setDate(cur.getDate()+7);
+    }
+  }
+
+  // ── HTML ──
+  let html=`<div class="gantt">`;
+
+  // Header
+  html+=`
+    <div class="gantt-months" style="display:flex">
+      <div class="gm-fixed" style="width:${FIXED_W}px;flex-shrink:0">
+        <div class="gm-fixed-cell" style="width:${220+RESP_W}px">Seller / Tarea</div>
+        <div class="gm-fixed-cell" style="width:${90}px;justify-content:center">Estado</div>
+      </div>
+      <div class="gm-cells-wrap" style="min-width:${ganttW}px">
+        <div class="gm-cells">
+          ${periodCells.map(c=>`<div class="period-cell${c.isNow?' current':''}" style="width:${c.px}px;flex-shrink:0;flex-direction:column;gap:0">${c.label}${c.sub?`<span style="font-size:8px;opacity:.6">${c.sub}</span>`:''}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  sellerIds.forEach(sid=>{
+    const seller=SELLERS[sid]||{nombre:sid,progreso_pct:0};
+    const st=tasks.filter(t=>t.seller_id===sid);
+    if(!st.length) return;
+    const hasBloq=st.some(t=>t.estado==='Bloqueado');
+    const pct=seller.progreso_pct||0;
+
+    html+=`
+      <div class="seller-group" id="sg-${esc(sid)}">
+        <div class="seller-header" style="display:flex" onclick="toggleGroup('${esc(sid)}')">
+          <div class="sh-fixed" style="width:${FIXED_W}px;flex-shrink:0">
+            <div class="sh-name-cell" style="width:${220+RESP_W}px">
+              <span class="sh-chevron">▾</span>
+              <div style="min-width:0">
+                <div class="sh-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(seller.nombre)}</div>
+                <div class="sh-id">${esc(sid)}</div>
+              </div>
+              ${hasBloq?`<span style="margin-left:auto;font-size:9px;font-weight:800;color:#f29a9a;background:var(--dng-dim);border:1px solid var(--dng-brd);padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0">BLOQUEADO</span>`:''}
+            </div>
+            <div class="sh-prog-cell" style="width:90px">
+              <div class="sh-prog-bar"><div class="sh-prog-fill" style="${progStyle(pct)};width:${pct}%"></div></div>
+              <span class="sh-prog-n">${pct}%</span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:${ganttW}px;height:100%;position:relative;min-height:40px">
+            <div class="g-line today" style="left:${todayLeft}px"></div>
+          </div>
+        </div>
+        <div class="task-rows">`;
+
+    st.forEach(t=>{
+      const left=dateLeft(t.inicio_plan);
+      const right=dateLeft(t.fin_plan);
+      const barW=(left!==null&&right!==null)?Math.max(currentScale==='semana'?COL_W:4,right-left):0;
+      const isOver=t.atraso_calc>0&&!['Completado','Cancelado'].includes(t.estado);
+      const shortLabel=barW>60?esc((t.hito||t.tarea).substring(0,currentScale==='semana'?18:22)):'';
+
+      html+=`
+          <div class="task-row" style="display:flex" onclick="openModal('${esc(t.task_id)}')">
+            <div class="tr-fixed" style="width:${FIXED_W}px;flex-shrink:0">
+              <div class="tr-name-cell" style="width:${220+RESP_W}px">
+                <div class="tr-tarea">${esc(t.tarea)}</div>
+                <div class="tr-fase"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</div>
+                ${currentScale==='semana'?`<div style="font-size:9px;color:var(--t3);margin-top:2px">${esc(t.responsable||'—')}</div>`:''}
+              </div>
+              <div class="tr-estado-cell" style="width:90px">
+                <span class="estado-badge ${estadoClass(t.estado)}">${t.estado}${isOver?` +${t.atraso_calc}d`:''}</span>
+              </div>
+            </div>
+            <div class="tr-gantt" style="flex:1;min-width:${ganttW}px;position:relative;min-height:36px">
+              <div class="g-line today" style="left:${todayLeft}px;opacity:.2"></div>
+              ${left!==null?`
+              <div class="g-bar ${barClass(t.estado)}${isOver?' overrun':''}"
+                   style="left:${left}px;width:${barW}px"
+                   title="${esc(t.tarea)} · ${fmtD(t.inicio_plan)} → ${fmtD(t.fin_plan)}">
+                ${shortLabel}
+              </div>`:''}
+            </div>
+          </div>`;
+    });
+
+    html+=`</div></div>`;
+  });
+
+  html+=`</div>`;
+  $('content').innerHTML=html;
+}
+
+function toggleGroup(sid){
+  const g=$('sg-'+sid);
+  if(g) g.classList.toggle('collapsed');
+}
+
+/* ── LISTA ── */
+function renderLista(tasks,sellerIds,today){
+  let html=`<div class="lista-wrap">`;
+  sellerIds.forEach(sid=>{
+    const seller=SELLERS[sid]||{nombre:sid,progreso_pct:0};
+    const st=tasks.filter(t=>t.seller_id===sid);
+    if(!st.length) return;
+    const pct=seller.progreso_pct||0;
+    html+=`
+      <div class="lista-seller">
+        <div class="lista-seller-hd">
+          <div class="lsh-name">${esc(seller.nombre)}</div>
+          <div class="lsh-id">${esc(sid)}</div>
+          <div class="lsh-prog" style="margin-left:auto">
+            <div class="lsh-pbar"><div class="lsh-pfill" style="${progStyle(pct)};width:${pct}%"></div></div>
+            <span class="lsh-pn">${pct}%</span>
+          </div>
+        </div>
+        <table class="lista-table">
+          <thead><tr>
+            <th>Tarea</th><th>Hito</th><th>Fase</th><th>Estado</th>
+            <th>Responsable</th><th>Inicio plan</th><th>Fin plan</th><th>Fin real</th><th>Atraso</th><th>Comentario</th>
+          </tr></thead>
+          <tbody>
+            ${st.map(t=>{
+              const atr=t.atraso_calc;
+              const ac=atr===0?'atraso-ok':atr<=3?'atraso-warn':'atraso-bad';
+              return`<tr onclick="openModal('${esc(t.task_id)}')">
+                <td class="td-tarea">${esc(t.tarea)}</td>
+                <td style="font-size:11px;color:var(--t3);max-width:140px">${esc(t.hito||'—')}</td>
+                <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
+                <td><span class="estado-badge ${estadoClass(t.estado)}">${t.estado}</span></td>
+                <td class="td-resp">${esc(t.responsable||'—')}</td>
+                <td class="td-dates">${fmtDfull(t.inicio_plan)}</td>
+                <td class="td-dates">${fmtDfull(t.fin_plan)}</td>
+                <td class="td-dates">${fmtDfull(t.fin_real)}</td>
+                <td class="td-atraso ${ac}">${atr>0?'+'+atr+'d':t.estado==='Completado'?'✓':'—'}</td>
+                <td class="td-comment">${esc((t.comentario||'').substring(0,70))}${t.comentario&&t.comentario.length>70?'…':''}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  });
+  html+=`</div>`;
+  $('content').innerHTML=html;
+}
+
+/* ── MODAL ── */
+function openModal(taskId){
+  const t=TASKS.find(x=>x.task_id===taskId);
+  if(!t) return;
+  const seller=SELLERS[t.seller_id]||{};
+  $('m-task').textContent=t.tarea||t.task_id;
+  $('m-sub').textContent=`${seller.nombre||t.seller_id} · ${t.hito||'—'} · ${t.fase||'—'}`;
+  const row=(l,v)=>v&&v!=='—'?`<div class="mrow"><span class="ml">${l}</span><span class="mv">${v}</span></div>`:'';
+  const atr=t.atraso_calc||0;
+  const blkHTML=t.estado==='Bloqueado'?`<div class="m-blk"><span>⚠</span><div><strong style="color:#f29a9a">Tarea bloqueada</strong><br>${esc(t.comentario||seller.bloqueo_res||'Sin descripción del bloqueo.')}</div></div>`:'';
+  $('m-body').innerHTML=`
+    ${blkHTML}
+    <div class="msec-t">Identificación</div>
+    ${row('ID tarea',esc(t.task_id))}
+    ${row('Seller',esc(seller.nombre||t.seller_id))}
+    ${row('Fase',`<span style="display:inline-flex;align-items:center;gap:4px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span>`)}
+    ${row('Hito',esc(t.hito))}
+    ${row('Responsable',esc(t.responsable))}
+    ${row('Depende de',esc(t.dependencia))}
+    <div style="margin-top:13px" class="msec-t">Fechas y estado</div>
+    ${row('Estado',`<span class="estado-badge ${estadoClass(t.estado)}">${t.estado}</span>`)}
+    ${row('Inicio planificado',fmtDfull(t.inicio_plan))}
+    ${row('Fin planificado',fmtDfull(t.fin_plan))}
+    ${row('Semana','S'+( t.inicio_plan?isoWeek(t.inicio_plan):'—'))}
+    ${row('Inicio real',fmtDfull(t.inicio_real)||'—')}
+    ${row('Fin real',fmtDfull(t.fin_real)||'—')}
+    ${row('Atraso',atr>0?`<span style="color:${atr<=3?'var(--warn)':'var(--danger)'};font-weight:700">+${atr} días</span>`:(t.estado==='Completado'?'<span style="color:var(--g)">A tiempo ✓</span>':'—'))}
+    ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}`;
+  $('modal-ov').classList.add('open');
+}
+function closeModal(e){
+  if(!e||e.target===$('modal-ov')) $('modal-ov').classList.remove('open');
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
+
+/* ── INIT ── */
+loadData(false);
+</script>
+</body>
+</html>
