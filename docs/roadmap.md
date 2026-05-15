@@ -387,6 +387,29 @@ Pendiente:
 - definir una Etapa 5E para piloto controlado de consumo local de logos;
 - mantener sin cambios `LOGO_BASE_URL`, `config.js`, `assets/js/config.js`, formularios, Backlog y Gestion de Sellers.
 
+## Etapa 5E: piloto controlado de fallback local de logos
+
+Objetivo: aplicar un piloto acotado en `public/presentaciones/presentacion-seller.html` para usar `../../assets/logos/{seller_id}.png` solo cuando no exista logo desde CSV o query params.
+
+Estado: completada.
+
+Resultado:
+
+- piloto aplicado solo en `public/presentaciones/presentacion-seller.html`;
+- prioridad preservada para `logo_url` del CSV y query params `logo`/`logo_url`;
+- agregado fallback local `../../assets/logos/{seller_id}.png`;
+- fallback final por iniciales preservado si no carga el logo;
+- `seller_id`, CTAs, CSV y logica de personalizacion preservados;
+- sin cambios en legacy `presentacion-seller_v3.html`;
+- sin cambios en Backlog, Gestion de Sellers, formularios, simuladores, `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script o redirects.
+
+Pendiente:
+
+- smoke test manual con `seller_id=SPT-001`;
+- validar caso con `logo_url` desde CSV/query;
+- validar caso sin logo local para confirmar iniciales;
+- revisar consola por errores o 404 inesperados.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.

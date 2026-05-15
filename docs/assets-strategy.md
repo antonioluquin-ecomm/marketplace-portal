@@ -612,6 +612,38 @@ Rollback:
 - No tocar config global.
 - Conservar fallback por iniciales como salida segura.
 
+### Etapa 5E: piloto controlado de fallback local en Presentacion Seller
+
+Estado: completada.
+
+Resultado:
+
+- Se aplico el piloto solo en `public/presentaciones/presentacion-seller.html`.
+- `logo_url` del CSV conserva prioridad principal.
+- Query params `logo` y `logo_url` conservan prioridad antes del fallback local.
+- Si no existe logo desde CSV/query, la pagina intenta cargar `../../assets/logos/{seller_id}.png`.
+- El `seller_id` se conserva sin cambios para busqueda, CTAs y personalizacion.
+- El nombre de archivo local se normaliza a minusculas para coincidir con `spt-001.png` a `spt-015.png`.
+- Si el logo local falla, se mantiene el fallback visual por iniciales.
+- No se modifico `presentacion-seller_v3.html`.
+- No se modificaron Backlog, Gestion de Sellers, formularios, simuladores, configuracion global, Apps Script ni redirects.
+
+Validaciones realizadas:
+
+- Prioridad confirmada: `logoUrl || logoParam || localLogoFallback()`.
+- Ruta local confirmada: `../../assets/logos/${sellerId.toLowerCase()}.png`.
+- Fallback final por iniciales preservado mediante `logo.onerror=hideLogo`.
+- CTAs preservados mediante `setCtaLinks()` sin cambios.
+- Archivo legacy en raiz verificado sin modificaciones.
+
+Validaciones manuales pendientes:
+
+- Abrir `public/presentaciones/presentacion-seller.html?seller_id=SPT-001`.
+- Confirmar que carga el logo local si el CSV no provee `logo_url`.
+- Probar con un seller con `logo_url` en CSV y confirmar que mantiene prioridad.
+- Probar con seller sin logo local y confirmar fallback por iniciales.
+- Revisar consola por 404 esperados/no esperados.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

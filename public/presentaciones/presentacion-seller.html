@@ -642,6 +642,10 @@
         .slice(0,2).map(w=>w[0]).join("").toUpperCase()||"S";
     }
 
+    function localLogoFallback() {
+      return sellerId ? `../../assets/logos/${encodeURIComponent(sellerId.toLowerCase())}.png` : "";
+    }
+
     function setCtaLinks() {
       const url = sellerId
         ? `${CONFIG.CLASSIFICATION_URL}?seller_id=${encodeURIComponent(sellerId)}`
@@ -653,7 +657,7 @@
 
     function applySellerIdentity({name,logoUrl}) {
       const sellerName = name||sellerNameParam||"Tu marca";
-      const sellerLogo = logoUrl||logoParam||"";
+      const sellerLogo = logoUrl||logoParam||localLogoFallback();
 
       $("sellerName").textContent = sellerName;
       $("sellerLeadName").textContent = sellerName;
