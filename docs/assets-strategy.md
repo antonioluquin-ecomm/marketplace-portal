@@ -644,6 +644,40 @@ Validaciones manuales pendientes:
 - Probar con seller sin logo local y confirmar fallback por iniciales.
 - Revisar consola por 404 esperados/no esperados.
 
+### Etapa 5F: fallback local en Simulador Seller
+
+Estado: completada.
+
+Resultado:
+
+- Se aplico el criterio validado en Presentacion Seller solo en `public/simuladores/simulador-seller.html`.
+- `logo_url` del CSV conserva prioridad principal mediante `getSellerLogoFromRow(SELLER)`.
+- Query params `logo` y `logo_url` conservan prioridad antes del fallback local.
+- Si no existe logo desde CSV/query, la pagina intenta cargar `../../assets/logos/{seller_id}.png`.
+- El `seller_id` se conserva sin cambios para seleccion, CTAs, overrides y personalizacion.
+- El nombre de archivo local se normaliza a minusculas para coincidir con `spt-001.png` a `spt-015.png`.
+- Si el logo local falla, se mantiene el fallback visual por iniciales.
+- No se modifico `simulador-seller_v12.html`.
+- No se modificaron Backlog, Gestion de Sellers, formularios, Presentacion Seller, configuracion global, Apps Script ni redirects.
+- No se modificaron formulas, calculos, tarifas, overrides ni escenarios.
+
+Validaciones realizadas:
+
+- Prioridad confirmada: `getSellerLogoFromRow(SELLER) || params.get("logo") || params.get("logo_url") || localLogoFallback()`.
+- Ruta local confirmada: `../../assets/logos/${CURRENT_SELLER_ID.toLowerCase()}.png`.
+- Fallback final por iniciales preservado mediante `logoEl.onerror`.
+- CTAs preservados mediante `topbarCta.href` sin cambios.
+- Funciones economicas `calculate()`, `render()`, `renderSvcImpact()` y `parseOverrides()` sin cambios funcionales.
+- Archivo legacy en raiz verificado sin modificaciones.
+
+Validaciones manuales pendientes:
+
+- Abrir `public/simuladores/simulador-seller.html?seller_id=SPT-001`.
+- Confirmar que carga el logo local si el CSV no provee `logo_url`.
+- Probar con un seller con `logo_url` en CSV/query y confirmar que mantiene prioridad.
+- Probar con seller sin logo local y confirmar fallback por iniciales.
+- Revisar que calculos, tarifas, overrides, escenarios y CTAs sigan funcionando.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

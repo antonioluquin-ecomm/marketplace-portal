@@ -4,6 +4,51 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5F fallback local Simulador Seller
+
+Tipo de cambio: piloto controlado.
+
+Estado: completado sin impacto global.
+
+Cambios incluidos:
+
+- Actualizacion acotada de `public/simuladores/simulador-seller.html`.
+- Agregado de fallback local `../../assets/logos/{seller_id}.png` solo cuando no exista logo desde CSV o query params.
+- Preservacion de prioridad para `logo_url` del CSV y `logo`/`logo_url` por query params.
+- Preservacion del fallback final por iniciales si el logo local no carga.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en `config.js`.
+- Sin modificaciones en `assets/js/config.js`.
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin modificaciones en Backlog.
+- Sin modificaciones en Gestion de Sellers.
+- Sin modificaciones en formularios.
+- Sin modificaciones en Presentacion Seller.
+- Sin modificaciones en Apps Script.
+- Sin redirects.
+- Sin movimiento ni eliminacion de `Logos/`.
+- Sin cambios de diseno visual.
+- Sin cambios en formulas, calculos, tarifas, overrides ni escenarios.
+- Sin modificaciones en `simulador-seller_v12.html`.
+
+Validacion:
+
+- Se confirmo que la prioridad queda `getSellerLogoFromRow(SELLER) || params.get("logo") || params.get("logo_url") || localLogoFallback()`.
+- Se confirmo que el fallback local apunta a `../../assets/logos/{seller_id}.png`.
+- Se confirmo que el fallback por iniciales sigue asociado a `logoEl.onerror`.
+- Se confirmo que CTAs, `seller_id`, `parseOverrides()`, `calculate()` y `render()` no fueron modificados.
+
+Pendiente:
+
+- Smoke test manual con `seller_id=SPT-001`.
+- Validar caso con `logo_url` existente desde CSV/query.
+- Validar caso sin logo local para confirmar fallback por iniciales.
+- Revisar calculos, escenarios y CTAs en navegador.
+
 ## 2026-05-15 - Etapa 5E piloto fallback local Presentacion Seller
 
 Tipo de cambio: piloto controlado.

@@ -794,6 +794,9 @@ function getSellerNameFromRow(row){
 function getSellerLogoFromRow(row){
   return pick(row,["logo_url","logo","url_logo","Logo","logo seller","logo_seller","imagen","image","image_url"]);
 }
+function localLogoFallback(){
+  return CURRENT_SELLER_ID ? `../../assets/logos/${encodeURIComponent(CURRENT_SELLER_ID.toLowerCase())}.png` : "";
+}
 function normalizeLogoUrl(url){
   let raw = String(url || "").trim();
   if(!raw) return "";
@@ -842,7 +845,7 @@ function applySellerInfo(shouldPrefill = true){
   applyOverridesForSeller();
 
   const name = pick(SELLER,["seller_nombre","nombre","nombre_seller","marca"]) || params.get("seller_name") || "Tu marca";
-  const logo = normalizeLogoUrl(getSellerLogoFromRow(SELLER) || params.get("logo") || "");
+  const logo = normalizeLogoUrl(getSellerLogoFromRow(SELLER) || params.get("logo") || params.get("logo_url") || localLogoFallback());
   const site = pick(SELLER,["sitio_objetivo","sitio"]) || "Sporting";
 
   $("sellerName").textContent   = name;

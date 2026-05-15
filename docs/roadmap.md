@@ -410,6 +410,29 @@ Pendiente:
 - validar caso sin logo local para confirmar iniciales;
 - revisar consola por errores o 404 inesperados.
 
+## Etapa 5F: fallback local de logos en Simulador Seller
+
+Objetivo: extender el criterio validado a `public/simuladores/simulador-seller.html` sin tocar calculos, tarifas, overrides, escenarios ni configuracion global.
+
+Estado: completada.
+
+Resultado:
+
+- fallback local aplicado solo en `public/simuladores/simulador-seller.html`;
+- prioridad preservada para `logo_url` del CSV y query params `logo`/`logo_url`;
+- agregado fallback local `../../assets/logos/{seller_id}.png`;
+- fallback final por iniciales preservado si no carga el logo;
+- `seller_id`, CTAs, CSV, calculos, tarifas, overrides y escenarios preservados;
+- sin cambios en legacy `simulador-seller_v12.html`;
+- sin cambios en Backlog, Gestion de Sellers, formularios, Presentacion Seller, `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script o redirects.
+
+Pendiente:
+
+- smoke test manual con `seller_id=SPT-001`;
+- validar caso con `logo_url` desde CSV/query;
+- validar caso sin logo local para confirmar iniciales;
+- revisar calculos, escenarios y CTAs despues del cambio.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.
