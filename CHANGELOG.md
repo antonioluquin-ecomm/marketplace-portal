@@ -4,6 +4,38 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 2 index oficial
+
+Tipo de cambio: estructural/documental.
+
+Estado: entrada institucional creada.
+
+Cambios incluidos:
+
+- Creacion de `index.html` oficial en la raiz del proyecto.
+- Enlaces desde `index.html` hacia paginas actuales existentes en la raiz.
+- Separacion visual entre acceso interno, acceso publico/sellers y documentacion.
+- Aviso visible de transicion estructural.
+- Actualizacion de roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en `sporting-marketplace_hub_v29.html`.
+- Sin movimiento de archivos HTML existentes.
+- Sin eliminacion de archivos.
+- Sin cambios funcionales.
+- Sin cambios visuales en paginas existentes.
+- Sin cambios de rutas actuales.
+- Sin modificaciones en formularios, simuladores ni Apps Script.
+- Sin extraccion de CSS o JavaScript compartido.
+- Sin redirects ni reemplazo de paginas actuales.
+
+Validacion:
+
+- `index.html` fue creado como pagina estatica autocontenida.
+- Los links apuntan a archivos actuales en raiz y documentacion existente.
+- La migracion hacia `/internal` y `/public` queda pendiente para etapas futuras.
+
 ## 2026-05-15 - Etapa 1 estructura base
 
 Tipo de cambio: estructural/documental.

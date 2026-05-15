@@ -4,7 +4,8 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 
 | Archivo actual | Ruta futura sugerida | Tipo | Criticidad | Observaciones |
 |---|---|---|---|---|
-| `sporting-marketplace_hub_v29.html` | `/index.html` | documentacion | Alta | Hub central actual. Debe convertirse en entrada oficial sin romper referencias previas. |
+| `index.html` | `/index.html` | documentacion | Alta | Entrada institucional oficial creada en Etapa 2. Enlaza a paginas actuales en raiz sin migrarlas. |
+| `sporting-marketplace_hub_v29.html` | `/legacy/root-html-v1/sporting-marketplace_hub_v29.html` | legacy | Alta | Hub central actual versionado. Se mantiene intacto como referencia temporal; no mover hasta definir compatibilidad. |
 | `backlog-sellers_v27.html` | `/internal/backlog/backlog-sellers.html` | interno | Alta | Pagina operativa critica. Consume datos externos y contiene logica de backlog. |
 | `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Gestion/alta de sellers. Depende de Apps Script y CSV. |
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Gantt operativo. Depende de Google Sheets. |
@@ -28,4 +29,3 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `Mapa del Hub.docx` | `/docs/source/Mapa del Hub.docx` | documentacion | Baja | Documento fuente. Puede mantenerse como referencia historica. |
 | `PROJECT_WORKFLOW.md` | `/PROJECT_WORKFLOW.md` | documentacion | Alta | Metodologia institucional base. Debe permanecer visible en raiz. |
 | archivos versionados antiguos futuros | `/legacy/` | legacy | Media | Usar solo despues de validar nuevas rutas y estrategia de compatibilidad. |
-

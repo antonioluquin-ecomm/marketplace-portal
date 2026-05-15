@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marketplace Portal | Sporting Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --g: #5ea832;
+      --g2: #4a8a26;
+      --g-soft: rgba(94, 168, 50, .12);
+      --g-line: rgba(94, 168, 50, .24);
+      --bg: #0b0f0b;
+      --bg2: #0f150f;
+      --panel: #141c13;
+      --panel2: #192118;
+      --line: rgba(255, 255, 255, .08);
+      --line2: rgba(255, 255, 255, .045);
+      --t1: #edf3e9;
+      --t2: #b7c8af;
+      --t3: #819178;
+      --t4: #53604e;
+      --warn: #f59e0b;
+      --info: #60a5fa;
+      --teal: #2dd4bf;
+      --vio: #c084fc;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      font-family: Barlow, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--t1);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 58px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--g-line);
+      background: rgba(11, 15, 11, .96);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .logo {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .logo span { color: var(--g); }
+
+    .crumb {
+      padding-left: 14px;
+      border-left: 1px solid var(--line);
+      color: var(--t4);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--g-line);
+      border-radius: 999px;
+      background: var(--g-soft);
+      color: #b7e69d;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--g);
+      box-shadow: 0 0 0 4px rgba(94, 168, 50, .18);
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+      gap: 28px;
+      padding: 46px 0 30px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--g);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 2px;
+      background: var(--g);
+    }
+
+    h1 {
+      max-width: 780px;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(48px, 7vw, 82px);
+      font-weight: 900;
+      line-height: .9;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin-top: 18px;
+      color: var(--t2);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .04);
+      color: var(--t2);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: .15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--g-line);
+      background: var(--g-soft);
+      color: var(--g);
+    }
+
+    .btn.primary {
+      border-color: var(--g);
+      background: var(--g);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      border-color: var(--g2);
+      background: var(--g2);
+      color: #fff;
+    }
+
+    .signal-panel {
+      align-self: stretch;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .018));
+    }
+
+    .signal-title {
+      color: var(--t4);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .signal-value {
+      margin-top: 14px;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .signal-copy {
+      margin-top: 12px;
+      color: var(--t3);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      padding: 12px;
+      border: 1px solid var(--line2);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .metric strong {
+      display: block;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 27px;
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 5px;
+      color: var(--t4);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .section {
+      padding: 30px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 31px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .section-note {
+      max-width: 480px;
+      color: var(--t3);
+      font-size: 13px;
+      line-height: 1.45;
+      text-align: right;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .card {
+      display: flex;
+      min-height: 112px;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--g);
+      border-radius: var(--radius);
+      background: var(--panel);
+      transition: .15s ease;
+    }
+
+    .card:hover {
+      border-color: var(--g-line);
+      border-left-color: var(--g);
+      background: var(--panel2);
+      transform: translateY(-1px);
+    }
+
+    .card.public { border-left-color: var(--teal); }
+    .card.doc { border-left-color: var(--info); }
+    .card.warn { border-left-color: var(--warn); }
+    .card.vio { border-left-color: var(--vio); }
+
+    .card-title {
+      color: var(--t1);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .card-meta {
+      color: var(--t4);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .transition {
+      margin: 34px 0 44px;
+      padding: 18px 20px;
+      border: 1px solid rgba(245, 158, 11, .28);
+      border-radius: 12px;
+      background: rgba(245, 158, 11, .08);
+    }
+
+    .transition strong {
+      display: block;
+      color: #ffd48a;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .transition p {
+      margin-top: 8px;
+      color: var(--t2);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 900px) {
+      .topbar { align-items: flex-start; flex-direction: column; gap: 10px; padding: 14px 18px; }
+      .brand { flex-wrap: wrap; }
+      .crumb { border-left: 0; padding-left: 0; }
+      .hero { grid-template-columns: 1fr; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .section-note { text-align: left; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 28px, 1180px); }
+      .hero { padding-top: 32px; }
+      .lead { font-size: 16px; }
+      .metrics { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">Marketplace <span>Portal</span></div>
+      <div class="crumb">Sporting Marketplace</div>
+    </div>
+    <div class="status"><span class="dot"></span> Etapa de reorganizacion estructural</div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Entrada institucional</div>
+        <h1>Marketplace Portal</h1>
+        <p class="lead">Hub central de gestion, documentacion y herramientas del Marketplace Sporting.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="sporting-marketplace_hub_v29.html">Abrir hub actual</a>
+          <a class="btn" href="#interno">Acceso interno</a>
+          <a class="btn" href="#publico">Acceso sellers</a>
+          <a class="btn" href="#documentacion">Documentacion</a>
+        </div>
+      </div>
+
+      <aside class="signal-panel" aria-label="Estado del proyecto">
+        <div class="signal-title">Estado</div>
+        <div class="signal-value">Reestructuracion institucional en curso</div>
+        <p class="signal-copy">Las paginas actuales se mantienen en raiz mientras se prepara la migracion segura hacia una arquitectura modular.</p>
+        <div class="metrics">
+          <div class="metric"><strong>17</strong><span>Paginas base</span></div>
+          <div class="metric"><strong>0</strong><span>Rutas rotas</span></div>
+          <div class="metric"><strong>2</strong><span>Etapa actual</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="interno">
+      <div class="section-head">
+        <h2>Acceso interno</h2>
+        <p class="section-note">Herramientas operativas, gobierno, modelos, seller center y planificacion. En esta etapa enlazan a los HTML actuales en raiz.</p>
+      </div>
+      <div class="grid">
+        <a class="card warn" href="sporting-marketplace_hub_v29.html"><span class="card-title">Hub central actual</span><span class="card-meta">Referencia temporal</span></a>
+        <a class="card" href="backlog-sellers_v27.html"><span class="card-title">Backlog de Sellers</span><span class="card-meta">Operacion</span></a>
+        <a class="card" href="gestion-sellers_v7.html"><span class="card-title">Gestion de Sellers</span><span class="card-meta">Alta y edicion</span></a>
+        <a class="card" href="gantt-operativo_v18.html"><span class="card-title">Gantt Operativo</span><span class="card-meta">Planificacion</span></a>
+        <a class="card" href="gantt-seller-center_v2.html"><span class="card-title">Gantt Seller Center</span><span class="card-meta">Roadmap SC</span></a>
+        <a class="card" href="seller-center_v2.html"><span class="card-title">Seller Center</span><span class="card-meta">Dashboard</span></a>
+        <a class="card vio" href="governance_v3.html"><span class="card-title">Governance</span><span class="card-meta">Gobierno</span></a>
+        <a class="card vio" href="proceso-onboarding_v4.html"><span class="card-title">Proceso de Onboarding</span><span class="card-meta">Flujo operativo</span></a>
+        <a class="card vio" href="modelo-integracion_v5.html"><span class="card-title">Modelo de Integracion</span><span class="card-meta">Decision tecnica</span></a>
+        <a class="card vio" href="modelo-economico_v2.html"><span class="card-title">Modelo Economico</span><span class="card-meta">Estrategia</span></a>
+        <a class="card vio" href="proyecto-marketplace_v3.html"><span class="card-title">Proyecto Marketplace</span><span class="card-meta">Vision ejecutiva</span></a>
+        <a class="card" href="simulador-economico_v4.html"><span class="card-title">Simulador Economico</span><span class="card-meta">Herramienta interna</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="publico">
+      <div class="section-head">
+        <h2>Acceso publico / sellers</h2>
+        <p class="section-note">Piezas compartibles con sellers. Deben mantenerse estables hasta definir compatibilidad de rutas.</p>
+      </div>
+      <div class="grid">
+        <a class="card public" href="formulario-calificacion_v2.html"><span class="card-title">Formulario de Calificacion</span><span class="card-meta">Publico</span></a>
+        <a class="card public" href="formulario-relevamiento_v2.html"><span class="card-title">Formulario de Relevamiento</span><span class="card-meta">Publico</span></a>
+        <a class="card public" href="presentacion-seller_v3.html"><span class="card-title">Presentacion Seller</span><span class="card-meta">Publico</span></a>
+        <a class="card public" href="simulador-seller_v12.html"><span class="card-title">Simulador Seller</span><span class="card-meta">Publico</span></a>
+      </div>
+    </section>
+
+    <section class="section" id="documentacion">
+      <div class="section-head">
+        <h2>Documentacion</h2>
+        <p class="section-note">Base institucional para ordenar la migracion, validar cambios y registrar decisiones.</p>
+      </div>
+      <div class="grid">
+        <a class="card doc" href="README.md"><span class="card-title">README</span><span class="card-meta">Proyecto</span></a>
+        <a class="card doc" href="CHANGELOG.md"><span class="card-title">Changelog</span><span class="card-meta">Historial</span></a>
+        <a class="card doc" href="docs/architecture.md"><span class="card-title">Arquitectura</span><span class="card-meta">Estructura futura</span></a>
+        <a class="card doc" href="docs/hub-map.md"><span class="card-title">Mapa del Hub</span><span class="card-meta">Inventario</span></a>
+        <a class="card doc" href="docs/roadmap.md"><span class="card-title">Roadmap</span><span class="card-meta">Etapas</span></a>
+        <a class="card doc" href="docs/test-matrix.md"><span class="card-title">Matriz de Validacion</span><span class="card-meta">QA</span></a>
+      </div>
+    </section>
+
+    <section class="transition" aria-label="Aviso de transicion">
+      <strong>Aviso de transicion</strong>
+      <p>Las paginas actuales se mantienen temporalmente en la raiz del repositorio hasta completar la migracion segura hacia `/internal` y `/public`. Este `index.html` no reemplaza, mueve ni modifica las paginas existentes; solo funciona como entrada institucional compatible con GitHub Pages.</p>
+    </section>
+  </main>
+</body>
+</html>

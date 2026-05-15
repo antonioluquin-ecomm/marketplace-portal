@@ -50,12 +50,21 @@ Resultado:
 
 Objetivo: definir la entrada principal del portal.
 
+Estado: completada la creacion de `index.html` oficial en raiz.
+
 Incluye:
 
 - crear `index.html`;
 - mantener temporalmente el hub versionado actual;
 - validar links principales;
 - documentar compatibilidad con GitHub Pages.
+
+Resultado:
+
+- `index.html` funciona como entrada institucional;
+- el hub versionado actual permanece intacto como referencia temporal;
+- los links apuntan a paginas actuales en raiz;
+- no se migraron paginas a `internal/` ni `public/`.
 
 ## Etapa 3: migracion de paginas internas
 
