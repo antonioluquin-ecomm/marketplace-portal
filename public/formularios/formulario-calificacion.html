@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calificación Inicial de Seller | Sporting Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --g: #5ea832;
+        --g2: #4a8a26;
+        --g-glow: rgba(94, 168, 50, 0.18);
+        --panel: #141a13;
+        --panel2: #192018;
+        --panel3: #1e261d;
+        --line: rgba(255, 255, 255, 0.09);
+        --line2: rgba(255, 255, 255, 0.05);
+        --text: #e8ede4;
+        --muted: #9dac94;
+        --muted2: #687662;
+        --warn: #ffb74d;
+        --danger: #d94040;
+        --info: #64b5f6;
+        --teal: #4db6ac;
+        --violet: #ce93d8;
+        --shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: Barlow, system-ui, sans-serif;
+        background: linear-gradient(180deg, #0b0f0b, #111711);
+        color: var(--text);
+        min-height: 100vh;
+        padding: 28px 16px;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+      }
+      .hero {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 18px;
+        box-shadow: var(--shadow);
+      }
+      .brand {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 25px;
+        margin-bottom: 6px;
+      }
+      .brand span {
+        color: var(--g);
+      }
+      h1 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 38px;
+        line-height: 1;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .intro-note {
+        display: grid;
+        gap: 8px;
+        margin-top: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .intro-note strong {
+        font-size: 13px;
+        color: var(--text);
+      }
+      .intro-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .badge.time {
+        background: rgba(94, 168, 50, 0.1);
+        border: 1px solid rgba(94, 168, 50, 0.25);
+        color: #b7e69d;
+      }
+      .badge.sections {
+        background: rgba(100, 181, 246, 0.1);
+        border: 1px solid rgba(100, 181, 246, 0.25);
+        color: #a8d4fb;
+      }
+      .badge.required {
+        background: rgba(255, 183, 77, 0.1);
+        border: 1px solid rgba(255, 183, 77, 0.25);
+        color: #ffd48a;
+      }
+      .seller-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 14px;
+        background: rgba(94, 168, 50, 0.12);
+        border: 1px solid rgba(94, 168, 50, 0.28);
+        color: #b7e69d;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .seller-chip.err {
+        background: rgba(217, 64, 64, 0.12);
+        border-color: rgba(217, 64, 64, 0.32);
+        color: #f2a0a0;
+      }
+      .seller-chip.hidden {
+        display: none;
+      }
+      .seller-identity {
+        display: none;
+        align-items: center;
+        gap: 14px;
+        margin-top: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .seller-identity.visible {
+        display: flex;
+      }
+      .seller-logo {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        object-fit: contain;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid var(--line);
+        padding: 6px;
+        flex-shrink: 0;
+      }
+      .seller-logo.hidden {
+        display: none;
+      }
+      .seller-initials {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        background: rgba(94, 168, 50, 0.14);
+        border: 1px solid rgba(94, 168, 50, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #b7e69d;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+      .seller-initials.hidden {
+        display: none;
+      }
+      .seller-eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--g);
+        margin-bottom: 2px;
+      }
+      .seller-name {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+      .seller-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .seller-id-small {
+        font-size: 11px;
+        color: var(--muted2);
+        margin-top: 3px;
+      }
+      .progress-box {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        margin-bottom: 16px;
+        background: rgba(13, 17, 13, 0.93);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .progress-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .progress-label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .progress-percent {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .bar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: var(--g);
+        transition: width 0.25s ease;
+      }
+      form {
+        display: grid;
+        gap: 16px;
+      }
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .section-title {
+        padding: 15px 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .section-title-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section-num {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: var(--g-glow);
+        border: 1px solid rgba(94, 168, 50, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--g);
+        flex-shrink: 0;
+      }
+      .section-label {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--g);
+      }
+      .section-tag {
+        color: var(--muted2);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .section-help {
+        padding: 13px 18px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+        background: rgba(255, 255, 255, 0.015);
+        border-bottom: 1px solid var(--line2);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        padding: 18px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .field.full {
+        grid-column: 1/-1;
+      }
+      label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        line-height: 1.2;
+      }
+      .req::after {
+        content: " *";
+        color: var(--warn);
+      }
+      small {
+        color: var(--muted2);
+        font-size: 11px;
+        line-height: 1.35;
+        display: block;
+      }
+      input,
+      select,
+      textarea {
+        font-family: Barlow, sans-serif;
+        width: 100%;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: var(--text);
+        padding: 11px 12px;
+        font-size: 14px;
+        outline: none;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--g);
+        box-shadow: 0 0 0 3px rgba(94, 168, 50, 0.13);
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--muted2);
+        font-size: 13px;
+      }
+      textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+      select option {
+        background: #111711;
+      }
+      .check-group,
+      .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 2px;
+      }
+      .check-group label,
+      .radio-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 38px;
+      }
+      .check-group input,
+      .radio-group input {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--g);
+        flex-shrink: 0;
+      }
+      .check-group label:has(input:checked),
+      .radio-group label:has(input:checked) {
+        background: var(--g-glow);
+        border-color: rgba(94, 168, 50, 0.4);
+        color: #b7e69d;
+      }
+      .conditional.hidden {
+        display: none !important;
+      }
+      .result-panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .result-head {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .result-title {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--g);
+        margin-bottom: 4px;
+      }
+      .result-sub {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .result-body {
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .result-card {
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .result-card.full {
+        grid-column: 1/-1;
+      }
+      .result-label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted2);
+        margin-bottom: 6px;
+      }
+      .result-value {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .result-detail {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        margin: 3px 4px 3px 0;
+      }
+      .pill.ok {
+        background: rgba(94, 168, 50, 0.1);
+        border-color: rgba(94, 168, 50, 0.25);
+        color: #b7e69d;
+      }
+      .pill.warn {
+        background: rgba(255, 183, 77, 0.1);
+        border-color: rgba(255, 183, 77, 0.25);
+        color: #ffd48a;
+      }
+      .pill.danger {
+        background: rgba(217, 64, 64, 0.1);
+        border-color: rgba(217, 64, 64, 0.28);
+        color: #f2a0a0;
+      }
+      .pill.info {
+        background: rgba(100, 181, 246, 0.1);
+        border-color: rgba(100, 181, 246, 0.25);
+        color: #a8d4fb;
+      }
+      .pill.teal {
+        background: rgba(77, 182, 172, 0.1);
+        border-color: rgba(77, 182, 172, 0.25);
+        color: #9de0d9;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+        margin-top: 2px;
+      }
+      .btn-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .btn {
+        border: none;
+        border-radius: 12px;
+        background: var(--g);
+        color: white;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 13px 22px;
+        cursor: pointer;
+        font-family: Barlow, sans-serif;
+        font-size: 13px;
+        transition:
+          background 0.15s,
+          opacity 0.15s;
+      }
+      .btn:hover {
+        background: var(--g2);
+      }
+      .btn.secondary {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--line);
+        color: var(--muted);
+      }
+      .btn.secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+      }
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .status {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .status.ok {
+        color: #b7e69d;
+        background: rgba(94,168,50,.10);
+        border: 1px solid rgba(94,168,50,.25);
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .status.err {
+        color: #f2a0a0;
+        background: rgba(217,64,64,.08);
+        border: 1px solid rgba(217,64,64,.22);
+        border-radius: 8px;
+        padding: 10px 14px;
+      }
+      .status.sending {
+        color: var(--muted);
+        font-style: italic;
+      }
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .status.ok { animation: fadeInUp .3s ease; }
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(8px);
+        background: var(--panel2);
+        border: 1px solid rgba(94, 168, 50, 0.3);
+        color: #b7e69d;
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.2s;
+        z-index: 1000;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      @media (max-width: 720px) {
+        body {
+          padding: 16px 10px;
+        }
+        h1 {
+          font-size: 30px;
+        }
+        .hero {
+          padding: 22px;
+        }
+        .grid,
+        .result-body {
+          grid-template-columns: 1fr;
+        }
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .btn-row {
+          justify-content: stretch;
+        }
+        .btn {
+          width: 100%;
+        }
+        .seller-identity {
+          align-items: flex-start;
+        }
+        .progress-box {
+          top: 0;
+          border-radius: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <div class="brand">Sporting <span>Marketplace</span></div>
+        <h1>Calificación Inicial de Seller</h1>
+        <p>
+          Este formulario permite relevar información básica del seller para
+          evaluar rápidamente su potencial, identificar el nivel de complejidad
+          y definir el camino inicial de integración dentro del Marketplace
+          Sporting.
+        </p>
+        <div class="intro-note">
+          <strong>Antes de completar</strong>
+          <p>
+            Esta instancia no reemplaza el relevamiento técnico completo. El
+            objetivo es contar con una primera lectura comercial y operativa
+            para decidir si corresponde avanzar a reunión guiada, análisis
+            técnico o incorporación al backlog.
+          </p>
+        </div>
+        <div class="intro-badges">
+          <span class="badge time">Tiempo estimado: 2–4 min</span
+          ><span class="badge sections">5 bloques simples</span
+          ><span class="badge required">Campos obligatorios marcados</span>
+        </div>
+        <div id="sellerIdentity" class="seller-identity">
+          <img
+            id="sellerLogo"
+            class="seller-logo hidden"
+            alt="Logo del seller"
+          />
+          <div id="sellerInitials" class="seller-initials">—</div>
+          <div>
+            <div class="seller-eyebrow">Calificación asociada a</div>
+            <div id="sellerNameView" class="seller-name">Validando seller…</div>
+            <div id="sellerMetaView" class="seller-meta"></div>
+            <div id="sellerIdView" class="seller-id-small"></div>
+          </div>
+        </div>
+        <div id="sellerChip" class="seller-chip">
+          Validando link del seller…
+        </div>
+      </header>
+
+      <div class="progress-box">
+        <div class="progress-top">
+          <div class="progress-label">Avance del formulario</div>
+          <div class="progress-percent" id="progressPercent">0%</div>
+        </div>
+        <div class="bar"><span id="progressBar"></span></div>
+      </div>
+
+      <form id="sellerForm">
+        <input type="hidden" name="seller_id" id="seller_id" />
+        <input type="hidden" name="tipo_formulario" value="calificacion" />
+
+        <section class="section" data-section="1">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">1</div>
+              <span class="section-label">Identificación</span>
+            </div>
+            <span class="section-tag">Datos básicos</span>
+          </div>
+          <div class="section-help">
+            Información mínima para identificar al seller y el contacto
+            principal.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label class="req">Nombre comercial / marca</label
+              ><input
+                name="nombre"
+                id="nombre"
+                required
+                placeholder="Ej: Adidas Argentina"
+              />
+            </div>
+            <div class="field">
+              <label class="req">Contacto principal</label
+              ><input
+                name="contacto_nombre"
+                required
+                placeholder="Nombre y apellido"
+              />
+            </div>
+            <div class="field">
+              <label class="req">Email de contacto</label
+              ><input
+                name="contacto_email"
+                type="email"
+                required
+                placeholder="nombre@empresa.com"
+              />
+            </div>
+            <div class="field">
+              <label>Teléfono / WhatsApp</label
+              ><input name="contacto_tel" placeholder="Ej: +54 9..." />
+            </div>
+          </div>
+        </section>
+
+        <section class="section" data-section="2">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">2</div>
+              <span class="section-label">Negocio</span>
+            </div>
+            <span class="section-tag">Oferta comercial</span>
+          </div>
+          <div class="section-help">
+            Datos simples para estimar volumen, categoría y tipo de seller.
+          </div>
+          <div class="grid">
+            <div class="field full">
+              <label class="req">Categorías principales que ofrecería</label
+              ><input
+                name="categorias"
+                id="categorias"
+                required
+                placeholder="Ej: calzado, indumentaria, accesorios deportivos"
+              />
+            </div>
+            <div class="field">
+              <label class="req">Cantidad aproximada de SKUs</label
+              ><select name="skus_estimados" required>
+                <option value="">Seleccionar</option>
+                <option>Menos de 100</option>
+                <option>100 - 500</option>
+                <option>500 - 2000</option>
+                <option>Más de 2000</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Tipo de seller</label
+              ><select name="tipo_seller">
+                <option value="">Seleccionar</option>
+                <option>Marca propia</option>
+                <option>Distribuidor oficial</option>
+                <option>Retailer multimarca</option>
+                <option>Fabricante</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" data-section="3">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">3</div>
+              <span class="section-label">Operación actual</span>
+            </div>
+            <span class="section-tag">Venta online</span>
+          </div>
+          <div class="section-help">
+            Permite entender si el seller ya opera digitalmente y en qué
+            canales.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label class="req">¿Actualmente vende online?</label>
+              <div class="radio-group">
+                <label
+                  ><input
+                    type="radio"
+                    name="vende_online"
+                    value="Sí"
+                    required
+                  />
+                  Sí</label
+                ><label
+                  ><input type="radio" name="vende_online" value="No" />
+                  No</label
+                ><label
+                  ><input
+                    type="radio"
+                    name="vende_online"
+                    value="En desarrollo"
+                  />
+                  En desarrollo</label
+                >
+              </div>
+            </div>
+            <div class="field">
+              <label class="req">Canales de venta actuales</label>
+              <div class="check-group">
+                <label
+                  ><input
+                    type="checkbox"
+                    name="canales_venta"
+                    value="Tienda online propia"
+                  />
+                  Tienda online propia</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="canales_venta"
+                    value="Marketplaces"
+                  />
+                  Marketplaces</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="canales_venta"
+                    value="Tiendas físicas"
+                  />
+                  Tiendas físicas</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="canales_venta"
+                    value="Redes sociales"
+                  />
+                  Redes sociales</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="canales_venta"
+                    value="Mayorista / B2B"
+                  />
+                  Mayorista / B2B</label
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" data-section="4">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">4</div>
+              <span class="section-label">Tecnología</span>
+            </div>
+            <span class="section-tag">Madurez inicial</span>
+          </div>
+          <div class="section-help">
+            Solo se releva el nivel necesario para orientar el modelo de
+            integración.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label class="req">Plataforma utilizada</label
+              ><select name="plataforma" id="plataforma" required>
+                <option value="">Seleccionar</option>
+                <option>VTEX</option>
+                <option>Shopify</option>
+                <option>WooCommerce</option>
+                <option>Tiendanube</option>
+                <option>Salesforce Commerce</option>
+                <option>Magento / Adobe Commerce</option>
+                <option>Otra</option>
+                <option>No tengo tienda online</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field conditional hidden" id="plataformaOtraWrap">
+              <label>Indicar plataforma</label
+              ><input
+                name="plataforma_otra"
+                placeholder="Ej: plataforma propia, Prestashop, etc."
+              />
+            </div>
+            <div class="field">
+              <label class="req">¿Tiene ERP / sistema de gestión?</label
+              ><select name="erp" required>
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Madurez técnica percibida</label
+              ><select name="madurez_tecnica">
+                <option value="">Seleccionar</option>
+                <option>Alta - Tiene equipo técnico / APIs</option>
+                <option>Media - Maneja archivos / sistemas</option>
+                <option>Baja - Operación manual</option>
+                <option>A definir</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" data-section="5">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">5</div>
+              <span class="section-label">Logística</span>
+            </div>
+            <span class="section-tag">Viabilidad operativa</span>
+          </div>
+          <div class="section-help">
+            Se pregunta el carrier porque impacta directamente en el esfuerzo de
+            integración logística.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label class="req">¿Realiza envíos a todo el país?</label
+              ><select name="envia_pais" required>
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcial / algunas zonas</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="req">Origen de despacho</label
+              ><select name="origen_despacho" required>
+                <option value="">Seleccionar</option>
+                <option>Un solo depósito</option>
+                <option>Más de un depósito</option>
+                <option>Tiendas físicas</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label class="req">Operador logístico actual</label>
+              <div class="check-group">
+                <label
+                  ><input
+                    type="checkbox"
+                    name="operador_logistico"
+                    value="Andreani"
+                  />
+                  Andreani</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="operador_logistico"
+                    value="OCA"
+                  />
+                  OCA</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="operador_logistico"
+                    value="Ocasa"
+                  />
+                  Ocasa</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="operador_logistico"
+                    value="Logística propia"
+                  />
+                  Logística propia</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="operador_logistico"
+                    value="Otros operadores"
+                    id="opOtros"
+                  />
+                  Otros operadores</label
+                ><label
+                  ><input
+                    type="checkbox"
+                    name="operador_logistico"
+                    value="A definir"
+                  />
+                  A definir</label
+                >
+              </div>
+            </div>
+            <div class="field full conditional hidden" id="otrosOperadoresWrap">
+              <label>Indicar otros operadores</label
+              ><input
+                name="otro_operador_logistico"
+                placeholder="Ej: Urbano, Correo Argentino, Chazki, operador local..."
+              />
+            </div>
+            <div class="field full">
+              <label>Comentarios adicionales</label
+              ><textarea
+                name="comentarios"
+                placeholder="Aclaraciones relevantes para evaluar el caso"
+              ></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="result-panel" id="resultPanel">
+          <div class="result-head">
+            <div>
+              <div class="result-title">Resultado preliminar</div>
+              <div class="result-sub">
+                Se calcula automáticamente según plataforma, volumen y
+                logística.
+              </div>
+            </div>
+          </div>
+          <div class="result-body">
+            <div class="result-card">
+              <div class="result-label">Clasificación</div>
+              <div class="result-value" id="clasificacionView">—</div>
+              <div class="result-detail" id="clasificacionDesc">
+                Completá los datos para obtener una recomendación.
+              </div>
+            </div>
+            <div class="result-card">
+              <div class="result-label">Modelo sugerido</div>
+              <div class="result-value" id="modeloView">—</div>
+              <div class="result-detail" id="modeloDesc">
+                Se orienta el camino inicial de integración.
+              </div>
+            </div>
+            <div class="result-card full">
+              <div class="result-label">Alertas / consideraciones</div>
+              <div id="alertasView">
+                <span class="pill">Sin datos suficientes</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="actions">
+          <div class="status" id="statusMsg">
+            Completá el formulario. La calificación quedará asociada al seller
+            indicado arriba.
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn secondary" onclick="copySummary()">
+              Copiar resumen</button
+            ><button type="reset" class="btn secondary">Limpiar</button
+            ><button type="submit" class="btn" id="submitBtn">
+              Enviar calificación
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="toast" id="toast">Copiado</div>
+
+    <script>
+      const ENDPOINT_URL =
+        "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
+      const SELLERS_CSV_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv";
+
+      const params = new URLSearchParams(window.location.search);
+      const sellerId = (params.get("seller_id") || "").trim();
+      const form = document.getElementById("sellerForm");
+      const sellerInput = document.getElementById("seller_id");
+      const submitBtn = document.getElementById("submitBtn");
+      const statusMsg = document.getElementById("statusMsg");
+      const chip = document.getElementById("sellerChip");
+      const sellerIdentity = document.getElementById("sellerIdentity");
+      const sellerLogo = document.getElementById("sellerLogo");
+      const sellerInitials = document.getElementById("sellerInitials");
+      const sellerNameView = document.getElementById("sellerNameView");
+      const sellerMetaView = document.getElementById("sellerMetaView");
+      const sellerIdView = document.getElementById("sellerIdView");
+      const progressBar = document.getElementById("progressBar");
+      const progressPercent = document.getElementById("progressPercent");
+      const plataforma = document.getElementById("plataforma");
+      const plataformaOtraWrap = document.getElementById("plataformaOtraWrap");
+      const opOtros = document.getElementById("opOtros");
+      const otrosOperadoresWrap = document.getElementById(
+        "otrosOperadoresWrap",
+      );
+
+      function norm(v) {
+        return String(v || "")
+          .trim()
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-z0-9]+/g, "_")
+          .replace(/^_+|_+$/g, "");
+      }
+      function clean(v) {
+        return String(v || "").trim();
+      }
+      function safeUrl(u) {
+        const v = String(u || "").trim();
+        if (!v) return "";
+        try {
+          const url = new URL(v, window.location.href);
+          return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+        } catch (e) {
+          return "";
+        }
+      }
+      function initials(name) {
+        const parts = String(name || "")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+        if (!parts.length) return "—";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+      function parseCSV(text) {
+        const rows = [];
+        let row = [],
+          cell = "",
+          q = false;
+        for (let i = 0; i < text.length; i++) {
+          const c = text[i],
+            n = text[i + 1];
+          if (c === '"') {
+            if (q && n === '"') {
+              cell += '"';
+              i++;
+            } else q = !q;
+          } else if (c === "," && !q) {
+            row.push(cell);
+            cell = "";
+          } else if ((c === "\n" || c === "\r") && !q) {
+            if (c === "\r" && n === "\n") i++;
+            row.push(cell);
+            if (row.some((v) => String(v).trim())) rows.push(row);
+            row = [];
+            cell = "";
+          } else cell += c;
+        }
+        row.push(cell);
+        if (row.some((v) => String(v).trim())) rows.push(row);
+        return rows;
+      }
+      function mapRows(matrix) {
+        const valid = matrix.filter((r) =>
+          r.some((v) => String(v || "").trim()),
+        );
+        const hi = valid.findIndex((r) =>
+          r.some((v) => norm(v).includes("seller_id")),
+        );
+        if (hi === -1) return [];
+        const headers = valid[hi].map((h) => norm(h));
+        return valid
+          .slice(hi + 1)
+          .map((r) => {
+            const o = {};
+            headers.forEach((h, i) => (o[h] = String(r[i] || "").trim()));
+            return o;
+          })
+          .filter((o) => o.seller_id);
+      }
+      function readSellerName(s) {
+        return (
+          s.seller_nombre ||
+          s.nombre ||
+          s.nombre_marca ||
+          s.nombre___marca ||
+          s.marca ||
+          ""
+        );
+      }
+
+      async function loadSellerIdentity() {
+        if (!sellerId) {
+          chip.textContent = "Link inválido: falta seller_id";
+          chip.classList.add("err");
+          submitBtn.disabled = true;
+          setStatus(
+            "No se detectó seller_id en la URL. Solicitá un link válido al equipo de Sporting.",
+            "err",
+          );
+          return;
+        }
+        sellerInput.value = sellerId;
+        chip.textContent = "Validando seller " + sellerId + "…";
+        try {
+          const res = await fetch(SELLERS_CSV_URL + "&_ts=" + Date.now(), {
+            cache: "no-store",
+          });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const rows = mapRows(parseCSV(await res.text()));
+          const seller = rows.find(
+            (r) =>
+              String(r.seller_id || "")
+                .trim()
+                .toUpperCase() === sellerId.toUpperCase(),
+          );
+          if (!seller) {
+            chip.textContent = "No se encontró el seller " + sellerId;
+            chip.classList.add("err");
+            submitBtn.disabled = true;
+            setStatus(
+              "El seller_id existe en el link, pero no fue encontrado en la hoja sellers. Revisá el ID o la publicación del CSV.",
+              "err",
+            );
+            return;
+          }
+          renderSellerIdentity(seller);
+        } catch (err) {
+          console.warn(err);
+          chip.textContent = "Calificación asociada a " + sellerId;
+          setStatus(
+            "No se pudo cargar el detalle del seller, pero el formulario puede enviarse con el seller_id del link.",
+          );
+        }
+      }
+
+      function renderSellerIdentity(seller) {
+        const name = readSellerName(seller) || sellerId;
+        const category =
+          seller.categoria ||
+          seller.categoria_principal ||
+          seller.categorias ||
+          "";
+        const site = seller.sitio_objetivo || seller.sitio || "";
+        const logoUrl = safeUrl(
+          seller.logo_url || seller.logo || seller.url_logo,
+        );
+        sellerNameView.textContent = name;
+        sellerMetaView.textContent = [category, site]
+          .filter(Boolean)
+          .join(" · ");
+        sellerIdView.textContent = "ID interno: " + sellerId;
+        sellerInitials.textContent = initials(name);
+        if (logoUrl) {
+          sellerLogo.src = logoUrl;
+          sellerLogo.onload = () => {
+            sellerLogo.classList.remove("hidden");
+            sellerInitials.classList.add("hidden");
+          };
+          sellerLogo.onerror = () => {
+            sellerLogo.classList.add("hidden");
+            sellerInitials.classList.remove("hidden");
+          };
+        } else {
+          sellerLogo.classList.add("hidden");
+          sellerInitials.classList.remove("hidden");
+        }
+        sellerIdentity.classList.add("visible");
+        chip.classList.add("hidden");
+        const nombreInput = document.querySelector('[name="nombre"]');
+        const categoriasInput = document.querySelector('[name="categorias"]');
+        if (nombreInput && !nombreInput.value && name !== sellerId)
+          nombreInput.value = name;
+        if (categoriasInput && !categoriasInput.value && category)
+          categoriasInput.value = category;
+        setStatus(
+          "Completá el formulario. La calificación quedará asociada al seller indicado arriba.",
+        );
+        updateAll();
+      }
+
+      function formToObject() {
+        const fd = new FormData(form);
+        const data = {};
+        for (const [k, v] of fd.entries()) {
+          if (data[k]) data[k] += ", " + v;
+          else data[k] = v;
+        }
+        return data;
+      }
+      function hasCarrier() {
+        return !!form.querySelector('input[name="operador_logistico"]:checked');
+      }
+      function getChecked(name) {
+        return [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(
+          (i) => i.value,
+        );
+      }
+      function low(s) {
+        return norm(s).replace(/_/g, " ");
+      }
+
+      function evaluateSeller() {
+        const d = formToObject();
+        const plataforma = low(d.plataforma);
+        const skus = low(d.skus_estimados);
+        const envio = low(d.envia_pais);
+        const origen = low(d.origen_despacho);
+        const carriers = getChecked("operador_logistico");
+        const carrierText = low(carriers.join(" "));
+        const usaVtex = plataforma.includes("vtex");
+        const carrierIntegrado =
+          carrierText.includes("andreani") ||
+          carrierText.includes("oca") ||
+          carrierText.includes("ocasa");
+        const otroCarrier =
+          carrierText.includes("otros") ||
+          carrierText.includes("propia") ||
+          low(d.otro_operador_logistico).length > 0;
+        const multi =
+          origen.includes("mas de un") ||
+          origen.includes("mas de") ||
+          origen.includes("tiendas");
+        const noPais = envio.includes("no") || envio.includes("parcial");
+        const altoVol =
+          skus.includes("mas de 2000") || skus.includes("mas_de_2000");
+        let clasificacion = "Apto con relevamiento técnico",
+          modelo = "A definir en relevamiento",
+          complejidad = 2,
+          desc =
+            "Requiere reunión guiada para confirmar alcance técnico y operativo.";
+        const alertas = [];
+        if (usaVtex && carrierIntegrado && !multi && !noPais) {
+          clasificacion = "Apto rápido";
+          modelo = "VTEX → VTEX";
+          complejidad = 1;
+          desc =
+            "Tiene condiciones iniciales favorables para avanzar con baja fricción.";
+        } else if (usaVtex) {
+          modelo = "VTEX → VTEX";
+        } else if (plataforma.includes("no tengo")) {
+          modelo = "Manual / carga asistida";
+        } else if (
+          plataforma.includes("shopify") ||
+          plataforma.includes("woocommerce") ||
+          plataforma.includes("tiendanube") ||
+          plataforma.includes("salesforce") ||
+          plataforma.includes("magento")
+        ) {
+          modelo = "API / integración a evaluar";
+        }
+        if (altoVol) {
+          complejidad++;
+          alertas.push("Volumen alto de SKUs");
+        }
+        if (multi) {
+          complejidad++;
+          alertas.push("Operación multi-origen");
+        }
+        if (noPais) {
+          complejidad++;
+          alertas.push("Cobertura logística limitada");
+        }
+        if (otroCarrier && !carrierIntegrado) {
+          complejidad++;
+          alertas.push("Carrier no integrado o a validar");
+        }
+        if (!hasCarrier()) alertas.push("Falta operador logístico");
+        if (complejidad >= 4) {
+          clasificacion = "Complejo / estratégico";
+          desc =
+            "Conviene avanzar con análisis técnico y operativo antes de comprometer fechas.";
+        }
+        document.getElementById("clasificacionView").textContent =
+          clasificacion;
+        document.getElementById("clasificacionDesc").textContent = desc;
+        document.getElementById("modeloView").textContent = modelo;
+        document.getElementById("modeloDesc").textContent = usaVtex
+          ? "Puede evaluarse conexión VTEX → VTEX."
+          : "El modelo debe confirmarse con el relevamiento técnico.";
+        const av = document.getElementById("alertasView");
+        av.innerHTML = (
+          alertas.length ? alertas : ["Sin alertas críticas iniciales"]
+        )
+          .map(
+            (a) =>
+              `<span class="pill ${a.includes("Sin alertas") ? "ok" : a.includes("Carrier") ? "danger" : "warn"}">${a}</span>`,
+          )
+          .join("");
+        return { data: d, clasificacion, modelo, complejidad, alertas };
+      }
+
+      function updateProgress() {
+        const required = [...form.querySelectorAll("[required]")];
+        let total = required.length + 1,
+          done = required.filter((el) => {
+            if (el.type === "radio")
+              return !!form.querySelector(`input[name="${el.name}"]:checked`);
+            return clean(el.value) !== "";
+          }).length;
+        if (hasCarrier()) done++;
+        const pct = Math.round((done / total) * 100);
+        progressBar.style.width = pct + "%";
+        progressPercent.textContent = pct + "%";
+      }
+      function updateVisibility() {
+        plataformaOtraWrap.classList.toggle(
+          "hidden",
+          plataforma.value !== "Otra",
+        );
+        otrosOperadoresWrap.classList.toggle("hidden", !opOtros.checked);
+      }
+      function updateAll() {
+        updateVisibility();
+        updateProgress();
+        evaluateSeller();
+      }
+      function setStatus(text, type = "") {
+        // textContent para mensajes de error/estado (seguro)
+        // innerHTML se usa solo en el bloque de éxito donde controlamos el string
+        statusMsg.textContent = text;
+        statusMsg.className = "status" + (type ? " " + type : "");
+      }
+      function buildSummary() {
+        const ev = evaluateSeller(),
+          d = ev.data;
+        return `Calificación inicial de Seller\n\nSeller ID: ${sellerId || "—"}\nSeller: ${d.nombre || "—"}\nContacto: ${d.contacto_nombre || "—"} - ${d.contacto_email || "—"}\nCategorías: ${d.categorias || "—"}\nSKUs estimados: ${d.skus_estimados || "—"}\nPlataforma: ${d.plataforma || "—"}${d.plataforma_otra ? ` (${d.plataforma_otra})` : ""}\nERP / sistema: ${d.erp || "—"}\nEnvíos país: ${d.envia_pais || "—"}\nOrigen despacho: ${d.origen_despacho || "—"}\nOperador logístico: ${d.operador_logistico || "—"}\nOtro operador: ${d.otro_operador_logistico || "—"}\n\nResultado sugerido: ${ev.clasificacion}\nModelo sugerido: ${ev.modelo}\nAlertas: ${ev.alertas.join(" | ") || "—"}\n\nComentarios: ${d.comentarios || "—"}`;
+      }
+      function copySummary() {
+        navigator.clipboard
+          .writeText(buildSummary())
+          .then(() => showToast("Resumen copiado"));
+      }
+      function showToast(text) {
+        const toast = document.getElementById("toast");
+        toast.textContent = text;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2200);
+      }
+
+      form.addEventListener("input", updateAll);
+      form.addEventListener("change", updateAll);
+      form.addEventListener("reset", () => setTimeout(updateAll, 0));
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const ev = evaluateSeller();
+        if (!sellerId) {
+          setStatus("Falta seller_id en la URL.", "err");
+          return;
+        }
+        if (!form.checkValidity() || !hasCarrier()) {
+          form.reportValidity();
+          setStatus("Faltan campos obligatorios.", "err");
+          return;
+        }
+        const payload = {
+          ...ev.data,
+          seller_id: sellerId,
+          tipo_formulario: "calificacion",
+          resultado_sugerido: ev.clasificacion,
+          modelo_sugerido: ev.modelo,
+          riesgo_logistico: ev.alertas.some(
+            (a) => a.includes("Carrier") || a.includes("Cobertura"),
+          )
+            ? "Alto"
+            : ev.alertas.length
+              ? "Medio"
+              : "Bajo",
+          clasificacion_inicial: ev.clasificacion,
+          complejidad_score: ev.complejidad,
+          alertas: ev.alertas.join(" | "),
+          fecha_evaluacion: new Date().toISOString(),
+        };
+        try {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Enviando…";
+          statusMsg.textContent = "Enviando calificación…";
+          statusMsg.className = "status sending";
+          const res = await fetch(ENDPOINT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload),
+          });
+          const json = await res.json();
+          if (json.status === "ok") {
+            // ── CONFIRMACIÓN COMPLETA ──────────────────────────────────
+            // 1. Mensaje claro con próximo paso
+            const sellerNombre = form.querySelector('[name="nombre"]')?.value?.trim() || "";
+            const nombreDisplay = sellerNombre ? ` para <strong>${sellerNombre}</strong>` : "";
+            statusMsg.innerHTML =
+              `✓ Calificación enviada correctamente${nombreDisplay}. ` +
+              `El equipo de Sporting Marketplace revisará la información ` +
+              `y se pondrá en contacto a la brevedad.`;
+            statusMsg.className = "status ok";
+
+            // 2. Botón: bloqueado con texto de confirmación
+            submitBtn.textContent = "Enviado ✓";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.6";
+            submitBtn.style.cursor = "default";
+
+            // 3. Scroll suave al mensaje de confirmación
+            statusMsg.scrollIntoView({ behavior: "smooth", block: "center" });
+
+            showToast("✓ Calificación enviada");
+          } else throw new Error(json.message || "Error desconocido");
+        } catch (err) {
+          setStatus("No se pudo enviar: " + err.message + ". Intentá nuevamente.", "err");
+          submitBtn.disabled = false;
+        }
+      });
+
+      loadSellerIdentity();
+      updateAll();
+    </script>
+  </body>
+</html>

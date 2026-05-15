@@ -235,6 +235,20 @@ Resultado:
 - se preservan `seller_id`, logos, CTA, tarifas, overrides, escenarios y calculos;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 4.3B: migracion Formulario de Calificacion
+
+Objetivo: copiar el formulario publico de calificacion a su ubicacion futura sin alterar envio ni validaciones.
+
+Estado: completada sin submit real.
+
+Resultado:
+
+- `formulario-calificacion_v2.html` copiado a `public/formularios/formulario-calificacion.html`;
+- `index.html` enlaza a la nueva ruta publica;
+- Presentacion Seller, Simulador Seller y Backlog ya usan la ruta publica futura;
+- se preservan endpoint, CSV sellers, `tipo_formulario`, payload, validaciones, `seller_id`, logo, personalizacion y submit;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 ## Etapa 5: assets compartidos
 
 Objetivo: ordenar recursos visuales y estaticos.

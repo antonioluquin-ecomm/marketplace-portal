@@ -4,6 +4,38 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 4.3B migracion Formulario de Calificacion
+
+Tipo de cambio: estructural.
+
+Estado: migracion controlada completada sin submit real.
+
+Cambios incluidos:
+
+- Copia de `formulario-calificacion_v2.html` hacia `public/formularios/formulario-calificacion.html`.
+- Actualizacion de `index.html` para enlazar preferentemente a la nueva ruta publica.
+- Validacion estatica de preservacion de endpoint, CSV, `tipo_formulario`, submit, `seller_id`, logo y personalizacion.
+- Actualizacion de roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion del archivo original.
+- Sin modificaciones en formulario de relevamiento.
+- Sin modificaciones en simuladores.
+- Sin modificaciones en Presentacion Seller.
+- Sin modificaciones en gestion de sellers.
+- Sin modificaciones en Apps Script.
+- Sin cambios en `ENDPOINT_URL`, `SELLERS_CSV_URL`, payload, `tipo_formulario`, validaciones, `seller_id`, logo, personalizacion ni submit.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+- Sin ejecucion de submit real.
+
+Validacion:
+
+- Se confirmo que la copia existe y carga como HTML.
+- Se confirmo que el original sigue existiendo en raiz.
+- Se confirmo que `ENDPOINT_URL`, `SELLERS_CSV_URL`, `tipo_formulario: "calificacion"`, fetch POST, `res.json()` y `json.status === "ok"` siguen presentes.
+
 ## 2026-05-15 - Etapa 4.2 migracion Simulador Seller publico
 
 Tipo de cambio: estructural.
