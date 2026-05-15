@@ -4,6 +4,55 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5K auditoria de logos en Backlog y Gestion
+
+Tipo de cambio: auditoria/documental.
+
+Estado: auditoria completada sin cambios funcionales.
+
+Cambios incluidos:
+
+- Auditoria de `internal/backlog/backlog-sellers.html`.
+- Auditoria de `internal/backlog/gestion-sellers.html`.
+- Documentacion del patron actual de consumo de logos: `LOGO_BASE_URL`, `LOGO_EXTENSIONS`, `logoCandidates`, `logoHTML`, `handleLogoError`, `handleModalLogoError`, `updateLogo`, fallback por iniciales.
+- Documentacion de diferencias entre Backlog (inline `CONFIG`, multi-superficie, solo lectura) y Gestion (`CFG` via `assets/js/config.js`, preview unica, escritura real).
+- Documentacion de riesgo operativo de la URL absoluta a GitHub Pages externo (`sporting-marketplace`) que hoy no usa `assets/logos/` local.
+- Clasificacion de riesgos: bajo / medio / alto / critico.
+- Propuesta de estrategia segura: fallback local sin tocar `LOGO_BASE_URL` ni `config.js`.
+- Reasignacion formal de la Etapa 5K a esta auditoria (la mencion previa en 5G queda cubierta por la matriz de Etapa 4.5).
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en HTML.
+- Sin cambios de referencias.
+- Sin modificaciones en `config.js`.
+- Sin modificaciones en `assets/js/config.js`.
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin cambios en Apps Script.
+- Sin cambios de endpoints, payloads, validaciones, `seller_id`, generacion o reserva de IDs.
+- Sin cambios en submit ni `localStorage`.
+- Sin modificaciones en formularios publicos, simuladores ni Presentacion Seller.
+- Sin redirects.
+- Sin extraccion de CSS o JavaScript.
+
+Validacion:
+
+- Se confirmo que Backlog declara `CONFIG.LOGO_BASE_URL` inline y no carga `assets/js/config.js`.
+- Se confirmo que Gestion carga `assets/js/config.js` y usa `FALLBACK_CONFIG` como respaldo.
+- Se confirmo que ambas paginas resuelven logos por `seller_id` y no consumen `logo_url` del CSV en el render actual.
+- Se confirmo que ambas tienen fallback por iniciales.
+- Se confirmo que la URL absoluta apunta a `antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/`, externa a este repositorio.
+- Se confirmo que no se modifico ningun archivo HTML ni de configuracion.
+
+Pendiente:
+
+- Etapa 5L: aplicar fallback local solo en Backlog.
+- Etapa 5M: aplicar fallback local solo en Gestion despues de validar 5L.
+- Smoke test manual de Backlog y Gestion en el contexto de Etapa 4.5.
+
 ## 2026-05-15 - Etapa 5J fallback local Formulario de Relevamiento
 
 Tipo de cambio: piloto controlado.

@@ -521,6 +521,49 @@ Incluye:
 
 Debe hacerse por pagina y con comparacion visual/manual.
 
+## Etapa 5K: auditoria de consumo de logos en Backlog y Gestion
+
+Objetivo: auditar el consumo de logos en `internal/backlog/backlog-sellers.html` e `internal/backlog/gestion-sellers.html` antes de extender el patron de fallback local validado en Etapas 5E, 5F, 5H y 5J.
+
+Estado: completada a nivel documental.
+
+Reasignacion de numeracion:
+
+- La unica mencion previa a `5K` aparecia en la seccion 5G de `docs/assets-strategy.md` como recomendacion historica de smoke test de Relevamiento. Ese smoke test queda cubierto por la matriz de Etapa 4.5 (`docs/test-matrix.md`). La Etapa 5K efectiva queda formalmente asignada a esta auditoria.
+
+Resultado:
+
+- auditado `internal/backlog/backlog-sellers.html`;
+- auditado `internal/backlog/gestion-sellers.html`;
+- documentado que Backlog tiene `CONFIG` inline con `LOGO_BASE_URL` hardcodeado y no carga `assets/js/config.js`;
+- documentado que Gestion carga `assets/js/config.js` y resuelve `LOGO_BASE_URL` con fallback inline `FALLBACK_CONFIG`;
+- documentado que ambas paginas dependen solo de `seller_id` y no consumen `logo_url` del CSV en el render actual;
+- documentado que ambas usan 5 extensiones (`png, webp, jpg, jpeg, svg`) y fallback final por iniciales;
+- documentado que la URL absoluta actual apunta a un GitHub Pages externo (`sporting-marketplace`) y no consume los logos locales de `assets/logos/`;
+- clasificado riesgo por accion (bajo / medio / alto / critico);
+- documentadas diferencias relevantes entre Backlog (multi-superficie, solo lectura) y Gestion (preview unica, escritura real);
+- propuesto patron de fallback local como estrategia segura, manteniendo URL absoluta como prioridad;
+- propuesto orden futuro: Etapa 5L para Backlog primero, Etapa 5M para Gestion despues;
+- mantenidos sin cambios `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script, endpoints, payloads, validaciones, `seller_id`, formularios, simuladores y Presentacion Seller.
+
+Alcance excluido:
+
+- Sin modificaciones en HTML.
+- Sin cambios de referencias.
+- Sin extraccion de CSS o JavaScript.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin cambios en `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`.
+- Sin tocar Apps Script, endpoints, payloads, validaciones o `seller_id`.
+- Sin implementacion de fallback local en Backlog ni en Gestion todavia.
+- Sin redirects.
+
+Pendiente:
+
+- Etapa 5L: aplicar fallback local solo en `internal/backlog/backlog-sellers.html`, manteniendo `LOGO_BASE_URL` actual como prioridad.
+- Etapa 5M: aplicar fallback local en `internal/backlog/gestion-sellers.html` solo despues de validar 5L.
+- Mantener sin cambios `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script, submit, payload, `seller_id` y archivos legacy.
+- Ejecutar smoke test manual de Backlog y Gestion como parte de la matriz de Etapa 4.5 antes y despues de 5L y 5M.
+
 ## Etapa 7: legacy y redirects
 
 Objetivo: cerrar la migracion sin romper referencias existentes.

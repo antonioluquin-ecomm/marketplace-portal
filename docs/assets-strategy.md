@@ -839,6 +839,178 @@ Validaciones manuales pendientes:
 - Confirmar condicionales y progreso sin corregir `pctSec`.
 - No ejecutar submit real.
 
+### Etapa 5K: auditoria de consumo de logos en Backlog y Gestion
+
+Estado: completada a nivel documental.
+
+Reasignacion de numeracion:
+
+- La unica mencion previa a `5K` aparecia en la seccion 5G como recomendacion historica para un smoke test manual de Relevamiento. Ese smoke test queda cubierto por la matriz de Etapa 4.5 (`docs/test-matrix.md`) y por las validaciones pendientes registradas en 5J.
+- A partir de esta entrada, la Etapa 5K queda formalmente asignada a la auditoria documental del consumo de logos en `internal/backlog/backlog-sellers.html` e `internal/backlog/gestion-sellers.html`.
+
+Alcance:
+
+- Solo auditoria.
+- Sin cambios en HTML.
+- Sin cambios en `config.js` ni `assets/js/config.js`.
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin cambios en Apps Script, endpoints, payloads, validaciones ni `seller_id`.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin redirects.
+- Sin cambios en formularios, simuladores ni Presentacion Seller.
+- Sin implementacion de fallback local en estas paginas todavia.
+
+Paginas auditadas:
+
+- `internal/backlog/backlog-sellers.html` (998 lineas).
+- `internal/backlog/gestion-sellers.html` (232 lineas).
+
+Hallazgos en Backlog:
+
+- No carga `assets/js/config.js`. Tiene un bloque `CONFIG` inline declarado al inicio del script (alrededor de la linea 369) con `LOGO_BASE_URL` hardcodeado a `https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/`.
+- Declara `LOGO_EXTENSIONS = ["png","webp","jpg","jpeg","svg"]` y construye candidatos por extension dentro de `logoCandidates(sellerId)`.
+- Helper `safeAssetId(id)` normaliza a minusculas y reemplaza caracteres no `[a-z0-9_-]` por `-` antes de armar la URL.
+- `logoHTML(s, cls, fallbackCls, sizeStyle)` retorna un `<img>` con `data-logo-candidates`, `data-logo-index`, `loading="lazy"` y `onerror="handleLogoError(...)"`.
+- `handleLogoError(img, initials, fallbackCls, sizeStyle)` cicla por la lista de candidatos y, agotada la lista, reemplaza el `<img>` por un `<div>` con iniciales.
+- El modal de detalle usa `m-logo` y `handleModalLogoError(logo, ini)` con el mismo patron de ciclo de candidatos + iniciales.
+- Mapea `logo_url` en `ALIASES` (`["logo_url","logo","url_logo"]`) pero `logoHTML()` no consume `s.logo_url`: la resolucion de logo se hace solo a partir de `seller_id` y `LOGO_BASE_URL`. La columna del CSV se ignora en el render actual.
+- Los logos se renderizan en multiples superficies: cards del kanban, tabla y modal.
+- Fallback final por iniciales se calcula con `sellerInitials(nombre)`.
+
+Hallazgos en Gestion de Sellers:
+
+- Carga `assets/js/config.js` via `<script src="../../assets/js/config.js">` en linea 10.
+- Define `FALLBACK_CONFIG` inline con `ASSETS.LOGO_BASE_URL` hardcodeado al mismo dominio absoluto que Backlog.
+- Resuelve `LOGO_BASE_URL` con prioridad `CFG.ASSETS.LOGO_BASE_URL || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`, normalizando barra final.
+- `logoCandidates(id)` construye candidatos con las mismas 5 extensiones y `encodeURIComponent(sid.toLowerCase())`.
+- `updateLogo(box, sellerId, name)` inserta un `<img>` en `#logoPreview`; en `img.onerror` cicla por candidatos y, agotada la lista, reemplaza con `<span class="logo-fallback">` por iniciales.
+- Renderiza un unico logo en la preview del seller en edicion. No hay tabla, kanban ni modal con logo.
+- No consume `logo_url` del CSV: la pagina es de gestion/escritura y solo genera la URL desde `seller_id`.
+- Tiene escritura real via Apps Script (`fetch(APPS_SCRIPT_URL, {method:"POST", mode:"no-cors", ...})`), reserva de IDs en `localStorage` (`mp_reserved_seller_ids`) y next-id calculado con `nextSellerId()`.
+
+Resumen comparativo:
+
+| Aspecto | Backlog | Gestion de Sellers |
+|---|---|---|
+| Carga `assets/js/config.js` | No | Si |
+| `LOGO_BASE_URL` | Inline en `CONFIG` | `CFG.ASSETS.LOGO_BASE_URL` o `FALLBACK_CONFIG` |
+| Apunta a | URL absoluta GitHub Pages externa (`sporting-marketplace`) | URL absoluta GitHub Pages externa (`sporting-marketplace`) |
+| Extensiones probadas | png, webp, jpg, jpeg, svg | png, webp, jpg, jpeg, svg |
+| Normalizacion de id | `safeAssetId`: trim + lower + `[^a-z0-9_-] -> -` | `clean().toLowerCase()` + `encodeURIComponent` |
+| Consume `logo_url` del CSV | No (mapeado en ALIASES pero no usado) | No |
+| Superficies con logo | Kanban cards, tabla, modal | Preview unica |
+| Manejo de error | `handleLogoError` global y `handleModalLogoError` | Closure local en `img.onerror` |
+| Fallback final | `<div class="seller-initials">` o `<div class="${fallbackCls}">` | `<span class="logo-fallback">` |
+| Dependencia de `seller_id` | Si | Si |
+| Escritura real | No | Si (Apps Script + `localStorage`) |
+
+Riesgos clasificados:
+
+- Bajo:
+  - Documentacion adicional sobre el patron de logos.
+  - Cualquier auditoria de codigo sin tocar archivos.
+- Medio:
+  - Insertar fallback local solo en Backlog sin tocar `LOGO_BASE_URL`. Backlog tiene su propio bloque `CONFIG` y se puede ampliar el helper sin afectar `assets/js/config.js`.
+  - Insertar fallback local solo en Gestion preservando submit. La preview es independiente del payload.
+- Alto:
+  - Modificar `LOGO_BASE_URL` global en `assets/js/config.js`. Cualquier cambio afecta inmediatamente a Gestion y a cualquier futura pagina que consuma config, y desincroniza con el bloque inline del Backlog.
+  - Modificar el bloque `CONFIG` inline del Backlog (afecta tambien `SELLERS_URL`, `RELEVAMIENTOS_URL`, `PUBLIC_BASE_URL` y rutas operativas).
+  - Apuntar a la URL externa (`antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/`) sin confirmar que ese GitHub Pages externo sirve los mismos logos que `assets/logos/` de este repositorio.
+- Critico:
+  - Tocar submit, payload, endpoint, validaciones, `seller_id`, `nextSellerId`, `reserveSellerId` o `localStorage` en Gestion. Ningun cambio de logo justifica acercarse a ese codigo.
+  - Romper el fallback por iniciales en Backlog. Es la salida segura cuando no hay logo y se invoca en cards, tabla y modal.
+  - Cambios masivos simultaneos en Backlog y Gestion en la misma etapa.
+
+Diferencias relevantes entre las dos paginas:
+
+- Backlog renderiza muchos logos por carga (cards + tabla + modal). El costo de equivocarse es visual transversal.
+- Gestion renderiza un solo logo en la preview, pero es la pagina con mayor riesgo funcional (escritura real, IDs, payload).
+- Backlog es operacionalmente de solo lectura sobre CSV. Gestion escribe via Apps Script.
+- Backlog no depende de `assets/js/config.js`. Gestion si.
+- Backlog usa helper global `handleLogoError`. Gestion usa closure local en `img.onerror`.
+
+Impacto de cambiar referencias:
+
+- Solo en Backlog: aislado al archivo migrado; legacy `backlog-sellers_v27.html` queda intacto. Riesgo concentrado en render visual.
+- Solo en Gestion: aislado al archivo migrado; legacy `gestion-sellers_v7.html` queda intacto. Riesgo concentrado en preview, sin tocar submit.
+- En `assets/js/config.js` global: impacta inmediatamente a Gestion migrada y a cualquier futura pagina que consuma `CFG.ASSETS.LOGO_BASE_URL`. No impacta Backlog (que no lo consume).
+- En `config.js` raiz: no impacta ninguna pagina hoy, pero compromete la estrategia de legacy/redirects.
+
+Riesgos operativos identificados:
+
+- La URL absoluta actual de `LOGO_BASE_URL` apunta a un GitHub Pages externo (`sporting-marketplace`), no a este repositorio (`marketplace-portal`). Si ese sitio externo deja de servir los logos, ambas paginas caen al fallback por iniciales. La copia local en `assets/logos/` no se consume hoy.
+- Cualquier modificacion en el bloque `CONFIG` inline del Backlog implica revisar tambien `SELLERS_URL`, `RELEVAMIENTOS_URL`, `PUBLIC_BASE_URL`, `PRESENTACION_PATH`, `CALIFICACION_PATH`, `RELEVAMIENTO_PATH` y `SIMULADOR_SELLER_PATH`. No es seguro tocar solo un campo.
+- Cualquier modificacion en `assets/js/config.js` requiere validar que Gestion siga resolviendo CFG, APPS_SCRIPT_URL, SELLERS_CSV_URL y ROUTES antes de tocar el campo de logo.
+
+Propuesta de estrategia segura para futura migracion:
+
+1. No tocar `LOGO_BASE_URL` global todavia.
+2. No tocar `config.js` raiz ni `assets/js/config.js` como primer paso.
+3. Aplicar la migracion como fallback local (no como cambio global de referencia). Mantener la URL absoluta como prioridad para no romper el comportamiento actual y agregar un fallback a `../../assets/logos/{seller_id}.png` solo si la URL absoluta no resuelve.
+4. Aplicar primero en Backlog en una etapa propia (`5L` sugerida), no junto con Gestion.
+5. Aplicar en Gestion en una etapa separada (`5M` sugerida), nunca compartiendo commit con Backlog.
+6. Mantener intactas todas las rutas no-logo del bloque `CONFIG` inline de Backlog y del `FALLBACK_CONFIG` de Gestion.
+7. Mantener el fallback final por iniciales como salida segura.
+8. Mantener `Logos/` y los archivos legacy en raiz sin cambios.
+
+Conviene fallback local en lugar de cambio global porque:
+
+- Preserva el comportamiento actual de los usuarios que ya consumen la URL absoluta cacheada.
+- Aisla el cambio al archivo migrado y permite rollback por commit unico.
+- No introduce dependencia nueva en `assets/js/config.js` para Backlog.
+- No obliga a sincronizar dos copias de config (raiz y `assets/js/`).
+- Es consistente con el patron aplicado en Etapas 5E, 5F, 5H y 5J.
+
+Que NO tocar todavia:
+
+- `assets/js/config.js`.
+- `config.js` raiz.
+- `LOGO_BASE_URL` en ningun archivo.
+- `LOGO_EXTENSIONS` en Backlog.
+- Bloque `CONFIG` inline del Backlog (todos los campos, no solo logos).
+- `FALLBACK_CONFIG` de Gestion (todos los campos).
+- Submit, endpoint, payload, validaciones, `seller_id`, `nextSellerId()`, `reserveSellerId()`, `localStorage`.
+- Apps Script.
+- Backlog legacy (`backlog-sellers_v27.html`) y Gestion legacy (`gestion-sellers_v7.html`).
+- `Logos/` y `assets/logos/`.
+- Formularios publicos y sus legacy.
+- Simuladores y sus legacy.
+- Presentacion Seller y su legacy.
+- Redirects desde archivos versionados.
+
+Validaciones necesarias para el piloto futuro (no se ejecutan en 5K):
+
+- Smoke test visual de cards del kanban con `SPT-001` a `SPT-015`.
+- Smoke test visual de tabla del Backlog.
+- Smoke test visual del modal del Backlog (apertura, cierre, contenido).
+- Smoke test de preview de Gestion con seller existente y con seller nuevo.
+- Confirmar prioridad: URL absoluta primero, fallback local solo si la primera falla, iniciales si todo falla.
+- Confirmar que filtros, busqueda, ordenes, tab kanban/tabla y modal siguen funcionando.
+- Confirmar que `nextSellerId`, `reserveSellerId`, `loadSellerById`, `formToObject`, `validatePayload` y submit no fueron alterados.
+- Consola sin errores JS nuevos.
+- Sin 404 inesperados (404 de logo local cuando no existe `spt-XXX.png` es esperado y debe caer a iniciales).
+- Comparacion visual antes/despues por captura.
+
+Rollback:
+
+- Revertir un solo commit por archivo (Backlog y Gestion en commits separados).
+- `assets/logos/` no se toca, por lo que el rollback solo afecta HTML migrado.
+- `LOGO_BASE_URL` no se toca, por lo que el comportamiento legacy se preserva como cinturon de seguridad.
+- Fallback por iniciales sigue presente y no requiere rollback.
+
+Candidato ideal para piloto futuro:
+
+- Pagina: `internal/backlog/backlog-sellers.html`.
+- Motivo: no depende de `assets/js/config.js`, no escribe datos, no toca Apps Script, tiene fallback por iniciales robusto y multiples superficies de render permiten detectar regresiones visuales rapido.
+- Etapa sugerida: `5L`.
+- Despues, en etapa separada `5M`: `internal/backlog/gestion-sellers.html`.
+- Razon de orden: Backlog primero porque es de solo lectura. Gestion despues porque escribe; conviene validar el patron en una pagina sin riesgo de payload antes de acercarse a la pagina con submit real.
+
+Archivos permitidos en futuras etapas 5L y 5M:
+
+- 5L: `internal/backlog/backlog-sellers.html`, `docs/assets-strategy.md`, `docs/roadmap.md`, `CHANGELOG.md`.
+- 5M: `internal/backlog/gestion-sellers.html`, `docs/assets-strategy.md`, `docs/roadmap.md`, `CHANGELOG.md`.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |
