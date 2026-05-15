@@ -1,0 +1,3277 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Relevamiento de Seller | Sporting Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --g: #5ea832;
+        --g2: #4a8a26;
+        --g-glow: rgba(94, 168, 50, 0.18);
+        --bg: #0d110d;
+        --panel: #141a13;
+        --panel2: #192018;
+        --line: rgba(255, 255, 255, 0.09);
+        --line2: rgba(255, 255, 255, 0.05);
+        --text: #e8ede4;
+        --muted: #9dac94;
+        --muted2: #687662;
+        --warn: #ffb74d;
+        --danger: #d94040;
+        --info: #64b5f6;
+        --teal: #4db6ac;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: Barlow, system-ui, sans-serif;
+        background: linear-gradient(180deg, #0b0f0b, #111711);
+        color: var(--text);
+        min-height: 100vh;
+        padding: 28px 16px;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+      }
+
+      /* HERO */
+      .hero {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 28px;
+        margin-bottom: 18px;
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+      }
+      .brand {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 25px;
+        margin-bottom: 6px;
+      }
+      .brand span {
+        color: var(--g);
+      }
+      h1 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 36px;
+        line-height: 1;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .intro-note {
+        display: grid;
+        gap: 8px;
+        margin-top: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .intro-note strong {
+        font-size: 13px;
+        color: var(--text);
+      }
+      .intro-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .badge.time {
+        background: rgba(94, 168, 50, 0.1);
+        border: 1px solid rgba(94, 168, 50, 0.25);
+        color: #b7e69d;
+      }
+      .badge.sections {
+        background: rgba(100, 181, 246, 0.1);
+        border: 1px solid rgba(100, 181, 246, 0.25);
+        color: #a8d4fb;
+      }
+      .badge.required {
+        background: rgba(255, 183, 77, 0.1);
+        border: 1px solid rgba(255, 183, 77, 0.25);
+        color: #ffd48a;
+      }
+
+      /* SELLER CHIP / IDENTITY */
+      .seller-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 14px;
+        background: rgba(94, 168, 50, 0.12);
+        border: 1px solid rgba(94, 168, 50, 0.28);
+        color: #b7e69d;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .seller-chip.err {
+        background: rgba(217, 64, 64, 0.12);
+        border-color: rgba(217, 64, 64, 0.32);
+        color: #f2a0a0;
+      }
+      .seller-identity {
+        display: none;
+        align-items: center;
+        gap: 14px;
+        margin-top: 16px;
+        padding: 14px 16px;
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .seller-identity.visible {
+        display: flex;
+      }
+      .seller-logo {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        object-fit: contain;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid var(--line);
+        padding: 6px;
+        flex-shrink: 0;
+      }
+      .seller-logo.hidden {
+        display: none;
+      }
+      .seller-initials {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        background: rgba(94, 168, 50, 0.14);
+        border: 1px solid rgba(94, 168, 50, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #b7e69d;
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+      .seller-eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--g);
+        margin-bottom: 2px;
+      }
+      .seller-name {
+        font-family: "Barlow Condensed", sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+      .seller-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .seller-id-small {
+        font-size: 11px;
+        color: var(--muted2);
+        margin-top: 3px;
+      }
+
+      /* PROGRESS */
+      .progress-box {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        margin-bottom: 16px;
+        background: rgba(13, 17, 13, 0.93);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .progress-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .progress-label {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .progress-percent {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .progress-sections {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .progress-section-dot {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        cursor: pointer;
+        transition: all 0.18s;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.35);
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+        user-select: none;
+      }
+      .progress-section-dot:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      .progress-section-dot.active {
+        background: rgba(94, 168, 50, 0.15);
+        border-color: rgba(94, 168, 50, 0.35);
+        color: #b7e69d;
+      }
+      .progress-section-dot.done {
+        background: rgba(94, 168, 50, 0.12);
+        border-color: rgba(94, 168, 50, 0.25);
+        color: #7ecf50;
+      }
+      .progress-section-dot.done::after {
+        content: "✓";
+        font-size: 9px;
+        opacity: 0.8;
+      }
+      .progress-section-dot.partial {
+        background: rgba(94, 168, 50, 0.07);
+        border-color: rgba(94, 168, 50, 0.18);
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .psec-num {
+        font-size: 9px;
+        opacity: 0.6;
+        font-weight: 700;
+      }
+      .bar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: var(--g);
+        transition: width 0.25s ease;
+      }
+
+      /* FORM */
+      form {
+        display: grid;
+        gap: 16px;
+      }
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .section-title {
+        padding: 15px 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .section-title-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section-num {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: var(--g-glow);
+        border: 1px solid rgba(94, 168, 50, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 900;
+        color: var(--g);
+        flex-shrink: 0;
+      }
+      .section-label {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--g);
+      }
+      .section-tag {
+        color: var(--muted2);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      /* ── NAVEGACIÓN ENTRE SECCIONES ── */
+      .section-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        gap: 10px;
+      }
+      .section-nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 18px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .section-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: rgba(255, 255, 255, 0.9);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+      .section-nav-btn.next {
+        background: rgba(94, 168, 50, 0.14);
+        border-color: rgba(94, 168, 50, 0.32);
+        color: #b7e69d;
+        margin-left: auto;
+      }
+      .section-nav-btn.next:hover {
+        background: rgba(94, 168, 50, 0.22);
+        border-color: rgba(94, 168, 50, 0.5);
+      }
+      .section-nav-center {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.25);
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .section-completion {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted2);
+      }
+      .section-completion.complete {
+        color: #7dc95a;
+      }
+      .section-help {
+        padding: 13px 18px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+        background: rgba(255, 255, 255, 0.015);
+        border-bottom: 1px solid var(--line2);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        padding: 18px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .field.full {
+        grid-column: 1/-1;
+      }
+      .field.full-3 {
+        grid-column: 1/-1;
+      }
+
+      label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        line-height: 1.2;
+      }
+
+      /* TOOLTIP */
+      .tip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 17px;
+        height: 17px;
+        border-radius: 999px;
+        background: rgba(100, 181, 246, 0.12);
+        border: 1px solid rgba(100, 181, 246, 0.28);
+        color: #a8d4fb;
+        font-size: 11px;
+        font-weight: 800;
+        cursor: help;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .tip:hover::after,
+      .tip:focus::after {
+        content: attr(data-tip);
+        position: absolute;
+        left: 50%;
+        bottom: 130%;
+        transform: translateX(-50%);
+        width: min(300px, 82vw);
+        background: #0f1a0f;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 11px 13px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.4;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        z-index: 40;
+        text-transform: none;
+        letter-spacing: 0;
+        white-space: normal;
+      }
+      .tip:hover::before,
+      .tip:focus::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: 125%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(255, 255, 255, 0.18);
+        z-index: 41;
+      }
+
+      small {
+        color: var(--muted2);
+        font-size: 11px;
+        line-height: 1.35;
+        display: block;
+      }
+      .example {
+        color: var(--muted2);
+        font-size: 11px;
+        margin-top: 2px;
+        font-style: italic;
+      }
+
+      input,
+      select,
+      textarea {
+        font-family: Barlow, sans-serif;
+        width: 100%;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: var(--text);
+        padding: 11px 12px;
+        font-size: 14px;
+        outline: none;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--g);
+        box-shadow: 0 0 0 3px rgba(94, 168, 50, 0.13);
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--muted2);
+        font-size: 13px;
+      }
+      textarea {
+        min-height: 90px;
+        resize: vertical;
+      }
+      select option {
+        background: #111711;
+      }
+
+      .req::after {
+        content: " *";
+        color: var(--warn);
+      }
+
+      /* INLINE RADIO GROUP */
+      .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 2px;
+      }
+      .radio-group label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 7px 12px;
+        border-radius: 8px;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .radio-group input[type="radio"] {
+        width: 14px;
+        height: 14px;
+        accent-color: var(--g);
+        flex-shrink: 0;
+      }
+      .radio-group label:has(input:checked) {
+        background: var(--g-glow);
+        border-color: rgba(94, 168, 50, 0.4);
+        color: #b7e69d;
+      }
+
+      /* CHECKBOX GROUP */
+      .check-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 2px;
+      }
+      .check-group label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: var(--panel2);
+        border: 1px solid var(--line);
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .check-group input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--g);
+        flex-shrink: 0;
+      }
+      .check-group label:has(input:checked) {
+        background: var(--g-glow);
+        border-color: rgba(94, 168, 50, 0.4);
+        color: #b7e69d;
+      }
+
+      /* ALERT */
+      .field-alert {
+        display: none;
+        font-size: 11px;
+        color: var(--warn);
+        margin-top: 4px;
+        padding: 6px 10px;
+        background: rgba(255, 183, 77, 0.07);
+        border: 1px solid rgba(255, 183, 77, 0.2);
+        border-radius: 7px;
+        line-height: 1.35;
+      }
+      .field-alert.visible {
+        display: block;
+      }
+
+      /* ACTIONS */
+      .actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+        margin-top: 2px;
+      }
+      .btn {
+        border: none;
+        border-radius: 12px;
+        background: var(--g);
+        color: white;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 13px 26px;
+        cursor: pointer;
+        font-family: Barlow, sans-serif;
+        font-size: 14px;
+        transition: background 0.15s;
+      }
+      .btn:hover {
+        background: var(--g2);
+      }
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .status {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .status.ok {
+        color: #b7e69d;
+      }
+      .status.err {
+        color: #f2a0a0;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .conditional.hidden {
+        display: none !important;
+      }
+
+      /* DIVIDER */
+      .field-group-title {
+        grid-column: 1/-1;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted2);
+        padding: 4px 0 2px;
+        border-bottom: 1px solid var(--line2);
+        margin-top: 4px;
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 16px 10px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .btn {
+          width: 100%;
+          text-align: center;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        .progress-box {
+          top: 0;
+          border-radius: 12px;
+        }
+        .seller-identity {
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <div class="brand">Sporting <span>Marketplace</span></div>
+        <h1>Relevamiento de Seller</h1>
+        <p>
+          Este formulario nos permite conocer tu operación actual: tecnología,
+          catálogo, stock, logística y condiciones comerciales. Con esa
+          información definimos el modelo de integración más adecuado para que
+          puedas operar dentro de Sporting Marketplace.
+        </p>
+        <div class="intro-note">
+          <strong>📋 Antes de completar</strong>
+          <p>
+            Respondé con la información
+            <strong style="color: var(--text)">actual</strong> de tu operación.
+            Si algo no está definido todavía, seleccioná <em>"A definir"</em> o
+            escribí una aclaración en el campo de observaciones correspondiente.
+            Los campos con asterisco (<span style="color: var(--warn)">*</span>)
+            son obligatorios.
+          </p>
+          <p>
+            Si tenés dudas en alguna pregunta, hacé clic en el ícono
+            <span
+              style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 15px;
+                height: 15px;
+                border-radius: 999px;
+                background: rgba(100, 181, 246, 0.2);
+                border: 1px solid rgba(100, 181, 246, 0.3);
+                color: #a8d4fb;
+                font-size: 10px;
+                font-weight: 800;
+              "
+              >?</span
+            >
+            para ver una explicación.
+          </p>
+        </div>
+        <div class="intro-badges">
+          <span class="badge time">⏱ Tiempo estimado: 15–20 min</span>
+          <span class="badge sections">📂 9 secciones</span>
+          <span class="badge required">* Campos obligatorios marcados</span>
+        </div>
+        <div id="sellerIdentity" class="seller-identity">
+          <img
+            id="sellerLogo"
+            class="seller-logo hidden"
+            alt="Logo del seller"
+          />
+          <div id="sellerInitials" class="seller-initials">—</div>
+          <div>
+            <div class="seller-eyebrow">Relevamiento asociado a</div>
+            <div id="sellerNameView" class="seller-name">Validando seller…</div>
+            <div id="sellerMetaView" class="seller-meta"></div>
+            <div id="sellerIdView" class="seller-id-small"></div>
+          </div>
+        </div>
+        <div id="sellerChip" class="seller-chip">
+          Validando link del seller…
+        </div>
+      </header>
+
+      <div class="progress-box">
+        <div class="progress-top">
+          <div class="progress-label" id="progressLabel">
+            Avance del formulario
+          </div>
+          <div class="progress-percent" id="progressPercent">0%</div>
+        </div>
+        <div class="bar"><span id="progressBar"></span></div>
+        <div class="progress-sections" id="sectionDots"></div>
+      </div>
+
+      <form id="sellerForm">
+        <input type="hidden" name="seller_id" id="seller_id" />
+
+        <!-- ═══════════════════════════════════════════════
+           1. DATOS GENERALES
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="1">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">1</div>
+              <span class="section-label">Datos generales del seller</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Identificación</span>
+              <span class="section-completion" id="sec1-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Datos básicos para identificar al seller y entender su perfil
+            comercial.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label class="req"
+                >Nombre comercial
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Nombre con el que la marca o empresa se presenta ante los clientes. Por ejemplo: 'Adidas Argentina', 'Deportes López', etc."
+                  >?</span
+                ></label
+              >
+              <input
+                name="nombre"
+                required
+                placeholder="Ej: Adidas Argentina"
+              />
+            </div>
+            <div class="field">
+              <label
+                >Razón social
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Nombre legal registrado ante AFIP. Puede diferir del nombre comercial."
+                  >?</span
+                ></label
+              >
+              <input
+                name="razon_social"
+                placeholder="Ej: Adidas Argentina S.A."
+              />
+            </div>
+            <div class="field">
+              <label>CUIT</label>
+              <input
+                name="cuit"
+                inputmode="numeric"
+                placeholder="Ej: 30-12345678-9"
+              />
+              <small>Formato: XX-XXXXXXXX-X</small>
+            </div>
+            <div class="field">
+              <label>Sitio web</label>
+              <input
+                name="web"
+                type="url"
+                placeholder="https://www.tusitio.com"
+              />
+            </div>
+            <div class="field">
+              <label>País / provincia de operación</label>
+              <input
+                name="pais_provincia"
+                placeholder="Ej: Argentina / Tucumán"
+              />
+            </div>
+            <div class="field">
+              <label
+                >Tipo de empresa
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Marca: vende productos de su propia marca. Distribuidor: revende marcas de terceros. Retailer: vende al consumidor final, puede ser mono o multimarca. Fabricante: produce los productos que vende."
+                  >?</span
+                ></label
+              >
+              <select name="tipo_empresa">
+                <option value="">Seleccionar</option>
+                <option>Marca propia</option>
+                <option>Distribuidor oficial</option>
+                <option>Retailer multimarca</option>
+                <option>Fabricante</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >Canal principal de venta actual
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Dónde vendés la mayor parte de tu volumen hoy? Elegí el canal más representativo."
+                  >?</span
+                ></label
+              >
+              <select name="canal_principal">
+                <option value="">Seleccionar</option>
+                <option>Tienda online propia</option>
+                <option>Tiendas físicas</option>
+                <option>Ventas mayoristas / B2B</option>
+                <option>Marketplaces (ML, etc.)</option>
+                <option>Redes sociales</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>¿Operás o evaluás operar en otros marketplaces?</label>
+              <select name="opera_marketplaces" data-toggle="marketplaces_det">
+                <option value="">Seleccionar</option>
+                <option>Sí, ya opero</option>
+                <option>No</option>
+                <option>Lo estoy evaluando</option>
+              </select>
+            </div>
+            <div
+              class="field full conditional hidden"
+              data-show-if="opera_marketplaces:Sí, ya opero,Lo estoy evaluando"
+              id="marketplaces_det"
+            >
+              <label
+                >¿En cuáles marketplaces?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Listá los marketplaces donde ya operás o estás evaluando. Esto nos ayuda a entender tu experiencia y posibles conflictos de canal."
+                  >?</span
+                ></label
+              >
+              <input
+                name="marketplaces_detalle"
+                placeholder="Ej: Mercado Libre, Dafiti, Linio, marketplace propio…"
+              />
+            </div>
+            <div class="field full">
+              <label class="req"
+                >Categorías principales que ofrecerías en Sporting
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Indicá las categorías de productos que querés publicar en el marketplace, no el total de tu oferta."
+                  >?</span
+                ></label
+              >
+              <input
+                name="categorias"
+                required
+                placeholder="Ej: Calzado deportivo, indumentaria running, accesorios fitness"
+              />
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <span class="section-nav-center">1 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(2)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           2. CONTACTOS
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="2">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">2</div>
+              <span class="section-label">Contactos</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Responsables</span>
+              <span class="section-completion" id="sec2-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Necesitamos saber con quién hablar según el tema. Si una misma
+            persona cubre varios roles, podés repetir el mismo nombre y email.
+          </div>
+          <div class="grid">
+            <div class="field-group-title">
+              Contacto principal (quien completa este formulario)
+            </div>
+            <div class="field">
+              <label class="req">Nombre y apellido</label>
+              <input
+                name="contacto_nombre"
+                required
+                placeholder="Ej: Laura Pérez"
+              />
+            </div>
+            <div class="field">
+              <label class="req">Email</label>
+              <input
+                name="contacto_email"
+                type="email"
+                required
+                placeholder="Ej: laura@tuempresa.com"
+              />
+            </div>
+            <div class="field">
+              <label>Teléfono / WhatsApp</label>
+              <input name="contacto_tel" placeholder="Ej: +54 9 11 XXXX-XXXX" />
+            </div>
+            <div class="field">
+              <label>Cargo / Rol</label>
+              <input
+                name="contacto_cargo"
+                placeholder="Ej: Gerente eCommerce"
+              />
+            </div>
+
+            <div class="field-group-title">Área comercial</div>
+            <div class="field">
+              <label>Nombre y apellido</label>
+              <input
+                name="contacto_comercial_nombre"
+                placeholder="Ej: Carlos Díaz"
+              />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input
+                name="contacto_comercial_email"
+                type="email"
+                placeholder="Ej: comercial@tuempresa.com"
+              />
+            </div>
+
+            <div class="field-group-title">Área técnica / integración</div>
+            <div class="field">
+              <label>Nombre y apellido</label>
+              <input
+                name="contacto_tec_nombre"
+                placeholder="Ej: Martín González"
+              />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input
+                name="contacto_tec_email"
+                type="email"
+                placeholder="Ej: tech@tuempresa.com"
+              />
+            </div>
+
+            <div class="field-group-title">Área operativa / logística</div>
+            <div class="field">
+              <label>Nombre y apellido</label>
+              <input
+                name="contacto_ops_nombre"
+                placeholder="Ej: Ana Rodríguez"
+              />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input
+                name="contacto_ops_email"
+                type="email"
+                placeholder="Ej: operaciones@tuempresa.com"
+              />
+            </div>
+
+            <div class="field-group-title">
+              Área administrativa / facturación
+            </div>
+            <div class="field">
+              <label>Nombre y apellido</label>
+              <input
+                name="contacto_admin_nombre"
+                placeholder="Ej: Pablo Suárez"
+              />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input
+                name="contacto_admin_email"
+                type="email"
+                placeholder="Ej: admin@tuempresa.com"
+              />
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(1)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">2 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(3)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           3. TECNOLOGÍA E INTEGRACIÓN
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="3">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">3</div>
+              <span class="section-label">Tecnología e integración</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Modelo técnico</span>
+              <span class="section-completion" id="sec3-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Esta sección nos permite definir cómo vamos a conectar tu operación
+            con Sporting Marketplace: si será vía API, planillas, VTEX a VTEX, o
+            Seller Center. No se requieren conocimientos técnicos para
+            completarla.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label
+                >¿Tenés una tienda online actualmente?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Indicá la plataforma que usás para tu tienda online. Si no tenés tienda online, seleccioná 'No tiene tienda online'."
+                  >?</span
+                ></label
+              >
+              <select name="plataforma">
+                <option value="">Seleccionar</option>
+                <option>VTEX</option>
+                <option>Tienda Nube</option>
+                <option>WooCommerce / WordPress</option>
+                <option>Shopify</option>
+                <option>Salesforce Commerce Cloud</option>
+                <option>Magento / Adobe Commerce</option>
+                <option>Desarrollo propio</option>
+                <option>No tiene tienda online</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Usás ERP u OMS?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="ERP: sistema de gestión empresarial (SAP, Tango, etc.). OMS: sistema de gestión de pedidos. Sirven para integrar stock, facturación y logística desde un sistema centralizado."
+                  >?</span
+                ></label
+              >
+              <select name="erp" data-toggle="erp_cual_wrap">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="erp:Sí"
+              id="erp_cual_wrap"
+            >
+              <label>¿Cuál ERP / OMS usás?</label>
+              <input
+                name="erp_cual"
+                placeholder="Ej: SAP, Tango, sistema propio, Oracle…"
+              />
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés APIs disponibles?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Una API es una conexión automatizada entre sistemas. Si tu plataforma o ERP permite enviar/recibir datos automáticamente (stock, pedidos, tracking), tenés APIs. Si no estás seguro, consultá con tu equipo técnico."
+                  >?</span
+                ></label
+              >
+              <select name="api" data-toggle="api_scope_wrap">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>No lo sé</option>
+              </select>
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="api:Sí,Parcialmente"
+              id="api_scope_wrap"
+            >
+              <label
+                >¿Para qué están disponibles las APIs?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Seleccioná todas las áreas donde podés conectar automáticamente. Si no sabés, elegí 'A definir'."
+                  >?</span
+                ></label
+              >
+              <select
+                name="api_alcance"
+                multiple
+                size="5"
+                style="min-height: 120px"
+              >
+                <option>Catálogo / productos</option>
+                <option>Stock</option>
+                <option>Precios</option>
+                <option>Recepción de pedidos</option>
+                <option>Estados de pedido</option>
+                <option>Tracking / envíos</option>
+                <option>Facturación</option>
+                <option>A definir</option>
+              </select>
+              <small>Podés seleccionar más de una opción (Ctrl + clic)</small>
+            </div>
+            <div class="field">
+              <label
+                >Método de integración preferido
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="VTEX a VTEX: conexión directa si usás VTEX. API: integración automatizada. Excel: carga manual por planilla. Seller Center: panel web de Sporting para cargar productos manualmente. A definir: lo evaluamos juntos."
+                  >?</span
+                ></label
+              >
+              <select name="metodo_integracion">
+                <option value="">Seleccionar</option>
+                <option>VTEX a VTEX</option>
+                <option>Excel / planilla</option>
+                <option>API</option>
+                <option>Seller Center (panel web)</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés equipo técnico?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Propio: empleados internos de IT. Tercerizado: agencia o freelance. Sin equipo: toda la gestión es manual."
+                  >?</span
+                ></label
+              >
+              <select name="equipo_tec">
+                <option value="">Seleccionar</option>
+                <option>Sí, propio</option>
+                <option>Sí, tercerizado (agencia / freelance)</option>
+                <option>No tengo equipo técnico</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Puede recibir pedidos desde un sistema externo?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Esto significa que Sporting te envía el pedido automáticamente por API o archivo, sin que necesitemos avisarte por email o teléfono."
+                  >?</span
+                ></label
+              >
+              <select name="recibe_pedidos_ext">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Puede informar estados del pedido automáticamente?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: 'preparando', 'despachado', 'entregado'. Si podés enviarlo por API o archivo, escribí Sí. Si lo hacés a mano, escribí No o Parcialmente."
+                  >?</span
+                ></label
+              >
+              <select name="informa_estados">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Puede informar número de tracking del envío?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="El tracking es el código que le permite al comprador rastrear su pedido (ej: número de guía de Andreani, OCA, etc.). Si podés enviarlo automáticamente, elegí Sí."
+                  >?</span
+                ></label
+              >
+              <select name="informa_tracking">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Con qué frecuencia actualizarías catálogo/stock/precios?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Tiempo real: se actualiza automáticamente en segundos. Diaria: una vez al día (ej: todas las mañanas). Manual: la persona carga los cambios a mano cuando los hay."
+                  >?</span
+                ></label
+              >
+              <select name="frec_actualizacion">
+                <option value="">Seleccionar</option>
+                <option>Tiempo real (automático)</option>
+                <option>Cada hora</option>
+                <option>Varias veces al día</option>
+                <option>Una vez al día</option>
+                <option>Semanal</option>
+                <option>Manual (según necesidad)</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label>Observaciones técnicas</label>
+              <textarea
+                name="obs_tecnologia"
+                placeholder="Cualquier detalle técnico adicional: restricciones de la plataforma, integraciones existentes, limitaciones de tu equipo, etc."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(2)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">3 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(4)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           4. CATÁLOGO
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="4">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">4</div>
+              <span class="section-label">Catálogo</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Productos</span>
+              <span class="section-completion" id="sec4-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Información sobre la calidad y estructura de tu catálogo. Nos
+            permite validar qué tan listos están los productos para publicarse y
+            si hay aspectos que preparar.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label
+                >¿Cuántos SKUs estimás publicar en la fase inicial?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="SKU = unidad de producto con variante. Ej: si vendés una remera en 3 tallas, eso son 3 SKUs. La fase inicial es el lanzamiento con los primeros productos."
+                  >?</span
+                ></label
+              >
+              <input
+                name="skus_estimados"
+                type="number"
+                min="0"
+                placeholder="Ej: 500"
+              />
+            </div>
+            <div class="field">
+              <label
+                >Variantes totales aproximadas
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Total de combinaciones de talle, color u otras variantes. Ej: 100 modelos × 5 tallas × 3 colores = 1500 variantes."
+                  >?</span
+                ></label
+              >
+              <input
+                name="variantes"
+                type="number"
+                min="0"
+                placeholder="Ej: 2500"
+              />
+            </div>
+            <div class="field">
+              <label
+                >¿Cómo gestionás el catálogo actualmente?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Dónde está la información de tus productos? Puede ser en Excel, en tu plataforma de eCommerce, en un ERP, etc."
+                  >?</span
+                ></label
+              >
+              <select name="gestion_catalogo">
+                <option value="">Seleccionar</option>
+                <option>Excel / planilla</option>
+                <option>API / sistema propio</option>
+                <option>Plataforma eCommerce (VTEX, TiendaNube, etc.)</option>
+                <option>ERP</option>
+                <option>Manual</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Podés enviar el catálogo en formato Excel?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Si la integración no es por API, necesitamos recibir el catálogo en una planilla con el formato que te proveemos. ¿Podés hacerlo?"
+                  >?</span
+                ></label
+              >
+              <select name="catalogo_excel">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Los productos tienen descripción e información completa?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Descripción completa incluye: nombre del producto, descripción larga, composición de materiales, género, temporada, año, marca, modelo y atributos clave según la categoría."
+                  >?</span
+                ></label
+              >
+              <select name="info_prod_completa">
+                <option value="">Seleccionar</option>
+                <option>Sí, todos</option>
+                <option>Parcialmente</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Los productos tienen atributos técnicos?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Atributos técnicos: peso, dimensiones, material, tecnología específica, certificaciones, etc. Depende de la categoría (ej: para calzado: drop, tipo de pisada, terreno)."
+                  >?</span
+                ></label
+              >
+              <select name="atributos_tecnicos">
+                <option value="">Seleccionar</option>
+                <option>Sí, completos</option>
+                <option>Parcialmente</option>
+                <option>No</option>
+                <option>No aplica para mi categoría</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés imágenes disponibles para todos los productos?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Las imágenes deben ser de alta calidad (mínimo 1000px), fondo blanco o neutro, sin marcas de agua. Al menos una imagen principal por producto es requerida."
+                  >?</span
+                ></label
+              >
+              <select name="imagenes">
+                <option value="">Seleccionar</option>
+                <option>Sí, todos los productos</option>
+                <option>Parcialmente</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés imágenes por variante de color?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: si una zapatilla viene en negro y blanco, ¿tenés fotos de ambos colores por separado?"
+                  >?</span
+                ></label
+              >
+              <select name="imagenes_variante">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>No aplica (sin variantes de color)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés tabla de talles?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Tabla con equivalencias de talle (ARG, US, EUR, etc.) y medidas (cm) para orientar al comprador. Es requerida para indumentaria y calzado."
+                  >?</span
+                ></label
+              >
+              <select name="tabla_talles">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>No aplica para mi categoría</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tus productos tienen talle y/o color como variantes?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Indica si tus SKUs se diferencian por talle (S/M/L/38/40), color, u otras variantes. Esto impacta en cómo estructuramos el catálogo."
+                  >?</span
+                ></label
+              >
+              <select name="productos_variantes">
+                <option value="">Seleccionar</option>
+                <option>Sí, talle y color</option>
+                <option>Sí, solo talle</option>
+                <option>Sí, solo color</option>
+                <option>No tienen variantes</option>
+                <option>Algunas categorías sí, otras no</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tus productos tienen código SKU y/o código de barras
+                (EAN/GTIN)?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="SKU interno: código propio que le asignás al producto. EAN/GTIN: código de barras universal (número de 13 dígitos). El EAN/GTIN facilita la identificación del producto en el mercado."
+                  >?</span
+                ></label
+              >
+              <select name="codigos_sku_ean">
+                <option value="">Seleccionar</option>
+                <option>Sí, tengo SKU interno y EAN/GTIN</option>
+                <option>Solo SKU interno (sin código de barras)</option>
+                <option>Solo EAN/GTIN (sin SKU interno)</option>
+                <option>No tengo ninguno</option>
+                <option>Parcialmente</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Alguno de tus productos ya está publicado en Sporting?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Si ya hay productos tuyos en el sitio, es importante saberlo para evitar duplicados o conflictos de catálogo."
+                  >?</span
+                ></label
+              >
+              <select name="productos_en_sporting">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>No lo sé</option>
+                <option>Algunos sí, otros no</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés restricciones sobre qué productos podés publicar?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: productos exclusivos de otro canal, acuerdos de distribución que limitan dónde vendés, categorías que no podés publicar online, condiciones de la marca."
+                  >?</span
+                ></label
+              >
+              <select
+                name="restricciones_cat"
+                data-toggle="restricciones_cat_det_wrap"
+              >
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div
+              class="field full conditional hidden"
+              data-show-if="restricciones_cat:Sí"
+              id="restricciones_cat_det_wrap"
+            >
+              <label>Detallá las restricciones de catálogo</label>
+              <textarea
+                name="restricciones_cat_det"
+                placeholder="Ej: no puedo publicar la línea premium porque es exclusiva de tiendas propias. Tampoco puedo publicar productos en liquidación en marketplaces externos."
+              ></textarea>
+            </div>
+            <div class="field full">
+              <label>Observaciones del catálogo</label>
+              <textarea
+                name="obs_catalogo"
+                placeholder="Cualquier detalle adicional sobre el estado o características de tu catálogo."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(3)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">4 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(5)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           5. STOCK Y PRECIOS
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="5">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">5</div>
+              <span class="section-label">Stock y precios</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Disponibilidad</span>
+              <span class="section-completion" id="sec5-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Esta sección es clave para entender el riesgo de quiebres de stock
+            (ventas sin disponibilidad real) y la sincronización de precios.
+            Respondé con la realidad de tu operación actual.
+          </div>
+          <div class="grid">
+            <div class="field-group-title">Stock</div>
+            <div class="field">
+              <label
+                >¿El stock que usás para vender online es exclusivo para ese
+                canal?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Exclusivo: tenés unidades reservadas solo para eCommerce. Compartido: las mismas unidades se venden también en tienda física, mayoristas u otros canales, lo que puede generar quiebres si no se sincroniza rápido."
+                  >?</span
+                ></label
+              >
+              <select name="stock_tipo">
+                <option value="">Seleccionar</option>
+                <option>Exclusivo para canal online</option>
+                <option>Compartido con tiendas físicas</option>
+                <option>Compartido con canal mayorista</option>
+                <option>Compartido con múltiples canales</option>
+                <option>Múltiples depósitos independientes</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Podés asignar un stock exclusivo para Sporting Marketplace?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Esto implica separar un número de unidades que solo se venderán a través de Sporting, evitando que se vendan en otro canal simultáneamente."
+                  >?</span
+                ></label
+              >
+              <select name="stock_exclusivo_mkt">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Usás stock de seguridad?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Stock de seguridad: se muestra 'sin stock' antes de quedarte sin unidades reales, para evitar vender algo que no podés entregar. Ej: si tenés 5 unidades, mostrás stock solo hasta 2 y las 3 restantes son el 'colchón'."
+                  >?</span
+                ></label
+              >
+              <select name="stock_seguridad">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Cuántas unidades sería el stock mínimo de seguridad estimado?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: si querés mantener siempre 2 unidades de colchón por SKU, escribí 2."
+                  >?</span
+                ></label
+              >
+              <input
+                name="stock_minimo_seguridad"
+                type="number"
+                min="0"
+                placeholder="Ej: 2"
+              />
+              <small>Unidades por SKU</small>
+            </div>
+            <div class="field">
+              <label
+                >¿Con qué frecuencia actualizaría el stock en Sporting?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="La frecuencia determina qué tan rápido se reflejan los cambios. Cuanto más frecuente, menor riesgo de vender sin stock real."
+                  >?</span
+                ></label
+              >
+              <select name="frec_stock">
+                <option value="">Seleccionar</option>
+                <option>Tiempo real (automático)</option>
+                <option>Cada hora</option>
+                <option>Varias veces al día</option>
+                <option>Una vez al día</option>
+                <option>Semanal</option>
+                <option>Manual (según necesidad)</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Cómo enviarías las actualizaciones de stock?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Cómo llegará la información de stock a Sporting? Por API (automático), por Excel que cargás manualmente, desde tu ERP o plataforma, etc."
+                  >?</span
+                ></label
+              >
+              <select name="gestion_stock">
+                <option value="">Seleccionar</option>
+                <option>Excel / planilla</option>
+                <option>API</option>
+                <option>ERP</option>
+                <option>Plataforma eCommerce</option>
+                <option>Manual</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿El stock está separado por depósito o canal?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: depósito A solo para eCommerce, depósito B para mayoristas. Esto facilita asignar stock exclusivo para Sporting."
+                  >?</span
+                ></label
+              >
+              <select name="stock_separado">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+
+            <div class="field-group-title">Precios</div>
+            <div class="field">
+              <label
+                >¿Cómo gestionás los precios actualmente?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Dónde se administran y actualizan los precios? En Excel, en tu plataforma, desde el ERP, etc."
+                  >?</span
+                ></label
+              >
+              <select name="gestion_precios">
+                <option value="">Seleccionar</option>
+                <option>Excel / planilla</option>
+                <option>API</option>
+                <option>ERP</option>
+                <option>Plataforma eCommerce</option>
+                <option>Manual</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>¿Con qué frecuencia cambian los precios?</label>
+              <select name="frec_precios">
+                <option value="">Seleccionar</option>
+                <option>Tiempo real (automático)</option>
+                <option>Diaria</option>
+                <option>Semanal</option>
+                <option>Por campaña (fechas especiales)</option>
+                <option>Manual (según necesidad)</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Los precios que enviás incluyen IVA?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Importante para mostrar el precio correcto al comprador. En Argentina, el precio al consumidor final siempre incluye IVA."
+                  >?</span
+                ></label
+              >
+              <select name="precios_iva">
+                <option value="">Seleccionar</option>
+                <option>Sí, incluyen IVA</option>
+                <option>No, son precios sin IVA</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Manejás precios diferentes por canal?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: precio mayorista distinto al minorista, precio especial para marketplace, precio de lista vs. precio web."
+                  >?</span
+                ></label
+              >
+              <select name="precios_canal">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No, el precio es único</option>
+                <option>Parcialmente</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Ofrecerías promociones propias?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: descuentos por temporada, 2×1, cuotas sin interés propias, precio especial para eventos (Hot Sale, Cyber Monday)."
+                  >?</span
+                ></label
+              >
+              <select name="promos" data-toggle="promos_det_wrap">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A evaluar</option>
+              </select>
+            </div>
+            <div
+              class="field full conditional hidden"
+              data-show-if="promos:Sí,A evaluar"
+              id="promos_det_wrap"
+            >
+              <label>Detallá las promociones que ofrecerías</label>
+              <textarea
+                name="promos_det"
+                placeholder="Ej: descuento del 20% en la línea running para Hot Sale. Cuotas propias a través de Tarjeta X. Precios especiales para temporada de invierno."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(4)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">5 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(6)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           6. LOGÍSTICA
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="6">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">6</div>
+              <span class="section-label">Logística</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Despacho y entrega</span>
+              <span class="section-completion" id="sec6-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Cobertura geográfica, operador logístico, tiempos de despacho y
+            capacidades operativas. Esta información define el SLA (plazo de
+            entrega) que le mostramos al comprador.
+          </div>
+          <div class="grid">
+            <div class="field-group-title">Cobertura y origen</div>
+            <div class="field">
+              <label
+                >¿Podés hacer entregas a todo el país?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Si solo cubrís ciertas provincias o zonas, indicá 'No' o 'Parcialmente' y detallá las zonas en el campo siguiente."
+                  >?</span
+                ></label
+              >
+              <select name="entrega_pais">
+                <option value="">Seleccionar</option>
+                <option>Sí, todo el país</option>
+                <option>No</option>
+                <option>Parcialmente (algunas zonas)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Qué zonas cubrís?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Si no cubrís todo el país, indicá las zonas o provincias que sí podés cubrir."
+                  >?</span
+                ></label
+              >
+              <input
+                name="zonas"
+                placeholder="Ej: AMBA, NOA, Buenos Aires, Córdoba y Santa Fe"
+              />
+            </div>
+            <div class="field">
+              <label>Provincia / localidad desde donde despachás</label>
+              <input
+                name="localidad_despacho"
+                placeholder="Ej: Tucumán / San Miguel de Tucumán"
+              />
+            </div>
+            <div class="field">
+              <label
+                >¿Desde dónde sale el pedido?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿De dónde sale físicamente el paquete cuando se vende? Puede ser tu depósito, una tienda, un operador logístico que gestiona tu inventario, etc."
+                  >?</span
+                ></label
+              >
+              <select name="despacho_origen">
+                <option value="">Seleccionar</option>
+                <option>Depósito propio único</option>
+                <option>Múltiples depósitos propios</option>
+                <option>Tiendas físicas</option>
+                <option>Depósito del operador logístico</option>
+                <option>A definir</option>
+              </select>
+            </div>
+
+            <div class="field-group-title">Operador logístico</div>
+            <div class="field">
+              <label
+                >¿Con qué operador/es logístico/s trabajás?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Indicá el nombre del servicio de transporte que usás. Si manejás la distribución propia (furgoneta, moto), escribí 'Logística propia'."
+                  >?</span
+                ></label
+              >
+              <input
+                name="operador_logistico"
+                placeholder="Ej: Andreani, OCA, Ocasa, logística propia…"
+              />
+            </div>
+            <div class="field">
+              <label>¿Trabajás con más de un operador logístico?</label>
+              <select name="multi_operador_logistico">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+
+            <div class="field-group-title">Tiempos y SLA</div>
+            <div class="field">
+              <label
+                >¿Qué días despachás pedidos?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Días en los que efectivamente entregás el paquete al operador logístico o lo enviás."
+                  >?</span
+                ></label
+              >
+              <select name="dias_despacho">
+                <option value="">Seleccionar</option>
+                <option>Lunes a viernes</option>
+                <option>Lunes a sábado</option>
+                <option>Días específicos (indicar en obs.)</option>
+                <option>A demanda</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Cuánto tardás en despachar desde que recibís el pedido?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Tiempo que pasa desde que el comprador paga hasta que el paquete sale de tu depósito/tienda. No incluye el tiempo de tránsito del transportista."
+                  >?</span
+                ></label
+              >
+              <select name="tiempo_despacho">
+                <option value="">Seleccionar</option>
+                <option>Mismo día hábil</option>
+                <option>24 hs hábiles</option>
+                <option>48 hs hábiles</option>
+                <option>72 hs hábiles</option>
+                <option>Más de 72 hs hábiles</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Podés cumplir el SLA de despacho acordado de forma
+                consistente?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="El SLA es el plazo de despacho comprometido. Si hay temporadas o situaciones en que no podés cumplirlo, indicá 'Parcialmente' y comentalo en las observaciones."
+                  >?</span
+                ></label
+              >
+              <select name="cumple_sla_despacho">
+                <option value="">Seleccionar</option>
+                <option>Sí, consistentemente</option>
+                <option>No</option>
+                <option>Parcialmente (indicar condiciones)</option>
+                <option>A definir</option>
+              </select>
+            </div>
+
+            <div class="field-group-title">Tracking y etiquetado</div>
+            <div class="field">
+              <label
+                >¿Podés proveer número de seguimiento (tracking) del pedido?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="El número de tracking permite al comprador ver dónde está su paquete en el sitio del operador logístico."
+                  >?</span
+                ></label
+              >
+              <select name="tracking">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés impresora de etiquetas disponible?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Para ciertos modelos de integración necesitamos que puedas imprimir etiquetas de envío con código de barras."
+                  >?</span
+                ></label
+              >
+              <select name="impresora">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Podés etiquetar los paquetes según el requerimiento de
+                Sporting?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="En algunos casos Sporting requiere que el paquete lleve una etiqueta específica con datos del pedido, el logo o instrucciones para el transportista."
+                  >?</span
+                ></label
+              >
+              <select name="etiquetado_requerido">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+
+            <div class="field-group-title">Retiro en tienda</div>
+            <div class="field">
+              <label
+                >¿Ofrecerías retiro en tienda (Click & Collect)?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="El comprador paga online y retira el producto en tu local físico, sin costo de envío."
+                  >?</span
+                ></label
+              >
+              <select name="retiro_tienda" data-toggle="retiro_fields">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="retiro_tienda:Sí,A definir"
+              id="retiro_fields"
+            >
+              <label
+                >¿Cuántos puntos de retiro tenés?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Cantidad de locales donde el comprador podría retirar su pedido."
+                  >?</span
+                ></label
+              >
+              <input
+                name="puntos_retiro"
+                type="number"
+                min="0"
+                placeholder="Ej: 3"
+              />
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="retiro_tienda:Sí,A definir"
+              id="stock_retiro_field"
+            >
+              <label
+                >¿El stock para retiro en tienda está separado del stock
+                web?</label
+              >
+              <select name="stock_retiro_tienda">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No, es el mismo stock</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field full conditional hidden"
+              data-show-if="retiro_tienda:Sí,A definir"
+              id="retiro_ops_field"
+            >
+              <label>¿Cómo funciona la operación de retiro en tienda?</label>
+              <textarea
+                name="retiro_ops"
+                placeholder="Describí el proceso: ¿cómo se prepara el pedido?, ¿cómo avisás al comprador que está listo?, ¿cuánto tiempo tiene para retirarlo?"
+              ></textarea>
+            </div>
+
+            <div class="field full">
+              <label>Observaciones logísticas</label>
+              <textarea
+                name="obs_logistica"
+                placeholder="Cualquier limitación, caso especial o particularidad logística que debamos conocer (ej: no despachamos en verano, tenemos demoras en el interior, trabajamos con transportista propio en zona GBA)."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(5)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">6 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(7)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           7. DEVOLUCIONES Y POSTVENTA
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="7">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">7</div>
+              <span class="section-label">Devoluciones y postventa</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Logística inversa</span>
+              <span class="section-completion" id="sec7-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Esta sección nos permite entender cómo se manejan los cambios y
+            devoluciones. Es importante para definir la experiencia postventa
+            del comprador y las responsabilidades de cada parte.
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label
+                >¿Aceptás devoluciones?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Devolución: el comprador recibe el producto y quiere devolverlo (arrepentimiento, falla, error de talla, etc.). En Argentina, la ley de defensa al consumidor establece 10 días de arrepentimiento para compras online."
+                  >?</span
+                ></label
+              >
+              <select name="acepta_devol" data-toggle="devol_fields">
+                <option value="">Seleccionar</option>
+                <option>Sí, todas las categorías</option>
+                <option>No</option>
+                <option>Según categoría</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="acepta_devol:Sí, todas las categorías,Según categoría,A definir"
+              id="devol_fields"
+            >
+              <label
+                >¿Cómo gestionás la logística de devolución?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Quién se encarga de recoger el producto en casa del comprador o de que llegue de vuelta a tu depósito?"
+                  >?</span
+                ></label
+              >
+              <select name="log_devol">
+                <option value="">Seleccionar</option>
+                <option>Logística propia</option>
+                <option>Operador logístico externo</option>
+                <option>El comprador lo envía por su cuenta</option>
+                <option>No tengo logística de devolución</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="acepta_devol:Sí, todas las categorías,Según categoría,A definir"
+            >
+              <label
+                >¿Quién es responsable de la logística inversa?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Logística inversa = el camino del producto desde el comprador de vuelta al vendedor. ¿Lo gestiona el seller, Sporting o el comprador?"
+                  >?</span
+                ></label
+              >
+              <input
+                name="resp_log_inv"
+                placeholder="Ej: el seller, Sporting, el operador logístico, a definir"
+              />
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="acepta_devol:Sí, todas las categorías,Según categoría,A definir"
+            >
+              <label
+                >¿A dónde se envía el producto devuelto?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Dónde llega físicamente el producto cuando el comprador lo devuelve?"
+                  >?</span
+                ></label
+              >
+              <input
+                name="deposito_devol"
+                placeholder="Ej: depósito central en Tucumán, tienda física, operador logístico"
+              />
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="acepta_devol:Sí, todas las categorías,Según categoría,A definir"
+            >
+              <label
+                >¿Quién valida el producto devuelto?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Alguien debe confirmar que el producto fue devuelto en condiciones, para definir si se aplica el reembolso. ¿Quién hace eso?"
+                  >?</span
+                ></label
+              >
+              <input
+                name="resp_validacion_devol"
+                placeholder="Ej: equipo de calidad del seller, depósito, a definir"
+              />
+            </div>
+            <div
+              class="field conditional hidden"
+              data-show-if="acepta_devol:Sí, todas las categorías,Según categoría,A definir"
+            >
+              <label>¿En cuánto tiempo resolvés una devolución?</label>
+              <select name="tiempo_devol">
+                <option value="">Seleccionar</option>
+                <option>24 hs hábiles</option>
+                <option>48 hs hábiles</option>
+                <option>72 hs hábiles</option>
+                <option>Más de 72 hs hábiles</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Hay categorías donde no aceptás devoluciones?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: artículos de higiene, productos de uso personal, liquidaciones, prendas con uso visible, accesorios de contacto."
+                  >?</span
+                ></label
+              >
+              <select name="restr_devol" data-toggle="restr_devol_det_wrap">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No, acepto en todas</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field full conditional hidden"
+              data-show-if="restr_devol:Sí,A definir"
+              id="restr_devol_det_wrap"
+            >
+              <label
+                >Detallá qué categorías o situaciones no aceptan
+                devolución</label
+              >
+              <textarea
+                name="restr_devol_det"
+                placeholder="Ej: ropa interior y medias sin envase cerrado, artículos de liquidación, productos personalizados, calzado con uso visible."
+              ></textarea>
+            </div>
+            <div class="field">
+              <label
+                >¿Emitís nota de crédito o reembolso por devolución
+                aprobada?</label
+              >
+              <select name="nota_credito">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label
+                >¿Tenés condiciones especiales de postventa o garantía?</label
+              >
+              <textarea
+                name="condiciones_postventa"
+                placeholder="Ej: garantía de 6 meses en productos electrónicos. Cambios solo en tienda física. Sin devolución en productos importados. Política de garantía de fábrica."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(6)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">7 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(8)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           8. FACTURACIÓN Y CONDICIONES COMERCIALES
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="8">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">8</div>
+              <span class="section-label"
+                >Facturación y condiciones comerciales</span
+              >
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Administración</span>
+              <span class="section-completion" id="sec8-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Datos necesarios para analizar la viabilidad económica de la
+            operación: facturación, comisiones, cuotas y restricciones
+            comerciales.
+          </div>
+          <div class="grid">
+            <div class="field-group-title">Facturación</div>
+            <div class="field">
+              <label
+                >¿Emitís facturas electrónicas?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Factura electrónica: se genera y envía digitalmente a través de AFIP. Es el estándar para operaciones en marketplaces."
+                  >?</span
+                ></label
+              >
+              <select name="emite_factura">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿La facturación es automática?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Automática: la factura se genera sola cuando se confirma el pedido, sin intervención manual. Manual: alguien tiene que emitirla a mano."
+                  >?</span
+                ></label
+              >
+              <select name="factura_auto">
+                <option value="">Seleccionar</option>
+                <option>Sí, automática</option>
+                <option>No, manual</option>
+                <option>Parcialmente</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Qué tipo de comprobante emitís?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Factura A: para empresas o responsables inscriptos. Factura B: para consumidores finales. Factura C: para monotributistas. En marketplaces generalmente se emite Factura B o C según el perfil del seller."
+                  >?</span
+                ></label
+              >
+              <input
+                name="tipo_factura"
+                placeholder="Ej: Factura B, Factura C, Ticket fiscal"
+              />
+            </div>
+            <div class="field">
+              <label>¿En qué formato entregás el comprobante?</label>
+              <select name="factura_formato">
+                <option value="">Seleccionar</option>
+                <option>PDF</option>
+                <option>XML</option>
+                <option>PDF + XML</option>
+                <option>Por API</option>
+                <option>Otro</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Emitís nota de crédito cuando se aprueba una
+                devolución?</label
+              >
+              <select name="nc_devol">
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+
+            <div class="field-group-title">Estimaciones de negocio</div>
+            <div class="field">
+              <label
+                >Ticket promedio estimado (en pesos)
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Valor promedio por transacción. Si vendés productos de distinto valor, podés estimar un promedio representativo."
+                  >?</span
+                ></label
+              >
+              <input
+                name="ticket_promedio"
+                type="number"
+                min="0"
+                placeholder="Ej: 35000"
+              />
+              <small>Importe aproximado en ARS</small>
+            </div>
+            <div class="field">
+              <label
+                >GMV estimado mensual (en pesos)
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="GMV = Gross Merchandise Value. Es el total de ventas brutas estimadas por mes. No tiene que ser exacto, un rango aproximado es suficiente."
+                  >?</span
+                ></label
+              >
+              <input
+                name="gmv_estimado"
+                type="number"
+                min="0"
+                placeholder="Ej: 500000"
+              />
+              <small>Volumen mensual estimado en ARS</small>
+            </div>
+
+            <div class="field-group-title">Condiciones comerciales</div>
+            <div class="field">
+              <label
+                >¿Qué cuotas ofrecerías?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Cuotas que ofrecería el seller a través de sus propios medios de pago o acuerdos. Las cuotas de las tarjetas del comprador las define Sporting en conjunto."
+                  >?</span
+                ></label
+              >
+              <select name="cuotas">
+                <option value="">Seleccionar</option>
+                <option>Solo 1 cuota</option>
+                <option>Hasta 3 cuotas</option>
+                <option>Hasta 6 cuotas</option>
+                <option>Hasta 12 cuotas</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >Comisión de marketplace esperada
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="¿Qué porcentaje de comisión sobre la venta esperás pagar al marketplace? Indicá tu expectativa o el acuerdo previo si ya lo tenés."
+                  >?</span
+                ></label
+              >
+              <input name="comision_mkt" placeholder="Ej: 7%, a definir" />
+            </div>
+            <div class="field">
+              <label
+                >¿Aceptás absorber el costo financiero de las cuotas?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Cuando el comprador paga en cuotas con tarjeta, hay un costo financiero. ¿Estás dispuesto a absorberlo vos o lo trasladarías al precio?"
+                  >?</span
+                ></label
+              >
+              <select name="costo_financiero">
+                <option value="">Seleccionar</option>
+                <option>Sí, lo absorbo</option>
+                <option>No, lo traslado al precio</option>
+                <option>Depende de la promoción</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div class="field">
+              <label
+                >¿Tenés restricciones comerciales?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Ej: precio mínimo de venta (MAP), exclusividades con otros canales, condiciones impuestas por la marca para revendedores, limitaciones de financiación."
+                  >?</span
+                ></label
+              >
+              <select
+                name="restricciones_com"
+                data-toggle="restricciones_com_det_wrap"
+              >
+                <option value="">Seleccionar</option>
+                <option>Sí</option>
+                <option>No</option>
+                <option>A definir</option>
+              </select>
+            </div>
+            <div
+              class="field full conditional hidden"
+              data-show-if="restricciones_com:Sí,A definir"
+              id="restricciones_com_det_wrap"
+            >
+              <label>Detallá las restricciones comerciales</label>
+              <textarea
+                name="restricciones_com_det"
+                placeholder="Ej: precio mínimo de venta (MAP) definido por la marca. No puedo vender con más de 6 cuotas. Exclusividad de cierta línea para canal físico."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(7)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">8 / 9</span>
+            <button
+              type="button"
+              class="section-nav-btn next"
+              onclick="navToSection(9)"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════
+           9. OBSERVACIONES FINALES
+      ═══════════════════════════════════════════════ -->
+        <section class="section" data-section="9">
+          <div class="section-title">
+            <div class="section-title-left">
+              <div class="section-num">9</div>
+              <span class="section-label">Observaciones finales</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span class="section-tag">Cierre</span>
+              <span class="section-completion" id="sec9-comp"></span>
+            </div>
+          </div>
+          <div class="section-help">
+            Espacio libre para aclarar cualquier punto que no haya quedado
+            cubierto en las secciones anteriores o que consideres relevante para
+            definir la integración.
+          </div>
+          <div class="grid">
+            <div class="field full">
+              <label
+                >¿Cuáles son las principales limitaciones actuales de tu
+                operación?
+                <span
+                  class="tip"
+                  tabindex="0"
+                  data-tip="Sé honesto/a. Es mejor saberlo ahora para planificar la integración correctamente. Ej: falta de API, equipo técnico reducido, stock compartido sin posibilidad de separar, cobertura geográfica limitada."
+                  >?</span
+                ></label
+              >
+              <textarea
+                name="limitaciones_actuales"
+                placeholder="Ej: No tenemos API disponible todavía. El stock está compartido con tienda física y no podemos separarlo aún. No tenemos logística para el interior del país."
+              ></textarea>
+            </div>
+            <div class="field full">
+              <label
+                >¿Hay particularidades de tu operación que debamos
+                conocer?</label
+              >
+              <textarea
+                name="particularidades"
+                placeholder="Ej: somos una marca estacional (temporada invierno/verano). Trabajamos con importaciones y los tiempos de reposición son largos. Tenemos productos de edición limitada."
+              ></textarea>
+            </div>
+            <div class="field full">
+              <label>¿Hay algo más que quieras agregar o preguntar?</label>
+              <textarea
+                name="comentarios"
+                placeholder="Cualquier comentario, duda, expectativa o información adicional que consideres útil para Sporting."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="section-nav">
+            <button
+              type="button"
+              class="section-nav-btn prev"
+              onclick="navToSection(8)"
+            >
+              ← Anterior
+            </button>
+            <span class="section-nav-center">9 / 9</span>
+          </div>
+        </section>
+
+        <div class="actions">
+          <div class="status" id="statusMsg">
+            Antes de enviar, verificá que el formulario esté completo.
+          </div>
+          <button class="btn" id="submitBtn" type="submit">
+            Enviar relevamiento →
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const APPS_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbx-Pqy4WWQiKBhO2mvEwYX1ULP7bHQ97iLKsdVJlBez7HBMYP94EPCBqg539w4lXImTAw/exec";
+      const SELLERS_CSV_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv";
+
+      const params = new URLSearchParams(window.location.search);
+      const sellerId = (params.get("seller_id") || "").trim();
+
+      const chip = document.getElementById("sellerChip");
+      const sellerInput = document.getElementById("seller_id");
+      const submitBtn = document.getElementById("submitBtn");
+      const statusMsg = document.getElementById("statusMsg");
+      const sellerIdentity = document.getElementById("sellerIdentity");
+      const sellerLogo = document.getElementById("sellerLogo");
+      const sellerInitials = document.getElementById("sellerInitials");
+      const sellerNameView = document.getElementById("sellerNameView");
+      const sellerMetaView = document.getElementById("sellerMetaView");
+      const sellerIdView = document.getElementById("sellerIdView");
+      const progressBar = document.getElementById("progressBar");
+      const progressPercent = document.getElementById("progressPercent");
+
+      // ── SECCIÓN LABELS para pills de navegación
+      const SECTION_LABELS = {
+        1: "Datos generales",
+        2: "Contactos",
+        3: "Tecnología",
+        4: "Catálogo",
+        5: "Stock y precios",
+        6: "Logística",
+        7: "Devoluciones",
+        8: "Facturación",
+        9: "Observaciones",
+      };
+
+      // ── BUILD SECTION PILLS
+      const sectionDots = document.getElementById("sectionDots");
+      const sections = document.querySelectorAll("[data-section]");
+      sections.forEach((s) => {
+        const n = s.dataset.section;
+        const pill = document.createElement("div");
+        pill.className = "progress-section-dot";
+        pill.id = "dot-sec-" + n;
+        pill.title =
+          "Ir a sección " + n + ": " + (SECTION_LABELS[n] || "Sección " + n);
+        pill.innerHTML =
+          '<span class="psec-num">' +
+          n +
+          "</span>" +
+          (SECTION_LABELS[n] || "Sección " + n);
+        pill.addEventListener("click", () => navToSection(Number(n)));
+        sectionDots.appendChild(pill);
+      });
+
+      // ── SCROLL / NAVIGATE TO SECTION
+      function navToSection(num) {
+        const target = document.querySelector('[data-section="' + num + '"]');
+        if (!target) return;
+        const offset = 80; // height of sticky progress-box
+        const top =
+          target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: "smooth" });
+        // Mark active pill
+        document
+          .querySelectorAll(".progress-section-dot")
+          .forEach((p) => p.classList.remove("active"));
+        const activePill = document.getElementById("dot-sec-" + num);
+        if (activePill) activePill.classList.add("active");
+      }
+
+      // ── TRACK ACTIVE SECTION ON SCROLL (Intersection Observer)
+      const secObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const n = entry.target.dataset.section;
+              document
+                .querySelectorAll(".progress-section-dot")
+                .forEach((p) => p.classList.remove("active"));
+              const pill = document.getElementById("dot-sec-" + n);
+              if (pill) pill.classList.add("active");
+              // Update label in progress box
+              const lbl = document.getElementById("progressLabel");
+              if (lbl)
+                lbl.textContent =
+                  (SECTION_LABELS[n] || "Sección " + n) + " (" + n + "/9)";
+            }
+          });
+        },
+        { threshold: 0.25, rootMargin: "-80px 0px 0px 0px" },
+      );
+
+      sections.forEach((s) => secObserver.observe(s));
+
+      function setStatus(msg, type = "") {
+        statusMsg.textContent = msg;
+        statusMsg.className = "status" + (type ? " " + type : "");
+      }
+
+      function norm(s) {
+        return String(s || "")
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "_")
+          .replace(/^_+|_+$/g, "");
+      }
+
+      function safeUrl(u) {
+        const v = String(u || "").trim();
+        if (!v) return "";
+        try {
+          const url = new URL(v, window.location.href);
+          return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+        } catch (e) {
+          return "";
+        }
+      }
+
+      function initials(name) {
+        const parts = String(name || "")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+        if (!parts.length) return "—";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+
+      function parseCSV(text) {
+        const rows = [];
+        let row = [],
+          cell = "",
+          q = false;
+        for (let i = 0; i < text.length; i++) {
+          const c = text[i],
+            n = text[i + 1];
+          if (c === '"') {
+            if (q && n === '"') {
+              cell += '"';
+              i++;
+            } else q = !q;
+          } else if (c === "," && !q) {
+            row.push(cell);
+            cell = "";
+          } else if ((c === "\n" || c === "\r") && !q) {
+            if (c === "\r" && n === "\n") i++;
+            row.push(cell);
+            rows.push(row);
+            row = [];
+            cell = "";
+          } else cell += c;
+        }
+        row.push(cell);
+        if (row.length > 1 || row[0] !== "") rows.push(row);
+        return rows;
+      }
+
+      function mapRows(matrix) {
+        const valid = matrix.filter((r) =>
+          r.some((v) => String(v || "").trim()),
+        );
+        const hi = valid.findIndex((r) =>
+          r.some((v) => norm(v).includes("seller_id")),
+        );
+        if (hi === -1) return [];
+        const headers = valid[hi].map((h) => norm(h));
+        return valid
+          .slice(hi + 1)
+          .map((r) => {
+            const o = {};
+            headers.forEach((h, i) => (o[h] = String(r[i] || "").trim()));
+            return o;
+          })
+          .filter((o) => o.seller_id);
+      }
+
+      function readSellerName(s) {
+        return (
+          s.seller_nombre ||
+          s.nombre ||
+          s.nombre_marca ||
+          s.nombre___marca ||
+          ""
+        );
+      }
+
+      function renderSellerIdentity(seller) {
+        const name = readSellerName(seller) || sellerId;
+        const category = seller.categoria || seller.categoria_principal || "";
+        const site = seller.sitio_objetivo || seller.sitio || "";
+        const logoUrl = safeUrl(
+          seller.logo_url || seller.logo || seller.url_logo,
+        );
+
+        sellerNameView.textContent = name;
+        sellerMetaView.textContent = [category, site]
+          .filter(Boolean)
+          .join(" · ");
+        sellerIdView.textContent = "ID interno: " + sellerId;
+        sellerInitials.textContent = initials(name);
+
+        if (logoUrl) {
+          sellerLogo.src = logoUrl;
+          sellerLogo.onload = () => {
+            sellerLogo.classList.remove("hidden");
+            sellerInitials.classList.add("hidden");
+          };
+          sellerLogo.onerror = () => {
+            sellerLogo.classList.add("hidden");
+            sellerInitials.classList.remove("hidden");
+          };
+        } else {
+          sellerLogo.classList.add("hidden");
+          sellerInitials.classList.remove("hidden");
+        }
+
+        sellerIdentity.classList.add("visible");
+        chip.classList.add("hidden");
+
+        const nombreInput = document.querySelector('[name="nombre"]');
+        const categoriasInput = document.querySelector('[name="categorias"]');
+        const webInput = document.querySelector('[name="web"]');
+        const plataformaInput = document.querySelector('[name="plataforma"]');
+        if (nombreInput && !nombreInput.value && name !== sellerId)
+          nombreInput.value = name;
+        if (categoriasInput && !categoriasInput.value && category)
+          categoriasInput.value = category;
+        if (webInput && !webInput.value && seller.seller_url)
+          webInput.value = seller.seller_url;
+        if (plataformaInput && !plataformaInput.value && seller.plataforma)
+          plataformaInput.value = seller.plataforma;
+        updateProgress();
+      }
+
+      async function loadSellerIdentity() {
+        if (!sellerId) {
+          chip.textContent = "Link inválido: falta seller_id";
+          chip.classList.add("err");
+          submitBtn.disabled = true;
+          setStatus(
+            "No se detectó seller_id en la URL. Solicitá un link válido al equipo de Sporting.",
+            "err",
+          );
+          return;
+        }
+
+        sellerInput.value = sellerId;
+        chip.textContent = "Validando seller " + sellerId + "…";
+
+        if (!SELLERS_CSV_URL) {
+          chip.textContent = "Relevamiento asociado a " + sellerId;
+          return;
+        }
+
+        try {
+          const res = await fetch(SELLERS_CSV_URL + "&_ts=" + Date.now(), {
+            cache: "no-store",
+          });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const rows = mapRows(parseCSV(await res.text()));
+          const seller = rows.find(
+            (r) =>
+              String(r.seller_id || "")
+                .trim()
+                .toUpperCase() === sellerId.toUpperCase(),
+          );
+
+          if (!seller) {
+            chip.textContent = "No se encontró el seller " + sellerId;
+            chip.classList.add("err");
+            submitBtn.disabled = true;
+            setStatus(
+              "El seller_id existe en el link, pero no fue encontrado en la hoja sellers. Revisá el ID o la publicación del CSV.",
+              "err",
+            );
+            return;
+          }
+
+          renderSellerIdentity(seller);
+          setStatus(
+            "Completá el formulario. El relevamiento quedará asociado al seller indicado arriba.",
+          );
+        } catch (err) {
+          console.warn(err);
+          chip.textContent = "Relevamiento asociado a " + sellerId;
+          setStatus(
+            "No se pudo cargar el nombre del seller, pero podés enviar el formulario igualmente.",
+          );
+        }
+      }
+
+      function formToObject(form) {
+        const fd = new FormData(form);
+        const obj = {};
+        fd.forEach((value, key) => {
+          if (obj[key]) {
+            obj[key] = obj[key] + ", " + String(value || "").trim();
+          } else {
+            obj[key] = String(value || "").trim();
+          }
+        });
+        obj.seller_id = sellerId;
+        return obj;
+      }
+
+      function applyConditionals() {
+        // data-show-if mechanism
+        document.querySelectorAll(".conditional").forEach((el) => {
+          const rule = el.getAttribute("data-show-if");
+          if (!rule) return;
+          const [fieldName, rawValues] = rule.split(":");
+          const allowed = (rawValues || "").split(",").map((v) => v.trim());
+          const source = document.querySelector(`[name="${fieldName}"]`);
+          const visible = source && allowed.includes(source.value);
+          el.classList.toggle("hidden", !visible);
+          if (!visible)
+            el.querySelectorAll("input,select,textarea").forEach((input) => {
+              input.value = "";
+            });
+        });
+
+        // data-toggle mechanism
+        document.querySelectorAll("[data-toggle]").forEach((trigger) => {
+          const targetId = trigger.getAttribute("data-toggle");
+          const target = document.getElementById(targetId);
+          if (!target) return;
+          const show = trigger.value && trigger.value !== "";
+          // Already handled by data-show-if for most cases
+        });
+
+        // Retiro en tienda group
+        const retiro = document.querySelector('[name="retiro_tienda"]');
+        const showRetiro = retiro && ["Sí", "A definir"].includes(retiro.value);
+        ["stock_retiro_field", "retiro_ops_field"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.classList.toggle("hidden", !showRetiro);
+            if (!showRetiro)
+              el.querySelectorAll("input,select,textarea").forEach((i) => {
+                i.value = "";
+              });
+          }
+        });
+
+        // Devoluciones group
+        const devol = document.querySelector('[name="acepta_devol"]');
+        const showDevol =
+          devol &&
+          ["Sí, todas las categorías", "Según categoría", "A definir"].includes(
+            devol.value,
+          );
+        document
+          .querySelectorAll(
+            '[name="resp_log_inv"],[name="deposito_devol"],[name="resp_validacion_devol"],[name="tiempo_devol"]',
+          )
+          .forEach((input) => {
+            const field = input.closest(".field");
+            if (field) {
+              field.classList.toggle("hidden", !showDevol);
+              if (!showDevol) input.value = "";
+            }
+          });
+      }
+
+      function updateProgress() {
+        const allFields = Array.from(
+          document.querySelectorAll(
+            '#sellerForm input:not([type="hidden"]), #sellerForm select, #sellerForm textarea',
+          ),
+        ).filter((el) => !el.closest(".hidden"));
+        const total = allFields.length || 1;
+        const completed = allFields.filter(
+          (el) => String(el.value || "").trim() !== "",
+        ).length;
+        const pct = Math.round((completed / total) * 100);
+        progressBar.style.width = pct + "%";
+        progressPercent.textContent = pct + "%";
+
+        // Section-level progress
+        sections.forEach((sec) => {
+          const secNum = sec.dataset.section;
+          const secFields = Array.from(
+            sec.querySelectorAll('input:not([type="hidden"]),select,textarea'),
+          ).filter((el) => !el.closest(".hidden"));
+          const secTotal = secFields.length;
+          const secDone = secFields.filter(
+            (el) => String(el.value || "").trim() !== "",
+          ).length;
+          const dot = document.getElementById("dot-sec-" + secNum);
+          // Update navigation pill state
+          const pill = document.getElementById("dot-sec-" + secNum);
+          if (pill) {
+            pill.classList.remove("done", "partial");
+            if (pctSec === 100) pill.classList.add("done");
+            else if (pctSec > 0) pill.classList.add("partial");
+          }
+
+          const compEl = document.getElementById("sec" + secNum + "-comp");
+          if (dot) {
+            if (secTotal === 0) {
+              dot.classList.remove("done", "partial");
+            } else if (secDone === secTotal) {
+              dot.classList.add("done");
+              dot.classList.remove("partial");
+            } else if (secDone > 0) {
+              dot.classList.add("partial");
+              dot.classList.remove("done");
+            } else {
+              dot.classList.remove("done", "partial");
+            }
+          }
+          if (compEl && secTotal > 0) {
+            const pctSec = Math.round((secDone / secTotal) * 100);
+            compEl.textContent = pctSec + "%";
+            compEl.className =
+              "section-completion" + (pctSec === 100 ? " complete" : "");
+          }
+        });
+      }
+
+      document.getElementById("sellerForm").addEventListener("input", () => {
+        applyConditionals();
+        updateProgress();
+      });
+      document.getElementById("sellerForm").addEventListener("change", () => {
+        applyConditionals();
+        updateProgress();
+      });
+
+      document
+        .getElementById("sellerForm")
+        .addEventListener("submit", async (ev) => {
+          ev.preventDefault();
+          if (!sellerId) return;
+          if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_URL")) {
+            setStatus(
+              "Falta configurar la URL de Apps Script en el HTML.",
+              "err",
+            );
+            return;
+          }
+          submitBtn.disabled = true;
+          setStatus("Enviando relevamiento…");
+          try {
+            const payload = {
+              ...formToObject(ev.currentTarget),
+              tipo_formulario: "relevamiento",
+            };
+
+            const res = await fetch(APPS_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify(payload),
+            });
+
+            const json = await res.json();
+
+            if (json.status !== "ok") {
+              throw new Error(
+                json.message || "No se pudo enviar el relevamiento.",
+              );
+            }
+            setStatus(
+              "✓ Relevamiento enviado correctamente. ¡Gracias! Nos pondremos en contacto a la brevedad.",
+              "ok",
+            );
+            const formEl = document.getElementById("sellerForm");
+            if (formEl) formEl.reset();
+            sellerInput.value = sellerId;
+            submitBtn.textContent = "Enviado ✓";
+            applyConditionals();
+            updateProgress();
+          } catch (err) {
+            console.error(err);
+            setStatus(
+              "Error al enviar: " + err.message + ". Intentá nuevamente.",
+              "err",
+            );
+            submitBtn.disabled = false;
+          }
+        });
+
+      applyConditionals();
+      updateProgress();
+      loadSellerIdentity();
+    </script>
+  </body>
+</html>

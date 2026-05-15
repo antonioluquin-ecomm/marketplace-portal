@@ -249,6 +249,24 @@ Resultado:
 - se preservan endpoint, CSV sellers, `tipo_formulario`, payload, validaciones, `seller_id`, logo, personalizacion y submit;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 4.4B: migracion Formulario de Relevamiento
+
+Objetivo: copiar el formulario publico de relevamiento a su ubicacion futura sin alterar envio, validaciones ni condicionales.
+
+Estado: completada sin submit real.
+
+Resultado:
+
+- `formulario-relevamiento_v2.html` copiado a `public/formularios/formulario-relevamiento.html`;
+- `index.html` enlaza a la nueva ruta publica;
+- Backlog ya usa la ruta publica futura para el relevamiento;
+- se preservan endpoint, CSV sellers, `tipo_formulario`, payload, validaciones, condicionales, `seller_id`, logo, personalizacion y submit;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
+Riesgo pendiente:
+
+- validar y corregir en etapa separada la referencia a `pctSec` antes de declaracion dentro de `updateProgress`, si se reproduce en navegador.
+
 ## Etapa 5: assets compartidos
 
 Objetivo: ordenar recursos visuales y estaticos.
