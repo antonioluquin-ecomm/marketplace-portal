@@ -4,6 +4,38 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 3.9 migracion Simulador Economico interno
+
+Tipo de cambio: estructural.
+
+Estado: migracion controlada completada.
+
+Cambios incluidos:
+
+- Copia de `simulador-economico_v4.html` hacia `internal/simuladores/simulador-economico.html`.
+- Actualizacion de `index.html` para enlazar preferentemente a la nueva ruta.
+- Actualizacion de `modelo-economico.html` para enlazar a la nueva ruta.
+- Actualizacion de roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion del archivo original.
+- Sin modificaciones en formularios.
+- Sin modificaciones en simulador seller publico.
+- Sin modificaciones en gestion de sellers.
+- Sin modificaciones en Apps Script.
+- Sin cambios en logica economica, formulas, tarifas, comisiones, overrides, escenarios ni inputs.
+- Sin cambios de endpoints o CSV.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+
+Validacion:
+
+- Se confirmo que la copia existe y carga como HTML.
+- Se confirmo que el original sigue existiendo en raiz.
+- Se confirmo que las dependencias de Sheets/config se preservan.
+- Se confirmo que funciones de calculo y render de escenarios siguen presentes.
+
 ## 2026-05-15 - Etapa 3.8B config central y Gestion de Sellers
 
 Tipo de cambio: estructural.

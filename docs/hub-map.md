@@ -21,7 +21,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `formulario-relevamiento_v2.html` | `/public/formularios/formulario-relevamiento.html` | publico | Alta | Formulario publico critico. No tocar inicialmente. |
 | `presentacion-seller_v3.html` | `/public/presentaciones/presentacion-seller.html` | publico | Media | Presentacion compartible con sellers. |
 | `simulador-seller_v12.html` | `/public/simuladores/simulador-seller.html` | publico | Alta | Simulador publico. Evitar cambios sin smoke test detallado. |
-| `simulador-economico_v4.html` | `/internal/simuladores/simulador-economico.html` | interno | Alta | Simulador interno. Depende de datos externos y reglas economicas. |
+| `simulador-economico_v4.html` | `/internal/simuladores/simulador-economico.html` | interno | Alta | Copiado a estructura futura. Mantiene Sheets/config, formulas, tarifas, overrides y escenarios. Original en raiz se mantiene como legacy temporal. |
 | `config.js` | `/assets/js/config.js` | integracion | Alta | Copiado a ubicacion futura como configuracion central. Original en raiz se mantiene como referencia temporal. |
 | `Apps_script_v5.js` | `/integrations/apps-script/Apps_script_v5.js` | integracion | Alta | Backend Apps Script. No modificar en etapa documental ni estructural inicial. |
 | `Logos/` | `/assets/logos/` | data | Media | Assets visuales. Migrar con cuidado por sensibilidad de rutas y mayusculas. |

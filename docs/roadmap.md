@@ -170,6 +170,20 @@ Resultado:
 - Backlog ya genera la ruta futura para editar sellers;
 - se preservan endpoint, payload, `tipo_formulario`, generacion de IDs, `localStorage`, validaciones y `no-cors`.
 
+## Etapa 3.9: migracion Simulador Economico interno
+
+Objetivo: copiar el simulador economico interno a su ubicacion futura sin tocar logica de calculo ni fuentes de datos.
+
+Estado: completada.
+
+Resultado:
+
+- `simulador-economico_v4.html` copiado a `internal/simuladores/simulador-economico.html`;
+- `index.html` enlaza a la nueva ruta;
+- `modelo-economico.html` enlaza a la nueva ruta;
+- se preservan CONFIG/DIRECT_CSV_URLS, formulas, tarifas, overrides, escenarios e inputs;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;
