@@ -1011,6 +1011,84 @@ Archivos permitidos en futuras etapas 5L y 5M:
 - 5L: `internal/backlog/backlog-sellers.html`, `docs/assets-strategy.md`, `docs/roadmap.md`, `CHANGELOG.md`.
 - 5M: `internal/backlog/gestion-sellers.html`, `docs/assets-strategy.md`, `docs/roadmap.md`, `CHANGELOG.md`.
 
+### Etapa 5L: fallback local en Backlog de Sellers
+
+Estado: completada.
+
+Resultado:
+
+- Se aplico fallback local solo en `internal/backlog/backlog-sellers.html`.
+- La URL absoluta de `CONFIG.LOGO_BASE_URL` conserva prioridad como primera opcion.
+- Se mantienen las 5 extensiones remotas (`png`, `webp`, `jpg`, `jpeg`, `svg`) como candidatos primarios.
+- Se agrego `../../assets/logos/{seller_id}.png` como ultimo candidato dentro de `logoCandidates()`.
+- El fallback final por iniciales se preserva en `handleLogoError()` y `handleModalLogoError()`.
+- Cards del kanban, tabla y modal heredan el nuevo candidato sin cambios estructurales porque consumen el array `data-logo-candidates` provisto por `logoCandidates()`.
+- No se modifico `CONFIG.LOGO_BASE_URL` ni `CONFIG.LOGO_EXTENSIONS`.
+- No se modifico el bloque `CONFIG` inline ni ninguna otra constante de Backlog (`SELLERS_URL`, `RELEVAMIENTOS_URL`, `PUBLIC_BASE_URL`, `PRESENTACION_PATH`, `CALIFICACION_PATH`, `RELEVAMIENTO_PATH`, `SIMULADOR_SELLER_PATH`).
+- No se modificaron filtros, busqueda, tabs, render del kanban, render de tabla, modal, CSV, parsers, helpers de pipeline, links publicos ni iconografia.
+- No se modifico `internal/backlog/gestion-sellers.html`.
+- No se modificaron `config.js` ni `assets/js/config.js`.
+- No se modificaron Apps Script, endpoints, payloads, simuladores, formularios ni Presentacion Seller.
+- No se modificaron archivos legacy en raiz (`backlog-sellers_v27.html` intacto).
+
+Cambio aplicado:
+
+```js
+function logoCandidates(sellerId){
+  const base=String(CONFIG.LOGO_BASE_URL||"").replace(/\/$/,"");
+  const id=safeAssetId(sellerId);
+  if(!base||!id)return[];
+  const list=(CONFIG.LOGO_EXTENSIONS||["png"]).map(ext=>`${base}/${id}.${ext}`);
+  // Fallback local secundario (Etapa 5L): se intenta solo si todos los candidatos remotos fallan.
+  // No reemplaza la URL absoluta ni el fallback final por iniciales (handleLogoError / handleModalLogoError).
+  list.push(`../../assets/logos/${id}.png`);
+  return list;
+}
+```
+
+Prioridad efectiva por seller (ejemplo `SPT-001`):
+
+1. `https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/spt-001.png`
+2. `https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/spt-001.webp`
+3. `https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/spt-001.jpg`
+4. `https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/spt-001.jpeg`
+5. `https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/spt-001.svg`
+6. `../../assets/logos/spt-001.png` (nuevo, local)
+7. Iniciales (`<div class="seller-initials">`) cuando se agota la lista.
+
+Validaciones realizadas:
+
+- Verificado que la guarda `if(!base||!id)return[];` se preserva sin cambios.
+- Verificado que el orden de extensiones remotas se preserva.
+- Verificado que `safeAssetId()` se reutiliza para normalizar el id en la ruta local (minusculas, `[^a-z0-9_-]` sustituido por `-`).
+- Verificado que `logoHTML()` consume el primer elemento del array y serializa el resto en `data-logo-candidates`, por lo que el nuevo candidato queda al final automaticamente.
+- Verificado que `handleLogoError()` (cards y tabla) y `handleModalLogoError()` (modal) reciclan el array por indice y no requieren cambios.
+- Verificado que el modal en `openModal()` invoca `logoCandidates(s.seller_id)` exactamente igual y hereda el nuevo candidato sin modificaciones a su estructura.
+- Verificado que `internal/backlog/gestion-sellers.html` no fue alterado.
+- Verificado que `config.js`, `assets/js/config.js`, Apps Script, formularios, simuladores y Presentacion Seller no fueron alterados.
+- Verificado que el archivo legacy `backlog-sellers_v27.html` permanece intacto.
+
+Validaciones manuales pendientes:
+
+- Abrir `internal/backlog/backlog-sellers.html` y confirmar que cards del kanban renderizan logo para sellers con asset en URL absoluta.
+- Confirmar que la tabla renderiza logo en `td.td-seller` con tamano reducido.
+- Abrir el modal de un seller y confirmar que `m-logo` carga la imagen remota; si falla, debe intentar la ruta local; si tambien falla, debe mostrar `m-initials`.
+- Probar con `seller_id` cuya URL absoluta este desactualizada o devuelva 404 y confirmar que el fallback local carga `../../assets/logos/{seller_id}.png`.
+- Probar con `seller_id` sin asset local y confirmar fallback por iniciales.
+- Revisar consola por errores JS nuevos (404 en candidatos intermedios es esperado segun la cadena de fallback).
+- Confirmar que filtros, busqueda, tabs `kanban/tabla`, modal, links publicos y boton "Editar seller" siguen funcionando sin diferencias visuales.
+
+Rollback:
+
+- Revertir el unico commit de 5L sobre `internal/backlog/backlog-sellers.html`.
+- `assets/logos/` no se toca, por lo que el rollback no requiere mover archivos.
+- `CONFIG.LOGO_BASE_URL` no se toca, por lo que el comportamiento previo (5 extensiones remotas + iniciales) se restaura por completo al revertir.
+
+Pendiente:
+
+- Etapa 5M: aplicar el mismo patron solo en `internal/backlog/gestion-sellers.html`, despues de validar 5L en navegador.
+- Actualizar `docs/test-matrix.md` para registrar el smoke test especifico de cards, tabla y modal en Backlog con la cadena de fallback completa.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

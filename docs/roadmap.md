@@ -564,6 +564,47 @@ Pendiente:
 - Mantener sin cambios `config.js`, `assets/js/config.js`, `LOGO_BASE_URL`, Apps Script, submit, payload, `seller_id` y archivos legacy.
 - Ejecutar smoke test manual de Backlog y Gestion como parte de la matriz de Etapa 4.5 antes y despues de 5L y 5M.
 
+## Etapa 5L: fallback local de logos en Backlog de Sellers
+
+Objetivo: agregar fallback local de logo en `internal/backlog/backlog-sellers.html` sin tocar `LOGO_BASE_URL`, sin tocar `assets/js/config.js`, sin tocar Apps Script y sin alterar filtros, busqueda, tabs, render del kanban, tabla, modal, CSV ni links publicos.
+
+Estado: completada.
+
+Resultado:
+
+- fallback local aplicado solo en `internal/backlog/backlog-sellers.html`;
+- prioridad preservada para `CONFIG.LOGO_BASE_URL` y las 5 extensiones remotas (`png`, `webp`, `jpg`, `jpeg`, `svg`);
+- agregado `../../assets/logos/{seller_id}.png` como ultimo candidato dentro de `logoCandidates()`;
+- el `seller_id` se normaliza con `safeAssetId()` igual que para los candidatos remotos;
+- `logoHTML()` no requiere cambios: serializa el array completo en `data-logo-candidates`;
+- `handleLogoError()` (cards y tabla) y `handleModalLogoError()` (modal) reciclan el array por indice y heredan el nuevo candidato sin modificaciones;
+- fallback final por iniciales preservado en cards, tabla y modal;
+- sin cambios en `CONFIG` inline (URLs, paths, extensiones, constantes operativas);
+- sin cambios en filtros, busqueda, tabs `kanban/tabla`, render estructural, modal, parsers CSV, helpers de pipeline ni links publicos;
+- sin cambios en `internal/backlog/gestion-sellers.html`;
+- sin cambios en `config.js`, `assets/js/config.js`, Apps Script, formularios, simuladores, Presentacion Seller, payloads ni redirects;
+- sin cambios en archivos legacy en raiz.
+
+Alcance excluido:
+
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin cambios en `LOGO_EXTENSIONS`.
+- Sin cambios en `config.js` ni `assets/js/config.js`.
+- Sin cambios en Apps Script, endpoints, payloads, validaciones o `seller_id`.
+- Sin cambios en Gestion de Sellers, formularios publicos, simuladores ni Presentacion Seller.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin cambios en archivos legacy en raiz (`backlog-sellers_v27.html`).
+- Sin redirects.
+- Sin cambios visuales, de filtros, de busqueda, de tabs, de modal ni de tabla.
+
+Pendiente:
+
+- Smoke test manual en navegador sobre cards del kanban, tabla y modal.
+- Validar caso con URL absoluta disponible y caso con URL absoluta caida.
+- Validar caso con asset local presente y caso sin asset local (debe caer a iniciales).
+- Etapa 5M: aplicar el mismo patron en `internal/backlog/gestion-sellers.html` solo despues de validar 5L.
+- Actualizar `docs/test-matrix.md` con el smoke test especifico de la cadena de fallback en Backlog.
+
 ## Etapa 7: legacy y redirects
 
 Objetivo: cerrar la migracion sin romper referencias existentes.

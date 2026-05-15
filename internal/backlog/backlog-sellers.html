@@ -514,7 +514,11 @@ function logoCandidates(sellerId){
   const base=String(CONFIG.LOGO_BASE_URL||"").replace(/\/$/,"");
   const id=safeAssetId(sellerId);
   if(!base||!id)return[];
-  return (CONFIG.LOGO_EXTENSIONS||["png"]).map(ext=>`${base}/${id}.${ext}`);
+  const list=(CONFIG.LOGO_EXTENSIONS||["png"]).map(ext=>`${base}/${id}.${ext}`);
+  // Fallback local secundario (Etapa 5L): se intenta solo si todos los candidatos remotos fallan.
+  // No reemplaza la URL absoluta ni el fallback final por iniciales (handleLogoError / handleModalLogoError).
+  list.push(`../../assets/logos/${id}.png`);
+  return list;
 }
 
 function logoHTML(s, cls="seller-logo", fallbackCls="seller-initials", sizeStyle=""){

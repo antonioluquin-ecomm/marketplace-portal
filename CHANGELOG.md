@@ -4,6 +4,58 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5L fallback local Backlog de Sellers
+
+Tipo de cambio: piloto controlado.
+
+Estado: completado sin cambios funcionales.
+
+Cambios incluidos:
+
+- Actualizacion acotada de `internal/backlog/backlog-sellers.html`.
+- Ampliacion de `logoCandidates(sellerId)` para incluir `../../assets/logos/{seller_id}.png` como ultimo candidato.
+- Preservacion de la URL absoluta `CONFIG.LOGO_BASE_URL` como prioridad principal y de las 5 extensiones remotas (`png`, `webp`, `jpg`, `jpeg`, `svg`).
+- Preservacion del fallback final por iniciales en cards, tabla y modal mediante `handleLogoError()` y `handleModalLogoError()`.
+- Propagacion automatica del nuevo candidato a cards del kanban, tabla y modal a traves de `data-logo-candidates`.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin cambios en `CONFIG.LOGO_BASE_URL` ni `CONFIG.LOGO_EXTENSIONS`.
+- Sin cambios en el bloque `CONFIG` inline ni en sus constantes operativas (`SELLERS_URL`, `RELEVAMIENTOS_URL`, `PUBLIC_BASE_URL`, `PRESENTACION_PATH`, `CALIFICACION_PATH`, `RELEVAMIENTO_PATH`, `SIMULADOR_SELLER_PATH`).
+- Sin modificaciones en `internal/backlog/gestion-sellers.html`.
+- Sin modificaciones en `config.js` ni `assets/js/config.js`.
+- Sin cambios en Apps Script, endpoints, payloads, validaciones o `seller_id`.
+- Sin cambios en filtros, busqueda, tabs `kanban/tabla`, render estructural, modal, parsers CSV, helpers de pipeline ni links publicos.
+- Sin cambios visuales ni de estructura.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin cambios en archivos legacy en raiz (`backlog-sellers_v27.html`).
+- Sin redirects.
+- Sin extraccion de CSS o JavaScript.
+- Sin modificaciones en formularios publicos, simuladores ni Presentacion Seller.
+
+Validacion:
+
+- Se confirmo que la guarda `if(!base||!id)return[];` se preserva sin cambios.
+- Se confirmo que los 5 candidatos remotos se mantienen primero y en el mismo orden de extensiones.
+- Se confirmo que el nuevo candidato local queda al final del array devuelto por `logoCandidates()`.
+- Se confirmo que `safeAssetId()` se reutiliza para normalizar el id en la ruta local.
+- Se confirmo que `logoHTML()` serializa el array completo en `data-logo-candidates` y no requiere cambios.
+- Se confirmo que `handleLogoError()` (cards y tabla) y `handleModalLogoError()` (modal) reciclan el array por indice sin cambios.
+- Se confirmo que `openModal()` invoca `logoCandidates(s.seller_id)` y hereda el nuevo candidato.
+- Se confirmo que ni `internal/backlog/gestion-sellers.html`, ni `config.js`, ni `assets/js/config.js`, ni Apps Script, ni formularios, ni simuladores, ni Presentacion Seller fueron alterados.
+- Se confirmo que `backlog-sellers_v27.html` legacy permanece intacto.
+
+Pendiente:
+
+- Smoke test manual sobre cards del kanban, tabla y modal.
+- Validar caso con URL absoluta disponible (no debe haber regresion).
+- Validar caso con URL absoluta caida y asset local presente (debe cargar el local).
+- Validar caso sin asset local (debe caer a iniciales).
+- Etapa 5M: aplicar el mismo patron en `internal/backlog/gestion-sellers.html` solo despues de validar 5L.
+- Actualizar `docs/test-matrix.md` con el smoke test especifico de la cadena de fallback en Backlog.
+
 ## 2026-05-15 - Etapa 5K auditoria de logos en Backlog y Gestion
 
 Tipo de cambio: auditoria/documental.
