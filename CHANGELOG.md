@@ -4,6 +4,41 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5G auditoria formularios publicos logos
+
+Tipo de cambio: auditoria/documental.
+
+Estado: auditoria completada sin cambios funcionales.
+
+Cambios incluidos:
+
+- Auditoria de `public/formularios/formulario-calificacion.html`.
+- Auditoria de `public/formularios/formulario-relevamiento.html`.
+- Documentacion de carga actual de logos, prioridad de `logo_url`, fallback por iniciales y puntos posibles de insercion para fallback local.
+- Clasificacion de riesgo: Calificacion alto, Relevamiento critico.
+- Recomendacion de aplicar primero en Calificacion y evaluar Relevamiento despues de smoke test.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin modificaciones en HTML.
+- Sin cambios de referencias.
+- Sin cambios en logica de formularios.
+- Sin cambios en submit.
+- Sin modificaciones en Apps Script.
+- Sin cambios de endpoints ni payloads.
+- Sin cambios de validaciones.
+- Sin modificaciones en `config.js` ni `assets/js/config.js`.
+- Sin modificaciones en Backlog, Gestion de Sellers, simuladores o Presentacion Seller.
+- Sin redirects.
+
+Riesgos documentados:
+
+- Los formularios escriben datos reales via Apps Script.
+- `formulario-relevamiento.html` tiene mayor sensibilidad por condicionales, progreso por seccion y riesgo pendiente `pctSec`.
+- `safeUrl()` acepta actualmente solo `http:` y `https:`, por lo que el fallback local requiere implementacion cuidadosa en una etapa separada.
+
 ## 2026-05-15 - Etapa 5F fallback local Simulador Seller
 
 Tipo de cambio: piloto controlado.

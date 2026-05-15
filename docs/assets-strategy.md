@@ -678,6 +678,98 @@ Validaciones manuales pendientes:
 - Probar con seller sin logo local y confirmar fallback por iniciales.
 - Revisar que calculos, tarifas, overrides, escenarios y CTAs sigan funcionando.
 
+### Etapa 5G: auditoria previa de logos en formularios publicos
+
+Estado: completada a nivel documental.
+
+Alcance:
+
+- Solo auditoria de `public/formularios/formulario-calificacion.html` y `public/formularios/formulario-relevamiento.html`.
+- Sin cambios en HTML, referencias, validaciones, submit, payloads, endpoints, Apps Script, config, Backlog, Gestion de Sellers, simuladores, Presentacion Seller o redirects.
+
+Hallazgos comunes:
+
+- Ambos formularios cargan identidad del seller desde `SELLERS_CSV_URL` usando `seller_id` obligatorio por query param.
+- Ambos tienen `sellerLogo`, `sellerInitials`, `safeUrl()`, `initials()` y `renderSellerIdentity(seller)`.
+- Ambos priorizan actualmente `seller.logo_url || seller.logo || seller.url_logo`.
+- Ambos validan la URL con `safeUrl()`, que acepta solo protocolos `http:` y `https:`.
+- Ambos mantienen fallback visual por iniciales cuando no hay logo o cuando falla la carga de la imagen.
+- Ambos tienen submit real hacia Apps Script y no deben usarse como primer terreno de prueba sin smoke test.
+
+Tabla de auditoria:
+
+| Formulario | Carga actual de logo | Query params logo | Fallback actual | Punto natural para fallback local | Riesgo | Observaciones |
+|---|---|---|---|---|---|---|
+| `public/formularios/formulario-calificacion.html` | `safeUrl(seller.logo_url || seller.logo || seller.url_logo)` dentro de `renderSellerIdentity()` | No usa `logo`/`logo_url` de query para identidad | `sellerInitials` via `sellerLogo.onerror` o ausencia de `logoUrl` | Despues de `safeUrl(...)`, antes del bloque `if (logoUrl)` | Alto | Es el candidato mas razonable para 5H porque el flujo es mas corto que Relevamiento. No tocar submit ni payload. |
+| `public/formularios/formulario-relevamiento.html` | `safeUrl(seller.logo_url || seller.logo || seller.url_logo)` dentro de `renderSellerIdentity()` | No usa `logo`/`logo_url` de query para identidad | `sellerInitials` via `sellerLogo.onerror` o ausencia de `logoUrl` | Despues de `safeUrl(...)`, antes del bloque `if (logoUrl)` | Critico | Formulario mas extenso, con condicionales y riesgo pendiente `pctSec` en `updateProgress`. Conviene esperar a validar Calificacion. |
+
+Diferencias relevantes:
+
+- Calificacion tiene menos secciones, menor superficie de interaccion y menor dependencia de condicionales.
+- Relevamiento tiene mas campos, secciones condicionales, progreso por seccion y riesgo conocido `pctSec`.
+- Ambos comparten el mismo patron de logo, por lo que el cambio tecnico seria similar, pero el riesgo operativo no lo es.
+
+Estrategia segura recomendada:
+
+1. No modificar ambos formularios en la misma etapa.
+2. Aplicar primero en `public/formularios/formulario-calificacion.html`.
+3. Mantener prioridad de `logo_url`, `logo` y `url_logo` desde CSV.
+4. Agregar fallback local solo si `safeUrl(...)` queda vacio.
+5. Usar `../../assets/logos/${sellerId.toLowerCase()}.png`.
+6. Mantener `sellerLogo.onerror` como fallback final por iniciales.
+7. No tocar `seller_id`, `SELLERS_CSV_URL`, `ENDPOINT_URL`/`APPS_SCRIPT_URL`, payload, validaciones ni submit.
+8. Recién despues de smoke test de Calificacion evaluar Relevamiento.
+
+Orden recomendado:
+
+- 5H: aplicar fallback local solo en `public/formularios/formulario-calificacion.html`.
+- 5I: smoke test manual de Calificacion, sin submit real.
+- 5J: aplicar fallback local en `public/formularios/formulario-relevamiento.html` solo si 5I cierra sin incidentes.
+- 5K: smoke test manual de Relevamiento, con foco adicional en `pctSec`.
+
+Archivos permitidos para la siguiente etapa:
+
+- `public/formularios/formulario-calificacion.html`
+- `docs/assets-strategy.md`
+- `docs/roadmap.md`
+- `CHANGELOG.md`
+
+Que no tocar:
+
+- `formulario-calificacion_v2.html`
+- `public/formularios/formulario-relevamiento.html` durante 5H
+- `formulario-relevamiento_v2.html`
+- Apps Script
+- endpoints
+- payloads
+- validaciones
+- submit
+- Backlog
+- Gestion de Sellers
+- Presentacion Seller
+- Simulador Seller
+- `config.js`
+- `assets/js/config.js`
+- `LOGO_BASE_URL`
+
+Rollback:
+
+- Revertir solo el cambio en el formulario piloto.
+- Mantener `assets/logos/` sin cambios.
+- Conservar `sellerInitials` como fallback final.
+- No tocar configuracion global.
+
+Smoke test posterior recomendado:
+
+- Abrir sin `seller_id` y confirmar bloqueo esperado.
+- Abrir con `?seller_id=SPT-001`.
+- Confirmar prioridad de `logo_url` si existe en CSV.
+- Confirmar fallback local si no existe `logo_url`.
+- Confirmar iniciales si no existe logo local.
+- Confirmar que campos obligatorios y validaciones siguen funcionando.
+- No ejecutar submit real.
+- Revisar consola por errores JS, 404 inesperados, CORS y fetch fallidos.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

@@ -433,6 +433,29 @@ Pendiente:
 - validar caso sin logo local para confirmar iniciales;
 - revisar calculos, escenarios y CTAs despues del cambio.
 
+## Etapa 5G: auditoria previa de logos en formularios publicos
+
+Objetivo: auditar si es seguro extender el fallback local de logos a formularios publicos migrados antes de modificar archivos.
+
+Estado: completada a nivel documental.
+
+Resultado:
+
+- auditados `public/formularios/formulario-calificacion.html` y `public/formularios/formulario-relevamiento.html`;
+- ambos cargan identidad por `seller_id` desde `SELLERS_CSV_URL`;
+- ambos priorizan `seller.logo_url || seller.logo || seller.url_logo`;
+- ambos tienen fallback por iniciales mediante `sellerLogo.onerror` o ausencia de logo;
+- ambos usan `safeUrl()`, que actualmente solo acepta `http:` y `https:`;
+- se identifico como punto natural de insercion el interior de `renderSellerIdentity()`, despues de resolver logo desde CSV;
+- Calificacion clasificada como riesgo alto;
+- Relevamiento clasificado como riesgo critico por sensibilidad, condicionales y riesgo pendiente `pctSec`;
+- recomendacion: aplicar primero en Calificacion, validar sin submit real y luego evaluar Relevamiento.
+
+Pendiente:
+
+- Etapa 5H: piloto controlado solo en `public/formularios/formulario-calificacion.html`;
+- mantener sin cambios Relevamiento, formularios legacy, Apps Script, endpoints, payloads, validaciones, submit, config global, Backlog, Gestion, simuladores y Presentacion Seller.
+
 ## Etapa 6: CSS/JS compartido
 
 Objetivo: reducir duplicacion tecnica sin cambiar comportamiento ni diseno.
