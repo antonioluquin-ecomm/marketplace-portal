@@ -221,6 +221,20 @@ Resultado:
 - se preservan `seller_id`, logos, CTA y lectura de CSV sellers;
 - el archivo original en raiz se mantiene intacto como legacy temporal.
 
+## Etapa 4.2: migracion Simulador Seller publico
+
+Objetivo: copiar el simulador publico para sellers a su ubicacion futura sin alterar calculos ni personalizacion por seller.
+
+Estado: completada.
+
+Resultado:
+
+- `simulador-seller_v12.html` copiado a `public/simuladores/simulador-seller.html`;
+- `index.html` enlaza a la nueva ruta publica;
+- Backlog ya genera la ruta publica futura para el simulador seller;
+- se preservan `seller_id`, logos, CTA, tarifas, overrides, escenarios y calculos;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 ## Etapa 5: assets compartidos
 
 Objetivo: ordenar recursos visuales y estaticos.

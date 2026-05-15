@@ -4,6 +4,37 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 4.2 migracion Simulador Seller publico
+
+Tipo de cambio: estructural.
+
+Estado: migracion controlada completada.
+
+Cambios incluidos:
+
+- Copia de `simulador-seller_v12.html` hacia `public/simuladores/simulador-seller.html`.
+- Actualizacion de `index.html` para enlazar preferentemente a la nueva ruta publica.
+- Validacion de preservacion de `seller_id`, logos, CTA, calculos, tarifas y overrides.
+- Actualizacion de roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion del archivo original.
+- Sin modificaciones en formularios.
+- Sin modificaciones en Presentacion Seller.
+- Sin modificaciones en simulador economico interno.
+- Sin modificaciones en gestion de sellers.
+- Sin modificaciones en Apps Script.
+- Sin cambios en logica economica, formulas, query params, seller_id, CTA, tarifas, overrides ni personalizacion.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+
+Validacion:
+
+- Se confirmo que la copia existe y carga como HTML.
+- Se confirmo que el original sigue existiendo en raiz.
+- Se confirmo que `seller_id`, `URLSearchParams`, logica de logo, CTA, calculos, tarifas y overrides siguen presentes.
+
 ## 2026-05-15 - Etapa 4.1 migracion Presentacion Seller
 
 Tipo de cambio: estructural.
