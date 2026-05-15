@@ -102,6 +102,19 @@ Resultado:
 - no se modificaron archivos originales de raiz;
 - no se extrajo CSS ni JavaScript.
 
+## Etapa 3.2: migracion Maqueta Seller Center
+
+Objetivo: copiar la maqueta de Seller Center a su ubicacion futura y ajustar navegacion minima.
+
+Estado: completada.
+
+Resultado:
+
+- `maqueta-seller-center_v2.html` copiado a `internal/seller-center/maqueta-seller-center.html`;
+- `internal/seller-center/index.html` enlaza a la nueva maqueta;
+- `index.html` incluye acceso a la maqueta migrada;
+- el archivo original en raiz se mantiene intacto como legacy temporal.
+
 Pendiente:
 
 - migrar paginas internas de mayor riesgo como backlog, gestion de sellers, Gantt y simuladores internos;

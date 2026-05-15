@@ -11,7 +11,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Gantt operativo. Depende de Google Sheets. |
 | `gantt-seller-center_v2.html` | `/internal/gantt/gantt-seller-center.html` | interno | Media | Roadmap Seller Center. Depende de Google Sheets. |
 | `seller-center_v2.html` | `/internal/seller-center/index.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
-| `maqueta-seller-center_v2.html` | `/internal/seller-center/maqueta-seller-center.html` | interno | Media | Maqueta visual/funcional. Evitar cambios visuales durante migracion estructural. |
+| `maqueta-seller-center_v2.html` | `/internal/seller-center/maqueta-seller-center.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
 | `proyecto-marketplace_v3.html` | `/internal/estrategia/proyecto-marketplace.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
 | `proceso-onboarding_v4.html` | `/internal/estrategia/proceso-onboarding.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |
 | `modelo-integracion_v5.html` | `/internal/estrategia/modelo-integracion.html` | interno | Media | Copiado a estructura futura. Navegacion minima ajustada en copia. Original en raiz se mantiene como legacy temporal. |

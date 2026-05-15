@@ -4,6 +4,37 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 3.2 migracion Maqueta Seller Center
+
+Tipo de cambio: estructural.
+
+Estado: migracion segura completada.
+
+Cambios incluidos:
+
+- Copia de `maqueta-seller-center_v2.html` hacia `internal/seller-center/maqueta-seller-center.html`.
+- Ajuste minimo de navegacion en la copia nueva.
+- Actualizacion de `internal/seller-center/index.html` para enlazar a la maqueta migrada.
+- Actualizacion de `index.html`, roadmap y mapa del hub.
+
+Alcance explicitamente excluido:
+
+- Sin movimiento ni eliminacion del archivo original.
+- Sin modificaciones en backlog.
+- Sin modificaciones en Gantt.
+- Sin modificaciones en formularios.
+- Sin modificaciones en simuladores.
+- Sin modificaciones en Apps Script.
+- Sin cambios de logica funcional.
+- Sin extraccion de CSS o JavaScript.
+- Sin redirects desde archivos versionados en raiz.
+
+Validacion:
+
+- Se confirmo que la copia existe y carga como HTML.
+- Se confirmo que el original sigue existiendo en raiz.
+- Se confirmo que los links locales ajustados resuelven.
+
 ## 2026-05-15 - Etapa 3.1 navegacion interna en copias
 
 Tipo de cambio: estructural.
