@@ -4,6 +4,35 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6E extension tokens.css al grupo internal/estrategia
+
+Tipo de cambio: extension controlada del link CSS a 4 paginas informativas.
+
+Estado: implementado — pendiente smoke test manual.
+
+Paginas modificadas (solo agregado link en <head>, :root inline conservado):
+- `internal/estrategia/governance.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Patron aplicado:
+```html
+<!-- 6E: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+Restricciones cumplidas:
+- No se modifico JS, Apps Script, endpoints, submit ni paginas criticas.
+- No se extrajo CSS inline.
+- No se eliminaron variables :root legacy.
+- `proceso-onboarding.html` (piloto 6C) no fue tocado.
+
+Correcciones documentales:
+- La lista de paginas en docs/test-matrix.md mencionaba paginas inexistentes (bandeja-seller, calificacion-seller, contacto-seller, presentacion-interna). Corregida con las paginas reales.
+
+Proxima accion: smoke test manual en las 4 paginas antes del proximo push (Etapa 6F).
+
 ## 2026-05-16 - Etapa 6D smoke test piloto tokens.css
 
 Tipo de cambio: documentacion — resultado de validacion.

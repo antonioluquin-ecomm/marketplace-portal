@@ -666,7 +666,26 @@ Etapa 6D: smoke test ejecutado el 2026-05-16 en entorno local. Resultado: OK. Ve
 
 Pendiente:
 - Validacion en produccion (GitHub Pages) despues del proximo deploy.
-- Etapa 6E: extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/`.
+
+## Etapa 6E: extension tokens.css al grupo internal/estrategia
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+Objetivo: extender `assets/css/tokens.css` a las 4 paginas reales del grupo `internal/estrategia/`, siguiendo el patron establecido en el piloto 6C/6D.
+
+Acciones realizadas:
+- Agregado `<link rel="stylesheet" href="../../assets/css/tokens.css">` en `<head>` de:
+  - `internal/estrategia/governance.html`
+  - `internal/estrategia/modelo-integracion.html`
+  - `internal/estrategia/modelo-economico.html`
+  - `internal/estrategia/proyecto-marketplace.html`
+- El `:root` inline de cada pagina fue conservado sin modificacion.
+- Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
+
+Pendiente:
+- Smoke test manual en las 4 paginas en entorno local antes del proximo push.
+- Etapa 6F (futura): evaluar si extender `tokens.css` a otros grupos de paginas o avanzar hacia la unificacion progresiva de nombres de variables.
 
 ## Etapa 7: legacy y redirects
 

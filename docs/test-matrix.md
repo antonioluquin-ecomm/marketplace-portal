@@ -162,8 +162,51 @@ Riesgos conocidos y pendientes:
 
 ### Proxima accion: Etapa 6E
 
-Piloto aprobado. Etapa 6E: extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/`:
-- `bandeja-seller.html`
-- `calificacion-seller.html`
-- `contacto-seller.html`
-- `presentacion-interna.html`
+Piloto aprobado. Etapa 6E: extender `tokens.css` a las otras 4 paginas reales del grupo `internal/estrategia/`:
+- `governance.html`
+- `modelo-integracion.html`
+- `modelo-economico.html`
+- `proyecto-marketplace.html`
+
+Nota: la lista anterior mencionaba paginas inexistentes (bandeja-seller, calificacion-seller, contacto-seller, presentacion-interna). Corregida en esta entrada.
+
+---
+
+## Etapa 6E: extension de tokens.css al grupo interno/estrategia
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+### Paginas actualizadas
+
+| Pagina | Link agregado | :root inline | Ruta usada |
+|---|---|---|---|
+| `internal/estrategia/governance.html` | ✅ linea 10-11 | ✅ intacto (linea 14) | `../../assets/css/tokens.css` |
+| `internal/estrategia/modelo-integracion.html` | ✅ linea 10-11 | ✅ intacto (linea 13) | `../../assets/css/tokens.css` |
+| `internal/estrategia/modelo-economico.html` | ✅ linea 10-11 | ✅ intacto (linea 14) | `../../assets/css/tokens.css` |
+| `internal/estrategia/proyecto-marketplace.html` | ✅ linea 10-11 | ✅ intacto (linea 13) | `../../assets/css/tokens.css` |
+
+Patron aplicado en todas:
+```html
+<!-- 6E: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+### Checklist de smoke test 6E (pendiente)
+
+| # | Verificacion | Metodo | Resultado |
+|---|---|---|---|
+| 1 | `governance.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 2 | `modelo-integracion.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 3 | `modelo-economico.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 4 | `proyecto-marketplace.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 5 | Sin errores de consola en las 4 paginas | DevTools → Console | Pendiente |
+| 6 | Sin regresion visual en topbar en las 4 paginas | Visual | Pendiente |
+| 7 | Sin regresion visual en sidebar en las 4 paginas | Visual | Pendiente |
+| 8 | Sin regresion visual en contenido principal | Visual | Pendiente |
+
+### Riesgos conocidos
+
+- Las variables `--warn`, `--info`, `--teal`, `--danger` tienen el mismo nombre en `tokens.css` y en el `:root` inline pero valores distintos. El inline sobreescribe al externo — comportamiento esperado hasta que se elimine el inline en etapas futuras.
+- `proyecto-marketplace.html` usa nombres de variables distintos en su `:root` (`--gd`, `--gb`, `--gb2`, `--b`, `--b2` en lugar de `--g-dim`, `--g-brd`, `--line`, `--line-soft`). No hay conflicto — coexisten con nombres distintos. A tener en cuenta cuando se unifiquen tokens en etapas futuras.
+- El smoke test debe ejecutarse en entorno local antes del proximo push a produccion.

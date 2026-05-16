@@ -1283,3 +1283,41 @@ El bloque `:root` original del HTML **no fue eliminado**. Permanece en la linea 
 Validaciones confirmadas: carga sin 404, HTTP 200 en `tokens.css`, sin errores de consola, sin regresion visual en topbar / sidebar / cards / KPIs / botones. El `:root` inline sigue activo como fallback.
 
 Piloto **aprobado**. Habilitado para extender `tokens.css` al resto del grupo `internal/estrategia/` en Etapa 6E.
+
+---
+
+### Etapa 6E
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+#### Objetivo
+
+Extender el link a `assets/css/tokens.css` a las 4 paginas reales del grupo `internal/estrategia/`, siguiendo el patron del piloto 6C.
+
+#### Paginas actualizadas
+
+| Pagina | Link | :root inline |
+|---|---|---|
+| `internal/estrategia/governance.html` | ✅ agregado | ✅ intacto |
+| `internal/estrategia/modelo-integracion.html` | ✅ agregado | ✅ intacto |
+| `internal/estrategia/modelo-economico.html` | ✅ agregado | ✅ intacto |
+| `internal/estrategia/proyecto-marketplace.html` | ✅ agregado | ✅ intacto |
+
+Ruta usada en todas: `../../assets/css/tokens.css`
+
+#### Nota sobre proyecto-marketplace.html
+
+Esta pagina usa nombres de variables propios en su `:root` (`--gd`, `--gb`, `--gb2`, `--b`, `--b2`) en lugar de los nombres canonicos (`--g-dim`, `--g-brd`, `--line`, `--line-soft`). No existe conflicto — coexisten en el mismo `:root` sin solapamiento. A considerar en etapas futuras de unificacion.
+
+#### Restricciones cumplidas
+
+- Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
+- No se extrajo CSS inline.
+- No se eliminaron variables inline.
+- No se crearon redirects ni se movieron archivos.
+
+#### Pendiente
+
+- Smoke test manual en las 4 paginas en entorno local.
+- Etapa 6F (futura): definir si extender `tokens.css` a otros grupos o avanzar hacia unificacion de nombres de variables.
