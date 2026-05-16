@@ -1335,4 +1335,70 @@ Las 5 paginas del grupo quedan **validadas con `tokens.css`**:
 | `modelo-economico.html` | 6E | ✅ 6F OK |
 | `proyecto-marketplace.html` | 6E | ✅ 6F OK |
 
-Pendiente: definir en Etapa 6G si extender `tokens.css` a otros grupos de paginas o iniciar la unificacion progresiva de nombres de variables legacy a nombres canonicos.
+---
+
+### Etapa 6G: auditoria del grupo internal/seller-center
+
+**Fecha:** 2026-05-16
+**Estado:** completado — solo lectura, sin modificaciones
+
+Auditadas 2 paginas del grupo `internal/seller-center/`:
+
+| Pagina | Lineas | JS | Colisiones con tokens.css | Veredicto |
+|---|---|---|---|---|
+| `index.html` | 705 | fetch read-only a Google Sheets | 8 variables (6 mismo valor, 2 distintos) | ✅ APTA |
+| `maqueta-seller-center.html` | 1288 | UI interactivo puro | 6 variables (TODAS distintas) | ❌ EXCLUIDA |
+
+#### Analisis index.html
+
+Paleta oscura Sporting, nomenclatura legacy (`--k`, `--t1`, `--bdr`, `--tb`) identica al grupo `estrategia/`. El bloque `<script>` realiza un `fetch` de solo lectura a Google Sheets para mostrar el roadmap de modulos SC — sin escritura, sin Apps Script, sin submit. Las 8 colisiones de nombres con `tokens.css` son identicas en valor o el inline prevalece de todos modos.
+
+#### Analisis y exclusion definitiva maqueta-seller-center.html
+
+La maqueta Seller Center representa **otra plataforma en creacion** con un sistema visual completamente distinto al Marketplace Portal. Paleta clara (fondo `#eef1f4`, panel `#ffffff`, texto `#222222`) frente a la paleta oscura de `tokens.css`. Las 6 colisiones de nombre son opuestos semánticos absolutos:
+
+| Variable | tokens.css | maqueta | Magnitud |
+|---|---|---|---|
+| `--panel` | `#141c13` (verde muy oscuro) | `#ffffff` (blanco) | 🔴 critico |
+| `--text` | `#edf3e9` (casi blanco) | `#222222` (negro) | 🔴 critico |
+| `--line` | `rgba(255,255,255,.08)` | `#dcdcdc` (gris) | 🔴 critico |
+| `--line-soft` | `rgba(255,255,255,.05)` | `#eeeeee` (gris claro) | 🔴 critico |
+| `--topbar-height` | `58px` | `42px` | 🟠 layout distinto |
+| `--teal` | `#2dd4bf` | `#1aa69a` | 🟡 color distinto |
+
+Agregar `tokens.css` a la maqueta no romperia nada hoy (el inline siempre gana), pero crearia una trampa: cualquier etapa futura que elimine el `:root` inline como "progresion" destruiria completamente el sistema visual de la maqueta. La exclusion es definitiva y por diseño — no es un pendiente a resolver.
+
+---
+
+### Etapa 6H
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+#### Objetivo
+
+Extender `assets/css/tokens.css` a `internal/seller-center/index.html`. Documentar exclusion definitiva de `maqueta-seller-center.html`.
+
+#### Modificacion realizada
+
+**`internal/seller-center/index.html`** — agregado dentro de `<head>`, lineas 10-11, antes del `<style>`:
+
+```html
+<!-- 6H: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+El `:root` inline (linea 13) fue conservado sin modificacion.
+
+#### Paginas del grupo internal/seller-center/
+
+| Pagina | Estado |
+|---|---|
+| `index.html` | ✅ `tokens.css` enlazado (6H) — pendiente smoke test |
+| `maqueta-seller-center.html` | ❌ excluida definitivamente — otra plataforma, otro sistema visual |
+
+#### Riesgos pendientes
+
+- `--info` de `index.html` (`#38bdf8`) es distinto del canonico (`#60a5fa`) — el inline prevalece, sin impacto visual.
+- El `fetch` a Google Sheets puede devolver error CORS en entorno local — esperado, no es regresion de CSS.
+- Smoke test pendiente antes del proximo push a produccion.

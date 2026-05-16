@@ -689,7 +689,30 @@ Estado final del grupo `internal/estrategia/`: **validado con `tokens.css`** —
 
 Pendiente:
 - Validacion en produccion (GitHub Pages) despues del proximo push.
-- Definir alcance de Etapa 6G: extender `tokens.css` a otros grupos o iniciar unificacion progresiva de nombres de variables legacy.
+
+## Etapa 6G: auditoria grupo internal/seller-center
+
+**Fecha:** 2026-05-16
+**Estado:** completado — solo auditoría, sin modificaciones
+
+Auditadas `index.html` (705 lineas, fetch read-only, paleta Sporting) y `maqueta-seller-center.html` (1288 lineas, UI puro, paleta clara distinta). Conclusiones: `index.html` apta para 6H; `maqueta-seller-center.html` excluida definitivamente por ser otra plataforma con otro sistema visual.
+
+## Etapa 6H: tokens.css en internal/seller-center/index.html
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+Objetivo: extender `tokens.css` a `internal/seller-center/index.html`. Documentar exclusion definitiva de `maqueta-seller-center.html`.
+
+Acciones realizadas:
+- Agregado `<link rel="stylesheet" href="../../assets/css/tokens.css">` en `<head>` de `internal/seller-center/index.html` (linea 10-11), antes del `<style>`.
+- El `:root` inline (linea 13) fue conservado sin modificacion.
+- `maqueta-seller-center.html` no fue modificada — excluida por diseño.
+- Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
+
+Pendiente:
+- Smoke test manual en `index.html` en entorno local antes del proximo push.
+- Etapa 6I: documentar resultado del smoke test.
 
 ## Etapa 7: legacy y redirects
 

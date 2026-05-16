@@ -4,6 +4,26 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6H tokens.css en seller-center index
+
+Tipo de cambio: extension controlada de link CSS + exclusion documentada.
+
+Estado: implementado — pendiente smoke test manual.
+
+Archivos HTML modificados:
+- `internal/seller-center/index.html` — agregado `<link rel="stylesheet" href="../../assets/css/tokens.css">` en `<head>` antes del `<style>`. El `:root` inline conservado.
+
+Archivos no modificados por decision:
+- `internal/seller-center/maqueta-seller-center.html` — excluida definitivamente. Representa otra plataforma en creacion con sistema visual propio (paleta clara). No adopta los tokens oscuros del Marketplace Portal.
+
+Etapa 6G (auditoria previa):
+- `index.html` auditada: paleta Sporting, fetch read-only a Google Sheets, 8 colisiones con tokens.css (6 mismo valor o sin impacto visual).
+- `maqueta-seller-center.html` auditada: 6 colisiones criticas de variables (panel, text, line, topbar-height) — opuestos semanticos absolutos entre paleta clara y oscura.
+
+Restricciones cumplidas: no se modifico JS, Apps Script, endpoints, submit, formularios, simuladores, backlog, gantt ni legacy.
+
+Proxima accion: smoke test manual de `index.html` antes del proximo push (Etapa 6I).
+
 ## 2026-05-16 - Etapa 6F smoke test grupo internal/estrategia
 
 Tipo de cambio: documentacion — resultado de validacion.

@@ -229,3 +229,52 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 - Las variables `--warn`, `--info`, `--teal`, `--danger` tienen el mismo nombre en `tokens.css` y en el `:root` inline pero valores distintos. El inline sobreescribe al externo en las 5 paginas — comportamiento esperado hasta que el inline sea eliminado en etapas futuras.
 - `proyecto-marketplace.html` usa nombres de variables propios (`--gd`, `--gb`, `--gb2`, `--b`, `--b2`) en lugar de los canonicos (`--g-dim`, `--g-brd`, `--line`, `--line-soft`). Sin conflicto ahora; a unificar en etapas futuras.
 - Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
+
+---
+
+## Etapa 6G: auditoria grupo internal/seller-center
+
+**Fecha:** 2026-05-16
+**Tipo:** auditoria — sin modificaciones
+
+| Pagina | Lineas | Veredicto | Motivo |
+|---|---|---|---|
+| `internal/seller-center/index.html` | 705 | ✅ APTA | Paleta Sporting, fetch read-only, mismo patron que estrategia/ |
+| `internal/seller-center/maqueta-seller-center.html` | 1288 | ❌ EXCLUIDA | Otra plataforma, paleta clara, 6 colisiones criticas de variables |
+
+---
+
+## Etapa 6H: tokens.css en internal/seller-center/index.html
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+### Cambio aplicado
+
+**`internal/seller-center/index.html`** — agregado en `<head>` linea 10-11, antes del `<style>`:
+
+```html
+<!-- 6H: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+`:root` inline (linea 13) conservado sin modificacion. `maqueta-seller-center.html` no fue tocada.
+
+### Checklist de smoke test 6H (pendiente)
+
+| # | Verificacion | Metodo | Resultado |
+|---|---|---|---|
+| 1 | `index.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 2 | `tokens.css` devuelve HTTP 200 | DevTools → Network | Pendiente |
+| 3 | Sin errores criticos de consola | DevTools → Console | Pendiente |
+| 4 | Sin regresion visual en topbar | Visual | Pendiente |
+| 5 | Sin regresion visual en sidebar | Visual | Pendiente |
+| 6 | Sin regresion visual en modulos SC | Visual | Pendiente |
+| 7 | El `fetch` a Google Sheets puede fallar por CORS en local — esperado | Console | No es regresion |
+| 8 | Click en "Ver maqueta" navega correctamente | Interaccion | Pendiente |
+| 9 | Click en "Ver Gantt" navega correctamente | Interaccion | Pendiente |
+| 10 | Link "Articulos Seller" (docx) resuelve correctamente | Inspeccion href | Pendiente |
+
+### Exclusion definitiva de maqueta-seller-center.html
+
+`maqueta-seller-center.html` representa otra plataforma en creacion con sistema visual propio (paleta clara: fondo `#eef1f4`, panel `#ffffff`, texto `#222222`). No adopta los tokens oscuros del Marketplace Portal. Exclusion por diseño — no es un pendiente a resolver en etapas futuras.
