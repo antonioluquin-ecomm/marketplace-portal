@@ -247,7 +247,14 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 ## Etapa 6H: tokens.css en internal/seller-center/index.html
 
 **Fecha:** 2026-05-16
-**Estado:** implementado — pendiente smoke test manual
+**Estado:** ✅ APROBADO — smoke test ejecutado el 2026-05-16
+
+### Etapa 6I: resultado del smoke test
+
+**Fecha de ejecucion:** 2026-05-16
+**Entorno:** local — `http://localhost:8080/internal/seller-center/index.html`
+**Ejecutado por:** Gabriel Luna
+**Resultado general:** OK
 
 ### Cambio aplicado
 
@@ -260,21 +267,33 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 
 `:root` inline (linea 13) conservado sin modificacion. `maqueta-seller-center.html` no fue tocada.
 
-### Checklist de smoke test 6H (pendiente)
+### Checklist de smoke test 6H (ejecutado en Etapa 6I)
 
 | # | Verificacion | Metodo | Resultado |
 |---|---|---|---|
-| 1 | `index.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 2 | `tokens.css` devuelve HTTP 200 | DevTools → Network | Pendiente |
-| 3 | Sin errores criticos de consola | DevTools → Console | Pendiente |
-| 4 | Sin regresion visual en topbar | Visual | Pendiente |
-| 5 | Sin regresion visual en sidebar | Visual | Pendiente |
-| 6 | Sin regresion visual en modulos SC | Visual | Pendiente |
-| 7 | El `fetch` a Google Sheets puede fallar por CORS en local — esperado | Console | No es regresion |
-| 8 | Click en "Ver maqueta" navega correctamente | Interaccion | Pendiente |
-| 9 | Click en "Ver Gantt" navega correctamente | Interaccion | Pendiente |
-| 10 | Link "Articulos Seller" (docx) resuelve correctamente | Inspeccion href | Pendiente |
+| 1 | `index.html` carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 2 | `tokens.css` devuelve HTTP 200 | DevTools → Network | ✅ OK |
+| 3 | Sin errores criticos de consola | DevTools → Console | ✅ OK |
+| 4 | Sin regresion visual en topbar | Visual | ✅ OK |
+| 5 | Sin regresion visual en sidebar | Visual | ✅ OK |
+| 6 | Sin regresion visual en modulos SC | Visual | ✅ OK |
+| 7 | Error CORS del `fetch` a Google Sheets — esperado, no regresion | Console | ✅ Confirmado esperado |
+| 8 | Click en "Ver maqueta" navega correctamente | Interaccion | ✅ OK |
+| 9 | Click en "Ver Gantt" navega correctamente | Interaccion | ✅ OK |
+| 10 | Link "Articulos Seller" (docx) resuelve correctamente | Inspeccion href | ✅ OK |
+
+### Estado final del grupo internal/seller-center/
+
+| Pagina | tokens.css | Smoke test | Observacion |
+|---|---|---|---|
+| `index.html` | ✅ enlazado (6H) | ✅ 6I — OK | `:root` inline activo como fallback |
+| `maqueta-seller-center.html` | ❌ excluida | No aplica | Otra plataforma, otro sistema visual — exclusion definitiva |
 
 ### Exclusion definitiva de maqueta-seller-center.html
 
 `maqueta-seller-center.html` representa otra plataforma en creacion con sistema visual propio (paleta clara: fondo `#eef1f4`, panel `#ffffff`, texto `#222222`). No adopta los tokens oscuros del Marketplace Portal. Exclusion por diseño — no es un pendiente a resolver en etapas futuras.
+
+### Riesgos pendientes tras 6I
+
+- `--info` de `index.html` (`#38bdf8`) difiere del canonico (`#60a5fa`) — el inline prevalece, sin impacto visual hoy. A unificar en etapas futuras.
+- Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.

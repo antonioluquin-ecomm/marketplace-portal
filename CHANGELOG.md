@@ -4,6 +4,26 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6I smoke test seller-center index
+
+Tipo de cambio: documentacion — resultado de validacion.
+
+Estado: completado.
+
+Resultado del smoke test manual en entorno local (`http://localhost:8080/internal/seller-center/index.html`):
+- `tokens.css` HTTP 200 sin 404.
+- Sin errores criticos de consola.
+- Sin regresion visual: topbar, sidebar, modulos SC OK.
+- Links "Ver maqueta" y "Ver Gantt" navegan correctamente.
+- Error CORS del fetch a Google Sheets: confirmado esperado, no regresion de CSS.
+- `:root` inline activo como fallback.
+
+Estado final del grupo `internal/seller-center/`:
+- `index.html`: enlazada y validada con tokens.css.
+- `maqueta-seller-center.html`: excluida definitivamente por ser otra plataforma con otro sistema visual.
+
+Archivos modificados: `docs/test-matrix.md`, `docs/roadmap.md`, `docs/assets-strategy.md`, `CHANGELOG.md`.
+
 ## 2026-05-16 - Etapa 6H tokens.css en seller-center index
 
 Tipo de cambio: extension controlada de link CSS + exclusion documentada.

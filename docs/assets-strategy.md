@@ -1394,11 +1394,21 @@ El `:root` inline (linea 13) fue conservado sin modificacion.
 
 | Pagina | Estado |
 |---|---|
-| `index.html` | ✅ `tokens.css` enlazado (6H) — pendiente smoke test |
+| `index.html` | ✅ `tokens.css` enlazado (6H) — ✅ smoke test OK (6I) |
 | `maqueta-seller-center.html` | ❌ excluida definitivamente — otra plataforma, otro sistema visual |
+
+#### Etapa 6I: resultado del smoke test
+
+**Fecha:** 2026-05-16 | **Entorno:** local (`http://localhost:8080/`) | **Resultado:** ✅ OK
+
+Validaciones confirmadas: `tokens.css` HTTP 200 sin 404, sin errores criticos de consola, sin regresion visual en topbar / sidebar / modulos SC. Links "Ver maqueta" y "Ver Gantt" navegan correctamente. Error CORS del `fetch` a Google Sheets: confirmado como esperado y no relacionado con CSS.
+
+#### Estado final del grupo internal/seller-center/
+
+- `index.html`: `tokens.css` enlazado y validado. `:root` inline activo como fallback.
+- `maqueta-seller-center.html`: excluida por diseño — otra plataforma, otro sistema visual. No es un pendiente.
 
 #### Riesgos pendientes
 
-- `--info` de `index.html` (`#38bdf8`) es distinto del canonico (`#60a5fa`) — el inline prevalece, sin impacto visual.
-- El `fetch` a Google Sheets puede devolver error CORS en entorno local — esperado, no es regresion de CSS.
-- Smoke test pendiente antes del proximo push a produccion.
+- `--info` de `index.html` (`#38bdf8`) difiere del canonico (`#60a5fa`) — el inline prevalece, sin impacto visual hoy. A unificar en etapas futuras.
+- Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.

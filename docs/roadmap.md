@@ -710,9 +710,12 @@ Acciones realizadas:
 - `maqueta-seller-center.html` no fue modificada — excluida por diseño.
 - Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
 
+Etapa 6I: smoke test ejecutado el 2026-05-16 en entorno local. Resultado: OK. Ver `docs/test-matrix.md — Etapa 6H/6I` para detalle completo.
+
+Estado final del grupo `internal/seller-center/`: `index.html` validada con `tokens.css`. `maqueta-seller-center.html` excluida definitivamente por ser otra plataforma con otro sistema visual.
+
 Pendiente:
-- Smoke test manual en `index.html` en entorno local antes del proximo push.
-- Etapa 6I: documentar resultado del smoke test.
+- Validacion en produccion (GitHub Pages) despues del proximo push.
 
 ## Etapa 7: legacy y redirects
 
