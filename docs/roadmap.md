@@ -605,6 +605,50 @@ Pendiente:
 - Etapa 5M: aplicar el mismo patron en `internal/backlog/gestion-sellers.html` solo despues de validar 5L.
 - Actualizar `docs/test-matrix.md` con el smoke test especifico de la cadena de fallback en Backlog.
 
+## Etapa 5M: fallback local de logos en Gestion de Sellers
+
+Objetivo: agregar fallback local de logo en `internal/backlog/gestion-sellers.html` sin tocar submit, payload, endpoint, `seller_id`, `nextSellerId`, `reserveSellerId`, `localStorage`, validaciones, carga de CSV, lógica de alta/edicion ni configuracion global.
+
+Estado: completada.
+
+Resultado:
+
+- fallback local aplicado solo en `internal/backlog/gestion-sellers.html`;
+- prioridad preservada para `LOGO_BASE_URL` (resuelto como `CFG.ASSETS.LOGO_BASE_URL || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`) y las 5 extensiones remotas (`png`, `webp`, `jpg`, `jpeg`, `svg`);
+- agregado `../../assets/logos/{seller_id}.png` como ultimo candidato dentro de `logoCandidates(id)`;
+- el `seller_id` se normaliza con `clean(id).toLowerCase()` + `encodeURIComponent(sid)` igual que para los candidatos remotos;
+- `updateLogo(box, sellerId, name)` no requiere cambios: continua ciclando el array por indice via `img.onerror` y cae a `<span class="logo-fallback">` cuando se agotan los candidatos;
+- la preview `#logoPreview` hereda el nuevo candidato sin cambios estructurales;
+- fallback final por iniciales preservado en `updateLogo()`;
+- sin cambios en `CFG.ASSETS.LOGO_BASE_URL` ni `FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`;
+- sin cambios en `nextSellerId`, `normalizeSellerId`, `reserveSellerId`, `getReservedIds`, `validatePayload`, `formToObject`, `updatePreview`, `buildPublicLink`, `buildFirstContactMessage`, `copyLink`, `copyPayload`;
+- sin cambios en el listener `submit`, ni en `fetch(APPS_SCRIPT_URL, ...)`, ni en `tipo_formulario:"seller"`, ni en `mp_responsable_seller`/`mp_reserved_seller_ids`;
+- sin cambios en `loadSellers`, `parseCSV`, `getCSV`, `buildExistingSelect`, `loadSelectedSeller`, `loadSellerById`, `initFromUrl`;
+- sin cambios en `internal/backlog/backlog-sellers.html`;
+- sin cambios en `config.js`, `assets/js/config.js`, Apps Script, formularios publicos, simuladores ni Presentacion Seller;
+- sin cambios en archivos legacy en raiz (`gestion-sellers_v7.html`).
+
+Alcance excluido:
+
+- Sin cambios en `LOGO_BASE_URL`.
+- Sin cambios en `config.js` ni `assets/js/config.js`.
+- Sin cambios en Apps Script, endpoints, payloads, validaciones, submit ni `seller_id`.
+- Sin cambios en `nextSellerId`, `reserveSellerId` ni `localStorage`.
+- Sin cambios en carga de CSV ni en el flujo de alta/edicion.
+- Sin cambios en Backlog, formularios publicos, simuladores ni Presentacion Seller.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin cambios en archivos legacy en raiz.
+- Sin redirects.
+- Sin cambios visuales ni de estructura.
+
+Pendiente:
+
+- Smoke test manual de la preview de Gestion con seller existente, seller nuevo y caso de URL principal caida.
+- Validar caso con asset local presente y caso sin asset local (debe caer a iniciales).
+- No ejecutar submit real durante el smoke test.
+- Actualizar `docs/test-matrix.md` con el smoke test especifico de la cadena de fallback en Gestion de Sellers.
+- Evaluar si las paginas piloto (5E, 5F, 5H, 5J, 5L, 5M) ya consolidadas habilitan crear un helper compartido `assets/js/logos.js` en una etapa futura, sin alterar las paginas que ya quedaron migradas.
+
 ## Etapa 7: legacy y redirects
 
 Objetivo: cerrar la migracion sin romper referencias existentes.

@@ -1089,6 +1089,93 @@ Pendiente:
 - Etapa 5M: aplicar el mismo patron solo en `internal/backlog/gestion-sellers.html`, despues de validar 5L en navegador.
 - Actualizar `docs/test-matrix.md` para registrar el smoke test especifico de cards, tabla y modal en Backlog con la cadena de fallback completa.
 
+### Etapa 5M: fallback local en Gestion de Sellers
+
+Estado: completada.
+
+Resultado:
+
+- Se aplico fallback local solo en `internal/backlog/gestion-sellers.html`.
+- La URL principal `LOGO_BASE_URL` (resuelta como `CFG.ASSETS.LOGO_BASE_URL || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`) conserva prioridad como primera opcion.
+- Se mantienen las 5 extensiones remotas (`png`, `webp`, `jpg`, `jpeg`, `svg`) como candidatos primarios.
+- Se agrego `../../assets/logos/{seller_id}.png` como ultimo candidato dentro de `logoCandidates(id)`.
+- El fallback final por iniciales se preserva intacto dentro de `updateLogo(box, sellerId, name)`: si todos los candidatos fallan, el `box` recibe `<span class="logo-fallback">${initials(name)}</span>`.
+- La preview de logo en `#logoPreview` hereda el nuevo candidato sin cambios estructurales porque `updateLogo()` ya cicla por todos los elementos del array via `img.onerror`.
+- No se modifico `CFG.ASSETS.LOGO_BASE_URL` ni `FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`.
+- No se modificaron `nextSellerId()`, `normalizeSellerId()`, `reserveSellerId()`, `getReservedIds()`, `validatePayload()`, `formToObject()`, `updatePreview()` ni `buildFirstContactMessage()`.
+- No se modifico el listener `$("sellerForm").addEventListener("submit", ...)` ni la llamada a `fetch(APPS_SCRIPT_URL, ...)`.
+- No se modifico el `payload` ni `tipo_formulario:"seller"`.
+- No se modificaron `getSavedResponsable()`, `saveResponsable()` ni la clave `localStorage` `mp_responsable_seller` ni `mp_reserved_seller_ids`.
+- No se modificaron carga de CSV (`getCSV`, `parseCSV`, `loadSellers`), select de sellers (`buildExistingSelect`, `loadSelectedSeller`, `loadSellerById`) ni flujo de alta/edicion.
+- No se modifico `internal/backlog/backlog-sellers.html`.
+- No se modificaron `config.js` ni `assets/js/config.js`.
+- No se modificaron Apps Script, endpoints, simuladores, formularios ni Presentacion Seller.
+- No se modificaron archivos legacy en raiz (`gestion-sellers_v7.html` intacto).
+
+Cambio aplicado:
+
+```js
+function logoCandidates(id){
+  const sid=clean(id).toLowerCase();
+  if(!sid) return [];
+  const list=["png","webp","jpg","jpeg","svg"].map(ext=>`${LOGO_BASE_URL}${encodeURIComponent(sid)}.${ext}`);
+  /* Etapa 5M: fallback local secundario; no reemplaza la URL principal ni el fallback final por iniciales en updateLogo(). */
+  list.push(`../../assets/logos/${encodeURIComponent(sid)}.png`);
+  return list;
+}
+```
+
+En el archivo, este cambio se preserva como una unica linea para mantener el estilo minificado del resto del bloque `<script>`.
+
+Prioridad efectiva por seller (ejemplo `SPT-001`):
+
+1. `${LOGO_BASE_URL}spt-001.png`
+2. `${LOGO_BASE_URL}spt-001.webp`
+3. `${LOGO_BASE_URL}spt-001.jpg`
+4. `${LOGO_BASE_URL}spt-001.jpeg`
+5. `${LOGO_BASE_URL}spt-001.svg`
+6. `../../assets/logos/spt-001.png` (nuevo, local)
+7. `<span class="logo-fallback">${initials(name)}</span>` cuando se agota la lista.
+
+Validaciones realizadas:
+
+- Verificado que la guarda `if(!sid) return [];` se preserva sin cambios.
+- Verificado que el orden de extensiones remotas se preserva (`png`, `webp`, `jpg`, `jpeg`, `svg`).
+- Verificado que `encodeURIComponent(sid)` se reutiliza tambien para la ruta local, consistente con los candidatos remotos.
+- Verificado que `updateLogo()` no fue modificado: continua creando el `<img>`, asignando `img.onerror` y cayendo a `<span class="logo-fallback">` cuando `i` agota `candidates.length`.
+- Verificado que `updatePreview()` invoca `updateLogo($("logoPreview"), o.seller_id, name)` sin cambios.
+- Verificado que el listener `submit` del formulario no fue tocado: `fetch(APPS_SCRIPT_URL, {method:"POST", mode:"no-cors", headers, body})`, `reserveSellerId(payload.seller_id)`, `saveResponsable(...)` siguen en su forma original.
+- Verificado que `validatePayload()` sigue retornando los mismos mensajes y se ejecuta antes de cualquier envio.
+- Verificado que `formToObject()`, `nextSellerId()`, `normalizeSellerId()`, `getQuerySellerId()` y `isEditModeFromUrl()` quedan intactos.
+- Verificado que `loadSellers()`, `buildExistingSelect()`, `loadSelectedSeller()`, `loadSellerById()` e `initFromUrl()` quedan intactos.
+- Verificado que `internal/backlog/backlog-sellers.html`, `config.js`, `assets/js/config.js`, Apps Script, formularios, simuladores y Presentacion Seller no fueron alterados.
+- Verificado que el archivo legacy `gestion-sellers_v7.html` permanece intacto.
+
+Validaciones manuales pendientes:
+
+- Abrir `internal/backlog/gestion-sellers.html` sin `seller_id` y confirmar que la preview muestra el logo o las iniciales del seller nuevo segun corresponda.
+- Abrir `internal/backlog/gestion-sellers.html?seller_id=SPT-001` y confirmar que la preview carga el logo remoto.
+- Simular caida de la URL remota (DevTools: bloquear el dominio) y confirmar que la preview muestra el logo local de `assets/logos/spt-001.png`.
+- Probar con un `seller_id` sin asset local (por ejemplo `SPT-099`) y confirmar fallback por iniciales.
+- Confirmar que la edicion de un seller existente sigue funcionando: select carga datos, `Editar seller` cambia el titulo y el boton.
+- Confirmar que los links publicos generados por `buildPublicLink()` siguen apuntando a las rutas correctas (`presentacion`, `calificacion`, `relevamiento`, `simulador`).
+- Confirmar que el mensaje de primer contacto se renderiza sin cambios.
+- Revisar consola por errores JS nuevos (404 de candidatos intermedios es esperado).
+- Confirmar que NO se ejecuta submit real durante el smoke test.
+
+Rollback:
+
+- Revertir el unico commit de 5M sobre `internal/backlog/gestion-sellers.html`.
+- `assets/logos/` no se toca, por lo que el rollback no requiere mover archivos.
+- `LOGO_BASE_URL` no se toca, por lo que el comportamiento previo se restaura por completo al revertir.
+- El flujo de alta/edicion, submit, payload y reserva de IDs no se ven afectados por el cambio ni por su rollback.
+
+Pendiente:
+
+- Smoke test manual en navegador conforme a la lista anterior, sin ejecutar submit real.
+- Actualizar `docs/test-matrix.md` para registrar el smoke test especifico de preview de Gestion con la cadena de fallback completa.
+- Evaluar en etapas posteriores si conviene mover el helper `logoCandidates`/`updateLogo` a un modulo compartido (`assets/js/logos.js`) sin alterar las paginas piloto.
+
 ## Roadmap recomendado Etapa 5
 
 | Etapa | Objetivo | Riesgo | Piloto |

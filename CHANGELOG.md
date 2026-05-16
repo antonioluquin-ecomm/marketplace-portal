@@ -4,6 +4,68 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-15 - Etapa 5M fallback local Gestion de Sellers
+
+Tipo de cambio: piloto controlado.
+
+Estado: completado sin cambios funcionales.
+
+Cambios incluidos:
+
+- Actualizacion acotada de `internal/backlog/gestion-sellers.html`.
+- Ampliacion de `logoCandidates(id)` para incluir `../../assets/logos/{seller_id}.png` como ultimo candidato.
+- Preservacion de `LOGO_BASE_URL` (resuelto como `CFG.ASSETS.LOGO_BASE_URL || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`) como prioridad principal.
+- Preservacion de las 5 extensiones remotas (`png`, `webp`, `jpg`, `jpeg`, `svg`).
+- Preservacion del fallback final por iniciales en la preview mediante `updateLogo()` (que continua reemplazando el `<img>` por `<span class="logo-fallback">` cuando se agotan los candidatos).
+- Propagacion automatica del nuevo candidato a `#logoPreview` a traves del ciclo `img.onerror` existente en `updateLogo()`.
+- Actualizacion de `docs/assets-strategy.md`.
+- Actualizacion de `docs/roadmap.md`.
+
+Alcance explicitamente excluido:
+
+- Sin cambios en `CFG.ASSETS.LOGO_BASE_URL` ni en `FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL`.
+- Sin cambios en `config.js` ni en `assets/js/config.js`.
+- Sin cambios en el listener `submit` del formulario.
+- Sin cambios en `fetch(APPS_SCRIPT_URL, ...)`, `mode:"no-cors"`, headers, ni body.
+- Sin cambios en `tipo_formulario:"seller"` ni en el payload.
+- Sin cambios en validaciones (`validatePayload`).
+- Sin cambios en `nextSellerId`, `normalizeSellerId`, `reserveSellerId`, `getReservedIds`.
+- Sin cambios en `localStorage` (`mp_responsable_seller`, `mp_reserved_seller_ids`).
+- Sin cambios en carga de CSV (`getCSV`, `parseCSV`, `loadSellers`).
+- Sin cambios en el flujo de alta/edicion (`buildExistingSelect`, `loadSelectedSeller`, `loadSellerById`, `initFromUrl`, `resetForm`).
+- Sin cambios en links publicos (`buildPublicLink`, `copyLink`, `copyFirstContactMessage`, `copyPayload`).
+- Sin cambios en `updatePreview()` ni en el render estructural.
+- Sin cambios visuales ni de estructura.
+- Sin modificaciones en `internal/backlog/backlog-sellers.html`.
+- Sin modificaciones en Apps Script.
+- Sin modificaciones en formularios publicos, simuladores ni Presentacion Seller.
+- Sin movimientos en `Logos/` ni en `assets/logos/`.
+- Sin cambios en archivos legacy en raiz (`gestion-sellers_v7.html`).
+- Sin redirects.
+- Sin extraccion de CSS o JavaScript.
+
+Validacion:
+
+- Se confirmo que la guarda `if(!sid) return [];` se preserva sin cambios.
+- Se confirmo que los 5 candidatos remotos se mantienen primero y en el mismo orden de extensiones.
+- Se confirmo que el nuevo candidato local queda al final del array devuelto por `logoCandidates(id)`.
+- Se confirmo que `encodeURIComponent(sid)` se reutiliza tambien para la ruta local, consistente con los candidatos remotos.
+- Se confirmo que `updateLogo()` no fue modificado y continua ciclando el array por indice via `img.onerror`, cayendo a `<span class="logo-fallback">` cuando se agotan los candidatos.
+- Se confirmo que `updatePreview()` sigue invocando `updateLogo($("logoPreview"), o.seller_id, name)` sin cambios.
+- Se confirmo que el listener `submit`, `fetch(APPS_SCRIPT_URL, ...)`, `reserveSellerId`, `saveResponsable` y la cadena de validaciones quedan intactos.
+- Se confirmo que `nextSellerId`, `normalizeSellerId`, `formToObject`, `validatePayload`, `getQuerySellerId`, `isEditModeFromUrl`, `loadSellers`, `parseCSV`, `getCSV`, `buildExistingSelect`, `loadSelectedSeller`, `loadSellerById` e `initFromUrl` quedan intactos.
+- Se confirmo que ni `internal/backlog/backlog-sellers.html`, ni `config.js`, ni `assets/js/config.js`, ni Apps Script, ni formularios, ni simuladores, ni Presentacion Seller fueron alterados.
+- Se confirmo que `gestion-sellers_v7.html` legacy permanece intacto.
+
+Pendiente:
+
+- Smoke test manual de la preview en `internal/backlog/gestion-sellers.html`.
+- Validar caso con URL principal disponible (no debe haber regresion en la preview).
+- Validar caso con URL principal caida y asset local presente (debe cargar el local en la preview).
+- Validar caso sin asset local (debe caer a iniciales en la preview).
+- No ejecutar submit real durante el smoke test.
+- Actualizar `docs/test-matrix.md` con el smoke test especifico de la cadena de fallback en Gestion de Sellers.
+
 ## 2026-05-15 - Etapa 5L fallback local Backlog de Sellers
 
 Tipo de cambio: piloto controlado.
