@@ -315,7 +315,14 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 ## Etapa 6K: tokens.css en grupo internal/backlog
 
 **Fecha:** 2026-05-16
-**Estado:** implementado — pendiente smoke test manual
+**Estado:** ✅ APROBADO — smoke test ejecutado el 2026-05-16
+
+### Etapa 6L: resultado del smoke test
+
+**Fecha de ejecucion:** 2026-05-16
+**Entorno:** local — `http://localhost:8080/`
+**Ejecutado por:** Gabriel Luna
+**Resultado general:** OK en ambas paginas
 
 ### Cambios aplicados
 
@@ -324,32 +331,39 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 | `backlog-sellers.html` | ✅ agregado | linea 10-11, antes de `<style>` (sin indent) | ✅ intacto (linea 13) |
 | `gestion-sellers.html` | ✅ agregado | linea 11-12, despues de `config.js`, antes de `<style>` | ✅ intacto (linea 14) |
 
-### Checklist de smoke test 6K (pendiente — Etapa 6L)
+### Checklist de smoke test 6K (ejecutado en Etapa 6L)
 
 #### backlog-sellers.html
 
 | # | Verificacion | Metodo | Resultado |
 |---|---|---|---|
-| 1 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 2 | `tokens.css` HTTP 200 | DevTools → Network | Pendiente |
-| 3 | Sin errores criticos de consola | DevTools → Console | Pendiente |
-| 4 | Topbar, sidebar, cards OK sin regresion visual | Visual | Pendiente |
-| 5 | CORS del fetch a Google Sheets puede fallar en local — esperado | Console | No es regresion |
+| 1 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 2 | `tokens.css` HTTP 200 | DevTools → Network | ✅ OK |
+| 3 | Sin errores criticos de consola | DevTools → Console | ✅ OK |
+| 4 | Cards, tabla, filtros y modal visibles sin regresion visual | Visual | ✅ OK |
+| 5 | CORS del fetch a Google Sheets — esperado, no regresion | Console | ✅ Confirmado esperado |
 
 #### gestion-sellers.html
 
 | # | Verificacion | Metodo | Resultado |
 |---|---|---|---|
-| 6 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 7 | `tokens.css` HTTP 200 | DevTools → Network | Pendiente |
-| 8 | Sin errores criticos de consola | DevTools → Console | Pendiente |
-| 9 | Topbar OK, formulario visible sin regresion | Visual | Pendiente |
-| 10 | Punto de estado (.dot) muestra ambar (#ffb74d del inline, NO #f59e0b del canonico) | Visual | Pendiente |
-| 11 | Asterisco de campo obligatorio muestra ambar correcto | Visual | Pendiente |
-| 12 | `config.js` carga sin errores | DevTools → Network | Pendiente |
-| 13 | No ejecutar submit real — solo validacion visual | — | No aplica |
+| 6 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 7 | `tokens.css` HTTP 200 | DevTools → Network | ✅ OK |
+| 8 | Sin errores criticos de consola | DevTools → Console | ✅ OK |
+| 9 | Formulario, preview, links visibles sin regresion | Visual | ✅ OK |
+| 10 | Punto de estado (.dot) muestra ambar correcto (inline prevalece) | Visual | ✅ OK |
+| 11 | Asterisco de campo obligatorio muestra ambar correcto | Visual | ✅ OK |
+| 12 | `config.js` carga sin errores | DevTools → Network | ✅ OK |
+| 13 | Submit real no ejecutado | — | ✅ Confirmado |
 
-### Riesgos conocidos
+### Estado final del grupo internal/backlog/
 
-- `gestion-sellers.html`: `--warn` (`#ffb74d`) y `--danger` (`#d94040`) difieren del canonico — el inline siempre prevalece. Sin cambio visual posible, pero verificar explicitamente en smoke test.
-- CSS y JS son capas independientes — el `<link>` CSS no puede afectar Apps Script, localStorage ni config.js.
+| Pagina | tokens.css | Smoke test | Observacion |
+|---|---|---|---|
+| `backlog-sellers.html` | ✅ enlazado (6K) | ✅ 6L — OK | `:root` inline activo, fetch read-only sin tocar |
+| `gestion-sellers.html` | ✅ enlazado (6K) | ✅ 6L — OK | `:root` inline activo, Apps Script / localStorage / submit sin tocar |
+
+### Riesgos pendientes tras 6L
+
+- `gestion-sellers.html`: `--warn` y `--danger` con valor inline (`#ffb74d`, `#d94040`) distintos del canonico — el inline siempre prevalece, sin cambio visual. A unificar en etapas futuras si se elimina el inline.
+- Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.

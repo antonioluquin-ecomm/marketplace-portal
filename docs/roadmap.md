@@ -738,9 +738,12 @@ Acciones realizadas:
 - El `:root` inline de cada pagina fue conservado sin modificacion.
 - Ningun bloque `<script>`, `config.js`, Apps Script, localStorage ni submit fue modificado.
 
+Etapa 6L: smoke test ejecutado el 2026-05-16 en entorno local. Resultado: OK en ambas paginas. Ver `docs/test-matrix.md — Etapa 6K/6L` para detalle completo.
+
+Estado final del grupo `internal/backlog/`: **ambas paginas validadas con `tokens.css`**. JS, Apps Script, localStorage y submit sin tocar.
+
 Pendiente:
-- Smoke test manual en ambas paginas en entorno local (Etapa 6L).
-- `gestion-sellers.html`: verificar visualmente el punto de estado del topbar y el formulario antes del proximo push.
+- Validacion en produccion (GitHub Pages) despues del proximo push.
 
 ## Etapa 7: legacy y redirects
 

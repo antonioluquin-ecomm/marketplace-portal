@@ -4,6 +4,20 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6L smoke test grupo internal/backlog
+
+Tipo de cambio: documentacion — resultado de validacion.
+
+Estado: completado.
+
+Resultado del smoke test manual en entorno local de las 2 paginas de Etapa 6K:
+- `backlog-sellers.html`: tokens.css HTTP 200, sin errores criticos, cards / tabla / filtros / modal OK.
+- `gestion-sellers.html`: tokens.css HTTP 200, sin errores criticos, formulario / preview / punto de estado / asteriscos OK. Submit real no ejecutado. Punto de estado ambar correcto (inline prevalece sobre canonico).
+
+Estado final del grupo `internal/backlog/`: 2 paginas validadas con tokens.css. JS, Apps Script, localStorage y submit sin tocar en ninguna etapa.
+
+Archivos modificados: `docs/test-matrix.md`, `docs/roadmap.md`, `docs/assets-strategy.md`, `CHANGELOG.md`.
+
 ## 2026-05-16 - Etapa 6K tokens.css en grupo internal/backlog
 
 Tipo de cambio: extension controlada de link CSS a 2 paginas del grupo backlog.

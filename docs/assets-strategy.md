@@ -1463,7 +1463,21 @@ En ambas: el `:root` inline fue conservado sin modificacion. Ningun bloque `<scr
 | `backlog-sellers.html` | ✅ enlazado (6K) | ✅ intacto | fetch read-only — sin tocar |
 | `gestion-sellers.html` | ✅ enlazado (6K) | ✅ intacto | Apps Script, localStorage, config.js — sin tocar |
 
+#### Etapa 6L: resultado del smoke test
+
+**Fecha:** 2026-05-16 | **Entorno:** local (`http://localhost:8080/`) | **Resultado:** ✅ OK en ambas paginas
+
+`backlog-sellers.html`: `tokens.css` HTTP 200, sin errores criticos, cards / tabla / filtros / modal sin regresion visual.
+`gestion-sellers.html`: `tokens.css` HTTP 200, sin errores criticos, formulario / preview / punto de estado / asteriscos sin regresion visual. Submit real no ejecutado. El inline prevalece en `--warn` y `--danger` — confirmado visualmente.
+
+#### Estado final del grupo internal/backlog/
+
+| Pagina | tokens.css | Smoke test | JS |
+|---|---|---|---|
+| `backlog-sellers.html` | ✅ (6K) | ✅ 6L OK | fetch read-only — intacto |
+| `gestion-sellers.html` | ✅ (6K) | ✅ 6L OK | Apps Script, localStorage, config.js — intactos |
+
 #### Riesgos pendientes
 
-- `gestion-sellers.html` tiene `--warn` (`#ffb74d`) y `--danger` (`#d94040`) distintos del canonico — el inline siempre prevalece. Verificar en smoke test que el punto de estado del topbar muestra los colores correctos.
-- Smoke test pendiente en ambas paginas antes del proximo push.
+- `gestion-sellers.html`: `--warn` (`#ffb74d`) y `--danger` (`#d94040`) con valores inline distintos del canonico — inline siempre prevalece, sin impacto visual. A unificar en etapas futuras si se elimina el inline.
+- Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
