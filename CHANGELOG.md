@@ -4,6 +4,27 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6M cierre de Etapa 6
+
+Tipo de cambio: documentacion — cierre de bloque.
+
+Estado: cerrado.
+
+La Etapa 6 queda cerrada para paginas internas. Se extendio `assets/css/tokens.css` a 8 paginas en 3 grupos con smoke test OK en todos.
+
+Alcance completado:
+- internal/estrategia/: 5 paginas (6C piloto + 6E extension) — smoke test 6D y 6F OK.
+- internal/seller-center/: index.html (6H) — smoke test 6I OK. Maqueta excluida por diseño.
+- internal/backlog/: backlog-sellers + gestion-sellers (6K) — smoke test 6L OK.
+
+Exclusiones:
+- maqueta-seller-center.html: excluida definitivamente (otra plataforma, paleta clara).
+- Paginas publicas (formularios, presentaciones, simuladores): diferidas — requieren auditoria propia.
+
+Invariante: en ninguna sub-etapa (6C–6L) se modificaron JS, Apps Script, endpoints, submit, localStorage, formularios, simuladores, legacy ni redirects.
+
+Archivos modificados: docs/assets-strategy.md, docs/roadmap.md, docs/test-matrix.md, CHANGELOG.md.
+
 ## 2026-05-16 - Etapa 6L smoke test grupo internal/backlog
 
 Tipo de cambio: documentacion — resultado de validacion.

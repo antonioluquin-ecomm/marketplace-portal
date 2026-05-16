@@ -1481,3 +1481,54 @@ En ambas: el `:root` inline fue conservado sin modificacion. Ningun bloque `<scr
 
 - `gestion-sellers.html`: `--warn` (`#ffb74d`) y `--danger` (`#d94040`) con valores inline distintos del canonico — inline siempre prevalece, sin impacto visual. A unificar en etapas futuras si se elimina el inline.
 - Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
+
+---
+
+## Etapa 6M: cierre documental de Etapa 6
+
+**Fecha:** 2026-05-16
+**Estado:** cerrado
+
+### Alcance completado
+
+La Etapa 6 cubrió la extension horizontal de `assets/css/tokens.css` a las paginas internas de bajo riesgo del proyecto. El patron aplicado en todos los grupos fue identico: agregar un `<link rel="stylesheet">` en `<head>` antes del `<style>`, conservar el `:root` inline como fallback, no extraer CSS ni modificar JS.
+
+### Estado final por grupo
+
+| Grupo | Paginas enlazadas | Paginas excluidas | Smoke test |
+|---|---|---|---|
+| `internal/estrategia/` | 5 (`proceso-onboarding`, `governance`, `modelo-integracion`, `modelo-economico`, `proyecto-marketplace`) | ninguna | ✅ 6D + 6F OK |
+| `internal/seller-center/` | 1 (`index.html`) | 1 (`maqueta-seller-center.html`) | ✅ 6I OK |
+| `internal/backlog/` | 2 (`backlog-sellers`, `gestion-sellers`) | ninguna | ✅ 6L OK |
+| **Total** | **8 paginas** | **1 excluida por diseño** | ✅ todos aprobados |
+
+### Exclusiones documentadas
+
+| Pagina | Motivo de exclusion | Tipo |
+|---|---|---|
+| `internal/seller-center/maqueta-seller-center.html` | Otra plataforma en creacion, paleta clara opuesta al design system Sporting | Por diseño — definitiva |
+| `public/formularios/formulario-calificacion.html` | Pagina seller-facing con formulario y submit real | Diferida — requiere auditoria propia |
+| `public/formularios/formulario-relevamiento.html` | Pagina seller-facing con formulario y submit real | Diferida — requiere auditoria propia |
+| `public/presentaciones/presentacion-seller.html` | Pagina seller-facing con estilos comerciales propios | Diferida — requiere auditoria propia |
+| `public/simuladores/simulador-seller.html` | Simulador con calculos y logica propia | Diferida — requiere auditoria propia |
+
+### Invariantes de la Etapa 6
+
+En ninguna etapa de la Etapa 6 se modificaron:
+- Bloques `<script>` embebidos
+- Archivos `assets/js/config.js`
+- Apps Script ni endpoints
+- `localStorage`, `nextSellerId`, `reserveSellerId`
+- Formularios publicos
+- Simuladores
+- Backlog operativo (solo se agrego un link CSS)
+- Archivos legacy
+- Redirects
+
+### Proxima etapa: auditorias pendientes
+
+Cualquier extension futura de `tokens.css` a paginas publicas requiere:
+1. Auditoria de `:root` y colisiones (como Etapa 6G/6J).
+2. Analisis de sensibilidad funcional del JS embebido.
+3. Confirmacion explicita de que el cambio es solo un `<link>` sin extraccion de CSS.
+4. Smoke test especifico que incluya verificacion visual del formulario o simulador completo.

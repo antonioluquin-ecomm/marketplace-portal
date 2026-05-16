@@ -745,6 +745,30 @@ Estado final del grupo `internal/backlog/`: **ambas paginas validadas con `token
 Pendiente:
 - Validacion en produccion (GitHub Pages) despues del proximo push.
 
+## Etapa 6M: cierre documental de Etapa 6
+
+**Fecha:** 2026-05-16
+**Estado:** cerrado
+
+La Etapa 6 queda cerrada para paginas internas. Se extendio `assets/css/tokens.css` a 8 paginas internas en 3 grupos, con smoke test OK en todos. La maqueta Seller Center fue excluida definitivamente por ser otra plataforma. Las paginas publicas fueron diferidas.
+
+### Resumen de alcance cerrado
+
+| Grupo | Paginas | Etapas | Estado |
+|---|---|---|---|
+| `internal/estrategia/` | 5 | 6C–6F | ✅ validado |
+| `internal/seller-center/` | 1 (+ 1 excluida) | 6G–6I | ✅ validado |
+| `internal/backlog/` | 2 | 6J–6L | ✅ validado |
+
+### Exclusiones
+
+- `maqueta-seller-center.html` — excluida por diseño (otra plataforma, paleta clara).
+- Paginas publicas (`formularios/`, `presentaciones/`, `simuladores/`) — diferidas. Requieren auditoria propia antes de cualquier cambio.
+
+### Invariantes respetados en toda la Etapa 6
+
+JS, Apps Script, endpoints, submit, localStorage, formularios, simuladores, legacy y redirects no fueron modificados en ninguna sub-etapa.
+
 ## Etapa 7: legacy y redirects
 
 Objetivo: cerrar la migracion sin romper referencias existentes.

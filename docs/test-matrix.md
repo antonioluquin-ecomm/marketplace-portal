@@ -367,3 +367,46 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 
 - `gestion-sellers.html`: `--warn` y `--danger` con valor inline (`#ffb74d`, `#d94040`) distintos del canonico — el inline siempre prevalece, sin cambio visual. A unificar en etapas futuras si se elimina el inline.
 - Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
+
+---
+
+## Etapa 6M: cierre de Etapa 6 — estado consolidado
+
+**Fecha:** 2026-05-16
+**Estado:** cerrado
+
+### Resumen de cobertura de tokens.css por grupo
+
+| Grupo | Pagina | Etapa link | Smoke test | Estado |
+|---|---|---|---|---|
+| `internal/estrategia/` | `proceso-onboarding.html` | 6C | ✅ 6D | Validado |
+| `internal/estrategia/` | `governance.html` | 6E | ✅ 6F | Validado |
+| `internal/estrategia/` | `modelo-integracion.html` | 6E | ✅ 6F | Validado |
+| `internal/estrategia/` | `modelo-economico.html` | 6E | ✅ 6F | Validado |
+| `internal/estrategia/` | `proyecto-marketplace.html` | 6E | ✅ 6F | Validado |
+| `internal/seller-center/` | `index.html` | 6H | ✅ 6I | Validado |
+| `internal/backlog/` | `backlog-sellers.html` | 6K | ✅ 6L | Validado |
+| `internal/backlog/` | `gestion-sellers.html` | 6K | ✅ 6L | Validado |
+
+**Total: 8 paginas enlazadas y validadas.**
+
+### Exclusiones definitivas
+
+| Pagina | Motivo |
+|---|---|
+| `internal/seller-center/maqueta-seller-center.html` | Otra plataforma, paleta clara — exclusion por diseño |
+
+### Paginas diferidas (fuera del alcance de Etapa 6)
+
+| Pagina | Motivo |
+|---|---|
+| `public/formularios/formulario-calificacion.html` | Seller-facing, formulario con submit real |
+| `public/formularios/formulario-relevamiento.html` | Seller-facing, formulario con submit real |
+| `public/presentaciones/presentacion-seller.html` | Seller-facing, estilos comerciales propios |
+| `public/simuladores/simulador-seller.html` | Simulador con calculos y logica propia |
+
+Cualquier extension futura a estas paginas requiere auditoria especifica antes de cualquier cambio.
+
+### Invariantes cumplidos en toda la Etapa 6
+
+En ninguna sub-etapa (6C a 6L) se modificaron: bloques `<script>`, `config.js`, Apps Script, endpoints, `localStorage`, `nextSellerId`, `reserveSellerId`, formularios publicos, simuladores, archivos legacy ni redirects.
