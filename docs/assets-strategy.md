@@ -1317,7 +1317,22 @@ Esta pagina usa nombres de variables propios en su `:root` (`--gd`, `--gb`, `--g
 - No se eliminaron variables inline.
 - No se crearon redirects ni se movieron archivos.
 
-#### Pendiente
+#### Etapa 6F: resultado del smoke test
 
-- Smoke test manual en las 4 paginas en entorno local.
-- Etapa 6F (futura): definir si extender `tokens.css` a otros grupos o avanzar hacia unificacion de nombres de variables.
+**Fecha:** 2026-05-16 | **Entorno:** local (`http://localhost:8080/`) | **Resultado:** ✅ OK en las 4 paginas
+
+Validaciones confirmadas en todas: `tokens.css` HTTP 200 sin 404, sin errores criticos de consola, sin regresion visual en topbar / sidebar / contenido principal. El `:root` inline sigue activo como fallback en cada pagina.
+
+#### Estado final del grupo internal/estrategia/
+
+Las 5 paginas del grupo quedan **validadas con `tokens.css`**:
+
+| Pagina | Etapa | Smoke test |
+|---|---|---|
+| `proceso-onboarding.html` | 6C | ✅ 6D OK |
+| `governance.html` | 6E | ✅ 6F OK |
+| `modelo-integracion.html` | 6E | ✅ 6F OK |
+| `modelo-economico.html` | 6E | ✅ 6F OK |
+| `proyecto-marketplace.html` | 6E | ✅ 6F OK |
+
+Pendiente: definir en Etapa 6G si extender `tokens.css` a otros grupos de paginas o iniciar la unificacion progresiva de nombres de variables legacy a nombres canonicos.

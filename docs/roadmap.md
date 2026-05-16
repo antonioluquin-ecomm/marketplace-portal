@@ -683,9 +683,13 @@ Acciones realizadas:
 - El `:root` inline de cada pagina fue conservado sin modificacion.
 - Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
 
+Etapa 6F: smoke test ejecutado el 2026-05-16 en entorno local. Resultado: OK en las 4 paginas. Ver `docs/test-matrix.md — Etapa 6E/6F` para detalle completo.
+
+Estado final del grupo `internal/estrategia/`: **validado con `tokens.css`** — 5 paginas con link externo activo y `:root` inline como fallback.
+
 Pendiente:
-- Smoke test manual en las 4 paginas en entorno local antes del proximo push.
-- Etapa 6F (futura): evaluar si extender `tokens.css` a otros grupos de paginas o avanzar hacia la unificacion progresiva de nombres de variables.
+- Validacion en produccion (GitHub Pages) despues del proximo push.
+- Definir alcance de Etapa 6G: extender `tokens.css` a otros grupos o iniciar unificacion progresiva de nombres de variables legacy.
 
 ## Etapa 7: legacy y redirects
 

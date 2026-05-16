@@ -175,7 +175,14 @@ Nota: la lista anterior mencionaba paginas inexistentes (bandeja-seller, calific
 ## Etapa 6E: extension de tokens.css al grupo interno/estrategia
 
 **Fecha:** 2026-05-16
-**Estado:** implementado — pendiente smoke test manual
+**Estado:** ✅ APROBADO — smoke test ejecutado el 2026-05-16
+
+### Etapa 6F: resultado del smoke test
+
+**Fecha de ejecucion:** 2026-05-16
+**Entorno:** local — `http://localhost:8080/`
+**Ejecutado por:** Gabriel Luna
+**Resultado general:** OK
 
 ### Paginas actualizadas
 
@@ -192,21 +199,33 @@ Patron aplicado en todas:
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 ```
 
-### Checklist de smoke test 6E (pendiente)
+### Checklist de smoke test 6E
 
 | # | Verificacion | Metodo | Resultado |
 |---|---|---|---|
-| 1 | `governance.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 2 | `modelo-integracion.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 3 | `modelo-economico.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 4 | `proyecto-marketplace.html` carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 5 | Sin errores de consola en las 4 paginas | DevTools → Console | Pendiente |
-| 6 | Sin regresion visual en topbar en las 4 paginas | Visual | Pendiente |
-| 7 | Sin regresion visual en sidebar en las 4 paginas | Visual | Pendiente |
-| 8 | Sin regresion visual en contenido principal | Visual | Pendiente |
+| 1 | `governance.html` carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 2 | `modelo-integracion.html` carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 3 | `modelo-economico.html` carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 4 | `proyecto-marketplace.html` carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 5 | Sin errores criticos de consola en las 4 paginas | DevTools → Console | ✅ OK |
+| 6 | Sin regresion visual en topbar en las 4 paginas | Visual | ✅ OK |
+| 7 | Sin regresion visual en sidebar en las 4 paginas | Visual | ✅ OK |
+| 8 | Sin regresion visual en contenido principal | Visual | ✅ OK |
 
-### Riesgos conocidos
+### Conclusion del smoke test 6E/6F
 
-- Las variables `--warn`, `--info`, `--teal`, `--danger` tienen el mismo nombre en `tokens.css` y en el `:root` inline pero valores distintos. El inline sobreescribe al externo — comportamiento esperado hasta que se elimine el inline en etapas futuras.
-- `proyecto-marketplace.html` usa nombres de variables distintos en su `:root` (`--gd`, `--gb`, `--gb2`, `--b`, `--b2` en lugar de `--g-dim`, `--g-brd`, `--line`, `--line-soft`). No hay conflicto — coexisten con nombres distintos. A tener en cuenta cuando se unifiquen tokens en etapas futuras.
-- El smoke test debe ejecutarse en entorno local antes del proximo push a produccion.
+El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
+
+| Pagina | Etapa | Smoke test |
+|---|---|---|
+| `proceso-onboarding.html` | 6C (piloto) | ✅ 6D — OK |
+| `governance.html` | 6E | ✅ 6F — OK |
+| `modelo-integracion.html` | 6E | ✅ 6F — OK |
+| `modelo-economico.html` | 6E | ✅ 6F — OK |
+| `proyecto-marketplace.html` | 6E | ✅ 6F — OK |
+
+### Riesgos pendientes tras 6F
+
+- Las variables `--warn`, `--info`, `--teal`, `--danger` tienen el mismo nombre en `tokens.css` y en el `:root` inline pero valores distintos. El inline sobreescribe al externo en las 5 paginas — comportamiento esperado hasta que el inline sea eliminado en etapas futuras.
+- `proyecto-marketplace.html` usa nombres de variables propios (`--gd`, `--gb`, `--gb2`, `--b`, `--b2`) en lugar de los canonicos (`--g-dim`, `--g-brd`, `--line`, `--line-soft`). Sin conflicto ahora; a unificar en etapas futuras.
+- Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
