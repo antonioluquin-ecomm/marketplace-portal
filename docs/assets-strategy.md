@@ -1276,6 +1276,10 @@ El bloque `:root` original del HTML **no fue eliminado**. Permanece en la linea 
 | JS modificado | ❌ ninguno |
 | Formularios tocados | ❌ ninguno |
 
-#### Siguiente paso: Etapa 6D
+#### Etapa 6D: resultado del smoke test
 
-Validar visualmente en navegador que `proceso-onboarding.html` carga sin errores y sin cambios de apariencia. Luego decidir si extender `tokens.css` a las otras 4 paginas del grupo `estrategia/` (bandeja-seller, calificacion-seller, contacto-seller, presentacion-interna) antes de avanzar a paginas con mayor riesgo.
+**Fecha:** 2026-05-16 | **Entorno:** local (`http://localhost:8080/`) | **Resultado:** ✅ OK
+
+Validaciones confirmadas: carga sin 404, HTTP 200 en `tokens.css`, sin errores de consola, sin regresion visual en topbar / sidebar / cards / KPIs / botones. El `:root` inline sigue activo como fallback.
+
+Piloto **aprobado**. Habilitado para extender `tokens.css` al resto del grupo `internal/estrategia/` en Etapa 6E.

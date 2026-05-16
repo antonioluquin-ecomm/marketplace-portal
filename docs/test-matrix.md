@@ -103,22 +103,29 @@ Usar esta seccion para anotar resultados reales despues de ejecutar el smoke tes
 
 **Pagina piloto:** `internal/estrategia/proceso-onboarding.html`
 **URL produccion:** `https://antonioluquin-ecomm.github.io/marketplace-portal/internal/estrategia/proceso-onboarding.html`
-**Estado:** pendiente de smoke test manual
+**Estado:** ✅ APROBADO — smoke test ejecutado el 2026-05-16
+
+### Etapa 6D: resultado del smoke test
+
+**Fecha de ejecucion:** 2026-05-16
+**Entorno:** local — `http://localhost:8080/internal/estrategia/proceso-onboarding.html`
+**Ejecutado por:** Gabriel Luna
+**Resultado general:** OK
 
 ### Checklist de carga
 
 | # | Verificacion | Metodo | Resultado |
 |---|---|---|---|
-| 1 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
-| 2 | `tokens.css` devuelve HTTP 200 | DevTools → Network | Pendiente |
-| 3 | Apariencia visual identica a la version anterior | Comparacion visual | Pendiente |
-| 4 | Topbar verde visible con altura correcta | Visual | Pendiente |
-| 5 | Sidebar izquierdo renderiza correctamente | Visual | Pendiente |
-| 6 | Tipografia Barlow carga desde Google Fonts | DevTools → Network | Pendiente |
-| 7 | KPIs (numeros verde/info/warn/teal) muestran colores correctos | Visual | Pendiente |
-| 8 | Cards y paneles muestran fondo oscuro correcto | Visual | Pendiente |
-| 9 | No hay errores en consola del navegador | DevTools → Console | Pendiente |
-| 10 | Responsive: layout colapsado en 768px funciona | DevTools → Responsive | Pendiente |
+| 1 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | ✅ OK |
+| 2 | `tokens.css` devuelve HTTP 200 | DevTools → Network | ✅ OK |
+| 3 | Apariencia visual identica a la version anterior | Comparacion visual | ✅ OK |
+| 4 | Topbar verde visible con altura correcta | Visual | ✅ OK |
+| 5 | Sidebar izquierdo renderiza correctamente | Visual | ✅ OK |
+| 6 | Tipografia Barlow carga desde Google Fonts | DevTools → Network | ✅ OK |
+| 7 | KPIs (numeros verde/info/warn/teal) muestran colores correctos | Visual | ✅ OK |
+| 8 | Cards y paneles muestran fondo oscuro correcto | Visual | ✅ OK |
+| 9 | No hay errores en consola del navegador | DevTools → Console | ✅ OK |
+| 10 | Responsive: layout colapsado en 768px funciona | DevTools → Responsive | No ejecutado — no critico para aprobacion |
 
 ### Verificacion de coexistencia de tokens
 
@@ -143,6 +150,20 @@ Desde DevTools → Elements → Computed Styles en cualquier elemento que use `v
 - Sin regresion visual respecto del estado anterior
 - Confirmacion de que la pagina sigue siendo 100% informativa (sin formularios, sin submit)
 
-### Proxima accion si piloto OK
+### Conclusion del piloto 6C/6D
 
-Etapa 6D: documentar resultado real del smoke test. Luego Etapa 6E: extender `tokens.css` a `bandeja-seller.html`, `calificacion-seller.html`, `contacto-seller.html`, `presentacion-interna.html` del mismo grupo `internal/estrategia/`.
+El piloto de `tokens.css` queda **aprobado**. La carga del archivo CSS externo no introduce errores ni regresion visual. El `:root` inline sigue funcionando correctamente como fuente de variables legacy durante la transicion.
+
+Riesgos conocidos y pendientes:
+
+- Las 4 variables con nombre compartido entre `tokens.css` e inline (`--warn`, `--info`, `--teal`, `--danger`) mantienen el valor LEGACY hasta que el inline sea eliminado en una etapa futura — comportamiento esperado, no es error.
+- El checklist responsive (item 10) no fue ejecutado — se puede validar en etapas posteriores junto con el resto del grupo `estrategia/`.
+- El smoke test fue ejecutado en entorno local. Pendiente validacion en produccion despues del proximo push/deploy.
+
+### Proxima accion: Etapa 6E
+
+Piloto aprobado. Etapa 6E: extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/`:
+- `bandeja-seller.html`
+- `calificacion-seller.html`
+- `contacto-seller.html`
+- `presentacion-interna.html`

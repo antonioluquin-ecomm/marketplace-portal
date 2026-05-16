@@ -662,9 +662,11 @@ Acciones realizadas:
 - El `:root` inline del HTML fue conservado sin modificacion — coexiste con el externo como fallback durante la transicion.
 - Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
 
+Etapa 6D: smoke test ejecutado el 2026-05-16 en entorno local. Resultado: OK. Ver `docs/test-matrix.md — Etapa 6C/6D` para detalle completo.
+
 Pendiente:
-- Etapa 6D: smoke test visual en navegador de `proceso-onboarding.html` para confirmar carga sin errores y sin regresion visual.
-- Etapa 6E (futura): extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/` si el piloto es satisfactorio.
+- Validacion en produccion (GitHub Pages) despues del proximo deploy.
+- Etapa 6E: extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/`.
 
 ## Etapa 7: legacy y redirects
 

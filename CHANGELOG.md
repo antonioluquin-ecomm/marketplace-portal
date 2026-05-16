@@ -4,6 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6D smoke test piloto tokens.css
+
+Tipo de cambio: documentacion — resultado de validacion.
+
+Estado: completado.
+
+Resultado del smoke test manual en entorno local (`http://localhost:8080/internal/estrategia/proceso-onboarding.html`):
+- `tokens.css` carga sin error 404, HTTP 200.
+- Sin errores de consola.
+- Sin regresion visual: topbar, sidebar, KPIs, cards, botones OK.
+- `:root` inline coexiste correctamente como fallback.
+
+Piloto aprobado. Habilitado para extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/` en Etapa 6E.
+
+Archivos modificados: `docs/test-matrix.md`, `docs/roadmap.md`, `docs/assets-strategy.md`, `CHANGELOG.md`.
+
 ## 2026-05-16 - Etapa 6C piloto tokens.css
 
 Tipo de cambio: creacion de archivo compartido + enlace piloto en pagina informativa.
