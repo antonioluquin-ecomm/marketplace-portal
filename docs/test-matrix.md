@@ -297,3 +297,59 @@ El grupo completo `internal/estrategia/` queda **validado con `tokens.css`**:
 
 - `--info` de `index.html` (`#38bdf8`) difiere del canonico (`#60a5fa`) — el inline prevalece, sin impacto visual hoy. A unificar en etapas futuras.
 - Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
+
+---
+
+## Etapa 6J: auditoria grupo internal/backlog
+
+**Fecha:** 2026-05-16
+**Tipo:** auditoria — sin modificaciones
+
+| Pagina | Lineas | Colisiones efectivas | JS | Veredicto |
+|---|---|---|---|---|
+| `backlog-sellers.html` | 1002 | 0 (usa alias --wa/--in/--da) | fetch read-only | ✅ APTA |
+| `gestion-sellers.html` | 232 | 0 visualmente (5 nombres iguales, inline siempre gana) | Apps Script POST + localStorage | ✅ APTA con nota |
+
+---
+
+## Etapa 6K: tokens.css en grupo internal/backlog
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+### Cambios aplicados
+
+| Pagina | Link | Ubicacion | :root inline |
+|---|---|---|---|
+| `backlog-sellers.html` | ✅ agregado | linea 10-11, antes de `<style>` (sin indent) | ✅ intacto (linea 13) |
+| `gestion-sellers.html` | ✅ agregado | linea 11-12, despues de `config.js`, antes de `<style>` | ✅ intacto (linea 14) |
+
+### Checklist de smoke test 6K (pendiente — Etapa 6L)
+
+#### backlog-sellers.html
+
+| # | Verificacion | Metodo | Resultado |
+|---|---|---|---|
+| 1 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 2 | `tokens.css` HTTP 200 | DevTools → Network | Pendiente |
+| 3 | Sin errores criticos de consola | DevTools → Console | Pendiente |
+| 4 | Topbar, sidebar, cards OK sin regresion visual | Visual | Pendiente |
+| 5 | CORS del fetch a Google Sheets puede fallar en local — esperado | Console | No es regresion |
+
+#### gestion-sellers.html
+
+| # | Verificacion | Metodo | Resultado |
+|---|---|---|---|
+| 6 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 7 | `tokens.css` HTTP 200 | DevTools → Network | Pendiente |
+| 8 | Sin errores criticos de consola | DevTools → Console | Pendiente |
+| 9 | Topbar OK, formulario visible sin regresion | Visual | Pendiente |
+| 10 | Punto de estado (.dot) muestra ambar (#ffb74d del inline, NO #f59e0b del canonico) | Visual | Pendiente |
+| 11 | Asterisco de campo obligatorio muestra ambar correcto | Visual | Pendiente |
+| 12 | `config.js` carga sin errores | DevTools → Network | Pendiente |
+| 13 | No ejecutar submit real — solo validacion visual | — | No aplica |
+
+### Riesgos conocidos
+
+- `gestion-sellers.html`: `--warn` (`#ffb74d`) y `--danger` (`#d94040`) difieren del canonico — el inline siempre prevalece. Sin cambio visual posible, pero verificar explicitamente en smoke test.
+- CSS y JS son capas independientes — el `<link>` CSS no puede afectar Apps Script, localStorage ni config.js.

@@ -4,6 +4,33 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6K tokens.css en grupo internal/backlog
+
+Tipo de cambio: extension controlada de link CSS a 2 paginas del grupo backlog.
+
+Estado: implementado — pendiente smoke test manual.
+
+Paginas modificadas (solo link en <head>, :root inline y JS conservados):
+- `internal/backlog/backlog-sellers.html` — linea 10-11, antes del `<style>` (sin indent)
+- `internal/backlog/gestion-sellers.html` — linea 11-12, despues de `config.js`, antes del `<style>`
+
+Patron aplicado:
+```html
+<!-- 6K: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+Restricciones cumplidas:
+- No se modifico JS, config.js, Apps Script, localStorage, submit, endpoints ni fetch.
+- No se extrajeron variables CSS ni se elimino el :root inline.
+- No se tocaron formularios, simuladores, gantt ni legacy.
+
+Etapa 6J (auditoria previa):
+- `backlog-sellers.html`: 0 colisiones efectivas con tokens.css (usa alias --wa/--in/--da).
+- `gestion-sellers.html`: 5 colisiones de nombre con valor distinto — el inline siempre prevalece, sin impacto visual.
+
+Proxima accion: smoke test manual en ambas paginas (Etapa 6L).
+
 ## 2026-05-16 - Etapa 6I smoke test seller-center index
 
 Tipo de cambio: documentacion — resultado de validacion.

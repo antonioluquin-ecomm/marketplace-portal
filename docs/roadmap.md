@@ -717,6 +717,31 @@ Estado final del grupo `internal/seller-center/`: `index.html` validada con `tok
 Pendiente:
 - Validacion en produccion (GitHub Pages) despues del proximo push.
 
+## Etapa 6J: auditoria grupo internal/backlog
+
+**Fecha:** 2026-05-16
+**Estado:** completado — solo auditoria, sin modificaciones
+
+Auditadas `backlog-sellers.html` (1002 lineas, fetch read-only, colisiones efectivas = 0) y `gestion-sellers.html` (232 lineas, Apps Script POST + localStorage, 5 colisiones con valores distintos pero inline siempre prevalece). Ambas aptas para 6K. CSS y JS son capas independientes — agregar `<link>` no afecta ninguna operacion funcional.
+
+## Etapa 6K: tokens.css en grupo internal/backlog
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+Objetivo: extender `tokens.css` a las 2 paginas del grupo `internal/backlog/`, completando la cobertura de grupos internos del proyecto.
+
+Acciones realizadas:
+- Agregado `<link rel="stylesheet" href="../../assets/css/tokens.css">` en `<head>` de:
+  - `internal/backlog/backlog-sellers.html` (linea 10-11, antes del `<style>`, sin indent)
+  - `internal/backlog/gestion-sellers.html` (linea 11-12, despues de `config.js` y antes del `<style>`, 2 espacios)
+- El `:root` inline de cada pagina fue conservado sin modificacion.
+- Ningun bloque `<script>`, `config.js`, Apps Script, localStorage ni submit fue modificado.
+
+Pendiente:
+- Smoke test manual en ambas paginas en entorno local (Etapa 6L).
+- `gestion-sellers.html`: verificar visualmente el punto de estado del topbar y el formulario antes del proximo push.
+
 ## Etapa 7: legacy y redirects
 
 Objetivo: cerrar la migracion sin romper referencias existentes.

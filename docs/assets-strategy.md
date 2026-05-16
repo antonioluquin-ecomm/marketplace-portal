@@ -1412,3 +1412,58 @@ Validaciones confirmadas: `tokens.css` HTTP 200 sin 404, sin errores criticos de
 
 - `--info` de `index.html` (`#38bdf8`) difiere del canonico (`#60a5fa`) — el inline prevalece, sin impacto visual hoy. A unificar en etapas futuras.
 - Smoke test ejecutado en entorno local. Pendiente validacion en produccion (GitHub Pages) despues del proximo push.
+
+---
+
+### Etapa 6J: auditoria del grupo internal/backlog
+
+**Fecha:** 2026-05-16
+**Estado:** completado — solo lectura, sin modificaciones
+
+Auditadas 2 paginas del grupo `internal/backlog/`:
+
+| Pagina | Lineas | Colisiones con tokens.css | JS sensible | Veredicto |
+|---|---|---|---|---|
+| `backlog-sellers.html` | 1002 | 2 (ambas mismo valor) | fetch read-only × 3 | ✅ APTA |
+| `gestion-sellers.html` | 232 | 8 (5 distinto — inline siempre gana) | fetch + Apps Script POST + localStorage | ✅ APTA con nota |
+
+`backlog-sellers.html` usa alias cortos (`--wa`, `--in`, `--da`, `--te`) sin colision efectiva con tokens.css. `gestion-sellers.html` usa `--warn`, `--info`, `--danger` con valores distintos al canonico — el `:root` inline siempre prevalece, sin cambio visual posible. CSS y JS son capas independientes: agregar un `<link>` no afecta submit, Apps Script, localStorage ni config.js.
+
+---
+
+### Etapa 6K
+
+**Fecha:** 2026-05-16
+**Estado:** implementado — pendiente smoke test manual
+
+#### Objetivo
+
+Extender `assets/css/tokens.css` a las 2 paginas del grupo `internal/backlog/`, completando la cobertura de grupos internos.
+
+#### Modificaciones realizadas
+
+**`internal/backlog/backlog-sellers.html`** — agregado en `<head>` linea 10-11, antes del `<style>` (sin indent):
+```html
+<!-- 6K: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+**`internal/backlog/gestion-sellers.html`** — agregado en `<head>` linea 11-12, despues de `config.js` y antes del `<style>` (2 espacios):
+```html
+<!-- 6K: tokens CSS externos. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+En ambas: el `:root` inline fue conservado sin modificacion. Ningun bloque `<script>` fue tocado.
+
+#### Estado del grupo internal/backlog/
+
+| Pagina | tokens.css | :root inline | JS |
+|---|---|---|---|
+| `backlog-sellers.html` | ✅ enlazado (6K) | ✅ intacto | fetch read-only — sin tocar |
+| `gestion-sellers.html` | ✅ enlazado (6K) | ✅ intacto | Apps Script, localStorage, config.js — sin tocar |
+
+#### Riesgos pendientes
+
+- `gestion-sellers.html` tiene `--warn` (`#ffb74d`) y `--danger` (`#d94040`) distintos del canonico — el inline siempre prevalece. Verificar en smoke test que el punto de estado del topbar muestra los colores correctos.
+- Smoke test pendiente en ambas paginas antes del proximo push.
