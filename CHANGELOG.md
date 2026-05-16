@@ -4,6 +4,28 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-16 - Etapa 6C piloto tokens.css
+
+Tipo de cambio: creacion de archivo compartido + enlace piloto en pagina informativa.
+
+Estado: completado.
+
+Archivos creados:
+- `assets/css/tokens.css` — bloque `:root {}` con 19 tokens canonicos en 5 grupos (verde primario, fondos, separadores, texto, semanticos + layout).
+
+Archivos modificados:
+- `internal/estrategia/proceso-onboarding.html` — agregado `<link rel="stylesheet" href="../../assets/css/tokens.css">` dentro de `<head>` antes del bloque `<style>`.
+
+Restricciones cumplidas:
+- El `:root` inline del HTML fue conservado sin modificacion — coexiste como fallback.
+- Ningun otro HTML, JS, formulario, simulador, backlog ni gantt fue modificado.
+- No se extrajo CSS inline.
+- No se eliminaron archivos legacy.
+- No se crearon redirects.
+- No se tocaron endpoints ni Apps Script.
+
+Proxima accion: smoke test visual en navegador para confirmar carga sin errores y sin regresion visual (Etapa 6D).
+
 ## 2026-05-15 - Etapa 5M fallback local Gestion de Sellers
 
 Tipo de cambio: piloto controlado.

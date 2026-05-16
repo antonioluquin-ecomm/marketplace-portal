@@ -649,6 +649,23 @@ Pendiente:
 - Actualizar `docs/test-matrix.md` con el smoke test especifico de la cadena de fallback en Gestion de Sellers.
 - Evaluar si las paginas piloto (5E, 5F, 5H, 5J, 5L, 5M) ya consolidadas habilitan crear un helper compartido `assets/js/logos.js` en una etapa futura, sin alterar las paginas que ya quedaron migradas.
 
+## Etapa 6C: piloto tokens.css en proceso-onboarding
+
+**Fecha:** 2026-05-16
+**Estado:** completado
+
+Objetivo: crear `assets/css/tokens.css` con el bloque `:root {}` canonico y enlazarlo como piloto en la pagina informativa de menor riesgo del proyecto.
+
+Acciones realizadas:
+- Creado `assets/css/tokens.css` con 19 variables canónicas en 5 grupos: verde primario, fondos, separadores, texto, semanticos + layout.
+- Agregado `<link rel="stylesheet" href="../../assets/css/tokens.css">` en `<head>` de `internal/estrategia/proceso-onboarding.html`, antes del bloque `<style>`.
+- El `:root` inline del HTML fue conservado sin modificacion — coexiste con el externo como fallback durante la transicion.
+- Ningun otro HTML, JS, formulario, simulador ni pagina critica fue modificado.
+
+Pendiente:
+- Etapa 6D: smoke test visual en navegador de `proceso-onboarding.html` para confirmar carga sin errores y sin regresion visual.
+- Etapa 6E (futura): extender `tokens.css` a las otras 4 paginas del grupo `internal/estrategia/` si el piloto es satisfactorio.
+
 ## Etapa 7: legacy y redirects
 
 Objetivo: cerrar la migracion sin romper referencias existentes.

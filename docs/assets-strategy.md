@@ -1192,3 +1192,90 @@ Pendiente:
 ## Decision recomendada
 
 La Etapa 5 no debe empezar por extraccion masiva. La ruta segura es documentar, copiar assets sin cambiar referencias, crear archivos compartidos sin consumo inicial y luego aplicar un piloto pequeño. La primera pagina candidata para cambios reales deberia ser `index.html` o una pagina informativa interna; la primera pagina publica candidata deberia ser `public/presentaciones/presentacion-seller.html`.
+
+---
+
+### Etapa 6C
+
+**Fecha:** 2026-05-16
+**Estado:** completado — piloto activo en una pagina
+
+#### Objetivo
+
+Crear `assets/css/tokens.css` con exclusivamente el bloque `:root {}` canonico definido en Etapa 6B, y enlazarlo como piloto en `internal/estrategia/proceso-onboarding.html`.
+
+#### Archivo creado
+
+**`assets/css/tokens.css`**
+
+```css
+:root {
+  /* Verde primario */
+  --g: #5ea832;
+  --g2: #4a8a26;
+  --g-dim: rgba(94, 168, 50, .10);
+  --g-brd: rgba(94, 168, 50, .24);
+
+  /* Fondos */
+  --bg: #0b0f0b;
+  --bg2: #0f150f;
+  --panel: #141c13;
+  --panel2: #192118;
+
+  /* Separadores */
+  --line: rgba(255, 255, 255, .08);
+  --line-soft: rgba(255, 255, 255, .05);
+
+  /* Texto */
+  --text: #edf3e9;
+  --text-muted: #a6b79d;
+  --text-soft: #71816b;
+  --text-dim: #4f5d49;
+
+  /* Semanticos */
+  --warn: #f59e0b;
+  --info: #60a5fa;
+  --teal: #2dd4bf;
+  --danger: #f87171;
+
+  /* Layout */
+  --topbar-height: 58px;
+}
+```
+
+El archivo contiene solo variables CSS. No incluye resets, layout, componentes ni estilos de pagina.
+
+#### Modificacion en pagina piloto
+
+**`internal/estrategia/proceso-onboarding.html`** — se agrego dentro de `<head>`, antes del bloque `<style>`:
+
+```html
+<!-- 6C: tokens CSS externos — piloto. El :root inline permanece como fallback. -->
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+```
+
+La ruta `../../assets/css/tokens.css` resuelve correctamente desde `internal/estrategia/`.
+
+#### Estado del :root inline
+
+El bloque `:root` original del HTML **no fue eliminado**. Permanece en la linea 13 del `<style>` interno. La cascada CSS funciona de la siguiente manera:
+
+1. `tokens.css` se carga primero (define los tokens canonicos con nombres semanticos: `--bg`, `--panel`, `--text`, etc.)
+2. El `<style>` inline se procesa despues — define los mismos colores con nombres legacy (`--k`, `--k2`, `--k3`, `--t1`, `--t2`, etc.)
+3. Ambos conjuntos de variables coexisten sin conflicto porque tienen nombres distintos
+4. Si se elimina el `:root` inline en etapas futuras, las referencias a tokens legacy (`var(--k)`, `var(--t1)`, etc.) deberan migrarse a nombres canonicos (`var(--bg)`, `var(--text)`, etc.)
+
+#### Alcance del piloto
+
+| Item | Estado |
+|---|---|
+| `assets/css/tokens.css` creado | ✅ |
+| Link en `<head>` de proceso-onboarding.html | ✅ |
+| `:root` inline conservado | ✅ |
+| Otros HTML modificados | ❌ ninguno |
+| JS modificado | ❌ ninguno |
+| Formularios tocados | ❌ ninguno |
+
+#### Siguiente paso: Etapa 6D
+
+Validar visualmente en navegador que `proceso-onboarding.html` carga sin errores y sin cambios de apariencia. Luego decidir si extender `tokens.css` a las otras 4 paginas del grupo `estrategia/` (bandeja-seller, calificacion-seller, contacto-seller, presentacion-interna) antes de avanzar a paginas con mayor riesgo.

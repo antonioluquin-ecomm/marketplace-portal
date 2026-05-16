@@ -96,3 +96,53 @@ Usar esta seccion para anotar resultados reales despues de ejecutar el smoke tes
 | Fecha | Responsable | Rutas probadas | Resultado general | Incidencias | Proxima accion |
 |---|---|---|---|---|---|
 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
+
+---
+
+## Etapa 6C: checklist de validacion del piloto tokens.css
+
+**Pagina piloto:** `internal/estrategia/proceso-onboarding.html`
+**URL produccion:** `https://antonioluquin-ecomm.github.io/marketplace-portal/internal/estrategia/proceso-onboarding.html`
+**Estado:** pendiente de smoke test manual
+
+### Checklist de carga
+
+| # | Verificacion | Metodo | Resultado |
+|---|---|---|---|
+| 1 | Pagina carga sin error 404 en `tokens.css` | DevTools → Network | Pendiente |
+| 2 | `tokens.css` devuelve HTTP 200 | DevTools → Network | Pendiente |
+| 3 | Apariencia visual identica a la version anterior | Comparacion visual | Pendiente |
+| 4 | Topbar verde visible con altura correcta | Visual | Pendiente |
+| 5 | Sidebar izquierdo renderiza correctamente | Visual | Pendiente |
+| 6 | Tipografia Barlow carga desde Google Fonts | DevTools → Network | Pendiente |
+| 7 | KPIs (numeros verde/info/warn/teal) muestran colores correctos | Visual | Pendiente |
+| 8 | Cards y paneles muestran fondo oscuro correcto | Visual | Pendiente |
+| 9 | No hay errores en consola del navegador | DevTools → Console | Pendiente |
+| 10 | Responsive: layout colapsado en 768px funciona | DevTools → Responsive | Pendiente |
+
+### Verificacion de coexistencia de tokens
+
+Desde DevTools → Elements → Computed Styles en cualquier elemento que use `var(--g)`:
+
+| Token externo (tokens.css) | Token legacy inline | Conflicto esperado |
+|---|---|---|
+| `--g: #5ea832` | `--g: #5ea832` | Ninguno (mismo valor) |
+| `--bg: #0b0f0b` | `--k: #0b0f0b` | Ninguno (nombres distintos) |
+| `--text: #edf3e9` | `--t1: #edf3e9` | Ninguno (nombres distintos) |
+| `--warn: #f59e0b` | `--warn: #ffb74d` | ⚠️ Mismo nombre, valor distinto — tokens.css define #f59e0b (canonico), inline define #ffb74d (legacy) |
+| `--info: #60a5fa` | `--info: #64b5f6` | ⚠️ Mismo nombre, valor distinto — tokens.css define #60a5fa (canonico), inline define #64b5f6 (legacy) |
+| `--teal: #2dd4bf` | `--teal: #4db6ac` | ⚠️ Mismo nombre, valor distinto — tokens.css define #2dd4bf (canonico), inline define #4db6ac (legacy) |
+| `--danger: #f87171` | `--danger: #d94040` | ⚠️ Mismo nombre, valor distinto — tokens.css define #f87171 (canonico), inline define #d94040 (legacy) |
+
+> Nota: para `--warn`, `--info`, `--teal` y `--danger`, el `:root` inline sobreescribe al externo porque el `<style>` se procesa despues que el `<link>`. El resultado visual sera el color LEGACY hasta que el inline sea eliminado en una etapa futura. Esto es esperado y no es un error.
+
+### Criterio de aprobacion del piloto
+
+- Sin error 404 en `tokens.css`
+- Sin errores de consola
+- Sin regresion visual respecto del estado anterior
+- Confirmacion de que la pagina sigue siendo 100% informativa (sin formularios, sin submit)
+
+### Proxima accion si piloto OK
+
+Etapa 6D: documentar resultado real del smoke test. Luego Etapa 6E: extender `tokens.css` a `bandeja-seller.html`, `calificacion-seller.html`, `contacto-seller.html`, `presentacion-interna.html` del mismo grupo `internal/estrategia/`.
