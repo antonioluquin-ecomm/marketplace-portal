@@ -4,6 +4,48 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 7H smoke test aliases legacy
+
+Tipo de cambio: documentacion de validacion.
+
+Estado: completado.
+
+Resultado general: OK.
+
+Validaciones registradas:
+- Aliases 7C a 7F redirigen a rutas nuevas correctas.
+- Query string y hash se preservan.
+- En paginas publicas se conserva `seller_id=SPT-001`.
+- No hay 404 criticos.
+- No se ejecuto submit real en Gestion de Sellers ni formularios.
+- `sporting-marketplace_hub_v29.html` no fue modificado.
+
+Aliases validados:
+- `governance_v3.html`
+- `proceso-onboarding_v4.html`
+- `modelo-integracion_v5.html`
+- `modelo-economico_v2.html`
+- `proyecto-marketplace_v3.html`
+- `seller-center_v2.html`
+- `gantt-seller-center_v2.html`
+- `gantt-operativo_v18.html`
+- `backlog-sellers_v27.html`
+- `gestion-sellers_v7.html`
+- `simulador-economico_v4.html`
+- `maqueta-seller-center_v2.html`
+- `presentacion-seller_v3.html?seller_id=SPT-001`
+- `simulador-seller_v12.html?seller_id=SPT-001`
+- `formulario-calificacion_v2.html?seller_id=SPT-001`
+- `formulario-relevamiento_v2.html?seller_id=SPT-001`
+
+Documentacion actualizada:
+- `docs/test-matrix.md`: resultados OK por alias y registro de ejecucion.
+- `docs/roadmap.md`: Etapa 7G marcada con smoke test OK y V1 lista para release notes.
+- `README.md`: estado V1 actualizado.
+
+Proxima accion:
+- Preparar release notes V1.
+
 ## 2026-05-18 - Etapa 7G cierre documental de Etapa 7
 
 Tipo de cambio: documentacion de cierre.

@@ -938,7 +938,7 @@ Smoke test requerido:
 
 ## Etapa 7G: cierre documental de Etapa 7
 
-Estado: cerrada en modo aliases, pendiente smoke test manual completo antes de release V1.
+Estado: cerrada en modo aliases, con smoke test manual completo OK.
 
 Objetivo: cerrar la migracion legacy sin mover ni eliminar archivos, manteniendo compatibilidad de URLs versionadas mediante aliases estaticos hacia las rutas nuevas.
 
@@ -962,15 +962,22 @@ Estado final de aliases:
 | Operativas internas y publicas | 8 | Aliases implementados |
 | Hub legacy versionado | 1 | Intacto / pendiente |
 
-Pendientes para cerrar V1:
+Validacion 7H:
 
-- ejecutar smoke test manual completo de aliases 7C a 7F;
-- validar especialmente paginas publicas con `?seller_id=SPT-001`;
-- no ejecutar submit real en Gestion de Sellers ni formularios;
+- smoke test manual completo de aliases 7C a 7F ejecutado con resultado OK;
+- aliases redirigen a rutas nuevas correctas;
+- query string y hash se preservan;
+- paginas publicas conservan `seller_id=SPT-001`;
+- no hay 404 criticos;
+- no se ejecuto submit real en Gestion de Sellers ni formularios;
+- `sporting-marketplace_hub_v29.html` sigue intacto.
+
+Pendientes para release V1:
+
 - decidir en etapa separada si `sporting-marketplace_hub_v29.html` se conserva como referencia permanente, se convierte en alias o se mueve a `legacy/` en una V2;
 - preparar release notes V1 con alcance cerrado y riesgos residuales.
 
 Estado V1:
 
-- V1 queda cercana/cerrable una vez completado el smoke test de aliases y documentado su resultado.
+- V1 queda lista para preparar release notes.
 - No se recomienda iniciar limpieza de `legacy/`, extraccion de JS/CSS adicional ni cambios funcionales antes del cierre V1.

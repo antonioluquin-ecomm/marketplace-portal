@@ -45,11 +45,12 @@ La reestructuracion inicial queda cercana a cierre V1:
 - aliases legacy implementados para todos los HTML versionados migrados;
 - `sporting-marketplace_hub_v29.html` intacto y pendiente de decision futura.
 
-Pendiente antes de declarar V1 cerrada:
+Validacion previa a release V1:
 
-- ejecutar smoke test manual completo de aliases;
-- validar paginas publicas con `?seller_id=SPT-001`;
-- documentar resultado real del smoke test;
+- smoke test manual completo de aliases ejecutado con resultado OK;
+- paginas publicas validadas con `?seller_id=SPT-001`;
+- query string y hash preservados en aliases;
+- no se ejecuto submit real en Gestion ni formularios;
 - preparar release notes V1.
 
 ## Metodologia de trabajo
