@@ -4,6 +4,25 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 12B cierre post-V1 y handoff
+
+Tipo de cambio: cierre documental.
+
+Estado: completado.
+
+Decision:
+- La raiz queda como compatibility layer de aliases.
+- No se mueven aliases a `legacy/`.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+
+Cambios:
+- Creado `docs/handoff-post-v1.md`.
+- Documentado cierre del bloque post-V1.
+
+Alcance:
+- Solo documentacion.
+- Sin cambios en HTML, CSS, JS, `internal/`, `public/`, `legacy/`, Apps Script, config ni aliases.
+
 ## 2026-05-18 - Etapa 11B decision tokens paginas publicas
 
 Tipo de cambio: documentacion de decision tecnica.

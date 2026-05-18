@@ -61,9 +61,10 @@ Validacion previa a release V1:
 Pendientes post-V1:
 
 - definir siguientes mejoras post-9D sobre el hub operativo sin tocar formularios, simuladores, Backlog, Gestion, Apps Script ni config sin etapa especifica;
-- no mover ni eliminar legacy hasta una etapa posterior;
+- mantener la raiz como compatibility layer de aliases; no mover aliases a `legacy/` sin etapa explicita;
 - evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.
+- usar `docs/handoff-post-v1.md` como contexto inicial para nuevas sesiones.
 
 ## Metodologia de trabajo
 

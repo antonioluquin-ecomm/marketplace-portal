@@ -1250,3 +1250,32 @@ Criterio futuro:
 - `public-tokens.css` debe ser separado de `tokens.css` interno;
 - no crear ni aplicar `public-tokens.css` sin smoke test por pagina;
 - mantener congelados formularios, simuladores, endpoints, payloads, submit y `seller_id`.
+
+## Etapa 12A: auditoria limpieza legacy
+
+Estado: completada en modo solo lectura.
+
+Resultado:
+
+- los HTML versionados en raiz funcionan como aliases livianos;
+- todos preservan query string y hash;
+- `legacy/root-html-v1/` existe y esta vacio salvo `.gitkeep`;
+- mover aliases fuera de raiz romperia URLs historicas y compatibilidad con GitHub Pages.
+
+Recomendacion: mantener aliases en raiz.
+
+## Etapa 12B: cierre post-V1
+
+Estado: completada.
+
+Decision:
+
+- raiz = compatibility layer de aliases;
+- no mover aliases a `legacy/`;
+- `legacy/root-html-v1/` reservado para snapshots historicos futuros;
+- no eliminar legacy ni aliases.
+
+Resultado:
+
+- creado `docs/handoff-post-v1.md`;
+- bloque post-V1 cerrado documentalmente.

@@ -155,6 +155,21 @@ Decision 11B:
 - Mantener paginas publicas seller-facing independientes de `assets/css/tokens.css`.
 - Evaluar un posible `public-tokens.css` solo con auditoria especifica futura.
 
+## Etapa 12B: compatibility layer de aliases
+
+Decision:
+
+- Mantener aliases versionados en raiz.
+- No mover aliases a `legacy/`.
+- Reservar `legacy/root-html-v1/` para snapshots historicos futuros.
+
+Smoke test futuro si se reabre limpieza legacy:
+
+- Validar cada alias versionado desde raiz.
+- Validar preservacion de query/hash.
+- Validar `seller_id` en aliases publicos.
+- Validar GitHub Pages despues de publicar.
+
 ## Riesgos conocidos
 
 - Posible referencia a `pctSec` antes de declaracion en `public/formularios/formulario-relevamiento.html`.

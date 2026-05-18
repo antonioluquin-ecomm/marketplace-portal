@@ -39,3 +39,10 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 - No se movieron archivos a `legacy/`.
 - No se eliminaron archivos.
 - No se modificaron paginas nuevas ni logica funcional.
+
+## Decision Etapa 12B
+
+- La raiz se mantiene como compatibility layer de aliases.
+- No se mueven aliases a `legacy/`.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+- Cualquier movimiento o eliminacion requiere etapa explicita y smoke test de URLs historicas.

@@ -105,3 +105,18 @@ Criterio futuro:
 - Si se busca consistencia visual publica, abrir auditoria especifica para `public-tokens.css`.
 - Mantener separado el sistema visual publico del `tokens.css` interno.
 - No tocar formularios, simuladores, endpoints, payloads, submit, `seller_id`, Apps Script ni calculos sin etapa especifica.
+
+## Etapa 12A/12B - cierre legacy post-V1
+
+Estado: cerrado documentalmente.
+
+Decision:
+
+- La raiz queda como compatibility layer de aliases.
+- No se mueven aliases a `legacy/`.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+- No se eliminan archivos legacy ni aliases.
+
+Handoff:
+
+- Creado `docs/handoff-post-v1.md` como resumen para nuevas sesiones.
