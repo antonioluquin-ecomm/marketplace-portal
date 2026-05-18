@@ -4,6 +4,32 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 8C decision hub legacy
+
+Tipo de cambio: documentacion de decision.
+
+Estado: documentado.
+
+Decision:
+- `sporting-marketplace_hub_v29.html` queda intacto como hub operativo historico temporal.
+- No se convierte en alias a `index.html` en V1.
+
+Motivo:
+- No esta completamente reemplazado por `index.html`.
+- `index.html` cumple rol institucional, liviano y documental.
+- El hub legacy conserva funcionalidades operativas no replicadas: sidebar, flujo de incorporacion, accesos rapidos, recursos por proceso, buscador, mapa de rutas y grid dinamico.
+- `index.html` todavia lo referencia como "Hub central actual" / "Referencia temporal".
+- Convertirlo ahora podria eliminar una herramienta operativa util o generar links redundantes/circulares.
+
+Recomendacion post-V1:
+- Evaluar si su funcionalidad se integra en `index.html`.
+- O crear `internal/hub-operativo.html`.
+- Recien despues decidir alias, pagina de transicion o movimiento a `legacy/`.
+
+Alcance:
+- Solo documentacion.
+- Sin cambios en HTML, CSS, JS, Apps Script, config, `internal/`, `public/`, aliases ni archivos legacy.
+
 ## 2026-05-18 - Etapa 8A Release Notes V1
 
 Tipo de cambio: cierre documental de version.

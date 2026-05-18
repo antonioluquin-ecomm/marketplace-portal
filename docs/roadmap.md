@@ -1008,9 +1008,42 @@ Alcance V1 cerrado:
 - aliases legacy implementados y smoke test OK;
 - documentacion viva actualizada.
 
+Decision 8C:
+
+- `sporting-marketplace_hub_v29.html` se mantiene intacto como hub operativo historico temporal;
+- no se convierte en alias a `index.html` en V1;
+- motivo: conserva funcionalidades operativas no replicadas en `index.html` como sidebar, flujo de incorporacion, accesos rapidos, recursos por proceso, buscador, mapa de rutas y grid dinamico;
+- `index.html` mantiene rol institucional, liviano y documental;
+- convertirlo ahora podria eliminar funcionalidad util o generar links redundantes/circulares, porque `index.html` todavia lo referencia como hub actual.
+
 Pendientes post-V1:
 
-- decision futura sobre `sporting-marketplace_hub_v29.html`;
+- evaluar si la funcionalidad de `sporting-marketplace_hub_v29.html` se integra en `index.html`;
+- evaluar alternativa `internal/hub-operativo.html`;
+- decidir alias, pagina de transicion o movimiento a `legacy/` solo despues de esa evaluacion;
 - limpieza o movimiento a `legacy/` solo en etapa posterior;
 - extraccion CSS/JS solo con auditoria especifica;
 - formularios y Gestion de Sellers solo con pruebas controladas y sin cambios de Apps Script no autorizados.
+
+## Etapa 8C: decision sobre `sporting-marketplace_hub_v29.html`
+
+Estado: documentada.
+
+Decision: mantener intacto como hub operativo historico temporal.
+
+No se convierte en alias a `index.html` en V1.
+
+Motivos:
+
+- no esta completamente reemplazado por `index.html`;
+- `index.html` es entrada institucional, liviana y documental;
+- el hub legacy conserva funcionalidades operativas: sidebar, flujo de incorporacion, accesos rapidos, recursos por proceso, buscador, mapa de rutas y grid dinamico;
+- enlaza a rutas nuevas en `internal/` y `public/`;
+- `index.html` todavia lo referencia como "Hub central actual" / "Referencia temporal";
+- convertirlo ahora podria eliminar funcionalidad util o generar links redundantes/circulares.
+
+Recomendacion post-V1:
+
+- evaluar si su funcionalidad se integra en `index.html`;
+- o crear `internal/hub-operativo.html`;
+- recien despues decidir alias, pagina de transicion o movimiento a `legacy/`.
