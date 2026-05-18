@@ -4,7 +4,7 @@
 | Campo | Detalle |
 |---|---|
 | Nombre del documento | Metodología de Trabajo Asistido por IA |
-| Version | v1.2 |
+| Version | v1.3 |
 | Estado | Activo |
 | Objetivo | Guia institucional reutilizable para proyectos asistidos por IA |
 
@@ -37,7 +37,8 @@
 - 25. Buenas practicas de prompts.
 - 26. Checklist base del proyecto.
 - 27. Convenciones recomendadas.
-- 28. Nota final.
+- 28. Regla operativa para comandos Git.
+- 29. Nota final.
 
 # 1. Objetivo del documento
 
@@ -965,7 +966,29 @@ Checklist reutilizable:
 - Priorizar legibilidad sobre complejidad.
 - Mantener el contexto institucional actualizado.
 
-# 28. Nota final
+# 28. Regla operativa para comandos Git
+
+El usuario trabaja normalmente desde VS Code y PowerShell en Windows. Por eso, los bloques de comandos deben entregarse preferentemente compatibles con PowerShell.
+
+Buenas practicas operativas:
+
+- Evitar comandos multilinea con `\` cuando sean para copiar directamente.
+- Para `git add` con varios archivos, usar una sola linea.
+- Mantener siempre validacion antes y despues:
+  - `git status --short`
+  - `git diff --name-only`
+- Los commits los ejecuta manualmente el usuario.
+
+Ejemplo recomendado:
+
+```powershell
+git status --short
+git diff --name-only
+git add README.md CHANGELOG.md docs/roadmap.md
+git status --short
+```
+
+# 29. Nota final
 
 Esta metodologia debe adaptarse a cada proyecto, equipo y contexto.
 
