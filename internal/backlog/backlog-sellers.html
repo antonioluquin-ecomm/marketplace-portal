@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Backlog de Sellers v26 Auditado | Sporting Marketplace</title>
+<title>Backlog de Sellers | Sporting Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -235,7 +235,7 @@ tbody tr:last-child td{border-bottom:none}
 <header class="topbar">
   <div class="tb-brand">
     <div class="tb-logo">Sporting <span>Marketplace</span></div>
-    <div class="tb-crumb">Backlog de Sellers · v26 AUDITADO</div>
+    <div class="tb-crumb">Seguimiento operativo de sellers</div>
   </div>
   <div class="tb-right">
     <div class="tb-status">
@@ -246,7 +246,7 @@ tbody tr:last-child td{border-bottom:none}
       <button class="view-btn active" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
       <button class="view-btn" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
     </div>
-    <a class="tb-btn" href="../../index.html">← Hub</a>
+    <a class="tb-btn" href="../../index.html">← Portal</a>
     <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻</button>
   </div>
 </header>
@@ -255,11 +255,11 @@ tbody tr:last-child td{border-bottom:none}
   <aside class="sidebar">
 
     <div class="sb-block" style="margin-top:14px">
-      <input class="search-input" id="search-input" type="text" placeholder="Buscar seller, ID…" oninput="renderContent()">
+      <input class="search-input" id="search-input" type="text" placeholder="Buscar seller, ID, grupo o marca…" oninput="renderContent()">
     </div>
 
     <div class="sb-block">
-      <div class="sb-lbl">Filtros rápidos</div>
+      <div class="sb-lbl">Atajos de seguimiento</div>
       <div class="quick-btns" id="quick-btns">
         <button class="qbtn" onclick="toggleQuick('bloqueados')">
           <span>🔴 Bloqueados</span><span class="qbtn-count" id="qc-bloqueados">0</span>
@@ -277,8 +277,8 @@ tbody tr:last-child td{border-bottom:none}
     </div>
 
     <div class="sb-block">
-      <div class="sb-lbl">Filtrar por</div>
-      <label class="fi-label">Pipeline</label>
+      <div class="sb-lbl">Filtros operativos</div>
+      <label class="fi-label">Estado del pipeline</label>
       <select class="fi-select" id="sel-pipeline" onchange="renderContent()">
         <option value="">Todos</option>
         <option>Identificados</option>
@@ -289,7 +289,7 @@ tbody tr:last-child td{border-bottom:none}
         <option>En integración</option>
         <option>Live</option>
       </select>
-      <label class="fi-label">Modelo</label>
+      <label class="fi-label">Modelo de integración</label>
       <select class="fi-select" id="sel-modelo" onchange="renderContent()">
         <option value="">Todos</option>
         <option>VTEX → VTEX</option>
@@ -312,11 +312,11 @@ tbody tr:last-child td{border-bottom:none}
       </select>
       <label class="fi-label">Responsable</label>
       <select class="fi-select" id="sel-responsable" onchange="renderContent()"></select>
-      <button class="clear-btn" onclick="clearFilters()">✕ Limpiar filtros</button>
+      <button class="clear-btn" onclick="clearFilters()">✕ Limpiar vista</button>
     </div>
 
     <div class="sb-block">
-      <div class="sb-lbl">Ordenar</div>
+      <div class="sb-lbl">Ordenar vista</div>
       <select class="fi-select" id="sel-orden" onchange="renderContent()">
         <option value="prioridad">Prioridad alta primero</option>
         <option value="bloqueados">Bloqueados primero</option>
@@ -330,20 +330,20 @@ tbody tr:last-child td{border-bottom:none}
 
   <div class="content-wrap">
     <div class="kpi-bar">
-      <div class="kpi"><div class="kpi-val" id="kpi-total">—</div><div class="kpi-lbl">Total</div></div>
+      <div class="kpi"><div class="kpi-val" id="kpi-total">—</div><div class="kpi-lbl">Sellers</div></div>
       <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val g" id="kpi-live">—</div><div class="kpi-lbl">Live</div></div>
       <div class="kpi"><div class="kpi-val i" id="kpi-int">—</div><div class="kpi-lbl">En integración</div></div>
       <div class="kpi"><div class="kpi-val w" id="kpi-eval">—</div><div class="kpi-lbl">En evaluación</div></div>
       <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val d" id="kpi-blk">—</div><div class="kpi-lbl">Bloqueados</div></div>
-      <div class="kpi"><div class="kpi-val w" id="kpi-alta">—</div><div class="kpi-lbl">Alta prio</div></div>
+      <div class="kpi"><div class="kpi-val w" id="kpi-alta">—</div><div class="kpi-lbl">Alta prioridad</div></div>
       <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val i" id="kpi-grupos">—</div><div class="kpi-lbl">Grupos</div></div>
       <div class="kpi"><div class="kpi-val g" id="kpi-marcas">—</div><div class="kpi-lbl">Marcas</div></div>
     </div>
     <div class="content-area" id="content-area">
-      <div class="state-box"><div class="state-icon">⟳</div><div class="state-title">Cargando sellers</div><div class="state-desc">Conectando con Google Sheets…</div></div>
+      <div class="state-box"><div class="state-icon">⟳</div><div class="state-title">Cargando backlog</div><div class="state-desc">Conectando con la base operativa de sellers…</div></div>
     </div>
   </div>
 </div>

@@ -1795,3 +1795,13 @@ Resultado:
 Pendiente:
 
 - 21C: smoke test sin submit real del Formulario de Relevamiento con `seller_id=SPT-001`.
+
+## Etapa 22A: revision UX/contenido Backlog Sellers
+
+Estado: completada.
+
+Resultado:
+
+- Revisado `internal/backlog/backlog-sellers.html`.
+- Ajustados textos visibles estaticos para mejorar lectura operativa de topbar, buscador, filtros, orden, KPIs y estado inicial de carga.
+- No se modificaron JS funcional, scripts, fetch, CSV, filtros funcionales, render dinamico, localStorage, datos, CSS estructural, rutas, assets ni config.
