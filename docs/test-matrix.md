@@ -822,3 +822,30 @@ Exclusiones permanentes de Etapa 14:
 - Config.
 - Aliases de raiz.
 - `legacy/`.
+
+---
+
+## Etapa 15C: smoke test pendiente para limpieza piloto CSS inline
+
+**Origen:** Etapa 15B.
+**Estado:** pendiente.
+**Alcance:** `internal/estrategia/proceso-onboarding.html`.
+
+Checklist:
+
+| # | Verificacion | Metodo | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|---|---|
+| 1 | Pagina carga correctamente | Browser / GitHub Pages local o remoto | Sin pantalla rota | Pendiente | Pendiente |
+| 2 | `tokens.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 3 | `internal-components.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 4 | Paneles se mantienen visualmente iguales | Visual | Sin regresion | Pendiente | Pendiente |
+| 5 | Callouts conservan estilo y margen superior | Visual | Sin regresion | Pendiente | Pendiente |
+| 6 | Cabeceras de seccion y descripciones se mantienen | Visual | Sin regresion | Pendiente | Pendiente |
+| 7 | Tags y tags verdes se mantienen | Visual | Sin regresion | Pendiente | Pendiente |
+| 8 | Responsive desktop/mobile se mantiene | Visual responsive | Sin overflow nuevo | Pendiente | Pendiente |
+| 9 | No se tocaron scripts ni paginas criticas | `git diff --name-only` | Solo archivos permitidos | Pendiente | Pendiente |
+
+Notas:
+
+- No ejecutar cambios funcionales durante 15C.
+- No extender limpieza a otras paginas hasta validar el piloto.

@@ -1773,3 +1773,35 @@ Siguiente bloque recomendado:
 2. O auditoria JS interna, sin implementar extraccion todavia.
 
 No iniciar limpieza de CSS ni extraccion JS sin una etapa especifica, smoke test por grupo y plan de rollback.
+
+### Etapa 15B: limpieza piloto CSS inline duplicado
+
+**Estado:** implementado, pendiente smoke test 15C.
+
+Pagina piloto:
+
+- `internal/estrategia/proceso-onboarding.html`
+
+Reglas limpiadas del CSS inline porque ya estan cubiertas por `assets/css/internal-components.css`:
+
+- `.panel`
+- `.panel.soft`
+- `.callout` parcialmente
+- `.callout.warn`
+- `.section-head`
+- `.section-title`
+- `.section-title span`
+- `.section-desc`
+- `.tag`
+- `.tag.green`
+
+Reglas conservadas:
+
+- `.callout{margin-top:14px}` se mantiene como ajuste local porque `internal-components.css` no define ese margen.
+
+Invariantes:
+
+- No se modifico `assets/css/internal-components.css`.
+- No se modifico `assets/css/tokens.css`.
+- No se tocaron textos, estructura HTML ni JavaScript.
+- No se tocaron paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.

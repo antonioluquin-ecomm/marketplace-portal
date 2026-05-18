@@ -4,6 +4,24 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 15B limpieza piloto CSS inline duplicado
+
+Tipo de cambio: implementacion minima y reversible.
+
+Estado: implementado, pendiente de smoke test 15C.
+
+Cambios:
+- Limpiadas reglas CSS inline duplicadas en `internal/estrategia/proceso-onboarding.html`.
+- Las reglas eliminadas ya estan cubiertas por `assets/css/internal-components.css`.
+- Se conservaron los links a `tokens.css` e `internal-components.css`.
+- Se conservo `.callout{margin-top:14px}` como ajuste local porque ese margen no existe en el CSS compartido.
+
+Alcance:
+- Sin cambios de textos.
+- Sin cambios de estructura HTML.
+- Sin cambios en JavaScript.
+- Sin cambios en `assets/css/internal-components.css`, `tokens.css`, otras paginas, publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni legacy.
+
 ## 2026-05-18 - Etapa 14I cierre documental CSS interno compartido
 
 Tipo de cambio: documentacion.

@@ -1481,3 +1481,38 @@ Proximo bloque recomendado:
 2. Auditoria JS interna.
 
 Ambos bloques deben iniciar en modo auditoria antes de cualquier implementacion.
+
+## Etapa 15B: limpieza piloto CSS inline duplicado
+
+Estado: implementada, pendiente de smoke test 15C.
+
+Resultado:
+
+- Limpieza piloto aplicada solo en `internal/estrategia/proceso-onboarding.html`.
+- Eliminadas reglas inline duplicadas ya cubiertas por `assets/css/internal-components.css`.
+- Conservados los links a `tokens.css` e `internal-components.css`.
+- Conservado CSS inline no duplicado.
+
+Clases limpiadas:
+
+- `.panel`
+- `.panel.soft`
+- `.callout.warn`
+- `.section-head`
+- `.section-title`
+- `.section-title span`
+- `.section-desc`
+- `.tag`
+- `.tag.green`
+
+Conservado:
+
+- `.callout{margin-top:14px}` como ajuste local no cubierto por `internal-components.css`.
+
+Validacion pendiente 15C:
+
+- confirmar carga sin 404 de `tokens.css` e `internal-components.css`;
+- revisar visualmente paneles, callouts, cabeceras de seccion y tags;
+- validar desktop/mobile;
+- confirmar sin cambios de JS;
+- confirmar `git diff --name-only` limitado a archivos permitidos.
