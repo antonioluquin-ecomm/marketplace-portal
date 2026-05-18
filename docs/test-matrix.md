@@ -204,6 +204,31 @@ Checklist especifico:
 - Confirmar que `sporting-marketplace_hub_v29.html` queda intacto.
 - No ejecutar submit real en Gestion ni formularios.
 
+## Etapa 7G: cierre documental y smoke test V1
+
+Estado: Etapa 7 cerrada en modo aliases. Smoke test manual completo pendiente antes de declarar V1 cerrada.
+
+Resumen de validacion requerida:
+
+| Grupo | Rutas legacy | Validacion clave | Resultado real | Estado | Observaciones |
+|---|---:|---|---|---|---|
+| Estrategia | 5 | Redireccion a `internal/estrategia/`, query/hash preservados | Pendiente | Pendiente | Incluye piloto Governance y aliases 7D |
+| Seller Center / Gantt | 3 | Redireccion a rutas `internal/`, sin 404 locales | Pendiente | Pendiente | Gantt conserva dependencias de datos en pagina destino |
+| Operativas internas | 4 | Redireccion a Backlog, Gestion, Simulador Economico y Maqueta | Pendiente | Pendiente | No ejecutar submit en Gestion |
+| Publicas seller-facing | 4 | Redireccion a `public/` preservando `seller_id` | Pendiente | Pendiente | Probar con `?seller_id=SPT-001`; no enviar formularios |
+| Hub legacy | 1 | Confirmar que sigue intacto | Pendiente | Pendiente | `sporting-marketplace_hub_v29.html` no fue convertido en alias |
+
+Checklist final V1:
+
+- Abrir todos los aliases legacy implementados.
+- Confirmar destino final correcto en `internal/` o `public/`.
+- Confirmar preservacion de `?test=1#riesgo`.
+- Confirmar preservacion de `?seller_id=SPT-001` en paginas publicas.
+- Confirmar ausencia de 404 locales en aliases.
+- Confirmar que `sporting-marketplace_hub_v29.html` sigue disponible e intacto.
+- No ejecutar submit real en Gestion de Sellers ni formularios.
+- Documentar resultado real antes de publicar o etiquetar V1.
+
 ## Registro de ejecucion
 
 Usar esta seccion para anotar resultados reales despues de ejecutar el smoke test manual.

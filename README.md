@@ -8,7 +8,9 @@ El objetivo es convertir el conjunto actual de paginas y herramientas en una pla
 
 ## Estado actual
 
-El proyecto funciona, pero crecio de forma organica. Actualmente la mayor parte de las paginas HTML se encuentran en la raiz del repositorio con nombres versionados, CSS inline y JavaScript embebido. Tambien conviven en la raiz archivos de configuracion, integracion, documentacion, datos y assets.
+El proyecto funciona y ya cuenta con estructura institucional migrada. Las paginas nuevas viven en `internal/` y `public/`, mientras que los HTML versionados de raiz que ya tienen ruta nueva funcionan como aliases de compatibilidad.
+
+`sporting-marketplace_hub_v29.html` se mantiene intacto como referencia temporal y decision pendiente para una etapa posterior. No se movieron archivos a `legacy/` durante el cierre de Etapa 7.
 
 Estructura actual resumida:
 
@@ -30,6 +32,25 @@ Estructura actual resumida:
 ├─ formularios, simuladores y modelos HTML
 └─ docs/
 ```
+
+## Estado V1
+
+La reestructuracion inicial queda cercana a cierre V1:
+
+- estructura base creada;
+- `index.html` institucional creado;
+- paginas internas y publicas migradas por copia segura;
+- assets/logos copiados y fallbacks locales aplicados por etapas;
+- `tokens.css` validado en paginas internas seleccionadas;
+- aliases legacy implementados para todos los HTML versionados migrados;
+- `sporting-marketplace_hub_v29.html` intacto y pendiente de decision futura.
+
+Pendiente antes de declarar V1 cerrada:
+
+- ejecutar smoke test manual completo de aliases;
+- validar paginas publicas con `?seller_id=SPT-001`;
+- documentar resultado real del smoke test;
+- preparar release notes V1.
 
 ## Metodologia de trabajo
 
@@ -55,4 +76,3 @@ Archivos documentales principales:
 - `docs/roadmap.md`
 - `docs/test-matrix.md`
 - `docs/decisions/README.md`
-

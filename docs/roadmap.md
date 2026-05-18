@@ -935,3 +935,42 @@ Smoke test requerido:
 - abrir cada alias con `?test=1#riesgo` y confirmar preservacion de query/hash;
 - confirmar que no hay 404 ni errores de consola;
 - confirmar que el enlace manual apunta al destino correcto.
+
+## Etapa 7G: cierre documental de Etapa 7
+
+Estado: cerrada en modo aliases, pendiente smoke test manual completo antes de release V1.
+
+Objetivo: cerrar la migracion legacy sin mover ni eliminar archivos, manteniendo compatibilidad de URLs versionadas mediante aliases estaticos hacia las rutas nuevas.
+
+Resultado consolidado:
+
+- todos los HTML versionados migrados tienen alias hacia su ruta nueva;
+- cada alias usa `meta refresh` como fallback y JavaScript con `window.location.replace()`;
+- los aliases preservan `location.search` y `location.hash`;
+- los aliases publicos preservan `seller_id` y cualquier parametro futuro;
+- `sporting-marketplace_hub_v29.html` queda intacto como referencia temporal y unica decision pendiente;
+- no se movio ningun archivo a `legacy/`;
+- no se elimino ningun archivo;
+- no se modificaron paginas nuevas, CSS compartido, JS funcional, Apps Script, endpoints, payloads, submit, `localStorage`, `config.js`, `assets/js/config.js`, assets ni logos.
+
+Estado final de aliases:
+
+| Grupo | Archivos | Estado |
+|---|---:|---|
+| Estrategia | 5 | Aliases implementados |
+| Seller Center / Gantt | 3 | Aliases implementados |
+| Operativas internas y publicas | 8 | Aliases implementados |
+| Hub legacy versionado | 1 | Intacto / pendiente |
+
+Pendientes para cerrar V1:
+
+- ejecutar smoke test manual completo de aliases 7C a 7F;
+- validar especialmente paginas publicas con `?seller_id=SPT-001`;
+- no ejecutar submit real en Gestion de Sellers ni formularios;
+- decidir en etapa separada si `sporting-marketplace_hub_v29.html` se conserva como referencia permanente, se convierte en alias o se mueve a `legacy/` en una V2;
+- preparar release notes V1 con alcance cerrado y riesgos residuales.
+
+Estado V1:
+
+- V1 queda cercana/cerrable una vez completado el smoke test de aliases y documentado su resultado.
+- No se recomienda iniciar limpieza de `legacy/`, extraccion de JS/CSS adicional ni cambios funcionales antes del cierre V1.

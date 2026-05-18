@@ -5,7 +5,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | Archivo actual | Ruta futura sugerida | Tipo | Criticidad | Observaciones |
 |---|---|---|---|---|
 | `index.html` | `/index.html` | documentacion | Alta | Entrada institucional oficial creada en Etapa 2. Enlaza a paginas actuales en raiz sin migrarlas. |
-| `sporting-marketplace_hub_v29.html` | `/legacy/root-html-v1/sporting-marketplace_hub_v29.html` | legacy | Alta | Hub central versionado. Se mantiene intacto como referencia temporal; unico HTML versionado principal pendiente de decision especifica. |
+| `sporting-marketplace_hub_v29.html` | `/legacy/root-html-v1/sporting-marketplace_hub_v29.html` | legacy | Alta | Hub central versionado. Se mantiene intacto como referencia temporal; unico HTML versionado principal pendiente de decision especifica para V2. |
 | `backlog-sellers_v27.html` | `/internal/backlog/backlog-sellers.html` | interno | Alta | Alias implementado en raiz hacia la ruta nueva. Usa meta refresh y JavaScript preservando query/hash. No se movio a `legacy/`; CSV, logos, cards, tabla, filtros y modal permanecen en la pagina nueva. |
 | `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Alias implementado en raiz hacia la ruta nueva. Usa meta refresh y JavaScript preservando query/hash. No se movio a `legacy/`; Apps Script, CSV sellers, localStorage y submit permanecen en la pagina nueva. |
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Alias implementado en raiz hacia la ruta nueva. Usa meta refresh y JavaScript preservando query/hash. No se movio a `legacy/`; la logica y CSV permanecen en la pagina nueva. |
@@ -28,4 +28,13 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 | `MarketPlace Sporting - Sellers (BD).xlsx` | `/data/MarketPlace Sporting - Sellers (BD).xlsx` | data | Media | Archivo de datos operativo. Evaluar si debe publicarse en GitHub Pages. |
 | `Mapa del Hub.docx` | `/docs/source/Mapa del Hub.docx` | documentacion | Baja | Documento fuente. Puede mantenerse como referencia historica. |
 | `PROJECT_WORKFLOW.md` | `/PROJECT_WORKFLOW.md` | documentacion | Alta | Metodologia institucional base. Debe permanecer visible en raiz. |
-| archivos versionados antiguos futuros | `/legacy/` | legacy | Media | Usar solo despues de validar nuevas rutas y estrategia de compatibilidad. |
+| archivos versionados antiguos futuros | `/legacy/` | legacy | Media | Etapa 7 cerro sin mover archivos a `legacy/`. Usar solo en una etapa futura posterior a smoke test, release V1 y decision explicita. |
+
+## Estado de cierre Etapa 7
+
+- Todos los HTML versionados con ruta nueva migrada funcionan como aliases en raiz.
+- Los aliases preservan query string y hash; esto protege `seller_id` en paginas publicas.
+- `sporting-marketplace_hub_v29.html` queda intacto como referencia temporal.
+- No se movieron archivos a `legacy/`.
+- No se eliminaron archivos.
+- No se modificaron paginas nuevas ni logica funcional.

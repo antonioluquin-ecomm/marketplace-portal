@@ -4,6 +4,38 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 7G cierre documental de Etapa 7
+
+Tipo de cambio: documentacion de cierre.
+
+Estado: Etapa 7 cerrada en modo aliases; smoke test manual completo pendiente antes de declarar V1 cerrada.
+
+Decision documentada:
+- Todos los HTML versionados que ya tenian ruta nueva migrada quedan cubiertos por aliases en raiz.
+- `sporting-marketplace_hub_v29.html` queda intacto como referencia temporal y unica decision legacy pendiente.
+- No se movieron archivos a `legacy/`.
+- No se eliminaron archivos.
+- No se modificaron paginas nuevas ni logica funcional.
+
+Alcance explicitamente excluido:
+- Sin modificaciones en HTML durante esta etapa.
+- Sin cambios de CSS, JS, Apps Script, endpoints, payloads, submit, `localStorage`, `config.js`, `assets/js/config.js`, assets o logos.
+- Sin nuevos aliases.
+- Sin limpieza legacy.
+
+Documentacion actualizada:
+- `docs/roadmap.md`: cierre 7G, estado final de aliases y V1 cercana/cerrable.
+- `docs/test-matrix.md`: checklist final de smoke test V1.
+- `docs/hub-map.md`: estado consolidado de cierre Etapa 7.
+- `README.md`: estado actual actualizado para reflejar estructura migrada y aliases legacy.
+
+Pendientes:
+- Ejecutar smoke test manual completo de aliases 7C a 7F.
+- Validar publicas con `?seller_id=SPT-001`.
+- No ejecutar submit real en Gestion de Sellers ni formularios.
+- Decidir en etapa separada el tratamiento futuro de `sporting-marketplace_hub_v29.html`.
+- Preparar release notes V1.
+
 ## 2026-05-18 - Etapa 7F aliases legacy restantes
 
 Tipo de cambio: compatibilidad legacy.
