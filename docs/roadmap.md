@@ -1815,3 +1815,13 @@ Resultado:
 - Revisado `internal/backlog/gestion-sellers.html`.
 - Ajustados textos visibles estaticos para mejorar claridad de alta/edicion, instrucciones, preview, labels, ayudas y placeholders seguros.
 - No se modificaron submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, generacion/reserva de IDs, localStorage, validaciones de negocio, `name/id`, valores de campos, CSV, config, rutas ni links publicos.
+
+## Etapa 22C: revision UX/copy Simulador Economico interno
+
+Estado: completada.
+
+Resultado:
+
+- Revisado `internal/simuladores/simulador-economico.html`.
+- Ajustados textos visibles estaticos para mejorar claridad de uso interno, parametros, supuestos comerciales, servicios, resultados, escenarios, financiacion y tarifas de referencia.
+- No se modificaron formulas, calculos, JS, scripts, fetch, CSV, CONFIG, DIRECT_CSV_URLS, tarifas, overrides, escenarios, inputs funcionales, valores, ids/classes, rutas ni config.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador Económico v4 — Sporting Marketplace</title>
+<title>Simulador Económico | Sporting Marketplace</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
 <!-- 14G: componentes internos pasivos. El CSS inline permanece como fallback. -->
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
@@ -416,52 +416,52 @@ body {
 <!-- ════════════ TOP BAR ════════════ -->
 <header class="topbar">
   <div class="topbar-brand">
-    <a href="../../index.html" title="Volver al Hub" style="display:flex;align-items:center;gap:0;text-decoration:none">
+    <a href="../../index.html" title="Volver al Portal" style="display:flex;align-items:center;gap:0;text-decoration:none">
       <svg width="110" height="26" viewBox="0 0 110 26" fill="none" xmlns="http://www.w3.org/2000/svg">
         <text x="0" y="19" font-family="'Barlow Condensed',sans-serif" font-weight="900" font-size="19" letter-spacing="0.04em" text-transform="uppercase" fill="#ffffff">SPORTING</text>
         <text x="72" y="19" font-family="'Barlow Condensed',sans-serif" font-weight="900" font-size="19" letter-spacing="0.04em" fill="#5ea832"> MKT</text>
       </svg>
     </a>
-    <span class="topbar-badge">Simulador Económico</span>
+    <span class="topbar-badge">Simulador económico interno</span>
   </div>
   <div class="topbar-right">
     <div class="status-dot" id="rates-status-top">
       <div class="dot" id="rates-dot"></div>
       <span id="rates-status-txt">Cargando tarifas…</span>
     </div>
-    <div class="disc-pill">Estimación orientativa · No contractual</div>
+    <div class="disc-pill">Uso interno · Estimación orientativa · No contractual</div>
   </div>
 </header>
 
 <!-- ════════════ COL 1 — INPUTS ════════════ -->
 <aside class="col-inputs">
   <div class="col-header">
-    <div class="col-title">Datos del seller</div>
-    <div class="col-sub">Completá los campos para simular</div>
+    <div class="col-title">Parámetros de simulación</div>
+    <div class="col-sub">Completá supuestos comerciales para estimar el escenario</div>
   </div>
 
   <!-- Identificación -->
   <div class="section">
-    <div class="section-label">Identificación</div>
+    <div class="section-label">Identificación del caso</div>
     <div class="field">
-      <div class="field-label">Seller / Empresa</div>
+      <div class="field-label">Seller o empresa</div>
       <div class="seller-select-wrap">
         <select class="sel" id="f-seller-select" onchange="handleSellerSelect()">
           <option value="">Cargando sellers…</option>
         </select>
-        <input class="inp" type="text" id="f-seller" placeholder="Nombre del seller" oninput="handleSellerManualInput()">
-        <div class="seller-helper" id="seller-helper">Podés seleccionar un seller existente o escribirlo manualmente.</div>
+        <input class="inp" type="text" id="f-seller" placeholder="Nombre del seller o empresa" oninput="handleSellerManualInput()">
+        <div class="seller-helper" id="seller-helper">Seleccioná un seller del Backlog o cargá una referencia manual para analizar un caso nuevo.</div>
       </div>
     </div>
     <div class="field">
-      <div class="field-label">Referencia del escenario</div>
-      <input class="inp" type="text" id="f-escenario" placeholder="Ej: Propuesta inicial" oninput="recalc()">
+      <div class="field-label">Nombre del escenario</div>
+      <input class="inp" type="text" id="f-escenario" placeholder="Ej: Propuesta inicial / piloto Q2" oninput="recalc()">
     </div>
   </div>
 
   <!-- Datos base -->
   <div class="section">
-    <div class="section-label">Datos base</div>
+    <div class="section-label">Supuestos comerciales base</div>
     <div class="field">
       <div class="field-label">
         Ventas mensuales — GMV
@@ -478,7 +478,7 @@ body {
     </div>
     <div class="field">
       <div class="field-label">
-        Comisión del Marketplace
+        Comisión Marketplace
         <span class="field-hint">% sobre ventas</span>
       </div>
       <input class="inp" type="number" id="f-comision" value="7" min="0" max="100" step="0.5" oninput="recalc()">
@@ -497,7 +497,7 @@ body {
     </div>
     <div class="field">
       <div class="field-label">
-        Tasa de devoluciones
+        Tasa estimada de devoluciones
         <span class="field-hint">% estimado</span>
       </div>
       <input class="inp" type="number" id="f-devol" value="5" min="0" max="100" step="0.5" oninput="recalc()">
@@ -506,7 +506,7 @@ body {
 
   <!-- Servicios adicionales — SIN badges/iniciales -->
   <div class="section">
-    <div class="section-label">Servicios adicionales</div>
+    <div class="section-label">Servicios incluidos en la estimación</div>
     <div class="svc-list">
 
       <div>
@@ -560,7 +560,7 @@ body {
           </label>
         </div>
         <div class="svc-sub" id="sub-ca">
-          <label>Cantidad de SKUs a catalogar</label>
+          <label>SKUs a catalogar</label>
           <input class="inp" type="number" id="f-skus" value="0" min="0" oninput="recalc()">
         </div>
       </div>
@@ -603,7 +603,7 @@ body {
 <main class="col-results">
 
   <div class="tab-bar">
-    <button class="tab-btn active" onclick="showTab('t-principal')">Resultado</button>
+    <button class="tab-btn active" onclick="showTab('t-principal')">Resultado estimado</button>
     <button class="tab-btn" onclick="showTab('t-escenarios')">Escenarios</button>
     <button class="tab-btn" onclick="showTab('t-financiacion')">Financiación</button>
   </div>
@@ -630,7 +630,7 @@ body {
           <div class="kpi-sub" id="r-pedidos">— pedidos estimados</div>
         </div>
         <div class="kpi danger">
-          <div class="kpi-lbl">Total cargos Marketplace</div>
+          <div class="kpi-lbl">Cargos totales Marketplace</div>
           <div class="kpi-val" id="r-cargos">$ —</div>
           <div class="kpi-sub" id="r-takerate">Take rate: —</div>
         </div>
@@ -638,7 +638,7 @@ body {
 
       <!-- Barra de composición -->
       <div class="comp-bar-wrap">
-        <div class="comp-bar-title">Composición del GMV</div>
+        <div class="comp-bar-title">Distribución estimada del GMV</div>
         <div class="comp-bar-track">
           <div class="comp-seg net"   id="bar-net"   style="width:86%"></div>
           <div class="comp-seg total" id="bar-total" style="width:14%"></div>
@@ -651,7 +651,7 @@ body {
 
       <!-- Desglose -->
       <div class="breakdown">
-        <div class="bd-title">Desglose de cargos</div>
+        <div class="bd-title">Desglose estimado de cargos</div>
         <!-- Cargos comerciales -->
         <div class="bd-row">
           <span class="bd-name">Comisión Marketplace</span>
@@ -677,7 +677,7 @@ body {
         <div class="bd-row" id="bdr-so"><span class="bd-name">Soporte y onboarding</span><span class="bd-amt" id="bd-so">—</span><span class="bd-pct" id="bd-so-pct">—</span></div>
         <!-- Totales -->
         <div class="bd-row total">
-          <span class="bd-name">Total cargos</span>
+          <span class="bd-name">Cargos totales</span>
           <span class="bd-amt" id="bd-total">—</span>
           <span class="bd-pct" id="bd-total-pct">—</span>
         </div>
@@ -689,7 +689,7 @@ body {
       </div>
 
       <div class="disclaimer">
-        ⚠ Esta simulación es orientativa. Los valores exactos se confirman en la propuesta comercial y en el contrato de adhesión. No constituye compromiso contractual.
+        ⚠ Esta simulación es orientativa y sirve para análisis interno. Los valores definitivos se confirman en la propuesta comercial y en el contrato de adhesión. No constituye compromiso contractual.
       </div>
 
     </div>
@@ -699,7 +699,7 @@ body {
   <div class="tab-content" id="t-escenarios">
     <div class="results-inner">
       <div style="font-size:12px;color:var(--text-3);line-height:1.6;margin-bottom:4px">
-        Los tres escenarios aplican las mismas tarifas y servicios seleccionados, variando el volumen de ventas.<br>
+        Los tres escenarios mantienen las mismas tarifas y servicios seleccionados; solo varía el volumen de ventas mensual.<br>
         <span class="text-green fw7">Conservador = 60% · Medio = GMV ingresado · Expansivo = 160%</span>
       </div>
       <div class="scenarios-grid" id="sc-grid"><!-- renderizado por JS --></div>
@@ -710,7 +710,7 @@ body {
   <div class="tab-content" id="t-financiacion">
     <div class="results-inner">
       <div class="breakdown">
-        <div class="bd-title">Mix de cuotas — cómo pagan los compradores</div>
+        <div class="bd-title">Mix de cuotas estimado — cómo pagan los compradores</div>
         <div style="padding:14px 18px" id="mix-visual"><!-- JS --></div>
       </div>
       <div class="breakdown">
@@ -726,7 +726,7 @@ body {
         </div>
       </div>
       <div style="font-size:12px;color:var(--text-3);line-height:1.7;padding:12px 16px;background:var(--green-dim);border-radius:6px;border-left:2px solid var(--green-brd)">
-        El cargo financiero se calcula ponderando el mix histórico de cómo pagan los compradores. Al limitar las cuotas máximas, el mix se redistribuye entre las opciones disponibles, aumentando el peso relativo del contado.
+        El cargo financiero se calcula ponderando el mix histórico de pago de los compradores. Al limitar las cuotas máximas, el mix se redistribuye entre las opciones disponibles, aumentando el peso relativo del contado.
       </div>
     </div>
   </div>
@@ -736,7 +736,7 @@ body {
 <!-- ════════════ COL 3 — TARIFAS (read-only, desde Google Sheets) ════════════ -->
 <aside class="col-rates">
   <div class="col-header">
-    <div class="col-title">Tarifas vigentes</div>
+    <div class="col-title">Tarifas de referencia</div>
     <div class="rates-status">
       <div class="dot" id="rates-dot-2"></div>
       <span id="rates-status-2">Cargando…</span>
@@ -752,7 +752,7 @@ body {
 
   <div class="section">
     <div class="rates-edit-note">
-      Las tarifas son gestionadas por el equipo comercial de Sporting desde una hoja de cálculo centralizada. El seller puede visualizarlas pero no modificarlas.<br><br>
+      Las tarifas son gestionadas por el equipo comercial de Sporting desde una hoja de cálculo centralizada. En este simulador se usan solo como referencia interna para estimar escenarios.<br><br>
       Para actualizar una tarifa, editá la fuente de datos y presioná <strong style="color:var(--text-1)">Actualizar tarifas</strong>.
     </div>
   </div>

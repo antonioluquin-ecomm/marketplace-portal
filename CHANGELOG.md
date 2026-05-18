@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 22C revision UX/copy Simulador Economico interno
+
+Tipo de cambio: contenido estatico en simulador critico.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles estaticos en `internal/simuladores/simulador-economico.html`.
+- Mejorada claridad de uso interno, parametros, supuestos comerciales, servicios, resultados, escenarios, financiacion y tarifas de referencia.
+- Sin cambios en formulas, calculos, JS, scripts, fetch, CSV, CONFIG, DIRECT_CSV_URLS, tarifas, overrides, escenarios, inputs funcionales, valores, ids/classes, rutas ni config.
+
 ## 2026-05-18 - Etapa 22B revision UX/copy Gestion Sellers
 
 Tipo de cambio: contenido estatico en pantalla critica.
