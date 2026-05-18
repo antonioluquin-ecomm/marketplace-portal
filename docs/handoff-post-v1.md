@@ -20,6 +20,7 @@ Fecha: 2026-05-18
 - `assets/js/internal-navigation.js` fue creado y aplicado solo a paginas informativas seleccionadas.
 - No se extrajo JS operativo.
 - Las paginas publicas seller-facing siguen independientes del CSS interno compartido.
+- Bloque 20A-20G cerrado: revision de contenido de portada institucional, paginas estrategicas, Seller Center, paginas publicas seller-facing, maqueta Seller Center y normalizacion final de textos visibles.
 
 ## Decisiones vigentes
 
@@ -28,6 +29,7 @@ Fecha: 2026-05-18
 - No tocar `config.js` ni `assets/js/config.js`.
 - No tocar `Apps_script_v5.js`.
 - No tocar formularios, submit, endpoints, payloads, simuladores, Apps Script ni datos reales sin etapa critica.
+- Para contenido post-20G, no tocar rutas, JS, CSS, formularios, submit, endpoints ni logica salvo etapa explicita.
 - Revisar manualmente en el futuro `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
 
 ## Metodologia vigente
@@ -41,10 +43,10 @@ Fecha: 2026-05-18
 
 ## Proximos pasos posibles
 
-- Smoke test post-push general si hubo cambios acumulados.
+- Push y smoke test liviano en GitHub Pages.
+- Luego avanzar solo con mejoras funcionales o contenido pendiente concreto.
 - Revisar manualmente `.xlsx` y `Mapa del Hub.docx` solo si se decide ordenar documentacion fuente.
 - Evitar nuevas refactorizaciones CSS/JS salvo necesidad real.
-- Avanzar sobre contenido o funcionalidades pendientes del Marketplace Portal.
 
 ## Contexto minimo para nueva sesion
 

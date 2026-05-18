@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 20G cierre liviano revision de contenido
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque 20A-20F de revision de contenido: portada institucional, paginas estrategicas, Seller Center, paginas publicas seller-facing, maqueta Seller Center y normalizacion final de textos visibles.
+- Confirmada la decision de no tocar rutas, JS, CSS, formularios, submit, endpoints ni logica durante este bloque.
+- Proximo paso recomendado: push y smoke test liviano en GitHub Pages.
+
 ## 2026-05-18 - Etapa 20F consistencia final textos visibles post-copy
 
 Tipo de cambio: contenido/documentacion.

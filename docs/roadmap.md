@@ -1765,3 +1765,19 @@ Resultado:
 - Ajustado `Etapa 2` a `Fase 2` en el roadmap estrategico visible para evitar confusion con etapas internas del proyecto.
 - Retirada marca visible `v3` del footer de `proyecto-marketplace.html`.
 - No se modificaron CSS, JS, scripts, styles, ids, classes, href, src, rutas, estructura funcional, formularios, submit, endpoints, payloads, Apps Script, config, simuladores, Backlog, Gestion, Gantt, Hub Operativo, assets, aliases ni legacy.
+
+## Etapa 20G: cierre liviano revision de contenido
+
+Estado: completada.
+
+Resultado:
+
+- Cerrado el bloque 20A-20F de revision de contenido.
+- 20A: portada institucional actualizada.
+- 20B: paginas estrategicas revisadas.
+- 20C: Seller Center index revisado.
+- 20D: paginas publicas seller-facing revisadas.
+- 20E: maqueta Seller Center revisada.
+- 20F: textos visibles normalizados.
+- Decision vigente: no tocar rutas, JS, CSS, formularios, submit, endpoints ni logica dentro de este bloque.
+- Proximo paso recomendado: push y smoke test liviano en GitHub Pages; luego avanzar solo con mejoras funcionales o contenido pendiente concreto.
