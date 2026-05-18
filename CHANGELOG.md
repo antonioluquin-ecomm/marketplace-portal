@@ -4,6 +4,26 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 18B cierre minimo de auditoria estructural
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Registrado el cierre de Etapa 18A como auditoria sin cambios.
+- No se detectaron links locales rotos en `href`, `src` o stylesheets dentro del alcance activo.
+- Se confirma que los HTML versionados de raiz siguen como aliases activos y no deben moverse a `legacy/`.
+- `sporting-marketplace_hub_v29.html` se mantiene como alias hacia `internal/hub-operativo.html`.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+- No se realizara limpieza fisica por ahora.
+- Se corrige la referencia documental obsoleta sobre `internal/seller-center/articulos-seller.docx`: el archivo existe.
+
+Decisiones:
+- Mantener `Logos/` y `assets/logos/` por compatibilidad y posible carga dinamica.
+- Mantener `config.js`, `assets/js/config.js` y `Apps_script_v5.js` sin tocar.
+- Revisar manualmente en una etapa futura `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y una posible consolidacion de `Logos/`.
+
 ## 2026-05-18 - Etapa 16F cierre documental JS interno compartido
 
 Tipo de cambio: documentacion.

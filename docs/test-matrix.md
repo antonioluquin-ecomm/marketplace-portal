@@ -19,7 +19,7 @@ Alcance de esta etapa:
 | `/internal/backlog/gestion-sellers.html` | Interna operativa con escritura | Validar carga sin ejecutar submit | Formulario, estados alta/edicion, mensajes | Carga con/sin `seller_id`, config central, validaciones visibles | `../../assets/js/config.js`, Apps Script, CSV sellers | Revisar errores JS, config, fetch | Abre correctamente; submit no ejecutado | Pendiente | Pendiente | Escritura real: probar solo con seller test en etapa futura |
 | `/internal/gantt/gantt-operativo.html` | Interna operativa | Validar Gantt operativo migrado | Timeline, tablas, colores, responsive | Carga de datos, filtros o navegacion si aplica | CSV sellers, CSV timeline | Revisar fetch, CORS, 404 | Timeline operativo visible y datos cargados | Pendiente | Pendiente | Preservar dependencias CSV actuales |
 | `/internal/gantt/gantt-seller-center.html` | Interna operativa | Validar Gantt Seller Center migrado | Timeline, columnas, responsive | Carga de datos y navegacion local | CSV publicado Seller Center | Revisar fetch, CORS, 404 | Gantt visible y datos cargados | Pendiente | Pendiente | Preservar CSV actual |
-| `/internal/seller-center/index.html` | Interna informativa | Validar Seller Center migrado | Layout, cards/secciones, navegacion | Links a maqueta y Gantt Seller Center | Rutas internas, posible doc externo | Revisar 404 | Pagina carga y links principales resuelven | Pendiente | Pendiente | Riesgo conocido: `articulos-seller.docx` faltante |
+| `/internal/seller-center/index.html` | Interna informativa | Validar Seller Center migrado | Layout, cards/secciones, navegacion | Links a maqueta y Gantt Seller Center | Rutas internas, documento `articulos-seller.docx` existente | Revisar 404 | Pagina carga y links principales resuelven | Pendiente | Pendiente | `internal/seller-center/articulos-seller.docx` existe; no tratar como faltante |
 | `/internal/seller-center/maqueta-seller-center.html` | Interna maqueta | Validar maqueta migrada | Maqueta, layout, responsive | Links locales minimos | Rutas internas | Sin errores JS ni 404 locales | Maqueta carga completa | Pendiente | Pendiente | Sin cambios visuales permitidos |
 | `/internal/simuladores/simulador-economico.html` | Interna simulador | Validar simulador economico interno | Inputs, tablas, escenarios, responsive | Recalculo local, carga de tarifas/overrides/sellers | Config, CSV sellers, tarifas, overrides | Revisar fetch, errores JS | Simulador carga y recalcula sin alterar formulas | Pendiente | Pendiente | No modificar formulas ni valores |
 | `/internal/estrategia/governance.html` | Interna informativa | Validar pagina de governance | Layout, navegacion, responsive | Links a paginas migradas/no migradas | Rutas internas | Sin errores JS ni 404 locales | Carga y navegacion operativa | Pendiente | Pendiente | Pagina informativa de bajo riesgo |
@@ -233,12 +233,20 @@ No ejecutar pruebas sobre formularios, simuladores, Backlog, Gestion, Apps Scrip
 ## Riesgos conocidos
 
 - Posible referencia a `pctSec` antes de declaracion en `public/formularios/formulario-relevamiento.html`.
-- Referencia heredada a `articulos-seller.docx` no presente en `internal/seller-center/index.html`.
+- Referencia a `articulos-seller.docx` presente en `internal/seller-center/index.html`; el archivo existe en `internal/seller-center/`.
 - Formularios publicos y Gestion de Sellers escriben datos reales via Apps Script.
 - Archivos legacy en raiz siguen duplicados respecto de rutas nuevas.
 - CSS y JavaScript siguen inline o embebidos.
 - Redirects desde archivos versionados de raiz todavia no fueron implementados, salvo el piloto `governance_v3.html`.
 - Dependencias externas de Google Sheets, Apps Script y logos pueden fallar por permisos, CORS o disponibilidad.
+
+## Etapa 18B: cierre minimo auditoria estructural
+
+- Etapa 18A cerrada como auditoria sin cambios.
+- Sin links locales rotos detectados en `href`, `src` o stylesheets dentro del alcance activo.
+- HTML versionados de raiz se mantienen como aliases activos; no mover a `legacy/`.
+- `sporting-marketplace_hub_v29.html` se mantiene como alias hacia `internal/hub-operativo.html`.
+- No se realizara limpieza fisica por ahora.
 
 ## Etapa 7B/7C: smoke test alias legacy Governance
 

@@ -69,6 +69,7 @@ Pendientes post-V1:
 - mantener paginas publicas seller-facing independientes del CSS interno compartido;
 - no extraer JavaScript ni eliminar CSS inline operativo sin nueva auditoria especifica;
 - no extraer JS operativo sin auditoria dedicada por pagina;
+- no realizar limpieza fisica de aliases, legacy, logos o archivos fuente por ahora; Etapa 18A/18B cerro la auditoria estructural sin links locales rotos detectados;
 - revisar documentacion/handoff o ejecutar smoke test post-push como proximo bloque recomendado;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.
 - usar `docs/handoff-post-v1.md` como contexto inicial para nuevas sesiones.

@@ -1664,3 +1664,25 @@ Opcion futura:
 Proximo bloque recomendado:
 
 - Revisar documentacion/handoff o ejecutar smoke test post-push.
+
+## Etapa 18B: cierre minimo de auditoria estructural
+
+Estado: completada.
+
+Resultado:
+
+- Etapa 18A cerrada como auditoria sin cambios.
+- No se detectaron links locales rotos en `href`, `src` o stylesheets dentro del alcance activo.
+- Los HTML versionados de raiz siguen como aliases activos y no deben moverse a `legacy/`.
+- `sporting-marketplace_hub_v29.html` se mantiene como alias hacia `internal/hub-operativo.html`.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+- No se realizara limpieza fisica por ahora.
+- `Logos/` y `assets/logos/` se mantienen por compatibilidad y posible carga dinamica.
+- `config.js`, `assets/js/config.js` y `Apps_script_v5.js` quedan sin tocar.
+- `internal/seller-center/articulos-seller.docx` existe; se corrige la referencia obsoleta que lo marcaba como faltante.
+
+Revision futura:
+
+- `MarketPlace Sporting - Sellers (BD).xlsx`;
+- `Mapa del Hub.docx`;
+- posible consolidacion futura de `Logos/`.

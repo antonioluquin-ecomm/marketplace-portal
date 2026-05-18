@@ -46,3 +46,14 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 - No se mueven aliases a `legacy/`.
 - `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
 - Cualquier movimiento o eliminacion requiere etapa explicita y smoke test de URLs historicas.
+
+## Decision Etapa 18B
+
+- Auditoria estructural 18A cerrada sin cambios de archivos.
+- No se detectaron links locales rotos en `href`, `src` o stylesheets dentro del alcance activo.
+- No se realizara limpieza fisica por ahora.
+- Los aliases de raiz, incluido `sporting-marketplace_hub_v29.html`, se mantienen activos.
+- `Logos/` y `assets/logos/` se mantienen por compatibilidad y posible carga dinamica.
+- `config.js`, `assets/js/config.js` y `Apps_script_v5.js` permanecen sin tocar.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+- Queda para decision manual futura revisar `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
