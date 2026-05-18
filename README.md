@@ -12,7 +12,7 @@ El proyecto funciona y ya cuenta con estructura institucional migrada. Las pagin
 
 `internal/hub-operativo.html` es el hub operativo interno oficial post-V1, creado a partir de la funcionalidad util de `sporting-marketplace_hub_v29.html`. `index.html` mantiene el rol de portada institucional liviana.
 
-`sporting-marketplace_hub_v29.html` se conserva en raiz como URL legacy, pero desde Etapa 9C funciona como alias hacia `internal/hub-operativo.html`. No se movio ni elimino el archivo legacy.
+`sporting-marketplace_hub_v29.html` se conserva en raiz como URL legacy, pero desde Etapa 9C funciona como alias hacia `internal/hub-operativo.html`. El smoke test de Etapa 9D fue OK, preservando query string y hash. No se movio ni elimino el archivo legacy.
 
 Estructura actual resumida:
 
@@ -59,7 +59,7 @@ Validacion previa a release V1:
 
 Pendientes post-V1:
 
-- ejecutar smoke test manual del alias `sporting-marketplace_hub_v29.html` hacia `internal/hub-operativo.html`;
+- definir siguientes mejoras post-9D sobre el hub operativo sin tocar formularios, simuladores, Backlog, Gestion, Apps Script ni config sin etapa especifica;
 - no mover ni eliminar legacy hasta una etapa posterior;
 - evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.

@@ -48,8 +48,8 @@ Alcance:
 |---|---|---|---|---|---|---|---|---|---|---|
 | `/internal/hub-operativo.html` | Interna operativa | Confirmar carga del hub operativo oficial | Sidebar, hero, flujo, cards, buscador, mapa de rutas, responsive | Links a rutas internas/publicas, buscador y grid dinamico | Rutas `internal/`, `public/`, `docs/`; sin datos externos obligatorios | Sin errores JS ni 404 locales | Hub operativo carga completo y navega a rutas nuevas | OK | Aprobado | Smoke test manual 9B OK |
 | `/index.html` | Entrada institucional | Confirmar acceso al nuevo hub operativo | Boton principal y card interna visibles | Link "Abrir Hub Operativo" apunta a `/internal/hub-operativo.html` | Ruta local nueva | Sin 404 local | Portada institucional abre el hub operativo | OK | Aprobado | `index.html` conserva rol institucional |
-| `/sporting-marketplace_hub_v29.html` | Alias legacy | Confirmar redireccion al hub operativo oficial | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/hub-operativo.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Alias implementado en 9C |
-| `/sporting-marketplace_hub_v29.html?test=1#mapa` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final `/internal/hub-operativo.html?test=1#mapa` | Pendiente | Pendiente | Validar antes de cerrar 9C |
+| `/sporting-marketplace_hub_v29.html` | Alias legacy | Confirmar redireccion al hub operativo oficial | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/hub-operativo.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | OK | Aprobado | Smoke test manual 9D OK |
+| `/sporting-marketplace_hub_v29.html?test=1#mapa` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final `/internal/hub-operativo.html?test=1#mapa` | OK | Aprobado | Query/hash preservados |
 
 Checklist especifico 9A:
 
@@ -61,6 +61,7 @@ Checklist especifico 9A:
 - Usar el buscador y abrir al menos un recurso interno y uno publico desde el grid dinamico.
 - Abrir `sporting-marketplace_hub_v29.html` y confirmar redireccion a `internal/hub-operativo.html`.
 - Abrir `sporting-marketplace_hub_v29.html?test=1#mapa` y confirmar preservacion de query/hash.
+- Resultado 9D: OK, sin 404 criticos y sin tocar formularios, simuladores, Backlog, Gestion, Apps Script, config, endpoints, payloads ni submit.
 
 ## Checklist de navegacion
 

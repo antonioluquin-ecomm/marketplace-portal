@@ -4,6 +4,26 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 9D smoke test alias hub legacy
+
+Tipo de cambio: documentacion de validacion.
+
+Estado: completado.
+
+Resultado general: OK.
+
+Validaciones registradas:
+- `sporting-marketplace_hub_v29.html` redirige correctamente a `internal/hub-operativo.html`.
+- `sporting-marketplace_hub_v29.html?test=1#mapa` redirige a `internal/hub-operativo.html?test=1#mapa`.
+- Query string y hash se preservan.
+- No hay 404 criticos.
+- `internal/hub-operativo.html` carga correctamente.
+- No se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads ni submit.
+
+Estado final:
+- `internal/hub-operativo.html` queda como hub operativo oficial.
+- `sporting-marketplace_hub_v29.html` queda como URL legacy/alias.
+
 ## 2026-05-18 - Etapa 9B/9C smoke test y alias hub legacy
 
 Tipo de cambio: validacion documental y alias legacy.

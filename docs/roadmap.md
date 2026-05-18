@@ -1078,7 +1078,7 @@ Pendiente post-9A:
 
 ## Etapa 9B/9C: smoke test y alias del hub legacy
 
-Estado: implementada, pendiente de smoke test del alias.
+Estado: implementada y validada en Etapa 9D.
 
 Objetivo: documentar el smoke test OK de `internal/hub-operativo.html` y convertir `sporting-marketplace_hub_v29.html` en alias hacia el hub operativo oficial.
 
@@ -1108,3 +1108,24 @@ Smoke test requerido del alias:
 - abrir `sporting-marketplace_hub_v29.html?test=1#mapa`;
 - confirmar preservacion de query/hash;
 - confirmar que no hay 404 ni errores de consola.
+
+## Etapa 9D: smoke test alias hub legacy
+
+Estado: completada.
+
+Resultado general: OK.
+
+Validaciones:
+
+- `sporting-marketplace_hub_v29.html` redirige correctamente a `internal/hub-operativo.html`;
+- `sporting-marketplace_hub_v29.html?test=1#mapa` redirige a `internal/hub-operativo.html?test=1#mapa`;
+- query string y hash se preservan;
+- no hay 404 criticos;
+- `internal/hub-operativo.html` carga correctamente;
+- no se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads ni submit.
+
+Estado final del hub operativo:
+
+- hub operativo oficial: `internal/hub-operativo.html`;
+- URL legacy/alias: `sporting-marketplace_hub_v29.html`;
+- sin movimientos ni eliminaciones de archivos.
