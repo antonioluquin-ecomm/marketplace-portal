@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 20E revision contenido Maqueta Seller Center
+
+Tipo de cambio: contenido.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles estaticos en `internal/seller-center/maqueta-seller-center.html`.
+- Aclarado que la maqueta es una referencia funcional/visual del Seller Center dentro del Marketplace Portal.
+- Alineado el lenguaje con Marketplace Sporting, onboarding, catalogo, stock, precios y operacion seller.
+- Sin cambios de CSS, JS, scripts, ids, classes, rutas, estructura funcional, formularios, submit, endpoints, payloads, Apps Script, config, assets ni aliases.
+
 ## 2026-05-18 - Etapa 20D revision contenido publico seller-facing
 
 Tipo de cambio: contenido.

@@ -1741,3 +1741,15 @@ Resultado:
 - Ajustados textos visibles estaticos en presentacion, simulador y encabezados introductorios de formularios.
 - Unificado lenguaje: Marketplace Sporting, seller, integracion, propuesta comercial, modelo operativo y onboarding.
 - No se modificaron rutas, CSS, JS, formularios, atributos, submit, endpoints, payloads ni logica de `seller_id`.
+
+## Etapa 20E: revision contenido Maqueta Seller Center
+
+Estado: completada.
+
+Resultado:
+
+- Revisado `internal/seller-center/maqueta-seller-center.html`.
+- Ajustados textos visibles estaticos para explicar la maqueta como referencia funcional/visual del Seller Center dentro del Marketplace Portal.
+- Aclarado que no representa el sistema productivo final.
+- Alineado el lenguaje con Marketplace Sporting, onboarding, catalogo, stock, precios, pedidos y operacion seller.
+- No se modificaron CSS, JS, scripts, ids, classes, rutas, estructura funcional, formularios, submit, endpoints, payloads, Apps Script, config, assets ni aliases.

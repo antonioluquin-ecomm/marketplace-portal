@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maqueta Seller Center v2 | Marketplace Sporting</title>
+<title>Maqueta Seller Center | Marketplace Sporting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -820,7 +820,7 @@
 <header class="topbar">
   <div class="hamburger"><span></span><span></span><span></span></div>
   <div class="logo">AL</div>
-  <div class="topbar-title">PIM Frontend <span style="font-size:13px;font-weight:400;color:#aaa;margin-left:6px">· Maqueta v3 · Prototipo visual</span></div>
+  <div class="topbar-title">Seller Center <span style="font-size:13px;font-weight:400;color:#aaa;margin-left:6px">· Referencia funcional y visual · Marketplace Portal</span></div>
   <div class="topbar-right">
     <div class="version">v1.116.0</div>
     <a class="tb-nav-link" href="./index.html" title="Volver al Seller Center">← Seller Center</a>
@@ -854,18 +854,18 @@
 
   <main class="main">
     <div class="dev-bar">
-      <strong>Maqueta v3 · Seller Center</strong>
-      <span>Vista PIM real</span>
-      <button onclick="openManualModal()">Abrir creación manual</button>
-      <button onclick="openImportModal('idle')">Abrir importación</button>
-      <button onclick="openImportModal('partial')">Importación con errores</button>
-      <button onclick="openImportModal('success')">Importación OK</button>
+      <strong>Referencia funcional y visual · Seller Center</strong>
+      <span>Maqueta interna para validar flujos de catálogo, stock, precios y operación seller; no representa el sistema productivo final.</span>
+      <button onclick="openManualModal()">Ver carga manual</button>
+      <button onclick="openImportModal('idle')">Ver carga masiva</button>
+      <button onclick="openImportModal('partial')">Ver carga con errores</button>
+      <button onclick="openImportModal('success')">Ver carga OK</button>
     </div>
 
     <section class="pim-card" id="page-pendientes">
       <div class="table-page" id="table-page">
         <div class="page-header">
-          <div class="page-title">Pendientes</div>
+          <div class="page-title">Productos pendientes de catalogación</div>
           <div class="count-badge">Productos: <span id="product-count">3</span></div>
           <div class="header-actions">
             <div class="timer">00:00:00.000</div>
@@ -878,9 +878,9 @@
         </div>
 
         <div class="filters-row">
-          <span>Filtros:</span>
+          <span>Filtros de operación seller:</span>
           <span class="filter-chip">Todos los sellers</span>
-          <span class="filter-chip">Listo para catalogar</span>
+          <span class="filter-chip">Listos para catálogo</span>
           <span class="filter-chip">Creado</span>
         </div>
 
@@ -890,10 +890,10 @@
               <tr>
                 <th>Código producto-color</th>
                 <th>Items</th>
-                <th>Estado</th>
+                <th>Estado operativo</th>
                 <th>Fecha alta</th>
                 <th>Últ. Actualización</th>
-                <th>Seller</th>
+                <th>Seller Marketplace</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -940,7 +940,7 @@
       <div class="page-placeholder" id="placeholder-page">
         <div style="font-size:36px">▧</div>
         <strong id="placeholder-title">Página no incluida</strong>
-        <span>Esta sección queda como navegación contextual de la maqueta.</span>
+        <span>Esta sección queda como navegación contextual para dimensionar el alcance futuro del Seller Center.</span>
       </div>
     </section>
   </main>
@@ -951,8 +951,8 @@
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Agregar Producto</div>
-        <div class="modal-subtitle">Creación manual de productos Seller</div>
+        <div class="modal-title">Carga manual de producto seller</div>
+        <div class="modal-subtitle">Referencia de alta individual para productos que ingresan al flujo de catálogo del Marketplace Sporting</div>
       </div>
       <button class="modal-close" onclick="closeManualModal()">×</button>
     </div>
@@ -966,8 +966,8 @@
   <div class="modal import">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Importar Productos</div>
-        <div class="modal-subtitle">Carga masiva mediante archivo CSV/XLSX</div>
+        <div class="modal-title">Carga masiva de productos seller</div>
+        <div class="modal-subtitle">Referencia de importación para acelerar onboarding, catálogo, stock y precios mediante CSV/XLSX</div>
       </div>
       <button class="modal-close" onclick="closeImportModal()">×</button>
     </div>
