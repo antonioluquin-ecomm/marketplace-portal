@@ -1416,27 +1416,34 @@ Validacion pendiente 14F:
 - confirmar que no hubo cambios de JS;
 - confirmar `git diff --name-only` limitado a archivos permitidos.
 
-## Etapa 14G: extension CSS compartido interno a Seller Center index
+## Etapa 14G: extension CSS compartido interno a paginas internas restantes
 
 Estado: implementada, pendiente de smoke test 14H.
 
 Resultado:
 
-- `assets/css/internal-components.css` enlazado en `internal/seller-center/index.html`.
-- Link agregado despues de `tokens.css` y antes del `<style>` inline.
+- `assets/css/internal-components.css` enlazado en:
+  - `internal/seller-center/index.html`;
+  - `internal/gantt/gantt-seller-center.html`;
+  - `internal/gantt/gantt-operativo.html`;
+  - `internal/simuladores/simulador-economico.html`;
+  - `internal/backlog/backlog-sellers.html`;
+  - `internal/backlog/gestion-sellers.html`;
+  - `internal/hub-operativo.html`.
+- Link agregado despues de `tokens.css` cuando existe y siempre antes del `<style>` inline.
 - CSS inline original conservado como fallback.
 
 Alcance protegido:
 
 - `internal/seller-center/maqueta-seller-center.html` no se modifico.
 - `assets/css/internal-components.css` no se modifico.
-- No se tocaron scripts, fetch CSV, render dinamico, paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.
+- No se tocaron scripts, fetch, CSV, formulas, filtros, submit, localStorage, render dinamico, paginas publicas, Apps Script, config, aliases ni `legacy/`.
 
 Validacion pendiente 14H:
 
-- confirmar carga sin 404 de `tokens.css` e `internal-components.css`;
-- revisar visualmente Seller Center index;
-- validar accesos a maqueta y Gantt;
-- confirmar que fetch CSV y render dinamico no cambiaron;
+- confirmar carga sin 404 de `internal-components.css`;
+- confirmar carga sin 404 de `tokens.css` en paginas que lo usan;
+- revisar visualmente Seller Center, Gantt, Backlog, Gestion, Simulador Economico y Hub Operativo;
+- confirmar que fetch, CSV, formulas, filtros, submit, localStorage y render dinamico no cambiaron;
 - confirmar que no hubo cambios de JS;
 - confirmar `git diff --name-only` limitado a archivos permitidos.

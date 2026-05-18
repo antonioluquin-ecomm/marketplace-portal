@@ -1710,18 +1710,29 @@ Exclusiones mantenidas:
 
 **Estado:** implementado, pendiente smoke test 14H.
 
-Extension controlada de `assets/css/internal-components.css` a `internal/seller-center/index.html`.
+Extension controlada de `assets/css/internal-components.css` a paginas internas restantes.
+
+Paginas enlazadas:
+
+- `internal/seller-center/index.html`
+- `internal/gantt/gantt-seller-center.html`
+- `internal/gantt/gantt-operativo.html`
+- `internal/simuladores/simulador-economico.html`
+- `internal/backlog/backlog-sellers.html`
+- `internal/backlog/gestion-sellers.html`
+- `internal/hub-operativo.html`
 
 Criterio aplicado:
 
-- Solo se agrego el link a `../../assets/css/internal-components.css`.
-- El link queda despues de `tokens.css` y antes del `<style>` inline.
+- Solo se agrego el link a `internal-components.css`.
+- El link queda despues de `tokens.css` cuando existe.
+- El link queda siempre antes del `<style>` inline.
 - El CSS inline original queda como fallback y mantiene precedencia.
 - No se modifica `assets/css/internal-components.css` en esta etapa.
 - No se extrae ni modifica JavaScript.
-- No se toca fetch CSV ni render dinamico.
+- No se toca fetch, CSV, formulas, filtros, submit, localStorage ni render dinamico.
 
 Exclusiones mantenidas:
 
 - `internal/seller-center/maqueta-seller-center.html` sigue excluida por representar otra plataforma visual.
-- Publicas, Backlog, Gestion, simuladores y formularios siguen fuera del alcance.
+- Publicas, formularios, simuladores publicos y presentaciones publicas siguen fuera del alcance.
