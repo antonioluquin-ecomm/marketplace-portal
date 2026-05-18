@@ -1532,3 +1532,37 @@ Cualquier extension futura de `tokens.css` a paginas publicas requiere:
 2. Analisis de sensibilidad funcional del JS embebido.
 3. Confirmacion explicita de que el cambio es solo un `<link>` sin extraccion de CSS.
 4. Smoke test especifico que incluya verificacion visual del formulario o simulador completo.
+
+---
+
+## Etapa 11A/11B: decision sobre tokens en paginas publicas seller-facing
+
+**Fecha:** 2026-05-18
+**Estado:** cerrado como decision documental
+
+### Paginas auditadas
+
+| Pagina | Riesgo | Beneficio esperado de `tokens.css` | Decision |
+|---|---|---|---|
+| `public/formularios/formulario-calificacion.html` | Alto | Bajo | No aplicar |
+| `public/formularios/formulario-relevamiento.html` | Critico | Bajo | Mantener independiente |
+| `public/presentaciones/presentacion-seller.html` | Medio | Bajo/Nulo | Mantener independiente |
+| `public/simuladores/simulador-seller.html` | Alto | Bajo | No aplicar |
+
+### Decision
+
+Las paginas publicas seller-facing se mantienen independientes de `assets/css/tokens.css`.
+
+### Motivos
+
+- Las 4 paginas tienen `:root` inline, estilos embebidos y variables locales.
+- `tokens.css` fue disenado para paginas internas.
+- `tokens.css` no incluye componentes ni layout, por lo que el beneficio para paginas publicas es bajo.
+- Formularios publicos escriben datos reales via Apps Script.
+- Formularios dependen de endpoints, payloads, validaciones y `seller_id`.
+- Simulador Seller depende de calculos, tarifas, overrides, CSV y personalizacion por seller.
+- Presentacion Seller es menos riesgosa, pero mantiene identidad visual comercial, logos, CTAs y fetch CSV.
+
+### Criterio futuro
+
+Si se busca consistencia visual en paginas publicas, la etapa correcta no es extender `tokens.css` interno. Debe abrirse una auditoria especifica para un posible `public-tokens.css`, separado del sistema interno, con smoke test por pagina y sin tocar endpoints, payloads, submit, `seller_id`, Apps Script ni calculos.

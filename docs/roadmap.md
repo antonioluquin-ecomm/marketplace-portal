@@ -1206,3 +1206,47 @@ Estado final:
 
 - Hub Operativo post-V1 mejorado y validado;
 - mejoras 10B cerradas sin refactor masivo ni extraccion CSS/JS.
+
+## Etapa 11A: auditoria tokens.css en paginas publicas
+
+Estado: completada en modo solo lectura.
+
+Objetivo: revisar si conviene aplicar `assets/css/tokens.css` a paginas publicas seller-facing.
+
+Paginas auditadas:
+
+- `public/formularios/formulario-calificacion.html`;
+- `public/formularios/formulario-relevamiento.html`;
+- `public/presentaciones/presentacion-seller.html`;
+- `public/simuladores/simulador-seller.html`.
+
+Resultado:
+
+| Pagina | Riesgo | Beneficio esperado de `tokens.css` | Recomendacion |
+|---|---|---|---|
+| `formulario-calificacion.html` | Alto | Bajo | No aplicar por ahora |
+| `formulario-relevamiento.html` | Critico | Bajo | Mantener independiente |
+| `presentacion-seller.html` | Medio | Bajo/Nulo | Mantener independiente |
+| `simulador-seller.html` | Alto | Bajo | No aplicar por ahora |
+
+## Etapa 11B: decision paginas publicas independientes
+
+Estado: completada.
+
+Decision: mantener paginas publicas seller-facing independientes de `assets/css/tokens.css`.
+
+Motivos:
+
+- las 4 paginas ya tienen sistema visual propio con `:root` inline, estilos embebidos y variables locales;
+- `tokens.css` fue creado para paginas internas y no aporta componentes ni layout;
+- el beneficio esperado es bajo o nulo;
+- formularios tienen submit real, endpoints, payloads y `seller_id`;
+- el simulador tiene calculos, tarifas, overrides y personalizacion por seller;
+- Presentacion Seller tiene identidad visual seller-facing, logos, CTAs y fetch CSV.
+
+Criterio futuro:
+
+- si se busca consistencia visual publica, abrir una auditoria especifica para un posible `public-tokens.css`;
+- `public-tokens.css` debe ser separado de `tokens.css` interno;
+- no crear ni aplicar `public-tokens.css` sin smoke test por pagina;
+- mantener congelados formularios, simuladores, endpoints, payloads, submit y `seller_id`.

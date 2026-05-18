@@ -81,3 +81,27 @@ Exclusiones confirmadas:
 - Sin cambios en `sporting-marketplace_hub_v29.html`.
 - Sin cambios en formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads, submit ni storage.
 - Sin refactor masivo ni extraccion CSS/JS.
+
+## Etapa 11A/11B - paginas publicas y tokens.css
+
+Estado: decision documentada.
+
+Decision:
+
+- Mantener paginas publicas seller-facing independientes de `assets/css/tokens.css`.
+- No crear `public-tokens.css` todavia.
+
+Tabla de decision:
+
+| Pagina | Riesgo | Beneficio esperado | Decision |
+|---|---|---|---|
+| `formulario-calificacion.html` | Alto | Bajo | No aplicar |
+| `formulario-relevamiento.html` | Critico | Bajo | Mantener independiente |
+| `presentacion-seller.html` | Medio | Bajo/Nulo | Mantener independiente |
+| `simulador-seller.html` | Alto | Bajo | No aplicar |
+
+Criterio futuro:
+
+- Si se busca consistencia visual publica, abrir auditoria especifica para `public-tokens.css`.
+- Mantener separado el sistema visual publico del `tokens.css` interno.
+- No tocar formularios, simuladores, endpoints, payloads, submit, `seller_id`, Apps Script ni calculos sin etapa especifica.

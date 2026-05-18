@@ -4,6 +4,28 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 11B decision tokens paginas publicas
+
+Tipo de cambio: documentacion de decision tecnica.
+
+Estado: completado.
+
+Decision:
+- Mantener las paginas publicas seller-facing independientes de `assets/css/tokens.css`.
+- No crear `public-tokens.css` todavia.
+
+Motivos:
+- Las 4 paginas publicas tienen `:root` inline, estilos embebidos y variables locales.
+- `tokens.css` fue disenado para paginas internas y no aporta componentes ni layout.
+- Beneficio esperado bajo o nulo frente al riesgo.
+- Formularios tienen submit real, endpoints, payloads y `seller_id`.
+- Simulador Seller tiene calculos, tarifas, overrides y personalizacion por seller.
+- Presentacion Seller es mas liviana, pero conserva identidad visual seller-facing, logos, CTAs y fetch CSV.
+
+Alcance:
+- Solo documentacion.
+- Sin cambios en HTML, CSS, JS, `tokens.css`, formularios, simuladores, presentacion seller, endpoints, payloads, submit, `seller_id` ni Apps Script.
+
 ## 2026-05-18 - Etapa 10C smoke test Hub Operativo mejorado
 
 Tipo de cambio: documentacion de validacion.

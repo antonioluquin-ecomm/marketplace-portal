@@ -133,6 +133,28 @@ Checklist especifico:
 - Revisar errores de logos faltantes.
 - En Formulario de Relevamiento, observar especificamente el posible error `pctSec` dentro de `updateProgress`.
 
+## Etapa 11A/11B: decision tokens paginas publicas
+
+Alcance:
+
+- Auditoria y decision documental.
+- Sin cambios HTML, CSS ni JS.
+- Sin aplicar `tokens.css`.
+- Sin crear `public-tokens.css`.
+- Sin tocar formularios, simuladores, endpoints, payloads, submit, `seller_id` ni Apps Script.
+
+| Ruta | Tipo | Riesgo | Beneficio `tokens.css` | Decision | Smoke test futuro si se reabre |
+|---|---|---|---|---|---|
+| `/public/formularios/formulario-calificacion.html` | Publica formulario | Alto | Bajo | No aplicar por ahora | Carga visual, bloqueo sin seller_id, carga con seller_id, submit no ejecutado |
+| `/public/formularios/formulario-relevamiento.html` | Publica formulario critico | Critico | Bajo | Mantener independiente | Carga completa, condicionales, progreso, `pctSec`, submit no ejecutado |
+| `/public/presentaciones/presentacion-seller.html` | Publica presentacion | Medio | Bajo/Nulo | Mantener independiente | Hero, logos, CTAs, seller_id, fetch CSV |
+| `/public/simuladores/simulador-seller.html` | Publica simulador | Alto | Bajo | No aplicar por ahora | Calculos, tarifas, overrides, seller_id, CTAs, sin cambios de formulas |
+
+Decision 11B:
+
+- Mantener paginas publicas seller-facing independientes de `assets/css/tokens.css`.
+- Evaluar un posible `public-tokens.css` solo con auditoria especifica futura.
+
 ## Riesgos conocidos
 
 - Posible referencia a `pctSec` antes de declaracion en `public/formularios/formulario-relevamiento.html`.
