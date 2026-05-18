@@ -912,3 +912,28 @@ Paginas excluidas por riesgo/beneficio:
 Proximo bloque sugerido:
 
 - Etapa 16A: auditoria JS interna compartible, sin implementacion.
+
+---
+
+## Etapa 16C: smoke test pendiente para piloto JS navegacion activa
+
+**Origen:** Etapa 16B.
+**Estado:** pendiente.
+**Alcance:** `internal/estrategia/governance.html`.
+
+Checklist:
+
+| # | Verificacion | Metodo | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|---|---|
+| 1 | Pagina carga correctamente | Browser / GitHub Pages local o remoto | Sin pantalla rota | Pendiente | Pendiente |
+| 2 | `internal-navigation.js` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 3 | Sidebar marca seccion activa inicial | Visual / DOM | Link activo correcto | Pendiente | Pendiente |
+| 4 | Sidebar actualiza seccion activa al hacer scroll | Scroll manual | Clase `active` cambia segun seccion | Pendiente | Pendiente |
+| 5 | Links internos siguen navegando a anclas | Click manual | Scroll a seccion correcta | Pendiente | Pendiente |
+| 6 | Sin errores de consola | DevTools Console | Sin errores nuevos | Pendiente | Pendiente |
+| 7 | No se tocaron otras paginas ni JS critico | `git diff --name-only` | Solo archivos permitidos | Pendiente | Pendiente |
+
+Notas:
+
+- No extender `internal-navigation.js` a otras paginas hasta validar 16C.
+- No mezclar este piloto con fetch, CSV, formularios, buscadores ni render dinamico.

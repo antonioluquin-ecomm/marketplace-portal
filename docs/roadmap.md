@@ -1580,3 +1580,28 @@ Opcion futura:
 Proximo bloque recomendado:
 
 - Etapa 16A: auditoria JS interna compartible, sin implementacion.
+
+## Etapa 16B: piloto JS navegacion activa en Governance
+
+Estado: implementada, pendiente de smoke test 16C.
+
+Resultado:
+
+- Creado `assets/js/internal-navigation.js`.
+- Agregada funcion global `window.InternalNavigation.initActiveSectionNav(options)`.
+- Aplicado solo en `internal/estrategia/governance.html`.
+- Reemplazado script inline de navegacion activa por llamada al helper compartido.
+
+Alcance protegido:
+
+- No se tocaron textos, estructura HTML, CSS ni navegacion.
+- No se tocaron otras paginas.
+- No se tocaron publicas, formularios, simuladores, Backlog, Gestion, Seller Center, Gantt, Hub Operativo, Apps Script, config, aliases ni `legacy/`.
+
+Validacion pendiente 16C:
+
+- confirmar que `internal-navigation.js` carga sin 404;
+- confirmar que el sidebar marca la seccion activa al hacer scroll;
+- confirmar que links internos siguen funcionando;
+- confirmar sin errores de consola;
+- confirmar `git diff --name-only` limitado a archivos permitidos.

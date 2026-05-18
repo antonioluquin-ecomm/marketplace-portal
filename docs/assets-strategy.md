@@ -1875,3 +1875,42 @@ Opcion futura:
 
 - Abrir auditoria especifica por pagina solo si aparece una necesidad real de mantenimiento o consistencia visual.
 - Proximo bloque recomendado: Etapa 16A, auditoria JS interna compartible, sin implementacion.
+
+## Etapa 16B: piloto JS navegacion activa
+
+**Estado:** implementado, pendiente smoke test 16C.
+
+Archivo creado:
+
+- `assets/js/internal-navigation.js`
+
+API inicial:
+
+- `window.InternalNavigation.initActiveSectionNav(options)`
+
+Opciones:
+
+- `linkSelector`
+- `activeClass`
+- `offset`
+
+Pagina piloto:
+
+- `internal/estrategia/governance.html`
+
+Criterio:
+
+- Extraer solo la navegacion lateral activa por scroll.
+- Mantener JS vanilla, sin modulos ES ni dependencias.
+- Mantener comportamiento equivalente al script inline original.
+- No tocar selector de `modelo-integracion.html` ni paginas operativas.
+
+No incluido:
+
+- Fetch.
+- CSV.
+- Render de cards/grids.
+- Buscadores.
+- Formularios.
+- localStorage.
+- Helpers globales de datos.
