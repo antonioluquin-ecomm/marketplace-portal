@@ -86,8 +86,8 @@ Alcance:
 
 | Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `/internal/hub-operativo.html` | Interna operativa | Validar mejoras 10B | Topbar, link Volver al Portal, aviso seller_id, mapa clickeable, estado sin resultados | Buscador con/sin coincidencias, links del mapa, links publicos base | Rutas locales `internal/`, `public/`, `../index.html` | Sin errores JS ni 404 locales | Mejoras operativas sin regresion visual ni funcional | Pendiente | Pendiente | No tocar formularios, simuladores, Backlog, Gestion ni Apps Script |
-| `/internal/hub-operativo.html` en mobile | Interna operativa responsive | Validar topbar sin overflow | Botones visibles sin solaparse; topbar estable | Link Volver al Portal y CTA principal operativos | CSS inline local | Sin errores JS | Topbar usable en viewport mobile | Pendiente | Pendiente | Ajuste minimo, sin rediseño |
+| `/internal/hub-operativo.html` | Interna operativa | Validar mejoras 10B | Topbar, link Volver al Portal, aviso seller_id, mapa clickeable, estado sin resultados | Buscador con/sin coincidencias, links del mapa, links publicos base | Rutas locales `internal/`, `public/`, `../index.html` | Sin errores JS ni 404 locales | Mejoras operativas sin regresion visual ni funcional | OK | Aprobado | Smoke test manual 10C OK |
+| `/internal/hub-operativo.html` en mobile | Interna operativa responsive | Validar topbar sin overflow | Botones visibles sin solaparse; topbar estable | Link Volver al Portal y CTA principal operativos | CSS inline local | Sin errores JS | Topbar usable en viewport mobile | OK | Aprobado | Topbar no rompe visualmente en mobile |
 
 Checklist especifico:
 
@@ -100,6 +100,7 @@ Checklist especifico:
 - Confirmar que los links publicos siguen sin `seller_id` hardcodeado.
 - Validar visualmente la topbar en mobile.
 - Confirmar sin 404 criticos.
+- Resultado 10C: OK. Busqueda por titulo y descripcion validada; estado sin resultados visible; sin `seller_id` hardcodeado; mapa clickeable operativo; sin tocar formularios, simuladores, Backlog, Gestion, Apps Script, config, endpoints, payloads ni submit.
 
 ## Checklist de datos
 

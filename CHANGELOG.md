@@ -4,6 +4,30 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 10C smoke test Hub Operativo mejorado
+
+Tipo de cambio: documentacion de validacion.
+
+Estado: completado.
+
+Resultado general: OK.
+
+Validaciones registradas:
+- `internal/hub-operativo.html` carga correctamente.
+- "Volver al Portal" abre `../index.html`.
+- Buscador encuentra resultados por titulo/label y descripcion.
+- Buscador muestra "Sin resultados" cuando no hay coincidencias.
+- Links publicos base abren `public/`.
+- No hay `seller_id` hardcodeado.
+- Mapa de rutas clickeable funciona.
+- Topbar no rompe visualmente en mobile.
+- No hay 404 criticos.
+- No se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads ni submit.
+
+Estado final:
+- Hub Operativo post-V1 mejorado y validado.
+- Etapa 10B cerrada sin refactor masivo ni extraccion CSS/JS.
+
 ## 2026-05-18 - Etapa 10B mejoras seguras Hub Operativo
 
 Tipo de cambio: mejora incremental acotada.

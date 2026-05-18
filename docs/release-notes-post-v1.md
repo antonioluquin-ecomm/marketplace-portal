@@ -48,9 +48,9 @@ Despues del cierre V1, Marketplace Portal incorporo el hub operativo interno ofi
 2. Abrir una Etapa 10A solo como auditoria de mejoras del hub operativo.
 3. Mantener congelados formularios, simuladores, Backlog, Gestion, Apps Script y config hasta etapa especifica.
 
-## Etapa 10B - mejoras seguras del Hub Operativo
+## Etapa 10B/10C - mejoras seguras del Hub Operativo
 
-Estado: implementada, pendiente de smoke test manual.
+Estado: implementada y validada.
 
 Mejoras incluidas:
 
@@ -61,6 +61,19 @@ Mejoras incluidas:
 - Mapa de rutas convertido en links clickeables.
 - Ajuste mobile minimo para reducir overflow visual en topbar.
 - Nota visual para contadores referenciales del sidebar.
+
+Smoke test 10C:
+
+- Resultado general: OK.
+- `internal/hub-operativo.html` carga correctamente.
+- "Volver al Portal" abre `../index.html`.
+- Buscador encuentra resultados por titulo/label y descripcion.
+- Buscador muestra "Sin resultados" cuando no hay coincidencias.
+- Links publicos base abren `public/`.
+- No hay `seller_id` hardcodeado.
+- Mapa de rutas clickeable funciona.
+- Topbar no rompe visualmente en mobile.
+- No hay 404 criticos.
 
 Exclusiones confirmadas:
 

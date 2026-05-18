@@ -1153,7 +1153,7 @@ Mejoras recomendadas:
 
 ## Etapa 10B: mejoras seguras del Hub Operativo
 
-Estado: implementada, pendiente de smoke test manual.
+Estado: implementada y validada en Etapa 10C.
 
 Resultado:
 
@@ -1181,3 +1181,28 @@ Smoke test requerido:
 - validar links del mapa de rutas;
 - validar topbar en mobile;
 - confirmar ausencia de 404 criticos.
+
+## Etapa 10C: smoke test Hub Operativo mejorado
+
+Estado: completada.
+
+Resultado general: OK.
+
+Validaciones:
+
+- `internal/hub-operativo.html` carga correctamente;
+- "Volver al Portal" abre `../index.html`;
+- buscador encuentra resultados por titulo/label;
+- buscador encuentra resultados por descripcion;
+- buscador muestra "Sin resultados" cuando no hay coincidencias;
+- links publicos base abren `public/`;
+- no hay `seller_id` hardcodeado;
+- mapa de rutas clickeable funciona;
+- topbar no rompe visualmente en mobile;
+- no hay 404 criticos;
+- no se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads ni submit.
+
+Estado final:
+
+- Hub Operativo post-V1 mejorado y validado;
+- mejoras 10B cerradas sin refactor masivo ni extraccion CSS/JS.
