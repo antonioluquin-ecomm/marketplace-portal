@@ -4,6 +4,27 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 9A hub operativo oficial
+
+Tipo de cambio: creacion de pagina interna operativa post-V1.
+
+Estado: implementado, pendiente de smoke test manual.
+
+Cambios:
+- Creado `internal/hub-operativo.html` tomando como base funcional `sporting-marketplace_hub_v29.html`.
+- Agregado acceso claro desde `index.html` como "Abrir Hub Operativo".
+- Ajustadas rutas en la nueva pagina para apuntar a `internal/`, `public/`, `docs/` e `index.html` desde su ubicacion en `/internal/`.
+- Eliminada en la nueva pagina la dependencia del `BASE_URL` viejo `sporting-marketplace` para el grid dinamico.
+- Documentada la nueva pagina como hub operativo interno oficial.
+
+Alcance:
+- `sporting-marketplace_hub_v29.html` permanece intacto como historico temporal.
+- No se modificaron paginas publicas, formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads, submit, aliases legacy ni assets.
+- No se extrajo CSS/JS ni se hizo refactor masivo.
+
+Validacion pendiente:
+- Smoke test manual de carga, sidebar, buscador, grid dinamico y links internos/publicos desde `/internal/hub-operativo.html`.
+
 ## 2026-05-18 - Etapa 8C decision hub legacy
 
 Tipo de cambio: documentacion de decision.

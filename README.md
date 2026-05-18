@@ -10,7 +10,9 @@ El objetivo es convertir el conjunto actual de paginas y herramientas en una pla
 
 El proyecto funciona y ya cuenta con estructura institucional migrada. Las paginas nuevas viven en `internal/` y `public/`, mientras que los HTML versionados de raiz que ya tienen ruta nueva funcionan como aliases de compatibilidad.
 
-`sporting-marketplace_hub_v29.html` se mantiene intacto como hub operativo historico temporal. No se convierte en alias a `index.html` en V1 porque conserva funcionalidades operativas no replicadas en la entrada institucional. No se movieron archivos a `legacy/` durante el cierre de Etapa 7.
+`internal/hub-operativo.html` es el hub operativo interno oficial post-V1, creado a partir de la funcionalidad util de `sporting-marketplace_hub_v29.html`. `index.html` mantiene el rol de portada institucional liviana.
+
+`sporting-marketplace_hub_v29.html` se mantiene intacto como hub operativo historico temporal. No se convierte en alias todavia porque conserva valor como referencia y porque el nuevo hub operativo requiere smoke test manual antes de decidir alias, transicion o movimiento a `legacy/`. No se movieron archivos a `legacy/` durante el cierre de Etapa 7.
 
 Estructura actual resumida:
 
@@ -23,6 +25,8 @@ Estructura actual resumida:
 ├─ Mapa del Hub.docx
 ├─ MarketPlace Sporting - Sellers (BD).xlsx
 ├─ sporting-marketplace_hub_v29.html
+├─ internal/
+│  └─ hub-operativo.html
 ├─ backlog-sellers_v27.html
 ├─ gestion-sellers_v7.html
 ├─ gantt-operativo_v18.html
@@ -55,7 +59,7 @@ Validacion previa a release V1:
 
 Pendientes post-V1:
 
-- evaluar si la funcionalidad de `sporting-marketplace_hub_v29.html` se integra en `index.html` o en `internal/hub-operativo.html`;
+- ejecutar smoke test manual de `internal/hub-operativo.html` antes de decidir alias o transicion del hub legacy;
 - no mover ni eliminar legacy hasta una etapa posterior;
 - evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.

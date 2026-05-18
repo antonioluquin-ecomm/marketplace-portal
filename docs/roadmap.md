@@ -1047,3 +1047,31 @@ Recomendacion post-V1:
 - evaluar si su funcionalidad se integra en `index.html`;
 - o crear `internal/hub-operativo.html`;
 - recien despues decidir alias, pagina de transicion o movimiento a `legacy/`.
+
+## Etapa 9A: hub operativo interno oficial
+
+Estado: implementada, pendiente de smoke test manual.
+
+Objetivo: crear `internal/hub-operativo.html` como herramienta operativa interna oficial, tomando como base funcional `sporting-marketplace_hub_v29.html` sin modificar el archivo legacy.
+
+Resultado:
+
+- creado `internal/hub-operativo.html`;
+- conservados sidebar, flujo de incorporacion, accesos rapidos, recursos por proceso, buscador de recursos, mapa de rutas, grid dinamico y separacion entre recursos internos y publicos;
+- ajustadas rutas estaticas para funcionar desde `/internal/`;
+- ajustado el resolver del grid dinamico para usar rutas locales nuevas y evitar la base URL vieja de `sporting-marketplace`;
+- agregado acceso claro desde `index.html` como "Abrir Hub Operativo";
+- `sporting-marketplace_hub_v29.html` permanece intacto y sin alias.
+
+Smoke test recomendado:
+
+- abrir `/internal/hub-operativo.html`;
+- validar carga visual del sidebar, hero, flujo, recursos, buscador y mapa de rutas;
+- validar links internos hacia `./backlog/`, `./gantt/`, `./seller-center/`, `./simuladores/` y `./estrategia/`;
+- validar links publicos hacia `../public/`;
+- validar busqueda y links del grid dinamico;
+- confirmar que no hay referencias a la base URL vieja ni 404 locales.
+
+Pendiente post-9A:
+
+- decidir despues del smoke test si `sporting-marketplace_hub_v29.html` se conserva intacto, se convierte en alias al nuevo hub operativo o queda como pagina de transicion.

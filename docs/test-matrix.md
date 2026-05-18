@@ -36,6 +36,29 @@ Alcance de esta etapa:
 | `/public/formularios/formulario-relevamiento.html` | Publica formulario critico | Validar bloqueo sin seller | Mensaje/estado sin seller, secciones | Bloqueo o validacion por falta de `seller_id` | Apps Script, CSV sellers | Revisar `pctSec`, errores JS | No permite submit valido sin seller | Pendiente | Pendiente | Riesgo `pctSec` puede aparecer al interactuar |
 | `/public/formularios/formulario-relevamiento.html?seller_id=SPT-001` | Publica formulario critico con escritura | Validar carga completa sin enviar | Logo, secciones, condicionales, progreso | Campos obligatorios, condicionales, validaciones; no submit real | Apps Script, CSV sellers, logos | Revisar `pctSec`, fetch, CORS | Formulario carga y valida sin enviar datos | Pendiente | Pendiente | No corregir `pctSec` dentro de esta etapa |
 
+## Etapa 9A: smoke test Hub Operativo
+
+Alcance:
+
+- Validar `internal/hub-operativo.html` como hub operativo interno oficial.
+- No ejecutar submits reales.
+- No modificar paginas publicas, formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config ni aliases legacy.
+
+| Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/internal/hub-operativo.html` | Interna operativa | Confirmar carga del hub operativo oficial | Sidebar, hero, flujo, cards, buscador, mapa de rutas, responsive | Links a rutas internas/publicas, buscador y grid dinamico | Rutas `internal/`, `public/`, `docs/`; sin datos externos obligatorios | Sin errores JS ni 404 locales | Hub operativo carga completo y navega a rutas nuevas | Pendiente | Pendiente | Creado desde hub legacy sin modificar `sporting-marketplace_hub_v29.html` |
+| `/index.html` | Entrada institucional | Confirmar acceso al nuevo hub operativo | Boton principal y card interna visibles | Link "Abrir Hub Operativo" apunta a `/internal/hub-operativo.html` | Ruta local nueva | Sin 404 local | Portada institucional abre el hub operativo | Pendiente | Pendiente | `index.html` conserva rol institucional |
+
+Checklist especifico 9A:
+
+- Abrir `/internal/hub-operativo.html`.
+- Confirmar que no intenta navegar a `sporting-marketplace` como base URL.
+- Validar sidebar y anchors internos: `#inicio`, `#flujo`, `#diaria`, `#seller-center`, `#estrategia`, `#seller-recursos`, `#todos`, `#mapa`.
+- Validar accesos internos a `./backlog/`, `./gantt/`, `./seller-center/`, `./simuladores/` y `./estrategia/`.
+- Validar accesos publicos a `../public/presentaciones/`, `../public/formularios/` y `../public/simuladores/`.
+- Usar el buscador y abrir al menos un recurso interno y uno publico desde el grid dinamico.
+- Confirmar que `sporting-marketplace_hub_v29.html` sigue intacto y no se convirtio en alias.
+
 ## Checklist de navegacion
 
 - Validar links desde `/index.html` hacia todas las rutas migradas.
