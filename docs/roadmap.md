@@ -1753,3 +1753,15 @@ Resultado:
 - Aclarado que no representa el sistema productivo final.
 - Alineado el lenguaje con Marketplace Sporting, onboarding, catalogo, stock, precios, pedidos y operacion seller.
 - No se modificaron CSS, JS, scripts, ids, classes, rutas, estructura funcional, formularios, submit, endpoints, payloads, Apps Script, config, assets ni aliases.
+
+## Etapa 20F: consistencia final textos visibles post-copy
+
+Estado: completada.
+
+Resultado:
+
+- Revisados textos visibles estaticos en portada, paginas estrategicas, Seller Center, maqueta Seller Center y paginas publicas.
+- Corregidas referencias visibles de `Governance` a `Gobernanza` donde correspondia.
+- Ajustado `Etapa 2` a `Fase 2` en el roadmap estrategico visible para evitar confusion con etapas internas del proyecto.
+- Retirada marca visible `v3` del footer de `proyecto-marketplace.html`.
+- No se modificaron CSS, JS, scripts, styles, ids, classes, href, src, rutas, estructura funcional, formularios, submit, endpoints, payloads, Apps Script, config, simuladores, Backlog, Gestion, Gantt, Hub Operativo, assets, aliases ni legacy.
