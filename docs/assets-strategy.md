@@ -1678,3 +1678,30 @@ Invariantes:
 - No se eliminaron estilos inline.
 - No se cambiaron textos ni estructura, salvo el link CSS.
 - No se tocaron paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.
+
+### Etapa 14E
+
+**Estado:** implementado, pendiente smoke test 14F.
+
+Extension controlada de `assets/css/internal-components.css` al resto del grupo informativo `internal/estrategia/`.
+
+Paginas enlazadas:
+
+- `internal/estrategia/governance.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Criterio aplicado:
+
+- Solo se agrego el link a `../../assets/css/internal-components.css`.
+- El link queda despues de `tokens.css` y antes del `<style>` inline.
+- El CSS inline original queda como fallback y mantiene precedencia.
+- No se modifica `assets/css/internal-components.css` en esta etapa.
+- No se extrae ni modifica JavaScript.
+
+Exclusiones mantenidas:
+
+- `internal/estrategia/proceso-onboarding.html` ya fue piloto 14C y no se toca en 14E.
+- `internal/hub-operativo.html` y `internal/seller-center/index.html` quedan excluidas.
+- Publicas, Backlog, Gestion, simuladores y formularios siguen fuera del alcance.

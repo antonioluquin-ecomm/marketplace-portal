@@ -1387,3 +1387,31 @@ Validacion pendiente 14D:
 - validar visualmente `proceso-onboarding.html`;
 - validar responsive;
 - confirmar que no se toco JS.
+
+## Etapa 14E: extension CSS compartido interno a estrategia
+
+Estado: implementada, pendiente de smoke test 14F.
+
+Resultado:
+
+- `assets/css/internal-components.css` enlazado en:
+  - `internal/estrategia/governance.html`;
+  - `internal/estrategia/modelo-integracion.html`;
+  - `internal/estrategia/modelo-economico.html`;
+  - `internal/estrategia/proyecto-marketplace.html`.
+- Link agregado despues de `tokens.css` y antes del `<style>` inline.
+- CSS inline original conservado como fallback.
+
+Alcance protegido:
+
+- `proceso-onboarding.html` no se modifico.
+- `assets/css/internal-components.css` no se modifico.
+- No se tocaron scripts, paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.
+
+Validacion pendiente 14F:
+
+- confirmar carga sin 404 de `tokens.css` e `internal-components.css`;
+- revisar visualmente las 4 paginas;
+- confirmar responsive basico;
+- confirmar que no hubo cambios de JS;
+- confirmar `git diff --name-only` limitado a archivos permitidos.

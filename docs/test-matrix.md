@@ -714,3 +714,37 @@ Cualquier extension futura a estas paginas requiere auditoria especifica antes d
 ### Invariantes cumplidos en toda la Etapa 6
 
 En ninguna sub-etapa (6C a 6L) se modificaron: bloques `<script>`, `config.js`, Apps Script, endpoints, `localStorage`, `nextSellerId`, `reserveSellerId`, formularios publicos, simuladores, archivos legacy ni redirects.
+
+---
+
+## Etapa 14F: smoke test pendiente para extension de internal-components.css
+
+**Origen:** Etapa 14E.
+**Estado:** pendiente.
+**Alcance:** grupo `internal/estrategia/` restante.
+
+Paginas a validar:
+
+- `internal/estrategia/governance.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Checklist:
+
+| # | Verificacion | Metodo | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|---|---|
+| 1 | Pagina carga correctamente | Browser / GitHub Pages local o remoto | Sin pantalla rota | Pendiente | Pendiente |
+| 2 | `tokens.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 3 | `internal-components.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 4 | CSS inline permanece activo como fallback | Inspeccion DOM / visual | Sin regresion visual | Pendiente | Pendiente |
+| 5 | Topbar y sidebar se mantienen estables | Visual desktop/mobile | Sin overflow critico | Pendiente | Pendiente |
+| 6 | Cards, paneles, tags y secciones se ven consistentes | Visual | Sin cambios disruptivos | Pendiente | Pendiente |
+| 7 | No hay errores JS nuevos | DevTools Console | Sin errores criticos nuevos | Pendiente | Pendiente |
+| 8 | No se tocaron scripts ni paginas criticas | `git diff --name-only` | Solo archivos permitidos | Pendiente | Pendiente |
+
+Notas:
+
+- `proceso-onboarding.html` no forma parte de 14E; ya fue piloto 14C.
+- `assets/css/internal-components.css` no se modifica en 14E.
+- Publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases y `legacy/` quedan fuera del alcance.
