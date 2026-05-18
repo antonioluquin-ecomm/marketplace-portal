@@ -4,6 +4,28 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 13B smoke test post-push GitHub Pages
+
+Tipo de cambio: documentacion de validacion productiva.
+
+Estado: completado.
+
+Resultado general: OK.
+
+Validaciones registradas:
+- `index.html` carga correctamente en GitHub Pages.
+- `internal/hub-operativo.html` carga correctamente.
+- Acceso al Hub Operativo funciona.
+- `sporting-marketplace_hub_v29.html` redirige a `internal/hub-operativo.html`.
+- `sporting-marketplace_hub_v29.html?test=1#mapa` preserva query string y hash.
+- Aliases publicos con `seller_id=SPT-001` preservan el parametro.
+- No hay 404 criticos.
+- No se ejecuto submit real en formularios ni Gestion de Sellers.
+
+Alcance:
+- Solo documentacion.
+- Sin cambios en HTML, CSS, JS, Apps Script, config, endpoints, payloads, submit, aliases ni archivos.
+
 ## 2026-05-18 - Etapa 12B cierre post-V1 y handoff
 
 Tipo de cambio: cierre documental.

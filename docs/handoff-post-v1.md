@@ -10,6 +10,7 @@ Fecha: 2026-05-18
 - `sporting-marketplace_hub_v29.html` redirige a `internal/hub-operativo.html`.
 - `legacy/root-html-v1/` existe, pero queda reservado para snapshots historicos futuros.
 - Las paginas publicas seller-facing se mantienen independientes de `assets/css/tokens.css`.
+- Smoke test post-push en GitHub Pages: OK.
 
 ## Rutas principales
 
@@ -49,14 +50,27 @@ Fecha: 2026-05-18
 - Paginas operativas dependen de CSV/Google Sheets.
 - Raiz contiene aliases necesarios para URLs historicas.
 - CSS/JS inline sigue como deuda controlada.
+- Validacion productiva OK, pero formularios y Gestion no fueron probados con submit real.
 
 ## Proximos pasos posibles
 
-1. Revisar diff completo y preparar commit post-V1.
-2. Hacer smoke test final en GitHub Pages.
-3. Auditar extraccion CSS/JS por grupo, empezando por paginas internas informativas.
-4. Auditar `public-tokens.css` solo si se busca consistencia publica.
-5. Crear snapshots historicos en `legacy/root-html-v1/` solo si hay decision explicita.
+1. Revisar diff completo si se abre una nueva etapa.
+2. Auditar extraccion CSS/JS por grupo, empezando por paginas internas informativas.
+3. Auditar `public-tokens.css` solo si se busca consistencia publica.
+4. Crear snapshots historicos en `legacy/root-html-v1/` solo si hay decision explicita.
+5. Planificar prueba con seller test antes de cualquier submit real.
+
+## Validacion productiva
+
+Etapa 13A/13B: smoke test post-push en GitHub Pages con resultado OK.
+
+- Portada institucional carga.
+- Hub Operativo carga.
+- Alias del hub legacy redirige correctamente.
+- Query string y hash se preservan.
+- Aliases publicos preservan `seller_id=SPT-001`.
+- Sin 404 criticos.
+- Sin submit real en formularios ni Gestion de Sellers.
 
 ## Recomendaciones para IA y tokens
 

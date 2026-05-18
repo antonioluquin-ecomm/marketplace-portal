@@ -170,6 +170,26 @@ Smoke test futuro si se reabre limpieza legacy:
 - Validar `seller_id` en aliases publicos.
 - Validar GitHub Pages despues de publicar.
 
+## Etapa 13A/13B: smoke test post-push GitHub Pages
+
+Resultado general: OK.
+
+| URL | Objetivo | Resultado | Observaciones |
+|---|---|---|---|
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/` | Carga portada institucional | OK | `index.html` carga correctamente |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/internal/hub-operativo.html` | Carga Hub Operativo | OK | Hub operativo disponible |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/sporting-marketplace_hub_v29.html` | Alias hub legacy | OK | Redirige a `internal/hub-operativo.html` |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/sporting-marketplace_hub_v29.html?test=1#mapa` | Alias con query/hash | OK | Preserva query string y hash |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/presentacion-seller_v3.html?seller_id=SPT-001` | Alias publico con seller | OK | Preserva `seller_id=SPT-001` |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/simulador-seller_v12.html?seller_id=SPT-001` | Alias publico con seller | OK | Preserva `seller_id=SPT-001` |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/formulario-calificacion_v2.html?seller_id=SPT-001` | Alias formulario con seller | OK | Sin submit real |
+| `https://antonioluquin-ecomm.github.io/marketplace-portal/formulario-relevamiento_v2.html?seller_id=SPT-001` | Alias formulario con seller | OK | Sin submit real |
+
+Confirmaciones:
+
+- No hay 404 criticos.
+- No se ejecuto submit real en formularios ni Gestion de Sellers.
+
 ## Riesgos conocidos
 
 - Posible referencia a `pctSec` antes de declaracion en `public/formularios/formulario-relevamiento.html`.

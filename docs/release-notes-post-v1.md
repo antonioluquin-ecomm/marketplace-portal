@@ -120,3 +120,20 @@ Decision:
 Handoff:
 
 - Creado `docs/handoff-post-v1.md` como resumen para nuevas sesiones.
+
+## Etapa 13A/13B - smoke test post-push
+
+Estado: completado.
+
+Resultado general: OK.
+
+Validaciones:
+
+- GitHub Pages carga `index.html`.
+- GitHub Pages carga `internal/hub-operativo.html`.
+- El acceso al Hub Operativo funciona.
+- `sporting-marketplace_hub_v29.html` redirige correctamente.
+- Query string y hash se preservan en el alias del hub.
+- Aliases publicos preservan `seller_id=SPT-001`.
+- No hay 404 criticos.
+- No se ejecuto submit real en formularios ni Gestion de Sellers.

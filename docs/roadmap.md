@@ -1279,3 +1279,31 @@ Resultado:
 
 - creado `docs/handoff-post-v1.md`;
 - bloque post-V1 cerrado documentalmente.
+
+## Etapa 13A/13B: smoke test post-push GitHub Pages
+
+Estado: completada.
+
+Resultado general: OK.
+
+URLs validadas:
+
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/internal/hub-operativo.html`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/sporting-marketplace_hub_v29.html`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/sporting-marketplace_hub_v29.html?test=1#mapa`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/presentacion-seller_v3.html?seller_id=SPT-001`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/simulador-seller_v12.html?seller_id=SPT-001`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/formulario-calificacion_v2.html?seller_id=SPT-001`
+- `https://antonioluquin-ecomm.github.io/marketplace-portal/formulario-relevamiento_v2.html?seller_id=SPT-001`
+
+Validaciones:
+
+- portada institucional carga;
+- Hub Operativo carga;
+- acceso al Hub Operativo funciona;
+- alias del hub legacy redirige correctamente;
+- query string y hash se preservan;
+- aliases publicos preservan `seller_id=SPT-001`;
+- no hay 404 criticos;
+- no se ejecuto submit real.
