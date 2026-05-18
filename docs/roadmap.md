@@ -779,3 +779,62 @@ Incluye:
 - mover versiones historicas a `legacy/`;
 - documentar URLs finales;
 - actualizar changelog y release notes.
+
+## Etapa 7A: auditoria legacy
+
+Estado: completada en modo solo lectura.
+
+Resultado:
+
+- se inventariaron HTML en raiz, `internal/` y `public/`;
+- se identificaron equivalencias entre archivos versionados de raiz y rutas nuevas;
+- se confirmo que `legacy/root-html-v1/` sigue vacio salvo `.gitkeep`;
+- se recomendo conservar todos los HTML versionados en raiz hasta validar aliases;
+- se recomendo iniciar con un piloto de bajo riesgo en una pagina informativa.
+
+## Etapa 7B/7C: matriz inicial de aliases y piloto Governance
+
+Estado: implementado parcialmente.
+
+Objetivo: documentar la matriz inicial de aliases legacy y validar un primer alias seguro antes de avanzar sobre archivos de mayor riesgo.
+
+Alias piloto implementado:
+
+| Origen legacy | Destino nuevo | Estado | Riesgo | Observaciones |
+|---|---|---|---|---|
+| `governance_v3.html` | `internal/estrategia/governance.html` | Piloto implementado | Bajo | Alias estatico con meta refresh, JavaScript y preservacion de query/hash. |
+
+Matriz inicial pendiente:
+
+| Origen legacy | Destino nuevo | Estado recomendado | Riesgo |
+|---|---|---|---|
+| `proceso-onboarding_v4.html` | `internal/estrategia/proceso-onboarding.html` | Pendiente | Bajo |
+| `modelo-integracion_v5.html` | `internal/estrategia/modelo-integracion.html` | Pendiente | Bajo |
+| `modelo-economico_v2.html` | `internal/estrategia/modelo-economico.html` | Pendiente | Bajo/Medio |
+| `proyecto-marketplace_v3.html` | `internal/estrategia/proyecto-marketplace.html` | Pendiente | Bajo/Medio |
+| `seller-center_v2.html` | `internal/seller-center/index.html` | Pendiente | Medio |
+| `maqueta-seller-center_v2.html` | `internal/seller-center/maqueta-seller-center.html` | Pendiente / evaluar exclusion | Medio |
+| `gantt-seller-center_v2.html` | `internal/gantt/gantt-seller-center.html` | Pendiente | Medio |
+| `gantt-operativo_v18.html` | `internal/gantt/gantt-operativo.html` | Pendiente | Alto |
+| `backlog-sellers_v27.html` | `internal/backlog/backlog-sellers.html` | Pendiente | Alto |
+| `gestion-sellers_v7.html` | `internal/backlog/gestion-sellers.html` | Pendiente | Critico |
+| `simulador-economico_v4.html` | `internal/simuladores/simulador-economico.html` | Pendiente | Alto |
+| `presentacion-seller_v3.html` | `public/presentaciones/presentacion-seller.html` | Pendiente | Medio/Alto |
+| `simulador-seller_v12.html` | `public/simuladores/simulador-seller.html` | Pendiente | Alto |
+| `formulario-calificacion_v2.html` | `public/formularios/formulario-calificacion.html` | Pendiente | Critico |
+| `formulario-relevamiento_v2.html` | `public/formularios/formulario-relevamiento.html` | Pendiente | Critico |
+| `sporting-marketplace_hub_v29.html` | `index.html` o legacy historico | Pendiente / decision requerida | Alto |
+
+Exclusiones de esta etapa:
+
+- no se movieron archivos a `legacy/`;
+- no se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, `config.js`, `assets/js/config.js` ni `sporting-marketplace_hub_v29.html`;
+- no se convirtio ningun otro HTML legacy en alias.
+
+Smoke test requerido:
+
+- abrir `governance_v3.html`;
+- confirmar redireccion a `internal/estrategia/governance.html`;
+- abrir `governance_v3.html?test=1#riesgo` y confirmar preservacion de query/hash;
+- confirmar que no hay 404 ni errores de consola;
+- confirmar que el enlace manual resuelve al mismo destino.

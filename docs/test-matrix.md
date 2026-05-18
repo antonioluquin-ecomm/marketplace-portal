@@ -86,8 +86,32 @@ Alcance de esta etapa:
 - Formularios publicos y Gestion de Sellers escriben datos reales via Apps Script.
 - Archivos legacy en raiz siguen duplicados respecto de rutas nuevas.
 - CSS y JavaScript siguen inline o embebidos.
-- Redirects desde archivos versionados de raiz todavia no fueron implementados.
+- Redirects desde archivos versionados de raiz todavia no fueron implementados, salvo el piloto `governance_v3.html`.
 - Dependencias externas de Google Sheets, Apps Script y logos pueden fallar por permisos, CORS o disponibilidad.
+
+## Etapa 7B/7C: smoke test alias legacy Governance
+
+Alcance:
+
+- Validar solo el alias piloto `governance_v3.html`.
+- No tocar otros HTML legacy.
+- No mover archivos a `legacy/`.
+- No probar formularios, simuladores, Backlog, Gestion de Sellers ni Apps Script.
+
+| Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/governance_v3.html` | Alias legacy | Confirmar redireccion al Governance migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/estrategia/governance.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Piloto de bajo riesgo |
+| `/governance_v3.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final `/internal/estrategia/governance.html?test=1#riesgo` | Pendiente | Pendiente | Validar tambien enlace manual si se pausa la redireccion |
+
+Checklist especifico:
+
+- Abrir `governance_v3.html` desde raiz.
+- Confirmar que el destino final es `internal/estrategia/governance.html`.
+- Abrir `governance_v3.html?test=1#riesgo`.
+- Confirmar que query string y hash se preservan.
+- Revisar Network/Console para confirmar ausencia de 404 locales.
+- Confirmar que el enlace manual apunta al mismo destino con query/hash cuando JavaScript alcanza a actualizarlo.
+- Confirmar que no se modificaron otros aliases legacy.
 
 ## Registro de ejecucion
 

@@ -4,6 +4,33 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 7B/7C matriz de aliases y piloto Governance
+
+Tipo de cambio: compatibilidad legacy + documentacion.
+
+Estado: implementado parcialmente, pendiente smoke test manual.
+
+Cambios incluidos:
+- Matriz inicial de aliases legacy documentada.
+- `governance_v3.html` convertido en alias estatico hacia `internal/estrategia/governance.html`.
+- El alias usa `meta refresh` como fallback y JavaScript con `window.location.replace()` preservando `location.search` y `location.hash`.
+- El enlace manual se actualiza por JavaScript para apuntar al destino con query/hash cuando corresponda.
+- Actualizacion de `docs/roadmap.md`, `docs/test-matrix.md` y `docs/hub-map.md`.
+
+Alcance explicitamente excluido:
+- Sin movimiento de archivos a `legacy/`.
+- Sin modificaciones en otros HTML legacy.
+- Sin modificaciones en `internal/estrategia/governance.html`.
+- Sin cambios en formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, `config.js`, `assets/js/config.js`, CSS compartido ni hub legacy `sporting-marketplace_hub_v29.html`.
+
+Validacion pendiente:
+- Abrir `governance_v3.html` y confirmar redireccion a `internal/estrategia/governance.html`.
+- Abrir `governance_v3.html?test=1#riesgo` y confirmar preservacion de query/hash.
+- Confirmar que no hay 404 ni errores de consola.
+
+Riesgo conocido:
+- El resto de aliases legacy sigue pendiente y debe avanzar por grupos de riesgo, dejando formularios, Gestion, simuladores, Backlog y hub legacy para etapas posteriores.
+
 ## 2026-05-16 - Etapa 6M cierre de Etapa 6
 
 Tipo de cambio: documentacion — cierre de bloque.
