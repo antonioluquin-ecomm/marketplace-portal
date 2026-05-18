@@ -4,6 +4,27 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 16F cierre documental JS interno compartido
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque de JS interno compartido.
+- Registrado el recorrido:
+  - 16A: auditoria JS interna compartible.
+  - 16B/16C: piloto de `assets/js/internal-navigation.js` en `governance.html`.
+  - 16D/16E: extension a `modelo-economico.html` y `proyecto-marketplace.html`.
+- Resultado final: `assets/js/internal-navigation.js` creado y aplicado solo a paginas informativas seleccionadas.
+- Decision: no extraer JS operativo.
+
+Exclusiones:
+- `modelo-integracion.html`, paginas operativas, `public/`, formularios, simuladores, Backlog, Gestion, Seller Center, Gantt, Hub Operativo, Apps Script, config, aliases y legacy.
+
+Proximo bloque recomendado:
+- Revisar documentacion/handoff o ejecutar smoke test post-push.
+
 ## 2026-05-18 - Etapa 16D extension JS navegacion estrategia
 
 Tipo de cambio: implementacion controlada.

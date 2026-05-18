@@ -1945,3 +1945,37 @@ Exclusiones:
 - `modelo-integracion.html` mantiene su selector especifico.
 - `proceso-onboarding.html` no tiene JS.
 - Paginas operativas y publicas siguen fuera de alcance.
+
+## Etapa 16F: cierre documental JS interno compartido
+
+**Estado:** cerrado documentalmente.
+
+Resumen del bloque:
+
+- 16A: auditoria JS interna compartible.
+- 16B/16C: piloto de `assets/js/internal-navigation.js` en `internal/estrategia/governance.html`.
+- 16D/16E: extension a `internal/estrategia/modelo-economico.html` y `internal/estrategia/proyecto-marketplace.html`.
+
+Resultado:
+
+- `assets/js/internal-navigation.js` queda como helper compartido minimo.
+- El helper se limita a navegacion activa por scroll.
+- Se aplica solo a paginas informativas seleccionadas.
+- No se extrae JS operativo.
+
+Exclusiones y motivos:
+
+- `internal/estrategia/modelo-integracion.html`: selector especifico.
+- `internal/seller-center/index.html`: fetch y render CSV.
+- `internal/gantt/gantt-operativo.html`: timeline, filtros y CSV.
+- `internal/gantt/gantt-seller-center.html`: timeline, filtros y CSV.
+- `internal/simuladores/simulador-economico.html`: formulas y calculos.
+- `internal/backlog/backlog-sellers.html`: filtros, modal y render.
+- `internal/backlog/gestion-sellers.html`: submit, Apps Script, config y localStorage.
+- `internal/hub-operativo.html`: buscador, grid y mapa.
+- `public/`: fuera del sistema JS interno.
+
+Opcion futura:
+
+- Auditoria dedicada por pagina solo si aparece una necesidad real.
+- Proximo bloque recomendado: revisar documentacion/handoff o smoke test post-push.

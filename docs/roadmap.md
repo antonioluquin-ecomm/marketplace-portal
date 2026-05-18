@@ -1633,3 +1633,34 @@ Validacion pendiente 16E:
 - confirmar que `animationDelay` sigue activo en `proyecto-marketplace.html`;
 - confirmar sin errores de consola;
 - confirmar que no hubo cambios en paginas fuera de alcance.
+
+## Etapa 16F: cierre documental JS interno compartido
+
+Estado: completada.
+
+Resultado:
+
+- 16A: auditoria JS interna compartible.
+- 16B/16C: piloto de `assets/js/internal-navigation.js` en `governance.html`.
+- 16D/16E: extension a `modelo-economico.html` y `proyecto-marketplace.html`.
+- `assets/js/internal-navigation.js` queda como helper minimo de navegacion activa por scroll.
+- No se extrae JS operativo.
+
+Exclusiones:
+
+- `modelo-integracion.html` por selector especifico.
+- `seller-center/index.html` por fetch/render CSV.
+- `gantt-operativo.html` y `gantt-seller-center.html` por timeline/filtros/CSV.
+- `simulador-economico.html` por formulas/calculos.
+- `backlog-sellers.html` por filtros/modal/render.
+- `gestion-sellers.html` por submit, Apps Script, config y localStorage.
+- `hub-operativo.html` por buscador/grid/mapa.
+- `public/` completo.
+
+Opcion futura:
+
+- Auditoria dedicada por pagina solo si aparece una necesidad real.
+
+Proximo bloque recomendado:
+
+- Revisar documentacion/handoff o ejecutar smoke test post-push.

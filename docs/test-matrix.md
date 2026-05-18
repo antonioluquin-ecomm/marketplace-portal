@@ -968,3 +968,38 @@ Notas:
 
 - No extender a `modelo-integracion.html` ni paginas operativas durante 16E.
 - No mezclar con fetch, CSV, formularios, buscadores ni render dinamico.
+
+---
+
+## Etapa 16F: cierre documental JS interno compartido
+
+**Estado:** documentado.
+
+Decision:
+
+- Cerrar JS interno compartido por ahora.
+- Mantener `assets/js/internal-navigation.js` como unico helper JS compartido post-V1.
+- No extraer JS operativo.
+
+Validaciones pendientes asociadas:
+
+- 16C: validar piloto en `governance.html`.
+- 16E: validar extension en `modelo-economico.html` y `proyecto-marketplace.html`.
+
+Exclusiones:
+
+| Pagina/grupo | Motivo |
+|---|---|
+| `modelo-integracion.html` | Selector especifico de escenarios |
+| `seller-center/index.html` | Fetch y render CSV |
+| `gantt-operativo.html` | Timeline, filtros y CSV |
+| `gantt-seller-center.html` | Timeline, filtros y CSV |
+| `simulador-economico.html` | Formulas y calculos |
+| `backlog-sellers.html` | Filtros, modal y render |
+| `gestion-sellers.html` | Submit, Apps Script, config y localStorage |
+| `hub-operativo.html` | Buscador, grid y mapa |
+| `public/` | Fuera del sistema JS interno |
+
+Proximo bloque sugerido:
+
+- Revisar documentacion/handoff o ejecutar smoke test post-push.

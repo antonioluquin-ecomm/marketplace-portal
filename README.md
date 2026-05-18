@@ -51,6 +51,7 @@ Marketplace Portal V1 queda estable y listo para release:
 - `internal/hub-operativo.html` recibio mejoras post-V1 acotadas en Etapa 10B: regreso al portal, buscador mejorado, aviso de `seller_id`, mapa clickeable y ajuste mobile minimo.
 - `assets/css/internal-components.css` quedo aplicado a paginas internas autorizadas en Etapa 14, manteniendo CSS inline como fallback y sin extraer JavaScript.
 - La limpieza CSS interna se cerro en Etapa 15: se aplico solo a paginas informativas de estrategia y las paginas operativas quedaron excluidas por relacion riesgo/beneficio.
+- `assets/js/internal-navigation.js` quedo creado en Etapa 16 como helper minimo para navegacion activa por scroll, aplicado solo a paginas informativas seleccionadas. No se extrajo JS operativo.
 
 Validacion previa a release V1:
 
@@ -67,7 +68,8 @@ Pendientes post-V1:
 - evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
 - mantener paginas publicas seller-facing independientes del CSS interno compartido;
 - no extraer JavaScript ni eliminar CSS inline operativo sin nueva auditoria especifica;
-- iniciar como proximo bloque recomendado la Etapa 16A de auditoria JS interna compartible, sin implementacion;
+- no extraer JS operativo sin auditoria dedicada por pagina;
+- revisar documentacion/handoff o ejecutar smoke test post-push como proximo bloque recomendado;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.
 - usar `docs/handoff-post-v1.md` como contexto inicial para nuevas sesiones.
 
