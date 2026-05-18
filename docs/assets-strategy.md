@@ -1566,3 +1566,86 @@ Las paginas publicas seller-facing se mantienen independientes de `assets/css/to
 ### Criterio futuro
 
 Si se busca consistencia visual en paginas publicas, la etapa correcta no es extender `tokens.css` interno. Debe abrirse una auditoria especifica para un posible `public-tokens.css`, separado del sistema interno, con smoke test por pagina y sin tocar endpoints, payloads, submit, `seller_id`, Apps Script ni calculos.
+
+---
+
+## Etapa 14A/14B: plan de extraccion CSS interna
+
+**Fecha:** 2026-05-18
+**Estado:** documentado, sin implementacion
+
+### Etapa 14A
+
+Auditoria de paginas internas informativas completada sin cambios.
+
+Paginas auditadas:
+
+- `internal/estrategia/governance.html`
+- `internal/estrategia/proceso-onboarding.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+- `internal/seller-center/index.html`
+- `internal/hub-operativo.html`
+
+### Patrones CSS repetidos
+
+- Topbar: `topbar`, `brand`, `logo`, estado, botones superiores.
+- Sidebar: `sidebar`, `nav`, estado `active`, scrollbars.
+- Layout: `main`, `hero`, `section`, `section-head`, `section-title`, `section-desc`.
+- Grids: `grid`, `grid.two`, `grid.four`, `cards`.
+- Componentes: `panel`, `card`, `kpi`, `pill`, `tag`, `callout`.
+- Responsive: ocultar sidebar y convertir grillas a 1 o 2 columnas.
+
+### Decision JS
+
+No extraer JavaScript por ahora.
+
+Motivos:
+
+- El JS compartible es bajo y se limita principalmente a navegacion activa por scroll.
+- `seller-center/index.html` tiene fetch, parse CSV y render dinamico.
+- `hub-operativo.html` tiene grid dinamico y buscador propio.
+- `modelo-integracion.html` tiene selector de escenarios.
+
+### Propuesta futura
+
+Crear, en etapa posterior y con smoke test:
+
+- `assets/css/internal-layout.css`: layout, topbar, sidebar, main, secciones y responsive base.
+- `assets/css/internal-components.css`: cards, KPIs, pills, tags, panels, callouts y grillas.
+
+No reemplazar `tokens.css`; estos archivos serian capas superiores sobre tokens.
+
+### Piloto recomendado 14C
+
+Primera pagina piloto:
+
+- `internal/estrategia/proceso-onboarding.html`
+
+Motivo: pagina informativa, menor cantidad de lineas, sin `<script>`, ya validada con `tokens.css`.
+
+Orden posterior sugerido:
+
+1. `internal/estrategia/governance.html`
+2. `internal/estrategia/modelo-integracion.html`
+3. `internal/estrategia/modelo-economico.html`
+4. `internal/estrategia/proyecto-marketplace.html`
+
+### Excluidas del piloto
+
+- `internal/hub-operativo.html`: rol operativo central y buscador/grid propio.
+- `internal/seller-center/index.html`: fetch CSV y render dinamico.
+- Paginas publicas seller-facing.
+- Backlog y Gestion de Sellers.
+- Simuladores y formularios.
+
+### Validaciones requeridas para 14C
+
+- Crear solo una capa CSS minima.
+- Aplicarla solo a `proceso-onboarding.html`.
+- Mantener `:root` inline como fallback.
+- No tocar scripts.
+- Comparar visualmente topbar, sidebar, cards, grillas, KPIs y responsive.
+- Confirmar sin 404 para el CSS nuevo.
+- Confirmar `git diff --name-only` limitado a CSS nuevo, pagina piloto y documentacion.

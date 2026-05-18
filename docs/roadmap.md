@@ -1307,3 +1307,55 @@ Validaciones:
 - aliases publicos preservan `seller_id=SPT-001`;
 - no hay 404 criticos;
 - no se ejecuto submit real.
+
+## Etapa 14A: auditoria CSS/JS paginas internas informativas
+
+Estado: completada en modo solo lectura.
+
+Resultado:
+
+- patrones CSS repetidos detectados en topbar, sidebar, layout, secciones, grillas, cards, KPIs, pills, tags y responsive;
+- patrones JS repetidos limitados principalmente a navegacion activa por scroll;
+- JS especifico de `seller-center/index.html`, `hub-operativo.html` y `modelo-integracion.html` no conviene extraer ahora;
+- no se modifico ningun archivo.
+
+## Etapa 14B: plan documental de extraccion CSS interna
+
+Estado: completada.
+
+Decision:
+
+- no extraer JS por ahora;
+- planificar CSS interno en capas futuras:
+  - `assets/css/internal-layout.css`;
+  - `assets/css/internal-components.css`.
+
+Piloto recomendado 14C:
+
+- `internal/estrategia/proceso-onboarding.html`.
+
+Orden posterior:
+
+1. `governance.html`;
+2. `modelo-integracion.html`;
+3. `modelo-economico.html`;
+4. `proyecto-marketplace.html`.
+
+Excluidas del piloto:
+
+- `internal/hub-operativo.html`;
+- `internal/seller-center/index.html`;
+- paginas publicas;
+- Backlog;
+- Gestion de Sellers;
+- simuladores;
+- formularios.
+
+Validaciones requeridas para 14C:
+
+- crear CSS minimo;
+- aplicar a una sola pagina;
+- mantener fallback inline;
+- no tocar JS;
+- smoke test visual y responsive;
+- confirmar sin 404.

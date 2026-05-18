@@ -190,6 +190,28 @@ Confirmaciones:
 - No hay 404 criticos.
 - No se ejecuto submit real en formularios ni Gestion de Sellers.
 
+## Etapa 14B: validaciones requeridas para piloto CSS interno
+
+Piloto propuesto: `internal/estrategia/proceso-onboarding.html`.
+
+Alcance futuro 14C:
+
+- Crear CSS interno minimo.
+- Aplicarlo solo a la pagina piloto.
+- No extraer JS.
+- No tocar publicas, formularios, simuladores, Backlog, Gestion, Apps Script, config, aliases ni legacy.
+
+Checklist 14C:
+
+- CSS nuevo carga sin 404.
+- `tokens.css` sigue cargando.
+- `:root` inline permanece como fallback.
+- Topbar sin regresion visual.
+- Sidebar sin regresion visual.
+- Cards, KPIs, grillas y paneles sin regresion visual.
+- Responsive mobile sin overflow.
+- `git diff --name-only` limitado a CSS nuevo, pagina piloto y documentacion.
+
 ## Riesgos conocidos
 
 - Posible referencia a `pctSec` antes de declaracion en `public/formularios/formulario-relevamiento.html`.

@@ -4,6 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 14B plan extraccion CSS interna
+
+Tipo de cambio: documentacion tecnica.
+
+Estado: completado.
+
+Resultado:
+- Etapa 14A cerrada como auditoria sin cambios.
+- Documentado plan futuro para `assets/css/internal-layout.css` y/o `assets/css/internal-components.css`.
+- Piloto recomendado para 14C: `internal/estrategia/proceso-onboarding.html`.
+- Decision: no extraer JavaScript por ahora.
+
+Alcance:
+- Solo documentacion.
+- Sin cambios en HTML, CSS, JS, `public/`, formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, aliases ni `legacy/`.
+
 ## 2026-05-18 - Etapa 13B smoke test post-push GitHub Pages
 
 Tipo de cambio: documentacion de validacion productiva.
