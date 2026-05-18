@@ -4,7 +4,7 @@
 | Campo | Detalle |
 |---|---|
 | Nombre del documento | Metodología de Trabajo Asistido por IA |
-| Version | v1.3 |
+| Version | v1.4 |
 | Estado | Activo |
 | Objetivo | Guia institucional reutilizable para proyectos asistidos por IA |
 
@@ -418,6 +418,58 @@ Buenas practicas:
 La mejor solucion no siempre es la mas completa, sino la mas clara, mantenible y suficiente para el problema actual.
 
 # 11. Flujo recomendado de trabajo
+
+## Modo operativo para Marketplace Portal
+
+Para Marketplace Portal, el flujo por defecto debe ser mas liviano que el usado durante la reestructuracion inicial.
+
+Regla base:
+
+```txt
+Implementacion controlada -> validacion minima -> commit manual.
+```
+
+Usar auditoria previa solo cuando el cambio toque o pueda afectar:
+
+- formularios;
+- submit;
+- Apps Script;
+- endpoints;
+- payloads;
+- config;
+- simuladores con formulas;
+- paginas operativas con datos, CSV, filtros, render dinamico o localStorage;
+- aliases o legacy;
+- cambios de arquitectura.
+
+Documentar en archivos solo cuando:
+
+- se cierre un bloque importante;
+- haya cambio arquitectonico;
+- haya una decision relevante;
+- se corrija un error;
+- se prepare una release;
+- se toque algo critico.
+
+No documentar cada smoke test menor. Para cambios visuales o informativos de bajo riesgo, basta con validacion manual minima y un commit claro.
+
+Agrupar cambios compatibles en una misma etapa:
+
+- paginas informativas juntas;
+- CSS visual junto;
+- JS simple informativo junto;
+- documentacion de cierre al final.
+
+Mantener metodologia estricta solo para cambios criticos:
+
+- formularios;
+- simuladores;
+- Apps Script;
+- config;
+- endpoints;
+- payloads;
+- submit real;
+- datos reales.
 
 ## 1. Contexto inicial
 
