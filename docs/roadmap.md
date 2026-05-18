@@ -1825,3 +1825,13 @@ Resultado:
 - Revisado `internal/simuladores/simulador-economico.html`.
 - Ajustados textos visibles estaticos para mejorar claridad de uso interno, parametros, supuestos comerciales, servicios, resultados, escenarios, financiacion y tarifas de referencia.
 - No se modificaron formulas, calculos, JS, scripts, fetch, CSV, CONFIG, DIRECT_CSV_URLS, tarifas, overrides, escenarios, inputs funcionales, valores, ids/classes, rutas ni config.
+
+## Etapa 22D: revision UX/copy Gantt interno
+
+Estado: completada.
+
+Resultado:
+
+- Revisados `internal/gantt/gantt-operativo.html` y `internal/gantt/gantt-seller-center.html`.
+- Ajustados textos visibles estaticos para mejorar claridad de contexto operativo, titulos, subtitulos, ayudas y estados iniciales de carga.
+- No se modificaron JS funcional, scripts, fetch, CSV, timeline, filtros funcionales, render dinamico, fechas/datos, ids/classes, name/value, rutas, href/src ni config.

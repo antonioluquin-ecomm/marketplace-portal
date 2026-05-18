@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 22D revision UX/copy Gantt interno
+
+Tipo de cambio: contenido estatico en paginas criticas.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles estaticos en `internal/gantt/gantt-operativo.html` y `internal/gantt/gantt-seller-center.html`.
+- Mejorada claridad de contexto operativo, titulos, subtitulos, ayudas y estados iniciales de carga.
+- Sin cambios en JS funcional, scripts, fetch, CSV, timeline, filtros funcionales, render dinamico, fechas/datos, ids/classes, name/value, rutas, href/src ni config.
+
 ## 2026-05-18 - Etapa 22C revision UX/copy Simulador Economico interno
 
 Tipo de cambio: contenido estatico en simulador critico.

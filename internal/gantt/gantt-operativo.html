@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Gantt Operativo — Panel de Ejecución | Sporting Marketplace</title>
+<title>Gantt Operativo | Marketplace Sporting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -339,7 +339,7 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 
   <div class="sb-note">
     Datos desde <strong style="color:var(--t2)">sellers</strong> + <strong style="color:var(--t2)">timeline</strong> de Google Sheets.<br><br>
-    El Gantt se usa para ejecución. El Backlog mantiene el pipeline; este panel muestra tareas planificadas y responsables.
+    Referencia operativa para seguimiento interno: el Backlog mantiene el pipeline y este panel ordena tareas planificadas, responsables y estado de avance.
   </div>
 </aside>
 
@@ -350,16 +350,16 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 
   <section class="exec-hero" aria-label="Contexto operativo del Gantt">
     <div class="exec-card">
-      <div class="exec-eyebrow">Panel de ejecución</div>
-      <div class="exec-title">Del backlog a la implementación</div>
+      <div class="exec-eyebrow">Marketplace Sporting</div>
+      <div class="exec-title">Gantt operativo de onboarding seller</div>
       <p class="exec-copy">
-        Este Gantt muestra únicamente los sellers que ya tienen planificación operativa. El Backlog define qué sellers avanzan; el Gantt ordena tareas, responsables, fechas, riesgos y bloqueos hasta el Go Live.
+        Este Gantt concentra los sellers que ya tienen planificación operativa. El Backlog define qué sellers avanzan; este panel organiza tareas, responsables, fechas, riesgos y bloqueos hasta el Go Live.
       </p>
       <div class="exec-flow">
         <div class="exec-step"><div class="exec-step-num">01</div><div class="exec-step-title">Backlog</div><div class="exec-step-desc">Seller priorizado y validado.</div></div>
-        <div class="exec-step"><div class="exec-step-num">02</div><div class="exec-step-title">Definición</div><div class="exec-step-desc">Modelo y alcance acordado.</div></div>
-        <div class="exec-step"><div class="exec-step-num">03</div><div class="exec-step-title">Plan</div><div class="exec-step-desc">Tareas, fechas y dueños.</div></div>
-        <div class="exec-step"><div class="exec-step-num">04</div><div class="exec-step-title">Ejecución</div><div class="exec-step-desc">Seguimiento diario.</div></div>
+        <div class="exec-step"><div class="exec-step-num">02</div><div class="exec-step-title">Definición</div><div class="exec-step-desc">Modelo operativo y alcance acordado.</div></div>
+        <div class="exec-step"><div class="exec-step-num">03</div><div class="exec-step-title">Plan</div><div class="exec-step-desc">Tareas, fechas y responsables.</div></div>
+        <div class="exec-step"><div class="exec-step-num">04</div><div class="exec-step-title">Ejecución</div><div class="exec-step-desc">Seguimiento de avances, riesgos y bloqueos.</div></div>
         <div class="exec-step"><div class="exec-step-num">05</div><div class="exec-step-title">Go Live</div><div class="exec-step-desc">Activación y control inicial.</div></div>
       </div>
     </div>
@@ -369,7 +369,7 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
         <div class="exec-rule">🔴 <div><strong>Bloqueado:</strong> requiere gestión antes de continuar.</div></div>
         <div class="exec-rule">🟡 <div><strong>En riesgo:</strong> revisar atraso, dependencia o responsable.</div></div>
         <div class="exec-rule">🟢 <div><strong>Completado:</strong> tarea cerrada y validada.</div></div>
-        <div class="exec-rule">📌 <div><strong>Solo activos:</strong> permite enfocarse en ejecución real.</div></div>
+        <div class="exec-rule">📌 <div><strong>Solo activos:</strong> enfoca el seguimiento en sellers con ejecución vigente.</div></div>
       </div>
     </div>
   </section>
@@ -418,7 +418,7 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
   </section>
 
   <div id="content" style="flex:1;overflow:auto">
-    <div class="center-state"><div class="spinner"></div><span>Cargando desde Google Sheets…</span></div>
+    <div class="center-state"><div class="spinner"></div><span>Cargando timeline operativo desde Google Sheets…</span></div>
   </div>
 
 </main>
