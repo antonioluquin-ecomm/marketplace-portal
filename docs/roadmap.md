@@ -1415,3 +1415,28 @@ Validacion pendiente 14F:
 - confirmar responsive basico;
 - confirmar que no hubo cambios de JS;
 - confirmar `git diff --name-only` limitado a archivos permitidos.
+
+## Etapa 14G: extension CSS compartido interno a Seller Center index
+
+Estado: implementada, pendiente de smoke test 14H.
+
+Resultado:
+
+- `assets/css/internal-components.css` enlazado en `internal/seller-center/index.html`.
+- Link agregado despues de `tokens.css` y antes del `<style>` inline.
+- CSS inline original conservado como fallback.
+
+Alcance protegido:
+
+- `internal/seller-center/maqueta-seller-center.html` no se modifico.
+- `assets/css/internal-components.css` no se modifico.
+- No se tocaron scripts, fetch CSV, render dinamico, paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.
+
+Validacion pendiente 14H:
+
+- confirmar carga sin 404 de `tokens.css` e `internal-components.css`;
+- revisar visualmente Seller Center index;
+- validar accesos a maqueta y Gantt;
+- confirmar que fetch CSV y render dinamico no cambiaron;
+- confirmar que no hubo cambios de JS;
+- confirmar `git diff --name-only` limitado a archivos permitidos.

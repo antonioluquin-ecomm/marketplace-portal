@@ -1705,3 +1705,23 @@ Exclusiones mantenidas:
 - `internal/estrategia/proceso-onboarding.html` ya fue piloto 14C y no se toca en 14E.
 - `internal/hub-operativo.html` y `internal/seller-center/index.html` quedan excluidas.
 - Publicas, Backlog, Gestion, simuladores y formularios siguen fuera del alcance.
+
+### Etapa 14G
+
+**Estado:** implementado, pendiente smoke test 14H.
+
+Extension controlada de `assets/css/internal-components.css` a `internal/seller-center/index.html`.
+
+Criterio aplicado:
+
+- Solo se agrego el link a `../../assets/css/internal-components.css`.
+- El link queda despues de `tokens.css` y antes del `<style>` inline.
+- El CSS inline original queda como fallback y mantiene precedencia.
+- No se modifica `assets/css/internal-components.css` en esta etapa.
+- No se extrae ni modifica JavaScript.
+- No se toca fetch CSV ni render dinamico.
+
+Exclusiones mantenidas:
+
+- `internal/seller-center/maqueta-seller-center.html` sigue excluida por representar otra plataforma visual.
+- Publicas, Backlog, Gestion, simuladores y formularios siguen fuera del alcance.

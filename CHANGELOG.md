@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 14G extension CSS compartido interno a Seller Center index
+
+Tipo de cambio: implementacion acotada y reversible.
+
+Estado: implementado, pendiente de smoke test 14H.
+
+Cambios:
+- Enlazado `assets/css/internal-components.css` en `internal/seller-center/index.html`.
+- El link se agrego despues de `tokens.css` y antes del `<style>` inline.
+- CSS inline original conservado como fallback.
+
+Alcance:
+- Sin cambios de textos.
+- Sin cambios de estructura HTML salvo link CSS.
+- Sin cambios en JavaScript, fetch CSV ni render dinamico.
+- Sin cambios en `internal/seller-center/maqueta-seller-center.html`, `assets/css/internal-components.css`, paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni legacy.
+
 ## 2026-05-18 - Etapa 14E extension CSS compartido interno a estrategia
 
 Tipo de cambio: implementacion acotada y reversible.

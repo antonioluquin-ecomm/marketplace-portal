@@ -748,3 +748,31 @@ Notas:
 - `proceso-onboarding.html` no forma parte de 14E; ya fue piloto 14C.
 - `assets/css/internal-components.css` no se modifica en 14E.
 - Publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases y `legacy/` quedan fuera del alcance.
+
+---
+
+## Etapa 14H: smoke test pendiente para Seller Center index con internal-components.css
+
+**Origen:** Etapa 14G.
+**Estado:** pendiente.
+**Alcance:** `internal/seller-center/index.html`.
+
+Checklist:
+
+| # | Verificacion | Metodo | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|---|---|
+| 1 | Pagina carga correctamente | Browser / GitHub Pages local o remoto | Sin pantalla rota | Pendiente | Pendiente |
+| 2 | `tokens.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 3 | `internal-components.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 4 | CSS inline permanece activo como fallback | Inspeccion DOM / visual | Sin regresion visual | Pendiente | Pendiente |
+| 5 | Topbar, sidebar y modulos se mantienen estables | Visual desktop/mobile | Sin overflow critico | Pendiente | Pendiente |
+| 6 | Acceso a maqueta funciona | Click / inspeccion href | Ruta correcta | Pendiente | Pendiente |
+| 7 | Acceso a Gantt funciona | Click / inspeccion href | Ruta correcta | Pendiente | Pendiente |
+| 8 | Fetch CSV y render dinamico no cambiaron | DevTools Console / visual | Sin errores nuevos | Pendiente | Pendiente |
+| 9 | No se tocaron scripts ni maqueta Seller Center | `git diff --name-only` | Solo archivos permitidos | Pendiente | Pendiente |
+
+Notas:
+
+- `internal/seller-center/maqueta-seller-center.html` no forma parte de 14G.
+- `assets/css/internal-components.css` no se modifica en 14G.
+- Publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases y `legacy/` quedan fuera del alcance.
