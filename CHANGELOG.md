@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 20B revision de contenido estrategico
+
+Tipo de cambio: contenido.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles en paginas estrategicas para alinear lenguaje institucional.
+- Normalizados labels de retorno hacia `index.html` como Portal/Portal institucional.
+- Retiradas marcas visibles de version en crumbs, titulos y footers de paginas ya oficiales.
+- Ajustado lenguaje de governance/gobernanza en `governance.html`.
+- Sin cambios de rutas, CSS, JS, ids, clases, scripts, assets ni estructura funcional.
+
 ## 2026-05-18 - Etapa 20A revision rapida Hub Operativo y navegacion
 
 Tipo de cambio: contenido/documentacion.

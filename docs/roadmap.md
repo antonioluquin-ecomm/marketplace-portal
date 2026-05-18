@@ -1707,3 +1707,14 @@ Resultado:
 - Se aplicaron solo ajustes de contenido en `index.html` para alinear la portada con el estado post-V1.
 - No se modifico `internal/hub-operativo.html`: no se detectaron mejoras simples evidentes que justificaran tocarlo.
 - No hubo cambios de rutas ni logica funcional.
+
+## Etapa 20B: revision de contenido estrategico
+
+Estado: completada.
+
+Resultado:
+
+- Revisadas las paginas de `internal/estrategia/`.
+- Ajustados textos visibles para unificar lenguaje institucional: Portal, Hub Operativo, Seller Center, integracion, gobernanza, onboarding y modelo economico.
+- Retiradas referencias visibles a versiones legacy en paginas ya oficiales.
+- No se modificaron rutas, CSS, JS, scripts, ids, clases ni estructura funcional.
