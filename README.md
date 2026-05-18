@@ -12,7 +12,7 @@ El proyecto funciona y ya cuenta con estructura institucional migrada. Las pagin
 
 `internal/hub-operativo.html` es el hub operativo interno oficial post-V1, creado a partir de la funcionalidad util de `sporting-marketplace_hub_v29.html`. `index.html` mantiene el rol de portada institucional liviana.
 
-`sporting-marketplace_hub_v29.html` se mantiene intacto como hub operativo historico temporal. No se convierte en alias todavia porque conserva valor como referencia y porque el nuevo hub operativo requiere smoke test manual antes de decidir alias, transicion o movimiento a `legacy/`. No se movieron archivos a `legacy/` durante el cierre de Etapa 7.
+`sporting-marketplace_hub_v29.html` se conserva en raiz como URL legacy, pero desde Etapa 9C funciona como alias hacia `internal/hub-operativo.html`. No se movio ni elimino el archivo legacy.
 
 Estructura actual resumida:
 
@@ -47,7 +47,7 @@ Marketplace Portal V1 queda estable y listo para release:
 - assets/logos copiados y fallbacks locales aplicados por etapas;
 - `tokens.css` validado en paginas internas seleccionadas;
 - aliases legacy implementados para todos los HTML versionados migrados;
-- `sporting-marketplace_hub_v29.html` intacto como hub operativo historico temporal.
+- `sporting-marketplace_hub_v29.html` quedo intacto durante V1 y desde Etapa 9C funciona como alias al hub operativo oficial.
 
 Validacion previa a release V1:
 
@@ -59,7 +59,7 @@ Validacion previa a release V1:
 
 Pendientes post-V1:
 
-- ejecutar smoke test manual de `internal/hub-operativo.html` antes de decidir alias o transicion del hub legacy;
+- ejecutar smoke test manual del alias `sporting-marketplace_hub_v29.html` hacia `internal/hub-operativo.html`;
 - no mover ni eliminar legacy hasta una etapa posterior;
 - evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.

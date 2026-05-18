@@ -6,7 +6,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 |---|---|---|---|---|
 | `index.html` | `/index.html` | documentacion | Alta | Entrada institucional oficial creada en Etapa 2. Enlaza a paginas actuales en raiz sin migrarlas. |
 | `internal/hub-operativo.html` | `/internal/hub-operativo.html` | interno | Alta | Etapa 9A: hub operativo interno oficial creado desde `sporting-marketplace_hub_v29.html`. Conserva sidebar, flujo, accesos rapidos, recursos por proceso, buscador, mapa de rutas y grid dinamico; links ajustados a rutas nuevas. Pendiente smoke test manual. |
-| `sporting-marketplace_hub_v29.html` | `/legacy/root-html-v1/sporting-marketplace_hub_v29.html` | legacy | Alta | Decision 8C/9A: se mantiene intacto como hub operativo historico temporal y fuente de referencia. No se convierte en alias todavia; la version oficial operativa nueva vive en `internal/hub-operativo.html`. Evaluar despues del smoke test si corresponde alias, transicion o movimiento a `legacy/`. |
+| `sporting-marketplace_hub_v29.html` | `/internal/hub-operativo.html` | legacy | Alta | Etapa 9C: alias implementado hacia `internal/hub-operativo.html`. Preserva query/hash con JavaScript y usa meta refresh como fallback. No se movio ni elimino el archivo legacy. |
 | `backlog-sellers_v27.html` | `/internal/backlog/backlog-sellers.html` | interno | Alta | Alias implementado en raiz hacia la ruta nueva. Usa meta refresh y JavaScript preservando query/hash. No se movio a `legacy/`; CSV, logos, cards, tabla, filtros y modal permanecen en la pagina nueva. |
 | `gestion-sellers_v7.html` | `/internal/backlog/gestion-sellers.html` | interno | Alta | Alias implementado en raiz hacia la ruta nueva. Usa meta refresh y JavaScript preservando query/hash. No se movio a `legacy/`; Apps Script, CSV sellers, localStorage y submit permanecen en la pagina nueva. |
 | `gantt-operativo_v18.html` | `/internal/gantt/gantt-operativo.html` | interno | Alta | Alias implementado en raiz hacia la ruta nueva. Usa meta refresh y JavaScript preservando query/hash. No se movio a `legacy/`; la logica y CSV permanecen en la pagina nueva. |
@@ -35,7 +35,7 @@ Este inventario documenta los archivos actuales y una ruta futura sugerida. No i
 
 - Todos los HTML versionados con ruta nueva migrada funcionan como aliases en raiz.
 - Los aliases preservan query string y hash; esto protege `seller_id` en paginas publicas.
-- `sporting-marketplace_hub_v29.html` queda intacto como referencia temporal.
+- `sporting-marketplace_hub_v29.html` quedo intacto hasta Etapa 9C; desde entonces funciona como alias hacia `internal/hub-operativo.html`.
 - No se movieron archivos a `legacy/`.
 - No se eliminaron archivos.
 - No se modificaron paginas nuevas ni logica funcional.

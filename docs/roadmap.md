@@ -1075,3 +1075,36 @@ Smoke test recomendado:
 Pendiente post-9A:
 
 - decidir despues del smoke test si `sporting-marketplace_hub_v29.html` se conserva intacto, se convierte en alias al nuevo hub operativo o queda como pagina de transicion.
+
+## Etapa 9B/9C: smoke test y alias del hub legacy
+
+Estado: implementada, pendiente de smoke test del alias.
+
+Objetivo: documentar el smoke test OK de `internal/hub-operativo.html` y convertir `sporting-marketplace_hub_v29.html` en alias hacia el hub operativo oficial.
+
+Resultado 9B:
+
+- `internal/hub-operativo.html` carga correctamente;
+- sidebar visible;
+- accesos rapidos visibles;
+- buscador funciona;
+- grid dinamico visible;
+- links internos abren rutas `internal/`;
+- links publicos abren rutas `public/`;
+- `index.html` muestra acceso "Abrir Hub Operativo".
+
+Resultado 9C:
+
+- `sporting-marketplace_hub_v29.html` ya no queda como hub operativo activo;
+- funciona como alias hacia `internal/hub-operativo.html`;
+- el hub operativo oficial es `internal/hub-operativo.html`;
+- no se movio ni elimino el archivo legacy;
+- no se modifico `internal/hub-operativo.html`.
+
+Smoke test requerido del alias:
+
+- abrir `sporting-marketplace_hub_v29.html`;
+- confirmar redireccion a `internal/hub-operativo.html`;
+- abrir `sporting-marketplace_hub_v29.html?test=1#mapa`;
+- confirmar preservacion de query/hash;
+- confirmar que no hay 404 ni errores de consola.
