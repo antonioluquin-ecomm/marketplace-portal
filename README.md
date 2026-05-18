@@ -50,6 +50,7 @@ Marketplace Portal V1 queda estable y listo para release:
 - `sporting-marketplace_hub_v29.html` quedo intacto durante V1 y desde Etapa 9C funciona como alias al hub operativo oficial.
 - `internal/hub-operativo.html` recibio mejoras post-V1 acotadas en Etapa 10B: regreso al portal, buscador mejorado, aviso de `seller_id`, mapa clickeable y ajuste mobile minimo.
 - `assets/css/internal-components.css` quedo aplicado a paginas internas autorizadas en Etapa 14, manteniendo CSS inline como fallback y sin extraer JavaScript.
+- La limpieza CSS interna se cerro en Etapa 15: se aplico solo a paginas informativas de estrategia y las paginas operativas quedaron excluidas por relacion riesgo/beneficio.
 
 Validacion previa a release V1:
 
@@ -65,7 +66,8 @@ Pendientes post-V1:
 - mantener la raiz como compatibility layer de aliases; no mover aliases a `legacy/` sin etapa explicita;
 - evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
 - mantener paginas publicas seller-facing independientes del CSS interno compartido;
-- no extraer JavaScript ni eliminar CSS inline sin nueva auditoria especifica;
+- no extraer JavaScript ni eliminar CSS inline operativo sin nueva auditoria especifica;
+- iniciar como proximo bloque recomendado la Etapa 16A de auditoria JS interna compartible, sin implementacion;
 - mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.
 - usar `docs/handoff-post-v1.md` como contexto inicial para nuevas sesiones.
 

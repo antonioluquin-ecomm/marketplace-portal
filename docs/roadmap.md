@@ -1545,3 +1545,38 @@ Validacion pendiente 15E:
 - probar selector de `modelo-integracion.html` sin cambios funcionales;
 - confirmar responsive basico;
 - confirmar que no hubo cambios de JS.
+
+## Etapa 15G: cierre documental limpieza CSS interna
+
+Estado: completada.
+
+Resultado:
+
+- 15A: auditoria general de duplicados CSS.
+- 15B/15C: limpieza piloto en `proceso-onboarding.html`.
+- 15D/15E: limpieza controlada en paginas de estrategia.
+- 15F: auditoria de paginas internas operativas.
+- Decision final: cerrar limpieza CSS interna por ahora.
+
+Paginas operativas excluidas:
+
+- `internal/seller-center/index.html`;
+- `internal/gantt/gantt-seller-center.html`;
+- `internal/gantt/gantt-operativo.html`;
+- `internal/simuladores/simulador-economico.html`;
+- `internal/backlog/backlog-sellers.html`;
+- `internal/backlog/gestion-sellers.html`;
+- `internal/hub-operativo.html`.
+
+Motivo:
+
+- Bajo beneficio de limpieza.
+- Mayor riesgo por fetch, CSV, filtros, formulas, submit, localStorage y render dinamico.
+
+Opcion futura:
+
+- Auditoria especifica por pagina solo si aparece necesidad real.
+
+Proximo bloque recomendado:
+
+- Etapa 16A: auditoria JS interna compartible, sin implementacion.

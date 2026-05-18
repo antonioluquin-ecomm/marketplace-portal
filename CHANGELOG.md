@@ -4,6 +4,28 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 15G cierre documental limpieza CSS interna
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque de limpieza CSS interna.
+- Registrado el recorrido:
+  - 15A: auditoria general de duplicados CSS.
+  - 15B/15C: limpieza piloto en `internal/estrategia/proceso-onboarding.html`.
+  - 15D/15E: limpieza controlada en paginas de estrategia.
+  - 15F: auditoria de paginas internas operativas.
+- Decision final: cerrar limpieza CSS interna por ahora.
+
+Motivo:
+- La limpieza segura se aplico en paginas informativas de estrategia.
+- Las paginas operativas tienen bajo beneficio y mayor riesgo por fetch, CSV, filtros, formulas, submit, localStorage o render dinamico.
+
+Proximo bloque recomendado:
+- Etapa 16A: auditoria JS interna compartible, sin implementacion.
+
 ## 2026-05-18 - Etapa 15D limpieza CSS estrategia
 
 Tipo de cambio: implementacion controlada.

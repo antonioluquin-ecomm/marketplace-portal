@@ -884,3 +884,31 @@ Notas:
 
 - No ejecutar refactor adicional durante 15E.
 - No extender limpieza a paginas operativas hasta nueva auditoria especifica.
+
+---
+
+## Etapa 15G: cierre documental limpieza CSS interna
+
+**Estado:** documentado.
+
+Decision:
+
+- Cerrar limpieza CSS interna por ahora.
+- No ejecutar smoke tests adicionales de limpieza CSS operativa porque no se implementaron cambios en paginas operativas.
+- Mantener smoke tests 15C y 15E como validaciones pendientes/esperadas de los cambios aplicados en paginas informativas.
+
+Paginas excluidas por riesgo/beneficio:
+
+| Pagina | Motivo |
+|---|---|
+| `internal/seller-center/index.html` | Fetch CSV y render dinamico; baja duplicacion real |
+| `internal/gantt/gantt-seller-center.html` | Timeline, filtros, CSV y render complejo |
+| `internal/gantt/gantt-operativo.html` | Timeline operativo y clases propias |
+| `internal/simuladores/simulador-economico.html` | Formulas y layout propio |
+| `internal/backlog/backlog-sellers.html` | Cards, tabla, filtros, modal y datos externos |
+| `internal/backlog/gestion-sellers.html` | Submit, Apps Script, config, localStorage y generacion de IDs |
+| `internal/hub-operativo.html` | Buscador, grid dinamico y mapa de rutas propio |
+
+Proximo bloque sugerido:
+
+- Etapa 16A: auditoria JS interna compartible, sin implementacion.

@@ -1837,3 +1837,41 @@ Conservado por riesgo visual:
 - `proyecto-marketplace.html`: `.panel` y `.callout` por tener sistema visual propio de esa pagina.
 
 No se agregaron variantes nuevas a `internal-components.css` porque no eran suficientemente genericas sin riesgo de regresion.
+
+### Etapa 15G: cierre documental limpieza CSS interna
+
+**Estado:** cerrado documentalmente.
+
+Resumen del bloque:
+
+- 15A: auditoria general de duplicados CSS.
+- 15B/15C: limpieza piloto en `internal/estrategia/proceso-onboarding.html`.
+- 15D/15E: limpieza controlada en paginas informativas de estrategia.
+- 15F: auditoria de paginas internas operativas.
+
+Decision final:
+
+- Cerrar la limpieza CSS interna por ahora.
+- Mantener `assets/css/internal-components.css` como capa compartida pasiva.
+- No seguir eliminando CSS inline en paginas operativas sin una necesidad real y una auditoria especifica por pagina.
+
+Paginas excluidas de limpieza por relacion riesgo/beneficio:
+
+- `internal/seller-center/index.html`
+- `internal/gantt/gantt-seller-center.html`
+- `internal/gantt/gantt-operativo.html`
+- `internal/simuladores/simulador-economico.html`
+- `internal/backlog/backlog-sellers.html`
+- `internal/backlog/gestion-sellers.html`
+- `internal/hub-operativo.html`
+
+Motivo:
+
+- Baja duplicacion real con `internal-components.css`.
+- Alto acoplamiento visual/funcional en paginas con fetch, CSV, filtros, formulas, submit, localStorage o render dinamico.
+- Beneficio menor frente al riesgo de regresion.
+
+Opcion futura:
+
+- Abrir auditoria especifica por pagina solo si aparece una necesidad real de mantenimiento o consistencia visual.
+- Proximo bloque recomendado: Etapa 16A, auditoria JS interna compartible, sin implementacion.
