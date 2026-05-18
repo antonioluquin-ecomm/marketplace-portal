@@ -229,6 +229,19 @@ Checklist final V1:
 - No ejecutar submit real en Gestion de Sellers ni formularios.
 - Documentar resultado real antes de publicar o etiquetar V1.
 
+## Etapa 8A: estado final V1
+
+Estado: V1 estable y lista para release.
+
+| Area | Resultado | Estado | Observaciones |
+|---|---|---|---|
+| Aliases legacy | Smoke test manual OK | Aprobado | Query/hash y `seller_id=SPT-001` preservados |
+| Paginas internas | Migradas y documentadas | Aprobado | `tokens.css` aplicado solo a grupo interno validado |
+| Paginas publicas | Migradas y documentadas | Aprobado | Sin `tokens.css`; sin submit real en smoke test |
+| Assets/logos | Centralizados y documentados | Aprobado | `Logos/` legacy se conserva |
+| Hub legacy | Intacto | Pendiente post-V1 | `sporting-marketplace_hub_v29.html` requiere decision futura |
+| Release notes | `docs/release-notes-v1.md` creada | Aprobado | Base para cierre V1 |
+
 ## Registro de ejecucion
 
 Usar esta seccion para anotar resultados reales despues de ejecutar el smoke test manual.

@@ -4,6 +4,40 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 8A Release Notes V1
+
+Tipo de cambio: cierre documental de version.
+
+Estado: V1 estable y lista para release.
+
+Cambios incluidos:
+- Creacion de `docs/release-notes-v1.md`.
+- README actualizado para declarar Marketplace Portal V1 como version estable.
+- Roadmap actualizado con Etapa 8A y pendientes post-V1.
+- Test matrix actualizada con estado final V1.
+
+Alcance V1 cerrado:
+- Estructura `internal/` y `public/` consolidada.
+- `index.html` institucional creado.
+- Paginas internas y publicas migradas.
+- Assets/logos centralizados.
+- Fallback local de logos aplicado por etapas.
+- `tokens.css` aplicado solo a paginas internas de bajo riesgo.
+- Aliases legacy implementados para HTML versionados migrados.
+- Smoke test manual de aliases documentado con resultado OK.
+
+Exclusiones y pendientes post-V1:
+- `sporting-marketplace_hub_v29.html` queda intacto.
+- No se movio ni elimino legacy.
+- Paginas publicas quedan sin `tokens.css` por ahora.
+- Sin extraccion masiva de CSS/JS.
+- Sin refactor funcional.
+- Sin cambios en Apps Script, endpoints, payloads, submit ni `localStorage`.
+
+Validacion:
+- Solo se modifico documentacion.
+- No se tocaron HTML, CSS, JS, Apps Script, config, endpoints, payloads, formularios, simuladores, Backlog, Gestion, assets ni legacy.
+
 ## 2026-05-18 - Etapa 7H smoke test aliases legacy
 
 Tipo de cambio: documentacion de validacion.

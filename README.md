@@ -35,7 +35,7 @@ Estructura actual resumida:
 
 ## Estado V1
 
-La reestructuracion inicial queda cercana a cierre V1:
+Marketplace Portal V1 queda estable y listo para release:
 
 - estructura base creada;
 - `index.html` institucional creado;
@@ -51,7 +51,14 @@ Validacion previa a release V1:
 - paginas publicas validadas con `?seller_id=SPT-001`;
 - query string y hash preservados en aliases;
 - no se ejecuto submit real en Gestion ni formularios;
-- preparar release notes V1.
+- release notes V1 creadas en `docs/release-notes-v1.md`.
+
+Pendientes post-V1:
+
+- decidir el tratamiento futuro de `sporting-marketplace_hub_v29.html`;
+- no mover ni eliminar legacy hasta una etapa posterior;
+- evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
+- mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.
 
 ## Metodologia de trabajo
 

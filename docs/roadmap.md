@@ -979,5 +979,38 @@ Pendientes para release V1:
 
 Estado V1:
 
-- V1 queda lista para preparar release notes.
+- V1 queda estable y lista para release.
+- Release notes V1 creadas en `docs/release-notes-v1.md`.
 - No se recomienda iniciar limpieza de `legacy/`, extraccion de JS/CSS adicional ni cambios funcionales antes del cierre V1.
+
+## Etapa 8A: Release Notes V1 y cierre documental
+
+Estado: completada.
+
+Objetivo: declarar Marketplace Portal V1 como version estable, documentar alcance cerrado, exclusiones, riesgos residuales y siguientes pasos post-V1.
+
+Resultado:
+
+- creadas release notes V1 en `docs/release-notes-v1.md`;
+- README actualizado para marcar V1 estable;
+- changelog actualizado con cierre V1;
+- matriz de test actualizada con estado final V1;
+- no se modificaron HTML, CSS, JS, Apps Script, config, endpoints, payloads, submit, assets ni legacy.
+
+Alcance V1 cerrado:
+
+- estructura `internal/` y `public/` consolidada;
+- entrada institucional `index.html`;
+- paginas internas y publicas migradas;
+- assets/logos centralizados;
+- fallback local de logos aplicado por etapas;
+- `tokens.css` aplicado solo a paginas internas de bajo riesgo;
+- aliases legacy implementados y smoke test OK;
+- documentacion viva actualizada.
+
+Pendientes post-V1:
+
+- decision futura sobre `sporting-marketplace_hub_v29.html`;
+- limpieza o movimiento a `legacy/` solo en etapa posterior;
+- extraccion CSS/JS solo con auditoria especifica;
+- formularios y Gestion de Sellers solo con pruebas controladas y sin cambios de Apps Script no autorizados.
