@@ -1914,3 +1914,34 @@ No incluido:
 - Formularios.
 - localStorage.
 - Helpers globales de datos.
+
+## Etapa 16D: extension JS navegacion activa a estrategia
+
+**Estado:** implementado, pendiente smoke test 16E.
+
+Paginas:
+
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Criterio:
+
+- Reemplazar solo navegacion activa por scroll.
+- Mantener comportamiento equivalente mediante `window.InternalNavigation.initActiveSectionNav(options)`.
+- Conservar logica no relacionada con navegacion activa.
+- No modificar `assets/js/internal-navigation.js` porque las opciones existentes cubren ambos casos.
+
+Parametros aplicados:
+
+- `modelo-economico.html`: `linkSelector: '.sidebar .nav[href^="#"]`, `activeClass: 'active'`, `offset: 120`.
+- `proyecto-marketplace.html`: `linkSelector: '.nav'`, `activeClass: 'active'`, `offset: 90`.
+
+Conservado:
+
+- `animationDelay` de `proyecto-marketplace.html`.
+
+Exclusiones:
+
+- `modelo-integracion.html` mantiene su selector especifico.
+- `proceso-onboarding.html` no tiene JS.
+- Paginas operativas y publicas siguen fuera de alcance.

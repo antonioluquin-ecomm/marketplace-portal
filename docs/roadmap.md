@@ -1605,3 +1605,31 @@ Validacion pendiente 16C:
 - confirmar que links internos siguen funcionando;
 - confirmar sin errores de consola;
 - confirmar `git diff --name-only` limitado a archivos permitidos.
+
+## Etapa 16D: extension JS navegacion activa a estrategia
+
+Estado: implementada, pendiente de smoke test 16E.
+
+Resultado:
+
+- `assets/js/internal-navigation.js` aplicado en:
+  - `internal/estrategia/modelo-economico.html`;
+  - `internal/estrategia/proyecto-marketplace.html`.
+- Reemplazado solo el script inline de navegacion activa.
+- Conservado `animationDelay` de `proyecto-marketplace.html`.
+- No se modifico `assets/js/internal-navigation.js`.
+
+Alcance protegido:
+
+- No se tocaron `governance.html`, `modelo-integracion.html` ni `proceso-onboarding.html`.
+- No se tocaron textos, estructura HTML ni CSS.
+- No se tocaron paginas operativas, publicas, Apps Script, config, aliases ni `legacy/`.
+
+Validacion pendiente 16E:
+
+- confirmar carga sin 404 de `internal-navigation.js`;
+- confirmar navegacion activa por scroll en ambas paginas;
+- confirmar links internos a anclas;
+- confirmar que `animationDelay` sigue activo en `proyecto-marketplace.html`;
+- confirmar sin errores de consola;
+- confirmar que no hubo cambios en paginas fuera de alcance.

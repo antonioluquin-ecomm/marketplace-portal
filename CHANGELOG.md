@@ -4,6 +4,25 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 16D extension JS navegacion estrategia
+
+Tipo de cambio: implementacion controlada.
+
+Estado: implementado, pendiente de smoke test 16E.
+
+Cambios:
+- Extendido `assets/js/internal-navigation.js` a:
+  - `internal/estrategia/modelo-economico.html`
+  - `internal/estrategia/proyecto-marketplace.html`
+- Reemplazado solo el JS inline de navegacion activa por scroll.
+- Conservado el `animationDelay` de `proyecto-marketplace.html`.
+- No fue necesario modificar `assets/js/internal-navigation.js`.
+
+Alcance:
+- Sin cambios de textos, estructura HTML, CSS ni navegacion.
+- Sin cambios en `governance.html`, `modelo-integracion.html` ni `proceso-onboarding.html`.
+- Sin cambios en paginas operativas, publicas, Apps Script, config, aliases ni legacy.
+
 ## 2026-05-18 - Etapa 16B piloto JS navegacion activa
 
 Tipo de cambio: implementacion minima y reversible.

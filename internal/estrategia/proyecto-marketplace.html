@@ -475,17 +475,13 @@ footer{border-top:1px solid var(--b2);padding:12px 30px;display:flex;align-items
   <span>proyecto-marketplace v3 · 2026</span>
 </footer>
 
+<script src="../../assets/js/internal-navigation.js"></script>
 <script>
-const secs = [...document.querySelectorAll('main section[id]')];
-const navs = [...document.querySelectorAll('.nav')];
-function setActive() {
-  const y = scrollY + 90;
-  let active = secs[0]?.id;
-  secs.forEach(s => { if (s.offsetTop <= y) active = s.id; });
-  navs.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + active));
-}
-addEventListener('scroll', setActive, { passive: true });
-setActive();
+window.InternalNavigation.initActiveSectionNav({
+  linkSelector: '.nav',
+  activeClass: 'active',
+  offset: 90
+});
 document.querySelectorAll('.section').forEach((s, i) => { s.style.animationDelay = (i * .06) + 's'; });
 </script>
 </body>

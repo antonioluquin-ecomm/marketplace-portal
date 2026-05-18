@@ -775,19 +775,13 @@
     </main>
   </div>
 
+  <script src="../../assets/js/internal-navigation.js"></script>
   <script>
-    const links = document.querySelectorAll('.sidebar .nav[href^="#"]');
-    const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-    const setActive = () => {
-      let current = sections[0]?.id || '';
-      for (const section of sections) {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 120) current = section.id;
-      }
-      links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-    };
-    document.addEventListener('scroll', setActive, { passive:true });
-    setActive();
+    window.InternalNavigation.initActiveSectionNav({
+      linkSelector: '.sidebar .nav[href^="#"]',
+      activeClass: 'active',
+      offset: 120
+    });
   </script>
 </body>
 </html>

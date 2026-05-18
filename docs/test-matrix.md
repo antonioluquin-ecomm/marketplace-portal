@@ -937,3 +937,34 @@ Notas:
 
 - No extender `internal-navigation.js` a otras paginas hasta validar 16C.
 - No mezclar este piloto con fetch, CSV, formularios, buscadores ni render dinamico.
+
+---
+
+## Etapa 16E: smoke test pendiente para extension JS navegacion estrategia
+
+**Origen:** Etapa 16D.
+**Estado:** pendiente.
+**Alcance:** `modelo-economico.html` y `proyecto-marketplace.html`.
+
+Paginas:
+
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Checklist:
+
+| # | Verificacion | Metodo | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|---|---|
+| 1 | Cada pagina carga correctamente | Browser / GitHub Pages local o remoto | Sin pantalla rota | Pendiente | Pendiente |
+| 2 | `internal-navigation.js` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 3 | Navegacion activa inicial funciona | Visual / DOM | Link activo correcto | Pendiente | Pendiente |
+| 4 | Navegacion activa cambia con scroll | Scroll manual | Clase `active` cambia por seccion | Pendiente | Pendiente |
+| 5 | Links internos a anclas funcionan | Click manual | Scroll a seccion correcta | Pendiente | Pendiente |
+| 6 | `animationDelay` se conserva en `proyecto-marketplace.html` | Visual / DOM | Animaciones sin regresion | Pendiente | Pendiente |
+| 7 | Sin errores de consola | DevTools Console | Sin errores nuevos | Pendiente | Pendiente |
+| 8 | No se tocaron paginas fuera de alcance | `git diff --name-only` | Solo archivos permitidos | Pendiente | Pendiente |
+
+Notas:
+
+- No extender a `modelo-integracion.html` ni paginas operativas durante 16E.
+- No mezclar con fetch, CSV, formularios, buscadores ni render dinamico.
