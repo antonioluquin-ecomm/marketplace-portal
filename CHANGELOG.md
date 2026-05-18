@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 20D revision contenido publico seller-facing
+
+Tipo de cambio: contenido.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles estaticos en paginas publicas seller-facing.
+- Unificado lenguaje hacia Marketplace Sporting, seller, integracion, propuesta comercial, modelo operativo y onboarding.
+- Retiradas marcas visibles de version en titulos publicos donde correspondia.
+- Sin cambios de rutas, CSS, JS, formularios, atributos, submit, endpoints, payloads, Apps Script ni config.
+
 ## 2026-05-18 - Etapa 20C revision contenido Seller Center index
 
 Tipo de cambio: contenido.

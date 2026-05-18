@@ -1730,3 +1730,14 @@ Resultado:
 - Aclarada su relacion con PIM, Articulos Seller, seguimiento y documentacion funcional.
 - La maqueta queda descripta como referencia funcional/visual, no como sistema productivo final.
 - No se tocaron rutas, CSS, JS, fetch, CSV, render dinamico ni estructura funcional.
+
+## Etapa 20D: revision contenido publico seller-facing
+
+Estado: completada.
+
+Resultado:
+
+- Revisadas paginas publicas seller-facing en `public/`.
+- Ajustados textos visibles estaticos en presentacion, simulador y encabezados introductorios de formularios.
+- Unificado lenguaje: Marketplace Sporting, seller, integracion, propuesta comercial, modelo operativo y onboarding.
+- No se modificaron rutas, CSS, JS, formularios, atributos, submit, endpoints, payloads ni logica de `seller_id`.
