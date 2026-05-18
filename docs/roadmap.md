@@ -1359,3 +1359,31 @@ Validaciones requeridas para 14C:
 - no tocar JS;
 - smoke test visual y responsive;
 - confirmar sin 404.
+
+## Etapa 14C: piloto CSS compartido interno
+
+Estado: implementada, pendiente de smoke test 14D.
+
+Resultado:
+
+- creado `assets/css/internal-components.css`;
+- enlazado solo en `internal/estrategia/proceso-onboarding.html`;
+- cargado despues de `tokens.css` y antes del `<style>` inline;
+- CSS inline original conservado como fallback;
+- sin cambios en JavaScript ni paginas criticas.
+
+Componentes incluidos:
+
+- paneles;
+- callouts;
+- cabeceras de seccion;
+- descripciones de seccion;
+- tags/pills pasivos.
+
+Validacion pendiente 14D:
+
+- confirmar CSS nuevo sin 404;
+- confirmar que `tokens.css` sigue cargando;
+- validar visualmente `proceso-onboarding.html`;
+- validar responsive;
+- confirmar que no se toco JS.

@@ -212,6 +212,24 @@ Checklist 14C:
 - Responsive mobile sin overflow.
 - `git diff --name-only` limitado a CSS nuevo, pagina piloto y documentacion.
 
+## Etapa 14D: smoke test piloto CSS interno
+
+Pagina: `internal/estrategia/proceso-onboarding.html`.
+
+| Validacion | Resultado esperado | Estado |
+|---|---|---|
+| `internal-components.css` carga sin 404 | HTTP 200 / sin error local | Pendiente |
+| `tokens.css` sigue cargando | HTTP 200 / sin error local | Pendiente |
+| CSS inline permanece | `:root` y `<style>` original presentes | Pendiente |
+| Topbar | Sin regresion visual | Pendiente |
+| Sidebar | Sin regresion visual | Pendiente |
+| Paneles y callouts | Sin regresion visual | Pendiente |
+| Section headers y tags | Sin regresion visual | Pendiente |
+| Responsive mobile | Sin overflow critico | Pendiente |
+| JS | Sin cambios / sin errores nuevos | Pendiente |
+
+No ejecutar pruebas sobre formularios, simuladores, Backlog, Gestion, Apps Script ni publicas.
+
 ## Riesgos conocidos
 
 - Posible referencia a `pctSec` antes de declaracion en `public/formularios/formulario-relevamiento.html`.

@@ -1649,3 +1649,32 @@ Orden posterior sugerido:
 - Comparar visualmente topbar, sidebar, cards, grillas, KPIs y responsive.
 - Confirmar sin 404 para el CSS nuevo.
 - Confirmar `git diff --name-only` limitado a CSS nuevo, pagina piloto y documentacion.
+
+### Etapa 14C
+
+**Estado:** implementado, pendiente smoke test 14D.
+
+Cambios:
+
+- Creado `assets/css/internal-components.css`.
+- Enlazado en `internal/estrategia/proceso-onboarding.html` despues de `tokens.css` y antes del `<style>` inline.
+- El CSS inline original permanece como fallback.
+
+Contenido inicial:
+
+- `.panel`
+- `.panel.soft`
+- `.callout`
+- `.callout.warn`
+- `.section-head`
+- `.section-title`
+- `.section-desc`
+- `.tag`
+- `.tag.green`
+
+Invariantes:
+
+- No se tocaron scripts.
+- No se eliminaron estilos inline.
+- No se cambiaron textos ni estructura, salvo el link CSS.
+- No se tocaron paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.

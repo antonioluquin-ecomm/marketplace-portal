@@ -1,0 +1,83 @@
+/*
+ * internal-components.css — componentes pasivos internos
+ * Etapa 14C — piloto minimo en proceso-onboarding.
+ *
+ * Alcance:
+ * - Solo clases de componentes informativos ya existentes.
+ * - No define layout global, topbar, sidebar, responsive critico ni JS.
+ * - Debe cargarse antes del CSS inline de la pagina piloto.
+ */
+
+.panel {
+  background: linear-gradient(180deg, var(--k3, var(--panel)), var(--k2, var(--panel2)));
+  border: 1px solid var(--bdr, var(--line));
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--shadow, 0 14px 42px rgba(0, 0, 0, .34));
+}
+
+.panel.soft {
+  box-shadow: none;
+  background: rgba(255, 255, 255, .025);
+}
+
+.callout {
+  border-left: 3px solid var(--g);
+  padding: 13px 15px;
+  background: var(--g-dim);
+  border-radius: 10px;
+  color: var(--t2, var(--text-muted));
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.callout.warn {
+  border-left-color: var(--warn);
+  background: rgba(255, 183, 77, .08);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.section-title span {
+  font-size: 18px;
+}
+
+.section-desc {
+  font-size: 12.5px;
+  color: var(--t3, var(--text-soft));
+  max-width: 610px;
+  line-height: 1.5;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, .06);
+  color: var(--t3, var(--text-soft));
+  white-space: nowrap;
+}
+
+.tag.green {
+  background: var(--g-dim);
+  color: var(--g);
+  border: 1px solid var(--g-brd);
+}
