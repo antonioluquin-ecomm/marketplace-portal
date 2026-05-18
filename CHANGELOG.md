@@ -4,6 +4,28 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 15D limpieza CSS estrategia
+
+Tipo de cambio: implementacion controlada.
+
+Estado: implementado, pendiente de smoke test 15E.
+
+Cambios:
+- Limpiado CSS inline duplicado en paginas informativas de `internal/estrategia/`.
+- Se uso `assets/css/internal-components.css` como base compartida.
+- No fue necesario modificar `assets/css/internal-components.css`.
+
+Paginas afectadas:
+- `internal/estrategia/governance.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Alcance:
+- Sin cambios de textos, estructura HTML, navegacion ni JavaScript.
+- Sin cambios en selector de `modelo-integracion.html`.
+- Sin cambios en publicas, formularios, simuladores, Backlog, Gestion, Seller Center, Gantt, Hub Operativo, Apps Script, config, aliases ni legacy.
+
 ## 2026-05-18 - Etapa 15B limpieza piloto CSS inline duplicado
 
 Tipo de cambio: implementacion minima y reversible.

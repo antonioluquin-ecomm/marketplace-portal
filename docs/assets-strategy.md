@@ -1805,3 +1805,35 @@ Invariantes:
 - No se modifico `assets/css/tokens.css`.
 - No se tocaron textos, estructura HTML ni JavaScript.
 - No se tocaron paginas publicas, Backlog, Gestion, formularios, simuladores, Apps Script, config, aliases ni `legacy/`.
+
+### Etapa 15D: limpieza CSS en paginas de estrategia
+
+**Estado:** implementado, pendiente smoke test 15E.
+
+Paginas intervenidas:
+
+- `internal/estrategia/governance.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Criterio:
+
+- Eliminar solo reglas inline cubiertas por `assets/css/internal-components.css`.
+- Conservar reglas inline cuando tienen diferencias visuales o son especificas de pagina.
+- No modificar HTML, textos, navegacion ni JavaScript.
+
+Eliminado por pagina:
+
+- `governance.html`: base de `.panel`, `.panel.soft`, `.section-head`, `.section-title`, `.section-title span`; `section-desc` queda reducido a ancho local.
+- `modelo-integracion.html`: base de `.panel`, `.panel.soft`, `.callout`, `.callout.warn`, `.section-head`, `.section-title`, `.section-title span`; `callout` conserva margen local y `callout.danger`; `section-desc` conserva ancho local.
+- `modelo-economico.html`: base de `.panel`, `.panel.soft`, `.section-head`, `.section-title`, `.section-title span`; `section-desc` queda reducido a ancho local.
+- `proyecto-marketplace.html`: `.panel.soft`.
+
+Conservado por riesgo visual:
+
+- `governance.html` y `modelo-economico.html`: `.callout` y variantes por usar gradientes, borde completo, padding y radio distintos.
+- `modelo-integracion.html`: `.tag` y variantes por usar `inline-block`, borde, margen y colores especificos del selector.
+- `proyecto-marketplace.html`: `.panel` y `.callout` por tener sistema visual propio de esa pagina.
+
+No se agregaron variantes nuevas a `internal-components.css` porque no eran suficientemente genericas sin riesgo de regresion.

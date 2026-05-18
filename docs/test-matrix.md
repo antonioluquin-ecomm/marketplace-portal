@@ -849,3 +849,38 @@ Notas:
 
 - No ejecutar cambios funcionales durante 15C.
 - No extender limpieza a otras paginas hasta validar el piloto.
+
+---
+
+## Etapa 15E: smoke test pendiente para limpieza CSS estrategia
+
+**Origen:** Etapa 15D.
+**Estado:** pendiente.
+**Alcance:** paginas informativas restantes de `internal/estrategia/`.
+
+Paginas:
+
+- `internal/estrategia/governance.html`
+- `internal/estrategia/modelo-integracion.html`
+- `internal/estrategia/modelo-economico.html`
+- `internal/estrategia/proyecto-marketplace.html`
+
+Checklist:
+
+| # | Verificacion | Metodo | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|---|---|
+| 1 | Cada pagina carga correctamente | Browser / GitHub Pages local o remoto | Sin pantalla rota | Pendiente | Pendiente |
+| 2 | `tokens.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 3 | `internal-components.css` carga sin 404 | DevTools Network | HTTP 200 | Pendiente | Pendiente |
+| 4 | Paneles mantienen estilo esperado | Visual | Sin regresion | Pendiente | Pendiente |
+| 5 | Section heads y section titles mantienen layout | Visual | Sin regresion | Pendiente | Pendiente |
+| 6 | Callouts conservan diferencias visuales especificas | Visual | Sin regresion | Pendiente | Pendiente |
+| 7 | Tags de `modelo-integracion.html` conservan variantes | Visual / selector | Sin regresion | Pendiente | Pendiente |
+| 8 | Selector de `modelo-integracion.html` funciona | Interaccion manual | Cambia resultado sin errores | Pendiente | Pendiente |
+| 9 | Responsive basico se mantiene | Visual mobile/desktop | Sin overflow nuevo | Pendiente | Pendiente |
+| 10 | No se tocaron scripts ni paginas fuera de alcance | `git diff --name-only` | Solo archivos permitidos | Pendiente | Pendiente |
+
+Notas:
+
+- No ejecutar refactor adicional durante 15E.
+- No extender limpieza a paginas operativas hasta nueva auditoria especifica.

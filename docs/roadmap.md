@@ -1516,3 +1516,32 @@ Validacion pendiente 15C:
 - validar desktop/mobile;
 - confirmar sin cambios de JS;
 - confirmar `git diff --name-only` limitado a archivos permitidos.
+
+## Etapa 15D: limpieza y alineacion CSS en paginas de estrategia
+
+Estado: implementada, pendiente de smoke test 15E.
+
+Resultado:
+
+- Limpieza controlada aplicada en:
+  - `internal/estrategia/governance.html`;
+  - `internal/estrategia/modelo-integracion.html`;
+  - `internal/estrategia/modelo-economico.html`;
+  - `internal/estrategia/proyecto-marketplace.html`.
+- Se eliminaron reglas inline duplicadas ya cubiertas por `assets/css/internal-components.css`.
+- No se modifico `assets/css/internal-components.css`.
+- No se tocaron scripts ni selector de `modelo-integracion.html`.
+
+Conservado:
+
+- Reglas con diferencias visuales relevantes.
+- Variantes especificas de `callout`, `tag` y paneles cuando no eran equivalentes.
+
+Validacion pendiente 15E:
+
+- revisar visualmente las cuatro paginas;
+- confirmar carga sin 404 de `tokens.css` e `internal-components.css`;
+- confirmar paneles, encabezados, callouts y tags sin regresion;
+- probar selector de `modelo-integracion.html` sin cambios funcionales;
+- confirmar responsive basico;
+- confirmar que no hubo cambios de JS.
