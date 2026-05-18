@@ -4,6 +4,27 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 10B mejoras seguras Hub Operativo
+
+Tipo de cambio: mejora incremental acotada.
+
+Estado: implementado, pendiente de smoke test manual.
+
+Cambios:
+- Agregado acceso "Volver al Portal" desde `internal/hub-operativo.html` hacia `../index.html`.
+- Buscador actualizado para indexar tambien la descripcion de cada recurso.
+- Agregado estado visual "Sin resultados" cuando la busqueda no tiene coincidencias.
+- Agregada aclaracion de que los links publicos son base y pueden requerir `seller_id` para experiencias personalizadas.
+- Mapa de rutas convertido en links clickeables hacia rutas existentes.
+- Agregado ajuste mobile minimo para reducir overflow visual en topbar.
+- Agregada nota visual de que los contadores del sidebar son referenciales.
+
+Alcance:
+- Sin refactor masivo.
+- Sin extraccion CSS/JS.
+- Sin cambios de rutas existentes.
+- Sin cambios en `index.html`, `sporting-marketplace_hub_v29.html`, formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads, submit ni storage.
+
 ## 2026-05-18 - Etapa 9D smoke test alias hub legacy
 
 Tipo de cambio: documentacion de validacion.

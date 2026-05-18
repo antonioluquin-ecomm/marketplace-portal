@@ -1129,3 +1129,55 @@ Estado final del hub operativo:
 - hub operativo oficial: `internal/hub-operativo.html`;
 - URL legacy/alias: `sporting-marketplace_hub_v29.html`;
 - sin movimientos ni eliminaciones de archivos.
+
+## Etapa 10A: auditoria de mejoras del Hub Operativo
+
+Estado: completada en modo solo lectura.
+
+Resultado:
+
+- `internal/hub-operativo.html` esta sano como hub operativo;
+- no usa `fetch`, `localStorage`, `sessionStorage`, submit ni endpoints;
+- los links principales a `internal/` y `public/` existen;
+- el JS esta acotado a buscador, grid dinamico y navegacion activa por scroll;
+- no se detectaron hallazgos bloqueantes.
+
+Mejoras recomendadas:
+
+- agregar regreso explicito a `index.html`;
+- mejorar buscador con descripcion y estado sin resultados;
+- aclarar que links publicos son base y pueden requerir `seller_id`;
+- convertir mapa de rutas en links si es simple;
+- reducir riesgo de overflow mobile en topbar;
+- indicar que los contadores de sidebar son referenciales.
+
+## Etapa 10B: mejoras seguras del Hub Operativo
+
+Estado: implementada, pendiente de smoke test manual.
+
+Resultado:
+
+- agregado link "Volver al Portal" hacia `../index.html`;
+- buscador ampliado para incluir descripcion de recursos;
+- agregado estado "Sin resultados" en busquedas sin coincidencias;
+- agregada aclaracion sobre links publicos base y `seller_id`;
+- mapa de rutas convertido en links clickeables;
+- ajuste mobile minimo en topbar;
+- nota visual para contadores referenciales del sidebar.
+
+Alcance protegido:
+
+- no se modificaron `index.html`, `sporting-marketplace_hub_v29.html`, paginas publicas, formularios, simuladores, Backlog, Gestion de Sellers, Apps Script, config, endpoints, payloads, submit ni storage;
+- no se extrajo CSS/JS;
+- no se hizo refactor masivo.
+
+Smoke test requerido:
+
+- cargar `internal/hub-operativo.html`;
+- validar "Volver al Portal";
+- probar buscador con coincidencias;
+- probar buscador sin coincidencias;
+- validar links publicos base;
+- validar links del mapa de rutas;
+- validar topbar en mobile;
+- confirmar ausencia de 404 criticos.

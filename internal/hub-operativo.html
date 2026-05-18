@@ -139,6 +139,10 @@ a { color:inherit; text-decoration:none; }
 .sb-nav.active .sb-cnt { color:var(--g); background:rgba(94,168,50,.18); }
 
 .sb-divider { height:1px; background:var(--ln); margin:8px 16px 18px; }
+.sb-note {
+  padding:0 16px 8px;
+  font-size:10px; font-weight:600; color:var(--t4);
+}
 
 .sb-quick { display:flex; flex-direction:column; gap:5px; padding:0 12px; }
 .sb-qlink {
@@ -366,6 +370,8 @@ h1 em { color:var(--g); font-style:normal; }
   font-size:11.5px; color:var(--t3);
   white-space:pre-line; line-height:1.75;
 }
+.rt-val a { color:var(--t2); font-weight:600; }
+.rt-val a:hover { color:var(--g); text-decoration:underline; }
 
 /* ─── RECORRIDO ─── */
 .route-flow {
@@ -426,6 +432,16 @@ h1 em { color:var(--g); font-style:normal; }
   font-size:11px; font-weight:700; color:var(--g); letter-spacing:.06em; text-transform:uppercase;
 }
 .hidden { display:none !important; }
+.empty-state {
+  display:none;
+  padding:18px;
+  border:1px dashed var(--ln);
+  border-radius:11px;
+  color:var(--t3);
+  font-size:13px;
+  background:rgba(255,255,255,.025);
+}
+.empty-state.visible { display:block; }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width:1160px) {
@@ -436,7 +452,10 @@ h1 em { color:var(--g); font-style:normal; }
   .all-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media (max-width:720px) {
-  .topbar { padding:0 16px; }
+  .topbar { padding:0 14px; gap:8px; }
+  .tb-right { gap:6px; }
+  .tb-right .tbtn:not(.cta):not(.portal-link) { display:none; }
+  .tbtn { padding:7px 10px; }
   .crumb, .pill { display:none; }
   .hero { padding:28px 20px; }
   .section { padding:28px 20px; }
@@ -458,6 +477,7 @@ h1 em { color:var(--g); font-style:normal; }
   </div>
   <div class="tb-right">
     <div class="pill"><span class="dot"></span>Operativo</div>
+    <a class="tbtn portal-link" href="../index.html">Volver al Portal</a>
     <a class="tbtn" href="./backlog/backlog-sellers.html">Backlog</a>
     <a class="tbtn" href="./gantt/gantt-operativo.html">Gantt</a>
     <a class="tbtn cta" href="./backlog/gestion-sellers.html">+ Seller</a>
@@ -470,6 +490,7 @@ h1 em { color:var(--g); font-style:normal; }
 <aside class="sidebar" id="sidebar">
   <div class="sb-section">
     <div class="sb-lbl">Navegación</div>
+    <div class="sb-note">Conteos referenciales.</div>
     <a class="sb-nav active" href="#inicio">Inicio</a>
     <a class="sb-nav" href="#flujo">Flujo de incorporación <span class="sb-cnt">6</span></a>
     <a class="sb-nav" href="#diaria">Gestión diaria <span class="sb-cnt">3</span></a>
@@ -721,6 +742,7 @@ h1 em { color:var(--g); font-style:normal; }
       <div class="access-box pub">
         <div class="access-head"><span class="access-ico">🌐</span>Compartible con sellers</div>
         <p>Los cuatro recursos de abajo pueden enviarse a sellers como links públicos. Son la única información que debe salir del equipo interno.</p>
+        <p>Estos accesos son links base; para una experiencia personalizada pueden requerir seller_id en la URL.</p>
         <div class="access-rule">Compartir siempre por link directo. Nunca compartir la URL del Hub completo.</div>
       </div>
     </div>
@@ -770,6 +792,7 @@ h1 em { color:var(--g); font-style:normal; }
       </div>
     </div>
     <div id="allGrid" class="all-grid"></div>
+    <div id="emptyState" class="empty-state">Sin resultados para la búsqueda actual.</div>
   </section>
 
   <!-- ══ MAPA ══ -->
@@ -782,15 +805,15 @@ h1 em { color:var(--g); font-style:normal; }
       </div>
     </div>
     <div class="route-table" style="margin-bottom:20px">
-      <div class="rt-row"><div class="rt-key">Inicio</div><div class="rt-val">/index.html</div></div>
-      <div class="rt-row"><div class="rt-key">Internal</div><div class="rt-val">/internal/backlog/       → Gestión de Sellers, Backlog
-/internal/gantt/         → Gantt Operativo, Gantt SC
-/internal/seller-center/ → Dashboard, Maqueta
-/internal/estrategia/    → Marco, Governance, Onboarding
-/internal/simuladores/   → Simulador Económico</div></div>
-      <div class="rt-row"><div class="rt-key">Public</div><div class="rt-val">/public/formularios/     → Calificación, Relevamiento
-/public/presentaciones/  → Presentación Seller
-/public/simuladores/     → Simulador Seller</div></div>
+      <div class="rt-row"><div class="rt-key">Inicio</div><div class="rt-val"><a href="../index.html">/index.html</a></div></div>
+      <div class="rt-row"><div class="rt-key">Internal</div><div class="rt-val"><a href="./backlog/gestion-sellers.html">/internal/backlog/</a>       → Gestión de Sellers, Backlog
+<a href="./gantt/gantt-operativo.html">/internal/gantt/</a>         → Gantt Operativo, Gantt SC
+<a href="./seller-center/index.html">/internal/seller-center/</a> → Dashboard, Maqueta
+<a href="./estrategia/proyecto-marketplace.html">/internal/estrategia/</a>    → Marco, Governance, Onboarding
+<a href="./simuladores/simulador-economico.html">/internal/simuladores/</a>   → Simulador Económico</div></div>
+      <div class="rt-row"><div class="rt-key">Public</div><div class="rt-val"><a href="../public/formularios/formulario-calificacion.html">/public/formularios/</a>     → Calificación, Relevamiento
+<a href="../public/presentaciones/presentacion-seller.html">/public/presentaciones/</a>  → Presentación Seller
+<a href="../public/simuladores/simulador-seller.html">/public/simuladores/</a>     → Simulador Seller</div></div>
     </div>
     <div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:10px">Recorrido recomendado</div>
     <div class="route-flow">
@@ -841,7 +864,7 @@ function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<
 function renderAllGrid() {
   const grid = document.getElementById('allGrid');
   grid.innerHTML = RESOURCES.map(r => `
-    <a class="all-card" href="${esc(toUrl(r.route))}" style="--accent:${r.accent}" data-label="${esc((r.label+' '+r.access+' '+r.key).toLowerCase())}">
+    <a class="all-card" href="${esc(toUrl(r.route))}" style="--accent:${r.accent}" data-label="${esc((r.label+' '+r.access+' '+r.key+' '+r.desc).toLowerCase())}">
       <div class="ac-top">
         <span class="ac-ico">${esc(r.icon)}</span>
         <span class="ac-access${r.access==='Seller'?' pub':''}">${esc(r.access)}</span>
@@ -855,9 +878,14 @@ function renderAllGrid() {
 
 function filterResources() {
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  document.querySelectorAll('.all-card').forEach(c =>
-    c.classList.toggle('hidden', !!q && !c.dataset.label.includes(q))
-  );
+  const cards = [...document.querySelectorAll('.all-card')];
+  let visible = 0;
+  cards.forEach(c => {
+    const match = !q || c.dataset.label.includes(q);
+    c.classList.toggle('hidden', !match);
+    if (match) visible += 1;
+  });
+  document.getElementById('emptyState').classList.toggle('visible', visible === 0);
 }
 
 renderAllGrid();

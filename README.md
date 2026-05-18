@@ -48,6 +48,7 @@ Marketplace Portal V1 queda estable y listo para release:
 - `tokens.css` validado en paginas internas seleccionadas;
 - aliases legacy implementados para todos los HTML versionados migrados;
 - `sporting-marketplace_hub_v29.html` quedo intacto durante V1 y desde Etapa 9C funciona como alias al hub operativo oficial.
+- `internal/hub-operativo.html` recibio mejoras post-V1 acotadas en Etapa 10B: regreso al portal, buscador mejorado, aviso de `seller_id`, mapa clickeable y ajuste mobile minimo.
 
 Validacion previa a release V1:
 

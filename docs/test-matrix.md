@@ -75,6 +75,32 @@ Checklist especifico 9A:
 - Validar rutas publicas sin `seller_id` y confirmar comportamiento esperado.
 - Confirmar que los links hacia legacy siguen funcionando mientras no existan redirects.
 
+## Etapa 10B: smoke test mejoras Hub Operativo
+
+Alcance:
+
+- Validar mejoras acotadas en `internal/hub-operativo.html`.
+- No ejecutar submits reales.
+- No probar formularios con escritura real.
+- No modificar ni validar cambios funcionales en paginas destino.
+
+| Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/internal/hub-operativo.html` | Interna operativa | Validar mejoras 10B | Topbar, link Volver al Portal, aviso seller_id, mapa clickeable, estado sin resultados | Buscador con/sin coincidencias, links del mapa, links publicos base | Rutas locales `internal/`, `public/`, `../index.html` | Sin errores JS ni 404 locales | Mejoras operativas sin regresion visual ni funcional | Pendiente | Pendiente | No tocar formularios, simuladores, Backlog, Gestion ni Apps Script |
+| `/internal/hub-operativo.html` en mobile | Interna operativa responsive | Validar topbar sin overflow | Botones visibles sin solaparse; topbar estable | Link Volver al Portal y CTA principal operativos | CSS inline local | Sin errores JS | Topbar usable en viewport mobile | Pendiente | Pendiente | Ajuste minimo, sin rediseño |
+
+Checklist especifico:
+
+- Abrir `internal/hub-operativo.html`.
+- Click en "Volver al Portal" y confirmar que abre `../index.html`.
+- Buscar un termino con coincidencias, por ejemplo `gantt`.
+- Buscar un termino sin coincidencias y confirmar estado "Sin resultados".
+- Abrir al menos un link del mapa `Internal`.
+- Abrir al menos un link del mapa `Public`.
+- Confirmar que los links publicos siguen sin `seller_id` hardcodeado.
+- Validar visualmente la topbar en mobile.
+- Confirmar sin 404 criticos.
+
 ## Checklist de datos
 
 - Confirmar carga de CSV de sellers.
