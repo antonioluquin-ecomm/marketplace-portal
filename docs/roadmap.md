@@ -808,10 +808,10 @@ Matriz inicial pendiente:
 
 | Origen legacy | Destino nuevo | Estado recomendado | Riesgo |
 |---|---|---|---|
-| `proceso-onboarding_v4.html` | `internal/estrategia/proceso-onboarding.html` | Pendiente | Bajo |
-| `modelo-integracion_v5.html` | `internal/estrategia/modelo-integracion.html` | Pendiente | Bajo |
-| `modelo-economico_v2.html` | `internal/estrategia/modelo-economico.html` | Pendiente | Bajo/Medio |
-| `proyecto-marketplace_v3.html` | `internal/estrategia/proyecto-marketplace.html` | Pendiente | Bajo/Medio |
+| `proceso-onboarding_v4.html` | `internal/estrategia/proceso-onboarding.html` | Alias implementado en 7D | Bajo |
+| `modelo-integracion_v5.html` | `internal/estrategia/modelo-integracion.html` | Alias implementado en 7D | Bajo |
+| `modelo-economico_v2.html` | `internal/estrategia/modelo-economico.html` | Alias implementado en 7D | Bajo/Medio |
+| `proyecto-marketplace_v3.html` | `internal/estrategia/proyecto-marketplace.html` | Alias implementado en 7D | Bajo/Medio |
 | `seller-center_v2.html` | `internal/seller-center/index.html` | Pendiente | Medio |
 | `maqueta-seller-center_v2.html` | `internal/seller-center/maqueta-seller-center.html` | Pendiente / evaluar exclusion | Medio |
 | `gantt-seller-center_v2.html` | `internal/gantt/gantt-seller-center.html` | Pendiente | Medio |
@@ -838,3 +838,33 @@ Smoke test requerido:
 - abrir `governance_v3.html?test=1#riesgo` y confirmar preservacion de query/hash;
 - confirmar que no hay 404 ni errores de consola;
 - confirmar que el enlace manual resuelve al mismo destino.
+
+## Etapa 7D: aliases legacy para paginas informativas de estrategia
+
+Estado: implementado, pendiente smoke test manual.
+
+Objetivo: extender el patron validado en el piloto Governance al resto de paginas informativas de `internal/estrategia/`, sin tocar paginas criticas ni mover archivos a `legacy/`.
+
+Aliases implementados:
+
+| Origen legacy | Destino nuevo | Estado | Riesgo |
+|---|---|---|---|
+| `proceso-onboarding_v4.html` | `internal/estrategia/proceso-onboarding.html` | Implementado | Bajo |
+| `modelo-integracion_v5.html` | `internal/estrategia/modelo-integracion.html` | Implementado | Bajo |
+| `modelo-economico_v2.html` | `internal/estrategia/modelo-economico.html` | Implementado | Bajo/Medio |
+| `proyecto-marketplace_v3.html` | `internal/estrategia/proyecto-marketplace.html` | Implementado | Bajo/Medio |
+
+Alcance excluido:
+
+- `governance_v3.html` no fue modificado en esta etapa;
+- no se movieron archivos a `legacy/`;
+- no se tocaron paginas nuevas en `internal/`;
+- no se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Seller Center, Apps Script, `config.js`, `assets/js/config.js`, CSS compartido ni `sporting-marketplace_hub_v29.html`.
+
+Smoke test requerido:
+
+- abrir cada archivo legacy convertido en alias;
+- confirmar redireccion a su ruta nueva;
+- abrir cada alias con `?test=1#riesgo` y confirmar preservacion de query/hash;
+- confirmar que no hay 404 ni errores de consola;
+- confirmar que el enlace manual apunta al destino correcto.

@@ -113,6 +113,36 @@ Checklist especifico:
 - Confirmar que el enlace manual apunta al mismo destino con query/hash cuando JavaScript alcanza a actualizarlo.
 - Confirmar que no se modificaron otros aliases legacy.
 
+## Etapa 7D: smoke test aliases legacy estrategia
+
+Alcance:
+
+- Validar solo aliases legacy informativos del grupo `internal/estrategia/`.
+- No tocar `governance_v3.html`.
+- No mover archivos a `legacy/`.
+- No probar formularios, simuladores, Backlog, Gestion de Sellers, Seller Center ni Apps Script.
+
+| Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/proceso-onboarding_v4.html` | Alias legacy | Confirmar redireccion al Onboarding migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/estrategia/proceso-onboarding.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Alias informativo de bajo riesgo |
+| `/modelo-integracion_v5.html` | Alias legacy | Confirmar redireccion al Modelo de Integracion migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/estrategia/modelo-integracion.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Alias informativo de bajo riesgo |
+| `/modelo-economico_v2.html` | Alias legacy | Confirmar redireccion al Modelo Economico migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/estrategia/modelo-economico.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Validar links posteriores al simulador interno desde destino |
+| `/proyecto-marketplace_v3.html` | Alias legacy | Confirmar redireccion al Proyecto Marketplace migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/estrategia/proyecto-marketplace.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Validar links posteriores a Gantt/Backlog desde destino |
+| `/proceso-onboarding_v4.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 4 aliases |
+| `/modelo-integracion_v5.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 4 aliases |
+| `/modelo-economico_v2.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 4 aliases |
+| `/proyecto-marketplace_v3.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 4 aliases |
+
+Checklist especifico:
+
+- Abrir cada archivo legacy desde raiz.
+- Confirmar que el destino final es la ruta correspondiente en `internal/estrategia/`.
+- Abrir cada archivo legacy con `?test=1#riesgo`.
+- Confirmar que query string y hash se preservan.
+- Revisar Network/Console para confirmar ausencia de 404 locales.
+- Confirmar que el enlace manual apunta al mismo destino con query/hash cuando JavaScript alcanza a actualizarlo.
+- Confirmar que no se modificaron aliases de paginas criticas.
+
 ## Registro de ejecucion
 
 Usar esta seccion para anotar resultados reales despues de ejecutar el smoke test manual.
