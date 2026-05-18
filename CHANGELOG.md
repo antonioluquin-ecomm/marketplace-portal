@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 22B revision UX/copy Gestion Sellers
+
+Tipo de cambio: contenido estatico en pantalla critica.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles estaticos en `internal/backlog/gestion-sellers.html`.
+- Mejorada claridad de hero, instrucciones, preview, labels, ayudas y placeholders seguros.
+- Sin cambios en submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, generacion/reserva de IDs, localStorage, validaciones de negocio, `name/id`, valores de campos, CSV, config, rutas ni links publicos.
+
 ## 2026-05-18 - Etapa 22A revision UX/contenido Backlog Sellers
 
 Tipo de cambio: contenido/UX visual menor.

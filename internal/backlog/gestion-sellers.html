@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestión de Sellers v6 | Sporting Marketplace</title>
+  <title>Gestión de Sellers | Sporting Marketplace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet" />
@@ -26,23 +26,23 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><div class="logo">SPORTING <span>MARKETPLACE</span></div><div class="crumb">Gestión de Sellers · v5 final</div></div>
+    <div class="brand"><div class="logo">SPORTING <span>MARKETPLACE</span></div><div class="crumb">Alta y edición operativa</div></div>
     <div class="top-actions"><a class="btn-top" href="../backlog/backlog-sellers.html">← Volver al backlog</a><div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Cargando…</span></div></div>
   </header>
 
   <main class="wrap">
     <section class="hero">
       <div class="panel">
-        <div class="eyebrow">Alta y seguimiento</div>
+        <div class="eyebrow">Gestión operativa</div>
         <h1>Gestión de <span>Sellers</span></h1>
-        <p class="lead">Usá esta pantalla para crear un seller potencial, completar su información inicial y dejarlo disponible para el backlog, los formularios y el seguimiento operativo.</p>
-        <div class="note">El ID del seller se genera automáticamente. Las fechas de alta y actualización las completa el sistema. Los logos y links públicos se calculan solos a partir del ID.</div>
+        <p class="lead">Usá esta pantalla para crear o actualizar la ficha inicial de un seller y dejarla disponible para el Backlog, los formularios públicos y el seguimiento operativo.</p>
+        <div class="note">El ID del seller se genera automáticamente. Las fechas de alta y actualización las completa el sistema. Los logos, la vista previa y los links públicos se calculan a partir del ID.</div>
       </div>
       <div class="panel soft">
         <h2>Cómo usar esta pantalla</h2>
-        <p class="lead" style="font-size:13px">Para un seller nuevo, completá solo los datos iniciales disponibles. Si el seller ya existe, seleccionalo para editar su ficha. La calificación y el relevamiento completarán luego los datos técnicos faltantes.</p>
-        <div class="section" style="padding-bottom:0"><div class="section-title">Seller existente</div>
-          <div class="field"><label>Editar un seller ya creado <small>opcional</small></label><select id="existingSeller" class="sel" onchange="loadSelectedSeller()"><option value="">Cargando sellers…</option></select></div>
+        <p class="lead" style="font-size:13px">Para un seller nuevo, completá solo la información inicial disponible. Si el seller ya existe, seleccionalo para editar su ficha sin cambiar el ID. La calificación y el relevamiento completan luego los datos técnicos faltantes.</p>
+        <div class="section" style="padding-bottom:0"><div class="section-title">Buscar seller existente</div>
+          <div class="field"><label>Editar una ficha ya creada <small>opcional</small></label><select id="existingSeller" class="sel" onchange="loadSelectedSeller()"><option value="">Cargando sellers…</option></select></div>
         </div>
       </div>
     </section>
@@ -50,11 +50,11 @@
     <section class="grid-layout">
       <aside class="side">
         <div class="preview-card">
-          <div class="preview-head"><div class="logo-box" id="logoPreview"><span class="logo-fallback">S</span></div><div><div id="pvName" class="preview-name">Nuevo seller</div><div id="pvMeta" class="preview-meta">Sporting Marketplace</div></div></div>
+          <div class="preview-head"><div class="logo-box" id="logoPreview"><span class="logo-fallback">S</span></div><div><div id="pvName" class="preview-name">Nuevo seller</div><div id="pvMeta" class="preview-meta">Marketplace Sporting</div></div></div>
           <div class="preview-body">
             <div class="kv"><span>ID del seller</span><span id="pvId">—</span></div>
             <div class="kv"><span>Empresa / grupo</span><span id="pvGrupo">—</span></div>
-            <div class="kv"><span>Marca / seller</span><span id="pvMarca">—</span></div>
+            <div class="kv"><span>Marca / seller operativo</span><span id="pvMarca">—</span></div>
             <div class="kv"><span>Modelo estimado</span><span id="pvModelo">—</span></div>
             <div class="kv"><span>Estado</span><span id="pvEstado">identificados</span></div>
             <div class="kv"><span>Activo</span><span id="pvActivo">SI</span></div>
@@ -66,7 +66,7 @@
           <div class="link-row"><b>Formulario relevamiento</b><button onclick="copyLink('relevamiento')">Copiar</button></div>
           <div class="link-row"><b>Simulador seller</b><button onclick="copyLink('simulador')">Copiar</button></div>
         </div>
-        <div class="msg-box"><div class="msg-title">Mensaje primer contacto</div><div class="msg-preview" id="messagePreview"></div><div class="actions"><button class="btn secondary" onclick="copyFirstContactMessage()" type="button">Copiar mensaje</button></div></div>
+        <div class="msg-box"><div class="msg-title">Mensaje sugerido de primer contacto</div><div class="msg-preview" id="messagePreview"></div><div class="actions"><button class="btn secondary" onclick="copyFirstContactMessage()" type="button">Copiar mensaje</button></div></div>
       </aside>
 
       <div class="panel">
@@ -76,18 +76,18 @@
           <div class="section">
             <div class="section-title">1. Datos principales</div>
             <div class="form-grid">
-              <div class="field"><label>ID generado automáticamente</label><input id="seller_id" name="seller_id" class="inp readonly" placeholder="Se genera al crear" autocomplete="off" readonly /><div class="help">Se asigna con la secuencia SPT-001, SPT-002, etc. Este ID conecta sellers, calificaciones y relevamientos.</div></div>
-              <div class="field"><label class="req">Nombre visible del seller</label><input id="seller_nombre" name="seller_nombre" class="inp" placeholder="Ej.: Puma / Asics (Dass)" /></div>
-              <div class="field"><label>Empresa / grupo</label><input id="empresa_grupo" name="empresa_grupo" class="inp" placeholder="Ej.: Grupo Dass / Bisa / Puma" /></div>
-              <div class="field"><label>Marca / seller operativo</label><input id="marca_seller_operativo" name="marca_seller_operativo" class="inp" placeholder="Ej.: Asics / Fila / Under Armour" /></div>
+              <div class="field"><label>ID generado automáticamente</label><input id="seller_id" name="seller_id" class="inp readonly" placeholder="Se genera automáticamente" autocomplete="off" readonly /><div class="help">Se asigna con la secuencia SPT-001, SPT-002, etc. Este ID conecta Backlog, calificación, relevamiento y links públicos.</div></div>
+              <div class="field"><label class="req">Nombre visible del seller</label><input id="seller_nombre" name="seller_nombre" class="inp" placeholder="Ej.: Puma / Asics - Grupo Dass" /></div>
+              <div class="field"><label>Empresa o grupo comercial</label><input id="empresa_grupo" name="empresa_grupo" class="inp" placeholder="Ej.: Grupo Dass / Bisa / Puma" /></div>
+              <div class="field"><label>Marca o seller operativo</label><input id="marca_seller_operativo" name="marca_seller_operativo" class="inp" placeholder="Ej.: Asics / Fila / Under Armour" /></div>
               <div class="field full"><label>Sitio web del seller</label><input id="url_seller" name="url_seller" class="inp" placeholder="https://..." /></div>
             </div>
           </div>
 
           <div class="section">
-            <div class="section-title">2. Información inicial estimada</div>
+            <div class="section-title">2. Perfil comercial e integración</div>
             <div class="form-grid">
-              <div class="field"><label>Categoría estimada</label><input id="categoria_estimada" name="categoria_estimada" class="inp" placeholder="Ej.: Calzado · Indumentaria · Accesorios" /></div>
+              <div class="field"><label>Categoría principal estimada</label><input id="categoria_estimada" name="categoria_estimada" class="inp" placeholder="Ej.: Calzado · Indumentaria · Accesorios" /></div>
               <div class="field"><label>Plataforma estimada</label><select id="plataforma_estimada" name="plataforma_estimada" class="sel"><option value="">A definir</option><option>VTEX</option><option>Tiendanube</option><option>WordPress</option><option>Shopify</option><option>WooCommerce</option><option>Magento / Adobe Commerce</option><option>SalesForceCommerce</option><option>ERP / Sistema propio</option><option>Sin plataforma</option><option>Otro</option></select></div>
               <div class="field"><label>Modelo de integración estimado</label><select id="modelo_integracion_estimado" name="modelo_integracion_estimado" class="sel"><option value="">A definir</option><option>VTEX ↔ VTEX</option><option>API Seller Center</option><option>Híbrido / Transitorio</option><option>Externo → Seller Center</option><option>Externo → PIM → VTEX</option></select></div>
               <div class="field"><label>Sitio objetivo</label><select id="sitio_objetivo" name="sitio_objetivo" class="sel"><option>Sporting</option><option>Woker</option><option>Ambos</option></select></div>
@@ -97,21 +97,21 @@
           <div class="section">
             <div class="section-title">3. Gestión operativa</div>
             <div class="form-grid">
-              <div class="field"><label>Estado de gestión</label><select id="estado_pipeline" name="estado_pipeline" class="sel"><option value="identificados">Identificado</option><option value="contactos">Contactado</option><option value="evaluación">En evaluación</option><option value="en relevamiento">En relevamiento</option><option value="aprobado para integrar">Aprobado para integrar</option><option value="en integración">En integración</option><option value="live">Live</option><option value="pausado">Pausado</option><option value="descartado">Descartado</option></select></div>
+              <div class="field"><label>Estado en el pipeline</label><select id="estado_pipeline" name="estado_pipeline" class="sel"><option value="identificados">Identificado</option><option value="contactos">Contactado</option><option value="evaluación">En evaluación</option><option value="en relevamiento">En relevamiento</option><option value="aprobado para integrar">Aprobado para integrar</option><option value="en integración">En integración</option><option value="live">Live</option><option value="pausado">Pausado</option><option value="descartado">Descartado</option></select></div>
               <div class="field"><label>Prioridad</label><select id="prioridad" name="prioridad" class="sel"><option>Media</option><option>Alta</option><option>Baja</option></select></div>
-              <div class="field"><label class="req">Creado por / responsable</label><input id="responsable" name="responsable" class="inp" placeholder="Ej.: Gabriel Luna" /><div class="help">Ingresar el nombre de la persona que crea o gestiona el seller.</div></div>
+              <div class="field"><label class="req">Responsable interno</label><input id="responsable" name="responsable" class="inp" placeholder="Ej.: Gabriel Luna" /><div class="help">Ingresar la persona responsable de crear o gestionar esta ficha.</div></div>
               <div class="field"><label>¿Sigue activo?</label><select id="activo" name="activo" class="sel"><option>SI</option><option>NO</option></select></div>
-              <div class="field full"><label>Próximo paso</label><input id="proximo_paso" name="proximo_paso" class="inp" placeholder="Ej.: Contactar seller y validar interés comercial" /></div>
+              <div class="field full"><label>Próximo paso operativo</label><input id="proximo_paso" name="proximo_paso" class="inp" placeholder="Ej.: Contactar seller y validar interés comercial" /></div>
             </div>
           </div>
 
           <div class="section">
             <div class="section-title">4. Contacto</div>
             <div class="form-grid">
-              <div class="field"><label>Nombre del contacto</label><input id="contacto_nombre" name="contacto_nombre" class="inp" /></div>
-              <div class="field"><label>Email del contacto</label><input id="contacto_email" name="contacto_email" class="inp" type="email" /></div>
-              <div class="field"><label>Teléfono / WhatsApp</label><input id="contacto_tel" name="contacto_tel" class="inp" /></div>
-              <div class="field full"><label>Observaciones internas</label><textarea id="observaciones" name="observaciones" placeholder="Notas internas para la gestión del seller"></textarea></div>
+              <div class="field"><label>Nombre del contacto principal</label><input id="contacto_nombre" name="contacto_nombre" class="inp" /></div>
+              <div class="field"><label>Email del contacto principal</label><input id="contacto_email" name="contacto_email" class="inp" type="email" /></div>
+              <div class="field"><label>Teléfono o WhatsApp</label><input id="contacto_tel" name="contacto_tel" class="inp" /></div>
+              <div class="field full"><label>Observaciones internas</label><textarea id="observaciones" name="observaciones" placeholder="Notas internas para seguimiento comercial, integración o próximos pasos"></textarea></div>
             </div>
           </div>
 

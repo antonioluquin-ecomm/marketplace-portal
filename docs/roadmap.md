@@ -1805,3 +1805,13 @@ Resultado:
 - Revisado `internal/backlog/backlog-sellers.html`.
 - Ajustados textos visibles estaticos para mejorar lectura operativa de topbar, buscador, filtros, orden, KPIs y estado inicial de carga.
 - No se modificaron JS funcional, scripts, fetch, CSV, filtros funcionales, render dinamico, localStorage, datos, CSS estructural, rutas, assets ni config.
+
+## Etapa 22B: revision UX/copy Gestion Sellers
+
+Estado: completada.
+
+Resultado:
+
+- Revisado `internal/backlog/gestion-sellers.html`.
+- Ajustados textos visibles estaticos para mejorar claridad de alta/edicion, instrucciones, preview, labels, ayudas y placeholders seguros.
+- No se modificaron submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, generacion/reserva de IDs, localStorage, validaciones de negocio, `name/id`, valores de campos, CSV, config, rutas ni links publicos.
