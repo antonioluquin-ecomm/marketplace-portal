@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 22E cierre liviano UX/copy operativo
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque 22A-22D de mejoras UX/copy operativo: Backlog Sellers, Gestion Sellers, Simulador Economico interno, Gantt Operativo y Gantt Seller Center.
+- Confirmada la decision de no tocar logica funcional, JS, CSV, submit, payloads, formulas, rutas ni config durante este bloque.
+- Proximo paso recomendado: push y smoke test liviano de paginas operativas; luego avanzar solo con bugs reales o mejoras funcionales concretas.
+
 ## 2026-05-18 - Etapa 22D revision UX/copy Gantt interno
 
 Tipo de cambio: contenido estatico en paginas criticas.

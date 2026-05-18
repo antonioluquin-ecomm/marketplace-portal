@@ -1835,3 +1835,17 @@ Resultado:
 - Revisados `internal/gantt/gantt-operativo.html` y `internal/gantt/gantt-seller-center.html`.
 - Ajustados textos visibles estaticos para mejorar claridad de contexto operativo, titulos, subtitulos, ayudas y estados iniciales de carga.
 - No se modificaron JS funcional, scripts, fetch, CSV, timeline, filtros funcionales, render dinamico, fechas/datos, ids/classes, name/value, rutas, href/src ni config.
+
+## Etapa 22E: cierre liviano UX/copy operativo
+
+Estado: completada.
+
+Resultado:
+
+- Cerrado el bloque 22A-22D de mejoras UX/copy operativo.
+- 22A: Backlog Sellers, microcopy y labels visibles.
+- 22B: Gestion Sellers, copy estatico sin tocar submit.
+- 22C: Simulador Economico interno, copy estatico sin tocar formulas.
+- 22D: Gantt Operativo y Gantt Seller Center, copy estatico sin tocar timeline, CSV ni JS.
+- Decision vigente: no tocar logica funcional, JS, CSV, submit, payloads, formulas, rutas ni config dentro de este bloque.
+- Proximo paso recomendado: push y smoke test liviano de paginas operativas; luego avanzar solo con bugs reales o mejoras funcionales concretas.
