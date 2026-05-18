@@ -1781,3 +1781,17 @@ Resultado:
 - 20F: textos visibles normalizados.
 - Decision vigente: no tocar rutas, JS, CSS, formularios, submit, endpoints ni logica dentro de este bloque.
 - Proximo paso recomendado: push y smoke test liviano en GitHub Pages; luego avanzar solo con mejoras funcionales o contenido pendiente concreto.
+
+## Etapa 21B: correccion pctSec en Formulario de Relevamiento
+
+Estado: completada, pendiente smoke test 21C.
+
+Resultado:
+
+- Corregido `ReferenceError: pctSec is not defined` en `public/formularios/formulario-relevamiento.html`.
+- Cambio limitado al bloque `updateProgress`.
+- No se modificaron submit, endpoint, payload, `seller_id`, Apps Script, validaciones de negocio, nombres/ids de campos, rutas ni config.
+
+Pendiente:
+
+- 21C: smoke test sin submit real del Formulario de Relevamiento con `seller_id=SPT-001`.

@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 21B correccion pctSec en Relevamiento
+
+Tipo de cambio: correccion critica acotada.
+
+Estado: completado, smoke test 21C pendiente.
+
+Resultado:
+- Corregido `ReferenceError: pctSec is not defined` en `public/formularios/formulario-relevamiento.html`.
+- El calculo de progreso por seccion queda declarado antes de actualizar el estado visual del indicador.
+- Sin cambios en submit, endpoint, payload, `seller_id`, Apps Script, validaciones de negocio, nombres/ids de campos, rutas ni config.
+
 ## 2026-05-18 - Etapa 20G cierre liviano revision de contenido
 
 Tipo de cambio: documentacion.

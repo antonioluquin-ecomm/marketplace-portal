@@ -3181,6 +3181,8 @@
           const secDone = secFields.filter(
             (el) => String(el.value || "").trim() !== "",
           ).length;
+          const pctSec =
+            secTotal > 0 ? Math.round((secDone / secTotal) * 100) : 0;
           const dot = document.getElementById("dot-sec-" + secNum);
           // Update navigation pill state
           const pill = document.getElementById("dot-sec-" + secNum);
@@ -3205,7 +3207,6 @@
             }
           }
           if (compEl && secTotal > 0) {
-            const pctSec = Math.round((secDone / secTotal) * 100);
             compEl.textContent = pctSec + "%";
             compEl.className =
               "section-completion" + (pctSec === 100 ? " complete" : "");
