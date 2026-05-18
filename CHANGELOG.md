@@ -4,6 +4,17 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 19A handoff corto estado actual
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Actualizado `docs/handoff-post-v1.md` como handoff corto post-etapas 14 a 18.
+- Resumido estado actual, cambios recientes, decisiones vigentes, metodologia operativa y proximos pasos.
+- Sin cambios funcionales, HTML, CSS, JS, Apps Script, config, assets, aliases ni legacy.
+
 ## 2026-05-18 - Etapa 18B cierre minimo de auditoria estructural
 
 Tipo de cambio: documentacion.

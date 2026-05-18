@@ -1,82 +1,57 @@
-# Handoff Post-V1 - Marketplace Portal
+# Handoff corto post-V1 - Marketplace Portal
 
 Fecha: 2026-05-18
 
 ## Estado actual
 
+- V1 y post-V1 estan cerrados.
 - `index.html` es la portada institucional.
 - `internal/hub-operativo.html` es el Hub Operativo oficial.
-- Los HTML versionados en raiz funcionan como aliases de compatibilidad.
-- `sporting-marketplace_hub_v29.html` redirige a `internal/hub-operativo.html`.
-- `legacy/root-html-v1/` existe, pero queda reservado para snapshots historicos futuros.
-- Las paginas publicas seller-facing se mantienen independientes de `assets/css/tokens.css`.
-- Smoke test post-push en GitHub Pages: OK.
+- `sporting-marketplace_hub_v29.html` funciona como alias hacia `internal/hub-operativo.html`.
+- Los HTML versionados en raiz funcionan como aliases activos de compatibilidad.
+- `legacy/root-html-v1/` queda reservado para snapshots historicos futuros.
+- La auditoria estructural 18A cerro sin links locales rotos detectados y sin limpieza fisica.
 
-## Rutas principales
+## Cambios recientes
 
-- Portal institucional: `/index.html`
-- Hub operativo: `/internal/hub-operativo.html`
-- Backlog: `/internal/backlog/backlog-sellers.html`
-- Gestion Sellers: `/internal/backlog/gestion-sellers.html`
-- Gantt Operativo: `/internal/gantt/gantt-operativo.html`
-- Seller Center: `/internal/seller-center/index.html`
-- Estrategia: `/internal/estrategia/`
-- Formularios publicos: `/public/formularios/`
-- Presentacion seller: `/public/presentaciones/presentacion-seller.html`
-- Simulador seller: `/public/simuladores/simulador-seller.html`
+- `assets/css/internal-components.css` fue creado y aplicado a paginas internas autorizadas.
+- La limpieza CSS se aplico solo en paginas informativas de estrategia.
+- Las paginas internas operativas quedaron excluidas de limpieza CSS por relacion riesgo/beneficio.
+- `assets/js/internal-navigation.js` fue creado y aplicado solo a paginas informativas seleccionadas.
+- No se extrajo JS operativo.
+- Las paginas publicas seller-facing siguen independientes del CSS interno compartido.
 
-## Decisiones tomadas
+## Decisiones vigentes
 
-- Mantener aliases en raiz como compatibility layer.
-- No mover aliases a `legacy/`.
-- Reservar `legacy/root-html-v1/` para snapshots historicos, no para aliases actuales.
-- No aplicar `tokens.css` a paginas publicas seller-facing.
-- Cualquier `public-tokens.css` futuro requiere auditoria propia.
-- No extraer CSS/JS sin auditoria y smoke test por grupo.
+- No mover aliases activos de raiz a `legacy/`.
+- No limpiar `assets/logos/` ni `Logos/` todavia.
+- No tocar `config.js` ni `assets/js/config.js`.
+- No tocar `Apps_script_v5.js`.
+- No tocar formularios, submit, endpoints, payloads, simuladores, Apps Script ni datos reales sin etapa critica.
+- Revisar manualmente en el futuro `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
 
-## Que no tocar
+## Metodologia vigente
 
-- Formularios publicos, submit, payloads, endpoints y Apps Script.
-- Gestion de Sellers y su escritura real.
-- Simuladores y formulas/calculos/tarifas/overrides.
-- `config.js` y `assets/js/config.js`.
-- Aliases de raiz, salvo etapa explicita.
-- `legacy/`, salvo decision explicita.
-
-## Riesgos residuales
-
-- Formularios y Gestion escriben datos reales via Apps Script.
-- `formulario-relevamiento.html` mantiene riesgo pendiente `pctSec`.
-- Paginas operativas dependen de CSV/Google Sheets.
-- Raiz contiene aliases necesarios para URLs historicas.
-- CSS/JS inline sigue como deuda controlada.
-- Validacion productiva OK, pero formularios y Gestion no fueron probados con submit real.
+- Modo rapido por defecto: implementacion controlada, validacion minima y commit manual.
+- Auditoria previa solo para cambios criticos, operativos, legacy o arquitectura.
+- Documentar solo cierres grandes, decisiones relevantes, errores, releases o cambios criticos.
+- Comandos preferidos compatibles con PowerShell.
+- Validacion minima: `git status --short` y `git diff --name-only`.
+- El usuario ejecuta commits manualmente.
 
 ## Proximos pasos posibles
 
-1. Revisar diff completo si se abre una nueva etapa.
-2. Auditar extraccion CSS/JS por grupo, empezando por paginas internas informativas.
-3. Auditar `public-tokens.css` solo si se busca consistencia publica.
-4. Crear snapshots historicos en `legacy/root-html-v1/` solo si hay decision explicita.
-5. Planificar prueba con seller test antes de cualquier submit real.
+- Smoke test post-push general si hubo cambios acumulados.
+- Revisar manualmente `.xlsx` y `Mapa del Hub.docx` solo si se decide ordenar documentacion fuente.
+- Evitar nuevas refactorizaciones CSS/JS salvo necesidad real.
+- Avanzar sobre contenido o funcionalidades pendientes del Marketplace Portal.
 
-## Validacion productiva
+## Contexto minimo para nueva sesion
 
-Etapa 13A/13B: smoke test post-push en GitHub Pages con resultado OK.
+Leer solo:
 
-- Portada institucional carga.
-- Hub Operativo carga.
-- Alias del hub legacy redirige correctamente.
-- Query string y hash se preservan.
-- Aliases publicos preservan `seller_id=SPT-001`.
-- Sin 404 criticos.
-- Sin submit real en formularios ni Gestion de Sellers.
-
-## Recomendaciones para IA y tokens
-
-- Empezar cada sesion leyendo solo: `README.md`, `docs/roadmap.md`, `docs/handoff-post-v1.md`, `CHANGELOG.md`.
-- Pedir una sola etapa por turno.
-- Indicar siempre modo: auditoria, documental, implementacion o validacion.
-- Repetir invariantes criticos: no submit, no Apps Script, no endpoints, no mover aliases.
-- Evitar releer todas las paginas publicas salvo que la etapa las afecte.
-- Usar `git status --short` y `git diff --name-only` como validacion minima.
+- `README.md`
+- `docs/handoff-post-v1.md`
+- `docs/roadmap.md`
+- `CHANGELOG.md`
+- `PROJECT_WORKFLOW.md`

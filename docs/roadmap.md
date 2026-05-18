@@ -1686,3 +1686,13 @@ Revision futura:
 - `MarketPlace Sporting - Sellers (BD).xlsx`;
 - `Mapa del Hub.docx`;
 - posible consolidacion futura de `Logos/`.
+
+## Etapa 19A: handoff corto del estado actual
+
+Estado: completada.
+
+Resultado:
+
+- `docs/handoff-post-v1.md` actualizado como resumen corto para retomar el proyecto sin repetir contexto largo.
+- Incluye estado V1/post-V1, aliases, Hub Operativo, cambios CSS/JS recientes, decisiones vigentes, metodologia rapida y proximos pasos posibles.
+- No se modificaron archivos funcionales.
