@@ -16,6 +16,7 @@
 - 4. Flujo recomendado de trabajo con IA.
 - 5. Manejo de contexto y documentacion institucional.
 - 6. Optimizacion de consumo de tokens.
+- 6.1 Configuracion recomendada de IA por etapa.
 - 7. Rol del equipo humano.
 - 8. Estructura recomendada de proyectos.
 - 9. Estado del proyecto y nivel de madurez.
@@ -330,6 +331,30 @@ Auditar la pantalla principal sin modificar archivos.
 Evaluar claridad para usuarios no tecnicos, redundancias, riesgos y mejoras priorizadas.
 Devolver quick wins, cambios de mediano impacto y recomendaciones a postergar.
 ```
+
+## 6.1 Configuracion recomendada de IA por etapa
+
+Antes de cada etapa o bloque de trabajo, indicar explicitamente la configuracion recomendada para optimizar tokens y reducir riesgo:
+
+- Codex: Fast activado/desactivado y nivel de inteligencia sugerido.
+- Claude Code: modo normal para tareas simples; razonamiento mas profundo solo para debugging, refactor critico o cambios de alto impacto.
+- Claude Cowork: usar solo cuando haga falta trabajo asistido mas amplio o coordinacion, porque puede consumir mas tokens.
+
+Criterio por tipo de tarea:
+
+| Riesgo | Ejemplos | Configuracion sugerida |
+|---|---|---|
+| Bajo | Textos visibles, documentacion, labels, copy, validaciones git, cambios estaticos acotados | Codex: Fast activado + Inteligencia Baja o Media. Claude Code: normal |
+| Medio | HTML con JS interno sin tocar scripts, CSS menor, navegacion visual, paginas internas con estructura sensible | Codex: Fast activado + Inteligencia Media. Claude Code: normal o analisis medio |
+| Alto | JS funcional, refactor, rutas complejas, errores, render dinamico, Backlog/Gestion/Gantt, simuladores | Codex: Fast desactivado + Inteligencia Alta. Claude Code: razonamiento mas profundo |
+| Critico | Apps Script, config, formularios, submit, endpoints, payloads, logica economica, datos reales | Codex: Fast desactivado + Inteligencia Alta o Extremadamente Alta. Claude Code: contexto acotado y validacion estricta |
+
+Reglas operativas:
+
+- Si una tarea empieza en Fast y Codex propone tocar logica, rutas, JS, CSS, submit o config fuera de alcance, detener y subir configuracion.
+- Si el chat acumula mucho contexto, abrir nuevo chat y pegar handoff corto.
+- Mantener prompts compactos con archivos permitidos/prohibidos.
+- Mantener regla PowerShell: comandos en una sola linea cuando corresponda, evitar backslash de Bash y recordar que el usuario ejecuta commits manualmente.
 
 # 7. Rol del equipo humano
 
