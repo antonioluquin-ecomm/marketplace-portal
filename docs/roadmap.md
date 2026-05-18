@@ -813,16 +813,16 @@ Matriz inicial pendiente:
 | `modelo-economico_v2.html` | `internal/estrategia/modelo-economico.html` | Alias implementado en 7D | Bajo/Medio |
 | `proyecto-marketplace_v3.html` | `internal/estrategia/proyecto-marketplace.html` | Alias implementado en 7D | Bajo/Medio |
 | `seller-center_v2.html` | `internal/seller-center/index.html` | Alias implementado en 7E | Medio |
-| `maqueta-seller-center_v2.html` | `internal/seller-center/maqueta-seller-center.html` | Pendiente / evaluar exclusion | Medio |
+| `maqueta-seller-center_v2.html` | `internal/seller-center/maqueta-seller-center.html` | Alias implementado en 7F | Medio |
 | `gantt-seller-center_v2.html` | `internal/gantt/gantt-seller-center.html` | Alias implementado en 7E | Medio |
 | `gantt-operativo_v18.html` | `internal/gantt/gantt-operativo.html` | Alias implementado en 7E | Alto |
-| `backlog-sellers_v27.html` | `internal/backlog/backlog-sellers.html` | Pendiente | Alto |
-| `gestion-sellers_v7.html` | `internal/backlog/gestion-sellers.html` | Pendiente | Critico |
-| `simulador-economico_v4.html` | `internal/simuladores/simulador-economico.html` | Pendiente | Alto |
-| `presentacion-seller_v3.html` | `public/presentaciones/presentacion-seller.html` | Pendiente | Medio/Alto |
-| `simulador-seller_v12.html` | `public/simuladores/simulador-seller.html` | Pendiente | Alto |
-| `formulario-calificacion_v2.html` | `public/formularios/formulario-calificacion.html` | Pendiente | Critico |
-| `formulario-relevamiento_v2.html` | `public/formularios/formulario-relevamiento.html` | Pendiente | Critico |
+| `backlog-sellers_v27.html` | `internal/backlog/backlog-sellers.html` | Alias implementado en 7F | Alto |
+| `gestion-sellers_v7.html` | `internal/backlog/gestion-sellers.html` | Alias implementado en 7F | Critico |
+| `simulador-economico_v4.html` | `internal/simuladores/simulador-economico.html` | Alias implementado en 7F | Alto |
+| `presentacion-seller_v3.html` | `public/presentaciones/presentacion-seller.html` | Alias implementado en 7F | Medio/Alto |
+| `simulador-seller_v12.html` | `public/simuladores/simulador-seller.html` | Alias implementado en 7F | Alto |
+| `formulario-calificacion_v2.html` | `public/formularios/formulario-calificacion.html` | Alias implementado en 7F | Critico |
+| `formulario-relevamiento_v2.html` | `public/formularios/formulario-relevamiento.html` | Alias implementado en 7F | Critico |
 | `sporting-marketplace_hub_v29.html` | `index.html` o legacy historico | Pendiente / decision requerida | Alto |
 
 Exclusiones de esta etapa:
@@ -868,6 +868,44 @@ Smoke test requerido:
 - abrir cada alias con `?test=1#riesgo` y confirmar preservacion de query/hash;
 - confirmar que no hay 404 ni errores de consola;
 - confirmar que el enlace manual apunta al destino correcto.
+
+## Etapa 7F: aliases legacy restantes con ruta nueva validada
+
+Estado: implementado, pendiente smoke test manual completo.
+
+Objetivo: convertir en aliases seguros todos los HTML versionados restantes que ya tienen destino migrado en `internal/` o `public/`, preservando query string y hash. Esta etapa no mueve archivos a `legacy/` ni toca la logica funcional de las paginas destino.
+
+Aliases implementados:
+
+| Origen legacy | Destino nuevo | Estado | Riesgo |
+|---|---|---|---|
+| `backlog-sellers_v27.html` | `internal/backlog/backlog-sellers.html` | Implementado | Alto |
+| `gestion-sellers_v7.html` | `internal/backlog/gestion-sellers.html` | Implementado | Critico |
+| `simulador-economico_v4.html` | `internal/simuladores/simulador-economico.html` | Implementado | Alto |
+| `maqueta-seller-center_v2.html` | `internal/seller-center/maqueta-seller-center.html` | Implementado | Medio |
+| `presentacion-seller_v3.html` | `public/presentaciones/presentacion-seller.html` | Implementado | Medio/Alto |
+| `simulador-seller_v12.html` | `public/simuladores/simulador-seller.html` | Implementado | Alto |
+| `formulario-calificacion_v2.html` | `public/formularios/formulario-calificacion.html` | Implementado | Critico |
+| `formulario-relevamiento_v2.html` | `public/formularios/formulario-relevamiento.html` | Implementado | Critico |
+
+Pendiente:
+
+- `sporting-marketplace_hub_v29.html` queda intacto y pendiente de decision especifica.
+
+Alcance excluido:
+
+- no se movieron archivos a `legacy/`;
+- no se tocaron `index.html`, paginas nuevas en `internal/`, paginas nuevas en `public/`, Apps Script, `config.js`, `assets/js/config.js`, `assets/css/tokens.css`, endpoints, payloads, submit, `localStorage`, assets de logos, `Logos/` ni `legacy/`;
+- no se modifico `sporting-marketplace_hub_v29.html`.
+
+Smoke test requerido:
+
+- abrir cada archivo legacy convertido en alias;
+- confirmar redireccion a su ruta nueva;
+- abrir paginas publicas con `?seller_id=SPT-001` y confirmar preservacion del parametro;
+- abrir cada alias con `?test=1#riesgo` y confirmar preservacion de query/hash;
+- confirmar que no hay 404 ni errores de consola;
+- no ejecutar submit real en Gestion ni formularios durante la validacion.
 
 ## Etapa 7E: aliases legacy para paginas internas de riesgo medio
 

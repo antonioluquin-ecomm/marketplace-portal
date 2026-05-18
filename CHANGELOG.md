@@ -4,6 +4,43 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 7F aliases legacy restantes
+
+Tipo de cambio: compatibilidad legacy.
+
+Estado: implementado, pendiente smoke test manual completo.
+
+Cambios incluidos:
+- `backlog-sellers_v27.html` convertido en alias hacia `internal/backlog/backlog-sellers.html`.
+- `gestion-sellers_v7.html` convertido en alias hacia `internal/backlog/gestion-sellers.html`.
+- `simulador-economico_v4.html` convertido en alias hacia `internal/simuladores/simulador-economico.html`.
+- `maqueta-seller-center_v2.html` convertido en alias hacia `internal/seller-center/maqueta-seller-center.html`.
+- `presentacion-seller_v3.html` convertido en alias hacia `public/presentaciones/presentacion-seller.html`.
+- `simulador-seller_v12.html` convertido en alias hacia `public/simuladores/simulador-seller.html`.
+- `formulario-calificacion_v2.html` convertido en alias hacia `public/formularios/formulario-calificacion.html`.
+- `formulario-relevamiento_v2.html` convertido en alias hacia `public/formularios/formulario-relevamiento.html`.
+- Cada alias usa `meta refresh` como fallback y JavaScript con `window.location.replace()` preservando `location.search` y `location.hash`.
+- En paginas publicas, el alias preserva query string completo, incluido `seller_id`.
+- Actualizacion de `docs/roadmap.md`, `docs/test-matrix.md` y `docs/hub-map.md`.
+
+Alcance explicitamente excluido:
+- Sin modificaciones en `sporting-marketplace_hub_v29.html`.
+- Sin modificaciones en `index.html`.
+- Sin modificaciones en paginas nuevas de `internal/` o `public/`.
+- Sin modificaciones en Apps Script, `config.js`, `assets/js/config.js`, `assets/css/tokens.css`, endpoints, payloads, submit, `localStorage`, `assets/logos`, `Logos/` ni `legacy/`.
+- Sin movimiento de archivos a `legacy/`.
+
+Validacion pendiente:
+- Abrir cada legacy convertido y confirmar redireccion a su ruta nueva.
+- Abrir paginas publicas legacy con `?seller_id=SPT-001` y confirmar preservacion del parametro.
+- Abrir cada legacy convertido con `?test=1#riesgo` y confirmar preservacion de query/hash.
+- Confirmar que no hay 404 ni errores de consola.
+- No ejecutar submit real en Gestion de Sellers ni formularios.
+
+Riesgo conocido:
+- Los aliases apuntan a paginas destino que conservan su riesgo funcional original: Gestion y formularios tienen escritura real, simuladores tienen formulas, Backlog y Gantt dependen de datos externos. Esta etapa no modifica esa logica.
+- `sporting-marketplace_hub_v29.html` queda pendiente e intacto para una decision separada.
+
 ## 2026-05-18 - Etapa 7E aliases legacy internos de riesgo medio
 
 Tipo de cambio: compatibilidad legacy.

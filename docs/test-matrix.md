@@ -171,6 +171,39 @@ Checklist especifico:
 - Confirmar que el enlace manual apunta al mismo destino con query/hash cuando JavaScript alcanza a actualizarlo.
 - Confirmar que Backlog, Gestion de Sellers, formularios, simuladores y hub legacy no fueron modificados.
 
+## Etapa 7F: smoke test aliases legacy restantes
+
+Alcance:
+
+- Validar aliases legacy restantes con ruta nueva migrada.
+- No mover archivos a `legacy/`.
+- No tocar `sporting-marketplace_hub_v29.html`.
+- No modificar ni probar logica funcional de paginas destino.
+- No ejecutar submit real en Gestion de Sellers ni formularios.
+
+| Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/backlog-sellers_v27.html` | Alias legacy | Confirmar redireccion al Backlog migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/internal/backlog/backlog-sellers.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | No validar datos en esta prueba de alias |
+| `/gestion-sellers_v7.html` | Alias legacy critico | Confirmar redireccion a Gestion migrada | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/internal/backlog/gestion-sellers.html`; no ejecutar submit | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Escritura real: no enviar datos |
+| `/simulador-economico_v4.html` | Alias legacy | Confirmar redireccion al Simulador Economico migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/internal/simuladores/simulador-economico.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | No validar formulas en esta prueba de alias |
+| `/maqueta-seller-center_v2.html` | Alias legacy | Confirmar redireccion a Maqueta Seller Center migrada | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/internal/seller-center/maqueta-seller-center.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Maqueta excluida de tokens.css, alias solamente |
+| `/presentacion-seller_v3.html?seller_id=SPT-001` | Alias legacy publico | Confirmar redireccion preservando seller_id | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/public/presentaciones/presentacion-seller.html?seller_id=SPT-001` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta y `seller_id` preservado | Pendiente | Pendiente | Query string es critico |
+| `/simulador-seller_v12.html?seller_id=SPT-001` | Alias legacy publico | Confirmar redireccion preservando seller_id | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/public/simuladores/simulador-seller.html?seller_id=SPT-001` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta y `seller_id` preservado | Pendiente | Pendiente | No validar formulas en esta prueba de alias |
+| `/formulario-calificacion_v2.html?seller_id=SPT-001` | Alias legacy publico critico | Confirmar redireccion preservando seller_id | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/public/formularios/formulario-calificacion.html?seller_id=SPT-001`; no ejecutar submit | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta y `seller_id` preservado | Pendiente | Pendiente | No enviar datos |
+| `/formulario-relevamiento_v2.html?seller_id=SPT-001` | Alias legacy publico critico | Confirmar redireccion preservando seller_id | Mensaje de redireccion solo si el navegador no redirige de inmediato | Redirige a `/public/formularios/formulario-relevamiento.html?seller_id=SPT-001`; no ejecutar submit | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta y `seller_id` preservado | Pendiente | Pendiente | No enviar datos; mantener riesgo `pctSec` separado |
+
+Checklist especifico:
+
+- Abrir cada archivo legacy desde raiz.
+- Confirmar que el destino final es la ruta correspondiente en `internal/` o `public/`.
+- Abrir cada archivo publico con `?seller_id=SPT-001`.
+- Confirmar que `seller_id` se preserva en el destino.
+- Abrir cada archivo legacy con `?test=1#riesgo`.
+- Confirmar que query string y hash se preservan.
+- Revisar Network/Console para confirmar ausencia de 404 locales.
+- Confirmar que `sporting-marketplace_hub_v29.html` queda intacto.
+- No ejecutar submit real en Gestion ni formularios.
+
 ## Registro de ejecucion
 
 Usar esta seccion para anotar resultados reales despues de ejecutar el smoke test manual.
