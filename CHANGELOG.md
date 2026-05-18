@@ -4,6 +4,29 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 14I cierre documental CSS interno compartido
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrada documentalmente la Etapa 14 de CSS interno compartido.
+- Registrado el recorrido:
+  - 14A: auditoria CSS/JS sin cambios.
+  - 14B: plan documental.
+  - 14C/14D: piloto en `internal/estrategia/proceso-onboarding.html`.
+  - 14E/14F: extension a paginas de estrategia.
+  - 14G/14H: extension a paginas internas restantes.
+- Resultado final: `assets/css/internal-components.css` aplicado a paginas internas autorizadas, manteniendo CSS inline como fallback.
+- Decision: no extraer JavaScript todavia.
+
+Exclusiones:
+- Paginas publicas, formularios, simuladores publicos, presentaciones publicas, Apps Script, config, JS, aliases de raiz y `legacy/`.
+
+Proximo bloque recomendado:
+- Evaluar limpieza gradual de CSS duplicado o iniciar auditoria JS interna, siempre sin implementar cambios hasta nueva etapa especifica.
+
 ## 2026-05-18 - Etapa 14G extension CSS compartido interno a paginas internas restantes
 
 Tipo de cambio: implementacion acotada y reversible.

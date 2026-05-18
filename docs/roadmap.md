@@ -1447,3 +1447,37 @@ Validacion pendiente 14H:
 - confirmar que fetch, CSV, formulas, filtros, submit, localStorage y render dinamico no cambiaron;
 - confirmar que no hubo cambios de JS;
 - confirmar `git diff --name-only` limitado a archivos permitidos.
+
+## Etapa 14I: cierre documental CSS interno compartido
+
+Estado: completada.
+
+Resultado final de Etapa 14:
+
+- 14A: auditoria CSS/JS cerrada sin cambios.
+- 14B: plan documental cerrado.
+- 14C/14D: piloto en `internal/estrategia/proceso-onboarding.html`.
+- 14E/14F: extension a paginas de estrategia.
+- 14G/14H: extension a paginas internas restantes.
+- `assets/css/internal-components.css` aplicado a paginas internas autorizadas.
+- CSS inline original mantenido como prioridad/fallback.
+
+Decision:
+
+- No extraer JavaScript todavia.
+- No eliminar CSS inline todavia.
+- No aplicar este CSS a paginas publicas seller-facing.
+
+Exclusiones:
+
+- Publicas, formularios, simuladores publicos, presentaciones publicas.
+- Apps Script, endpoints, payloads, submit.
+- `config.js`, `assets/js/config.js`.
+- Aliases de raiz y `legacy/`.
+
+Proximo bloque recomendado:
+
+1. Auditoria de limpieza gradual de CSS duplicado interno.
+2. Auditoria JS interna.
+
+Ambos bloques deben iniciar en modo auditoria antes de cualquier implementacion.

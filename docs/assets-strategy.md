@@ -1736,3 +1736,40 @@ Exclusiones mantenidas:
 
 - `internal/seller-center/maqueta-seller-center.html` sigue excluida por representar otra plataforma visual.
 - Publicas, formularios, simuladores publicos y presentaciones publicas siguen fuera del alcance.
+
+### Etapa 14I: cierre documental
+
+**Estado:** cerrado documentalmente.
+
+Resumen de la Etapa 14:
+
+- 14A: auditoria CSS/JS de paginas internas informativas, sin cambios.
+- 14B: plan documental de extraccion CSS interna.
+- 14C/14D: piloto de `assets/css/internal-components.css` en `internal/estrategia/proceso-onboarding.html`.
+- 14E/14F: extension al resto de paginas informativas de `internal/estrategia/`.
+- 14G/14H: extension a paginas internas restantes.
+
+Resultado final:
+
+- `assets/css/internal-components.css` queda aplicado a paginas internas autorizadas.
+- El CSS inline original permanece como prioridad/fallback.
+- No se extrae CSS inline todavia.
+- No se extrae JavaScript todavia.
+
+Exclusiones vigentes:
+
+- Paginas publicas seller-facing.
+- Formularios.
+- Simuladores publicos.
+- Presentaciones publicas.
+- Apps Script.
+- `config.js` y `assets/js/config.js`.
+- Aliases de raiz.
+- `legacy/`.
+
+Siguiente bloque recomendado:
+
+1. Auditoria de limpieza gradual de CSS duplicado interno.
+2. O auditoria JS interna, sin implementar extraccion todavia.
+
+No iniciar limpieza de CSS ni extraccion JS sin una etapa especifica, smoke test por grupo y plan de rollback.

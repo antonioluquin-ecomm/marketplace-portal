@@ -786,3 +786,39 @@ Notas:
 - `assets/css/internal-components.css` no se modifica en 14G.
 - Paginas publicas, formularios, simuladores publicos, presentaciones publicas, Apps Script, config, aliases y `legacy/` quedan fuera del alcance.
 - No ejecutar submit real durante 14H.
+
+---
+
+## Etapa 14I: cierre documental de CSS interno compartido
+
+**Estado:** documentado.
+
+Resumen de cobertura:
+
+| Bloque | Etapa | Estado documental | Observacion |
+|---|---|---|---|
+| Auditoria CSS/JS | 14A | Cerrada | Sin cambios de archivos |
+| Plan CSS interno | 14B | Cerrado | Decision: no extraer JS |
+| Piloto `proceso-onboarding` | 14C/14D | Documentado | CSS inline conservado |
+| Estrategia informativa | 14E/14F | Documentado | CSS inline conservado |
+| Internas restantes | 14G/14H | Documentado | CSS inline conservado |
+
+Validaciones requeridas para cualquier cierre operativo posterior:
+
+- Confirmar carga sin 404 de `internal-components.css`.
+- Confirmar carga sin 404 de `tokens.css` donde aplique.
+- Confirmar sin regresion visual en desktop/mobile.
+- Confirmar que no se modificaron bloques `<script>`.
+- Confirmar que fetch, CSV, formulas, filtros, submit, localStorage y render dinamico no cambiaron.
+- No ejecutar submit real en Gestion ni formularios.
+
+Exclusiones permanentes de Etapa 14:
+
+- Paginas publicas.
+- Formularios.
+- Simuladores publicos.
+- Presentaciones publicas.
+- Apps Script.
+- Config.
+- Aliases de raiz.
+- `legacy/`.
