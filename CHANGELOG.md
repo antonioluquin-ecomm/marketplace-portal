@@ -4,6 +4,37 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 7E aliases legacy internos de riesgo medio
+
+Tipo de cambio: compatibilidad legacy.
+
+Estado: implementado, pendiente smoke test manual.
+
+Cambios incluidos:
+- `seller-center_v2.html` convertido en alias hacia `internal/seller-center/index.html`.
+- `gantt-seller-center_v2.html` convertido en alias hacia `internal/gantt/gantt-seller-center.html`.
+- `gantt-operativo_v18.html` convertido en alias hacia `internal/gantt/gantt-operativo.html`.
+- Cada alias usa `meta refresh` como fallback y JavaScript con `window.location.replace()` preservando `location.search` y `location.hash`.
+- Cada enlace manual se actualiza por JavaScript para apuntar al destino con query/hash cuando corresponda.
+- Actualizacion de `docs/roadmap.md`, `docs/test-matrix.md` y `docs/hub-map.md`.
+
+Alcance explicitamente excluido:
+- Sin modificaciones en Backlog.
+- Sin modificaciones en Gestion de Sellers.
+- Sin modificaciones en formularios, simuladores, paginas publicas ni Apps Script.
+- Sin modificaciones en paginas nuevas de `internal/`.
+- Sin movimiento de archivos a `legacy/`.
+- Sin cambios en `config.js`, `assets/js/config.js`, CSS compartido ni `sporting-marketplace_hub_v29.html`.
+
+Validacion pendiente:
+- Abrir cada legacy convertido y confirmar redireccion a su ruta nueva.
+- Abrir cada legacy convertido con `?test=1#riesgo` y confirmar preservacion de query/hash.
+- Confirmar que no hay 404 ni errores de consola.
+
+Riesgo conocido:
+- Gantt Operativo conserva riesgo alto por dependencias de datos en la pagina destino. El alias no modifica su logica, CSV ni render.
+- Quedan pendientes aliases de Backlog, Gestion de Sellers, simuladores, formularios, maqueta y hub legacy.
+
 ## 2026-05-18 - Etapa 7D aliases legacy estrategia
 
 Tipo de cambio: compatibilidad legacy.

@@ -812,10 +812,10 @@ Matriz inicial pendiente:
 | `modelo-integracion_v5.html` | `internal/estrategia/modelo-integracion.html` | Alias implementado en 7D | Bajo |
 | `modelo-economico_v2.html` | `internal/estrategia/modelo-economico.html` | Alias implementado en 7D | Bajo/Medio |
 | `proyecto-marketplace_v3.html` | `internal/estrategia/proyecto-marketplace.html` | Alias implementado en 7D | Bajo/Medio |
-| `seller-center_v2.html` | `internal/seller-center/index.html` | Pendiente | Medio |
+| `seller-center_v2.html` | `internal/seller-center/index.html` | Alias implementado en 7E | Medio |
 | `maqueta-seller-center_v2.html` | `internal/seller-center/maqueta-seller-center.html` | Pendiente / evaluar exclusion | Medio |
-| `gantt-seller-center_v2.html` | `internal/gantt/gantt-seller-center.html` | Pendiente | Medio |
-| `gantt-operativo_v18.html` | `internal/gantt/gantt-operativo.html` | Pendiente | Alto |
+| `gantt-seller-center_v2.html` | `internal/gantt/gantt-seller-center.html` | Alias implementado en 7E | Medio |
+| `gantt-operativo_v18.html` | `internal/gantt/gantt-operativo.html` | Alias implementado en 7E | Alto |
 | `backlog-sellers_v27.html` | `internal/backlog/backlog-sellers.html` | Pendiente | Alto |
 | `gestion-sellers_v7.html` | `internal/backlog/gestion-sellers.html` | Pendiente | Critico |
 | `simulador-economico_v4.html` | `internal/simuladores/simulador-economico.html` | Pendiente | Alto |
@@ -860,6 +860,35 @@ Alcance excluido:
 - no se movieron archivos a `legacy/`;
 - no se tocaron paginas nuevas en `internal/`;
 - no se tocaron formularios, simuladores, Backlog, Gestion de Sellers, Seller Center, Apps Script, `config.js`, `assets/js/config.js`, CSS compartido ni `sporting-marketplace_hub_v29.html`.
+
+Smoke test requerido:
+
+- abrir cada archivo legacy convertido en alias;
+- confirmar redireccion a su ruta nueva;
+- abrir cada alias con `?test=1#riesgo` y confirmar preservacion de query/hash;
+- confirmar que no hay 404 ni errores de consola;
+- confirmar que el enlace manual apunta al destino correcto.
+
+## Etapa 7E: aliases legacy para paginas internas de riesgo medio
+
+Estado: implementado, pendiente smoke test manual.
+
+Objetivo: extender el patron de alias seguro a paginas internas ya migradas de riesgo medio, sin tocar paginas operativas criticas ni archivos nuevos.
+
+Aliases implementados:
+
+| Origen legacy | Destino nuevo | Estado | Riesgo |
+|---|---|---|---|
+| `seller-center_v2.html` | `internal/seller-center/index.html` | Implementado | Medio |
+| `gantt-seller-center_v2.html` | `internal/gantt/gantt-seller-center.html` | Implementado | Medio |
+| `gantt-operativo_v18.html` | `internal/gantt/gantt-operativo.html` | Implementado | Alto |
+
+Alcance excluido:
+
+- no se movieron archivos a `legacy/`;
+- no se tocaron paginas nuevas en `internal/`;
+- no se tocaron Backlog, Gestion de Sellers, formularios, simuladores, paginas publicas, Apps Script, `config.js`, `assets/js/config.js`, CSS compartido ni `sporting-marketplace_hub_v29.html`;
+- `maqueta-seller-center_v2.html` queda pendiente por su exclusion visual/documental previa.
 
 Smoke test requerido:
 

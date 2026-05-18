@@ -143,6 +143,34 @@ Checklist especifico:
 - Confirmar que el enlace manual apunta al mismo destino con query/hash cuando JavaScript alcanza a actualizarlo.
 - Confirmar que no se modificaron aliases de paginas criticas.
 
+## Etapa 7E: smoke test aliases legacy internos de riesgo medio
+
+Alcance:
+
+- Validar solo aliases legacy de Seller Center y Gantt.
+- No mover archivos a `legacy/`.
+- No probar Backlog, Gestion de Sellers, formularios, simuladores, paginas publicas ni Apps Script.
+- No tocar paginas nuevas en `internal/`.
+
+| Ruta | Tipo | Objetivo de prueba | Validaciones visuales | Validaciones funcionales | Dependencias | Consola | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/seller-center_v2.html` | Alias legacy | Confirmar redireccion al Seller Center migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/seller-center/index.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | La pagina destino mantiene sus dependencias read-only |
+| `/gantt-seller-center_v2.html` | Alias legacy | Confirmar redireccion al Gantt Seller Center migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/gantt/gantt-seller-center.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | La pagina destino mantiene CSV externo |
+| `/gantt-operativo_v18.html` | Alias legacy | Confirmar redireccion al Gantt Operativo migrado | Mensaje de redireccion solo si el navegador no redirige de inmediato | Meta refresh y JS redirigen a `/internal/gantt/gantt-operativo.html` | Ruta local nueva | Sin 404 ni errores JS | Redireccion correcta al destino nuevo | Pendiente | Pendiente | Riesgo alto por dependencias de datos; alias no toca logica |
+| `/seller-center_v2.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 3 aliases |
+| `/gantt-seller-center_v2.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 3 aliases |
+| `/gantt-operativo_v18.html?test=1#riesgo` | Alias legacy con query/hash | Confirmar preservacion de parametros | Mensaje fallback no debe romper layout minimo | `location.search` y `location.hash` se conservan en el destino | Ruta local nueva | Sin 404 ni errores JS | Destino final conserva `?test=1#riesgo` | Pendiente | Pendiente | Mismo criterio para los 3 aliases |
+
+Checklist especifico:
+
+- Abrir cada archivo legacy desde raiz.
+- Confirmar que el destino final es la ruta correspondiente en `internal/`.
+- Abrir cada archivo legacy con `?test=1#riesgo`.
+- Confirmar que query string y hash se preservan.
+- Revisar Network/Console para confirmar ausencia de 404 locales.
+- Confirmar que el enlace manual apunta al mismo destino con query/hash cuando JavaScript alcanza a actualizarlo.
+- Confirmar que Backlog, Gestion de Sellers, formularios, simuladores y hub legacy no fueron modificados.
+
 ## Registro de ejecucion
 
 Usar esta seccion para anotar resultados reales despues de ejecutar el smoke test manual.
