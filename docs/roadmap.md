@@ -1696,3 +1696,14 @@ Resultado:
 - `docs/handoff-post-v1.md` actualizado como resumen corto para retomar el proyecto sin repetir contexto largo.
 - Incluye estado V1/post-V1, aliases, Hub Operativo, cambios CSS/JS recientes, decisiones vigentes, metodologia rapida y proximos pasos posibles.
 - No se modificaron archivos funcionales.
+
+## Etapa 20A: revision rapida Hub Operativo y navegacion
+
+Estado: completada.
+
+Resultado:
+
+- Revisado `internal/hub-operativo.html` e `index.html`.
+- Se aplicaron solo ajustes de contenido en `index.html` para alinear la portada con el estado post-V1.
+- No se modifico `internal/hub-operativo.html`: no se detectaron mejoras simples evidentes que justificaran tocarlo.
+- No hubo cambios de rutas ni logica funcional.

@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 20A revision rapida Hub Operativo y navegacion
+
+Tipo de cambio: contenido/documentacion.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos de `index.html` que seguian describiendo la migracion como etapa inicial.
+- Actualizado estado visible a portal estable post-V1.
+- Aclarado que las rutas oficiales viven en `internal/` y `public/`, y que los HTML versionados de raiz son aliases de compatibilidad.
+- Sin cambios de rutas, logica, Hub Operativo, formularios, simuladores, Backlog, Gestion, Apps Script, config, assets ni legacy.
+
 ## 2026-05-18 - Etapa 19A handoff corto estado actual
 
 Tipo de cambio: documentacion.

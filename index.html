@@ -391,7 +391,7 @@
       <div class="logo">Marketplace <span>Portal</span></div>
       <div class="crumb">Sporting Marketplace</div>
     </div>
-    <div class="status"><span class="dot"></span> Etapa de reorganizacion estructural</div>
+    <div class="status"><span class="dot"></span> Portal estable post-V1</div>
   </header>
 
   <main class="wrap">
@@ -410,12 +410,12 @@
 
       <aside class="signal-panel" aria-label="Estado del proyecto">
         <div class="signal-title">Estado</div>
-        <div class="signal-value">Reestructuracion institucional en curso</div>
-        <p class="signal-copy">Las paginas actuales se mantienen en raiz mientras se prepara la migracion segura hacia una arquitectura modular.</p>
+        <div class="signal-value">Arquitectura institucional estable</div>
+        <p class="signal-copy">Las rutas oficiales viven en internal/ y public/. Los HTML versionados de raiz se mantienen como aliases de compatibilidad.</p>
         <div class="metrics">
-          <div class="metric"><strong>17</strong><span>Paginas base</span></div>
+          <div class="metric"><strong>17</strong><span>Aliases raiz</span></div>
           <div class="metric"><strong>0</strong><span>Rutas rotas</span></div>
-          <div class="metric"><strong>2</strong><span>Etapa actual</span></div>
+          <div class="metric"><strong>V1</strong><span>Estado base</span></div>
         </div>
       </aside>
     </section>
@@ -423,7 +423,7 @@
     <section class="section" id="interno">
       <div class="section-head">
         <h2>Acceso interno</h2>
-        <p class="section-note">Herramientas operativas, gobierno, modelos, seller center y planificacion. En esta etapa enlazan a los HTML actuales en raiz.</p>
+        <p class="section-note">Herramientas operativas, gobierno, modelos, Seller Center y planificacion. Enlazan a las rutas oficiales dentro de internal/.</p>
       </div>
       <div class="grid">
         <a class="card warn" href="internal/hub-operativo.html"><span class="card-title">Hub Operativo</span><span class="card-meta">Interno oficial</span></a>
@@ -445,7 +445,7 @@
     <section class="section" id="publico">
       <div class="section-head">
         <h2>Acceso publico / sellers</h2>
-        <p class="section-note">Piezas compartibles con sellers. Deben mantenerse estables hasta definir compatibilidad de rutas.</p>
+        <p class="section-note">Piezas compartibles con sellers. Usar links directos y conservar seller_id cuando el flujo requiera personalizacion.</p>
       </div>
       <div class="grid">
         <a class="card public" href="public/formularios/formulario-calificacion.html"><span class="card-title">Formulario de Calificacion</span><span class="card-meta">Publico</span></a>
@@ -470,9 +470,9 @@
       </div>
     </section>
 
-    <section class="transition" aria-label="Aviso de transicion">
-      <strong>Aviso de transicion</strong>
-      <p>Las paginas actuales se mantienen temporalmente en la raiz del repositorio hasta completar la migracion segura hacia `/internal` y `/public`. Este `index.html` no reemplaza, mueve ni modifica las paginas existentes; solo funciona como entrada institucional compatible con GitHub Pages.</p>
+    <section class="transition" aria-label="Aviso de compatibilidad">
+      <strong>Aviso de compatibilidad</strong>
+      <p>Las rutas oficiales del portal viven en /internal y /public. Los HTML versionados de raiz se conservan como aliases de compatibilidad para no romper URLs historicas ni parametros como seller_id.</p>
     </section>
   </main>
 </body>
