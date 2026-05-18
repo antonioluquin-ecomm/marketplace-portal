@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 20C revision contenido Seller Center index
+
+Tipo de cambio: contenido.
+
+Estado: completado.
+
+Resultado:
+- Ajustados textos visibles en `internal/seller-center/index.html`.
+- Aclarado el rol del Seller Center como modulo operativo dentro del Marketplace Portal.
+- Alineada la relacion con PIM, Articulos Seller, seguimiento y documentacion funcional.
+- Aclarado que la maqueta es referencia funcional/visual y no sistema productivo final.
+- Sin cambios de rutas, CSS, JS, fetch, render dinamico, CSV, assets, Apps Script ni config.
+
 ## 2026-05-18 - Etapa 20B revision de contenido estrategico
 
 Tipo de cambio: contenido.

@@ -1718,3 +1718,15 @@ Resultado:
 - Ajustados textos visibles para unificar lenguaje institucional: Portal, Hub Operativo, Seller Center, integracion, gobernanza, onboarding y modelo economico.
 - Retiradas referencias visibles a versiones legacy en paginas ya oficiales.
 - No se modificaron rutas, CSS, JS, scripts, ids, clases ni estructura funcional.
+
+## Etapa 20C: revision contenido Seller Center index
+
+Estado: completada.
+
+Resultado:
+
+- Revisado `internal/seller-center/index.html`.
+- Ajustados textos visibles para explicar mejor el Seller Center como modulo operativo del Marketplace Portal.
+- Aclarada su relacion con PIM, Articulos Seller, seguimiento y documentacion funcional.
+- La maqueta queda descripta como referencia funcional/visual, no como sistema productivo final.
+- No se tocaron rutas, CSS, JS, fetch, CSV, render dinamico ni estructura funcional.
