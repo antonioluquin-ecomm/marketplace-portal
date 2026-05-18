@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 23B piloto CSS familia Backlog
+
+Tipo de cambio: visual controlado.
+
+Estado: completado.
+
+Resultado:
+- Creado `assets/css/pages/backlog.css` como hoja especifica para la familia Backlog.
+- Enlazado en `internal/backlog/backlog-sellers.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, sidebar, KPIs, content frame y estados de carga/vacio; se conservaron inline las reglas acopladas a render dinamico, tabla, cards, modal, chips, progress y toast.
+- Sin cambios en JS, fetch, CSV, render dinamico, filtros funcionales, modal funcional, datos, localStorage, rutas, href/src, ids/classes ni config.
+
 ## 2026-05-18 - Etapa 22E cierre liviano UX/copy operativo
 
 Tipo de cambio: documentacion.

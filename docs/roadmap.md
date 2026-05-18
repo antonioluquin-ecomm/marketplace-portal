@@ -1849,3 +1849,15 @@ Resultado:
 - 22D: Gantt Operativo y Gantt Seller Center, copy estatico sin tocar timeline, CSV ni JS.
 - Decision vigente: no tocar logica funcional, JS, CSV, submit, payloads, formulas, rutas ni config dentro de este bloque.
 - Proximo paso recomendado: push y smoke test liviano de paginas operativas; luego avanzar solo con bugs reales o mejoras funcionales concretas.
+
+## Etapa 23B: piloto CSS familia Backlog
+
+Estado: completada.
+
+Resultado:
+
+- Creado `assets/css/pages/backlog.css`.
+- Enlazado `backlog.css` en `internal/backlog/backlog-sellers.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, sidebar, KPIs, content frame y estados de carga/vacio.
+- Conservadas inline las reglas sensibles o acopladas a render dinamico: kanban, cards de seller, tabla, chips/status, progress, modal, acciones compartidas y toast.
+- No se modificaron JS, fetch, CSV, render dinamico, filtros funcionales, modal funcional, datos, localStorage, rutas, href/src, ids/classes ni config.

@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <!-- 14G: componentes internos pasivos. El CSS inline permanece como fallback. -->
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
+<link rel="stylesheet" href="../../assets/css/pages/backlog.css">
 <style>
 :root{
   --g:#5ea832;--g2:#4a8a26;--gd:rgba(94,168,50,.10);--gb:rgba(94,168,50,.24);--gb2:rgba(94,168,50,.12);
@@ -33,62 +34,14 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 input,select{font-family:inherit}
 
 /* ── TOPBAR ── */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--tb);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(11,15,11,.96);border-bottom:1px solid var(--gb2);backdrop-filter:blur(20px)}
-.tb-brand{display:flex;align-items:center;gap:12px}
-.tb-logo{font-family:"Barlow Condensed",sans-serif;font-weight:900;font-size:18px;text-transform:uppercase;letter-spacing:.04em;color:var(--t1)}
-.tb-logo span{color:var(--g)}
-.tb-crumb{border-left:1px solid var(--b);padding-left:12px;font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}
-.tb-right{display:flex;align-items:center;gap:8px}
-.tb-status{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--t4)}
-.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:pulse 2s infinite}
-.tb-dot.loading{background:var(--wa)}
-.tb-dot.error{background:var(--da);animation:none}
-@keyframes pulse{50%{opacity:.3}}
-.tb-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:1px solid var(--b);border-radius:6px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);transition:.15s}
-.tb-btn:hover{color:var(--g);border-color:var(--gb);background:var(--gd)}
-.view-toggle{display:flex;border:1px solid var(--b);border-radius:6px;overflow:hidden}
-.view-btn{padding:5px 12px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t4);transition:.15s}
-.view-btn:hover{color:var(--t2)}
-.view-btn.active{background:var(--g);color:#fff}
 
 /* ── SHELL ── */
-.shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
 
 /* ── SIDEBAR ── */
-.sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow-y:auto;background:rgba(15,21,15,.97);border-right:1px solid var(--b);padding:14px 0 40px;display:flex;flex-direction:column;gap:0}
-.sidebar::-webkit-scrollbar{width:3px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--b);border-radius:99px}
-.sb-lbl{font-size:8.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4);padding:0 14px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
-.sb-lbl::after{content:"";flex:1;height:1px;background:var(--b2)}
-.sb-block{padding:0 10px;margin-bottom:16px}
-.search-input{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--b);background:rgba(255,255,255,.04);color:var(--t1);font-size:13px;outline:none;transition:.15s}
-.search-input::placeholder{color:var(--t4)}
-.search-input:focus{border-color:var(--gb);background:rgba(255,255,255,.06)}
-.fi-select{width:100%;padding:7px 9px;border-radius:7px;border:1px solid var(--b);background:var(--k3);color:var(--t2);font-size:12.5px;outline:none;margin-bottom:5px;transition:.15s}
-.fi-select:focus{border-color:var(--gb)}
-.fi-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin:8px 0 3px;display:block}
-.quick-btns{display:flex;flex-direction:column;gap:4px}
-.qbtn{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:7px;border:1px solid var(--b2);background:rgba(255,255,255,.025);font-size:12px;color:var(--t3);transition:.15s;text-align:left}
-.qbtn:hover{border-color:var(--b);color:var(--t1);background:rgba(255,255,255,.05)}
-.qbtn.active{border-color:var(--gb);color:var(--g);background:var(--gd)}
-.qbtn-count{font-family:"Barlow Condensed",sans-serif;font-size:13px;font-weight:700;color:var(--t4)}
-.qbtn.active .qbtn-count{color:var(--g)}
-.clear-btn{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--b);background:transparent;color:var(--t4);font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:.15s;margin-top:6px}
-.clear-btn:hover{border-color:var(--wa);color:var(--wa)}
 
 /* ── KPI BAR ── */
-.kpi-bar{display:flex;gap:10px;padding:12px 20px;border-bottom:1px solid var(--b2);background:rgba(255,255,255,.015);flex-wrap:wrap}
-.kpi{display:flex;flex-direction:column;gap:2px;min-width:70px}
-.kpi-val{font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:900;line-height:1;color:var(--t1)}
-.kpi-val.g{color:var(--g)}.kpi-val.w{color:var(--wa)}.kpi-val.d{color:var(--da)}.kpi-val.i{color:var(--in)}
-.kpi-lbl{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t4)}
-.kpi-sep{width:1px;background:var(--b);align-self:stretch}
 
 /* ── CONTENT ── */
-.content-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden}
-.content-area{padding:16px 20px 60px;overflow-y:auto}
-.content-area::-webkit-scrollbar{width:4px}
-.content-area::-webkit-scrollbar-thumb{background:var(--b);border-radius:99px}
 
 /* ── KANBAN ── */
 .kanban{display:grid;grid-auto-flow:column;grid-auto-columns:240px;gap:10px;overflow-x:auto;padding-bottom:12px}
@@ -214,18 +167,12 @@ tbody tr:last-child td{border-bottom:none}
 .prog-pct{font-family:"Barlow Condensed",sans-serif;font-size:14px;font-weight:700;color:var(--t3);min-width:28px}
 
 /* ── EMPTY / LOADING / ERROR ── */
-.state-box{display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 20px;text-align:center;color:var(--t4)}
-.state-icon{font-size:36px;opacity:.4}
-.state-title{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;color:var(--t3)}
-.state-desc{font-size:13px;line-height:1.6}
 
 /* ── TOAST ── */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--k3);border:1px solid var(--gb);color:var(--t1);padding:9px 18px;border-radius:8px;font-size:12.5px;font-weight:600;z-index:1000;opacity:0;transition:all .25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:960px){
-  .shell{grid-template-columns:1fr}
-  .sidebar{display:none}
   .kanban{grid-auto-columns:85vw}
 }
 </style>
