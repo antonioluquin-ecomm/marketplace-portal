@@ -1861,3 +1861,15 @@ Resultado:
 - Movidas reglas visuales estaticas de topbar, sidebar, KPIs, content frame y estados de carga/vacio.
 - Conservadas inline las reglas sensibles o acopladas a render dinamico: kanban, cards de seller, tabla, chips/status, progress, modal, acciones compartidas y toast.
 - No se modificaron JS, fetch, CSV, render dinamico, filtros funcionales, modal funcional, datos, localStorage, rutas, href/src, ids/classes ni config.
+
+## Etapa 23C: CSS familia Gantt
+
+Estado: completada.
+
+Resultado:
+
+- Creado `assets/css/pages/gantt.css`.
+- Enlazado `gantt.css` en `internal/gantt/gantt-operativo.html` y `internal/gantt/gantt-seller-center.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, sidebar, botones de cabecera, estados de carga/vacio/error y leyenda estatica.
+- Conservadas inline las reglas sensibles o acopladas a timeline, barras, fechas, dependencias, filtros funcionales, render dinamico, modal/drawer y datos.
+- No se modificaron JS, fetch, CSV, timeline, filtros funcionales, render dinamico, fechas/datos, rutas, href/src, ids/classes ni config.

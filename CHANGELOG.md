@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 23C CSS familia Gantt
+
+Tipo de cambio: visual controlado.
+
+Estado: completado.
+
+Resultado:
+- Creado `assets/css/pages/gantt.css` como hoja especifica para paginas Gantt internas.
+- Enlazado en `internal/gantt/gantt-operativo.html` y `internal/gantt/gantt-seller-center.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, sidebar, botones de cabecera, estados de carga/vacio/error y leyenda estatica.
+- Conservadas inline las reglas acopladas a timeline, barras, fechas, dependencias, filtros funcionales, render dinamico, modal/drawer y datos.
+- Sin cambios en JS, fetch, CSV, timeline, filtros, render dinamico, fechas/datos, rutas, href/src, ids/classes ni config.
+
 ## 2026-05-18 - Etapa 23B piloto CSS familia Backlog
 
 Tipo de cambio: visual controlado.

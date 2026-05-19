@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
 <!-- 14G: componentes internos pasivos. El CSS inline permanece como fallback. -->
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
+<link rel="stylesheet" href="../../assets/css/pages/gantt.css">
 <style>
 :root {
   --g:       #5ea832; --g2:#4a8a26;
@@ -30,39 +31,17 @@ html{font-size:15px}
 body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
 
 /* ── TOPBAR ── */
-.topbar{position:sticky;top:0;z-index:300;height:56px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 22px;background:rgba(13,15,13,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(16px)}
-.tb-brand{display:flex;align-items:center;gap:12px}
-.tb-logo{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:var(--w);white-space:nowrap}
-.tb-logo span{color:var(--g)}
-.tb-module{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);border-left:1px solid var(--bdr);padding-left:12px;white-space:nowrap}
-.tb-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.status-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--t3);flex-shrink:0}
-.dot.live{background:var(--g);box-shadow:0 0 0 3px rgba(94,168,50,.18);animation:pulse 2s infinite}
-.dot.err{background:var(--danger)} .dot.load{background:var(--warn);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.tb-date{font-size:10px;color:var(--t3);white-space:nowrap}
-.btn-sm{background:transparent;border:1px solid var(--bdr);border-radius:6px;color:var(--t2);font-family:'Barlow',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.btn-sm:hover{border-color:var(--g);color:var(--g)} .btn-sm:disabled{opacity:.5;cursor:progress}
 
 /* ── LAYOUT ── */
 .shell{display:grid;grid-template-columns:234px 1fr;min-height:calc(100vh - 56px)}
 
 /* ── SIDEBAR ── */
-.sidebar{background:var(--k2);border-right:1px solid var(--bdr);padding:16px 0;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
-.sb-s{padding:0 13px;margin-bottom:18px}
-.sb-lbl{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);margin-bottom:7px;padding:0 3px}
-.fi,.sel{width:100%;padding:8px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:7px;color:var(--t1);font-family:'Barlow',sans-serif;font-size:12px}
-.fi:focus,.sel:focus{outline:none;border-color:var(--g)} .fi::placeholder{color:var(--t3)}
-.sel{cursor:pointer} .sel option{background:var(--k2)}
 .fb{display:flex;align-items:center;justify-content:space-between;width:100%;padding:7px 8px;margin-bottom:3px;background:transparent;border:1px solid transparent;border-radius:6px;color:var(--t2);font-family:'Barlow',sans-serif;font-size:12px;cursor:pointer;transition:all .12s;text-align:left}
 .fb:hover{background:rgba(255,255,255,.05);color:var(--t1)} .fb.on{background:var(--g-dim);color:var(--g);border-color:var(--g-brd)}
 .fb-l{display:flex;align-items:center;gap:7px}
 .fc{font-size:10px;font-weight:700;min-width:20px;text-align:center;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--t3)}
 .fb.on .fc{background:rgba(94,168,50,.2);color:var(--g)}
-.sb-div{height:1px;background:var(--bdr);margin:0 13px 16px}
 .fase-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.sb-note{margin:0 13px;padding:10px 12px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);font-size:10px;color:var(--t3);line-height:1.55}
 
 /* ── MAIN ── */
 .main{background:var(--k3);overflow:hidden;display:flex;flex-direction:column;min-width:0}
@@ -227,10 +206,8 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .m-blk{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;background:var(--dng-dim);border:1px solid var(--dng-brd);border-radius:7px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.5}
 
 /* ── STATES ── */
-.center-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:280px;gap:14px}
 .spinner{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--g);animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.center-state span{font-size:13px;color:var(--t3)}
 .err-box{padding:24px;max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 .err-title{font-size:14px;font-weight:700;color:#f29a9a}
 .err-body{font-size:12px;color:var(--t3);line-height:1.7}
@@ -259,7 +236,7 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 @media(max-width:980px){.exec-hero{grid-template-columns:1fr}.exec-flow{grid-template-columns:repeat(2,1fr)}.exec-actions{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.exec-flow,.exec-actions{grid-template-columns:1fr}.exec-hero{padding:14px}.summary{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
 
-@media(max-width:860px){.shell{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:860px){.shell{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
