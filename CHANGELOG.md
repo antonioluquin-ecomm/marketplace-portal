@@ -4,6 +4,20 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 30D diseno tecnico edicion Gantt Operativo
+
+Tipo de cambio: documentacion tecnica.
+
+Estado: completado.
+
+Resultado:
+- Documentada arquitectura futura para editar tareas del Gantt Operativo via Apps Script.
+- Creado `docs/gantt-operativo-edicion.md` con estado actual, contrato propuesto, campos editables/no editables, validaciones, riesgos y etapas 30E1-30E4.
+- Se definio operacion futura `tipo_formulario: "gantt_task_update"`.
+- Se recomienda iniciar solo con campos de bajo riesgo y tarea dummy/QA.
+- No se implemento escritura ni se modificaron archivos funcionales.
+- Sin cambios en `internal/gantt/gantt-operativo.html`, Apps Script, config, CSV URLs, Google Sheets, formularios, simuladores, `public/` ni `legacy/`.
+
 ## 2026-05-19 - Etapas 29B/29C logo interno clickeable
 
 Tipo de cambio: normalizacion visual/navegacional interna y cierre documental.

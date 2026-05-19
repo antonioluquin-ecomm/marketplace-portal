@@ -28,6 +28,7 @@ Fecha: 2026-05-18
 - Bloque 27A-27F cerrado: base visual enterprise/SaaS, headers/topbars internos normalizados y navegacion interna consistente.
 - Bloque 28B cerrado: navegacion publica seller-facing entre Presentacion, Simulador, Calificacion y Relevamiento preservando `seller_id`.
 - Bloque 29B-29C cerrado: logos internos clickeables hacia `index.html`, validados con smoke HTTP local y capturas desktop/mobile.
+- Bloque 30D cerrado: diseno tecnico documentado para futura edicion del Gantt Operativo via Apps Script, sin implementacion de escritura.
 
 ## Decisiones vigentes
 
@@ -42,6 +43,7 @@ Fecha: 2026-05-18
 - Para bloque 24 cerrado, se mantuvo inline todo CSS sensible asociado a submit, payloads, `seller_id`, validaciones, render dinamico, CTAs, calculos, formulas, resultados, tarifas y overrides.
 - Para bloque 26 cerrado, no se tocaron JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
 - Para bloque 29 cerrado, el logo interno debe volver siempre a la portada institucional: `../index.html` desde el Hub y `../../index.html` desde paginas bajo `internal/*/*`.
+- Para bloque 30D, la edicion futura del Gantt debe partir de `docs/gantt-operativo-edicion.md` y usar tarea dummy/QA antes de tocar datos reales.
 - Revisar manualmente en el futuro `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
 
 ## Metodologia vigente

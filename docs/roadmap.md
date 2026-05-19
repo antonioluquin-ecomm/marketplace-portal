@@ -2095,3 +2095,22 @@ Resultado:
 - Resultado visual general: logo visible y topbars sin regresion atribuible al cambio de 29B.
 - Riesgo residual: cualquier ajuste fino futuro debe tratar hallazgos visuales preexistentes de mobile como etapa separada, sin mezclarlo con la normalizacion del logo.
 - 29C no modifico HTML, CSS ni JS funcional; solo documentacion.
+
+## Etapa 30D: diseno tecnico de edicion Gantt via Apps Script
+
+Estado: completada.
+
+Resultado:
+
+- Documentado el diseno tecnico para una futura edicion controlada de tareas del Gantt Operativo desde el front.
+- Documento principal: `docs/gantt-operativo-edicion.md`.
+- Operacion futura propuesta: `tipo_formulario = "gantt_task_update"`.
+- Campos iniciales de bajo riesgo: `estado`, `responsable`, `inicio_real`, `fin_real`, `comentario`.
+- Campos con validacion fuerte: `inicio_plan`, `fin_plan`, `fase`, `hito`, `dependencia`, `visible_gantt`.
+- Campos no editables: `task_id`, `id_tarea`, `seller_id`, `seller_nombre`.
+- Se recomienda implementar 30E en fases: endpoint QA, UI acotada, smoke con tarea test y habilitacion controlada.
+- No se implemento escritura y no se modificaron archivos funcionales.
+
+Proximo paso recomendado:
+
+- Ejecutar 30E1 solo si se aprueba una tarea dummy o entorno QA para escritura real.

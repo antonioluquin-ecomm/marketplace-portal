@@ -1045,3 +1045,32 @@ Evidencia local:
 
 - Capturas generadas en `C:\tmp\marketplace-portal-29c-smoke-all`.
 - Se validaron vistas desktop `1365x768` y mobile `390x844`.
+
+---
+
+## Etapa 30D: matriz futura edicion Gantt Operativo
+
+**Estado:** documentado, no implementado.
+
+**Documento tecnico:** `docs/gantt-operativo-edicion.md`.
+
+Validaciones futuras obligatorias para 30E:
+
+| Caso | Entrada | Resultado esperado | Estado |
+|---|---|---|---|
+| `task_id` valido | `tipo_formulario=gantt_task_update`, campos permitidos | Actualiza fila unica y responde `ok:true` | Pendiente |
+| `task_id` inexistente | ID no presente en `timeline` | Rechaza con `ok:false` y error claro | Pendiente |
+| `task_id` duplicado | ID repetido en `timeline` | Rechaza sin escribir | Pendiente |
+| Campo no permitido | `fields` incluye columna restringida | Rechaza o ignora segun contrato final; preferencia rechazar | Pendiente |
+| Fecha invalida | `inicio_real`, `fin_real`, `inicio_plan` o `fin_plan` invalida | Rechaza sin escribir | Pendiente |
+| Estado invalido | Estado fuera de enum permitido | Rechaza sin escribir | Pendiente |
+| Payload vacio | `fields={}` | Rechaza sin escribir | Pendiente |
+| Sin `updated_by` | Payload sin usuario | Rechaza o registra usuario anonimo segun decision 30E | Pendiente |
+| Recarga posterior | Guardado OK | `loadData(true)` refleja cambios desde CSV | Pendiente |
+| Smoke no productivo | Tarea dummy/QA | No altera tareas reales | Pendiente |
+
+Restricciones para 30E:
+
+- No editar `task_id`, `id_tarea`, `seller_id` ni `seller_nombre`.
+- No modificar formulas, columnas calculadas, URLs, estructura de hoja ni endpoints existentes.
+- No habilitar edicion productiva sin prueba con tarea dummy.
