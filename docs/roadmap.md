@@ -1948,3 +1948,14 @@ Resultado:
 - Reutilizadas reglas publicas compartidas existentes de base visual, body/wrap, hero, brand, intro note, badges, seller identity/logo/chip, secciones, field containers, labels visuales, botones y responsive visual basico.
 - Conservadas inline las reglas sensibles o acopladas a progreso por secciones, navegacion entre secciones, tooltips, condicionales, `hidden/visible`, estados dinamicos, validaciones, errores, inputs/selects/textarea, radio/checkbox, alertas, status, submit, payload y campos.
 - No se modificaron bloques `<script>`, submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, validaciones, `name/id/value`, action/method, rutas, href/src existentes ni JS funcional.
+
+## Etapa 24D: extension CSS publico a Presentacion Seller
+
+Estado: completada.
+
+Resultado:
+
+- Enlazado `assets/css/pages/public-seller.css` en `public/presentaciones/presentacion-seller.html`, antes del CSS inline.
+- Reutilizadas solo reglas publicas compartidas de base global segura: `box-sizing`, reset de margen/padding y scroll suave.
+- Conservadas inline las reglas especificas de presentacion comercial: topbar, CTAs, hero editorial, seller card, logos personalizados, secciones claras/oscuras, cards comerciales, disclaimers, responsive y estados dependientes de personalizacion por seller.
+- No se modificaron bloques `<script>`, `seller_id`, CTAs, rutas, href/src existentes, personalizacion dinamica, render dinamico, `name/id/value` ni JS funcional.

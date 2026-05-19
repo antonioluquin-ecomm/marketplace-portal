@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 24D extension CSS publico a Presentacion Seller
+
+Tipo de cambio: visual controlado.
+
+Estado: completado.
+
+Resultado:
+- Enlazado `assets/css/pages/public-seller.css` en `public/presentaciones/presentacion-seller.html`, antes del CSS inline.
+- Reutilizadas solo reglas publicas compartidas de base global segura (`box-sizing`, reset de margen/padding y scroll suave).
+- Conservadas inline las reglas especificas de presentacion comercial: topbar, CTAs, hero editorial, seller card, logos personalizados, secciones claras/oscuras, cards comerciales, disclaimers, responsive y estados dependientes de personalizacion por seller.
+- Sin cambios en bloques `<script>`, `seller_id`, CTAs, rutas, href/src existentes, personalizacion dinamica, render dinamico, `name/id/value` ni JS funcional.
+
 ## 2026-05-19 - Etapa 24C extension CSS publico a Relevamiento
 
 Tipo de cambio: visual critico acotado.
