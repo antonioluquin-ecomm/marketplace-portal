@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 24B piloto CSS publico seller-facing
+
+Tipo de cambio: visual critico acotado.
+
+Estado: completado.
+
+Resultado:
+- Creado `assets/css/pages/public-seller.css` como hoja publica compartida para paginas seller-facing.
+- Enlazado solo en `public/formularios/formulario-calificacion.html`, antes del CSS inline.
+- Movidas reglas visuales estaticas de base publica, body/wrap, hero, brand, intro note, badges, seller identity/logo/chip, secciones, field containers, labels visuales, botones, toast y responsive visual basico.
+- Conservadas inline las reglas sensibles o acopladas a progreso, result panel, pills calculadas, `hidden/visible`, estados dinamicos, validaciones, errores, status, inputs/selects/textarea, radio/checkbox, submit, payload y campos.
+- Sin cambios en bloques `<script>`, submit, fetch, `ENDPOINT_URL`, payload, `tipo_formulario`, `seller_id`, validaciones, `name/id/value`, action/method, rutas, href/src existentes ni JS funcional.
+
 ## 2026-05-18 - Etapa 23G cierre CSS por familias internas
 
 Tipo de cambio: documentacion.

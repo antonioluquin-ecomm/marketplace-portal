@@ -1925,3 +1925,15 @@ Resultado:
 - Decision vigente: se mantuvo inline todo CSS sensible asociado a JS, render dinamico, submit, filtros, timeline, formulas, payloads o estados dinamicos.
 - Decision vigente: no tocar `public/` todavia.
 - Proximo paso recomendado: push y smoke test visual liviano; luego decidir si se abre CSS publico seller-facing en etapa separada.
+
+## Etapa 24B: piloto CSS publico seller-facing
+
+Estado: completada.
+
+Resultado:
+
+- Creado `assets/css/pages/public-seller.css`.
+- Enlazado `public-seller.css` solo en `public/formularios/formulario-calificacion.html`, antes del CSS inline.
+- Movidas reglas visuales estaticas de base publica, body/wrap, hero, brand, intro note, badges, seller identity/logo/chip, secciones, field containers, labels visuales, botones, toast y responsive visual basico.
+- Conservadas inline las reglas sensibles o acopladas a progreso, result panel, pills calculadas, `hidden/visible`, estados dinamicos, validaciones, errores, status, inputs/selects/textarea, radio/checkbox, submit, payload y campos.
+- No se modificaron bloques `<script>`, submit, fetch, `ENDPOINT_URL`, payload, `tipo_formulario`, `seller_id`, validaciones, `name/id/value`, action/method, rutas, href/src existentes ni JS funcional.
