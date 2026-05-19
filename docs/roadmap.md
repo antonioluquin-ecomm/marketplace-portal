@@ -1970,3 +1970,18 @@ Resultado:
 - Reutilizadas solo reglas publicas compartidas de base global segura: `box-sizing`, reset de margen/padding y scroll suave.
 - Conservadas inline las reglas especificas del simulador: topbar, CTAs, hero, seller box, paneles, inputs funcionales, resultados, KPIs, escenarios, tarifas, overrides, estados dinamicos, toasts, disclaimers y responsive propio.
 - No se modificaron bloques `<script>`, JS funcional, calculos, formulas, resultados, tarifas, overrides, `seller_id`, CTAs, rutas, href/src existentes, render dinamico ni `name/id/value`.
+
+## Etapa 24F: cierre CSS publico seller-facing
+
+Estado: completada.
+
+Resultado:
+
+- Cerrado el bloque 24B-24E de CSS publico seller-facing.
+- 24B: creacion de `public-seller.css` y piloto en `formulario-calificacion`.
+- 24C: extension a `formulario-relevamiento`.
+- 24D: extension minima a `presentacion-seller`.
+- 24E: extension minima a `simulador-seller`.
+- Decision vigente: mantener inline todo CSS sensible asociado a submit, payloads, `seller_id`, validaciones, render dinamico, CTAs, calculos, formulas, resultados, tarifas y overrides.
+- Resultado: sistema visual publico seller-facing unificado sin tocar logica funcional.
+- Proximo paso recomendado: push y smoke test visual publico; luego entrar solo en mejoras funcionales reales o UI refinements especificos.

@@ -4,6 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 24F cierre CSS publico seller-facing
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque 24B-24E de CSS publico seller-facing.
+- 24B: creado `assets/css/pages/public-seller.css` y aplicado como piloto en `formulario-calificacion`.
+- 24C: extendido a `formulario-relevamiento`.
+- 24D: extension minima a `presentacion-seller`.
+- 24E: extension minima a `simulador-seller`.
+- Decision vigente: mantener inline todo CSS sensible asociado a submit, payloads, `seller_id`, validaciones, render dinamico, CTAs, calculos, formulas, resultados, tarifas y overrides.
+- Resultado: sistema visual publico seller-facing unificado sin tocar logica funcional.
+- Proximo paso recomendado: push y smoke test visual publico; luego entrar solo en mejoras funcionales reales o UI refinements especificos.
+
 ## 2026-05-19 - Etapa 24E extension CSS publico a Simulador Seller
 
 Tipo de cambio: visual critico acotado.
