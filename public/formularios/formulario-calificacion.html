@@ -369,6 +369,13 @@
       <header class="hero">
         <div class="brand">SPORTING <span>MARKETPLACE</span></div>
         <div class="portal-section-label">FORMULARIO DE CALIFICACIÓN</div>
+        <nav class="public-flow-nav" aria-label="Navegación pública seller">
+          <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+          <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+          <a class="active" data-public-link="calificacion" href="./formulario-calificacion.html">Calificación</a>
+          <a data-public-link="relevamiento" href="./formulario-relevamiento.html">Relevamiento</a>
+        </nav>
+        <a class="public-next-cta" data-public-link="relevamiento" href="./formulario-relevamiento.html">Ir a relevamiento →</a>
         <h1>Calificación Inicial de Seller</h1>
         <p>
           Este formulario permite relevar información básica del seller para
@@ -810,6 +817,12 @@
 
       const params = new URLSearchParams(window.location.search);
       const sellerId = (params.get("seller_id") || "").trim();
+      const PUBLIC_LINKS = {
+        presentacion: "../presentaciones/presentacion-seller.html",
+        simulador: "../simuladores/simulador-seller.html",
+        calificacion: "./formulario-calificacion.html",
+        relevamiento: "./formulario-relevamiento.html",
+      };
       const form = document.getElementById("sellerForm");
       const sellerInput = document.getElementById("seller_id");
       const submitBtn = document.getElementById("submitBtn");
@@ -841,6 +854,16 @@
       }
       function clean(v) {
         return String(v || "").trim();
+      }
+      function publicLink(key) {
+        const base = PUBLIC_LINKS[key] || key;
+        return sellerId ? base + "?seller_id=" + encodeURIComponent(sellerId) : base;
+      }
+      function wirePublicLinks() {
+        document.querySelectorAll("[data-public-link]").forEach((el) => {
+          const key = el.getAttribute("data-public-link");
+          if (PUBLIC_LINKS[key]) el.href = publicLink(key);
+        });
       }
       function safeUrl(u) {
         const v = String(u || "").trim();
@@ -922,6 +945,8 @@
           ""
         );
       }
+
+      wirePublicLinks();
 
       async function loadSellerIdentity() {
         if (!sellerId) {

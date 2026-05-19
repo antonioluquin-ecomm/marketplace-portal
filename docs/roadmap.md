@@ -2053,3 +2053,18 @@ Resultado:
 - Variantes conservadas: `index.html` institucional, `public/` seller-facing y maqueta Seller Center.
 - Se mantuvieron intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, aliases, legacy y campos.
 - Proximo paso recomendado: smoke visual interno desktop/mobile y luego smoke post-push en GitHub Pages.
+
+## Etapa 28B: navegacion publica seller-facing con seller_id
+
+Estado: completada.
+
+Resultado:
+
+- Agregada navegacion publica cruzada entre Presentacion, Simulador, Calificacion y Relevamiento.
+- Todos los links publicos cruzados se construyen desde `URLSearchParams` y conservan `seller_id` cuando viene en la URL.
+- Presentacion y Simulador mantienen CTA principal hacia Calificacion.
+- Calificacion suma CTA no invasivo hacia Relevamiento.
+- Relevamiento suma navegacion secundaria sin empujar salida del formulario.
+- La navegacion publica de Presentacion usa rutas relativas seguras para evitar depender del `BASE_URL` absoluto.
+- Se mantuvieron intactos submit, payloads, endpoints, Apps Script, calculos, validaciones, campos, hidden `seller_id`, config, aliases, legacy e `internal/`.
+- Proximo paso recomendado: smoke visual/manual con `seller_id=SPT-001` en desktop y mobile.

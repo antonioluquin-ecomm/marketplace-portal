@@ -4,6 +4,21 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 28B navegacion publica seller-facing con seller_id
+
+Tipo de cambio: navegacion publica critica acotada.
+
+Estado: completado.
+
+Resultado:
+- Agregada navegacion publica entre Presentacion, Simulador, Calificacion y Relevamiento.
+- Los links cruzados se construyen localmente desde `URLSearchParams` y preservan `seller_id` cuando existe en la URL actual.
+- Presentacion mantiene CTA principal a Calificacion, ahora con ruta relativa publica segura en vez de depender del `BASE_URL` absoluto para esa navegacion.
+- Simulador mantiene CTA principal a Calificacion y suma accesos a Presentacion y Relevamiento.
+- Calificacion suma navegacion publica y CTA no invasivo `Ir a relevamiento`.
+- Relevamiento suma navegacion publica secundaria sin alterar el formulario.
+- Sin cambios en submit, payloads, endpoints, Apps Script, calculos, validaciones, campos `name/id/value/data-*`, `action/method`, hidden `seller_id`, config, aliases, legacy ni paginas internas.
+
 ## 2026-05-19 - Etapa 27F normalizacion interna de headers/topbars
 
 Tipo de cambio: visual estructural acotado.

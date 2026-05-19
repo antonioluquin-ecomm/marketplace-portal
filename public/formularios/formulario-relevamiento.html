@@ -475,6 +475,12 @@
       <header class="hero">
         <div class="brand">SPORTING <span>MARKETPLACE</span></div>
         <div class="portal-section-label">FORMULARIO DE RELEVAMIENTO</div>
+        <nav class="public-flow-nav" aria-label="Navegación pública seller">
+          <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+          <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+          <a data-public-link="calificacion" href="./formulario-calificacion.html">Calificación</a>
+          <a class="active" data-public-link="relevamiento" href="./formulario-relevamiento.html">Relevamiento</a>
+        </nav>
         <h1>Relevamiento de Seller</h1>
         <p>
           Este formulario nos permite conocer tu operación actual: tecnología,
@@ -2531,6 +2537,12 @@
 
       const params = new URLSearchParams(window.location.search);
       const sellerId = (params.get("seller_id") || "").trim();
+      const PUBLIC_LINKS = {
+        presentacion: "../presentaciones/presentacion-seller.html",
+        simulador: "../simuladores/simulador-seller.html",
+        calificacion: "./formulario-calificacion.html",
+        relevamiento: "./formulario-relevamiento.html",
+      };
 
       const chip = document.getElementById("sellerChip");
       const sellerInput = document.getElementById("seller_id");
@@ -2631,6 +2643,18 @@
           .replace(/^_+|_+$/g, "");
       }
 
+      function publicLink(key) {
+        const base = PUBLIC_LINKS[key] || key;
+        return sellerId ? base + "?seller_id=" + encodeURIComponent(sellerId) : base;
+      }
+
+      function wirePublicLinks() {
+        document.querySelectorAll("[data-public-link]").forEach((el) => {
+          const key = el.getAttribute("data-public-link");
+          if (PUBLIC_LINKS[key]) el.href = publicLink(key);
+        });
+      }
+
       function safeUrl(u) {
         const v = String(u || "").trim();
         if (!v) return "";
@@ -2715,6 +2739,8 @@
           ""
         );
       }
+
+      wirePublicLinks();
 
       function renderSellerIdentity(seller) {
         const name = readSellerName(seller) || sellerId;

@@ -282,6 +282,12 @@
     <div class="crumb">SIMULADOR SELLER</div>
   </div>
   <div class="tb-right">
+    <nav class="public-flow-nav compact" aria-label="Navegación pública seller">
+      <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+      <a class="active" data-public-link="simulador" href="./simulador-seller.html">Simulador</a>
+      <a data-public-link="calificacion" href="../formularios/formulario-calificacion.html">Calificación</a>
+      <a data-public-link="relevamiento" href="../formularios/formulario-relevamiento.html">Relevamiento</a>
+    </nav>
     <div class="tb-chip" id="topbarChip" style="display:none">
       Comisión <span id="topbarComision">—</span>
     </div>
@@ -302,6 +308,12 @@
   <section class="hero">
     <div class="panel">
       <div class="eyebrow">Proyección económica preliminar</div>
+      <nav class="public-flow-nav hero-public-nav" aria-label="Navegación pública seller">
+        <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+        <a class="active" data-public-link="simulador" href="./simulador-seller.html">Simulador</a>
+        <a data-public-link="calificacion" href="../formularios/formulario-calificacion.html">Calificación</a>
+        <a data-public-link="relevamiento" href="../formularios/formulario-relevamiento.html">Relevamiento</a>
+      </nav>
       <h1>Simulá tus ventas en <span>Sporting</span></h1>
       <p class="lead">Completá tus datos de venta, elegí los servicios a considerar y visualizá una estimación orientativa de facturación, deducciones y neto para tu marca dentro de Marketplace Sporting.</p>
       <div class="seller-box">
@@ -652,9 +664,29 @@ let _rtimer    = null;
 
 const params = new URLSearchParams(window.location.search);
 let CURRENT_SELLER_ID = (params.get("seller_id") || params.get("seller") || params.get("id") || "").trim();
+const PUBLIC_LINKS = {
+  presentacion: "../presentaciones/presentacion-seller.html",
+  simulador: "./simulador-seller.html",
+  calificacion: "../formularios/formulario-calificacion.html",
+  relevamiento: "../formularios/formulario-relevamiento.html"
+};
 
 /* ── helpers ── */
 const $     = id => document.getElementById(id);
+function publicSellerId(){
+  return (CURRENT_SELLER_ID || params.get("seller_id") || "").trim();
+}
+function publicLink(key){
+  const base = PUBLIC_LINKS[key] || key;
+  const sid = publicSellerId();
+  return sid ? base + "?seller_id=" + encodeURIComponent(sid) : base;
+}
+function wirePublicLinks(){
+  document.querySelectorAll("[data-public-link]").forEach(el => {
+    const key = el.getAttribute("data-public-link");
+    if(PUBLIC_LINKS[key]) el.href = publicLink(key);
+  });
+}
 const norm  = v  => String(v ?? "").trim().toLowerCase();
 const num   = v  => {
   if(v === null || v === undefined || v === "") return 0;
@@ -902,8 +934,9 @@ function applySellerInfo(shouldPrefill = true){
 
   const topbarCta = $("topbarCta");
   if(topbarCta){
-    topbarCta.href = "../formularios/formulario-calificacion.html" + (CURRENT_SELLER_ID ? "?seller_id=" + encodeURIComponent(CURRENT_SELLER_ID) : "");
+    topbarCta.href = publicLink("calificacion");
   }
+  wirePublicLinks();
 
   if(shouldPrefill && CURRENT_SELLER_ID){
     const ticket = num(pick(SELLER,["ticket_promedio","ticket","ticket_medio"]));
@@ -1095,9 +1128,7 @@ function updateViabilityAndCTA(r, gross) {
     }
 
     // Wire CTA links
-    const base = "../formularios/formulario-calificacion.html";
-    const qp = CURRENT_SELLER_ID ? "?seller_id=" + encodeURIComponent(CURRENT_SELLER_ID) : "";
-    const formUrl = base + qp;
+    const formUrl = publicLink("calificacion");
     const formLink = $("ctaFormLink");
     if (formLink) formLink.href = formUrl;
 

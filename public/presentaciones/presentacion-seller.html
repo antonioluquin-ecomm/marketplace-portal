@@ -250,6 +250,12 @@
       <a href="#proceso">Proceso</a>
       <a href="#economia">Condiciones</a>
     </nav>
+    <nav class="public-flow-nav compact" aria-label="Navegación pública seller">
+      <a class="active" data-public-link="presentacion" href="./presentacion-seller.html">Presentación</a>
+      <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+      <a data-public-link="calificacion" href="../formularios/formulario-calificacion.html">Calificación</a>
+      <a data-public-link="relevamiento" href="../formularios/formulario-relevamiento.html">Relevamiento</a>
+    </nav>
     <a id="topCta" class="top-cta" href="#" target="_blank" rel="noopener">
       Completar calificación <span class="top-cta-arr">→</span>
     </a>
@@ -261,6 +267,12 @@
     <div class="hero-inner">
       <div class="hero-copy">
         <div class="hero-eyebrow">Propuesta comercial para sellers</div>
+        <nav class="public-flow-nav hero-public-nav" aria-label="Navegación pública seller">
+          <a class="active" data-public-link="presentacion" href="./presentacion-seller.html">Presentación</a>
+          <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+          <a data-public-link="calificacion" href="../formularios/formulario-calificacion.html">Calificación</a>
+          <a data-public-link="relevamiento" href="../formularios/formulario-relevamiento.html">Relevamiento</a>
+        </nav>
         <h1>Vendé más.<br><em>Sporting<br>Marketplace.</em></h1>
         <p class="hero-lead"><strong id="sellerLeadName">Tu marca</strong> puede llegar a más de 4,5 millones de usuarios deportivos dentro de un canal digital con operación, checkout y tráfico ya instalados.</p>
         <p class="hero-sub">Tu marca aporta producto, stock y capacidad operativa. Marketplace Sporting aporta canal, exposición, medios de pago y una experiencia de compra preparada para escalar.</p>
@@ -618,8 +630,26 @@
     const sellerId       = (params.get("seller_id") || "").trim();
     const sellerNameParam= (params.get("seller_name") || params.get("nombre") || "").trim();
     const logoParam      = (params.get("logo") || params.get("logo_url") || "").trim();
+    const PUBLIC_LINKS = {
+      presentacion: "./presentacion-seller.html",
+      simulador: "../simuladores/simulador-seller.html",
+      calificacion: "../formularios/formulario-calificacion.html",
+      relevamiento: "../formularios/formulario-relevamiento.html"
+    };
 
     const $ = id => document.getElementById(id);
+
+    function publicLink(key) {
+      const base = PUBLIC_LINKS[key] || key;
+      return sellerId ? `${base}?seller_id=${encodeURIComponent(sellerId)}` : base;
+    }
+
+    function wirePublicLinks() {
+      document.querySelectorAll("[data-public-link]").forEach(el => {
+        const key = el.getAttribute("data-public-link");
+        if (PUBLIC_LINKS[key]) el.href = publicLink(key);
+      });
+    }
 
     function normalizeKey(v) {
       return String(v||"").trim().toLowerCase()
@@ -670,9 +700,7 @@
     }
 
     function setCtaLinks() {
-      const url = sellerId
-        ? `${CONFIG.CLASSIFICATION_URL}?seller_id=${encodeURIComponent(sellerId)}`
-        : CONFIG.CLASSIFICATION_URL;
+      const url = publicLink("calificacion");
       ["mainCta","topCta","finalCta"].forEach(id=>{
         const el=$(id); if(el) el.href=url;
       });
@@ -720,7 +748,8 @@
     }
 
     async function init() {
-      setCtaLinks();
+    wirePublicLinks();
+    setCtaLinks();
       applySellerIdentity({name:sellerNameParam||"Tu marca",logoUrl:logoParam});
       try {
         const seller=await loadSellerFromSheet();
