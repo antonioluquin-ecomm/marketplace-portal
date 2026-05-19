@@ -2024,3 +2024,16 @@ Resultado:
 - Mejoradas legibilidad, aire visual, jerarquia, botones, badges, cards, sidebars, topbars y estados visuales.
 - Se mantuvieron intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, rutas criticas y campos.
 - Proximo paso recomendado: smoke visual post-refactor en GitHub Pages y ajustes menores solo si aparecen hallazgos concretos.
+
+## Etapa 27B: unificacion global de headers/topbars
+
+Estado: completada.
+
+Resultado:
+
+- Unificado el header/topbar del portal con marca `SPORTING MARKETPLACE`, label de seccion en uppercase y acciones alineadas a la derecha.
+- Normalizadas altura, spacing, botones, estados y separadores visuales del header.
+- Aplicado en portada, Hub Operativo, estrategia, Backlog, Gestion Sellers, Gantt, Seller Center, simuladores y paginas publicas seller-facing.
+- Variante conservada: formularios publicos mantienen header tipo hero, pero con marca y label visual unificados.
+- Se mantuvieron intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, rutas criticas y campos.
+- Proximo paso recomendado: smoke visual post-push y ajustes menores solo si aparecen inconsistencias concretas.

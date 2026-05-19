@@ -32,7 +32,7 @@
     --purple: #9c27b0;
     --modal-shadow: 0 8px 28px rgba(0,0,0,.28);
     --sidebar-width: 220px;
-    --topbar-height: 42px;
+    --topbar-height: 56px;
   }
 
   body {
@@ -71,21 +71,29 @@
   .hamburger span { height: 2px; background: #ddd; border-radius: 2px; }
 
   .logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    background: #10a6bd;
-    display: grid;
-    place-items: center;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     color: white;
-    font-weight: 800;
-    font-size: 13px;
+    font-weight: 900;
+    font-size: 17px;
+    letter-spacing: .015em;
+    text-transform: uppercase;
   }
+  .logo span { color: #6aa84f; }
 
   .topbar-title {
-    font-size: 21px;
-    font-weight: 500;
-    color: #f5f5f5;
+    border-left: 1px solid rgba(255,255,255,.18);
+    padding-left: 14px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #b7c1b3;
   }
 
   .topbar-right {
@@ -819,8 +827,8 @@
 
 <header class="topbar">
   <div class="hamburger"><span></span><span></span><span></span></div>
-  <div class="logo">AL</div>
-  <div class="topbar-title">Seller Center <span style="font-size:13px;font-weight:400;color:#aaa;margin-left:6px">· Referencia funcional y visual · Marketplace Portal</span></div>
+  <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+  <div class="topbar-title">SELLER CENTER</div>
   <div class="topbar-right">
     <div class="version">v1.116.0</div>
     <a class="tb-nav-link" href="./index.html" title="Volver al Seller Center">← Seller Center</a>

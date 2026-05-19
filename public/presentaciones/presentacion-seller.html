@@ -215,7 +215,7 @@
     .btn,.badge,.pill{letter-spacing:.07em}
     @media(max-width:760px){h1{font-size:34px}.section{padding:58px 20px}}
     /* Etapa 27A: UI foundation enterprise seller-facing. */
-    :root{--g:#6aa84f;--g2:#54873d;--dark:#101311;--panel:#191d19;--line:rgba(255,255,255,.10);--text:#f1f4ef;--muted:#b7c1b3}
+    :root{--g:#6aa84f;--g2:#54873d;--dark:#101311;--panel:#191d19;--line:rgba(255,255,255,.10);--text:#f1f4ef;--muted:#b7c1b3;--tb:56px}
     body{font-size:15px;line-height:1.65}
     .topbar{background:rgba(16,19,17,.96);box-shadow:none;border-bottom-color:rgba(255,255,255,.10)}
     .logo{font-family:Barlow,system-ui,sans-serif;text-transform:none;letter-spacing:.01em}
@@ -224,6 +224,11 @@
     p,.lead,.section-copy,.card p{line-height:1.65}
     .card,.seller-card,.metric,.step,.note{box-shadow:none;border-color:rgba(255,255,255,.10)}
     .btn.primary,.cta-primary{background:var(--g);border-color:var(--g)}
+    /* Etapa 27B: header/topbar unificado. */
+    .topbar{height:56px;min-height:56px;padding:0 clamp(18px,2.4vw,28px)}
+    .brand{gap:14px}.logo{font-size:17px;font-weight:900;text-transform:uppercase;letter-spacing:.015em}.logo span{color:var(--g)}
+    .crumb{border-left:1px solid var(--line);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+    .topnav{margin-left:auto}
   </style>
 </head>
 <body>
@@ -231,7 +236,8 @@
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="brand">
-      <div class="logo">Sporting <span>Marketplace</span></div>
+      <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+      <div class="crumb">PRESENTACIÓN SELLER</div>
       <div id="topSeller" class="seller-id-chip">
         <img id="topSellerLogo" alt=""/>
         <strong id="topSellerName"></strong>

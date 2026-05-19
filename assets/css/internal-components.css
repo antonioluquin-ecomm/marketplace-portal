@@ -88,6 +88,62 @@
   background: rgba(16, 19, 17, .96);
 }
 
+/* Etapa 27B: patron comun de headers/topbars. */
+:where(.topbar) {
+  min-height: 56px;
+  padding-inline: clamp(18px, 2.4vw, 28px);
+}
+
+:where(.brand, .tb-brand, .tb-left, .topbar-brand) {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+:where(.logo, .tb-logo, .topbar-logo) {
+  font-family: Barlow, system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: .015em;
+  text-transform: uppercase;
+  color: var(--t1, var(--w, var(--text)));
+  white-space: nowrap;
+}
+
+:where(.logo span, .logo b, .tb-logo span, .topbar-logo span) {
+  color: var(--g);
+  font-weight: 900;
+}
+
+:where(.crumb, .tb-crumb, .tb-module, .topbar-badge) {
+  border-left: 1px solid var(--border-soft, var(--bdr, var(--line)));
+  padding-left: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--t3, var(--text-soft));
+  white-space: nowrap;
+}
+
+:where(.top-actions, .tb-right, .topbar-right) {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+:where(.btn-top, .tb-btn, .tbtn, .btn-sm) {
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: var(--radius-control, 9px);
+  font-size: 11px;
+  font-weight: 800;
+}
+
 :where(.sidebar) {
   background: rgba(15, 21, 15, .97);
 }

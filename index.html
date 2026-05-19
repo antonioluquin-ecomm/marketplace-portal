@@ -434,13 +434,32 @@
     .btn.primary { background: var(--g); border-color: var(--g); }
     .btn:hover { background: var(--g-soft); color: #d8ead0; }
     .card-title, .doc-card h3 { letter-spacing: .01em; }
+
+    /* Etapa 27B: header/topbar unificado. */
+    .topbar { min-height: 56px; padding: 0 clamp(18px, 2.4vw, 28px); }
+    .brand { gap: 14px; }
+    .logo {
+      font-family: Barlow, system-ui, sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: .015em;
+      text-transform: uppercase;
+    }
+    .logo span { color: var(--g); }
+    .crumb {
+      border-left-color: var(--line);
+      color: var(--t3);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="logo">Marketplace <span>Portal</span></div>
-      <div class="crumb">Sporting Marketplace</div>
+      <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+      <div class="crumb">PORTAL INSTITUCIONAL</div>
     </div>
     <div class="status"><span class="dot"></span> Portal estable post-V1</div>
   </header>

@@ -213,3 +213,16 @@ body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
 .update-btn:hover{border-color:rgba(106,168,79,.35);color:#d8ead0}
 .rates-edit-note{background:rgba(106,168,79,.07);border-left-color:rgba(106,168,79,.28)}
 .disclaimer{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.16)}
+
+/* Etapa 27B: header comun para simuladores internos. */
+.topbar-logo{
+  font-family:Barlow,system-ui,sans-serif;
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:.015em;
+  text-transform:uppercase;
+  color:var(--white);
+  text-decoration:none;
+  white-space:nowrap;
+}
+.topbar-logo span{color:var(--green)}

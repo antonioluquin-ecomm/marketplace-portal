@@ -404,3 +404,51 @@ small {
 .toast {
   box-shadow: 0 10px 26px rgba(0, 0, 0, .22);
 }
+
+/* Etapa 27B: patron comun de headers/topbars publicos. */
+.topbar {
+  min-height: 56px;
+  padding-inline: clamp(18px, 2.4vw, 28px);
+}
+
+.topbar .brand,
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.topbar .logo,
+.brand {
+  font-family: Barlow, system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: .015em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.topbar .logo span,
+.brand span {
+  color: var(--g);
+}
+
+.topbar .crumb,
+.portal-section-label {
+  border-left: 1px solid var(--line);
+  padding-left: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--muted2);
+  white-space: nowrap;
+}
+
+.hero .portal-section-label {
+  display: inline-flex;
+  margin: 2px 0 12px;
+  border-left-color: rgba(255,255,255,.14);
+}

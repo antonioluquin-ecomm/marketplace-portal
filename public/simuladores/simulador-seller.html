@@ -267,14 +267,19 @@
     p,.lead,.helper,.note{line-height:1.65}
     .panel,.card,.seller-box,.result-card,.kpi,.scenario-card,.disclaimer{background:var(--panel);border-color:var(--line)}
     .btn,.tb-cta{background:var(--g);border-color:var(--g)}
+    /* Etapa 27B: header/topbar unificado. */
+    .topbar{height:56px;min-height:56px;padding:0 clamp(18px,2.4vw,28px)}
+    .brand{gap:14px}.logo{font-size:17px;font-weight:900;text-transform:uppercase;letter-spacing:.015em}.logo span{color:var(--g)}
+    .crumb{border-left:1px solid var(--line);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--muted2);text-transform:uppercase;white-space:nowrap}
+    .tb-right{margin-left:auto}
   </style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="brand">
-    <div class="logo">Sporting <span>Marketplace</span></div>
-    <div class="crumb">Simulador Seller</div>
+    <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+    <div class="crumb">SIMULADOR SELLER</div>
   </div>
   <div class="tb-right">
     <div class="tb-chip" id="topbarChip" style="display:none">

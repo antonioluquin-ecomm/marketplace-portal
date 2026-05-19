@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 27B unificacion global de headers/topbars
+
+Tipo de cambio: visual estructural.
+
+Estado: completado.
+
+Resultado:
+- Normalizado el patron de header/topbar con marca `SPORTING MARKETPLACE`, seccion en uppercase, separador sutil y acciones alineadas a la derecha.
+- Ajustados headers internos, publicos seller-facing, paginas estrategicas, Backlog, Gestion, Gantt, Seller Center y Simuladores.
+- Incorporada capa CSS compartida para altura, espaciado, marca, section label, botones y estados visuales del header.
+- Conservadas variantes minimas en formularios seller-facing, donde el header es hero informativo y no topbar fija.
+- Sin cambios en scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, rutas criticas ni campos.
+
 ## 2026-05-19 - Etapa 27A UI Foundation Refactor
 
 Tipo de cambio: visual fuerte.

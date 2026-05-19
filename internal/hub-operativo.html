@@ -512,6 +512,15 @@ h1 { font-size:clamp(38px,4.5vw,58px); line-height:1; }
 .snap,.flow,.flow-step,.card,.access-card,.search-box,.empty-state { background:var(--s1); border-color:var(--ln); }
 .tbtn.cta { background:var(--g); border-color:var(--g); }
 .card:hover,.access-card:hover { border-color:rgba(106,168,79,.24); background:var(--s2); }
+
+/* Etapa 27B: header/topbar unificado. */
+.topbar { min-height:56px; padding:0 clamp(18px,2.4vw,28px); }
+.tb-left { gap:14px; }
+.logo { font-size:17px; font-weight:900; text-transform:uppercase; letter-spacing:.015em; }
+.logo b { color:var(--g); }
+.crumb { border-left-color:var(--ln); color:var(--t3); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+.tb-right { margin-left:auto; gap:10px; }
+.tbtn { min-height:34px; padding:7px 12px; }
 </style>
 </head>
 <body>
@@ -519,8 +528,8 @@ h1 { font-size:clamp(38px,4.5vw,58px); line-height:1; }
 <!-- TOPBAR -->
 <header class="topbar">
   <div class="tb-left">
-    <div class="logo">Sporting <b>Market</b></div>
-    <div class="crumb">Hub Operativo · Interno</div>
+    <div class="logo">SPORTING <b>MARKETPLACE</b></div>
+    <div class="crumb">HUB OPERATIVO</div>
   </div>
   <div class="tb-right">
     <div class="pill"><span class="dot"></span>Operativo</div>
