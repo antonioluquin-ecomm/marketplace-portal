@@ -4,6 +4,20 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 31B modularizacion minima Apps Script
+
+Tipo de cambio: refactor tecnico acotado.
+
+Estado: implementado localmente sin deploy activo.
+
+Resultado:
+- Creados `Config.gs`, `Headers.gs` y `Utils.gs`.
+- Movidas solo constantes globales estaticas, helpers de respuesta HTTP y utilidades generales sin side effects de negocio.
+- `Apps_script_v5.js` conserva `doPost`, `doGet`, routing y toda la logica de Gantt, sellers, calificacion, relevamiento, definicion tecnica, Sheets y emails.
+- Agregado `errorResponse(err)` con el mismo formato de error existente.
+- Validado smoke mockeado de rutas `seller`, `gestion_seller`, `calificacion`, `relevamiento`, `gantt_task_update` y error por falta de `seller_id`.
+- No se tocaron front, config central JS, endpoints, payloads, formularios, simuladores, Google Sheets, deploy activo, `internal/`, `public/` ni `legacy/`.
+
 ## 2026-05-19 - Etapa 31A auditoria modularizacion Apps Script
 
 Tipo de cambio: auditoria tecnica y documentacion.

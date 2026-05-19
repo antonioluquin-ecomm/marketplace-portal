@@ -16,16 +16,6 @@
  */
 
 // ── CONFIG ──────────────────────────────────────
-const SPREADSHEET_ID = "1S_pl358H8nbJC3xgd7UpRpOxTYkC_hopYcBX6WzMlzU";
-const EMAIL_NOTIFICACION = "gabriel.luna@luquin.com.ar";
-const TIMEZONE = "America/Argentina/Buenos_Aires";
-
-const HOJA_SELLERS = "sellers";
-const HOJA_CALIFICACIONES = "calificaciones";
-const HOJA_RELEVAMIENTO = "relevamientos";
-const HOJA_DEFINICION_TECNICA = "definicion_tecnica";
-const HOJA_TIMELINE = "timeline";
-
 // ───────────────────────────────────────────────
 // ENTRY POINT
 // ───────────────────────────────────────────────
@@ -94,12 +84,7 @@ function doPost(e) {
   } catch (err) {
     console.error("Error en doPost:", err.toString());
 
-    return jsonResponse({
-      ok: false,
-      status: "error",
-      error: err && err.message ? err.message : err.toString(),
-      message: err.toString(),
-    });
+    return errorResponse(err);
   }
 }
 
@@ -114,12 +99,6 @@ function doGet() {
       HOJA_DEFINICION_TECNICA,
     ],
   });
-}
-
-function jsonResponse(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(
-    ContentService.MimeType.JSON,
-  );
 }
 
 function normalizarTipoFormulario(valor) {
@@ -332,10 +311,6 @@ function validarSeller(obj, existingRow) {
   }
 }
 
-function emailValido(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
-}
-
 function normalizarSellerId(valor) {
   return String(valor || "").trim().toUpperCase();
 }
@@ -396,10 +371,6 @@ function normalizarActivo(valor) {
   if (["si", "sí", "s", "true", "1", "activo"].includes(n)) return "SI";
   if (["no", "n", "false", "0", "inactivo"].includes(n)) return "NO";
   return raw;
-}
-
-function fechaActualSimple() {
-  return Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd");
 }
 
 const CAMPOS_GANTT_EDITABLES_QA = {
@@ -967,23 +938,6 @@ function buscarFilaPorSellerId(ws, sellerId) {
   return null;
 }
 
-function rowToObject(headers, row) {
-  const obj = {};
-  headers.forEach((h, i) => {
-    obj[h] =
-      row[i] !== undefined && row[i] !== null ? String(row[i]).trim() : "";
-  });
-  return obj;
-}
-
-function pickPrimero(valores) {
-  for (const valor of valores) {
-    const limpio = limpiarValor(valor);
-    if (limpio) return limpio;
-  }
-  return "";
-}
-
 // ───────────────────────────────────────────────
 // HOJAS / HEADERS
 // ───────────────────────────────────────────────
@@ -1104,19 +1058,6 @@ function formatearHoja(ws, totalColumnas) {
 // ───────────────────────────────────────────────
 // LIMPIEZA / COMPLETITUD / ESTADOS
 // ───────────────────────────────────────────────
-function limpiarValor(valor) {
-  if (valor === null || valor === undefined) return "";
-
-  if (Array.isArray(valor)) {
-    return valor
-      .map((v) => String(v || "").trim())
-      .filter(Boolean)
-      .join(", ");
-  }
-
-  return String(valor).trim();
-}
-
 function calcularCompletitudPorHeaders(d, headers, ignorar) {
   const campos = headers.filter((h) => !ignorar.includes(h));
   const total = campos.length;
@@ -1134,14 +1075,6 @@ function obtenerEstado(completitud) {
   if (completitud >= 80) return "Completo";
   if (completitud >= 50) return "Parcial";
   return "Incompleto";
-}
-
-function normalizarTexto(valor) {
-  return String(valor || "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
 }
 
 // ───────────────────────────────────────────────

@@ -1160,3 +1160,39 @@ Validaciones futuras para 31B+:
 | Compatibilidad payloads | Confirmar mismos campos y respuestas | Pendiente |
 | Headers | Confirmar que no hay backups/clear inesperados | Pendiente |
 | Deploy incremental | Versionar Apps Script y conservar rollback | Pendiente |
+
+## Etapa 31B: modularizacion minima Apps Script
+
+**Estado:** implementado localmente, sin deploy activo.
+
+Validaciones realizadas:
+
+| Verificacion | Resultado | Estado |
+|---|---|---|
+| Archivos creados | `Config.gs`, `Headers.gs`, `Utils.gs` | OK |
+| `Apps_script_v5.js` | Mantiene `doPost`, `doGet`, routing y dominios funcionales | OK |
+| Sintaxis `Apps_script_v5.js` | `node --check Apps_script_v5.js` sin errores | OK |
+| Sintaxis `.gs` | Carga local con `vm` sin errores; `node --check` no acepta extension `.gs` en este Node | OK |
+| Routing mockeado | `seller`, `gestion_seller`, `calificacion`, `relevamiento`, `gantt_task_update` | OK |
+| Formato de error | Falta `seller_id` conserva `ok:false`, `status:error`, `error`, `message` | OK |
+| Escritura real | No ejecutada | OK |
+
+Funciones movidas:
+
+| Archivo | Funciones / constantes |
+|---|---|
+| `Config.gs` | `SPREADSHEET_ID`, `EMAIL_NOTIFICACION`, `TIMEZONE`, `HOJA_*` |
+| `Headers.gs` | `jsonResponse`, `errorResponse` |
+| `Utils.gs` | `emailValido`, `fechaActualSimple`, `rowToObject`, `pickPrimero`, `limpiarValor`, `normalizarTexto` |
+
+Funciones no movidas:
+
+| Dominio | Estado |
+|---|---|
+| Gantt Operativo | No modularizado en 31B |
+| Sellers / Gestion Sellers | No modularizado en 31B |
+| Calificacion | No modularizado en 31B |
+| Relevamiento | No modularizado en 31B |
+| Definicion tecnica | No modularizado en 31B |
+| Helpers Sheets con side effects | No modularizados en 31B |
+| Headers de hojas `HEADERS_*` | No movidos en 31B |

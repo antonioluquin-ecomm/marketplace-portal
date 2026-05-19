@@ -186,3 +186,59 @@ No hacer en esta etapa:
 Avanzar con modularizacion incremental solo despues de una etapa 31B dedicada. La prioridad debe ser preservar contratos externos, no embellecer internamente. El primer objetivo realista es dejar `doPost` como router fino y mover utilidades/configuracion sin tocar dominio. Despues, extraer Gantt como modulo piloto y usarlo para validar el patron de split.
 
 La modularizacion completa es conveniente, pero debe tratarse como cambio critico sobre endpoint productivo.
+
+## Estado 31B - Modularizacion minima inicial
+
+Implementado sin deploy ni escritura real.
+
+Archivos creados:
+
+- `Config.gs`
+- `Headers.gs`
+- `Utils.gs`
+
+Cambios aplicados:
+
+- `Config.gs` concentra constantes globales estaticas:
+  - `SPREADSHEET_ID`
+  - `EMAIL_NOTIFICACION`
+  - `TIMEZONE`
+  - `HOJA_SELLERS`
+  - `HOJA_CALIFICACIONES`
+  - `HOJA_RELEVAMIENTO`
+  - `HOJA_DEFINICION_TECNICA`
+  - `HOJA_TIMELINE`
+- `Headers.gs` concentra helpers de salida HTTP:
+  - `jsonResponse`
+  - `errorResponse`
+- `Utils.gs` concentra helpers genericos sin side effects de negocio:
+  - `emailValido`
+  - `fechaActualSimple`
+  - `rowToObject`
+  - `pickPrimero`
+  - `limpiarValor`
+  - `normalizarTexto`
+- `Apps_script_v5.js` conserva `doPost`, `doGet`, routing y toda la logica de dominios.
+- En `doPost`, el bloque de error usa `errorResponse(err)` manteniendo el mismo formato previo.
+
+Funciones no movidas en 31B:
+
+- Gantt Operativo: `actualizarTareaGantt` y validaciones Gantt.
+- Sellers / Gestion Sellers.
+- Calificacion.
+- Relevamiento.
+- Definicion tecnica.
+- Helpers de Sheets con side effects o riesgo estructural.
+- Headers de hojas (`HEADERS_*`) y campos especificos (`CAMPOS_*`).
+- Emails.
+
+Validacion local 31B:
+
+- `node --check Apps_script_v5.js` OK.
+- `.gs` validados por carga local con `vm` debido a que el Node local no acepta extension `.gs` en `node --check`.
+- Smoke mockeado de routing OK para `seller`, `gestion_seller`, `calificacion`, `relevamiento`, `gantt_task_update` y error por falta de `seller_id`.
+
+Riesgo residual:
+
+- Apps Script usa namespace global compartido; al subir estos archivos al proyecto real debe verificarse que no existan archivos/funciones con los mismos nombres.
+- Falta validacion en Apps Script real antes de deploy activo.
