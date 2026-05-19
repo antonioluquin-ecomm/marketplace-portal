@@ -1196,3 +1196,26 @@ Funciones no movidas:
 | Definicion tecnica | No modularizado en 31B |
 | Helpers Sheets con side effects | No modularizados en 31B |
 | Headers de hojas `HEADERS_*` | No movidos en 31B |
+
+### Etapa 31B: validacion real post modularizacion minima
+
+**Estado:** validado sin escrituras reales.
+
+| Smoke | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Incorporacion local `.gs` | `rg --files` y carga conjunta con `vm` | `Config.gs`, `Headers.gs`, `Utils.gs` y `Apps_script_v5.js` cargan juntos | OK |
+| Proyecto remoto Apps Script | Busqueda `.clasp.json` / `appsscript.json` | No hay metadata local para inspeccionar archivos remotos | Limitacion |
+| `doGet` real | GET no destructivo al Web App real | `status:"ok"` y hojas esperadas | OK |
+| Duplicados | Revision de simbolos en 4 archivos | 84 simbolos, 0 duplicados | OK |
+| `seller` | Smoke mockeado `doPost` | `ok:true`, `tipo_formulario:"seller"` | OK |
+| `gestion_seller` | Smoke mockeado `doPost` | Alias normaliza a `seller` | OK |
+| `calificacion` | Smoke mockeado `doPost` | `ok:true`, `tipo_formulario:"calificacion"` | OK |
+| `relevamiento` | Smoke mockeado `doPost` | `ok:true`, `tipo_formulario:"relevamiento"` | OK |
+| `gantt_task_update` | Smoke mockeado `doPost` con `TASK-DUMMY-QA` | `ok:true`, `updated_fields` preservado | OK |
+| Falta `seller_id` | Smoke mockeado error | `ok:false`, `status:"error"`, `error`, `message` | OK |
+| Escritura real | No ejecutada | Sin cambios en Google Sheets | OK |
+
+Pendiente antes de 31C:
+
+- Confirmar en el editor Apps Script real o mediante `clasp` que `Config.gs`, `Headers.gs` y `Utils.gs` fueron subidos al proyecto remoto.
+- Ejecutar POST real solo con dummy aprobado si se decide validar escritura controlada.

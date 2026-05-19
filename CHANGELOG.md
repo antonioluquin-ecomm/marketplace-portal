@@ -18,6 +18,13 @@ Resultado:
 - Validado smoke mockeado de rutas `seller`, `gestion_seller`, `calificacion`, `relevamiento`, `gantt_task_update` y error por falta de `seller_id`.
 - No se tocaron front, config central JS, endpoints, payloads, formularios, simuladores, Google Sheets, deploy activo, `internal/`, `public/` ni `legacy/`.
 
+Validacion post implementacion:
+- GET no destructivo al Web App real respondio `status:"ok"` con hojas esperadas.
+- Revision local de simbolos en `Config.gs`, `Headers.gs`, `Utils.gs` y `Apps_script_v5.js`: 84 simbolos, sin duplicados conflictivos.
+- Smoke mockeado de `doPost/doGet` cargando los 4 archivos juntos: OK.
+- No se ejecutaron POST reales ni escrituras en Google Sheets.
+- Limitacion: el repo no contiene `.clasp.json` ni `appsscript.json`; no se pudo listar archivos remotos del proyecto Apps Script desde Codex.
+
 ## 2026-05-19 - Etapa 31A auditoria modularizacion Apps Script
 
 Tipo de cambio: auditoria tecnica y documentacion.

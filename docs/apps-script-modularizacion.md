@@ -242,3 +242,41 @@ Riesgo residual:
 
 - Apps Script usa namespace global compartido; al subir estos archivos al proyecto real debe verificarse que no existan archivos/funciones con los mismos nombres.
 - Falta validacion en Apps Script real antes de deploy activo.
+
+## Validacion post 31B - proyecto real / local controlado
+
+Fecha: 2026-05-19
+
+Objetivo: confirmar que la modularizacion minima no cambio contratos ni comportamiento esperado antes de avanzar a 31C.
+
+Resultado general: validacion aprobada con una salvedad. El Web App real respondio `doGet` correctamente mediante GET no destructivo. Los POST reales no se ejecutaron para evitar escrituras en Google Sheets; se validaron con smoke mockeado cargando `Config.gs`, `Headers.gs`, `Utils.gs` y `Apps_script_v5.js` juntos.
+
+Validaciones realizadas:
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| Archivos `.gs` presentes en repo | `Config.gs`, `Headers.gs`, `Utils.gs` existen junto a `Apps_script_v5.js` | OK |
+| Proyecto Apps Script real | Sin `.clasp.json` / `appsscript.json`; no se puede inspeccionar remotamente el listado de archivos desde el repo | Limitacion |
+| `doGet` real Web App | GET no destructivo respondio `{"status":"ok","message":"Apps Script activo - Marketplace Sporting","hojas":["sellers","calificaciones","relevamientos","definicion_tecnica"]}` | OK |
+| Duplicados conflictivos | 84 simbolos revisados en 4 archivos; sin duplicados | OK |
+| Sintaxis `Apps_script_v5.js` | `node --check Apps_script_v5.js` sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Apps_script_v5.js` cargan juntos via `vm` | OK |
+| `doPost` mock `seller` | Ruta OK, respuesta `ok:true`, `tipo_formulario:"seller"` | OK |
+| `doPost` mock `gestion_seller` | Alias conserva salida normalizada como `seller` | OK |
+| `doPost` mock `calificacion` | Ruta OK, respuesta `ok:true`, `tipo_formulario:"calificacion"` | OK |
+| `doPost` mock `relevamiento` | Ruta OK, incluye `definicion_tecnica` mockeada | OK |
+| `doPost` mock `gantt_task_update` | Ruta OK con `TASK-DUMMY-QA` mockeado | OK |
+| Error falta `seller_id` | Conserva `ok:false`, `status:"error"`, `error`, `message` | OK |
+| Escritura real Google Sheets | No ejecutada | OK |
+
+Confirmaciones:
+
+- No se agregaron nuevas funciones funcionales.
+- No se modularizo Gantt, sellers, calificacion, relevamiento ni definicion tecnica.
+- No se cambiaron endpoints, payloads ni nombres de campos.
+- No se tocaron `internal/`, `public/`, `legacy/`, `config.js` ni `assets/js/config.js`.
+
+Riesgo residual:
+
+- Para confirmar incorporacion remota de `Config.gs`, `Headers.gs` y `Utils.gs` en el editor Apps Script hace falta acceso al proyecto real o `clasp`. El repo no tiene metadata de vinculacion. La validacion actual confirma compatibilidad local fuerte y `doGet` real operativo, pero no lista archivos remotos.
+- Los POST reales siguen pendientes hasta que exista tarea/seller dummy aprobado para escritura controlada.
