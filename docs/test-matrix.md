@@ -1105,3 +1105,32 @@ Payload dummy recomendado:
   }
 }
 ```
+
+### Etapa 30E3: UI controlada de edicion Gantt Operativo
+
+**Estado:** implementado sin ejecutar escritura real desde el front.
+
+Validaciones realizadas:
+
+| Verificacion | Resultado | Estado |
+|---|---|---|
+| Alcance de archivos | Solo `internal/gantt/gantt-operativo.html` y documentacion permitida | OK |
+| Apps Script | No modificado en 30E3 | OK |
+| Campos enviados | Solo `estado`, `responsable`, `inicio_real`, `fin_real`, `comentario` | OK |
+| Campos restringidos | `task_id`, `seller_id`, seller, fase, hito, dependencia, visible_gantt y fechas planificadas no son editables | OK |
+| Confirmacion antes de guardar | `window.confirm` requerido antes del POST | OK |
+| Advertencia QA | Si la tarea no es `TASK-DUMMY-QA`, el confirm recuerda validar primero con dummy | OK |
+| Validacion local de campos | Smoke local OK para fecha invalida, rango invalido y estado invalido | OK |
+| Payload | Usa `tipo_formulario = "gantt_task_update"` y `task_id` de la tarea seleccionada | OK |
+| Actualizacion visual | Tras OK actualiza la tarea localmente y reabre el detalle con feedback | OK |
+| Escritura real | No ejecutada durante la implementacion | OK |
+
+Casos pendientes de QA real/controlado:
+
+| Caso | Metodo | Estado |
+|---|---|---|
+| Update con `TASK-DUMMY-QA` | Ejecutar manualmente contra tarea dummy aprobada | Pendiente |
+| `task_id` inexistente | Enviar payload controlado y validar respuesta error | Pendiente |
+| Fecha invalida | Forzar payload/fixture con fecha invalida y validar rechazo | Pendiente |
+| Sin errores JS | Smoke en navegador real desktop/mobile | Pendiente |
+| Filtros/vistas | Validar seller filter, busqueda, fase, estado, solo activos, semana/mes, Gantt/lista y modal detalle | Pendiente |

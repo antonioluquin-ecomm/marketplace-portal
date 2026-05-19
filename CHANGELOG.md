@@ -4,6 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 30E3 UI controlada edicion Gantt Operativo
+
+Tipo de cambio: interfaz operativa controlada y documentacion.
+
+Estado: implementado sin ejecutar escritura real.
+
+Resultado:
+- Agregado boton `Editar tarea` dentro del modal de detalle de `internal/gantt/gantt-operativo.html`.
+- Agregado modal de edicion para `estado`, `responsable`, `inicio_real`, `fin_real` y `comentario`.
+- El front construye payload `tipo_formulario = "gantt_task_update"` con `task_id` de la tarea seleccionada.
+- Se requiere confirmacion antes de guardar.
+- Se muestra feedback OK/error.
+- Tras OK, la vista se actualiza localmente y el modal de detalle se reabre con mensaje de confirmacion.
+- No se exponen como editables `task_id`, `seller_id`, seller, fase, hito, dependencia, `visible_gantt`, fechas planificadas, formulas ni columnas calculadas.
+- No se modifico Apps Script, config, CSV URLs, formularios, simuladores, `public/` ni `legacy/`.
+
 ## 2026-05-19 - Etapa 30E1 endpoint QA Apps Script Gantt
 
 Tipo de cambio: Apps Script controlado y documentacion.

@@ -395,3 +395,50 @@ Pendiente antes de ejecutar pruebas reales:
 - confirmar si existen columnas `updated_at` / `updated_by`;
 - confirmar si existe hoja compatible de auditoria;
 - aprobar ejecucion manual contra entorno QA o tarea dummy.
+
+## Estado 30E3
+
+Implementado en `internal/gantt/gantt-operativo.html`:
+
+- Boton `Editar tarea` dentro del modal de detalle.
+- Modal de edicion separado para campos operativos de bajo riesgo.
+- Campos editables desde UI:
+  - `estado`
+  - `responsable`
+  - `inicio_real`
+  - `fin_real`
+  - `comentario`
+- Payload enviado al endpoint:
+
+```json
+{
+  "tipo_formulario": "gantt_task_update",
+  "task_id": "SPT-001-T01",
+  "updated_by": "gantt-operativo-ui",
+  "fields": {
+    "estado": "En curso",
+    "responsable": "QA",
+    "inicio_real": "2026-05-19",
+    "fin_real": "",
+    "comentario": "Comentario operativo."
+  }
+}
+```
+
+Controles aplicados:
+
+- Confirmacion obligatoria antes de guardar.
+- Advertencia QA adicional si la tarea editada no es `TASK-DUMMY-QA`.
+- Validacion local de estado permitido.
+- Validacion local de fechas `YYYY-MM-DD` o vacio.
+- Validacion de rango: `fin_real` no puede ser anterior a `inicio_real`.
+- No se exponen campos `task_id`, `seller_id`, `seller_nombre`, `fase`, `hito`, `dependencia`, `visible_gantt`, fechas planificadas ni columnas calculadas como editables.
+- Tras respuesta OK, la vista se actualiza localmente de forma segura y muestra feedback en el modal de detalle.
+
+Pendiente de QA manual:
+
+- Probar primero contra `TASK-DUMMY-QA`.
+- Validar error con `task_id` inexistente usando endpoint o fixture controlado.
+- Validar error con fecha invalida.
+- Confirmar que el CSV publicado refleja el cambio despues de la latencia normal de Google Sheets.
+- Confirmar sin errores JS en navegador real.

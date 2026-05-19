@@ -204,6 +204,26 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .ml{color:var(--t3);flex-shrink:0} .mv{color:var(--t1);font-weight:500;text-align:right}
 .m-comment{font-size:12px;color:var(--t2);line-height:1.65;padding:10px;background:rgba(255,255,255,.03);border-radius:6px;border:1px solid var(--bdr);margin-top:8px}
 .m-blk{display:flex;gap:9px;align-items:flex-start;padding:10px 12px;background:var(--dng-dim);border:1px solid var(--dng-brd);border-radius:7px;margin-bottom:12px;font-size:12px;color:var(--t2);line-height:1.5}
+.m-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--bdr-l)}
+.m-edit-note{margin-bottom:12px;padding:9px 11px;border:1px solid var(--g-brd);background:var(--g-dim);border-radius:7px;color:var(--t1);font-size:12px;line-height:1.45}
+.edit-modal{width:560px}
+.edit-form{display:grid;gap:12px}
+.edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.edit-field{display:grid;gap:5px}
+.edit-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--t3)}
+.edit-input,.edit-select,.edit-textarea{width:100%;min-width:0;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:7px;color:var(--t1);font-family:'Barlow',sans-serif;font-size:13px;padding:8px 9px;outline:none}
+.edit-select option{background:var(--k2);color:var(--t1)}
+.edit-input:focus,.edit-select:focus,.edit-textarea:focus{border-color:var(--g-brd);box-shadow:0 0 0 2px var(--g-dim)}
+.edit-textarea{min-height:98px;resize:vertical;line-height:1.45}
+.edit-readonly{padding:8px 9px;border-radius:7px;border:1px solid var(--bdr-l);background:rgba(255,255,255,.025);color:var(--t2);font-size:12px;word-break:break-word}
+.edit-status{display:none;padding:9px 10px;border-radius:7px;font-size:12px;line-height:1.45;border:1px solid var(--bdr)}
+.edit-status.visible{display:block}
+.edit-status.ok{background:var(--g-dim);border-color:var(--g-brd);color:var(--t1)}
+.edit-status.err{background:var(--dng-dim);border-color:var(--dng-brd);color:#f4b3b3}
+.edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:2px}
+.edit-help{font-size:11px;color:var(--t3);line-height:1.45}
+.btn-sm.primary{background:var(--g);border-color:var(--g-brd);color:#fff}
+.btn-sm.primary:hover{background:var(--g2);color:#fff}
 
 /* ── STATES ── */
 .spinner{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--g);animation:spin .7s linear infinite}
@@ -235,6 +255,7 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .exec-section-label{padding:13px 22px 0;color:var(--t3);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.012)}
 @media(max-width:980px){.exec-hero{grid-template-columns:1fr}.exec-flow{grid-template-columns:repeat(2,1fr)}.exec-actions{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.exec-flow,.exec-actions{grid-template-columns:1fr}.exec-hero{padding:14px}.summary{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.modal,.edit-modal{width:calc(100vw - 24px);max-height:92vh}.modal-hd{padding:15px 16px 12px}.modal-body{padding:14px 16px}.edit-grid{grid-template-columns:1fr}.edit-actions,.m-actions{justify-content:stretch;flex-direction:column}.edit-actions .btn-sm,.m-actions .btn-sm{width:100%}}
 
 @media(max-width:860px){.shell{grid-template-columns:1fr}}
 
@@ -714,6 +735,65 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   </div>
 </div>
 
+<div class="modal-ov" id="edit-ov" onclick="closeEditModal(event)">
+  <div class="modal edit-modal">
+    <div class="modal-hd">
+      <div><div class="mhd-task">Editar tarea</div><div class="mhd-sub" id="edit-sub">Campos operativos de bajo riesgo</div></div>
+      <button class="modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form class="edit-form" id="edit-form" onsubmit="saveGanttTaskEdit(event)">
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label">Task ID</label>
+            <div class="edit-readonly" id="edit-task-id">—</div>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">Seller</label>
+            <div class="edit-readonly" id="edit-seller">—</div>
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="edit-estado">Estado</label>
+            <select class="edit-select" id="edit-estado" name="estado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En curso">En curso</option>
+              <option value="Bloqueado">Bloqueado</option>
+              <option value="Completado">Completado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="edit-responsable">Responsable</label>
+            <input class="edit-input" id="edit-responsable" name="responsable" maxlength="120" autocomplete="off">
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="edit-inicio-real">Inicio real</label>
+            <input class="edit-input" id="edit-inicio-real" name="inicio_real" type="date">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="edit-fin-real">Fin real</label>
+            <input class="edit-input" id="edit-fin-real" name="fin_real" type="date">
+          </div>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="edit-comentario">Comentario</label>
+          <textarea class="edit-textarea" id="edit-comentario" name="comentario" maxlength="1000"></textarea>
+        </div>
+        <div class="edit-help">No se editan task_id, seller_id, seller, fase, hito, dependencias ni fechas planificadas.</div>
+        <div class="edit-status" id="edit-status"></div>
+        <div class="edit-actions">
+          <button type="button" class="btn-sm" onclick="closeEditModal()">Cancelar</button>
+          <button type="submit" class="btn-sm primary" id="edit-submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ═══════════════════════════════════════════
    CONFIG
@@ -731,6 +811,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 const CONFIG = {
   SELLERS_URL:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
   TIMELINE_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1623881837&single=true&output=csv',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec',
 };
 
 /* ── STATE ── */
@@ -740,6 +821,8 @@ let currentView  = 'gantt';
 let currentScale = 'mes';   // 'mes' | 'semana'
 let filters = { fase:'todos', estado:'todos', seller:'todos' };
 let weekPanelOpen = false;
+let activeEditTaskId = '';
+let lastEditFeedback = null;
 
 /* ── UTILS ── */
 const $   = id => document.getElementById(id);
@@ -1381,6 +1464,139 @@ function renderLista(tasks,sellerIds,today){
   $('content').innerHTML=html;
 }
 
+function dateInputValue(d){
+  if(!d) return '';
+  const date=d instanceof Date?d:parseDate(d);
+  if(!date||isNaN(date.getTime())) return '';
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,'0');
+  const day=String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function isValidEditDate(value){
+  if(!value) return true;
+  const match=String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!match) return false;
+  const d=new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));
+  return d.getFullYear()===Number(match[1])&&d.getMonth()===Number(match[2])-1&&d.getDate()===Number(match[3]);
+}
+function showEditStatus(type,msg){
+  const el=$('edit-status');
+  if(!el) return;
+  el.className=`edit-status visible ${type}`;
+  el.textContent=msg;
+}
+function clearEditStatus(){
+  const el=$('edit-status');
+  if(!el) return;
+  el.className='edit-status';
+  el.textContent='';
+}
+function setEditSaving(saving){
+  const btn=$('edit-submit');
+  if(!btn) return;
+  btn.disabled=saving;
+  btn.textContent=saving?'Guardando...':'Guardar cambios';
+}
+function validateTaskEditFields(fields){
+  if(!fields.estado) return 'El estado es obligatorio.';
+  if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(fields.estado)) return 'Estado no permitido.';
+  if(!isValidEditDate(fields.inicio_real)) return 'Inicio real debe usar formato YYYY-MM-DD.';
+  if(!isValidEditDate(fields.fin_real)) return 'Fin real debe usar formato YYYY-MM-DD.';
+  if(fields.inicio_real&&fields.fin_real&&new Date(fields.fin_real+'T00:00:00')<new Date(fields.inicio_real+'T00:00:00')) return 'Fin real no puede ser anterior a inicio real.';
+  if(fields.responsable.length>120) return 'Responsable supera 120 caracteres.';
+  if(fields.comentario.length>1000) return 'Comentario supera 1000 caracteres.';
+  return '';
+}
+function openEditTask(taskId){
+  const t=TASKS.find(x=>x.task_id===taskId);
+  if(!t){
+    activeEditTaskId='';
+    $('edit-ov').classList.add('open');
+    showEditStatus('err','No se encontro la tarea seleccionada.');
+    return;
+  }
+  const seller=SELLERS[t.seller_id]||{};
+  activeEditTaskId=t.task_id;
+  clearEditStatus();
+  $('edit-sub').textContent=`${seller.nombre||t.seller_id} · ${t.hito||'Sin hito'} · ${t.fase||'Sin fase'}`;
+  $('edit-task-id').textContent=t.task_id;
+  $('edit-seller').textContent=`${seller.nombre||t.seller_nombre||t.seller_id} · ${t.seller_id}`;
+  $('edit-estado').value=t.estado||'Pendiente';
+  $('edit-responsable').value=t.responsable||'';
+  $('edit-inicio-real').value=dateInputValue(t.inicio_real);
+  $('edit-fin-real').value=dateInputValue(t.fin_real);
+  $('edit-comentario').value=t.comentario||'';
+  $('edit-ov').classList.add('open');
+}
+function closeEditModal(e){
+  if(!e||e.target===$('edit-ov')){
+    $('edit-ov').classList.remove('open');
+    setEditSaving(false);
+  }
+}
+function readEditFields(){
+  return {
+    estado: $('edit-estado').value,
+    responsable: ($('edit-responsable').value||'').trim(),
+    inicio_real: $('edit-inicio-real').value||'',
+    fin_real: $('edit-fin-real').value||'',
+    comentario: ($('edit-comentario').value||'').trim(),
+  };
+}
+function applyLocalTaskEdit(t,fields){
+  t.estado=estadoNorm(fields.estado);
+  t.responsable=fields.responsable;
+  t.inicio_real=parseDate(fields.inicio_real);
+  t.fin_real=parseDate(fields.fin_real);
+  t.comentario=fields.comentario;
+  calcProgreso();
+}
+async function saveGanttTaskEdit(ev){
+  ev.preventDefault();
+  const t=TASKS.find(x=>x.task_id===activeEditTaskId);
+  if(!t){ showEditStatus('err','No se encontro la tarea activa. Cerra y volve a abrir el detalle.'); return; }
+  const fields=readEditFields();
+  const validation=validateTaskEditFields(fields);
+  if(validation){ showEditStatus('err',validation); return; }
+  const qaMsg=t.task_id==='TASK-DUMMY-QA'?'':'\n\nQA: validar primero con TASK-DUMMY-QA antes de editar tareas reales.';
+  const ok=window.confirm(`Confirmar actualizacion de ${t.task_id}. Se modificaran solo estado, responsable, fechas reales y comentario.${qaMsg}`);
+  if(!ok) return;
+
+  const payload={
+    tipo_formulario:'gantt_task_update',
+    task_id:t.task_id,
+    updated_by:'gantt-operativo-ui',
+    fields,
+  };
+
+  setEditSaving(true);
+  clearEditStatus();
+  try{
+    const res=await fetch(CONFIG.APPS_SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload),
+    });
+    const txt=await res.text();
+    let json={};
+    try{ json=txt?JSON.parse(txt):{}; }catch(parseErr){ throw new Error('Respuesta no JSON del endpoint.'); }
+    if(!res.ok||json.ok===false||json.status==='error'){
+      throw new Error(json.error||json.message||('HTTP '+res.status));
+    }
+    applyLocalTaskEdit(t,fields);
+    lastEditFeedback={task_id:t.task_id,type:'ok',message:'Cambios enviados al Apps Script. Vista actualizada localmente; el CSV puede tardar unos segundos en reflejar Sheets.'};
+    render();
+    closeEditModal();
+    openModal(t.task_id);
+  }catch(err){
+    console.error(err);
+    showEditStatus('err',err.message||'No se pudo guardar la tarea.');
+  }finally{
+    setEditSaving(false);
+  }
+}
+
 /* ── MODAL ── */
 function openModal(taskId){
   const t=TASKS.find(x=>x.task_id===taskId);
@@ -1391,7 +1607,9 @@ function openModal(taskId){
   const row=(l,v)=>v&&v!=='—'?`<div class="mrow"><span class="ml">${l}</span><span class="mv">${v}</span></div>`:'';
   const atr=t.atraso_calc||0;
   const blkHTML=t.estado==='Bloqueado'?`<div class="m-blk"><span>⚠</span><div><strong style="color:#f29a9a">Tarea bloqueada</strong><br>${esc(t.comentario||seller.bloqueo_res||'Sin descripción del bloqueo.')}</div></div>`:'';
+  const editHTML=lastEditFeedback&&lastEditFeedback.task_id===t.task_id?`<div class="m-edit-note">${esc(lastEditFeedback.message)}</div>`:'';
   $('m-body').innerHTML=`
+    ${editHTML}
     ${blkHTML}
     <div class="msec-t">Identificación</div>
     ${row('ID tarea',esc(t.task_id))}
@@ -1408,14 +1626,15 @@ function openModal(taskId){
     ${row('Inicio real',fmtDfull(t.inicio_real)||'—')}
     ${row('Fin real',fmtDfull(t.fin_real)||'—')}
     ${row('Atraso',atr>0?`<span style="color:${atr<=3?'var(--warn)':'var(--danger)'};font-weight:700">+${atr} días</span>`:(t.estado==='Completado'?'<span style="color:var(--g)">A tiempo ✓</span>':'—'))}
-    ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}`;
+    ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}
+    <div class="m-actions"><button type="button" class="btn-sm primary" onclick="openEditTask('${esc(t.task_id)}')">Editar tarea</button></div>`;
   $('modal-ov').classList.add('open');
 }
 function closeModal(e){
   if(!e||e.target===$('modal-ov')) $('modal-ov').classList.remove('open');
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('edit-ov')&&$('edit-ov').classList.contains('open')) closeEditModal(); else closeModal();}});
 
 /* ── INIT ── */
 loadData(false);
