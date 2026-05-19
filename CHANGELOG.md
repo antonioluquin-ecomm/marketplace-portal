@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 30E1 endpoint QA Apps Script Gantt
+
+Tipo de cambio: Apps Script controlado y documentacion.
+
+Estado: implementado sin prueba de escritura real.
+
+Resultado:
+- Agregado soporte para `tipo_formulario = "gantt_task_update"` en `Apps_script_v5.js`.
+- El endpoint busca tareas por `task_id` / `id_tarea` en la hoja `timeline`.
+- Permite actualizar solo campos de bajo riesgo: `estado`, `responsable`, `inicio_real`, `fin_real`, `comentario`.
+- Rechaza campos no permitidos, `task_id` faltante/inexistente/duplicado, fechas invalidas y estados fuera de enum.
+- No crea columnas nuevas ni cambia estructura de Google Sheets.
+- Registra `updated_at` / `updated_by` solo si las columnas ya existen.
+- Registra auditoria solo si ya existe una hoja compatible.
+- Documentado payload dummy recomendado en `docs/gantt-operativo-edicion.md` y `docs/test-matrix.md`.
+- No se modifico el front del Gantt y no se ejecuto escritura real.
+
 ## 2026-05-19 - Etapa 30D diseno tecnico edicion Gantt Operativo
 
 Tipo de cambio: documentacion tecnica.

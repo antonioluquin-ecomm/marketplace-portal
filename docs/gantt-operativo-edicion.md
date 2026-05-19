@@ -2,7 +2,7 @@
 
 Fecha: 2026-05-19
 
-Estado: diseno aprobado para etapa futura. No implementado.
+Estado: 30E1 implementa endpoint QA en Apps Script. Front aun no implementado.
 
 ## Objetivo
 
@@ -15,7 +15,7 @@ Definir una arquitectura segura para permitir, en una etapa futura, editar tarea
 - `SELLERS_URL`: hoja `sellers`.
 - `TIMELINE_URL`: hoja `timeline`.
 
-La pagina es read-only. Usa `fetch(..., { cache: "no-store" })`, parsea CSV localmente y normaliza:
+La pagina sigue siendo read-only. Usa `fetch(..., { cache: "no-store" })`, parsea CSV localmente y normaliza:
 
 - `SELLERS`: mapa por `seller_id`.
 - `TASKS`: array de tareas visibles del timeline.
@@ -326,4 +326,72 @@ Alcance:
 
 ## Decision 30D
 
-30D no implementa escritura ni cambia archivos funcionales. La edicion real debe abrirse solo en 30E con alcance explicito, tarea dummy y aprobacion previa.
+30D no implemento escritura ni cambio archivos funcionales. 30E1 agrega solo el endpoint QA en Apps Script; el front sigue sin escritura.
+
+## Estado 30E1
+
+Implementado en `Apps_script_v5.js`:
+
+- `tipo_formulario = "gantt_task_update"`.
+- Busca la tarea por `task_id` o `id_tarea`.
+- Rechaza `task_id` inexistente.
+- Rechaza `task_id` duplicado.
+- Permite actualizar solo campos de bajo riesgo:
+  - `estado`
+  - `responsable`
+  - `inicio_real`
+  - `fin_real`
+  - `comentario`
+- Rechaza cualquier otro campo recibido en `fields`.
+- Valida fechas `YYYY-MM-DD` o vacio.
+- Valida `estado` contra enum permitido.
+- No crea columnas nuevas.
+- No crea hoja de auditoria nueva.
+- Registra `updated_at` / `updated_by` solo si esas columnas ya existen en `timeline`.
+- Registra auditoria solo si ya existe una hoja compatible: `timeline_log`, `gantt_task_log`, `gantt_updates_log` o `auditoria_gantt`.
+- Validacion local mockeada OK: update valido en memoria, rechazo de campo no permitido, rechazo de fecha invalida y guardia `seller_id` existente para formularios actuales.
+
+Respuesta final 30E1:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T01",
+  "updated_fields": ["estado", "comentario"]
+}
+```
+
+Respuesta de error:
+
+```json
+{
+  "ok": false,
+  "status": "error",
+  "error": "mensaje claro",
+  "message": "Error: mensaje claro"
+}
+```
+
+Payload dummy recomendado para QA, no ejecutar contra tareas productivas:
+
+```json
+{
+  "tipo_formulario": "gantt_task_update",
+  "task_id": "TASK-DUMMY-QA",
+  "updated_by": "qa@marketplace.local",
+  "fields": {
+    "estado": "En curso",
+    "responsable": "QA",
+    "inicio_real": "2026-05-19",
+    "fin_real": "",
+    "comentario": "Prueba controlada endpoint 30E1."
+  }
+}
+```
+
+Pendiente antes de ejecutar pruebas reales:
+
+- confirmar `task_id` dummy existente en hoja `timeline`;
+- confirmar si existen columnas `updated_at` / `updated_by`;
+- confirmar si existe hoja compatible de auditoria;
+- aprobar ejecucion manual contra entorno QA o tarea dummy.

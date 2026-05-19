@@ -1050,7 +1050,7 @@ Evidencia local:
 
 ## Etapa 30D: matriz futura edicion Gantt Operativo
 
-**Estado:** documentado, no implementado.
+**Estado:** 30E1 endpoint QA implementado; pruebas reales pendientes.
 
 **Documento tecnico:** `docs/gantt-operativo-edicion.md`.
 
@@ -1058,7 +1058,7 @@ Validaciones futuras obligatorias para 30E:
 
 | Caso | Entrada | Resultado esperado | Estado |
 |---|---|---|---|
-| `task_id` valido | `tipo_formulario=gantt_task_update`, campos permitidos | Actualiza fila unica y responde `ok:true` | Pendiente |
+| `task_id` valido | `tipo_formulario=gantt_task_update`, campos permitidos | Actualiza fila unica y responde `ok:true` | Pendiente con tarea dummy |
 | `task_id` inexistente | ID no presente en `timeline` | Rechaza con `ok:false` y error claro | Pendiente |
 | `task_id` duplicado | ID repetido en `timeline` | Rechaza sin escribir | Pendiente |
 | Campo no permitido | `fields` incluye columna restringida | Rechaza o ignora segun contrato final; preferencia rechazar | Pendiente |
@@ -1074,3 +1074,34 @@ Restricciones para 30E:
 - No editar `task_id`, `id_tarea`, `seller_id` ni `seller_nombre`.
 - No modificar formulas, columnas calculadas, URLs, estructura de hoja ni endpoints existentes.
 - No habilitar edicion productiva sin prueba con tarea dummy.
+
+### Etapa 30E1: endpoint QA Apps Script
+
+**Estado:** implementado sin ejecutar escritura real.
+
+Validaciones realizadas:
+
+| Verificacion | Resultado | Estado |
+|---|---|---|
+| Sintaxis local de `Apps_script_v5.js` | `node --check Apps_script_v5.js` sin errores | OK |
+| Smoke local mockeado | Update valido en memoria, rechazo de campo no permitido, fecha invalida y guardia `seller_id` existente | OK |
+| Front Gantt | No modificado | OK |
+| Apps Script existente `seller`, `gestion_seller`, `calificacion`, `relevamiento` | Ruteo conservado; `seller_id` sigue requerido para esos tipos | OK |
+| Escritura real | No ejecutada | OK |
+
+Payload dummy recomendado:
+
+```json
+{
+  "tipo_formulario": "gantt_task_update",
+  "task_id": "TASK-DUMMY-QA",
+  "updated_by": "qa@marketplace.local",
+  "fields": {
+    "estado": "En curso",
+    "responsable": "QA",
+    "inicio_real": "2026-05-19",
+    "fin_real": "",
+    "comentario": "Prueba controlada endpoint 30E1."
+  }
+}
+```
