@@ -1897,3 +1897,15 @@ Resultado:
 - Movidas reglas visuales estaticas de topbar, hero/intro, paneles estaticos, botones visuales, layout general, acciones y badges.
 - Conservadas inline las reglas sensibles o acopladas a formularios, inputs/selects/textarea, preview dinamica, links publicos generados, mensajes, alertas, estados de guardado, toast y submit.
 - No se modificaron JS, submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, generacion/reserva de IDs, localStorage, `name/id/value/data-*`, rutas, href/src ni config.
+
+## Etapa 23F: CSS familia Seller Center
+
+Estado: completada.
+
+Resultado:
+
+- Creado `assets/css/pages/seller-center.css`.
+- Enlazado `seller-center.css` en `internal/seller-center/index.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, shell, sidebar, hero/intro, secciones, herramientas, flujo, alertas visuales, footer y responsive general.
+- Conservadas inline las reglas sensibles o acopladas a carga viva, spinner, KPIs, progreso global, modulos renderizados, roadmap dinamico, hitos y estados derivados de CSV/JS.
+- No se modificaron fetch, CSV, render dinamico, roadmap dinamico, JS funcional, rutas, href/src, ids/classes ni maqueta Seller Center.

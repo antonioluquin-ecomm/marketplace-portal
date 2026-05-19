@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 23F CSS familia Seller Center
+
+Tipo de cambio: visual controlado.
+
+Estado: completado.
+
+Resultado:
+- Creado `assets/css/pages/seller-center.css` como hoja especifica para la familia Seller Center.
+- Enlazado en `internal/seller-center/index.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, shell, sidebar, hero/intro, secciones, herramientas, flujo, alertas visuales, footer y responsive general.
+- Conservadas inline las reglas sensibles o acopladas a carga viva, spinner, KPIs, progreso global, modulos renderizados, roadmap dinamico, hitos y estados derivados de CSV/JS.
+- Sin cambios en fetch, CSV, render dinamico, roadmap dinamico, JS funcional, rutas, href/src, ids/classes ni maqueta Seller Center.
+
 ## 2026-05-18 - Etapa 23E CSS familia Gestion Sellers
 
 Tipo de cambio: visual critico acotado.
