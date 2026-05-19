@@ -1011,3 +1011,37 @@ Exclusiones:
 Proximo bloque sugerido:
 
 - Revisar documentacion/handoff o ejecutar smoke test post-push.
+
+---
+
+## Etapa 29C: smoke logo interno clickeable
+
+**Estado:** validado.
+
+**Objetivo:** confirmar que la normalizacion de 29B dejo todos los logos internos clickeables hacia `index.html` sin romper carga ni topbar.
+
+Validaciones:
+
+| Grupo | Paginas | Verificacion | Resultado | Estado |
+|---|---|---|---|---|
+| Portada | `index.html` | Carga local HTTP | `200`; marca institucional visible | OK |
+| Hub | `internal/hub-operativo.html` | Logo a `../index.html`; desktop/mobile 390px | Link correcto; captura generada | OK |
+| Estrategia | `internal/estrategia/*.html` | Logo a `../../index.html`; carga local | Links correctos; HTTP `200`; capturas desktop/mobile | OK |
+| Backlog | `internal/backlog/*.html` | Logo a `../../index.html`; no alterar filtros/render | Links correctos; HTTP `200`; capturas desktop/mobile | OK |
+| Gantt | `internal/gantt/*.html` | Logo a `../../index.html`; no alterar timeline | Links correctos; HTTP `200`; capturas desktop/mobile | OK |
+| Seller Center | `internal/seller-center/index.html` y maqueta | Logo a `../../index.html`; conservar estetica maqueta | Links correctos; HTTP `200`; capturas desktop/mobile | OK |
+| Simulador interno | `internal/simuladores/simulador-economico.html` | Confirmar que seguia OK | Link ya correcto; HTTP `200`; captura generada | OK |
+
+Checklist tecnico:
+
+| Verificacion | Resultado | Estado |
+|---|---|---|
+| `git diff --name-only` durante 29C | Solo documentacion | OK |
+| Apps Script / config / JS compartido | Sin cambios | OK |
+| `public/`, `legacy/`, formularios, payloads, endpoints | Sin cambios | OK |
+| Simuladores funcionales, formulas, timeline Gantt | Sin cambios | OK |
+
+Evidencia local:
+
+- Capturas generadas en `C:\tmp\marketplace-portal-29c-smoke-all`.
+- Se validaron vistas desktop `1365x768` y mobile `390x844`.

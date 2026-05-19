@@ -4,6 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapas 29B/29C logo interno clickeable
+
+Tipo de cambio: normalizacion visual/navegacional interna y cierre documental.
+
+Estado: completado y validado.
+
+Resultado:
+- Etapa 29B implementada: logos internos normalizados como links hacia la portada institucional `index.html`.
+- Se mantuvo el texto exacto `SPORTING <span>MARKETPLACE</span>`.
+- Rutas confirmadas: `../index.html` desde `internal/hub-operativo.html` y `../../index.html` desde paginas bajo `internal/*/*`.
+- `index.html` queda como excepcion institucional y puede no linkear a si mismo.
+- La maqueta Seller Center conserva su estetica visual, pero la marca principal ahora vuelve a portada.
+- Etapa 29C validada con smoke HTTP local, validacion estatica de hrefs y capturas Chrome headless desktop/mobile del alcance interno.
+- Sin cambios en HTML, CSS ni JS funcional durante 29C; solo documentacion.
+- Sin cambios en Apps Script, config, `assets/js/config.js`, `public/`, `legacy/`, formularios, payloads, endpoints, simuladores funcionales, formulas ni timeline Gantt.
+
 ## 2026-05-19 - Etapa 28B navegacion publica seller-facing con seller_id
 
 Tipo de cambio: navegacion publica critica acotada.

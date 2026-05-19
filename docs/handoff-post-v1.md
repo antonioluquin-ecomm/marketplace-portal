@@ -25,6 +25,9 @@ Fecha: 2026-05-18
 - Bloque 23B-23G cerrado: CSS por familias internas para Backlog Sellers, Gantt, Simulador Economico interno, Gestion Sellers y Seller Center index.
 - Bloque 24B-24F cerrado: CSS publico seller-facing con `public-seller.css` aplicado a formularios, presentacion seller y simulador seller.
 - Bloque 26A-26D cerrado: auditoria visual global PRO, pulido visual global, smoke visual post-push OK y cierre documental.
+- Bloque 27A-27F cerrado: base visual enterprise/SaaS, headers/topbars internos normalizados y navegacion interna consistente.
+- Bloque 28B cerrado: navegacion publica seller-facing entre Presentacion, Simulador, Calificacion y Relevamiento preservando `seller_id`.
+- Bloque 29B-29C cerrado: logos internos clickeables hacia `index.html`, validados con smoke HTTP local y capturas desktop/mobile.
 
 ## Decisiones vigentes
 
@@ -38,6 +41,7 @@ Fecha: 2026-05-18
 - Para bloque 23 cerrado, se mantuvo inline todo CSS sensible asociado a JS, render dinamico, submit, filtros, timeline, formulas, payloads o estados dinamicos.
 - Para bloque 24 cerrado, se mantuvo inline todo CSS sensible asociado a submit, payloads, `seller_id`, validaciones, render dinamico, CTAs, calculos, formulas, resultados, tarifas y overrides.
 - Para bloque 26 cerrado, no se tocaron JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
+- Para bloque 29 cerrado, el logo interno debe volver siempre a la portada institucional: `../index.html` desde el Hub y `../../index.html` desde paginas bajo `internal/*/*`.
 - Revisar manualmente en el futuro `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
 
 ## Metodologia vigente

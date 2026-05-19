@@ -2068,3 +2068,30 @@ Resultado:
 - La navegacion publica de Presentacion usa rutas relativas seguras para evitar depender del `BASE_URL` absoluto.
 - Se mantuvieron intactos submit, payloads, endpoints, Apps Script, calculos, validaciones, campos, hidden `seller_id`, config, aliases, legacy e `internal/`.
 - Proximo paso recomendado: smoke visual/manual con `seller_id=SPT-001` en desktop y mobile.
+
+## Etapa 29B: normalizacion de logo interno clickeable
+
+Estado: completada.
+
+Resultado:
+
+- Normalizados logos internos para que la marca `SPORTING MARKETPLACE` vuelva siempre a `index.html`.
+- `internal/hub-operativo.html` usa `../index.html`.
+- Paginas bajo `internal/*/*` usan `../../index.html`.
+- `index.html` se conserva como excepcion institucional sin necesidad de linkear a si mismo.
+- La maqueta Seller Center conserva su estetica, con logo principal clickeable hacia portada.
+- Se mantuvieron botones existentes y navegacion operativa: `Volver al Hub`, `Volver al Portal`, `Backlog`, `Gantt`, acciones, filtros y CTAs.
+- Se mantuvieron intactos JS funcional, submit, payloads, endpoints, Apps Script, config, formularios, simuladores funcionales, formulas, timeline Gantt, `seller_id`, `public/`, aliases y legacy.
+
+## Etapa 29C: smoke visual y cierre documental de logo interno
+
+Estado: completada.
+
+Resultado:
+
+- Validado `index.html` y todas las paginas internas del alcance con smoke HTTP local `200`.
+- Confirmado por validacion estatica que cada logo interno clickea hacia `index.html` con la ruta esperada.
+- Generadas capturas Chrome headless desktop y mobile 390px para todo el alcance interno.
+- Resultado visual general: logo visible y topbars sin regresion atribuible al cambio de 29B.
+- Riesgo residual: cualquier ajuste fino futuro debe tratar hallazgos visuales preexistentes de mobile como etapa separada, sin mezclarlo con la normalizacion del logo.
+- 29C no modifico HTML, CSS ni JS funcional; solo documentacion.
