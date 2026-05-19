@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 24E extension CSS publico a Simulador Seller
+
+Tipo de cambio: visual critico acotado.
+
+Estado: completado.
+
+Resultado:
+- Enlazado `assets/css/pages/public-seller.css` en `public/simuladores/simulador-seller.html`, antes del CSS inline.
+- Reutilizadas solo reglas publicas compartidas de base global segura (`box-sizing`, reset de margen/padding y scroll suave).
+- Conservadas inline las reglas especificas del simulador: topbar, CTAs, hero, seller box, paneles, inputs funcionales, resultados, KPIs, escenarios, tarifas, overrides, estados dinamicos, toasts, disclaimers y responsive propio.
+- Sin cambios en bloques `<script>`, JS funcional, calculos, formulas, resultados, tarifas, overrides, `seller_id`, CTAs, rutas, href/src existentes, render dinamico ni `name/id/value`.
+
 ## 2026-05-19 - Etapa 24D extension CSS publico a Presentacion Seller
 
 Tipo de cambio: visual controlado.

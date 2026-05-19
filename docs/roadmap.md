@@ -1959,3 +1959,14 @@ Resultado:
 - Reutilizadas solo reglas publicas compartidas de base global segura: `box-sizing`, reset de margen/padding y scroll suave.
 - Conservadas inline las reglas especificas de presentacion comercial: topbar, CTAs, hero editorial, seller card, logos personalizados, secciones claras/oscuras, cards comerciales, disclaimers, responsive y estados dependientes de personalizacion por seller.
 - No se modificaron bloques `<script>`, `seller_id`, CTAs, rutas, href/src existentes, personalizacion dinamica, render dinamico, `name/id/value` ni JS funcional.
+
+## Etapa 24E: extension CSS publico a Simulador Seller
+
+Estado: completada.
+
+Resultado:
+
+- Enlazado `assets/css/pages/public-seller.css` en `public/simuladores/simulador-seller.html`, antes del CSS inline.
+- Reutilizadas solo reglas publicas compartidas de base global segura: `box-sizing`, reset de margen/padding y scroll suave.
+- Conservadas inline las reglas especificas del simulador: topbar, CTAs, hero, seller box, paneles, inputs funcionales, resultados, KPIs, escenarios, tarifas, overrides, estados dinamicos, toasts, disclaimers y responsive propio.
+- No se modificaron bloques `<script>`, JS funcional, calculos, formulas, resultados, tarifas, overrides, `seller_id`, CTAs, rutas, href/src existentes, render dinamico ni `name/id/value`.
