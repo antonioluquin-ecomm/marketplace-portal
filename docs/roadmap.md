@@ -1985,3 +1985,15 @@ Resultado:
 - Decision vigente: mantener inline todo CSS sensible asociado a submit, payloads, `seller_id`, validaciones, render dinamico, CTAs, calculos, formulas, resultados, tarifas y overrides.
 - Resultado: sistema visual publico seller-facing unificado sin tocar logica funcional.
 - Proximo paso recomendado: push y smoke test visual publico; luego entrar solo en mejoras funcionales reales o UI refinements especificos.
+
+## Etapa 26B: bloque visual PRO global
+
+Estado: completada.
+
+Resultado:
+
+- Ajustada la escala visual global de tipografia, radios, sombras, espaciados, botones, badges y cards.
+- Aplicado pulido controlado en CSS compartido, CSS por familia, portada, Hub Operativo, estrategia y paginas publicas seller-facing seleccionadas.
+- Se mantuvo inline todo CSS sensible ligado a JS, render dinamico, submit, timeline, formulas, payloads, validaciones o `seller_id`.
+- No se modificaron bloques `<script>`, endpoints, payloads, Apps Script, config, rutas criticas ni logica funcional.
+- Proximo paso recomendado: smoke test visual liviano en GitHub Pages antes de abrir refinamientos puntuales.

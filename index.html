@@ -383,6 +383,26 @@
       .metrics { grid-template-columns: 1fr; }
       .grid { grid-template-columns: 1fr; }
     }
+
+    /* Etapa 26B: pulido visual PRO sin cambios funcionales. */
+    body { font-size: 14.5px; line-height: 1.6; }
+    .wrap { width: min(1160px, calc(100% - 44px)); }
+    .topbar { box-shadow: 0 1px 0 rgba(255,255,255,.025); }
+    .hero { gap: 24px; padding: 42px 0 30px; }
+    h1 { font-size: clamp(44px, 6.4vw, 74px); line-height: .94; }
+    .lead { font-size: 16.5px; line-height: 1.6; }
+    .signal-panel, .metric, .card, .doc-card, .decision {
+      border-radius: 12px;
+      box-shadow: none;
+    }
+    .btn { border-radius: 8px; min-height: 38px; }
+    .status, .badge, .tag { letter-spacing: .07em; }
+    .card p, .doc-card p, .decision p { line-height: 1.6; }
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 28px, 1160px); }
+      h1 { font-size: 36px; }
+      .hero { gap: 18px; }
+    }
   </style>
 </head>
 <body>

@@ -41,4 +41,21 @@
 
   /* Layout */
   --topbar-height: 58px;
+
+  /* Etapa 26B: escala visual PRO global */
+  --font-body: 14.5px;
+  --font-meta: 12.5px;
+  --font-label: 11.5px;
+  --lh-body: 1.6;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-panel: 14px;
+  --shadow-soft: 0 12px 34px rgba(0, 0, 0, .24);
+  --shadow-panel: 0 18px 48px rgba(0, 0, 0, .28);
 }

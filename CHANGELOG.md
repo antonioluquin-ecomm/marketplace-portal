@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 26B bloque visual PRO global
+
+Tipo de cambio: visual agrupado.
+
+Estado: completado.
+
+Resultado:
+- Agregada escala visual global en `tokens.css` para tipografia, espaciados, radios y sombras.
+- Ajustados componentes internos y CSS por familia para mejorar legibilidad, jerarquia, aire visual, radios, botones, badges, cards y estados.
+- Aplicado pulido visual controlado en portada, Hub Operativo, paginas estrategicas y paginas publicas de presentacion/simulador.
+- Conservado inline el CSS sensible ligado a JS, render dinamico, submit, timeline, formulas, payloads, validaciones y `seller_id`.
+- Sin cambios en bloques `<script>`, submit, fetch, endpoints, payloads, Apps Script, config, rutas criticas ni logica funcional.
+
 ## 2026-05-19 - Etapa 24F cierre CSS publico seller-facing
 
 Tipo de cambio: documentacion.

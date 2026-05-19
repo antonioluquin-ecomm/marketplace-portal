@@ -49,8 +49,8 @@
   letter-spacing:.05em;
   background:var(--amber-dim);
   border:1px solid rgba(201,122,16,.22);
-  padding:4px 10px;
-  border-radius:20px;
+  padding:5px 10px;
+  border-radius:999px;
 }
 
 .col-inputs  { background:var(--surface-1); border-right:1px solid var(--border); overflow-y:auto; height:calc(100vh - 54px); position:sticky; top:54px; box-shadow:inset -1px 0 0 rgba(94,168,50,.05) }
@@ -58,7 +58,7 @@
 .col-rates   { background:var(--surface-1); border-left:1px solid var(--border); overflow-y:auto; height:calc(100vh - 54px); position:sticky; top:54px; box-shadow:inset 1px 0 0 rgba(94,168,50,.04) }
 
 .col-header {
-  padding:18px 20px 14px;
+  padding:18px 20px 15px;
   border-bottom:1px solid var(--border);
   position:sticky;
   top:0;
@@ -75,7 +75,7 @@
 }
 .col-sub { font-size:11px; color:var(--text-3); margin-top:2px }
 
-.section { padding:18px 20px; border-bottom:1px solid var(--border-l) }
+.section { padding:19px 20px; border-bottom:1px solid var(--border-l) }
 .section:last-child { border-bottom:none }
 .section-label {
   font-size:10px;
@@ -86,7 +86,7 @@
   margin-bottom:12px;
 }
 
-.results-inner { padding:20px; display:flex; flex-direction:column; gap:16px }
+.results-inner { padding:22px; display:flex; flex-direction:column; gap:18px }
 .results-header {
   display:flex;
   align-items:baseline;
@@ -123,7 +123,7 @@
   line-height:1.6;
   padding:12px;
   background:var(--green-dim);
-  border-radius:6px;
+  border-radius:var(--radius-card,12px);
   border-left:2px solid var(--green-brd);
   margin-top:2px;
 }
@@ -139,7 +139,7 @@
   border:1px solid var(--border);
   color:var(--text-3);
   padding:5px 10px;
-  border-radius:6px;
+  border-radius:var(--radius-control,8px);
   cursor:pointer;
   transition:all .15s;
   margin-top:8px;
@@ -155,7 +155,7 @@
   z-index:5;
 }
 .tab-btn {
-  padding:13px 20px;
+  padding:14px 20px;
   font-size:11px;
   font-weight:700;
   letter-spacing:.08em;
@@ -180,7 +180,7 @@
   padding:10px 18px;
   background:var(--amber-dim);
   border:1px solid rgba(201,122,16,.15);
-  border-radius:6px;
+  border-radius:var(--radius-card,12px);
 }
 
 ::-webkit-scrollbar { width:3px }

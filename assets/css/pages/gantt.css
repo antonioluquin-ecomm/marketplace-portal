@@ -11,7 +11,7 @@
   align-items:center;
   justify-content:space-between;
   gap:14px;
-  padding:0 22px;
+  padding:0 24px;
   background:rgba(13,15,13,.97);
   border-bottom:1px solid var(--g-brd, var(--bdr));
   backdrop-filter:blur(18px);
@@ -36,9 +36,9 @@
   display:inline-flex;
   align-items:center;
   gap:5px;
-  padding:6px 12px;
+  padding:7px 12px;
   border:1px solid var(--bdr);
-  border-radius:7px;
+  border-radius:var(--radius-control,8px);
   background:rgba(255,255,255,.025);
   color:var(--t2);
   font-family:'Barlow',sans-serif;
@@ -66,15 +66,15 @@
 }
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--bdr-m, var(--bdr));border-radius:3px}
-.sb-s,.sb-section{padding:0 13px;margin-bottom:17px}
+.sb-s,.sb-section{padding:0 14px;margin-bottom:18px}
 .sb-lbl{font-size:8.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--t4, var(--t3));margin-bottom:7px;padding:0 2px}
 .sb-div{height:1px;background:var(--bdr);margin:0 13px 15px}
 .fi,.sel,.fsel,.sb-search{
   width:100%;
-  padding:8px 10px;
+  padding:9px 10px;
   background:rgba(255,255,255,.045);
   border:1px solid rgba(255,255,255,.10);
-  border-radius:8px;
+  border-radius:var(--radius-control,8px);
   color:var(--t1);
   font-family:'Barlow',sans-serif;
   font-size:12px;
@@ -84,7 +84,7 @@
 .fi::placeholder,.sb-search::placeholder{color:var(--t4, var(--t3))}
 .sel,.fsel{cursor:pointer}
 .sel option,.fsel option{background:var(--k2)}
-.sb-note{margin:0 13px;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);font-size:10px;color:var(--t3);line-height:1.55}
+.sb-note{margin:0 14px;padding:11px 12px;border-radius:var(--radius-card,12px);background:rgba(255,255,255,.03);border:1px solid var(--bdr);font-size:11px;color:var(--t3);line-height:1.6}
 
 /* Empty, loading and error states */
 .center-state,.loading,.empty,.error-state{
@@ -92,12 +92,12 @@
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:12px;
+  gap:10px;
   min-height:260px;
-  padding:42px 24px;
+  padding:44px 24px;
   text-align:center;
   color:var(--t3);
-  font-size:13px;
+  font-size:13.5px;
 }
 .center-state span{font-size:13px;color:var(--t3)}
 .error-state{align-items:flex-start;text-align:left;color:var(--warn);max-width:700px;margin:0 auto}
@@ -109,7 +109,7 @@
   align-items:center;
   gap:12px;
   flex-wrap:wrap;
-  padding:8px 14px;
+  padding:9px 16px;
   border-top:1px solid var(--bdr);
   background:rgba(13,15,13,.95);
   position:sticky;

@@ -249,6 +249,14 @@
       .cuotas-chips{grid-template-columns:repeat(4,1fr)}
       .bd-row{grid-template-columns:1fr auto auto}
     }
+
+    /* Etapa 26B: pulido visual publico sin tocar calculos ni resultados. */
+    body{font-size:14.5px;line-height:1.6}
+    h1{font-size:clamp(36px,5.4vw,60px);line-height:.98}
+    p,.lead,.helper,.note{line-height:1.62}
+    .panel,.card,.seller-box,.result-card,.kpi,.scenario-card,.disclaimer{border-radius:12px;box-shadow:none}
+    .btn,.badge,.pill,.chip{letter-spacing:.07em}
+    @media(max-width:720px){h1{font-size:32px}.wrap{padding:22px 14px 54px}}
   </style>
 </head>
 <body>

@@ -15,7 +15,10 @@
   --info: #64b5f6;
   --teal: #4db6ac;
   --violet: #ce93d8;
-  --shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+  --shadow: 0 14px 42px rgba(0, 0, 0, 0.24);
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-panel: 14px;
 }
 * {
   box-sizing: border-box;
@@ -31,6 +34,8 @@ body {
   color: var(--text);
   min-height: 100vh;
   padding: 28px 16px;
+  font-size: 14.5px;
+  line-height: 1.6;
 }
 .wrap {
   max-width: 1040px;
@@ -39,7 +44,7 @@ body {
 .hero {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: var(--radius-panel);
   padding: 28px;
   margin-bottom: 18px;
   box-shadow: var(--shadow);
@@ -57,15 +62,15 @@ body {
 }
 h1 {
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 38px;
+  font-size: 36px;
   line-height: 1;
   text-transform: uppercase;
   margin-bottom: 8px;
 }
 p {
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 14.5px;
+  line-height: 1.6;
 }
 .intro-note {
   display: grid;
@@ -74,7 +79,7 @@ p {
   padding: 14px 16px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .intro-note strong {
   font-size: 13px;
@@ -90,9 +95,9 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 11px;
+  padding: 5px 10px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
 }
 .badge.time {
@@ -131,12 +136,12 @@ p {
   padding: 14px 16px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .seller-logo {
   width: 54px;
   height: 54px;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   object-fit: contain;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--line);
@@ -146,7 +151,7 @@ p {
 .seller-initials {
   width: 54px;
   height: 54px;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   background: rgba(94, 168, 50, 0.14);
   border: 1px solid rgba(94, 168, 50, 0.3);
   display: flex;
@@ -187,7 +192,7 @@ p {
 .section {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius-panel);
   overflow: hidden;
 }
 .section-title {
@@ -255,7 +260,7 @@ p {
   grid-column: 1/-1;
 }
 label {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--text);
   display: flex;
@@ -265,8 +270,8 @@ label {
 }
 small {
   color: var(--muted2);
-  font-size: 11px;
-  line-height: 1.35;
+  font-size: 11.5px;
+  line-height: 1.45;
   display: block;
 }
 .btn-row {
@@ -277,7 +282,7 @@ small {
 }
 .btn {
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-control);
   background: var(--g);
   color: white;
   font-weight: 800;
@@ -286,7 +291,7 @@ small {
   padding: 13px 22px;
   cursor: pointer;
   font-family: Barlow, sans-serif;
-  font-size: 13px;
+  font-size: 12.5px;
   transition:
     background 0.15s,
     opacity 0.15s;
