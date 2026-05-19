@@ -4,6 +4,18 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 24C extension CSS publico a Relevamiento
+
+Tipo de cambio: visual critico acotado.
+
+Estado: completado.
+
+Resultado:
+- Enlazado `assets/css/pages/public-seller.css` solo en `public/formularios/formulario-relevamiento.html`, antes del CSS inline.
+- Reutilizadas reglas publicas compartidas existentes para base visual, body/wrap, hero, brand, intro note, badges, seller identity/logo/chip, secciones, field containers, labels visuales, botones y responsive visual basico.
+- Conservadas inline las reglas sensibles o acopladas a progreso por secciones, navegacion entre secciones, tooltips, condicionales, `hidden/visible`, estados dinamicos, validaciones, errores, inputs/selects/textarea, radio/checkbox, alertas, status, submit, payload y campos.
+- Sin cambios en bloques `<script>`, submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, validaciones, `name/id/value`, action/method, rutas, href/src existentes ni JS funcional.
+
 ## 2026-05-19 - Etapa 24B piloto CSS publico seller-facing
 
 Tipo de cambio: visual critico acotado.
