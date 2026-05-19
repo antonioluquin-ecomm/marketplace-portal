@@ -1,12 +1,13 @@
 # Metodología de Trabajo Asistido por IA
+
 ## Documento Institucional Base
 
-| Campo | Detalle |
-|---|---|
-| Nombre del documento | Metodología de Trabajo Asistido por IA |
-| Version | v1.4 |
-| Estado | Activo |
-| Objetivo | Guia institucional reutilizable para proyectos asistidos por IA |
+| Campo                | Detalle                                                         |
+| -------------------- | --------------------------------------------------------------- |
+| Nombre del documento | Metodología de Trabajo Asistido por IA                          |
+| Version              | v2.0                                                            |
+| Estado               | Activo                                                          |
+| Objetivo             | Guia institucional reutilizable para proyectos asistidos por IA |
 
 ## Índice
 
@@ -39,7 +40,12 @@
 - 26. Checklist base del proyecto.
 - 27. Convenciones recomendadas.
 - 28. Regla operativa para comandos Git.
-- 29. Nota final.
+- 29. Metodologia visual y consistencia UI.
+- 30. Freeze zones y zonas criticas.
+- 31. Auditoria vs implementacion como metodologia formal.
+- 32. Smoke visual y QA manual.
+- 33. Niveles de madurez visual.
+- 34. Nota final.
 
 # 1. Objetivo del documento
 
@@ -290,6 +296,34 @@ Sin contexto compartido:
 - se incrementa el retrabajo;
 - se pierden decisiones previas.
 
+## Manejo de contexto largo
+
+Cuando el chat acumula demasiado contexto:
+
+- abrir un nuevo chat antes de degradar calidad;
+- reutilizar handoff corto;
+- evitar continuar refactors grandes en chats compactados;
+- evitar mezclar multiples proyectos en un mismo chat;
+- reutilizar documentacion institucional como contexto base.
+
+Indicadores para abrir nuevo chat:
+
+- respuestas mas lentas;
+- perdida de contexto;
+- repeticiones;
+- IA confundiendo etapas;
+- necesidad de reexplicar decisiones;
+- proyecto con demasiadas ramas abiertas.
+
+Buenas practicas:
+
+- usar handoff corto;
+- resumir estado actual;
+- listar pendientes;
+- indicar riesgos abiertos;
+- pegar solo contexto relevante;
+- evitar pegar historiales gigantes completos.
+
 # 6. Optimizacion de consumo de tokens
 
 Los requerimientos claros reducen:
@@ -342,12 +376,12 @@ Antes de cada etapa o bloque de trabajo, indicar explicitamente la configuracion
 
 Criterio por tipo de tarea:
 
-| Riesgo | Ejemplos | Configuracion sugerida |
-|---|---|---|
-| Bajo | Textos visibles, documentacion, labels, copy, validaciones git, cambios estaticos acotados | Codex: Fast activado + Inteligencia Baja o Media. Claude Code: normal |
-| Medio | HTML con JS interno sin tocar scripts, CSS menor, navegacion visual, paginas internas con estructura sensible | Codex: Fast activado + Inteligencia Media. Claude Code: normal o analisis medio |
-| Alto | JS funcional, refactor, rutas complejas, errores, render dinamico, Backlog/Gestion/Gantt, simuladores | Codex: Fast desactivado + Inteligencia Alta. Claude Code: razonamiento mas profundo |
-| Critico | Apps Script, config, formularios, submit, endpoints, payloads, logica economica, datos reales | Codex: Fast desactivado + Inteligencia Alta o Extremadamente Alta. Claude Code: contexto acotado y validacion estricta |
+| Riesgo  | Ejemplos                                                                                                      | Configuracion sugerida                                                                                                 |
+| ------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Bajo    | Textos visibles, documentacion, labels, copy, validaciones git, cambios estaticos acotados                    | Codex: Fast activado + Inteligencia Baja o Media. Claude Code: normal                                                  |
+| Medio   | HTML con JS interno sin tocar scripts, CSS menor, navegacion visual, paginas internas con estructura sensible | Codex: Fast activado + Inteligencia Media. Claude Code: normal o analisis medio                                        |
+| Alto    | JS funcional, refactor, rutas complejas, errores, render dinamico, Backlog/Gestion/Gantt, simuladores         | Codex: Fast desactivado + Inteligencia Alta. Claude Code: razonamiento mas profundo                                    |
+| Critico | Apps Script, config, formularios, submit, endpoints, payloads, logica economica, datos reales                 | Codex: Fast desactivado + Inteligencia Alta o Extremadamente Alta. Claude Code: contexto acotado y validacion estricta |
 
 Reglas operativas:
 
@@ -355,6 +389,59 @@ Reglas operativas:
 - Si el chat acumula mucho contexto, abrir nuevo chat y pegar handoff corto.
 - Mantener prompts compactos con archivos permitidos/prohibidos.
 - Mantener regla PowerShell: comandos en una sola linea cuando corresponda, evitar backslash de Bash y recordar que el usuario ejecuta commits manualmente.
+
+### Reglas practicas de configuracion
+
+Usar configuraciones livianas solo cuando el alcance sea realmente acotado.
+
+Subir nivel de inteligencia cuando:
+
+- el cambio toca JS;
+- hay render dinamico;
+- existen CSV, APIs o datos externos;
+- se modifican rutas;
+- hay riesgo de romper navegacion;
+- hay formularios o submit;
+- existen dependencias compartidas;
+- el cambio afecta multiples paginas;
+- el proyecto ya tiene deuda tecnica o estructura compleja.
+
+Fast activado:
+
+- ideal para cambios visuales simples;
+- documentacion;
+- textos;
+- auditorias menores;
+- smoke tests;
+- validaciones de git;
+- cambios HTML estaticos pequenos.
+
+Fast desactivado:
+
+- obligatorio para cambios criticos;
+- recomendado para refactors;
+- recomendado para cambios sobre JS;
+- recomendado para cambios de arquitectura;
+- recomendado para paginas operativas complejas.
+
+Claude Code:
+
+- recomendado para auditorias profundas;
+- ideal para entender arquitectura;
+- ideal para detectar deuda tecnica;
+- ideal antes de refactors grandes.
+
+Claude Cowork:
+
+- usar solo cuando haga falta trabajo coordinado mas amplio;
+- puede consumir significativamente mas tokens;
+- no usar como modo por defecto para tareas pequenas o medianas.
+
+Regla recomendada:
+
+- comenzar simple;
+- subir inteligencia solo si el riesgo aumenta;
+- evitar razonamiento extremo innecesario en tareas pequenas.
 
 # 7. Rol del equipo humano
 
@@ -418,14 +505,14 @@ No todos los proyectos requieren el mismo nivel de documentacion, validacion o a
 
 El nivel de proceso debe adaptarse al estado real del proyecto. Un prototipo no necesita la misma estructura que un sistema operativo usado por usuarios reales. Del mismo modo, un proyecto heredado requiere auditoria antes de recibir cambios grandes.
 
-| Estado | Descripcion | Enfoque recomendado |
-|---|---|---|
-| Concepto | Idea inicial sin desarrollo | Definir problema, usuarios y alcance |
-| Prototipo | Primera prueba funcional | Validar utilidad antes de escalar |
-| MVP | Version minima usable | Priorizar estabilidad y feedback real |
-| Operativo | Uso real por usuarios | Validar, documentar y controlar releases |
-| Escalando | Crecimiento en alcance o usuarios | Reforzar arquitectura, tests y soporte |
-| Legacy | Proyecto existente o heredado | Auditar antes de modificar |
+| Estado    | Descripcion                       | Enfoque recomendado                      |
+| --------- | --------------------------------- | ---------------------------------------- |
+| Concepto  | Idea inicial sin desarrollo       | Definir problema, usuarios y alcance     |
+| Prototipo | Primera prueba funcional          | Validar utilidad antes de escalar        |
+| MVP       | Version minima usable             | Priorizar estabilidad y feedback real    |
+| Operativo | Uso real por usuarios             | Validar, documentar y controlar releases |
+| Escalando | Crecimiento en alcance o usuarios | Reforzar arquitectura, tests y soporte   |
+| Legacy    | Proyecto existente o heredado     | Auditar antes de modificar               |
 
 # 10. Principio de simplicidad
 
@@ -443,6 +530,31 @@ Buenas practicas:
 La mejor solucion no siempre es la mas completa, sino la mas clara, mantenible y suficiente para el problema actual.
 
 # 11. Flujo recomendado de trabajo
+
+## Regla general de auditoria
+
+Cuando el alcance no este completamente claro:
+
+1. auditoria;
+2. identificacion de riesgos;
+3. definicion de alcance;
+4. implementacion;
+5. validacion.
+
+Evitar:
+
+- implementar directamente cambios grandes;
+- mezclar auditoria e implementacion;
+- refactors masivos sin mapa previo;
+- cambios transversales sin smoke test.
+
+La auditoria previa reduce:
+
+- retrabajo;
+- consumo de tokens;
+- cambios fuera de alcance;
+- deuda tecnica accidental;
+- regresiones funcionales.
 
 ## Modo operativo para Marketplace Portal
 
@@ -589,15 +701,15 @@ Separarlos ayuda a:
 
 # 13. Riesgo segun tipo de cambio
 
-| Tipo de cambio | Riesgo |
-|---|---|
-| Documentacion | Bajo |
-| Texto/UI simple | Bajo |
-| UI compleja | Medio |
-| Cambio funcional | Medio |
-| Refactor estructural | Alto |
-| Build/release | Alto |
-| Dependencias nuevas | Alto |
+| Tipo de cambio       | Riesgo |
+| -------------------- | ------ |
+| Documentacion        | Bajo   |
+| Texto/UI simple      | Bajo   |
+| UI compleja          | Medio  |
+| Cambio funcional     | Medio  |
+| Refactor estructural | Alto   |
+| Build/release        | Alto   |
+| Dependencias nuevas  | Alto   |
 
 Los cambios de mayor riesgo requieren:
 
@@ -815,13 +927,13 @@ Ventajas:
 
 Ejemplos de uso adecuado:
 
-| Necesidad | Opcion liviana |
-|---|---|
-| Registrar respuestas de un formulario | Google Sheets |
-| Generar un panel operativo simple | Google Sheets |
-| Automatizar envio o transformacion simple | Google Apps Script |
-| Mantener configuraciones editables por negocio | Google Sheets |
-| Registrar eventos o logs operativos simples | Google Sheets |
+| Necesidad                                      | Opcion liviana     |
+| ---------------------------------------------- | ------------------ |
+| Registrar respuestas de un formulario          | Google Sheets      |
+| Generar un panel operativo simple              | Google Sheets      |
+| Automatizar envio o transformacion simple      | Google Apps Script |
+| Mantener configuraciones editables por negocio | Google Sheets      |
+| Registrar eventos o logs operativos simples    | Google Sheets      |
 
 Limite importante:
 
@@ -1047,6 +1159,31 @@ Checklist reutilizable:
 
 El usuario trabaja normalmente desde VS Code y PowerShell en Windows. Por eso, los bloques de comandos deben entregarse preferentemente compatibles con PowerShell.
 
+## Regla operativa Git y consola
+
+El usuario realiza commits manualmente desde consola.
+
+Buenas practicas:
+
+- entregar comandos listos para copiar;
+- preferir una sola linea en PowerShell;
+- evitar continuaciones con "\" estilo Bash;
+- no asumir entorno Linux;
+- indicar claramente:
+  - commit;
+  - push;
+  - branch;
+  - validaciones previas;
+  - archivos modificados.
+
+Preferir:
+
+```powershell
+git add . ; git commit -m "mensaje"
+```
+
+adaptado a PowerShell cuando corresponda.
+
 Buenas practicas operativas:
 
 - Evitar comandos multilinea con `\` cuando sean para copiar directamente.
@@ -1065,7 +1202,304 @@ git add README.md CHANGELOG.md docs/roadmap.md
 git status --short
 ```
 
-# 29. Nota final
+# 29. Metodologia visual y consistencia UI
+
+El documento refleja metodologia de arquitectura, IA y workflow. Esta seccion institucionaliza la metodologia visual que ya es parte central del trabajo real.
+
+## Principios visuales base
+
+- Consistencia entre paginas antes que perfeccion individual.
+- Separar estilos publicos de estilos internos/operativos.
+- Usar shared CSS para elementos comunes: topbar, sidebar, cards, badges, footer.
+- No duplicar estilos entre paginas: centralizar.
+- Priorizar legibilidad sobre densidad visual.
+- Mantener jerarquia clara: titulo, subtitulo, cuerpo, etiqueta.
+
+## Espaciado y tipografia
+
+- Mantener spacing consistente entre secciones y componentes.
+- No mezclar tamanios de fuente sin jerarquia clara.
+- Evitar padding cero en contenedores principales.
+- Verificar overflow en textos largos, especialmente en mobile.
+- Respetar line-height para legibilidad en bloques de texto.
+
+## Componentes recurrentes
+
+| Componente         | Regla general                                           |
+| ------------------ | ------------------------------------------------------- |
+| Headers / topbar   | Consistentes entre todas las paginas del mismo modulo   |
+| Sidebar            | Colapsable en mobile; no romper navegacion              |
+| Cards              | Padding uniforme; texto sin overflow; accion clara      |
+| Badges / etiquetas | Color con significado definido; no usar solo decorativo |
+| Botones            | Jerarquia clara: primario, secundario, destructivo      |
+| Formularios        | Label visible; error visible; submit claro              |
+| Tablas             | Responsive; columnas priorizadas en mobile              |
+
+## Separacion publico / interno
+
+- Las paginas publicas deben tener estetica mas neutra y profesional.
+- Las paginas internas/operativas pueden priorizar densidad de informacion.
+- No mezclar estilos de ambos contextos sin justificacion.
+- Definir paleta por contexto y documentarla.
+
+## Navegacion y rutas
+
+- Verificar que todos los links del menu funcionen despues de cambios.
+- Verificar active states en navegacion.
+- Verificar breadcrumbs si existen.
+- No romper rutas al reorganizar carpetas o renombrar archivos.
+- Verificar que paginas de error o fallback existan.
+
+## Branding y consistencia visual
+
+- Mantener uso coherente de logo, colores primarios y tipografia base.
+- No mezclar familias de fuentes sin criterio.
+- Documentar paleta de colores usada.
+- Evitar cambios de branding en etapas operativas sin decision formal.
+
+## Enterprise SaaS UI
+
+Criterios de referencia para proyectos con nivel de madurez PRO o institucional:
+
+- Layout limpio con espacio en blanco generoso.
+- Sidebar estable y navegacion predecible.
+- Densidad controlada: no mostrar todo junto.
+- Estados vacios con mensaje claro.
+- Feedback de acciones: loaders, confirmaciones, errores visibles.
+- Consistencia entre modulos aunque hayan sido desarrollados en etapas distintas.
+
+# 30. Freeze zones y zonas criticas
+
+Las zonas criticas son archivos, modulos o configuraciones que NO deben modificarse sin auditoria y aprobacion explicita.
+
+## Definicion de freeze zone
+
+Una freeze zone es cualquier elemento donde un cambio no controlado puede:
+
+- romper flujo principal;
+- generar datos incorrectos;
+- interrumpir integraciones externas;
+- afectar usuarios reales;
+- generar errores irreversibles.
+
+## Zonas congeladas por defecto
+
+Estas zonas requieren siempre validacion estricta antes de cualquier cambio:
+
+| Zona                                | Razon                                         |
+| ----------------------------------- | --------------------------------------------- |
+| Apps Script / backend               | Logica de negocio y automatizaciones criticas |
+| Payloads y endpoints                | Contratos con servicios externos              |
+| Submit y formularios activos        | Afectan datos reales                          |
+| Config y variables de entorno       | Pueden romper todo el proyecto                |
+| Render dinamico con datos reales    | CSV, APIs, localStorage                       |
+| Rutas y aliases                     | Pueden romper navegacion completa             |
+| Timeline y simuladores con formulas | Logica economica sensible                     |
+| Logica de autenticacion o permisos  | Seguridad critica                             |
+
+## Regla operativa para freeze zones
+
+Antes de tocar una freeze zone:
+
+1. Auditoria del modulo.
+2. Identificacion de dependencias.
+3. Definicion de alcance acotado.
+4. Implementacion con backup o rama separada.
+5. Validacion estricta antes de publicar.
+6. Documentar el cambio.
+
+Nunca modificar una freeze zone como parte de un cambio visual o documental.
+Si la IA propone tocar una freeze zone fuera de alcance: detener y renegociar alcance.
+
+## Como declarar freeze zones en prompts
+
+```txt
+No modificar:
+- Apps Script
+- config/
+- src/submit.js
+- payloads/
+Modificar solo:
+- src/ui/cards.css
+- docs/release.md
+```
+
+# 31. Auditoria vs implementacion como metodologia formal
+
+La separacion entre auditoria e implementacion es un principio central de esta metodologia, no una sugerencia opcional.
+
+## Por que separar siempre
+
+Mezclar auditoria e implementacion en una misma instruccion o etapa genera:
+
+- cambios fuera de alcance no detectados;
+- retrabajo por falta de mapa previo;
+- consumo excesivo de tokens;
+- regresiones no anticipadas;
+- dificultad para revisar o revertir;
+- deuda tecnica accidental.
+
+## Flujo formal
+
+```txt
+AUDITORIA (sin modificar archivos)
+-> diagnostico
+-> riesgos detectados
+-> dependencias identificadas
+-> alcance recomendado
+-> quick wins vs cambios de mayor impacto
+
+IMPLEMENTACION (alcance definido y aprobado)
+-> archivos permitidos declarados
+-> archivos prohibidos declarados
+-> validaciones esperadas definidas
+-> resumen de cambio al finalizar
+
+VALIDACION (independiente de implementacion)
+-> smoke test
+-> revision de consola
+-> casos reales
+-> responsive si aplica
+```
+
+## Cuando es obligatorio separar
+
+- Refactors de cualquier escala.
+- Cambios en JS, rutas, formularios o config.
+- Cambios transversales que afecten multiples paginas.
+- Proyectos con deuda tecnica o estructura heredada.
+- Cualquier cambio donde el alcance no este completamente claro.
+
+## Cuando puede omitirse la auditoria formal
+
+- Cambios visuales acotados y bien definidos.
+- Correcciones de texto o labels.
+- Documentacion sin tocar logica.
+- Cambios que el equipo ya entiende completamente.
+
+Incluso en estos casos, conviene un smoke test minimo post-cambio.
+
+## Prompt de auditoria recomendado
+
+```txt
+Auditar [modulo o archivo] sin modificar ningún archivo.
+Entregar:
+- diagnostico actual;
+- riesgos detectados;
+- dependencias criticas;
+- quick wins;
+- cambios recomendados priorizados;
+- proximo paso sugerido de menor riesgo.
+```
+
+# 32. Smoke visual y QA manual
+
+El smoke visual es la validacion rapida post-cambio que confirma que nada visible se rompio. Es parte obligatoria del flujo para cambios UI o estructurales.
+
+## Que cubre el smoke visual
+
+- Carga correcta de la pagina o modulo.
+- Ausencia de errores visibles en consola.
+- Layout sin elementos rotos, superpuestos o fuera de lugar.
+- Navegacion funcional: links, menu, sidebar, topbar.
+- Responsive basico: mobile y desktop.
+- Overflow controlado en textos y contenedores.
+- Estados vacios o de error visibles si aplica.
+- Formularios con label, campo y submit visible.
+- Datos o contenido cargado correctamente.
+- Ausencia de elementos duplicados o faltantes.
+
+## Checklist de smoke visual
+
+```txt
+[ ] Pagina carga sin error.
+[ ] Consola sin errores criticos.
+[ ] Layout sin elementos rotos.
+[ ] Navegacion funciona.
+[ ] Mobile sin overflow ni elementos cortados.
+[ ] Formularios visibles y operativos.
+[ ] Datos cargan correctamente si aplica.
+[ ] Links internos funcionan.
+[ ] No hay contenido duplicado ni faltante.
+[ ] Branding y estilos consistentes con el resto del proyecto.
+```
+
+## Cuando ejecutar smoke visual
+
+- Despues de cualquier cambio UI.
+- Despues de cambios CSS o estructurales.
+- Antes de hacer commit en cambios visuales.
+- Antes de release.
+- Despues de deploy en entorno real.
+
+## QA manual para cambios funcionales
+
+Para cambios que afecten logica, formularios, datos o integraciones:
+
+```txt
+[ ] Flujo principal funciona de inicio a fin.
+[ ] Casos de error visibles y comprensibles.
+[ ] Datos enviados o recibidos correctamente.
+[ ] Sin loops, freezes ni comportamientos inesperados.
+[ ] Validaciones activas.
+[ ] Submit o accion principal ejecuta correctamente.
+[ ] Respuesta del sistema es clara para el usuario.
+[ ] Comportamiento consistente en distintos navegadores si aplica.
+```
+
+## GitHub Pages y entornos estaticos
+
+Para proyectos publicados en GitHub Pages u hosting estatico:
+
+- Verificar rutas relativas vs absolutas.
+- Verificar que assets carguen correctamente post-deploy.
+- Verificar que 404 no rompa navegacion.
+- Verificar seller_id u otros parametros dinamicos si aplica.
+- Revisar cache si los cambios no aparecen inmediatamente.
+
+# 33. Niveles de madurez visual
+
+Los proyectos evolucionan visualmente. Esta seccion define niveles de referencia para alinear expectativas y criterios de calidad.
+
+| Nivel           | Descripcion                        | Criterios                                                                    |
+| --------------- | ---------------------------------- | ---------------------------------------------------------------------------- |
+| MVP visual      | Primera version funcional          | Funciona, no rompe, sin polish                                               |
+| Operativo       | Usado por usuarios reales          | Consistente, legible, sin errores visuales                                   |
+| PRO             | Referencia de calidad interna      | Espaciado, jerarquia, responsive, componentes unificados                     |
+| Enterprise SaaS | Nivel institucional                | Feedback de acciones, estados vacios, navegacion predecible, branding solido |
+| Institucional   | Documento o sistema con vida larga | Consistencia total, documentado, mantenible, escalable                       |
+
+## Como usar estos niveles
+
+- Definir el nivel objetivo antes de empezar una etapa visual.
+- No exigir nivel Enterprise SaaS en un MVP.
+- No publicar como operativo algo que aun esta en MVP visual.
+- Elevar el nivel gradualmente con criterio y evidencia.
+
+## Criterios para subir de nivel
+
+De MVP a Operativo:
+
+- Sin errores visuales criticos.
+- Navegacion completa funcional.
+- Responsive basico sin overflow.
+
+De Operativo a PRO:
+
+- Shared CSS implementado.
+- Componentes consistentes entre paginas.
+- Jerarquia tipografica clara.
+- Spacing uniforme.
+
+De PRO a Enterprise SaaS:
+
+- Estados vacios documentados.
+- Feedback de acciones implementado.
+- Navegacion predecible y estable.
+- Branding solido y documentado.
+- Separacion clara entre contexto publico e interno.
+
+# 34. Nota final
 
 Esta metodologia debe adaptarse a cada proyecto, equipo y contexto.
 
