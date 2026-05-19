@@ -1873,3 +1873,15 @@ Resultado:
 - Movidas reglas visuales estaticas de topbar, sidebar, botones de cabecera, estados de carga/vacio/error y leyenda estatica.
 - Conservadas inline las reglas sensibles o acopladas a timeline, barras, fechas, dependencias, filtros funcionales, render dinamico, modal/drawer y datos.
 - No se modificaron JS, fetch, CSV, timeline, filtros funcionales, render dinamico, fechas/datos, rutas, href/src, ids/classes ni config.
+
+## Etapa 23D: CSS familia Simuladores internos
+
+Estado: completada.
+
+Resultado:
+
+- Creado `assets/css/pages/simuladores.css`.
+- Enlazado `simuladores.css` en `internal/simuladores/simulador-economico.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, layout de columnas, headers/secciones, contenedor de resultados, estados de tarifas, boton de actualizacion, tabs visuales y disclaimer.
+- Conservadas inline las reglas sensibles o acopladas a inputs, toggles de servicios, KPIs/resultados, composicion, breakdown, escenarios, financiacion, tarifas dinamicas y render JS.
+- No se modificaron formulas, calculos, JS, fetch, CSV, CONFIG, DIRECT_CSV_URLS, tarifas, overrides, inputs funcionales, render dinamico, rutas, href/src, ids/classes ni config.

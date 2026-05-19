@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 23D CSS familia Simuladores internos
+
+Tipo de cambio: visual controlado.
+
+Estado: completado.
+
+Resultado:
+- Creado `assets/css/pages/simuladores.css` como hoja especifica para simuladores internos.
+- Enlazado en `internal/simuladores/simulador-economico.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, layout de columnas, headers/secciones, contenedor de resultados, estados de tarifas, boton de actualizacion, tabs visuales y disclaimer.
+- Conservadas inline las reglas sensibles o acopladas a inputs, toggles de servicios, KPIs/resultados, composicion, breakdown, escenarios, financiacion, tarifas dinamicas y render JS.
+- Sin cambios en formulas, calculos, JS, fetch, CSV, CONFIG, DIRECT_CSV_URLS, tarifas, overrides, inputs, render dinamico, rutas, href/src, ids/classes ni config.
+
 ## 2026-05-18 - Etapa 23C CSS familia Gantt
 
 Tipo de cambio: visual controlado.
