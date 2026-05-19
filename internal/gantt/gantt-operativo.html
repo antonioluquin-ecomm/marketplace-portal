@@ -250,6 +250,287 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 .sbtn.on{background:rgba(255,255,255,.10)}
 .g-bar:hover{filter:none}
 .exec-title,.sh-name,.lsh-name,.mhd-task{letter-spacing:.01em}
+
+/* Etapa 30B: pulido visual local Gantt Operativo, sin tocar render ni datos. */
+.alert-strip{
+  gap:6px 8px;
+  padding:8px 22px;
+  background:rgba(217,64,64,.09);
+}
+.alert-strip strong{
+  font-size:11px;
+  margin-right:2px;
+}
+.alert-item{
+  min-height:25px;
+  border-radius:7px;
+  background:rgba(217,64,64,.10);
+  color:#f4b3b3;
+  font-size:10.5px;
+  font-weight:800;
+  line-height:1.2;
+  box-shadow:none;
+}
+.alert-item:hover{
+  background:rgba(217,64,64,.16);
+  border-color:rgba(217,64,64,.34);
+}
+.exec-hero{
+  grid-template-columns:minmax(0,1.45fr) minmax(280px,.72fr);
+  gap:12px;
+  padding:14px 22px;
+  background:rgba(255,255,255,.012);
+}
+.exec-card{
+  padding:13px 15px;
+  border-radius:10px;
+}
+.exec-title{
+  font-size:20px;
+  line-height:1.05;
+  overflow-wrap:anywhere;
+}
+.exec-copy{
+  max-width:760px;
+  font-size:12px;
+  line-height:1.5;
+}
+.exec-flow{
+  gap:5px;
+  margin-top:10px;
+}
+.exec-step{
+  min-height:58px;
+  padding:8px 9px;
+  background:rgba(255,255,255,.018);
+}
+.exec-step-desc{
+  font-size:10px;
+}
+.exec-rules{
+  gap:6px;
+}
+.exec-rule{
+  padding:7px 9px;
+  background:rgba(255,255,255,.018);
+  font-size:11px;
+}
+.exec-section-label{
+  padding:11px 22px 0;
+  background:rgba(255,255,255,.008);
+}
+.exec-actions{
+  gap:8px;
+  padding:0 22px 12px;
+  background:rgba(255,255,255,.008);
+}
+.exec-action{
+  min-height:42px;
+  padding:9px 11px;
+  background:rgba(255,255,255,.018);
+  color:var(--t3);
+  font-size:11.5px;
+}
+.exec-action:hover{
+  transform:none;
+}
+.exec-action span{
+  color:var(--t3);
+  font-size:14px;
+}
+.week-panel.collapsed{
+  max-height:34px;
+}
+.week-panel-hd{
+  min-height:34px;
+  padding:7px 22px;
+}
+.week-body{
+  gap:8px;
+  padding:9px 22px 12px;
+}
+.week-task{
+  padding:7px 9px;
+  border-radius:7px;
+}
+.summary{
+  gap:8px;
+  padding:10px 22px;
+}
+.kpi{
+  padding:9px 12px;
+  border-radius:8px;
+}
+.kpi-l{
+  font-size:8.5px;
+}
+.kpi-n{
+  font-size:24px;
+}
+.toolbar{
+  padding:8px 22px;
+}
+.gantt-months{
+  box-shadow:0 1px 0 rgba(255,255,255,.035);
+}
+.gm-fixed-cell,.period-cell{
+  padding-block:8px;
+}
+.seller-header{
+  background:#171d17;
+}
+.seller-header:hover{
+  background:#1a211a;
+}
+.sh-name-cell,.sh-prog-cell{
+  padding-block:9px;
+}
+.task-row:hover .tr-fixed,
+.lista-table tr:hover td{
+  background:rgba(106,168,79,.045);
+}
+.tr-name-cell{
+  padding-top:7px;
+  padding-bottom:7px;
+}
+.tr-tarea{
+  color:#d7dfd3;
+}
+.tr-gantt{
+  background:linear-gradient(90deg,rgba(255,255,255,.018),rgba(255,255,255,0));
+}
+.g-bar{
+  min-width:10px;
+  border-radius:5px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);
+}
+.g-bar.pend{
+  background:rgba(255,255,255,.18);
+  color:#ccd4c8;
+}
+.g-bar.wip{
+  background:linear-gradient(90deg,#2f7ccf,#5aa6f7);
+  color:#eef6ff;
+}
+.g-bar.blk{
+  background:linear-gradient(90deg,#a92d2d,#df5353);
+  color:#fff1f1;
+}
+.g-bar.done{
+  background:linear-gradient(90deg,#388657,#58b875);
+  color:#f0fff3;
+}
+.estado-badge{
+  border:1px solid transparent;
+}
+.st-done{
+  border-color:rgba(78,167,106,.28);
+}
+.st-wip{
+  border-color:rgba(100,181,246,.28);
+}
+.st-pend{
+  border-color:rgba(255,255,255,.10);
+}
+.st-blk{
+  border-color:rgba(217,64,64,.34);
+}
+.filter-hint{
+  margin-top:5px;
+  padding:0 2px;
+  font-size:10px;
+  line-height:1.35;
+  color:var(--t3);
+}
+.sel.filter-active{
+  border-color:rgba(106,168,79,.48);
+  background:rgba(106,168,79,.10);
+  color:#d8ead0;
+}
+
+@media(max-width:980px){
+  .exec-hero{grid-template-columns:1fr}
+}
+@media(max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .sidebar{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    position:static;
+    height:auto;
+    max-height:none;
+    overflow:visible;
+    padding:12px;
+    border-right:0;
+    border-bottom:1px solid var(--bdr);
+  }
+  .sb-s,.sb-section{
+    margin:0;
+    padding:0;
+  }
+  .sb-div{
+    display:none;
+  }
+  .sb-note{
+    grid-column:1 / -1;
+    margin:0;
+  }
+  .fb{
+    min-height:30px;
+  }
+  .exec-hero{
+    padding:12px 14px;
+  }
+  .exec-flow{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .exec-actions{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    padding:0 14px 12px;
+  }
+  .exec-section-label,.summary,.toolbar,.week-panel-hd,.week-body,.alert-strip{
+    padding-left:14px;
+    padding-right:14px;
+  }
+  .summary{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .week-body{
+    grid-template-columns:1fr;
+  }
+}
+@media(max-width:560px){
+  .sidebar{
+    grid-template-columns:1fr;
+  }
+  .alert-strip{
+    align-items:flex-start;
+  }
+  .alert-strip strong{
+    width:100%;
+  }
+  .alert-item{
+    max-width:100%;
+    white-space:normal;
+  }
+  .exec-title{
+    font-size:19px;
+  }
+  .exec-flow,.exec-actions,.summary{
+    grid-template-columns:1fr;
+  }
+  .toolbar{
+    align-items:flex-start;
+  }
+  .tl-l,.tl-r{
+    width:100%;
+    justify-content:space-between;
+  }
+  .modal{
+    width:min(520px,calc(100vw - 24px));
+  }
+}
 </style>
 </head>
 <body>
@@ -274,6 +555,14 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   <div class="sb-s">
     <div class="sb-lbl">Buscar seller / tarea</div>
     <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
+  </div>
+
+  <div class="sb-s">
+    <div class="sb-lbl">Seller</div>
+    <select class="sel" id="seller-sel" onchange="setSellerFilter(this.value)">
+      <option value="todos">Todos</option>
+    </select>
+    <div class="filter-hint" id="seller-filter-hint">Todos los sellers</div>
   </div>
 
   <div class="sb-s">
@@ -449,7 +738,7 @@ let SELLERS  = {};
 let TASKS    = [];
 let currentView  = 'gantt';
 let currentScale = 'mes';   // 'mes' | 'semana'
-let filters = { fase:'todos', estado:'todos' };
+let filters = { fase:'todos', estado:'todos', seller:'todos' };
 let weekPanelOpen = false;
 
 /* ── UTILS ── */
@@ -605,6 +894,31 @@ function calcProgreso() {
   });
 }
 
+/* ── SELLERS únicos → poblar select ── */
+function populateSellers() {
+  const sel=$('seller-sel');
+  if(!sel) return;
+  const current=sel.value;
+  const ids=[...new Set([...Object.keys(SELLERS),...TASKS.map(t=>t.seller_id)].filter(Boolean))];
+  ids.sort((a,b)=>{
+    const na=SELLERS[a]?.nombre||TASKS.find(t=>t.seller_id===a)?.seller_nombre||a;
+    const nb=SELLERS[b]?.nombre||TASKS.find(t=>t.seller_id===b)?.seller_nombre||b;
+    return na.localeCompare(nb,'es');
+  });
+  while(sel.options.length>1) sel.remove(1);
+  ids.forEach(id=>{
+    const seller=SELLERS[id]||{};
+    const name=seller.nombre||TASKS.find(t=>t.seller_id===id)?.seller_nombre||id;
+    const o=document.createElement('option');
+    o.value=id;
+    o.textContent=name&&name!==id?`${name} · ${id}`:id;
+    sel.appendChild(o);
+  });
+  sel.value=ids.includes(current)?current:'todos';
+  filters.seller=sel.value;
+  updateSellerHint();
+}
+
 /* ── RESPONSABLES únicos → poblar select ── */
 function populateResponsables() {
   const sel=$('resp-sel');
@@ -644,6 +958,7 @@ async function loadData(manual=false){
     SELLERS=normalizeSellers(csvToObjects(tS,['seller_id','id_unico']));
     TASKS=normalizeTasks(csvToObjects(tT,['task_id','id_tarea','id tarea','seller_id']));
     calcProgreso();
+    populateSellers();
     populateResponsables();
     setStatus('live',`Google Sheets · ${Object.keys(SELLERS).length} sellers · ${TASKS.length} tareas`);
     $('last-update').textContent=new Date().toLocaleString('es-AR',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'});
@@ -664,10 +979,27 @@ function setF(type,val){
   const btn=$(`f${type[0]}-${val.replace(' ','_')}`); if(btn) btn.classList.add('on');
   render();
 }
+function updateSellerHint(){
+  const sel=$('seller-sel');
+  const hint=$('seller-filter-hint');
+  if(!sel||!hint) return;
+  const active=filters.seller&&filters.seller!=='todos';
+  sel.classList.toggle('filter-active',active);
+  if(!active){ hint.textContent='Todos los sellers'; return; }
+  const seller=SELLERS[filters.seller]||{};
+  hint.textContent=`Filtrado por ${seller.nombre||filters.seller}`;
+}
+function setSellerFilter(sid){
+  filters.seller=sid||'todos';
+  updateSellerHint();
+  render();
+}
 function clearFilters(){
   $('search').value=''; $('resp-sel').value='todos';
-  filters={fase:'todos',estado:'todos'};
+  if($('seller-sel')) $('seller-sel').value='todos';
+  filters={fase:'todos',estado:'todos',seller:'todos'};
   $('solo-activos').checked=false;
+  updateSellerHint();
   document.querySelectorAll('[id^="ff-"],[id^="fe-"]').forEach(b=>b.classList.remove('on'));
   const ff=$('ff-todos');if(ff)ff.classList.add('on');
   const fe=$('fe-todos');if(fe)fe.classList.add('on');
@@ -724,10 +1056,13 @@ function progStyle(pct){
 function render(){
   const search=($('search').value||'').trim().toLowerCase();
   const resp=($('resp-sel')?.value)||'todos';
+  const sellerFilter=filters.seller||'todos';
   const soloAct=$('solo-activos').checked;
   const today=new Date(); today.setHours(0,0,0,0);
+  updateSellerHint();
 
   let tasks=TASKS.filter(t=>{
+    if(sellerFilter!=='todos'&&t.seller_id!==sellerFilter) return false;
     if(filters.fase!=='todos'&&norm(t.fase)!==norm(filters.fase)) return false;
     if(filters.estado!=='todos'&&t.estado!==filters.estado) return false;
     if(resp!=='todos'&&t.responsable!==resp) return false;
@@ -757,7 +1092,7 @@ function render(){
     return(sa?.nombre||a).localeCompare(sb?.nombre||b,'es');
   });
 
-  updateCounts(tasks,sellerIds.length);
+  updateCounts(tasks,sellerIds.length,sellerFilter);
   renderAlertStrip(tasks);
   renderWeekPanel(tasks,today);
 
@@ -775,20 +1110,21 @@ function render(){
 }
 
 /* ── COUNTS ── */
-function updateCounts(tasks,nSel){
+function updateCounts(tasks,nSel,sellerFilter='todos'){
   $('ks-sellers').textContent=nSel;
   $('ks-blk').textContent=tasks.filter(t=>t.estado==='Bloqueado').length;
   $('ks-wip').textContent=tasks.filter(t=>t.estado==='En curso').length;
   $('ks-done').textContent=tasks.filter(t=>t.estado==='Completado').length;
   $('ks-pend').textContent=tasks.filter(t=>t.estado==='Pendiente').length;
-  const by=fn=>TASKS.filter(fn).length;
+  const countBase=sellerFilter==='todos'?TASKS:TASKS.filter(t=>t.seller_id===sellerFilter);
+  const by=fn=>countBase.filter(fn).length;
   const fc=(id,n)=>{const e=$(id);if(e)e.textContent=n;};
-  fc('ffc-todos',TASKS.length);
+  fc('ffc-todos',countBase.length);
   fc('ffc-Comercial',by(t=>norm(t.fase).includes('comercial')));
   fc('ffc-Técnica',by(t=>norm(t.fase).includes('tecnica')||norm(t.fase).includes('técnica')));
   fc('ffc-Operativa',by(t=>norm(t.fase).includes('operativa')));
   fc('ffc-Cierre',by(t=>norm(t.fase).includes('cierre')));
-  fc('fec-todos',TASKS.length);
+  fc('fec-todos',countBase.length);
   fc('fec-wip',by(t=>t.estado==='En curso'));
   fc('fec-blk',by(t=>t.estado==='Bloqueado'));
   fc('fec-pend',by(t=>t.estado==='Pendiente'));
