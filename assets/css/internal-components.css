@@ -134,14 +134,28 @@
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  min-width: 0;
 }
 
 :where(.btn-top, .tb-btn, .tbtn, .btn-sm) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   min-height: 34px;
   padding: 7px 12px;
   border-radius: var(--radius-control, 9px);
   font-size: 11px;
   font-weight: 800;
+  white-space: nowrap;
+}
+
+:where(.status, .tb-status, .status-row, .status-dot, .load-badge, .live-badge) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  white-space: nowrap;
 }
 
 :where(.sidebar) {
@@ -175,6 +189,23 @@
 @media (max-width: 720px) {
   :where(.topbar) {
     gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  :where(.brand, .tb-brand, .tb-left, .topbar-brand) {
+    flex: 1 1 auto;
+  }
+
+  :where(.top-actions, .tb-right, .topbar-right) {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-left: 0;
+  }
+
+  :where(.status, .tb-status, .status-row, .status-dot, .load-badge, .live-badge) {
+    max-width: 100%;
   }
 
   :where(.panel, .card, .tool-card, .snap, .section) {

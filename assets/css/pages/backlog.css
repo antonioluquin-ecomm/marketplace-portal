@@ -29,6 +29,8 @@
 @keyframes pulse{50%{opacity:.3}}
 .tb-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid var(--b);border-radius:var(--radius-control,8px);font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);transition:.15s}
 .tb-btn:hover{color:var(--g);border-color:var(--gb);background:var(--gd)}
+.tb-btn.primary{background:var(--g);border-color:var(--g);color:#fff}
+.tb-btn.primary:hover{background:var(--g2);border-color:var(--g2);color:#fff}
 .view-toggle{display:flex;border:1px solid var(--b);border-radius:var(--radius-control,8px);overflow:hidden;background:rgba(255,255,255,.02)}
 .view-btn{padding:5px 12px;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t4);transition:.15s}
 .view-btn:hover{color:var(--t2)}
@@ -100,6 +102,11 @@
 @media(max-width:960px){
   .shell{grid-template-columns:1fr}
   .sidebar{display:none}
+  .topbar{height:auto;min-height:var(--tb);align-items:flex-start;flex-wrap:wrap;padding:10px 16px;gap:8px}
+  .tb-brand{flex:1 1 auto;min-width:0}
+  .tb-crumb{display:none}
+  .tb-right{flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;margin-left:0;gap:6px}
+  .tb-status{order:-1}
 }
 
 /* Etapa 27A: UI foundation enterprise para Backlog. */

@@ -59,6 +59,8 @@ h2{font-size:20px;margin-bottom:12px}
   .side{position:relative;top:auto}
   .topbar{height:auto;min-height:var(--tb);padding:12px 16px;align-items:flex-start}
   .brand,.top-actions{flex-wrap:wrap}
+  .brand{flex:1 1 auto}
+  .top-actions{flex:1 1 100%;justify-content:flex-start;margin-left:0}
   .crumb{display:none}
 }
 

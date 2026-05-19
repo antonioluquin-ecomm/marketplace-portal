@@ -2037,3 +2037,19 @@ Resultado:
 - Variante conservada: formularios publicos mantienen header tipo hero, pero con marca y label visual unificados.
 - Se mantuvieron intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, rutas criticas y campos.
 - Proximo paso recomendado: smoke visual post-push y ajustes menores solo si aparecen inconsistencias concretas.
+
+## Etapa 27F: normalizacion interna de headers/topbars
+
+Estado: completada.
+
+Resultado:
+
+- Normalizados headers/topbars internos con marca `SPORTING MARKETPLACE`, label de seccion corto, status breve y acciones a la derecha.
+- Estandarizados textos de navegacion: `← Portal`, `← Hub` y `← Backlog`.
+- Gantt Operativo vuelve al Hub Operativo real con label `← Hub`.
+- Backlog Sellers suma accion segura `+ Seller` hacia Gestion Sellers.
+- Simulador Economico suma accion explicita `← Portal`.
+- Reforzado comportamiento mobile de topbars internas: marca prioritaria, acciones con wrap y labels secundarios ocultables.
+- Variantes conservadas: `index.html` institucional, `public/` seller-facing y maqueta Seller Center.
+- Se mantuvieron intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, aliases, legacy y campos.
+- Proximo paso recomendado: smoke visual interno desktop/mobile y luego smoke post-push en GitHub Pages.

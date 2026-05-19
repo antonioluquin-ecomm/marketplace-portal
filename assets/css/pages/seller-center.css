@@ -4,6 +4,7 @@
 .logo span{color:var(--g)}
 .crumb{border-left:1px solid var(--bdr);padding-left:12px;font-size:9.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}
 .topbar-right{display:flex;align-items:center;gap:8px}
+.load-badge,.live-badge{white-space:nowrap}
 .tb-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--bdr);border-radius:var(--radius-control,8px);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);transition:.15s;cursor:pointer;background:none;font-family:inherit}
 .tb-btn:hover{color:var(--g);border-color:var(--g-brd);background:var(--g-dim)}
 
@@ -96,6 +97,7 @@ h1{font-size:40px}
   .brand{flex:1 1 160px}
   .crumb{display:none}
   .topbar-right{flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;margin-left:0;gap:6px}
+  .load-badge,.live-badge{max-width:100%}
   .tb-btn{min-width:0}
   .shell{grid-template-columns:minmax(0,1fr);padding-top:calc(var(--tb) + 44px)}
   .main{width:100%;max-width:100%;min-width:0;padding:20px 16px 60px}

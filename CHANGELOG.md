@@ -4,6 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 27F normalizacion interna de headers/topbars
+
+Tipo de cambio: visual estructural acotado.
+
+Estado: completado.
+
+Resultado:
+- Normalizados headers/topbars internos con marca `SPORTING MARKETPLACE`, label de seccion corto, status breve y acciones a la derecha.
+- Estandarizados labels de navegacion interna: `← Portal`, `← Hub` y `← Backlog`.
+- Corregido Gantt Operativo para volver al Hub Operativo real mediante `../hub-operativo.html`.
+- Agregada accion `+ Seller` en Backlog Sellers hacia `gestion-sellers.html`.
+- Agregada accion explicita `← Portal` en Simulador Economico.
+- Reforzado comportamiento mobile de topbars internas para priorizar marca, wrappear acciones y ocultar labels secundarios cuando corresponde.
+- Conservadas variantes: `index.html` institucional, `public/` seller-facing y maqueta de Seller Center.
+- Sin cambios en scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, aliases, legacy ni campos.
+
 ## 2026-05-19 - Etapa 27B unificacion global de headers/topbars
 
 Tipo de cambio: visual estructural.

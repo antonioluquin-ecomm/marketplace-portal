@@ -123,6 +123,11 @@
 
 @media(max-width:860px){
   .sidebar{display:none}
+  .topbar{height:auto;min-height:var(--tb,56px);align-items:flex-start;flex-wrap:wrap;padding:10px 16px;gap:8px}
+  .tb-brand,.tb-left{flex:1 1 auto;min-width:0}
+  .tb-module,.tb-crumb,.tb-pipe{display:none}
+  .tb-right{flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;margin-left:0;gap:6px}
+  .tb-date,.tb-badge{max-width:100%}
 }
 
 /* Etapa 27A: UI foundation enterprise para Gantt. */
