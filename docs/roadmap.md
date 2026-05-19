@@ -1909,3 +1909,19 @@ Resultado:
 - Movidas reglas visuales estaticas de topbar, shell, sidebar, hero/intro, secciones, herramientas, flujo, alertas visuales, footer y responsive general.
 - Conservadas inline las reglas sensibles o acopladas a carga viva, spinner, KPIs, progreso global, modulos renderizados, roadmap dinamico, hitos y estados derivados de CSV/JS.
 - No se modificaron fetch, CSV, render dinamico, roadmap dinamico, JS funcional, rutas, href/src, ids/classes ni maqueta Seller Center.
+
+## Etapa 23G: cierre CSS por familias internas
+
+Estado: completada.
+
+Resultado:
+
+- Cerrado el bloque 23B-23F de CSS por familias internas.
+- 23B: `backlog.css` creado para Backlog Sellers.
+- 23C: `gantt.css` creado para Gantt Operativo y Gantt Seller Center.
+- 23D: `simuladores.css` creado para Simulador Economico interno.
+- 23E: `gestion-sellers.css` creado para Gestion Sellers.
+- 23F: `seller-center.css` creado para Seller Center index.
+- Decision vigente: se mantuvo inline todo CSS sensible asociado a JS, render dinamico, submit, filtros, timeline, formulas, payloads o estados dinamicos.
+- Decision vigente: no tocar `public/` todavia.
+- Proximo paso recomendado: push y smoke test visual liviano; luego decidir si se abre CSS publico seller-facing en etapa separada.

@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 23G cierre CSS por familias internas
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque 23B-23F de CSS por familias internas.
+- 23B: `backlog.css` creado para Backlog Sellers.
+- 23C: `gantt.css` creado para Gantt Operativo y Gantt Seller Center.
+- 23D: `simuladores.css` creado para Simulador Economico interno.
+- 23E: `gestion-sellers.css` creado para Gestion Sellers.
+- 23F: `seller-center.css` creado para Seller Center index.
+- Decision vigente: mantener inline todo CSS sensible asociado a JS, render dinamico, submit, filtros, timeline, formulas, payloads o estados dinamicos.
+- Decision vigente: no tocar `public/` todavia; evaluar CSS publico seller-facing en etapa separada.
+- Proximo paso recomendado: push y smoke test visual liviano.
+
 ## 2026-05-18 - Etapa 23F CSS familia Seller Center
 
 Tipo de cambio: visual controlado.
