@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 31A auditoria modularizacion Apps Script
+
+Tipo de cambio: auditoria tecnica y documentacion.
+
+Estado: completado sin cambios funcionales.
+
+Resultado:
+- Auditado `Apps_script_v5.js` para futura modularizacion segura.
+- Creado `docs/apps-script-modularizacion.md` con diagnostico, mapa funcional, dependencias cruzadas, riesgos, arquitectura propuesta y estrategia 31B-31E.
+- Recomendacion principal: no hacer refactor masivo; mantener `doPost` como fachada estable y migrar por etapas.
+- Riesgos criticos identificados: routing `doPost`, headers con comportamiento destructivo/no destructivo, side effects de calificacion/relevamiento, namespace global Apps Script y deploy parcial.
+- No se modifico `Apps_script_v5.js`, config, front, endpoints, payloads, formularios, simuladores, Google Sheets, `public/` ni `legacy/`.
+
 ## 2026-05-19 - Etapa 30E3 UI controlada edicion Gantt Operativo
 
 Tipo de cambio: interfaz operativa controlada y documentacion.

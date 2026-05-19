@@ -1134,3 +1134,29 @@ Casos pendientes de QA real/controlado:
 | Fecha invalida | Forzar payload/fixture con fecha invalida y validar rechazo | Pendiente |
 | Sin errores JS | Smoke en navegador real desktop/mobile | Pendiente |
 | Filtros/vistas | Validar seller filter, busqueda, fase, estado, solo activos, semana/mes, Gantt/lista y modal detalle | Pendiente |
+
+## Etapa 31A: auditoria modularizacion Apps Script
+
+**Estado:** documentado, sin cambios funcionales.
+
+**Documento tecnico:** `docs/apps-script-modularizacion.md`.
+
+Validaciones realizadas:
+
+| Verificacion | Resultado | Estado |
+|---|---|---|
+| Archivo funcional | `Apps_script_v5.js` auditado solo lectura | OK |
+| Mapa funcional | Routing, sellers, gestion_seller, calificacion, relevamiento, definicion tecnica, Gantt, auditoria, helpers y config documentados | OK |
+| Riesgos | Dependencias implicitas, globals, side effects, headers, deploy parcial y payloads existentes documentados | OK |
+| Propuesta futura | Etapas 31B-31E definidas | OK |
+| Comportamiento funcional | No modificado | OK |
+
+Validaciones futuras para 31B+:
+
+| Caso | Metodo | Estado |
+|---|---|---|
+| `doGet` | Confirmar `status: ok` tras cada split | Pendiente |
+| Routing | POST dummy por `seller`, `calificacion`, `relevamiento`, `gantt_task_update` | Pendiente |
+| Compatibilidad payloads | Confirmar mismos campos y respuestas | Pendiente |
+| Headers | Confirmar que no hay backups/clear inesperados | Pendiente |
+| Deploy incremental | Versionar Apps Script y conservar rollback | Pendiente |

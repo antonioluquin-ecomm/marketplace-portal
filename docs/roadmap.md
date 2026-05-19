@@ -2114,3 +2114,21 @@ Resultado:
 Proximo paso recomendado:
 
 - Ejecutar 30E1 solo si se aprueba una tarea dummy o entorno QA para escritura real.
+
+## Etapa 31A: auditoria critica modularizacion Apps Script
+
+Estado: completada.
+
+Resultado:
+
+- Auditado `Apps_script_v5.js` como base para una futura modularizacion segura.
+- Documento principal: `docs/apps-script-modularizacion.md`.
+- Mapa funcional definido por dominios: routing, sellers, gestion_seller, calificacion, relevamiento, definicion tecnica, Gantt Operativo, auditoria/logs, helpers, validaciones y configuracion.
+- Arquitectura futura recomendada: `Codigo.gs`, `Config.gs`, `Headers.gs`, `Utils.gs`, `Sheets.gs`, `Sellers.gs`, `Calificaciones.gs`, `Relevamientos.gs`, `DefinicionTecnica.gs`, `GanttOperativo.gs` y `Notificaciones.gs`.
+- Estrategia recomendada: 31B extraer Config/Utils/Headers; 31C mover Gantt; 31D mover Sellers/Formularios; 31E mover Definicion Tecnica/Notificaciones y cleanup.
+- Riesgo principal: `doPost` es fachada critica para formularios/front y no debe cambiar respuestas, aliases ni side effects.
+- No se implemento modularizacion y no se modifico comportamiento funcional.
+
+Proximo paso recomendado:
+
+- Ejecutar 31B solo como extraccion pasiva de Config/Utils/Headers, con smoke Apps Script y POST dummy antes de deploy productivo.

@@ -29,6 +29,7 @@ Fecha: 2026-05-18
 - Bloque 28B cerrado: navegacion publica seller-facing entre Presentacion, Simulador, Calificacion y Relevamiento preservando `seller_id`.
 - Bloque 29B-29C cerrado: logos internos clickeables hacia `index.html`, validados con smoke HTTP local y capturas desktop/mobile.
 - Bloque 30D cerrado: diseno tecnico documentado para futura edicion del Gantt Operativo via Apps Script, sin implementacion de escritura.
+- Bloque 31A cerrado: auditoria critica de modularizacion Apps Script documentada en `docs/apps-script-modularizacion.md`, sin cambios funcionales.
 
 ## Decisiones vigentes
 
@@ -44,6 +45,7 @@ Fecha: 2026-05-18
 - Para bloque 26 cerrado, no se tocaron JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
 - Para bloque 29 cerrado, el logo interno debe volver siempre a la portada institucional: `../index.html` desde el Hub y `../../index.html` desde paginas bajo `internal/*/*`.
 - Para bloque 30D, la edicion futura del Gantt debe partir de `docs/gantt-operativo-edicion.md` y usar tarea dummy/QA antes de tocar datos reales.
+- Para bloque 31A, una futura modularizacion debe mantener `doPost` como fachada estable y avanzar por etapas: 31B Config/Utils/Headers, 31C Gantt, 31D Sellers/Formularios, 31E Definicion Tecnica/Notificaciones.
 - Revisar manualmente en el futuro `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
 
 ## Metodologia vigente
@@ -61,6 +63,7 @@ Fecha: 2026-05-18
 - Alternativa: preparar cierre release/post-V1 final si no quedan mejoras prioritarias.
 - Revisar manualmente `.xlsx` y `Mapa del Hub.docx` solo si se decide ordenar documentacion fuente.
 - Evitar nuevas refactorizaciones CSS/JS salvo necesidad real.
+- Si se retoma Apps Script, leer primero `docs/apps-script-modularizacion.md` y no ejecutar refactor masivo unico.
 
 ## Contexto minimo para nueva sesion
 
@@ -69,5 +72,6 @@ Leer solo:
 - `README.md`
 - `docs/handoff-post-v1.md`
 - `docs/roadmap.md`
+- `docs/apps-script-modularizacion.md`
 - `CHANGELOG.md`
 - `PROJECT_WORKFLOW.md`
