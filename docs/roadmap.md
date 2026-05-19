@@ -2011,3 +2011,16 @@ Resultado:
 - Resultado: Marketplace Portal queda mas consistente, legible y profesional.
 - Decision vigente: no tocar JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
 - Proximo paso recomendado: entrar solo en mejoras funcionales concretas o cierre release/post-V1 final.
+
+## Etapa 27A: UI Foundation Refactor
+
+Estado: completada.
+
+Resultado:
+
+- Refactor visual de base para llevar el portal hacia una estetica enterprise/SaaS mas sobria.
+- Ajustados tokens, componentes internos, CSS por familia y overrides visuales inline seguros.
+- Reducido el predominio del verde, glow, sombras fuertes, bordes dobles, tracking excesivo y uppercase en controles.
+- Mejoradas legibilidad, aire visual, jerarquia, botones, badges, cards, sidebars, topbars y estados visuales.
+- Se mantuvieron intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, rutas criticas y campos.
+- Proximo paso recomendado: smoke visual post-refactor en GitHub Pages y ajustes menores solo si aparecen hallazgos concretos.

@@ -487,6 +487,31 @@ h1 { font-size:clamp(40px,4.8vw,62px); line-height:.96; letter-spacing:0; }
   .hero { padding:30px 20px; gap:18px; }
   h1 { font-size:36px; }
 }
+
+/* Etapa 27A: UI foundation enterprise. */
+:root {
+  --g:#6aa84f; --g2:#54873d;
+  --g-dim:rgba(106,168,79,.09); --g-brd:rgba(106,168,79,.20);
+  --bg:#101311; --bg2:#151915;
+  --s1:#191d19; --s2:#1f241f; --s3:#252b25;
+  --ln:rgba(255,255,255,.10); --ln2:rgba(255,255,255,.065);
+  --t1:#f1f4ef; --t2:#b7c1b3; --t3:#889386; --t4:#687264;
+}
+body { font-size:15px; line-height:1.65; background:var(--bg); }
+.topbar { background:rgba(16,19,17,.96); border-bottom-color:var(--ln); }
+.logo { font-family:Barlow,system-ui,sans-serif; font-size:18px; text-transform:none; letter-spacing:.01em; }
+.crumb,.pill,.hero-eyebrow,.sec-eyebrow,.fs-num,.card-type { letter-spacing:.04em; }
+.pill { background:rgba(106,168,79,.08); border-color:rgba(106,168,79,.20); color:#d8ead0; }
+.sidebar { background:var(--bg2); border-right-color:var(--ln); box-shadow:none; }
+.sb-lbl { letter-spacing:.08em; color:var(--t4); }
+.sb-nav,.sb-qlink,.tbtn { text-transform:none; letter-spacing:.015em; }
+.sb-nav.active,.sb-qlink:hover { background:var(--g-dim); color:#d8ead0; }
+.hero { padding:40px 38px 36px; }
+h1 { font-size:clamp(38px,4.5vw,58px); line-height:1; }
+.hero-lead { font-size:15px; color:var(--t2); }
+.snap,.flow,.flow-step,.card,.access-card,.search-box,.empty-state { background:var(--s1); border-color:var(--ln); }
+.tbtn.cta { background:var(--g); border-color:var(--g); }
+.card:hover,.access-card:hover { border-color:rgba(106,168,79,.24); background:var(--s2); }
 </style>
 </head>
 <body>

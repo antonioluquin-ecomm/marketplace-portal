@@ -12,26 +12,26 @@
 
 :root {
   /* Verde primario */
-  --g: #5ea832;
-  --g2: #4a8a26;
-  --g-dim: rgba(94, 168, 50, .10);
-  --g-brd: rgba(94, 168, 50, .24);
+  --g: #6aa84f;
+  --g2: #54873d;
+  --g-dim: rgba(106, 168, 79, .09);
+  --g-brd: rgba(106, 168, 79, .20);
 
   /* Fondos */
-  --bg: #0b0f0b;
-  --bg2: #0f150f;
-  --panel: #141c13;
-  --panel2: #192118;
+  --bg: #101311;
+  --bg2: #141814;
+  --panel: #191d19;
+  --panel2: #1f241f;
 
   /* Separadores */
-  --line: rgba(255, 255, 255, .08);
-  --line-soft: rgba(255, 255, 255, .05);
+  --line: rgba(255, 255, 255, .10);
+  --line-soft: rgba(255, 255, 255, .065);
 
   /* Texto */
-  --text: #edf3e9;
-  --text-muted: #a6b79d;
-  --text-soft: #71816b;
-  --text-dim: #4f5d49;
+  --text: #f1f4ef;
+  --text-muted: #b7c1b3;
+  --text-soft: #889386;
+  --text-dim: #687264;
 
   /* Semánticos */
   --warn: #f59e0b;
@@ -43,19 +43,28 @@
   --topbar-height: 58px;
 
   /* Etapa 26B: escala visual PRO global */
-  --font-body: 14.5px;
-  --font-meta: 12.5px;
-  --font-label: 11.5px;
-  --lh-body: 1.6;
+  --font-body: 15px;
+  --font-meta: 13px;
+  --font-label: 12px;
+  --lh-body: 1.65;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
   --space-5: 24px;
   --space-6: 32px;
-  --radius-control: 8px;
+  --radius-control: 9px;
   --radius-card: 12px;
   --radius-panel: 14px;
-  --shadow-soft: 0 12px 34px rgba(0, 0, 0, .24);
-  --shadow-panel: 0 18px 48px rgba(0, 0, 0, .28);
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, .16);
+  --shadow-panel: 0 16px 36px rgba(0, 0, 0, .20);
+
+  /* Etapa 27A: UI foundation enterprise */
+  --surface-raised: #202620;
+  --surface-muted: rgba(255, 255, 255, .035);
+  --border-soft: rgba(255, 255, 255, .075);
+  --accent: var(--g);
+  --accent-soft: var(--g-dim);
+  --accent-border: var(--g-brd);
+  --focus-ring: 0 0 0 3px rgba(106, 168, 79, .14);
 }

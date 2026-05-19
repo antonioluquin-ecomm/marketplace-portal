@@ -196,3 +196,20 @@
   .col-inputs { position:static; height:auto }
   .col-results { height:auto }
 }
+
+/* Etapa 27A: UI foundation enterprise para simuladores internos. */
+body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
+.topbar{background:rgba(16,19,17,.96);border-bottom-color:rgba(255,255,255,.10);box-shadow:none}
+.topbar-badge,.col-title,.section-label{letter-spacing:.08em;color:#7f8a7b}
+.topbar-right{gap:14px}
+.disc-pill{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.18);letter-spacing:.015em}
+.col-inputs,.col-rates{background:#151915;border-color:rgba(255,255,255,.10);box-shadow:none}
+.col-results{background:#191d19}
+.col-header,.section,.results-header,.tab-bar{border-color:rgba(255,255,255,.09)}
+.results-inner{gap:20px}
+.results-seller{font-size:21px;letter-spacing:.01em}
+.tab-btn,.update-btn{text-transform:none;letter-spacing:.015em}
+.tab-btn.active{color:#d8ead0;border-bottom-color:#6aa84f}
+.update-btn:hover{border-color:rgba(106,168,79,.35);color:#d8ead0}
+.rates-edit-note{background:rgba(106,168,79,.07);border-left-color:rgba(106,168,79,.28)}
+.disclaimer{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.16)}

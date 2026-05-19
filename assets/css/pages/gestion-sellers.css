@@ -61,3 +61,22 @@ h2{font-size:20px;margin-bottom:12px}
   .brand,.top-actions{flex-wrap:wrap}
   .crumb{display:none}
 }
+
+/* Etapa 27A: UI foundation enterprise para Gestion Sellers. */
+body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
+.topbar{background:rgba(16,19,17,.96);border-bottom-color:rgba(255,255,255,.10);box-shadow:none}
+.logo{font-family:Barlow,system-ui,sans-serif;font-size:17px;letter-spacing:.01em;text-transform:none}
+.logo span{color:#6aa84f}
+.crumb,.eyebrow{letter-spacing:.08em;color:#7f8a7b}
+.btn-top,.btn{text-transform:none;letter-spacing:.015em;border-radius:9px}
+.btn{background:#6aa84f}
+.btn:hover{filter:brightness(1.04)}
+.btn.secondary{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.11);color:#b7c1b3}
+.wrap{max-width:1180px;padding:34px 26px 74px}
+.panel{background:#191d19;border-color:rgba(255,255,255,.10);box-shadow:none}
+.panel.soft{background:rgba(255,255,255,.035)}
+h1{font-size:clamp(36px,5vw,58px);line-height:1}
+h2,h3{letter-spacing:.01em}
+.lead{font-size:15px;color:#b7c1b3}
+.note{background:rgba(106,168,79,.08);border-left-color:#6aa84f;color:#b7c1b3}
+.pill{background:rgba(106,168,79,.08);border-color:rgba(106,168,79,.22);color:#b9d9aa;letter-spacing:.015em}

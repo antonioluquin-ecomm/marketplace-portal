@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 27A UI Foundation Refactor
+
+Tipo de cambio: visual fuerte.
+
+Estado: completado.
+
+Resultado:
+- Ajustada la base visual del Marketplace Portal hacia una estetica mas enterprise/SaaS, menos densa y menos dependiente del verde.
+- Revisados tokens, componentes internos, CSS por familia y overrides visuales inline seguros.
+- Reducidos glow, sombras fuertes, bordes dobles, tracking excesivo, uppercase en controles y fondos demasiado verdes.
+- Mejorada legibilidad general con body cercano a 15px, line-height mas comodo, metadata mas clara y superficies mas sobrias.
+- Conservados intactos scripts, JS funcional, submit, endpoints, payloads, Apps Script, config, formulas, calculos, render dinamico, `seller_id`, rutas criticas y campos.
+
 ## 2026-05-19 - Etapa 26D cierre bloque visual PRO global
 
 Tipo de cambio: documentacion.

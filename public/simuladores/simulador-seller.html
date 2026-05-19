@@ -257,6 +257,16 @@
     .panel,.card,.seller-box,.result-card,.kpi,.scenario-card,.disclaimer{border-radius:12px;box-shadow:none}
     .btn,.badge,.pill,.chip{letter-spacing:.07em}
     @media(max-width:720px){h1{font-size:32px}.wrap{padding:22px 14px 54px}}
+    /* Etapa 27A: UI foundation enterprise seller-facing. */
+    :root{--g:#6aa84f;--g2:#54873d;--bg:#101311;--panel:#191d19;--panel2:#1f241f;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.065);--text:#f1f4ef;--muted:#b7c1b3;--muted2:#7f8a7b}
+    body{font-size:15px;line-height:1.65;background:var(--bg)}
+    .topbar{background:rgba(16,19,17,.96);box-shadow:none;border-bottom-color:var(--line)}
+    .logo{font-family:Barlow,system-ui,sans-serif;text-transform:none;letter-spacing:.01em}
+    .crumb,.status,.tb-chip,.btn,.badge,.pill,.chip{text-transform:none;letter-spacing:.015em}
+    h1{font-size:clamp(34px,5vw,54px);line-height:1}
+    p,.lead,.helper,.note{line-height:1.65}
+    .panel,.card,.seller-box,.result-card,.kpi,.scenario-card,.disclaimer{background:var(--panel);border-color:var(--line)}
+    .btn,.tb-cta{background:var(--g);border-color:var(--g)}
   </style>
 </head>
 <body>

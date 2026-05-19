@@ -124,3 +124,20 @@
 @media(max-width:860px){
   .sidebar{display:none}
 }
+
+/* Etapa 27A: UI foundation enterprise para Gantt. */
+body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
+.topbar{background:rgba(16,19,17,.96);border-bottom-color:rgba(255,255,255,.10);box-shadow:none}
+.tb-logo{font-size:17px;letter-spacing:.02em}
+.tb-logo span{color:#6aa84f}
+.tb-module,.tb-crumb,.tb-date,.sb-lbl,.lg-sep{letter-spacing:.08em;color:#7f8a7b}
+.tb-badge{background:rgba(106,168,79,.09);border-color:rgba(106,168,79,.22);color:#b9d9aa}
+.btn-sm,.tb-btn{text-transform:none;letter-spacing:.015em;background:rgba(255,255,255,.035)}
+.btn-sm:hover,.tb-btn:hover{border-color:rgba(106,168,79,.32);color:#d8ead0;background:rgba(106,168,79,.10)}
+.dot.live,.live-dot{box-shadow:0 0 0 2px rgba(106,168,79,.13)}
+.sidebar{background:#151915;border-right-color:rgba(255,255,255,.10);box-shadow:none}
+.fi,.sel,.fsel,.sb-search{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.11);font-size:12.5px}
+.fi:focus,.sel:focus,.fsel:focus,.sb-search:focus{border-color:rgba(106,168,79,.45);box-shadow:0 0 0 3px rgba(106,168,79,.12)}
+.sb-note{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09);color:#9ba69a}
+.legend{background:rgba(16,19,17,.96);border-top-color:rgba(255,255,255,.09)}
+.center-state,.loading,.empty,.error-state{font-size:14px;color:#8f9a8b}

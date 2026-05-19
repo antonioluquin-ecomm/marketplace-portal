@@ -403,6 +403,37 @@
       h1 { font-size: 36px; }
       .hero { gap: 18px; }
     }
+
+    /* Etapa 27A: UI foundation enterprise. */
+    :root {
+      --g: #6aa84f;
+      --g2: #54873d;
+      --g-soft: rgba(106, 168, 79, .09);
+      --g-line: rgba(106, 168, 79, .18);
+      --bg: #101311;
+      --bg2: #151915;
+      --panel: #191d19;
+      --panel2: #1f241f;
+      --line: rgba(255, 255, 255, .10);
+      --line2: rgba(255, 255, 255, .065);
+      --t1: #f1f4ef;
+      --t2: #b7c1b3;
+      --t3: #889386;
+      --t4: #687264;
+    }
+    body { font-size: 15px; line-height: 1.65; background: var(--bg); }
+    .topbar { background: rgba(16, 19, 17, .96); border-bottom-color: var(--line); }
+    .logo { font-family: Barlow, system-ui, sans-serif; font-size: 18px; text-transform: none; letter-spacing: .01em; }
+    .crumb, .eyebrow, .section-eyebrow, .status, .tag, .badge { letter-spacing: .04em; }
+    .status { background: rgba(106,168,79,.08); border-color: rgba(106,168,79,.20); }
+    .hero { padding-top: 46px; }
+    h1 { font-size: clamp(42px, 6vw, 68px); line-height: .98; }
+    .lead { font-size: 17px; color: var(--t2); }
+    .signal-panel, .metric, .card, .doc-card, .decision, .transition { background: var(--panel); border-color: var(--line); }
+    .btn { text-transform: none; letter-spacing: .015em; border-radius: 9px; }
+    .btn.primary { background: var(--g); border-color: var(--g); }
+    .btn:hover { background: var(--g-soft); color: #d8ead0; }
+    .card-title, .doc-card h3 { letter-spacing: .01em; }
   </style>
 </head>
 <body>

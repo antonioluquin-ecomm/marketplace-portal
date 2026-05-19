@@ -101,3 +101,23 @@
   .shell{grid-template-columns:1fr}
   .sidebar{display:none}
 }
+
+/* Etapa 27A: UI foundation enterprise para Backlog. */
+body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
+.topbar{background:rgba(16,19,17,.96);border-bottom-color:rgba(255,255,255,.10);box-shadow:none}
+.tb-logo{font-size:17px;letter-spacing:.02em}
+.tb-logo span{color:#6aa84f}
+.tb-crumb,.sb-lbl,.fi-label,.kpi-lbl{letter-spacing:.08em;color:#7f8a7b}
+.tb-btn,.view-btn,.qbtn,.clear-btn{text-transform:none;letter-spacing:.015em;font-weight:700}
+.view-btn.active{background:#6aa84f;color:#fff}
+.sidebar{background:#151915;border-right-color:rgba(255,255,255,.10);box-shadow:none}
+.search-input,.fi-select{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.11);font-size:13.5px}
+.search-input:focus,.fi-select:focus{border-color:rgba(106,168,79,.45);box-shadow:0 0 0 3px rgba(106,168,79,.12)}
+.qbtn{background:transparent;border-color:rgba(255,255,255,.075);color:#aeb9aa}
+.qbtn:hover{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.12)}
+.qbtn.active{background:rgba(106,168,79,.10);border-color:rgba(106,168,79,.26);color:#d8ead0}
+.kpi-bar{background:#151915;border-bottom-color:rgba(255,255,255,.08)}
+.kpi-val{font-size:24px}
+.content-area{padding:26px 28px 68px}
+.state-title{font-family:Barlow,system-ui,sans-serif;text-transform:none;font-size:17px;letter-spacing:0;color:#c8d0c4}
+.state-desc{font-size:13.5px;color:#8f9a8b}

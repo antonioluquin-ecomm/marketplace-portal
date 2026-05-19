@@ -69,3 +69,23 @@ h1{font-family:"Barlow Condensed",sans-serif;font-size:42px;line-height:1;text-t
   .main{padding:20px 16px 60px}
   .tools-grid{grid-template-columns:1fr}
 }
+
+/* Etapa 27A: UI foundation enterprise para Seller Center. */
+body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
+.topbar{background:rgba(16,19,17,.96);border-bottom-color:rgba(255,255,255,.10);box-shadow:none}
+.logo{font-family:Barlow,system-ui,sans-serif;font-size:17px;letter-spacing:.01em;text-transform:none}
+.logo span{color:#6aa84f}
+.crumb,.sb-label,.eyebrow{letter-spacing:.08em;color:#7f8a7b}
+.tb-btn,.nav,.sb-link,.sec-link{text-transform:none;letter-spacing:.015em}
+.sidebar{background:#151915;border-right-color:rgba(255,255,255,.10)}
+.nav{font-size:13px;color:#aeb9aa}
+.nav:hover{background:rgba(255,255,255,.045)}
+.nav.active{background:rgba(106,168,79,.10);color:#d8ead0;border-left-color:#6aa84f}
+.main{max-width:1140px}
+h1{font-size:40px}
+.lead{font-size:15px;color:#b7c1b3}
+.tool-card,.flow-step,.alert,.footer{background:#191d19;border-color:rgba(255,255,255,.10)}
+.tool-card:hover{border-color:rgba(106,168,79,.24);background:#1f241f}
+.tool-card:hover::before{background:#6aa84f}
+.tool-desc,.sec-desc,.flow-sub,.footer-left{color:#8f9a8b}
+.tool-name,.sec-title{letter-spacing:.01em}

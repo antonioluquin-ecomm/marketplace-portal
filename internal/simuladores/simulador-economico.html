@@ -285,6 +285,18 @@ body {
   .kpi.primary { grid-column:1 }
   .scenarios-grid { grid-template-columns:1fr }
 }
+
+/* Etapa 27A: UI foundation enterprise local. */
+:root{--green:#6aa84f;--green-dark:#54873d;--green-dim:rgba(106,168,79,.09);--green-brd:rgba(106,168,79,.20);--bg:#101311;--surface-1:#151915;--surface-2:#191d19;--surface-3:#1f241f;--border:rgba(255,255,255,.10);--border-l:rgba(255,255,255,.065);--text-1:#f1f4ef;--text-2:#b7c1b3;--text-3:#889386}
+body{font-size:15px;line-height:1.65;background:var(--bg)}
+.inp,.sel{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.11);border-radius:9px;font-size:14px}
+.inp:focus,.sel:focus{border-color:rgba(106,168,79,.45);box-shadow:0 0 0 3px rgba(106,168,79,.12)}
+.field-label,.seller-helper,.svc-name{font-size:12.5px}
+.kpi,.comp-bar-wrap,.breakdown,.sc-card,.svc-sub{border-radius:12px;border-color:var(--border);box-shadow:none}
+.kpi.primary{background:var(--green);border-color:var(--green)}
+.kpi-lbl,.bd-title,.comp-bar-title,.sc-pill{text-transform:none;letter-spacing:.04em}
+.sc-title{letter-spacing:.01em}
+.tog input:checked ~ .tog-track{background:var(--green)}
 </style>
 </head>
 <body>

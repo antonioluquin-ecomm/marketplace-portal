@@ -175,6 +175,23 @@ tbody tr:last-child td{border-bottom:none}
 @media(max-width:960px){
   .kanban{grid-auto-columns:85vw}
 }
+
+/* Etapa 27A: UI foundation enterprise local. */
+:root{
+  --g:#6aa84f;--g2:#54873d;--gd:rgba(106,168,79,.09);--gb:rgba(106,168,79,.20);--gb2:rgba(106,168,79,.14);
+  --k:#101311;--k2:#151915;--k3:#191d19;--k4:#1f241f;
+  --t1:#f1f4ef;--t2:#b7c1b3;--t3:#889386;--t4:#687264;
+  --b:rgba(255,255,255,.10);--b2:rgba(255,255,255,.065);
+}
+body{font-size:15px;line-height:1.65;background:var(--k)}
+.k-col-hdr,.k-col-body,.scard,.modal,.modal-hdr,.share-row,.toast{background:var(--k3);border-color:var(--b)}
+.scard:hover{box-shadow:none;transform:none;border-color:var(--gb2)}
+.scard-name{font-size:14px}
+.scard-next,.mnext{background:rgba(106,168,79,.07);border-left-color:var(--g)}
+.chip,.status-pill,.badge-meta,.share-btn,.maction{text-transform:none;letter-spacing:.015em}
+.modal-name{font-size:22px;letter-spacing:.01em}
+.msec-title{letter-spacing:.08em;color:var(--t4)}
+.share-btn.primary,.maction.primary{background:var(--g);border-color:var(--g)}
 </style>
 </head>
 <body>

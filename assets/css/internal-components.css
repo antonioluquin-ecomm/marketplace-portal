@@ -9,7 +9,7 @@
  */
 
 .panel {
-  background: linear-gradient(180deg, var(--k3, var(--panel)), var(--k2, var(--panel2)));
+  background: var(--surface-raised, var(--k3, var(--panel)));
   border: 1px solid var(--bdr, var(--line));
   border-radius: var(--radius-panel, 14px);
   padding: clamp(18px, 2vw, 22px);
@@ -18,7 +18,7 @@
 
 .panel.soft {
   box-shadow: none;
-  background: rgba(255, 255, 255, .025);
+  background: var(--surface-muted, rgba(255, 255, 255, .035));
 }
 
 .callout {
@@ -68,8 +68,8 @@
   padding: 4px 9px;
   border-radius: 999px;
   font-size: 9.5px;
-  font-weight: 900;
-  letter-spacing: .07em;
+  font-weight: 800;
+  letter-spacing: .04em;
   text-transform: uppercase;
   background: rgba(255, 255, 255, .06);
   color: var(--t3, var(--text-soft));
@@ -85,6 +85,7 @@
 
 :where(.topbar) {
   box-shadow: 0 1px 0 rgba(255, 255, 255, .025);
+  background: rgba(16, 19, 17, .96);
 }
 
 :where(.sidebar) {
@@ -92,7 +93,7 @@
 }
 
 :where(.card, .tool-card, .kpi, .snap, .decision-box, .result, .section, .panel) {
-  border-color: var(--bdr, var(--line));
+  border-color: var(--border-soft, var(--bdr, var(--line)));
   box-shadow: none;
 }
 
@@ -103,10 +104,12 @@
 :where(.btn, .btn-top, .tb-btn, .tbtn, .btn-sm, .qbtn, .sb-qlink) {
   border-radius: var(--radius-control, 8px);
   min-height: 34px;
+  letter-spacing: .015em;
+  text-transform: none;
 }
 
 :where(.pill, .tag, .tb-badge, .nav-badge, .status) {
-  letter-spacing: .07em;
+  letter-spacing: .035em;
 }
 
 :where(p, li, .lead, .hero-lead, .sec-desc, .tool-desc, .state-desc) {
@@ -127,4 +130,21 @@
   background: var(--g-dim);
   color: var(--g);
   border: 1px solid var(--g-brd);
+}
+
+/* Etapa 27A: foundation visual enterprise. */
+:where(.sidebar) {
+  box-shadow: none;
+}
+
+:where(.section-title, .sec-title, .tool-name, .card h3) {
+  letter-spacing: .01em;
+}
+
+:where(.callout, .note, .alert, .sb-note) {
+  border-radius: var(--radius-card, 12px);
+}
+
+:where(input, select, textarea):focus {
+  box-shadow: var(--focus-ring, 0 0 0 3px rgba(106, 168, 79, .14));
 }
