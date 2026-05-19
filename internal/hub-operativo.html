@@ -521,6 +521,18 @@ h1 { font-size:clamp(38px,4.5vw,58px); line-height:1; }
 .crumb { border-left-color:var(--ln); color:var(--t3); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
 .tb-right { margin-left:auto; gap:10px; }
 .tbtn { min-height:34px; padding:7px 12px; }
+@media(max-width:720px) {
+  .sec-head {
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .search-wrap,
+  .search {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+  }
+}
 </style>
 </head>
 <body>

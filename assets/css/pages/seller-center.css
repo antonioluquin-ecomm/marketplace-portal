@@ -89,3 +89,17 @@ h1{font-size:40px}
 .tool-card:hover::before{background:#6aa84f}
 .tool-desc,.sec-desc,.flow-sub,.footer-left{color:#8f9a8b}
 .tool-name,.sec-title{letter-spacing:.01em}
+
+@media(max-width:980px){
+  .topbar{height:auto;min-height:var(--tb);align-items:flex-start;flex-wrap:wrap;padding:10px 16px;gap:8px}
+  .brand,.topbar-right{min-width:0}
+  .brand{flex:1 1 160px}
+  .crumb{display:none}
+  .topbar-right{flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;margin-left:0;gap:6px}
+  .tb-btn{min-width:0}
+  .shell{grid-template-columns:minmax(0,1fr);padding-top:calc(var(--tb) + 44px)}
+  .main{width:100%;max-width:100%;min-width:0;padding:20px 16px 60px}
+  .section,.status-row,.stat-card,.global-progress,.modulos-grid,.modulo-card,.hitos-panel,.tools-grid,.flow,.alert,.footer{min-width:0;max-width:100%}
+  .status-row,.modulos-grid,.tools-grid{grid-template-columns:minmax(0,1fr)}
+  .flow{overflow-x:auto;padding-bottom:2px}
+}

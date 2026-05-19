@@ -226,3 +226,70 @@ body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
   white-space:nowrap;
 }
 .topbar-logo span{color:var(--green)}
+
+@media(max-width:720px) {
+  .shell {
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto auto;
+    width:100%;
+    min-width:0;
+  }
+  .topbar {
+    min-width:0;
+    height:auto;
+    min-height:54px;
+    flex-wrap:wrap;
+    align-items:flex-start;
+    padding:10px 16px;
+    gap:8px;
+  }
+  .topbar-brand,
+  .topbar-right {
+    min-width:0;
+    max-width:100%;
+    flex-wrap:wrap;
+  }
+  .topbar-brand {
+    flex:1 1 170px;
+    gap:8px;
+  }
+  .topbar-badge {
+    white-space:normal;
+    padding-left:0;
+    border-left:0;
+  }
+  .topbar-right {
+    flex:1 1 100%;
+    justify-content:flex-start;
+    gap:8px;
+  }
+  .disc-pill {
+    max-width:100%;
+    white-space:normal;
+  }
+  .col-inputs,
+  .col-results,
+  .col-rates,
+  .results-inner,
+  .tab-bar,
+  .tab-content,
+  .section,
+  .col-header {
+    width:100%;
+    min-width:0;
+    max-width:100%;
+  }
+  .col-inputs,
+  .col-results {
+    position:static;
+    height:auto;
+    overflow-x:clip;
+  }
+  .tab-bar {
+    flex-wrap:wrap;
+  }
+  .tab-btn {
+    flex:1 1 auto;
+    min-width:0;
+  }
+}
