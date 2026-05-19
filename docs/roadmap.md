@@ -1997,3 +1997,17 @@ Resultado:
 - Se mantuvo inline todo CSS sensible ligado a JS, render dinamico, submit, timeline, formulas, payloads, validaciones o `seller_id`.
 - No se modificaron bloques `<script>`, endpoints, payloads, Apps Script, config, rutas criticas ni logica funcional.
 - Proximo paso recomendado: smoke test visual liviano en GitHub Pages antes de abrir refinamientos puntuales.
+
+## Etapa 26D: cierre bloque visual PRO global
+
+Estado: completada.
+
+Resultado:
+
+- Cerrado el bloque 26A-26C.
+- 26A: auditoria visual global PRO.
+- 26B: pulido visual global aplicado.
+- 26C: smoke visual post-push OK.
+- Resultado: Marketplace Portal queda mas consistente, legible y profesional.
+- Decision vigente: no tocar JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
+- Proximo paso recomendado: entrar solo en mejoras funcionales concretas o cierre release/post-V1 final.

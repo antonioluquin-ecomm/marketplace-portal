@@ -4,6 +4,21 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-19 - Etapa 26D cierre bloque visual PRO global
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Cerrado el bloque visual PRO global 26A-26C.
+- 26A: auditoria visual global PRO del Marketplace Portal.
+- 26B: aplicacion de pulido visual global para mejorar consistencia, legibilidad y jerarquia.
+- 26C: smoke visual post-push OK.
+- Resultado general: portal mas consistente, legible y profesional.
+- Decision vigente: no tocar JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
+- Proximo paso recomendado: avanzar solo con mejoras funcionales concretas o cierre release/post-V1 final.
+
 ## 2026-05-19 - Etapa 26B bloque visual PRO global
 
 Tipo de cambio: visual agrupado.

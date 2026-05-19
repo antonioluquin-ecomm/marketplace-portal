@@ -24,6 +24,7 @@ Fecha: 2026-05-18
 - Bloque 22A-22E cerrado: mejoras UX/copy operativo en Backlog Sellers, Gestion Sellers, Simulador Economico interno, Gantt Operativo y Gantt Seller Center, sin tocar logica funcional.
 - Bloque 23B-23G cerrado: CSS por familias internas para Backlog Sellers, Gantt, Simulador Economico interno, Gestion Sellers y Seller Center index.
 - Bloque 24B-24F cerrado: CSS publico seller-facing con `public-seller.css` aplicado a formularios, presentacion seller y simulador seller.
+- Bloque 26A-26D cerrado: auditoria visual global PRO, pulido visual global, smoke visual post-push OK y cierre documental.
 
 ## Decisiones vigentes
 
@@ -36,6 +37,7 @@ Fecha: 2026-05-18
 - Para bloque 22 cerrado, se mantuvo la decision de no tocar logica funcional, JS, CSV, submit, payloads, formulas, rutas ni config.
 - Para bloque 23 cerrado, se mantuvo inline todo CSS sensible asociado a JS, render dinamico, submit, filtros, timeline, formulas, payloads o estados dinamicos.
 - Para bloque 24 cerrado, se mantuvo inline todo CSS sensible asociado a submit, payloads, `seller_id`, validaciones, render dinamico, CTAs, calculos, formulas, resultados, tarifas y overrides.
+- Para bloque 26 cerrado, no se tocaron JS critico, submit, payloads, Apps Script, config, formulas, timeline, `seller_id` ni rutas criticas.
 - Revisar manualmente en el futuro `MarketPlace Sporting - Sellers (BD).xlsx`, `Mapa del Hub.docx` y posible consolidacion de `Logos/`.
 
 ## Metodologia vigente
@@ -49,9 +51,8 @@ Fecha: 2026-05-18
 
 ## Proximos pasos posibles
 
-- Push y smoke test visual liviano en GitHub Pages, con foco en paginas internas operativas.
-- Push y smoke test visual publico en GitHub Pages para paginas seller-facing.
-- Luego avanzar solo con bugs reales, mejoras funcionales concretas o contenido pendiente especifico.
+- Entrar solo con bugs reales, mejoras funcionales concretas o contenido pendiente especifico.
+- Alternativa: preparar cierre release/post-V1 final si no quedan mejoras prioritarias.
 - Revisar manualmente `.xlsx` y `Mapa del Hub.docx` solo si se decide ordenar documentacion fuente.
 - Evitar nuevas refactorizaciones CSS/JS salvo necesidad real.
 
