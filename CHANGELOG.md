@@ -4,6 +4,19 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-18 - Etapa 23E CSS familia Gestion Sellers
+
+Tipo de cambio: visual critico acotado.
+
+Estado: completado.
+
+Resultado:
+- Creado `assets/css/pages/gestion-sellers.css` como hoja especifica para gestion/backoffice de sellers.
+- Enlazado en `internal/backlog/gestion-sellers.html` despues de `internal-components.css` y antes del CSS inline.
+- Movidas reglas visuales estaticas de topbar, hero/intro, paneles estaticos, botones visuales, layout general, acciones y badges.
+- Conservadas inline las reglas sensibles o acopladas a formularios, inputs/selects/textarea, preview dinamica, links publicos generados, mensajes, alertas, estados de guardado, toast y submit.
+- Sin cambios en JS, submit, fetch, `APPS_SCRIPT_URL`, payload, `tipo_formulario`, `seller_id`, generacion/reserva de IDs, localStorage, `name/id/value/data-*`, rutas, href/src ni config.
+
 ## 2026-05-18 - Etapa 23D CSS familia Simuladores internos
 
 Tipo de cambio: visual controlado.
