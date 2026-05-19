@@ -83,8 +83,11 @@
     font-size: 17px;
     letter-spacing: .015em;
     text-transform: uppercase;
+    text-decoration: none;
+    outline-offset: 4px;
   }
   .logo span { color: #6aa84f; }
+  .logo:focus-visible { outline: 2px solid #6aa84f; }
 
   .topbar-title {
     border-left: 1px solid rgba(255,255,255,.18);
@@ -827,7 +830,7 @@
 
 <header class="topbar">
   <div class="hamburger"><span></span><span></span><span></span></div>
-  <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+  <a class="logo" href="../../index.html" title="Volver al Portal">SPORTING <span>MARKETPLACE</span></a>
   <div class="topbar-title">SELLER CENTER</div>
   <div class="topbar-right">
     <div class="version">v1.116.0</div>

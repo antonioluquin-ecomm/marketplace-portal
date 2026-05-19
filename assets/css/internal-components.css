@@ -116,6 +116,21 @@
   font-weight: 900;
 }
 
+:where(a.logo, a.tb-logo, a.topbar-logo) {
+  text-decoration: none;
+  cursor: pointer;
+  outline-offset: 4px;
+}
+
+:where(a.logo:hover, a.tb-logo:hover, a.topbar-logo:hover) {
+  color: var(--t1, var(--w, var(--text)));
+}
+
+:where(a.logo:focus-visible, a.tb-logo:focus-visible, a.topbar-logo:focus-visible) {
+  border-radius: 4px;
+  outline: 2px solid var(--g);
+}
+
 :where(.crumb, .tb-crumb, .tb-module, .topbar-badge) {
   border-left: 1px solid var(--border-soft, var(--bdr, var(--line)));
   padding-left: 14px;
