@@ -4,6 +4,31 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31UX-B compactar cabecera operativa Gantt
+
+Tipo de cambio: UX/UI visual acotado.
+
+Estado: implementado localmente.
+
+Resultado:
+- Compactado el hero operativo de `internal/gantt/gantt-operativo.html`.
+- El flujo 01-05 queda visualmente reducido como chips operativos.
+- `Reglas de lectura` pasa a bloque colapsable con `details/summary`.
+- `Accesos operativos` mantiene links, pero con menor altura y menor protagonismo visual.
+- KPIs y toolbar quedan visualmente mas cerca del Gantt/Lista.
+- Se mantiene topbar con `+ Nueva tarea`, `Actualizar` y `Hub`.
+- Se mantienen alertas superiores.
+
+Alcance:
+- Solo CSS/HTML visual en Gantt Operativo.
+- No se tocaron filtros JS, render dinamico, calculos, KPIs, payloads, backend, Apps Script ni Google Sheets.
+
+Validaciones:
+- Revision estatica de estructura: OK.
+- Links de accesos operativos conservan `href`: OK.
+- `+ Nueva tarea`, `Actualizar` y `Hub` siguen presentes en topbar: OK.
+- `git diff --check`: OK.
+
 ## 2026-05-20 - Fix visibilidad boton `+ Nueva tarea` Gantt
 
 Tipo de cambio: UI bugfix acotado.
