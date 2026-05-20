@@ -54,19 +54,21 @@ function actualizarTareaGantt(d) {
   const ws = ss.getSheetByName(HOJA_TIMELINE);
   if (!ws) throw new Error('No existe la hoja "timeline"');
 
-  const headers = obtenerHeaders(ws);
-  if (!headers.length) throw new Error('La hoja "timeline" no tiene headers');
-
-  const headerMap = construirMapaHeadersNormalizados(headers);
-  const taskCol = resolverIndiceHeader(headerMap, GANTT_TASK_ID_HEADER_ALIASES);
+  const timelineHeaders = obtenerHeadersTimelineGantt(ws);
+  const headers = timelineHeaders.headers;
+  const headerMap = timelineHeaders.headerMap;
+  const taskCol = resolverIndiceHeaderGantt(
+    headerMap,
+    GANTT_TASK_ID_HEADER_ALIASES,
+  );
   if (taskCol === -1) {
-    throw new Error('La hoja "timeline" no tiene columna task_id / id_tarea');
+    throw new Error('La hoja "timeline" no tiene columna task_id / id_tarea / ID Tarea');
   }
 
   const values = ws.getDataRange().getValues();
   const coincidencias = [];
   const taskIdNorm = normalizarIdGantt(taskId);
-  for (let i = 1; i < values.length; i++) {
+  for (let i = timelineHeaders.dataStartRowNumber - 1; i < values.length; i++) {
     if (normalizarIdGantt(values[i][taskCol]) === taskIdNorm) {
       coincidencias.push({ rowNumber: i + 1, row: values[i] });
     }
@@ -119,6 +121,29 @@ function construirMapaHeadersNormalizados(headers) {
   return map;
 }
 
+function obtenerHeadersTimelineGantt(ws) {
+  const lastColumn = ws.getLastColumn();
+  const lastRow = ws.getLastRow();
+  if (!lastColumn || !lastRow) throw new Error('La hoja "timeline" no tiene headers');
+
+  const scanRows = Math.min(10, lastRow);
+  const rows = ws.getRange(1, 1, scanRows, lastColumn).getValues();
+  for (let i = 0; i < rows.length; i++) {
+    const headers = rows[i].map((h) => String(h || "").trim());
+    const headerMap = construirMapaHeadersNormalizados(headers);
+    if (resolverIndiceHeaderGantt(headerMap, GANTT_TASK_ID_HEADER_ALIASES) !== -1) {
+      return {
+        headers,
+        headerMap,
+        headerRowNumber: i + 1,
+        dataStartRowNumber: i + 2,
+      };
+    }
+  }
+
+  throw new Error('La hoja "timeline" no tiene columna task_id / id_tarea / ID Tarea');
+}
+
 function normalizarHeaderGantt(valor) {
   const header = normalizarTexto(valor)
     .replace(/[^a-z0-9]+/g, "_")
@@ -131,6 +156,15 @@ function resolverIndiceHeader(headerMap, alias) {
   for (const key of alias) {
     const normalized = normalizarHeaderGantt(key);
     if (headerMap[normalized] !== undefined) return headerMap[normalized];
+  }
+  return -1;
+}
+
+function resolverIndiceHeaderGantt(headerMap, alias) {
+  const aliasesNormalizados = alias.map((key) => normalizarHeaderGantt(key));
+  for (const [header, idx] of Object.entries(headerMap)) {
+    if (aliasesNormalizados.includes(header)) return idx;
+    if (header.includes("id") && header.includes("tarea")) return idx;
   }
   return -1;
 }
@@ -237,7 +271,7 @@ function registrarAuditoriaGanttSiExiste(ss, taskId, updatedBy, before, after) {
 
   const headerMap = construirMapaHeadersNormalizados(headers);
   if (
-    resolverIndiceHeader(headerMap, GANTT_TASK_ID_HEADER_ALIASES) === -1 ||
+    resolverIndiceHeaderGantt(headerMap, GANTT_TASK_ID_HEADER_ALIASES) === -1 ||
     resolverIndiceHeader(headerMap, ["updated_at", "fecha", "fecha_actualizacion"]) === -1
   ) {
     return;
