@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31UX-F cierre documental UX Gantt Operativo
+
+Tipo de cambio: documentacion.
+
+Estado: completado.
+
+Resultado:
+- Registrado el cierre del bloque UX operativo del Gantt.
+- 31UX-C: auditoria de continuidad detecto nesting HTML inconsistente en el hero operativo.
+- 31UX-C-FIX: eliminado un `</div>` sobrante; HTML balanceado, sin cambios funcionales.
+- 31UX-D: smoke visual/manual OK informado para hero y toolbar operativos.
+- 31UX-E: compactacion final de hero, toolbar, spacing y densidad operativa para mejorar uso vertical del viewport.
+
+Alcance:
+- Solo documentacion en `CHANGELOG.md`, `docs/roadmap.md` y `docs/test-matrix.md`.
+- No se tocaron HTML, JS, Apps Script, endpoints, payloads, backend, config, assets ni Google Sheets durante esta etapa.
+
 ## 2026-05-20 - Etapa 31UX-B compactar cabecera operativa Gantt
 
 Tipo de cambio: UX/UI visual acotado.

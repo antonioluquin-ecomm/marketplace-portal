@@ -1715,3 +1715,20 @@ Validacion real pendiente:
 
 - Ejecutar solo con tarea dummy autorizada.
 - No ejecutar bajas sobre tareas productivas.
+
+### Etapa 31UX-F: cierre UX operativo Gantt
+
+**Estado:** documentado; cambios funcionales no realizados en esta etapa.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| 31UX-C continuidad | Auditoria previa | Detectado `</div>` sobrante en hero operativo | OK |
+| 31UX-C-FIX nesting | Validacion estatica previa | HTML balanceado; sin cambios funcionales | OK |
+| 31UX-D smoke visual | Validacion manual informada | Hero y toolbar operativos OK | OK |
+| 31UX-E compactacion | Revision de alcance | Hero, toolbar, spacing y densidad operativa compactados | OK |
+| Contratos funcionales | Revision de alcance | Sin cambios en Apps Script, endpoints, payloads, fetch ni Google Sheets | OK |
+
+Nota:
+
+- Este cierre solo documenta el bloque UX ya validado.
+- No se ejecutaron POST reales ni submits reales en esta etapa documental.

@@ -2203,3 +2203,16 @@ Recomendacion:
 
 - No limpiar ahora.
 - Planificar una etapa futura solo si la documentacion o compatibility layer se vuelve costosa de mantener.
+
+## Etapa 31UX-F: cierre documental UX Gantt Operativo
+
+Estado: completada.
+
+Resultado:
+
+- Cerrado documentalmente el bloque UX operativo del Gantt.
+- 31UX-C audito continuidad y detecto nesting inconsistente en el hero.
+- 31UX-C-FIX corrigio un `</div>` sobrante, dejando HTML balanceado sin cambios funcionales.
+- 31UX-D quedo validada manualmente como smoke visual OK.
+- 31UX-E compacto hero, toolbar, spacing y densidad operativa para mejorar el area visible del timeline/lista.
+- No hubo cambios funcionales, backend, Apps Script, endpoints, payloads ni Google Sheets en este cierre documental.
