@@ -690,3 +690,116 @@ Confirmacion de alcance 31C2:
 - No se implemento escritura nueva.
 - No se modifico `gantt_task_update`.
 - No se tocaron Apps Script, Google Sheets, front, endpoints, payloads actuales ni estructura de columnas.
+
+## Estado 31C2A - Endpoint QA para crear tareas Gantt
+
+Estado: implementado localmente. No se ejecuto escritura real contra Google Sheets.
+
+Operacion agregada:
+
+- `tipo_formulario = "gantt_task_create"`
+
+Archivos funcionales modificados:
+
+- `Apps_script_v5.js`: routing minimo hacia `crearTareaGantt(data)`.
+- `Gantt.gs`: funcion `crearTareaGantt` y helpers exclusivos para alta QA.
+
+### Contrato implementado
+
+Payload QA recomendado:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "qa@marketplace.local",
+  "task": {
+    "task_id": "TASK-DUMMY-QA-CREATE",
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "Carga comercial inicial",
+    "tarea": "Tarea dummy QA desde Apps Script",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "visible_gantt": "No",
+    "comentario": "Alta QA controlada"
+  }
+}
+```
+
+Respuesta OK:
+
+```json
+{
+  "ok": true,
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "created_fields": ["task_id", "seller_id", "fase", "hito", "tarea", "responsable", "inicio_plan", "fin_plan", "estado", "visible_gantt", "comentario"],
+  "row_number": 123,
+  "message": "Tarea Gantt creada"
+}
+```
+
+Errores:
+
+- Usa `errorResponse(err)`.
+- Mantiene formato `ok:false`, `status:"error"`, `error`, `message`.
+
+### Reglas implementadas
+
+- Usa `obtenerHeadersTimelineGantt(ws)` para detectar la fila real de headers.
+- Soporta headers humanos como `ID Tarea`.
+- No depende de `row_number` como identificador estable.
+- Si el payload trae `task_id`, valida duplicado antes de insertar.
+- Si no trae `task_id`, genera un ID con formato `{seller_id}-T-XX` usando el siguiente correlativo existente.
+- No crea columnas nuevas.
+- No modifica estructura de hoja.
+- No borra filas.
+- No altera formulas.
+- Escribe `created_at` / `created_by` solo si esas columnas ya existen.
+- Registra auditoria solo si existe hoja compatible.
+
+Campos minimos requeridos en payload:
+
+- `seller_id`
+- `fase`
+- `hito`
+- `tarea`
+- `responsable`
+- `inicio_plan`
+- `fin_plan`
+
+Defaults:
+
+- `estado`: `Pendiente`
+- `visible_gantt`: `No`
+- `comentario`: vacio
+
+Validaciones:
+
+- `seller_id` obligatorio.
+- Textos requeridos no vacios.
+- Fechas plan validas en formato `YYYY-MM-DD`.
+- `fin_plan` no puede ser anterior a `inicio_plan`.
+- `estado` debe pertenecer a `ESTADOS_GANTT_PERMITIDOS`.
+- `visible_gantt` acepta `Si`, `Sí` y `No`, normalizando a `Si` / `No`.
+- `task_id` duplicado se rechaza.
+- Columnas requeridas faltantes se rechazan con error claro.
+
+### Validacion local
+
+| Caso | Resultado | Estado |
+|---|---|---|
+| Create con headers en fila 1 | Genera `SPT-001-T-02`, inserta fila y aplica defaults | OK |
+| Create con headers reales en fila 3 | Acepta `TASK-DUMMY-QA-CREATE`, inserta en fila fisica correcta | OK |
+| `seller_id` faltante | Error controlado `seller_id obligatorio` | OK |
+| Fecha invalida | Error controlado | OK |
+| `fin_plan` anterior a `inicio_plan` | Error controlado | OK |
+| `task_id` duplicado | Error controlado | OK |
+| Defaults | `estado = Pendiente`, `visible_gantt = No` | OK |
+
+Pendiente real:
+
+- Subir `Gantt.gs` y `Apps_script_v5.js` actualizados al proyecto Apps Script real.
+- Ejecutar POST real solo con autorizacion explicita y payload QA con `visible_gantt = No`.
+- Confirmar que el CSV publicado refleja la fila despues de la latencia normal.

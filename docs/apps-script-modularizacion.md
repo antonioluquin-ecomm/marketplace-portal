@@ -622,3 +622,94 @@ Confirmacion:
 - No se modificaron endpoints actuales.
 - `gantt_task_update` queda intacto.
 - No se tocaron Google Sheets, front, `internal/`, `public/`, `legacy/`, `config.js` ni `assets/js/config.js`.
+
+## Estado 31C2A - Endpoint QA `gantt_task_create`
+
+Fecha: 2026-05-20
+
+Estado: implementado localmente sin escritura real.
+
+### Cambios funcionales acotados
+
+`Apps_script_v5.js`:
+
+- Agrega routing minimo para `tipo_formulario = "gantt_task_create"`.
+- Mantiene `doPost` como fachada estable.
+- No cambia los flujos `seller`, `gestion_seller`, `calificacion`, `relevamiento`, `definicion_tecnica` ni `gantt_task_update`.
+
+`Gantt.gs`:
+
+- Agrega `crearTareaGantt`.
+- Agrega aliases de columnas para alta de tarea.
+- Reutiliza `obtenerHeadersTimelineGantt` para detectar headers reales aunque esten en fila 3.
+- Reutiliza normalizaciones/validaciones Gantt.
+- Agrega helpers especificos:
+  - `validarColumnasCreateGantt`
+  - `generarTaskIdGantt`
+  - `existeTaskIdGantt`
+  - `validarFechaObligatoriaGantt`
+  - `validarRangoPlanGantt`
+  - `validarTextoObligatorioGantt`
+  - `normalizarVisibleGantt`
+  - `registrarMetadatosAltaGanttSiExisten`
+
+### Contrato
+
+Payload:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "qa@marketplace.local",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "Carga comercial inicial",
+    "tarea": "Tarea dummy QA desde Apps Script",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "visible_gantt": "No",
+    "comentario": "Alta QA controlada"
+  }
+}
+```
+
+Response OK:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T-02",
+  "created_fields": ["task_id", "seller_id", "fase", "hito", "tarea", "responsable", "inicio_plan", "fin_plan", "estado", "visible_gantt", "comentario"],
+  "row_number": 123,
+  "message": "Tarea Gantt creada"
+}
+```
+
+Errores:
+
+- Conservan formato `errorResponse`.
+- No cambian responses existentes de otros endpoints.
+
+### Validacion local
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | OK |
+| Create headers fila 1 | Genera ID, inserta fila mock y aplica defaults | OK |
+| Create headers fila 3 | Detecta `ID Tarea` e inserta en fila fisica correcta | OK |
+| Error `seller_id` faltante | `ok:false`, error claro | OK |
+| Error fecha invalida | `ok:false`, error claro | OK |
+| Error rango plan invalido | `ok:false`, error claro | OK |
+| Error `task_id` duplicado | `ok:false`, error claro | OK |
+| Escritura real | No ejecutada | OK |
+
+### Riesgo residual
+
+- Falta deploy/incorporacion real de `Apps_script_v5.js` y `Gantt.gs`.
+- La prueba real debe usar tarea dummy con `visible_gantt = No`.
+- Si la hoja `timeline` no tiene columna opcional `visible_gantt`, el endpoint no la crea; solo escribe columnas existentes.
+- La generacion de ID reduce duplicados, pero en concurrencia extrema debe revalidarse contra la hoja real antes de habilitar uso productivo.

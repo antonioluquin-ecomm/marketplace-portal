@@ -1,7 +1,7 @@
 /**
  * SPORTING MARKETPLACE - Apps Script Gantt Operativo
  *
- * Logica exclusiva del endpoint tipo_formulario = "gantt_task_update".
+ * Logica exclusiva de endpoints Gantt Operativo.
  */
 
 const CAMPOS_GANTT_EDITABLES_QA = {
@@ -27,6 +27,23 @@ const GANTT_TASK_ID_HEADER_ALIASES = [
   "Id Tarea",
   "id tarea",
 ];
+
+const CAMPOS_GANTT_CREATE_ALIASES = {
+  task_id: GANTT_TASK_ID_HEADER_ALIASES,
+  seller_id: ["seller_id", "id_seller", "seller"],
+  fase: ["fase"],
+  hito: ["hito"],
+  tarea: ["tarea", "actividad"],
+  responsable: ["responsable"],
+  dependencia: ["dependencia", "depende_de", "Depende de"],
+  inicio_plan: ["inicio_plan", "fecha_inicio_plan", "Inicio plan"],
+  fin_plan: ["fin_plan", "fecha_fin_plan", "Fin plan"],
+  inicio_real: ["inicio_real", "fecha_inicio_real", "Inicio real"],
+  fin_real: ["fin_real", "fecha_fin_real", "Fin real"],
+  estado: ["estado_tarea", "estado"],
+  visible_gantt: ["visible_gantt", "visible", "Visible Gantt"],
+  comentario: ["comentario", "comentarios"],
+};
 
 function actualizarTareaGantt(d) {
   const taskId = limpiarValor(d.task_id || d.id_tarea);
@@ -112,6 +129,115 @@ function actualizarTareaGantt(d) {
   };
 }
 
+function crearTareaGantt(d) {
+  const task = d.task;
+  if (!task || Array.isArray(task) || typeof task !== "object") {
+    throw new Error("Falta task como objeto de tarea a crear");
+  }
+
+  const sellerId = normalizarIdGantt(task.seller_id);
+  if (!sellerId) throw new Error("seller_id obligatorio");
+
+  const fase = validarTextoObligatorioGantt(task.fase, "fase", 120);
+  const hito = validarTextoObligatorioGantt(task.hito, "hito", 160);
+  const tarea = validarTextoObligatorioGantt(task.tarea, "tarea", 220);
+  const responsable = validarTextoObligatorioGantt(
+    task.responsable,
+    "responsable",
+    120,
+  );
+  const inicioPlan = validarFechaObligatoriaGantt(task.inicio_plan, "inicio_plan");
+  const finPlan = validarFechaObligatoriaGantt(task.fin_plan, "fin_plan");
+  validarRangoPlanGantt(inicioPlan, finPlan);
+
+  const estado = normalizarEstadoGantt(task.estado || "Pendiente");
+  const visibleGantt = normalizarVisibleGantt(task.visible_gantt || "No");
+  const comentario = validarTextoGantt(task.comentario || "", "comentario", 1000);
+  const dependencia = validarTextoGantt(
+    task.dependencia || "",
+    "dependencia",
+    120,
+  );
+  const inicioReal = validarFechaGantt(task.inicio_real || "", "inicio_real");
+  const finReal = validarFechaGantt(task.fin_real || "", "fin_real");
+  validarRangoFechasGantt({ inicio_real: inicioReal, fin_real: finReal });
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE);
+  if (!ws) throw new Error('No existe la hoja "timeline"');
+
+  const timelineHeaders = obtenerHeadersTimelineGantt(ws);
+  const headers = timelineHeaders.headers;
+  const headerMap = timelineHeaders.headerMap;
+  const taskCol = resolverIndiceHeaderGantt(
+    headerMap,
+    GANTT_TASK_ID_HEADER_ALIASES,
+  );
+  if (taskCol === -1) {
+    throw new Error('La hoja "timeline" no tiene columna task_id / id_tarea / ID Tarea');
+  }
+
+  validarColumnasCreateGantt(headerMap);
+
+  const values = ws.getDataRange().getValues();
+  const taskIdRecibido = limpiarValor(
+    task.task_id || task.id_tarea || task["ID Tarea"] || d.task_id || d.id_tarea,
+  );
+  const taskId = taskIdRecibido
+    ? normalizarIdGantt(taskIdRecibido)
+    : generarTaskIdGantt(sellerId, values, taskCol, timelineHeaders.dataStartRowNumber);
+
+  if (existeTaskIdGantt(values, taskCol, timelineHeaders.dataStartRowNumber, taskId)) {
+    throw new Error("task_id duplicado en timeline: " + taskId);
+  }
+
+  const datos = {
+    task_id: taskId,
+    seller_id: sellerId,
+    fase,
+    hito,
+    tarea,
+    responsable,
+    dependencia,
+    inicio_plan: inicioPlan,
+    fin_plan: finPlan,
+    inicio_real: inicioReal,
+    fin_real: finReal,
+    estado,
+    visible_gantt: visibleGantt,
+    comentario,
+  };
+
+  const row = headers.map(() => "");
+  const createdFields = [];
+  Object.keys(datos).forEach((campo) => {
+    const col = resolverIndiceHeader(headerMap, CAMPOS_GANTT_CREATE_ALIASES[campo]);
+    if (col !== -1) {
+      row[col] = datos[campo];
+      createdFields.push(campo);
+    }
+  });
+
+  const rowNumber = ws.getLastRow() + 1;
+  ws.appendRow(row);
+
+  registrarMetadatosAltaGanttSiExisten(ws, headerMap, rowNumber, d.created_by);
+  registrarAuditoriaGanttSiExiste(
+    ss,
+    taskId,
+    d.created_by,
+    {},
+    datos,
+    "gantt_task_create",
+  );
+
+  return {
+    task_id: taskId,
+    created_fields: createdFields,
+    row_number: rowNumber,
+  };
+}
+
 function construirMapaHeadersNormalizados(headers) {
   const map = {};
   headers.forEach((header, idx) => {
@@ -169,6 +295,61 @@ function resolverIndiceHeaderGantt(headerMap, alias) {
   return -1;
 }
 
+function validarColumnasCreateGantt(headerMap) {
+  const requeridas = [
+    "task_id",
+    "seller_id",
+    "fase",
+    "hito",
+    "tarea",
+    "responsable",
+    "inicio_plan",
+    "fin_plan",
+    "estado",
+  ];
+
+  requeridas.forEach((campo) => {
+    const col = resolverIndiceHeader(headerMap, CAMPOS_GANTT_CREATE_ALIASES[campo]);
+    if (col === -1) {
+      throw new Error("Columna inexistente para crear tarea Gantt: " + campo);
+    }
+  });
+}
+
+function generarTaskIdGantt(sellerId, values, taskCol, dataStartRowNumber) {
+  const sellerNorm = normalizarIdGantt(sellerId);
+  const prefix = sellerNorm + "-T-";
+  const pattern = new RegExp("^" + escaparRegexGantt(prefix) + "(\\d+)$");
+  let max = 0;
+  let pad = 2;
+
+  for (let i = dataStartRowNumber - 1; i < values.length; i++) {
+    const taskId = normalizarIdGantt(values[i][taskCol]);
+    const match = taskId.match(pattern);
+    if (match) {
+      const n = Number(match[1]);
+      if (!Number.isNaN(n)) {
+        max = Math.max(max, n);
+        pad = Math.max(pad, match[1].length);
+      }
+    }
+  }
+
+  return prefix + String(max + 1).padStart(pad, "0");
+}
+
+function escaparRegexGantt(valor) {
+  return String(valor).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function existeTaskIdGantt(values, taskCol, dataStartRowNumber, taskId) {
+  const taskIdNorm = normalizarIdGantt(taskId);
+  for (let i = dataStartRowNumber - 1; i < values.length; i++) {
+    if (normalizarIdGantt(values[i][taskCol]) === taskIdNorm) return true;
+  }
+  return false;
+}
+
 function normalizarIdGantt(valor) {
   return limpiarValor(valor).toUpperCase();
 }
@@ -213,6 +394,20 @@ function validarFechaGantt(valor, campo) {
   return raw;
 }
 
+function validarFechaObligatoriaGantt(valor, campo) {
+  const fecha = validarFechaGantt(valor, campo);
+  if (!fecha) throw new Error(campo + " obligatorio");
+  return fecha;
+}
+
+function validarRangoPlanGantt(inicioPlan, finPlan) {
+  const inicio = new Date(inicioPlan + "T00:00:00");
+  const fin = new Date(finPlan + "T00:00:00");
+  if (fin < inicio) {
+    throw new Error("fin_plan no puede ser anterior a inicio_plan");
+  }
+}
+
 function validarRangoFechasGantt(fields) {
   if (
     fields.inicio_real === undefined ||
@@ -238,6 +433,43 @@ function validarTextoGantt(valor, campo, maxLength) {
   return raw;
 }
 
+function validarTextoObligatorioGantt(valor, campo, maxLength) {
+  const raw = validarTextoGantt(valor, campo, maxLength);
+  if (!raw) throw new Error(campo + " obligatorio");
+  return raw;
+}
+
+function normalizarVisibleGantt(valor) {
+  const raw = limpiarValor(valor);
+  if (!raw) return "No";
+  const key = normalizarHeaderGantt(raw);
+  if (["si", "s"].includes(key)) return "Si";
+  if (["no", "n"].includes(key)) return "No";
+  throw new Error("visible_gantt invalido: " + raw);
+}
+
+function registrarMetadatosAltaGanttSiExisten(ws, headerMap, rowNumber, createdBy) {
+  const createdAtCol = resolverIndiceHeader(headerMap, [
+    "created_at",
+    "fecha_creacion",
+    "fecha_alta",
+  ]);
+  if (createdAtCol !== -1) {
+    ws
+      .getRange(rowNumber, createdAtCol + 1)
+      .setValue(Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss"));
+  }
+
+  const createdByCol = resolverIndiceHeader(headerMap, [
+    "created_by",
+    "creado_por",
+    "usuario_creacion",
+  ]);
+  if (createdByCol !== -1 && limpiarValor(createdBy)) {
+    ws.getRange(rowNumber, createdByCol + 1).setValue(limpiarValor(createdBy));
+  }
+}
+
 function registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, updatedBy) {
   const updatedAtCol = resolverIndiceHeader(headerMap, [
     "updated_at",
@@ -261,7 +493,15 @@ function registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, updatedBy) {
   }
 }
 
-function registrarAuditoriaGanttSiExiste(ss, taskId, updatedBy, before, after) {
+function registrarAuditoriaGanttSiExiste(
+  ss,
+  taskId,
+  updatedBy,
+  before,
+  after,
+  operacion,
+) {
+  const accion = operacion || "gantt_task_update";
   const nombres = ["timeline_log", "gantt_task_log", "gantt_updates_log", "auditoria_gantt"];
   const ws = nombres.map((n) => ss.getSheetByName(n)).find(Boolean);
   if (!ws) return;
@@ -285,8 +525,11 @@ function registrarAuditoriaGanttSiExiste(ss, taskId, updatedBy, before, after) {
     if (["updated_by", "usuario", "actualizado_por"].includes(key)) {
       return limpiarValor(updatedBy);
     }
+    if (["created_by", "creado_por", "usuario_creacion"].includes(key)) {
+      return limpiarValor(updatedBy);
+    }
     if (["tipo_formulario", "operacion", "accion"].includes(key)) {
-      return "gantt_task_update";
+      return accion;
     }
     if (["updated_fields", "campos_actualizados"].includes(key)) {
       return Object.keys(after).join(", ");

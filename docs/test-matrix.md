@@ -1376,3 +1376,51 @@ Decision de diseno:
 - No eliminar fisicamente tareas.
 - Preferir `visible_gantt = No` para ocultar y `estado = Cancelado` para comunicar anulacion.
 - Usar `disabled_at` / `disabled_by` solo si existen o si una etapa futura aprueba agregar columnas.
+
+### Etapa 31C2A: endpoint QA `gantt_task_create`
+
+**Estado:** implementado localmente; escritura real pendiente de autorizacion.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Routing | `tipo_formulario=gantt_task_create` | `doPost` deriva a `crearTareaGantt` antes de exigir `seller_id` raiz | OK |
+| Headers fila 1 | Smoke mockeado | Crea fila, genera `SPT-001-T-02`, aplica defaults | OK |
+| Headers fila 3 | Smoke mockeado con cabecera visual y `ID Tarea` | Detecta headers reales e inserta en fila fisica correcta | OK |
+| `seller_id` faltante | Smoke mockeado | `ok:false`, `error:"seller_id obligatorio"` | OK |
+| Fecha invalida | Smoke mockeado | `ok:false`, error claro | OK |
+| `fin_plan` anterior a `inicio_plan` | Smoke mockeado | `ok:false`, `error:"fin_plan no puede ser anterior a inicio_plan"` | OK |
+| `task_id` duplicado | Smoke mockeado | `ok:false`, `error:"task_id duplicado en timeline: ..."` | OK |
+| Default estado | Smoke mockeado sin `estado` | Escribe `Pendiente` | OK |
+| Default visible | Smoke mockeado sin `visible_gantt` | Escribe `No` si la columna existe | OK |
+| Sintaxis fachada | `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | Sin errores | OK |
+| Escritura real | No ejecutada | Sin cambios en Google Sheets | OK |
+
+Payload QA recomendado para validacion real autorizada:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "qa@marketplace.local",
+  "task": {
+    "task_id": "TASK-DUMMY-QA-CREATE",
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "Carga comercial inicial",
+    "tarea": "Tarea dummy QA desde Apps Script",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "visible_gantt": "No",
+    "comentario": "Alta QA controlada"
+  }
+}
+```
+
+Pendientes:
+
+- Subir `Apps_script_v5.js` y `Gantt.gs` al proyecto Apps Script real.
+- Ejecutar POST real solo si se autoriza escritura dummy.
+- Confirmar que la fila creada queda con `visible_gantt = No`.
+- Confirmar que no afecta el Gantt visible ni tareas productivas.

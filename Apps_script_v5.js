@@ -35,6 +35,17 @@ function doPost(e) {
       });
     }
 
+    if (tipoFormulario === "gantt_task_create") {
+      const resultadoGantt = crearTareaGantt(data);
+      return jsonResponse({
+        ok: true,
+        task_id: resultadoGantt.task_id,
+        created_fields: resultadoGantt.created_fields,
+        row_number: resultadoGantt.row_number,
+        message: "Tarea Gantt creada",
+      });
+    }
+
     const sellerId = String(data.seller_id || "").trim();
 
     if (!sellerId) {
@@ -64,7 +75,7 @@ function doPost(e) {
 
       enviarNotificacionRelevamiento(sellerId, data, resultado);
     } else {
-      throw new Error("tipo_formulario invalido. Usar 'seller', 'gestion_seller', 'calificacion', 'relevamiento' o 'gantt_task_update'.");
+      throw new Error("tipo_formulario invalido. Usar 'seller', 'gestion_seller', 'calificacion', 'relevamiento', 'gantt_task_update' o 'gantt_task_create'.");
     }
 
     return jsonResponse({
@@ -123,6 +134,10 @@ function normalizarTipoFormulario(valor) {
     ["gantt_task_update", "gantt_update", "timeline_update"].includes(tipo)
   )
     return "gantt_task_update";
+  if (
+    ["gantt_task_create", "gantt_create", "timeline_create"].includes(tipo)
+  )
+    return "gantt_task_create";
 
   return tipo;
 }

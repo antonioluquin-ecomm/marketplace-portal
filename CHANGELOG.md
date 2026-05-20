@@ -4,6 +4,60 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2A endpoint QA crear tareas Gantt
+
+Tipo de cambio: Apps Script QA controlado y documentacion.
+
+Estado: implementado localmente; escritura real no ejecutada.
+
+Resultado:
+- Agregado routing minimo `tipo_formulario = "gantt_task_create"` en `Apps_script_v5.js`.
+- Agregada funcion `crearTareaGantt` en `Gantt.gs`.
+- El endpoint crea una fila nueva en `timeline` usando la fila real de headers detectada por `obtenerHeadersTimelineGantt()`.
+- Soporta header visual `ID Tarea`.
+- Si no viene `task_id`, Apps Script genera uno seguro a partir de `seller_id` y el siguiente correlativo.
+- Si viene `task_id`, valida duplicado antes de insertar.
+- Defaults aplicados: `estado = Pendiente`, `visible_gantt = No`, `comentario = ""`.
+- No crea columnas nuevas, no borra filas, no modifica estructura de hoja y no altera formulas.
+
+Validaciones:
+- `node --check Apps_script_v5.js` OK.
+- Carga conjunta local de `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs` y `Apps_script_v5.js` OK.
+- Smoke mockeado create OK con headers en fila 1.
+- Smoke mockeado create OK con headers reales en fila 3.
+- Error por `seller_id` faltante OK.
+- Error por fecha invalida OK.
+- Error por `fin_plan` anterior a `inicio_plan` OK.
+- Error por `task_id` duplicado OK.
+- Defaults `estado` y `visible_gantt` OK.
+- Escritura real no ejecutada.
+
+Payload QA sugerido:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "qa@marketplace.local",
+  "task": {
+    "task_id": "TASK-DUMMY-QA-CREATE",
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "Carga comercial inicial",
+    "tarea": "Tarea dummy QA desde Apps Script",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "visible_gantt": "No",
+    "comentario": "Alta QA controlada"
+  }
+}
+```
+
+Alcance:
+- No se tocaron `internal/`, `public/`, `legacy/`, `config.js`, `assets/js/config.js`, Google Sheets, front, sellers, gestion_seller, calificacion, relevamiento, definicion_tecnica ni endpoints existentes.
+- `gantt_task_update` se mantiene compatible.
+
 ## 2026-05-20 - Etapa 31C2 diseno alta/baja controlada tareas Gantt
 
 Tipo de cambio: documentacion tecnica.
