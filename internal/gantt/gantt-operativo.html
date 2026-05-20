@@ -575,6 +575,38 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   padding-top:8px;
   padding-bottom:8px;
 }
+.control-group{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.control-label{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--t3);
+  white-space:nowrap;
+}
+.toolbar .vtog,
+.toolbar .scale-tog{
+  flex-shrink:0;
+}
+.toolbar .ri{
+  min-height:28px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 9px;
+  border:1px solid var(--bdr-l);
+  border-radius:999px;
+  background:rgba(255,255,255,.018);
+  color:var(--t2);
+  white-space:nowrap;
+}
+.toolbar .btn-sm{
+  min-height:28px;
+}
 
 @media(max-width:980px){
   .exec-hero{grid-template-columns:1fr}
@@ -653,7 +685,10 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   }
   .tl-l,.tl-r{
     width:100%;
-    justify-content:space-between;
+    justify-content:flex-start;
+  }
+  .control-group{
+    width:100%;
   }
   .modal{
     width:min(520px,calc(100vw - 24px));
@@ -692,14 +727,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <option value="todos">Todos</option>
     </select>
     <div class="filter-hint" id="seller-filter-hint">Todos los sellers</div>
-  </div>
-
-  <div class="sb-s">
-    <div class="sb-lbl">Vista</div>
-    <div class="vtog" style="width:100%">
-      <button class="vbtn on" style="flex:1" id="btn-gantt" onclick="setView('gantt')">Gantt</button>
-      <button class="vbtn"    style="flex:1" id="btn-lista" onclick="setView('lista')">Lista</button>
-    </div>
   </div>
 
   <div class="sb-s">
@@ -769,6 +796,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         <div class="exec-step"><div class="exec-step-num">03</div><div class="exec-step-title">Plan</div><div class="exec-step-desc">Tareas, fechas y responsables.</div></div>
         <div class="exec-step"><div class="exec-step-num">04</div><div class="exec-step-title">Ejecución</div><div class="exec-step-desc">Seguimiento de avances, riesgos y bloqueos.</div></div>
         <div class="exec-step"><div class="exec-step-num">05</div><div class="exec-step-title">Go Live</div><div class="exec-step-desc">Activación y control inicial.</div></div>
+        </div>
       </div>
     </div>
     <details class="exec-card exec-help">
@@ -812,13 +840,23 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 
   <section class="toolbar">
     <div class="tl-l">
-      <div class="scale-tog">
-        <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
-        <button class="sbtn"    id="sc-semana" onclick="setScale('semana')">Semana</button>
+      <div class="control-group">
+        <span class="control-label">Vista</span>
+        <div class="vtog">
+          <button class="vbtn on" id="btn-gantt" onclick="setView('gantt')">Gantt</button>
+          <button class="vbtn" id="btn-lista" onclick="setView('lista')">Lista</button>
+        </div>
       </div>
-      <span class="ri" id="ri-info">—</span>
+      <div class="control-group">
+        <span class="control-label">Escala</span>
+        <div class="scale-tog">
+          <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
+          <button class="sbtn"    id="sc-semana" onclick="setScale('semana')">Semana</button>
+        </div>
+      </div>
     </div>
     <div class="tl-r">
+      <span class="ri" id="ri-info">—</span>
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>
