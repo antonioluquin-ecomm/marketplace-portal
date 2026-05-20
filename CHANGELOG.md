@@ -4,6 +4,30 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31W actualizacion PROJECT_WORKFLOW y auditoria documental
+
+Tipo de cambio: metodologia / documentacion.
+
+Estado: completado.
+
+Resultado:
+- Actualizado `PROJECT_WORKFLOW.md` para reflejar la metodologia real actual de Marketplace Portal.
+- Formalizada la regla de validacion manual humana vs validacion asistida por IA.
+- Agregada regla: Codex no debe gastar tokens en smoke visual/manual cuando el usuario indique que lo validara personalmente.
+- Agregada regla: si el usuario valida manualmente una implementacion local, Codex solo documenta el cierre si se lo piden.
+- Reforzada la politica de commits manuales por PowerShell.
+- Reforzada la regla de usar Codex con Fast OFF e inteligencia alta para cambios criticos.
+- Documentada la capa de compatibilidad de raiz: aliases, `legacy/root-html-v1/`, `legacy/`, `Logos/` y `assets/logos/` no se limpian fisicamente sin etapa explicita y smoke de URLs historicas.
+- Agregada auditoria de limpieza documental con candidatos, riesgos y recomendacion.
+
+Recomendacion:
+- No limpiar archivos ahora.
+- Postergar cualquier limpieza fisica a una etapa dedicada con auditoria de referencias y smoke de aliases/URLs historicas.
+
+Alcance:
+- Solo documentacion.
+- No se tocaron codigo funcional, Apps Script, `internal/`, `public/`, `legacy/`, config, endpoints, payloads ni Google Sheets.
+
 ## 2026-05-20 - Etapa 31C2I UI baja logica Gantt
 
 Tipo de cambio: UI operativa controlada.

@@ -45,7 +45,8 @@
 - 31. Auditoria vs implementacion como metodologia formal.
 - 32. Smoke visual y QA manual.
 - 33. Niveles de madurez visual.
-- 34. Nota final.
+- 34. Auditoria documental y limpieza controlada.
+- 35. Nota final.
 
 # 1. Objetivo del documento
 
@@ -389,6 +390,10 @@ Reglas operativas:
 - Si el chat acumula mucho contexto, abrir nuevo chat y pegar handoff corto.
 - Mantener prompts compactos con archivos permitidos/prohibidos.
 - Mantener regla PowerShell: comandos en una sola linea cuando corresponda, evitar backslash de Bash y recordar que el usuario ejecuta commits manualmente.
+- Para Marketplace Portal, usar Codex como ejecutor principal de implementacion, auditoria tecnica, documentacion y smoke mockeado/local.
+- Para cambios criticos usar Codex con Fast desactivado e inteligencia alta.
+- Para cambios menores, documentales o de copy usar configuracion liviana.
+- No gastar tokens de Codex en smokes visuales/manuales extensos cuando el usuario indique que los validara personalmente.
 
 ### Reglas practicas de configuracion
 
@@ -589,6 +594,13 @@ Documentar en archivos solo cuando:
 - se toque algo critico.
 
 No documentar cada smoke test menor. Para cambios visuales o informativos de bajo riesgo, basta con validacion manual minima y un commit claro.
+
+Cuando el usuario valide manualmente un cambio local, Codex no debe repetir un smoke visual/manual largo. En ese caso debe:
+
+- registrar la validacion humana solo si se lo piden;
+- documentar el cierre solo si se lo piden;
+- mantener el reporte final acotado a alcance, archivos, riesgos y pendientes;
+- dejar explicitamente pendiente cualquier smoke no ejecutado por Codex.
 
 Agrupar cambios compatibles en una misma etapa:
 
@@ -1296,6 +1308,8 @@ Estas zonas requieren siempre validacion estricta antes de cualquier cambio:
 | Rutas y aliases                     | Pueden romper navegacion completa             |
 | Timeline y simuladores con formulas | Logica economica sensible                     |
 | Logica de autenticacion o permisos  | Seguridad critica                             |
+| Legacy, aliases y raiz compatible   | Preservan URLs historicas y compatibilidad    |
+| Logos y assets historicos           | Pueden estar referenciados por paginas reales |
 
 ## Regla operativa para freeze zones
 
@@ -1310,6 +1324,25 @@ Antes de tocar una freeze zone:
 
 Nunca modificar una freeze zone como parte de un cambio visual o documental.
 Si la IA propone tocar una freeze zone fuera de alcance: detener y renegociar alcance.
+
+## Compatibility layer Marketplace Portal
+
+En Marketplace Portal, la raiz conserva una capa de compatibilidad con aliases historicos. `legacy/root-html-v1/` queda reservado para snapshots futuros. Por defecto:
+
+- no eliminar aliases de raiz;
+- no mover aliases de raiz;
+- no limpiar fisicamente `legacy/`;
+- no limpiar fisicamente `Logos/` ni `assets/logos/`;
+- no cambiar rutas historicas sin etapa explicita;
+- no hacer limpieza fisica de archivos fuente o snapshots sin smoke de URLs historicas.
+
+Cualquier limpieza fisica requiere:
+
+1. auditoria de referencias;
+2. lista exacta de archivos;
+3. etapa explicita de limpieza;
+4. smoke de aliases y URLs historicas;
+5. plan de rollback.
 
 ## Como declarar freeze zones en prompts
 
@@ -1457,6 +1490,36 @@ Para proyectos publicados en GitHub Pages u hosting estatico:
 - Verificar seller_id u otros parametros dinamicos si aplica.
 - Revisar cache si los cambios no aparecen inmediatamente.
 
+## Validacion manual humana vs validacion asistida por IA
+
+La validacion puede ser asistida por IA o realizada manualmente por el usuario. La eleccion debe optimizar seguridad, evidencia y consumo de tokens.
+
+Usar validacion asistida por IA cuando:
+
+- haya validaciones estaticas o mockeadas rapidas;
+- se necesite revisar diffs, payloads o contratos;
+- se pueda ejecutar `git diff --check`, parsing local o smoke mockeado;
+- el flujo tenga riesgo tecnico y requiera evidencia reproducible;
+- el usuario no tenga el entorno manual abierto.
+
+Usar validacion manual humana cuando:
+
+- el usuario pueda validar visualmente mas rapido en navegador;
+- el browser integrado o DevTools no este disponible;
+- el smoke sea principalmente visual o responsive;
+- la prueba requiera criterio humano de UX;
+- la prueba real implique Apps Script, Google Sheets, datos dummy autorizados o GitHub Pages;
+- el usuario indique explicitamente que la validara personalmente.
+
+Reglas operativas:
+
+- Si el usuario dice que validara manualmente, Codex no debe seguir intentando reconectar browser ni gastar tokens en smoke visual/manual.
+- Codex debe dejar pendiente solo el smoke manual final que corresponda.
+- Si despues de una implementacion local el usuario valida manualmente, Codex solo debe documentar el cierre si se lo piden.
+- No pedir a Codex smokes manuales extensos si el usuario puede validarlos directamente con menor costo.
+- Para cambios criticos, la validacion humana no reemplaza validaciones tecnicas basicas como `git diff --check`, revision de payloads o smoke mockeado cuando sean baratos y seguros.
+- Para Apps Script, endpoints, payloads, formularios, simuladores y Google Sheets, cualquier prueba real debe quedar limitada a dummy autorizada o etapa explicita.
+
 # 33. Niveles de madurez visual
 
 Los proyectos evolucionan visualmente. Esta seccion define niveles de referencia para alinear expectativas y criterios de calidad.
@@ -1499,7 +1562,54 @@ De PRO a Enterprise SaaS:
 - Branding solido y documentado.
 - Separacion clara entre contexto publico e interno.
 
-# 34. Nota final
+# 34. Auditoria documental y limpieza controlada
+
+La documentacion viva puede crecer mucho durante proyectos iterativos. El crecimiento no es un problema si la documentacion sigue teniendo proposito claro; si empieza a duplicar contexto, conviene auditar antes de limpiar.
+
+## Criterios para detectar exceso documental
+
+Un documento puede ser candidato a revision cuando:
+
+- repite contenido de otro documento sin aportar audiencia distinta;
+- conserva estados viejos que contradicen el estado actual;
+- mezcla handoff, roadmap, test matrix y changelog en un mismo lugar;
+- documenta detalles de smoke ya superados sin valor historico;
+- no se referencia desde README, handoff o roadmap;
+- contiene instrucciones obsoletas para rutas, deploy o herramientas.
+
+## Reglas de limpieza
+
+- No eliminar documentacion sin etapa explicita.
+- No mover documentos sin revisar links y referencias.
+- No borrar historico util para auditoria o rollback.
+- Preferir archivar o consolidar antes que borrar.
+- Mantener `CHANGELOG.md` como historial cronologico, no como manual operativo.
+- Mantener `docs/roadmap.md` como direccion de etapas, no como bitacora exhaustiva.
+- Mantener `docs/test-matrix.md` como matriz de validacion, no como changelog.
+- Mantener `docs/handoff-post-v1.md` como punto de arranque para nuevo chat.
+
+## Auditoria de limpieza Marketplace Portal
+
+Candidatos a revisar en una etapa futura:
+
+| Archivo o grupo | Motivo | Riesgo | Recomendacion |
+| --- | --- | --- | --- |
+| `docs/handoff-post-v1.md` | Puede quedar viejo despues de cada bloque largo | Alto si se usa como contexto inicial desactualizado | Mantener y actualizar solo en cierres de bloque o antes de nuevo chat |
+| `docs/roadmap.md` | Acumula etapas historicas y proximos pasos | Medio por longitud | Mantener; evaluar resumen superior y archivo historico futuro |
+| `docs/test-matrix.md` | Acumula smokes pasados y futuros | Medio por densidad | Mantener; separar matriz viva vs historico solo si crece demasiado |
+| `docs/gantt-operativo-edicion.md` | Muy detallado por etapas 30-31 | Bajo mientras Gantt siga activo | Mantener como documento tecnico especializado |
+| `docs/apps-script-modularizacion.md` | Mezcla diseno, validaciones y estado real | Medio | Mantener; revisar al cerrar modularizacion 31D/31E |
+| Aliases raiz `*_v*.html` | Compatibility layer historica | Alto si se eliminan | No limpiar sin etapa explicita y smoke de URLs |
+| `legacy/` | Reservado para snapshots futuros | Alto si se borra evidencia | No limpiar fisicamente |
+| `Logos/` y `assets/logos/` | Posibles referencias actuales o historicas | Medio/alto | No limpiar sin auditoria de referencias y smoke visual |
+
+Recomendacion actual:
+
+- No limpiar ahora.
+- Postergar limpieza fisica hasta una etapa dedicada.
+- Priorizar consolidacion documental ligera: mantener handoff actualizado, roadmap como guia y changelog como historial.
+
+# 35. Nota final
 
 Esta metodologia debe adaptarse a cada proyecto, equipo y contexto.
 

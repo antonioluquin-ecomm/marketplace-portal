@@ -2183,3 +2183,23 @@ Recomendacion de continuidad:
 
 - Abrir nuevo chat por contexto alto.
 - Configuracion recomendada: Codex, Fast OFF, Inteligencia Alta.
+
+## Etapa 31W: actualizacion PROJECT_WORKFLOW y auditoria documental
+
+Estado: completada.
+
+Resultado:
+
+- Actualizado `PROJECT_WORKFLOW.md` para reflejar la metodologia operativa actual.
+- Formalizada la distincion entre validacion manual humana y validacion asistida por IA.
+- Regla incorporada: si el usuario indica que validara manualmente, Codex no debe gastar tokens en smoke visual/manual extenso.
+- Regla incorporada: si el usuario valida manualmente una implementacion local, Codex solo documenta cierre si se lo piden.
+- Reforzada la politica de commits manuales por PowerShell.
+- Reforzada la recomendacion de Codex con Fast OFF e inteligencia alta para cambios criticos.
+- Documentada politica de no limpieza fisica de aliases, `legacy/`, `Logos/` ni `assets/logos/` sin etapa explicita y smoke de URLs historicas.
+- Auditados documentos candidatos a limpieza futura.
+
+Recomendacion:
+
+- No limpiar ahora.
+- Planificar una etapa futura solo si la documentacion o compatibility layer se vuelve costosa de mantener.
