@@ -639,6 +639,18 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   padding-top:4px;
   padding-bottom:4px;
 }
+.toolbar .today-btn{
+  padding:4px 8px;
+}
+.period-cell.current{
+  color:#d8ead0;
+  background:rgba(106,168,79,.11);
+  box-shadow:inset 0 -2px 0 var(--g);
+}
+.g-line.today{
+  opacity:.9;
+  box-shadow:0 0 0 1px rgba(106,168,79,.22);
+}
 
 @media(max-width:980px){
   .exec-hero{grid-template-columns:1fr}
@@ -884,9 +896,11 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
           <button class="sbtn"    id="sc-semana" onclick="setScale('semana')">Semana</button>
         </div>
+        <button class="btn-sm today-btn" type="button" onclick="scrollToToday()">Hoy</button>
       </div>
     </div>
     <div class="tl-r">
+      <span class="ri" id="range-info">Rango: —</span>
       <span class="ri" id="ri-info">—</span>
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
@@ -1076,6 +1090,7 @@ let weekPanelOpen = false;
 let activeEditTaskId = '';
 let lastEditFeedback = null;
 let lastDisableFeedback = null;
+let lastTodayScrollLeft = 0;
 
 /* ── UTILS ── */
 const $   = id => document.getElementById(id);
@@ -1369,9 +1384,16 @@ function setScale(s){
   $('sc-semana').classList.toggle('on',s==='semana');
   render();
 }
+function scrollToToday(){
+  const c=$('content');
+  if(!c) return;
+  if(typeof c.scrollTo==='function') c.scrollTo({left:lastTodayScrollLeft,behavior:'smooth'});
+  else c.scrollLeft=lastTodayScrollLeft;
+}
 
 /* ── HELPERS ── */
 const dBetween=(a,b)=>a&&b?Math.round((b-a)/86400000):null;
+function fmtDMonth(d){if(!d)return'—';return `${String(d.getDate()).padStart(2,'0')} ${d.toLocaleDateString('es-AR',{month:'short'}).replace('.','')}`;}
 function fmtD(d){if(!d)return'—';return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});}
 function fmtDfull(d){if(!d)return'—';return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit'});}
 function isoWeek(d){
@@ -1563,6 +1585,12 @@ function renderGantt(tasks,sellerIds,today){
     return Math.max(0,Math.min(ganttW,days*COL_W));
   };
   const todayLeft=dateLeft(today)||0;
+  lastTodayScrollLeft=Math.max(0,FIXED_W+todayLeft-140);
+  const rangeInfo=$('range-info');
+  if(rangeInfo){
+    const fmtRange=d=>d.toLocaleDateString('es-AR',{month:'short',year:'2-digit'}).replace('.','');
+    rangeInfo.textContent=`Rango: ${fmtRange(rangeStart)} - ${fmtRange(rangeEnd)}`;
+  }
 
   // ── Construir celdas de encabezado ──
   let periodCells=[];
@@ -1590,7 +1618,7 @@ function renderGantt(tasks,sellerIds,today){
       const isNow=cur<=today&&today<=wEnd;
       const wn=isoWeek(cur);
       periodCells.push({label:`S${wn}`,days,isNow,px:days*COL_W,
-        sub:`${fmtD(cStart)}`});
+        sub:fmtDMonth(cStart)});
       cur=new Date(cur); cur.setDate(cur.getDate()+7);
     }
   }
