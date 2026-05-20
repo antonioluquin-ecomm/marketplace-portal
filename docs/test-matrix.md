@@ -1295,3 +1295,20 @@ Pendiente:
 - Disenar alta/baja logica de tareas Gantt desde front en etapa separada.
 - No eliminar filas fisicamente.
 - Usar `visible_gantt = No` o `estado = Cancelado`.
+
+### Revalidacion real 31C-fix
+
+**Estado:** no aprobado en Apps Script real.
+
+| Prueba | Metodo | Resultado | Estado |
+|---|---|---|---|
+| `doGet` real | GET Web App | `status:"ok"` | OK |
+| POST sin `task_id` | POST no destructivo | `ok:false`, `error:"Falta task_id"` | OK |
+| POST `TASK-DUMMY-QA` | POST real autorizado | `ok:false`, error `La hoja "timeline" no tiene columna task_id / id_tarea` | Fallo |
+| Header visual `ID Tarea` | Inferido por POST dummy | No reconocido por el Apps Script real activo | Fallo |
+| Escritura real | Resultado del POST dummy | Sin escritura exitosa evidenciada | OK |
+
+Pendiente:
+
+- Subir/deployar `Gantt.gs` actualizado con alias `ID Tarea`.
+- Repetir smoke real con `TASK-DUMMY-QA`.

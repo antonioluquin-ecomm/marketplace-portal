@@ -446,3 +446,30 @@ Validacion real segura:
 - No eliminar fisicamente tareas.
 - Usar baja logica mediante `visible_gantt = No` o `estado = Cancelado`.
 - Preservar historial, dependencias, auditoria y trazabilidad de timeline.
+
+## Revalidacion real 31C-fix
+
+Fecha: 2026-05-20
+
+Objetivo: confirmar en Apps Script real que el alias visual `ID Tarea` ya es reconocido por `gantt_task_update`.
+
+Resultado general: no aprobado. El Web App real esta operativo, pero el POST con `TASK-DUMMY-QA` sigue fallando con el mismo error de columna. Esto indica que el fix local de alias aun no esta incorporado/deployado en el proyecto Apps Script real, o que el despliegue activo sigue apuntando a una version anterior.
+
+| Validacion real | Resultado | Estado |
+|---|---|---|
+| `doGet` real | `{"status":"ok","message":"Apps Script activo - Marketplace Sporting","hojas":["sellers","calificaciones","relevamientos","definicion_tecnica"]}` | OK |
+| POST `gantt_task_update` sin `task_id` | `{"ok":false,"status":"error","error":"Falta task_id","message":"Error: Falta task_id"}` | OK |
+| POST `TASK-DUMMY-QA` | `{"ok":false,"status":"error","error":"La hoja \"timeline\" no tiene columna task_id / id_tarea","message":"Error: La hoja \"timeline\" no tiene columna task_id / id_tarea"}` | Fallo |
+
+Conclusion:
+
+- `doPost` / `doGet` siguen activos.
+- `gantt_task_update` responde con formato estable.
+- La hoja `timeline` con header visual `ID Tarea` no fue reconocida por el Apps Script real durante esta revalidacion.
+- No hay evidencia de escritura exitosa sobre Google Sheets en esta prueba.
+
+Pendiente:
+
+- Subir/incorporar el `Gantt.gs` actualizado con `GANTT_TASK_ID_HEADER_ALIASES` al proyecto Apps Script real.
+- Redeployar o actualizar la version activa del Web App si corresponde.
+- Repetir POST con `TASK-DUMMY-QA`.

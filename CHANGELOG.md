@@ -28,6 +28,13 @@ Validaciones:
 - POST real no destructivo sin `task_id` OK.
 - POST real con `TASK-DUMMY-QA` queda pendiente hasta subir el fix al Apps Script real.
 
+Revalidacion real:
+- `doGet` real OK.
+- POST real sin `task_id` OK con `error:"Falta task_id"`.
+- POST real autorizado con `TASK-DUMMY-QA` fallo con `La hoja "timeline" no tiene columna task_id / id_tarea`.
+- Conclusion: el fix local de alias `ID Tarea` aun no esta activo en el proyecto Apps Script real, o el Web App sigue usando una version anterior.
+- No hubo escritura exitosa evidenciada.
+
 Nota futura:
 - 31C2 podria abordar alta/desactivacion de tareas Gantt desde front.
 - No se recomienda borrar tareas fisicamente; preferir baja logica con `visible_gantt = No` o `estado = Cancelado`.
