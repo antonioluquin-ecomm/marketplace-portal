@@ -26,10 +26,11 @@ Validaciones:
 - No se ejecuto escritura real.
 
 Validacion real post 31C:
-- `doGet` real del Web App falla con `ReferenceError: jsonResponse is not defined`.
-- POST real no destructivo `gantt_task_update` sin `task_id` falla con `ReferenceError: errorResponse is not defined`.
-- No se ejecuto POST con `TASK-DUMMY-QA` para evitar escritura real.
-- Conclusion: el proyecto Apps Script remoto no tiene incorporados/deployados los helpers modularizados requeridos; 31D queda bloqueada hasta subir `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs` y revalidar.
+- `doGet` real del Web App respondio `status:"ok"` con hojas esperadas.
+- POST real no destructivo `gantt_task_update` sin `task_id` respondio `ok:false` con `error:"Falta task_id"`.
+- Esto confirma que `Gantt.gs` y helpers modularizados estan integrados en el proyecto real.
+- POST controlado con `TASK-DUMMY-QA` no escribio: fallo antes por `La hoja "timeline" no tiene columna task_id / id_tarea`.
+- 31D queda pendiente hasta revisar/confirmar el header real de `timeline`.
 
 ## 2026-05-19 - Etapa 31B modularizacion minima Apps Script
 

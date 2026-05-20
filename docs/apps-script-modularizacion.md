@@ -362,22 +362,23 @@ Fecha: 2026-05-20
 
 Objetivo: validar que `Gantt.gs` quedo integrado al proyecto real antes de avanzar a 31D.
 
-Resultado general: bloqueado. La validacion real del Web App indica que el proyecto remoto no tiene incorporados todos los archivos modularizados requeridos por la fachada actual.
+Resultado general: integracion Apps Script OK, escritura dummy bloqueada por header real de la hoja `timeline`.
 
 Resultados reales:
 
 | Validacion | Resultado | Estado |
 |---|---|---|
-| `doGet` real Web App | Falla con `ReferenceError: jsonResponse is not defined (linea 92, archivo "Codigo")` | Fallo |
-| POST real no destructivo `gantt_task_update` sin `task_id` | Falla con `ReferenceError: errorResponse is not defined (linea 87, archivo "Codigo")` | Fallo |
-| Confirmacion de `Gantt.gs` remoto | No concluyente: el POST no alcanza a validar Gantt porque falta `errorResponse` remoto | Bloqueado |
-| POST real con `TASK-DUMMY-QA` | No ejecutado para evitar escritura real y porque el Web App ya falla antes | No ejecutado |
+| `doGet` real Web App | `{"status":"ok","message":"Apps Script activo - Marketplace Sporting","hojas":["sellers","calificaciones","relevamientos","definicion_tecnica"]}` | OK |
+| POST real no destructivo `gantt_task_update` sin `task_id` | `{"ok":false,"status":"error","error":"Falta task_id","message":"Error: Falta task_id"}` | OK |
+| Confirmacion de `Gantt.gs` remoto | El endpoint reconoce `gantt_task_update` y ejecuta validacion Gantt especifica | OK |
+| POST real con `TASK-DUMMY-QA` | `{"ok":false,"status":"error","error":"La hoja \"timeline\" no tiene columna task_id / id_tarea","message":"Error: La hoja \"timeline\" no tiene columna task_id / id_tarea"}` | Bloqueado por header |
 
 Interpretacion tecnica:
 
-- La fachada remota actual esta llamando helpers movidos en 31B (`jsonResponse`, `errorResponse`), pero el proyecto Apps Script real no los encuentra.
-- Esto sugiere que `Headers.gs` no fue incorporado/subido al proyecto real, o que el deploy activo no incluye los archivos modularizados.
-- Antes de validar `Gantt.gs`, hay que corregir la incorporacion remota de `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs` en Apps Script.
+- `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs` ya estan disponibles para el Web App real.
+- `doPost` y `doGet` siguen funcionando como fachada estable.
+- El error de `TASK-DUMMY-QA` ocurre dentro de la logica Gantt, antes de cualquier escritura de celda, por no detectar columna `task_id` / `id_tarea` en la hoja real `timeline`.
+- No hubo escritura real exitosa sobre Google Sheets durante esta validacion.
 
 Validacion local de control:
 
@@ -386,11 +387,9 @@ Validacion local de control:
 | `node --check Apps_script_v5.js` | Sin errores | OK |
 | Carga conjunta local | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` cargan con `vm` | OK |
 | Duplicados | 84 simbolos en 5 archivos, 0 duplicados | OK |
-| Smoke mockeado `gantt_task_update` | OK | OK |
-| Smoke mockeado error `task_id` faltante | Formato estable | OK |
+| `git diff --check` | Sin errores | OK |
 
 Decision:
 
-- No avanzar a 31D.
-- No ejecutar escrituras reales.
-- Primero incorporar/subir los `.gs` modularizados al proyecto real Apps Script y redeployar/validar `doGet`.
+- No avanzar a 31D hasta revisar/confirmar el header real de `timeline`.
+- Mantener sin cambios la logica funcional; si se corrige algo, debe ser una etapa explicita sobre compatibilidad de headers Gantt o sobre la hoja QA.

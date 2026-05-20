@@ -1253,21 +1253,21 @@ Funciones no movidas:
 
 ### Etapa 31C-post: validacion real post modularizacion Gantt
 
-**Estado:** bloqueada en Web App real.
+**Estado:** Apps Script integrado; escritura dummy bloqueada por header real en `timeline`.
 
 | Prueba | Metodo | Resultado | Estado |
 |---|---|---|---|
-| `doGet` real | GET no destructivo al Web App | `ReferenceError: jsonResponse is not defined` | Fallo |
-| POST real no destructivo sin `task_id` | `tipo_formulario=gantt_task_update` sin `task_id` | `ReferenceError: errorResponse is not defined` | Fallo |
-| `TASK-DUMMY-QA` real | No ejecutado | Evitado por riesgo de escritura y Web App ya fallando | No ejecutado |
+| `doGet` real | GET no destructivo al Web App | `status:"ok"` y hojas esperadas | OK |
+| POST real no destructivo sin `task_id` | `tipo_formulario=gantt_task_update` sin `task_id` | `ok:false`, `error:"Falta task_id"` | OK |
+| Integracion `Gantt.gs` | Validacion real del endpoint | Reconoce `gantt_task_update` y devuelve errores propios Gantt | OK |
+| `TASK-DUMMY-QA` real | POST controlado con campos permitidos | `ok:false`, error `La hoja "timeline" no tiene columna task_id / id_tarea` | Bloqueado |
+| Escritura real | Resultado del POST dummy | No hubo escritura exitosa | OK |
 | Sintaxis local fachada | `node --check Apps_script_v5.js` | Sin errores | OK |
 | Carga conjunta local | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` via `vm` | Sin errores | OK |
 | Duplicados locales | Revision de simbolos | 84 simbolos, 0 duplicados | OK |
-| Smoke mockeado Gantt OK | `TASK-DUMMY-QA` mockeado | `ok:true`, response estable | OK |
-| Smoke mockeado error | `task_id` faltante | `ok:false`, `status:error`, `error`, `message` estable | OK |
+| `git diff --check` | Validacion git | Sin errores | OK |
 
-Conclusion:
+Pendiente:
 
-- La implementacion local 31C sigue valida.
-- El proyecto Apps Script real no esta ejecutando con los helpers modularizados disponibles.
-- No avanzar a 31D hasta incorporar/subir `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs` al proyecto real y confirmar `doGet` OK.
+- Confirmar/corregir header real de `timeline` para que el endpoint detecte `task_id` / `id_tarea`.
+- No avanzar a 31D hasta resolver esa compatibilidad o definir una etapa QA especifica.
