@@ -393,3 +393,56 @@ Decision:
 
 - No avanzar a 31D hasta revisar/confirmar el header real de `timeline`.
 - Mantener sin cambios la logica funcional; si se corrige algo, debe ser una etapa explicita sobre compatibilidad de headers Gantt o sobre la hoja QA.
+
+## Estado 31C-fix - Alias `ID Tarea` en Gantt
+
+Fecha: 2026-05-20
+
+Objetivo: permitir que el endpoint `gantt_task_update` identifique tareas cuando la hoja `timeline` usa el header visual `ID Tarea`, sin renombrar columnas en Google Sheets y sin cambiar payloads ni responses.
+
+Cambio aplicado en `Gantt.gs`:
+
+- Agregado `GANTT_TASK_ID_HEADER_ALIASES`.
+- Alias aceptados para resolver la columna identificadora:
+  - `task_id`
+  - `id_tarea`
+  - `ID Tarea`
+  - `Id Tarea`
+  - `id tarea`
+- `normalizarHeaderGantt` mantiene la canonicalizacion hacia `id_tarea`.
+- `actualizarTareaGantt` y `registrarAuditoriaGanttSiExiste` usan la lista comun de alias.
+
+No cambio:
+
+- Payload externo: sigue usando `task_id`.
+- Response OK.
+- Response error.
+- `doPost` / `doGet`.
+- Logica de sellers, gestion, calificacion, relevamiento o definicion tecnica.
+- Google Sheets.
+
+Validacion local:
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta local | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | OK |
+| Duplicados | 85 simbolos en 5 archivos, 0 duplicados | OK |
+| Smoke header `ID Tarea` | `gantt_task_update` OK con `TASK-DUMMY-QA` mockeado | OK |
+| Error `task_id` faltante | `ok:false`, `error:"Falta task_id"` | OK |
+| `task_id` inexistente | Error controlado `task_id no existe` | OK |
+
+Validacion real segura:
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `doGet` real | `status:"ok"` | OK |
+| POST real sin `task_id` | `ok:false`, `error:"Falta task_id"` | OK |
+| POST real con `TASK-DUMMY-QA` | Pendiente hasta subir este fix al proyecto Apps Script real | Pendiente |
+
+31C2 futura sugerida:
+
+- Disenar creacion/desactivacion de tareas Gantt desde el front en una etapa separada.
+- No eliminar fisicamente tareas.
+- Usar baja logica mediante `visible_gantt = No` o `estado = Cancelado`.
+- Preservar historial, dependencias, auditoria y trazabilidad de timeline.

@@ -20,6 +20,14 @@ const ESTADOS_GANTT_PERMITIDOS = {
   cancelado: "Cancelado",
 };
 
+const GANTT_TASK_ID_HEADER_ALIASES = [
+  "task_id",
+  "id_tarea",
+  "ID Tarea",
+  "Id Tarea",
+  "id tarea",
+];
+
 function actualizarTareaGantt(d) {
   const taskId = limpiarValor(d.task_id || d.id_tarea);
   if (!taskId) throw new Error("Falta task_id");
@@ -50,7 +58,7 @@ function actualizarTareaGantt(d) {
   if (!headers.length) throw new Error('La hoja "timeline" no tiene headers');
 
   const headerMap = construirMapaHeadersNormalizados(headers);
-  const taskCol = resolverIndiceHeader(headerMap, ["task_id", "id_tarea"]);
+  const taskCol = resolverIndiceHeader(headerMap, GANTT_TASK_ID_HEADER_ALIASES);
   if (taskCol === -1) {
     throw new Error('La hoja "timeline" no tiene columna task_id / id_tarea');
   }
@@ -112,9 +120,11 @@ function construirMapaHeadersNormalizados(headers) {
 }
 
 function normalizarHeaderGantt(valor) {
-  return normalizarTexto(valor)
+  const header = normalizarTexto(valor)
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_+|_+$/g, "");
+  if (["id_tarea", "id_de_tarea"].includes(header)) return "id_tarea";
+  return header;
 }
 
 function resolverIndiceHeader(headerMap, alias) {
@@ -227,7 +237,7 @@ function registrarAuditoriaGanttSiExiste(ss, taskId, updatedBy, before, after) {
 
   const headerMap = construirMapaHeadersNormalizados(headers);
   if (
-    resolverIndiceHeader(headerMap, ["task_id", "id_tarea"]) === -1 ||
+    resolverIndiceHeader(headerMap, GANTT_TASK_ID_HEADER_ALIASES) === -1 ||
     resolverIndiceHeader(headerMap, ["updated_at", "fecha", "fecha_actualizacion"]) === -1
   ) {
     return;

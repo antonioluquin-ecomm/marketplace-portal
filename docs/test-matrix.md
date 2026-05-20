@@ -1271,3 +1271,27 @@ Pendiente:
 
 - Confirmar/corregir header real de `timeline` para que el endpoint detecte `task_id` / `id_tarea`.
 - No avanzar a 31D hasta resolver esa compatibilidad o definir una etapa QA especifica.
+
+### Etapa 31C-fix: alias `ID Tarea` en endpoint Gantt
+
+**Estado:** implementado localmente; pendiente deploy/revalidacion real con `TASK-DUMMY-QA`.
+
+| Prueba | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Alias header `ID Tarea` | Smoke mockeado con hoja `timeline` | `gantt_task_update` OK | OK |
+| Error `task_id` faltante | Smoke mockeado | `ok:false`, `error:"Falta task_id"` | OK |
+| `task_id` inexistente | Smoke mockeado | Error controlado `task_id no existe` | OK |
+| Payload externo | Revision estatica | Sigue usando `task_id` | OK |
+| Response | Smoke mockeado | Formato estable | OK |
+| `doGet` real | GET no destructivo | `status:"ok"` | OK |
+| POST real sin `task_id` | POST no destructivo | `ok:false`, `error:"Falta task_id"` | OK |
+| POST real `TASK-DUMMY-QA` | No ejecutado tras fix local | Pendiente hasta subir `Gantt.gs` actualizado al Apps Script real | Pendiente |
+| `node --check` | `Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | Sin errores | OK |
+| Duplicados | Revision de simbolos | 85 simbolos, 0 duplicados | OK |
+
+31C2 sugerida:
+
+- Disenar alta/baja logica de tareas Gantt desde front en etapa separada.
+- No eliminar filas fisicamente.
+- Usar `visible_gantt = No` o `estado = Cancelado`.

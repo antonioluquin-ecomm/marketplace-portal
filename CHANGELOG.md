@@ -4,6 +4,34 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C-fix alias ID Tarea Gantt
+
+Tipo de cambio: fix tecnico acotado.
+
+Estado: implementado localmente; pendiente deploy/revalidacion real con `TASK-DUMMY-QA`.
+
+Resultado:
+- `Gantt.gs` ahora reconoce `ID Tarea`, `Id Tarea` e `id tarea` como alias validos de `task_id` / `id_tarea`.
+- El payload externo sigue usando `task_id`.
+- Responses OK/error se mantienen identicas.
+- No se renombra la columna en Google Sheets.
+- No se tocaron `Apps_script_v5.js`, `doPost`, `doGet`, sellers, gestion_seller, calificacion, relevamiento, definicion tecnica, front, endpoints ni payloads.
+
+Validaciones:
+- `node --check Apps_script_v5.js` OK.
+- Carga conjunta local de `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs` y `Apps_script_v5.js` OK.
+- Revision de simbolos: 85 simbolos, sin duplicados.
+- Smoke mockeado con header `ID Tarea`: OK.
+- Error por `task_id` faltante: OK.
+- Error por `task_id` inexistente: OK.
+- `doGet` real OK.
+- POST real no destructivo sin `task_id` OK.
+- POST real con `TASK-DUMMY-QA` queda pendiente hasta subir el fix al Apps Script real.
+
+Nota futura:
+- 31C2 podria abordar alta/desactivacion de tareas Gantt desde front.
+- No se recomienda borrar tareas fisicamente; preferir baja logica con `visible_gantt = No` o `estado = Cancelado`.
+
 ## 2026-05-20 - Etapa 31C modularizacion controlada Gantt Apps Script
 
 Tipo de cambio: refactor tecnico acotado.

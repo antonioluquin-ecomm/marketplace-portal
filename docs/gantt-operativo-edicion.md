@@ -442,3 +442,27 @@ Pendiente de QA manual:
 - Validar error con fecha invalida.
 - Confirmar que el CSV publicado refleja el cambio despues de la latencia normal de Google Sheets.
 - Confirmar sin errores JS en navegador real.
+
+## Estado 31C-fix
+
+El endpoint Gantt mantiene el payload externo con `task_id`, pero ahora resuelve la columna identificadora de la hoja `timeline` con alias de header:
+
+- `task_id`
+- `id_tarea`
+- `ID Tarea`
+- `Id Tarea`
+- `id tarea`
+
+No se renombra la columna visible en Google Sheets y no cambian responses ni campos del front.
+
+Validacion local:
+
+- Smoke mockeado con header `ID Tarea`: OK.
+- Error por `task_id` faltante: OK.
+- Error por `task_id` inexistente: OK.
+
+Etapa futura sugerida 31C2:
+
+- Evaluar creacion/desactivacion de tareas Gantt desde el front.
+- No borrar tareas fisicamente.
+- Preferir baja logica con `visible_gantt = No` o `estado = Cancelado` para preservar historial y dependencias.
