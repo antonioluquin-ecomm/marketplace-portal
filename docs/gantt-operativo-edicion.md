@@ -965,3 +965,104 @@ Baja:
 ### Decision
 
 31C2C queda aprobada. El bloque Apps Script QA de alta/baja queda validado para avanzar a una etapa futura de front, manteniendo la restriccion de no operar sobre tareas productivas sin autorizacion.
+
+## Estado 31C2D - UI controlada para crear tareas Gantt
+
+Estado: implementado localmente. No se ejecuto POST real desde el front.
+
+Archivo funcional modificado:
+
+- `internal/gantt/gantt-operativo.html`
+
+### Cambios aplicados
+
+- Boton visible `+ Nueva tarea` en la toolbar del Gantt Operativo.
+- Modal de creacion separado del modal de edicion existente.
+- Selector de `seller_id` poblado con los sellers ya cargados.
+- Si hay filtro activo por seller, el modal preselecciona ese seller.
+- Campos del modal:
+  - `seller_id`
+  - `fase`
+  - `hito`
+  - `tarea`
+  - `responsable`
+  - `inicio_plan`
+  - `fin_plan`
+  - `estado`
+  - `comentario`
+- `estado` default: `Pendiente`.
+- `comentario` opcional.
+- `visible_gantt` no se muestra ni se envia porque no fue confirmado en el CSV real.
+- `task_id` no se genera ni se envia desde el front.
+
+### Payload generado
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "front@gantt-operativo",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "QA",
+    "tarea": "Nueva tarea desde UI",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "comentario": "Comentario opcional"
+  }
+}
+```
+
+### Validaciones front implementadas
+
+- `seller_id` obligatorio.
+- `fase` obligatoria.
+- `hito` obligatorio.
+- `tarea` obligatoria.
+- `responsable` obligatorio.
+- `inicio_plan` obligatorio.
+- `fin_plan` obligatorio.
+- Fechas en formato valido.
+- `fin_plan` no puede ser anterior a `inicio_plan`.
+- Estado debe estar dentro de:
+  - `Pendiente`
+  - `En curso`
+  - `Bloqueado`
+  - `Completado`
+  - `Cancelado`
+- Confirmacion obligatoria antes del POST.
+
+### Flujo esperado
+
+1. Usuario abre `+ Nueva tarea`.
+2. Completa campos minimos.
+3. Confirma el alta.
+4. Front envia POST a Apps Script.
+5. Si `ok:false`, muestra error en el modal.
+6. Si `ok:true`, muestra feedback y ejecuta `loadData(true)`.
+7. La nueva tarea aparece cuando el CSV publicado refleja Google Sheets.
+
+### Validaciones realizadas
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| Boton `+ Nueva tarea` presente | Revision estatica | OK |
+| Modal abre/cierra | Funciones `openCreateTask` / `closeCreateModal` agregadas | OK |
+| Payload sin `task_id` | Revision estatica del payload | OK |
+| `visible_gantt` fuera de UI/payload | Revision estatica | OK |
+| Validaciones front | Funciones agregadas | OK |
+| Recarga posterior | `loadData(true)` tras OK | OK |
+| Edicion existente | No se cambio contrato `gantt_task_update` | OK |
+| POST real | No ejecutado | OK |
+
+Limitacion tecnica:
+
+- El Node local no pudo parsear el script completo por optional chaining preexistente en el archivo; se uso revision estatica/diff en esta etapa.
+
+Riesgo residual:
+
+- Debe ejecutarse smoke manual en navegador antes de habilitar uso operativo.
+- No crear tareas productivas desde UI hasta definir permisos y confirmacion de uso.
+- El CSV puede tardar en reflejar el alta despues del OK de Apps Script.

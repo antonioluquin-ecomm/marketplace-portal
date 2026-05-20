@@ -4,6 +4,42 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2D UI crear tarea Gantt
+
+Tipo de cambio: UI operativa controlada.
+
+Estado: implementado localmente; POST real no ejecutado.
+
+Resultado:
+- Agregado boton `+ Nueva tarea` en la toolbar de `internal/gantt/gantt-operativo.html`.
+- Agregado modal de creacion con campos minimos:
+  - `seller_id`
+  - `fase`
+  - `hito`
+  - `tarea`
+  - `responsable`
+  - `inicio_plan`
+  - `fin_plan`
+  - `estado`
+  - `comentario`
+- El front no muestra ni envia `visible_gantt`.
+- El front no genera ni envia `task_id`.
+- El payload usa `tipo_formulario = "gantt_task_create"` y `created_by = "front@gantt-operativo"`.
+- Se agregaron validaciones front para campos obligatorios, estado permitido, fechas validas y rango planificado.
+- Se requiere confirmacion antes de enviar.
+- Tras respuesta OK se muestra feedback y se recarga el CSV con `loadData(true)`.
+- La edicion existente queda separada y sin cambios de contrato.
+
+Validaciones:
+- `git diff --check` sobre el archivo Gantt: OK.
+- Revision estatica del diff: OK.
+- POST real no ejecutado.
+- Syntax check completo con Node local no aplico porque el archivo ya contiene optional chaining no soportado por el Node disponible.
+
+Alcance:
+- Solo se modifico `internal/gantt/gantt-operativo.html` y documentacion.
+- No se tocaron Apps Script, `Gantt.gs`, `Apps_script_v5.js`, Google Sheets, config, front publico, formularios, simuladores ni endpoints existentes.
+
 ## 2026-05-20 - Etapa 31C2C smoke real alta/baja Gantt
 
 Tipo de cambio: validacion real controlada y documentacion.

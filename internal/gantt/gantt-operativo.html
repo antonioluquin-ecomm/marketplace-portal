@@ -711,6 +711,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <span class="ri" id="ri-info">—</span>
     </div>
     <div class="tl-r">
+      <button class="btn-sm primary" type="button" onclick="openCreateTask()">+ Nueva tarea</button>
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>
@@ -788,6 +789,81 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         <div class="edit-actions">
           <button type="button" class="btn-sm" onclick="closeEditModal()">Cancelar</button>
           <button type="submit" class="btn-sm primary" id="edit-submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="create-ov" onclick="closeCreateModal(event)">
+  <div class="modal edit-modal">
+    <div class="modal-hd">
+      <div><div class="mhd-task">Nueva tarea</div><div class="mhd-sub">Alta controlada en Gantt Operativo</div></div>
+      <button class="modal-close" onclick="closeCreateModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form class="edit-form" id="create-form" onsubmit="saveGanttTaskCreate(event)">
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="create-seller-id">Seller ID</label>
+            <select class="edit-select" id="create-seller-id" name="seller_id">
+              <option value="">Seleccionar seller</option>
+            </select>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="create-estado">Estado</label>
+            <select class="edit-select" id="create-estado" name="estado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En curso">En curso</option>
+              <option value="Bloqueado">Bloqueado</option>
+              <option value="Completado">Completado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="create-fase">Fase</label>
+            <input class="edit-input" id="create-fase" name="fase" maxlength="120" autocomplete="off">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="create-hito">Hito</label>
+            <input class="edit-input" id="create-hito" name="hito" maxlength="160" autocomplete="off">
+          </div>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="create-tarea">Tarea</label>
+          <input class="edit-input" id="create-tarea" name="tarea" maxlength="220" autocomplete="off">
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="create-responsable">Responsable</label>
+            <input class="edit-input" id="create-responsable" name="responsable" maxlength="120" autocomplete="off">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="create-inicio-plan">Inicio plan</label>
+            <input class="edit-input" id="create-inicio-plan" name="inicio_plan" type="date">
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="create-fin-plan">Fin plan</label>
+            <input class="edit-input" id="create-fin-plan" name="fin_plan" type="date">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label">Task ID</label>
+            <div class="edit-readonly">Lo genera Apps Script</div>
+          </div>
+        </div>
+        <div class="edit-field">
+          <label class="edit-label" for="create-comentario">Comentario</label>
+          <textarea class="edit-textarea" id="create-comentario" name="comentario" maxlength="1000"></textarea>
+        </div>
+        <div class="edit-help">No se envia task_id desde el front. Apps Script genera el ID definitivo. visible_gantt queda fuera de la UI hasta confirmar la columna real.</div>
+        <div class="edit-status" id="create-status"></div>
+        <div class="edit-actions">
+          <button type="button" class="btn-sm" onclick="closeCreateModal()">Cancelar</button>
+          <button type="submit" class="btn-sm primary" id="create-submit">Crear tarea</button>
         </div>
       </form>
     </div>
@@ -1000,6 +1076,22 @@ function populateSellers() {
   sel.value=ids.includes(current)?current:'todos';
   filters.seller=sel.value;
   updateSellerHint();
+  populateCreateSellerOptions(ids);
+}
+function populateCreateSellerOptions(ids){
+  const sel=$('create-seller-id');
+  if(!sel) return;
+  const current=sel.value;
+  while(sel.options.length>1) sel.remove(1);
+  (ids||[]).forEach(id=>{
+    const seller=SELLERS[id]||{};
+    const name=seller.nombre||TASKS.find(t=>t.seller_id===id)?.seller_nombre||id;
+    const o=document.createElement('option');
+    o.value=id;
+    o.textContent=name&&name!==id?`${name} · ${id}`:id;
+    sel.appendChild(o);
+  });
+  sel.value=(ids||[]).includes(current)?current:'';
 }
 
 /* ── RESPONSABLES únicos → poblar select ── */
@@ -1597,6 +1689,108 @@ async function saveGanttTaskEdit(ev){
   }
 }
 
+function showCreateStatus(type,msg){
+  const el=$('create-status');
+  if(!el) return;
+  el.className=`edit-status visible ${type}`;
+  el.textContent=msg;
+}
+function clearCreateStatus(){
+  const el=$('create-status');
+  if(!el) return;
+  el.className='edit-status';
+  el.textContent='';
+}
+function setCreateSaving(saving){
+  const btn=$('create-submit');
+  if(!btn) return;
+  btn.disabled=saving;
+  btn.textContent=saving?'Creando...':'Crear tarea';
+}
+function openCreateTask(){
+  const form=$('create-form');
+  if(form) form.reset();
+  clearCreateStatus();
+  $('create-estado').value='Pendiente';
+  const selectedSeller=filters.seller&&filters.seller!=='todos'?filters.seller:'';
+  if(selectedSeller&&$('create-seller-id')){
+    $('create-seller-id').value=selectedSeller;
+  }
+  $('create-ov').classList.add('open');
+}
+function closeCreateModal(e){
+  if(!e||e.target===$('create-ov')){
+    $('create-ov').classList.remove('open');
+    setCreateSaving(false);
+  }
+}
+function readCreateFields(){
+  return {
+    seller_id: ($('create-seller-id').value||'').trim(),
+    fase: ($('create-fase').value||'').trim(),
+    hito: ($('create-hito').value||'').trim(),
+    tarea: ($('create-tarea').value||'').trim(),
+    responsable: ($('create-responsable').value||'').trim(),
+    inicio_plan: $('create-inicio-plan').value||'',
+    fin_plan: $('create-fin-plan').value||'',
+    estado: $('create-estado').value||'Pendiente',
+    comentario: ($('create-comentario').value||'').trim(),
+  };
+}
+function validateTaskCreateFields(task){
+  if(!task.seller_id) return 'Seleccioná un seller_id.';
+  if(!task.fase) return 'La fase es obligatoria.';
+  if(!task.hito) return 'El hito es obligatorio.';
+  if(!task.tarea) return 'La tarea es obligatoria.';
+  if(!task.responsable) return 'El responsable es obligatorio.';
+  if(!task.inicio_plan) return 'Inicio plan es obligatorio.';
+  if(!task.fin_plan) return 'Fin plan es obligatorio.';
+  if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(task.estado)) return 'Estado no permitido.';
+  if(!isValidEditDate(task.inicio_plan)) return 'Inicio plan debe usar formato YYYY-MM-DD.';
+  if(!isValidEditDate(task.fin_plan)) return 'Fin plan debe usar formato YYYY-MM-DD.';
+  if(new Date(task.fin_plan+'T00:00:00')<new Date(task.inicio_plan+'T00:00:00')) return 'Fin plan no puede ser anterior a inicio plan.';
+  if(task.comentario.length>1000) return 'Comentario supera 1000 caracteres.';
+  return '';
+}
+async function saveGanttTaskCreate(ev){
+  ev.preventDefault();
+  const task=readCreateFields();
+  const validation=validateTaskCreateFields(task);
+  if(validation){ showCreateStatus('err',validation); return; }
+  const ok=window.confirm(`Confirmar alta de nueva tarea para ${task.seller_id}. Apps Script generará el task_id definitivo.`);
+  if(!ok) return;
+
+  const payload={
+    tipo_formulario:'gantt_task_create',
+    created_by:'front@gantt-operativo',
+    task,
+  };
+
+  setCreateSaving(true);
+  clearCreateStatus();
+  try{
+    const res=await fetch(CONFIG.APPS_SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload),
+    });
+    const txt=await res.text();
+    let json={};
+    try{ json=txt?JSON.parse(txt):{}; }catch(parseErr){ throw new Error('Respuesta no JSON del endpoint.'); }
+    if(!res.ok||json.ok===false||json.status==='error'){
+      throw new Error(json.error||json.message||('HTTP '+res.status));
+    }
+    showCreateStatus('ok',`Tarea creada (${json.task_id||'ID generado'}). Recargando datos desde CSV...`);
+    await loadData(true);
+    showCreateStatus('ok',`Tarea creada (${json.task_id||'ID generado'}). Validá la aparición luego de la latencia normal del CSV.`);
+  }catch(err){
+    console.error(err);
+    showCreateStatus('err',err.message||'No se pudo crear la tarea.');
+  }finally{
+    setCreateSaving(false);
+  }
+}
+
 /* ── MODAL ── */
 function openModal(taskId){
   const t=TASKS.find(x=>x.task_id===taskId);
@@ -1634,7 +1828,7 @@ function closeModal(e){
   if(!e||e.target===$('modal-ov')) $('modal-ov').classList.remove('open');
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('edit-ov')&&$('edit-ov').classList.contains('open')) closeEditModal(); else closeModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('create-ov')&&$('create-ov').classList.contains('open')) closeCreateModal(); else if($('edit-ov')&&$('edit-ov').classList.contains('open')) closeEditModal(); else closeModal();}});
 
 /* ── INIT ── */
 loadData(false);

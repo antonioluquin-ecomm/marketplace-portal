@@ -1496,3 +1496,58 @@ Decision:
 
 - 31C2C queda aprobada.
 - Se puede planificar una etapa futura de front controlado, manteniendo uso exclusivo de dummy hasta nueva autorizacion.
+
+### Etapa 31C2D: UI controlada crear tarea Gantt
+
+**Estado:** implementado localmente; POST real no ejecutado.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Abrir Gantt Operativo | Pendiente smoke navegador | Sin errores JS nuevos | Pendiente |
+| Boton `+ Nueva tarea` | Revision estatica | Presente en toolbar | OK |
+| Modal abre/cierra | Revision estatica | `openCreateTask` / `closeCreateModal` | OK |
+| Campos minimos | Revision estatica | `seller_id`, `fase`, `hito`, `tarea`, `responsable`, `inicio_plan`, `fin_plan`, `estado`, `comentario` | OK |
+| `visible_gantt` | Revision estatica | No se muestra ni se envia | OK |
+| `task_id` | Revision estatica | No se genera ni se envia desde front | OK |
+| Validaciones front | Revision estatica | Campos obligatorios, fechas, rango, estado | OK |
+| Confirmacion | Revision estatica | `window.confirm` antes del POST | OK |
+| Payload | Revision estatica | `tipo_formulario:"gantt_task_create"`, `created_by:"front@gantt-operativo"`, `task:{...}` | OK |
+| Error endpoint | Pendiente smoke manual/mock | Mostrar mensaje claro en modal | Pendiente |
+| OK endpoint | Pendiente smoke manual/mock | Feedback y `loadData(true)` | Pendiente |
+| Edicion existente | Pendiente smoke navegador | Modal editar sigue funcionando | Pendiente |
+| Filtros/timeline/detalle | Pendiente smoke navegador | Sin regresiones | Pendiente |
+| Escritura real | No ejecutada | Sin POST real desde Codex | OK |
+
+Payload esperado desde UI:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "front@gantt-operativo",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "QA",
+    "tarea": "Nueva tarea desde UI",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "comentario": "Comentario opcional"
+  }
+}
+```
+
+Smoke manual recomendado:
+
+- Abrir Gantt Operativo.
+- Confirmar boton `+ Nueva tarea`.
+- Abrir/cerrar modal.
+- Intentar guardar vacio y validar errores.
+- Completar payload dummy autorizado.
+- Confirmar que no aparece `task_id` editable.
+- Interceptar/revisar payload antes de autorizar POST real.
+- Ejecutar POST real solo con autorizacion.
+- Confirmar feedback OK/error.
+- Confirmar recarga CSV.
+- Confirmar que editar tarea sigue funcionando.
