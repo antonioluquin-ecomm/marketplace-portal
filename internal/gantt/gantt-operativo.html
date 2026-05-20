@@ -568,6 +568,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   <div class="tb-right">
     <div class="status-row"><div class="dot load" id="status-dot"></div><span id="status-txt">Cargando…</span></div>
     <div class="tb-date" id="last-update"></div>
+    <button class="btn-sm primary" type="button" onclick="openCreateTask()">+ Nueva tarea</button>
     <button class="btn-sm" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
     <a class="btn-sm" href="../hub-operativo.html" title="Volver al Hub Operativo">← Hub</a>
   </div>
@@ -715,7 +716,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <span class="ri" id="ri-info">—</span>
     </div>
     <div class="tl-r">
-      <button class="btn-sm primary" type="button" onclick="openCreateTask()">+ Nueva tarea</button>
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>

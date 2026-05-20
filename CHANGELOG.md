@@ -4,6 +4,25 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Fix visibilidad boton `+ Nueva tarea` Gantt
+
+Tipo de cambio: UI bugfix acotado.
+
+Estado: implementado localmente.
+
+Resultado:
+- Movido el boton `+ Nueva tarea` desde la toolbar interna del contenido hacia la topbar superior derecha.
+- El boton queda junto a `Actualizar` y `Hub`.
+- Se mantiene llamada existente a `openCreateTask()`.
+- Se elimina el boton anterior de la toolbar para evitar duplicados.
+- No se cambia logica de alta, payload, backend ni Apps Script.
+
+Validaciones:
+- El boton existe una sola vez en el HTML.
+- El boton llama a `openCreateTask()`.
+- La ubicacion no depende de vista Gantt/Lista, filtros, seller seleccionado ni render del contenido.
+- `git diff --check`: OK.
+
 ## 2026-05-20 - Etapa 31W actualizacion PROJECT_WORKFLOW y auditoria documental
 
 Tipo de cambio: metodologia / documentacion.
