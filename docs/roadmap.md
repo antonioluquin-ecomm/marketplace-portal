@@ -2132,3 +2132,54 @@ Resultado:
 Proximo paso recomendado:
 
 - Ejecutar 31B solo como extraccion pasiva de Config/Utils/Headers, con smoke Apps Script y POST dummy antes de deploy productivo.
+
+## Etapa 31C-HANDOFF: consolidacion post 31C2E
+
+Estado: completada.
+
+Resultado:
+
+- Consolidado el bloque 31B-31C2E para continuidad en nuevo chat.
+- V1 sigue estable.
+- No hubo refactor masivo ni ruptura detectada de endpoints existentes.
+- Arquitectura Apps Script actual:
+  - `Apps_script_v5.js`: fachada estable con `doPost`, `doGet` y routing principal.
+  - `Config.gs`: configuracion y constantes.
+  - `Headers.gs`: helpers de respuesta HTTP/JSON.
+  - `Utils.gs`: utilidades generales.
+  - `Gantt.gs`: dominio Gantt Operativo.
+- Funcionalidades Gantt aprobadas:
+  - `gantt_task_update`
+  - `gantt_task_create`
+  - `gantt_task_disable`
+- Compatibilidad confirmada:
+  - headers reales de `timeline` en fila 3.
+  - alias de ID de tarea: `ID Tarea`, `Id Tarea`, `id tarea`, `task_id`, `id_tarea`.
+  - payload externo conserva `task_id`.
+- Estado UI:
+  - edicion de tarea OK.
+  - alta de tarea OK.
+  - baja logica desde UI pendiente.
+- Smokes reales aprobados:
+  - backend Apps Script.
+  - CSV publicado de `timeline`.
+  - UI create con dummy `SPT-001-T-30`.
+- Riesgos residuales:
+  - permisos y roles pendientes.
+  - concurrencia y duplicados concurrentes pendientes de hardening.
+  - auditoria/logs avanzados pendientes.
+  - `visible_gantt` no debe usarse en UI hasta confirmar columna real o aprobar cambio estructural.
+  - baja logica desde front pendiente.
+
+Proximas etapas recomendadas:
+
+- 31C2F: hardening de permisos, concurrencia y logs.
+- UI baja logica de tareas Gantt.
+- Auditoria avanzada de operaciones Gantt.
+- Permisos por rol.
+- Prevencion reforzada de duplicados concurrentes.
+
+Recomendacion de continuidad:
+
+- Abrir nuevo chat por contexto alto.
+- Configuracion recomendada: Codex, Fast OFF, Inteligencia Alta.

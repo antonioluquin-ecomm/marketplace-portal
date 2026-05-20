@@ -4,6 +4,39 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C-HANDOFF consolidacion post 31C2E
+
+Tipo de cambio: documentacion / handoff.
+
+Estado: completado.
+
+Resultado:
+- Actualizado el handoff y roadmap para continuar el proyecto en un nuevo chat sin perdida de contexto.
+- Consolidado el estado del bloque 31B-31C2E.
+- Arquitectura Apps Script vigente documentada:
+  - `Apps_script_v5.js` como fachada estable.
+  - `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs`.
+- Funcionalidades Gantt aprobadas documentadas:
+  - `gantt_task_update`
+  - `gantt_task_create`
+  - `gantt_task_disable`
+- Compatibilidad documentada para headers reales de `timeline` en fila 3 y alias `ID Tarea`.
+- Estado UI documentado:
+  - edicion OK.
+  - alta OK.
+  - baja logica desde UI pendiente.
+- Smokes reales aprobados documentados:
+  - backend Apps Script.
+  - CSV publicado.
+  - UI create con dummy `SPT-001-T-30`.
+- Riesgos residuales y proximas etapas sugeridas documentadas.
+- Recomendacion explicita: abrir nuevo chat por contexto alto con Codex, Fast OFF e Inteligencia Alta.
+
+Alcance:
+- Solo documentacion.
+- No se tocaron Apps Script, backend, front, `internal/`, `public/`, `legacy/`, `config.js`, `assets/js/config.js`, Google Sheets ni endpoints.
+- V1 sigue estable; no hubo refactor masivo ni ruptura detectada de endpoints existentes.
+
 ## 2026-05-20 - Etapa 31C2E smoke UI alta Gantt
 
 Tipo de cambio: validacion UI/backend controlada y documentacion.
