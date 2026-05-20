@@ -1732,3 +1732,30 @@ Nota:
 
 - Este cierre solo documenta el bloque UX ya validado.
 - No se ejecutaron POST reales ni submits reales en esta etapa documental.
+
+### Etapa 32B: diccionario de datos Timeline / Gantt Operativo
+
+**Estado:** documentado; sin cambios funcionales.
+
+Documento principal: `docs/data-dictionary-timeline.md`.
+
+| Validacion futura | Metodo | Resultado esperado | Estado |
+|---|---|---|---|
+| Lectura CSV `timeline` | Abrir Gantt / fetch CSV | Headers actuales siguen resolviendo por aliases | Futuro |
+| Render Gantt Mes | Smoke visual/manual | Timeline visible sin errores | Futuro |
+| Render Gantt Semana | Smoke visual/manual | Semanas visibles y orientacion temporal conservada | Futuro |
+| Boton `Hoy` | Smoke UI | Scroll horizontal manual al periodo actual | Futuro |
+| Create dummy | POST controlado con tarea QA | Crea fila unica sin columnas nuevas implicitas | Futuro |
+| Update dummy | POST controlado con tarea QA | Actualiza solo campos permitidos | Futuro |
+| Disable dummy | POST controlado con tarea QA | Cancela logicamente sin borrar fila | Futuro |
+| Campos obligatorios | Payload incompleto | Apps Script rechaza sin escribir | Futuro |
+| Enums validos | `fase` / `estado` permitidos | Operacion aceptada | Futuro |
+| Enums invalidos | `fase` / `estado` fuera de catalogo | Operacion rechazada | Futuro |
+| Dependencia valida | `dependencia` apunta a `task_id` existente | Operacion aceptada | Futuro |
+| Dependencia invalida | `dependencia` inexistente | Operacion rechazada | Futuro |
+| Compatibilidad headers | `ID Tarea`, `Inicio plan`, `Fin plan` | Front y Apps Script siguen resolviendo aliases | Futuro |
+
+Notas:
+
+- 32B no ejecuta smoke real, POST ni submit.
+- La matriz queda preparada para etapas 32C-32G.

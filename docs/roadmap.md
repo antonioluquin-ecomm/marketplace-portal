@@ -2216,3 +2216,29 @@ Resultado:
 - 31UX-D quedo validada manualmente como smoke visual OK.
 - 31UX-E compacto hero, toolbar, spacing y densidad operativa para mejorar el area visible del timeline/lista.
 - No hubo cambios funcionales, backend, Apps Script, endpoints, payloads ni Google Sheets en este cierre documental.
+
+## Bloque 32: optimizacion BD Timeline / Gantt Operativo
+
+Estado: iniciado en modo auditoria/documentacion.
+
+Objetivo:
+
+- Tratar `timeline` como base de datos liviana del Gantt Operativo.
+- Separar datos persistidos, datos calculados, catalogos, aliases y campos futuros.
+- Evitar cambios destructivos sobre CSV, Apps Script o frontend sin compatibilidad previa.
+
+Etapas propuestas:
+
+- 32A: auditoria critica de estructura actual de `timeline`.
+- 32B: diccionario de datos formal en `docs/data-dictionary-timeline.md`.
+- 32C: compatibilidad y aliases de columnas.
+- 32D: catalogos y normalizacion de fase, estado, responsable e hito.
+- 32E: validacion backend contra catalogos.
+- 32F: limpieza controlada de columnas derivadas.
+- 32G: smoke real con tarea dummy autorizada.
+
+Decision vigente:
+
+- No eliminar columnas ni cambiar headers sin etapa de migracion.
+- `Atraso (dias)` y `Semana` deben tender a calcularse, no persistirse como datos maestros.
+- `visible_gantt` queda pendiente de decision formal; la baja logica estandar sigue asociada a `Estado = Cancelado`.

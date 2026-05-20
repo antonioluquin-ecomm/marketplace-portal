@@ -4,6 +4,21 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 32B diccionario de datos Timeline / Gantt Operativo
+
+Tipo de cambio: documentacion / arquitectura de datos.
+
+Estado: completado sin implementacion funcional.
+
+Resultado:
+- Creado `docs/data-dictionary-timeline.md` como contrato documental de la hoja `timeline`.
+- Documentadas columnas actuales, aliases, decisiones preliminares, estructura canonica recomendada, catalogos sugeridos, reglas de edicion, riesgos y estrategia de migracion 32C-32G.
+- Registrada la auditoria 32A como base del diccionario: `timeline` ya opera como base de datos liviana del Gantt Operativo.
+
+Alcance:
+- Solo documentacion.
+- No se tocaron HTML, JS, Apps Script, endpoints, payloads, backend, config, assets, CSV ni Google Sheets.
+
 ## 2026-05-20 - Etapa 31UX-F cierre documental UX Gantt Operativo
 
 Tipo de cambio: documentacion.
