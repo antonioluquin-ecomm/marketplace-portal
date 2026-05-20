@@ -4,6 +4,24 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2 diseno alta/baja controlada tareas Gantt
+
+Tipo de cambio: documentacion tecnica.
+
+Estado: completado sin implementacion funcional.
+
+Resultado:
+- Documentado el diseno para futuras operaciones `gantt_task_create` y `gantt_task_disable`.
+- Se definieron campos minimos, validaciones, estrategia de `task_id` / `ID Tarea`, manejo de dependencias y baja logica.
+- Recomendacion principal: no borrar filas fisicamente; preferir `visible_gantt = No` para ocultar del Gantt y `estado = Cancelado` para comunicar cancelacion operativa. Si en el futuro existe `disabled_at`, usarlo como auditoria adicional, no como unico indicador.
+- Smoke futuro recomendado con tarea dummy `TASK-DUMMY-QA-CREATE` o prefijo QA equivalente.
+
+Alcance:
+- Solo se modifico documentacion.
+- No se implementaron endpoints nuevos.
+- No se modifico `gantt_task_update`.
+- No se tocaron `Gantt.gs`, `Apps_script_v5.js`, Google Sheets, front, endpoints, payloads actuales, `internal/`, `public/`, `legacy/`, `config.js` ni `assets/js/config.js`.
+
 ## 2026-05-20 - Etapa 31C-fix alias ID Tarea Gantt
 
 Tipo de cambio: fix tecnico acotado.

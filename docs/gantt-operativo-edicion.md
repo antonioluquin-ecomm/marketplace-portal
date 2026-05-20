@@ -466,3 +466,227 @@ Etapa futura sugerida 31C2:
 - Evaluar creacion/desactivacion de tareas Gantt desde el front.
 - No borrar tareas fisicamente.
 - Preferir baja logica con `visible_gantt = No` o `estado = Cancelado` para preservar historial y dependencias.
+
+## Etapa 31C2 - Diseno alta/baja controlada de tareas Gantt
+
+Estado: diseno tecnico. No se implemento codigo funcional, no se modifico Google Sheets y no se cambiaron endpoints actuales.
+
+### Diagnostico
+
+El Gantt Operativo ya tiene una primera escritura controlada mediante `gantt_task_update`, limitada a campos de bajo riesgo. Crear o dar de baja tareas es mas sensible porque cambia el universo de filas que alimenta timeline, metricas, dependencias, alertas y filtros. El riesgo principal no es agregar una fila, sino romper trazabilidad, duplicar IDs, dejar dependencias apuntando a tareas inexistentes o borrar historial operativo.
+
+La hoja `timeline` debe seguir siendo la fuente canonica. El front futuro no deberia inventar columnas ni confiar en `row_number` como identificador estable. Toda operacion debe resolver la fila por `task_id` / `ID Tarea` y responder con JSON consistente.
+
+### Alta de tarea propuesta
+
+Operacion futura:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "usuario@dominio.com",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Onboarding",
+    "hito": "Configuracion inicial",
+    "tarea": "Validar datos fiscales",
+    "responsable": "Operaciones",
+    "inicio_plan": "2026-05-20",
+    "fin_plan": "2026-05-27",
+    "dependencia": "",
+    "estado": "Pendiente",
+    "visible_gantt": "Si",
+    "comentario": "Alta controlada QA."
+  }
+}
+```
+
+Respuesta sugerida:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T-058",
+  "created_fields": ["seller_id", "fase", "hito", "tarea", "responsable", "inicio_plan", "fin_plan", "estado", "visible_gantt"],
+  "error": ""
+}
+```
+
+Campos minimos requeridos:
+
+- `seller_id`
+- `fase`
+- `hito`
+- `tarea`
+- `responsable`
+- `inicio_plan`
+- `fin_plan`
+- `estado`
+- `visible_gantt`
+
+Campos opcionales:
+
+- `dependencia`
+- `inicio_real`
+- `fin_real`
+- `comentario`
+- `created_by`
+
+Campos no aceptados desde el front:
+
+- columnas calculadas;
+- atrasos;
+- formulas;
+- `seller_nombre` derivado;
+- columnas internas de auditoria;
+- `row_number`.
+
+### Generacion y validacion de task_id
+
+Opcion recomendada para una primera version segura: el Apps Script genera `task_id` / `ID Tarea`.
+
+Regla sugerida:
+
+- usar prefijo `seller_id`;
+- detectar IDs existentes de ese seller;
+- generar proximo correlativo estable, por ejemplo `SPT-001-T-058`;
+- verificar unicidad global antes de escribir;
+- rechazar si el ID calculado ya existe por carrera concurrente.
+
+Alternativa controlada:
+
+- permitir `task_id` enviado solo si `created_by` o modo QA esta autorizado;
+- validar formato;
+- rechazar duplicados;
+- no usarlo para produccion general.
+
+No se recomienda generar IDs en el front. El front puede mostrar una vista previa, pero el backend debe decidir el ID final.
+
+### Dependencias
+
+La dependencia debe:
+
+- aceptar vacio;
+- aceptar solo `task_id` existente;
+- rechazar dependencias hacia tareas deshabilitadas salvo excepcion operativa;
+- rechazar autodependencia;
+- evitar ciclos simples antes de escribir.
+
+Validacion minima de ciclos:
+
+- si la nueva tarea depende de `A`, verificar que `A` no dependa directa o indirectamente de la nueva tarea;
+- en primera version, si no se implementa chequeo profundo de ciclos, limitar a dependencia unica y validar existencia.
+
+### Baja controlada propuesta
+
+Operacion futura:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "SPT-001-T-058",
+  "updated_by": "usuario@dominio.com",
+  "reason": "Tarea duplicada durante QA.",
+  "mode": "hide_and_cancel"
+}
+```
+
+Respuesta sugerida:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T-058",
+  "updated_fields": ["visible_gantt", "estado", "comentario"],
+  "error": ""
+}
+```
+
+Recomendacion:
+
+- no borrar filas fisicamente;
+- usar `visible_gantt = No` para quitar la tarea de la vista operativa cuando corresponda;
+- usar `estado = Cancelado` para comunicar que la tarea queda anulada;
+- si existe o se aprueba una columna futura `disabled_at`, completarla desde Apps Script;
+- si existe o se aprueba `disabled_by`, completarla con `updated_by`;
+- conservar comentario/motivo para auditoria.
+
+Decision recomendada por caso:
+
+| Caso | Accion recomendada | Motivo |
+|---|---|---|
+| Tarea duplicada o creada por error | `visible_gantt = No` + `estado = Cancelado` | Evita ruido visual y conserva historial. |
+| Tarea real cancelada por decision operativa | `estado = Cancelado`, evaluar mantener visible | Puede ser relevante para auditoria de proyecto. |
+| Tarea obsoleta que bloquea lectura | `visible_gantt = No` | Reduce ruido sin perder trazabilidad. |
+| Error de carga QA | `visible_gantt = No` + comentario QA | Permite smoke sin borrar evidencia. |
+
+### Riesgos de borrado fisico
+
+No se recomienda eliminar filas porque:
+
+- rompe dependencias existentes;
+- altera auditorias y trazabilidad;
+- puede afectar metricas historicas;
+- dificulta rollback;
+- puede desplazar formulas o rangos;
+- puede dejar referencias desde comentarios, logs o capturas;
+- complica investigar cambios concurrentes.
+
+### Validaciones necesarias
+
+Para `gantt_task_create`:
+
+- `tipo_formulario` valido;
+- `seller_id` obligatorio y existente;
+- campos minimos presentes;
+- fechas plan validas `YYYY-MM-DD`;
+- `fin_plan` no anterior a `inicio_plan`;
+- `estado` dentro de enum permitido;
+- `visible_gantt` normalizado a `Si` / `No`;
+- dependencia existente o vacia;
+- sin duplicidad de `task_id`;
+- no escribir columnas inexistentes;
+- no tocar formulas ni columnas calculadas;
+- registrar `created_at` / `created_by` si existen;
+- registrar auditoria si existe hoja compatible.
+
+Para `gantt_task_disable`:
+
+- `task_id` obligatorio;
+- tarea existente y no duplicada;
+- motivo obligatorio o recomendado con minimo de longitud;
+- no borrar fila;
+- actualizar solo campos permitidos;
+- validar que no queden tareas activas dependiendo de una tarea oculta sin advertencia;
+- registrar `updated_at` / `updated_by` si existen;
+- registrar auditoria si existe hoja compatible.
+
+### Smoke test futuro recomendado
+
+Usar solo tarea dummy, nunca tareas productivas:
+
+1. Crear `TASK-DUMMY-QA-CREATE` o dejar que backend genere ID con seller QA.
+2. Confirmar respuesta `ok:true`.
+3. Confirmar que la fila nueva aparece en `timeline`.
+4. Confirmar que el CSV publicado la refleja despues de la latencia normal.
+5. Confirmar que Gantt Operativo la muestra si `visible_gantt = Si`.
+6. Ejecutar baja logica con `gantt_task_disable`.
+7. Confirmar que `visible_gantt = No` y/o `estado = Cancelado`.
+8. Confirmar que no desaparece fisicamente la fila.
+9. Confirmar que dependencias y filtros no rompen.
+10. Confirmar auditoria si existe hoja compatible.
+
+### Etapas futuras recomendadas
+
+- 31C2A: implementar `gantt_task_create` solo en Apps Script con tarea QA, sin front.
+- 31C2B: implementar `gantt_task_disable` solo en Apps Script con tarea QA, sin front.
+- 31C2C: smoke real controlado con dummy y rollback logico.
+- 31C2D: UI interna en Gantt Operativo para crear tarea, detras de confirmacion fuerte.
+- 31C2E: UI interna para dar de baja tarea, sin borrado fisico.
+- 31C2F: auditoria y hardening de permisos, concurrencia y logs.
+
+Confirmacion de alcance 31C2:
+
+- No se implemento escritura nueva.
+- No se modifico `gantt_task_update`.
+- No se tocaron Apps Script, Google Sheets, front, endpoints, payloads actuales ni estructura de columnas.

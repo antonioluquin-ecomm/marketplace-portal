@@ -1312,3 +1312,67 @@ Pendiente:
 
 - Subir/deployar `Gantt.gs` actualizado con alias `ID Tarea`.
 - Repetir smoke real con `TASK-DUMMY-QA`.
+
+### Etapa 31C2: diseno alta/baja controlada tareas Gantt
+
+**Estado:** documentado, sin implementacion funcional.
+
+**Documento tecnico:** `docs/gantt-operativo-edicion.md`.
+
+Alcance:
+
+- Solo auditoria y diseno tecnico.
+- Sin cambios en Apps Script funcional.
+- Sin cambios en Google Sheets.
+- Sin cambios en front, endpoints actuales, payloads actuales ni `gantt_task_update`.
+
+#### Matriz futura `gantt_task_create`
+
+| Caso | Entrada | Resultado esperado | Estado |
+|---|---|---|---|
+| Alta dummy valida | `tipo_formulario=gantt_task_create`, seller QA, campos minimos completos | Crea una fila unica y responde `ok:true` con `task_id` generado | Futuro |
+| Falta `seller_id` | Payload sin seller | Rechaza sin escribir | Futuro |
+| Seller inexistente | `seller_id` no presente en hoja sellers | Rechaza sin escribir | Futuro |
+| Falta campo minimo | Sin `fase`, `hito`, `tarea`, `responsable`, `inicio_plan`, `fin_plan`, `estado` o `visible_gantt` | Rechaza sin escribir | Futuro |
+| Fecha invalida | `inicio_plan` o `fin_plan` fuera de `YYYY-MM-DD` | Rechaza sin escribir | Futuro |
+| Rango invalido | `fin_plan` anterior a `inicio_plan` | Rechaza sin escribir | Futuro |
+| Estado invalido | Estado fuera de enum permitido | Rechaza sin escribir | Futuro |
+| Dependencia inexistente | `dependencia` apunta a task no existente | Rechaza sin escribir | Futuro |
+| Dependencia circular | Nueva tarea generaria ciclo | Rechaza o bloquea segun validacion definida | Futuro |
+| ID duplicado | Collision al generar o recibir `task_id` QA | Rechaza sin escribir | Futuro |
+| Columna faltante | Falta columna requerida en `timeline` | Error claro, sin crear columnas nuevas | Futuro |
+| Auditoria | Existen columnas/hoja de log compatible | Registra `created_at` / `created_by` o log si existe | Futuro |
+
+#### Matriz futura `gantt_task_disable`
+
+| Caso | Entrada | Resultado esperado | Estado |
+|---|---|---|---|
+| Baja dummy valida | `tipo_formulario=gantt_task_disable`, `task_id` dummy, `reason` | No borra fila; actualiza `visible_gantt = No` y/o `estado = Cancelado` | Futuro |
+| Falta `task_id` | Payload sin ID | Rechaza sin escribir | Futuro |
+| `task_id` inexistente | ID no presente en `timeline` | Rechaza sin escribir | Futuro |
+| `task_id` duplicado | ID repetido | Rechaza sin escribir | Futuro |
+| Falta motivo | Sin `reason` | Rechaza o advierte segun contrato final | Futuro |
+| Tarea con dependientes activos | Otras tareas activas dependen de ella | Rechaza o advierte antes de baja | Futuro |
+| Baja repetida | Tarea ya oculta/cancelada | Respuesta idempotente o error claro segun contrato final | Futuro |
+| Auditoria | Existen `disabled_at`, `disabled_by` o log compatible | Registra usuario, fecha y motivo si existe soporte | Futuro |
+| Integridad visual | Recarga CSV despues de baja | Gantt no muestra tarea si `visible_gantt = No`; historial permanece en hoja | Futuro |
+
+#### Smoke futuro recomendado
+
+| Paso | Verificacion | Resultado esperado | Estado |
+|---|---|---|---|
+| 1 | Crear tarea dummy con seller QA | `ok:true`, `task_id` generado o validado | Futuro |
+| 2 | Confirmar fila en `timeline` | Fila nueva existe, sin formulas alteradas | Futuro |
+| 3 | Confirmar CSV publicado | La tarea aparece tras latencia normal | Futuro |
+| 4 | Confirmar Gantt | La tarea aparece si `visible_gantt = Si` | Futuro |
+| 5 | Dar de baja dummy | `ok:true`, sin delete fisico | Futuro |
+| 6 | Confirmar baja logica | `visible_gantt = No` y/o `estado = Cancelado` | Futuro |
+| 7 | Confirmar historial | La fila sigue existiendo | Futuro |
+| 8 | Confirmar dependencias | No quedan referencias rotas sin advertencia | Futuro |
+| 9 | Confirmar auditoria | Log/metadata si existen columnas compatibles | Futuro |
+
+Decision de diseno:
+
+- No eliminar fisicamente tareas.
+- Preferir `visible_gantt = No` para ocultar y `estado = Cancelado` para comunicar anulacion.
+- Usar `disabled_at` / `disabled_by` solo si existen o si una etapa futura aprueba agregar columnas.

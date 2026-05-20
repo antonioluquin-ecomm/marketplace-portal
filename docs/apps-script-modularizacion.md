@@ -473,3 +473,152 @@ Pendiente:
 - Subir/incorporar el `Gantt.gs` actualizado con `GANTT_TASK_ID_HEADER_ALIASES` al proyecto Apps Script real.
 - Redeployar o actualizar la version activa del Web App si corresponde.
 - Repetir POST con `TASK-DUMMY-QA`.
+
+## Etapa 31C2 - Diseno alta/baja controlada Gantt
+
+Fecha: 2026-05-20
+
+Estado: documentado sin implementacion funcional.
+
+Objetivo: definir operaciones futuras para crear y dar de baja tareas del Gantt Operativo manteniendo `Apps_script_v5.js` como fachada estable y sin cambiar `gantt_task_update`.
+
+### Propuesta de arquitectura Apps Script
+
+Mantener el mismo patron modular:
+
+- `Apps_script_v5.js`: solo routing futuro de `tipo_formulario`.
+- `Gantt.gs`: funciones especificas `crearTareaGantt` y `darDeBajaTareaGantt` en una etapa futura.
+- `Config.gs`, `Headers.gs`, `Utils.gs`: sin cambios salvo necesidad futura muy justificada.
+
+No agregar clases ni namespaces en esta fase. Apps Script mantiene namespace global compartido, por lo que los nombres futuros deben ser especificos:
+
+- `crearTareaGantt`
+- `darDeBajaTareaGantt`
+- `generarTaskIdGantt`
+- `validarDependenciaGantt`
+- `validarPayloadAltaGantt`
+- `validarPayloadBajaGantt`
+
+### Payload `gantt_task_create`
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "usuario@dominio.com",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Onboarding",
+    "hito": "Configuracion inicial",
+    "tarea": "Validar datos fiscales",
+    "responsable": "Operaciones",
+    "inicio_plan": "2026-05-20",
+    "fin_plan": "2026-05-27",
+    "dependencia": "",
+    "estado": "Pendiente",
+    "visible_gantt": "Si",
+    "comentario": "Alta controlada QA."
+  }
+}
+```
+
+Campos requeridos:
+
+- `seller_id`
+- `fase`
+- `hito`
+- `tarea`
+- `responsable`
+- `inicio_plan`
+- `fin_plan`
+- `estado`
+- `visible_gantt`
+
+Respuesta propuesta:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T-058",
+  "created_fields": ["seller_id", "fase", "hito", "tarea", "responsable", "inicio_plan", "fin_plan", "estado", "visible_gantt"]
+}
+```
+
+### Payload `gantt_task_disable`
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "SPT-001-T-058",
+  "updated_by": "usuario@dominio.com",
+  "reason": "Tarea duplicada durante QA.",
+  "mode": "hide_and_cancel"
+}
+```
+
+Respuesta propuesta:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T-058",
+  "updated_fields": ["visible_gantt", "estado", "comentario"]
+}
+```
+
+### Reglas tecnicas
+
+Alta:
+
+- Apps Script debe generar el `task_id` final en produccion.
+- El front no debe generar IDs definitivos.
+- El ID debe ser unico globalmente.
+- La hoja puede mostrar `ID Tarea`; el endpoint debe seguir resolviendo alias.
+- No se deben escribir columnas calculadas ni formulas.
+- Si existen `created_at` / `created_by`, completarlas desde Apps Script.
+- Si existe hoja de auditoria compatible, registrar alta.
+
+Baja:
+
+- No eliminar filas fisicamente.
+- Preferir `visible_gantt = No` para ocultar de la vista.
+- Usar `estado = Cancelado` cuando la tarea queda anulada operativamente.
+- Si existen `disabled_at` / `disabled_by`, usarlas como auditoria adicional.
+- Mantener motivo en `comentario` o campo compatible.
+
+Dependencias:
+
+- La dependencia puede ser vacia.
+- Si se informa, debe apuntar a un `task_id` existente.
+- Rechazar autodependencia.
+- Rechazar o advertir si la dependencia apunta a tarea deshabilitada.
+- Evitar ciclos antes de escribir, al menos para dependencia directa en la primera version.
+
+### Riesgos
+
+| Riesgo | Severidad | Mitigacion |
+|---|---:|---|
+| Duplicar `task_id` | Alta | Generacion backend y chequeo de unicidad antes de append. |
+| Romper dependencias | Alta | Validar existencia, autodependencia y baja con tareas dependientes activas. |
+| Borrado fisico | Alta | Prohibir delete; usar baja logica. |
+| Crear filas incompletas | Media | Campos minimos obligatorios y validacion de fechas/estado. |
+| Concurrencia | Media | Releer IDs antes de escribir y rechazar collision. |
+| Columnas faltantes | Media | No crear columnas sin etapa explicita; rechazar con error claro. |
+| Auditoria insuficiente | Media | Registrar `created_at`, `updated_at`, usuario y log si existe. |
+
+### Etapas futuras recomendadas
+
+| Etapa | Alcance | Archivos posibles |
+|---|---|---|
+| 31C2A | Endpoint `gantt_task_create` QA sin front | `Gantt.gs`, docs |
+| 31C2B | Endpoint `gantt_task_disable` QA sin front | `Gantt.gs`, docs |
+| 31C2C | Smoke real con tarea dummy y baja logica | docs |
+| 31C2D | UI crear tarea en Gantt Operativo | `internal/gantt/gantt-operativo.html`, docs |
+| 31C2E | UI dar de baja tarea, sin delete fisico | `internal/gantt/gantt-operativo.html`, docs |
+| 31C2F | Auditoria/permisos/concurrencia | `Gantt.gs`, docs |
+
+Confirmacion:
+
+- 31C2 no implemento codigo funcional.
+- No se modificaron endpoints actuales.
+- `gantt_task_update` queda intacto.
+- No se tocaron Google Sheets, front, `internal/`, `public/`, `legacy/`, `config.js` ni `assets/js/config.js`.
