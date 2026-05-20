@@ -25,6 +25,12 @@ Validaciones:
 - Smoke mockeado error por `task_id` faltante OK.
 - No se ejecuto escritura real.
 
+Validacion real post 31C:
+- `doGet` real del Web App falla con `ReferenceError: jsonResponse is not defined`.
+- POST real no destructivo `gantt_task_update` sin `task_id` falla con `ReferenceError: errorResponse is not defined`.
+- No se ejecuto POST con `TASK-DUMMY-QA` para evitar escritura real.
+- Conclusion: el proyecto Apps Script remoto no tiene incorporados/deployados los helpers modularizados requeridos; 31D queda bloqueada hasta subir `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs` y revalidar.
+
 ## 2026-05-19 - Etapa 31B modularizacion minima Apps Script
 
 Tipo de cambio: refactor tecnico acotado.

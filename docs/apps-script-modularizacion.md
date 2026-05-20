@@ -355,3 +355,42 @@ Riesgo residual:
 
 - Falta incorporar y validar `Gantt.gs` en el proyecto real de Apps Script antes de deploy activo.
 - POST real con `TASK-DUMMY-QA` sigue pendiente hasta aprobacion de escritura controlada.
+
+## Validacion post 31C - proyecto real
+
+Fecha: 2026-05-20
+
+Objetivo: validar que `Gantt.gs` quedo integrado al proyecto real antes de avanzar a 31D.
+
+Resultado general: bloqueado. La validacion real del Web App indica que el proyecto remoto no tiene incorporados todos los archivos modularizados requeridos por la fachada actual.
+
+Resultados reales:
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `doGet` real Web App | Falla con `ReferenceError: jsonResponse is not defined (linea 92, archivo "Codigo")` | Fallo |
+| POST real no destructivo `gantt_task_update` sin `task_id` | Falla con `ReferenceError: errorResponse is not defined (linea 87, archivo "Codigo")` | Fallo |
+| Confirmacion de `Gantt.gs` remoto | No concluyente: el POST no alcanza a validar Gantt porque falta `errorResponse` remoto | Bloqueado |
+| POST real con `TASK-DUMMY-QA` | No ejecutado para evitar escritura real y porque el Web App ya falla antes | No ejecutado |
+
+Interpretacion tecnica:
+
+- La fachada remota actual esta llamando helpers movidos en 31B (`jsonResponse`, `errorResponse`), pero el proyecto Apps Script real no los encuentra.
+- Esto sugiere que `Headers.gs` no fue incorporado/subido al proyecto real, o que el deploy activo no incluye los archivos modularizados.
+- Antes de validar `Gantt.gs`, hay que corregir la incorporacion remota de `Config.gs`, `Headers.gs`, `Utils.gs` y `Gantt.gs` en Apps Script.
+
+Validacion local de control:
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta local | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` cargan con `vm` | OK |
+| Duplicados | 84 simbolos en 5 archivos, 0 duplicados | OK |
+| Smoke mockeado `gantt_task_update` | OK | OK |
+| Smoke mockeado error `task_id` faltante | Formato estable | OK |
+
+Decision:
+
+- No avanzar a 31D.
+- No ejecutar escrituras reales.
+- Primero incorporar/subir los `.gs` modularizados al proyecto real Apps Script y redeployar/validar `doGet`.
