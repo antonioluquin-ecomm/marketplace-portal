@@ -891,3 +891,77 @@ Pendiente real:
 - Ejecutar POST real solo contra `TASK-DUMMY-QA-CREATE` creada en 31C2A y con autorizacion explicita.
 - Confirmar que no se borra la fila.
 - Confirmar que `visible_gantt = No` y/o `estado = Cancelado` quedan aplicados segun modo.
+
+## Estado 31C2C - Smoke real alta/baja Gantt
+
+Estado: aprobado.
+
+Alcance ejecutado:
+
+- Validacion real controlada contra Web App Apps Script.
+- Escritura solo sobre tarea dummy `TASK-DUMMY-QA-CREATE`.
+- Lectura de verificacion mediante CSV publicado de `timeline`.
+- Sin cambios de codigo funcional durante la validacion.
+
+### Resultados
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `doGet` real | `status:"ok"`, mensaje Apps Script activo | OK |
+| `gantt_task_create` real | `ok:true`, `task_id:"TASK-DUMMY-QA-CREATE"`, `row_number:78` | OK |
+| Fila existe en `timeline` | CSV publicado encontro `TASK-DUMMY-QA-CREATE` | OK |
+| Estado tras alta | `Pendiente` | OK |
+| Comentario tras alta | `Alta QA controlada` | OK |
+| `gantt_task_disable` real | `ok:true`, `row_number:78`, `disabled_fields:["estado","comentario"]` | OK |
+| Estado tras baja | `Cancelado` | OK |
+| Comentario tras baja | `Baja logica QA controlada` | OK |
+| No borrado fisico | La fila sigue presente en CSV con el mismo `task_id` | OK |
+| `gantt_task_update` | Error controlado sin `task_id`: `Falta task_id` | OK |
+| Endpoint existente `seller` | Error controlado sin `seller_id`: `Falta seller_id en el formulario` | OK |
+| Formato JSON | `ok`, `status`, `error`, `message` conservados en errores | OK |
+
+### Payloads ejecutados
+
+Alta:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "qa@marketplace.local",
+  "task": {
+    "task_id": "TASK-DUMMY-QA-CREATE",
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "QA",
+    "tarea": "Tarea dummy QA desde endpoint",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-20",
+    "fin_plan": "2026-06-21",
+    "estado": "Pendiente",
+    "comentario": "Alta QA controlada"
+  }
+}
+```
+
+Baja:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "updated_by": "qa@marketplace.local",
+  "mode": "cancel",
+  "reason": "Baja logica QA controlada"
+}
+```
+
+### Observaciones
+
+- La lectura CSV no expuso columna `visible_gantt`; por eso la validacion real uso `mode = "cancel"`.
+- `disabled_fields` real fue `["estado","comentario"]`.
+- La prueba no ejecuto acciones sobre tareas productivas.
+- No se detecto impacto en endpoints existentes durante los checks no destructivos.
+
+### Decision
+
+31C2C queda aprobada. El bloque Apps Script QA de alta/baja queda validado para avanzar a una etapa futura de front, manteniendo la restriccion de no operar sobre tareas productivas sin autorizacion.

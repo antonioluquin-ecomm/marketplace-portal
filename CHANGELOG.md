@@ -4,6 +4,29 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2C smoke real alta/baja Gantt
+
+Tipo de cambio: validacion real controlada y documentacion.
+
+Estado: aprobado.
+
+Resultado:
+- `doGet` real respondio `status:"ok"`.
+- `gantt_task_create` real creo la tarea dummy `TASK-DUMMY-QA-CREATE`.
+- La tarea fue creada en `timeline` con `row_number: 78`.
+- El CSV publicado confirmo la fila con `Estado = Pendiente` y `Comentario = Alta QA controlada`.
+- `gantt_task_disable` real con `mode = "cancel"` actualizo la misma tarea dummy.
+- El CSV publicado confirmo `Estado = Cancelado` y `Comentario = Baja logica QA controlada`.
+- La fila no fue borrada; la tarea sigue visible en la lectura CSV con el mismo `task_id`.
+- `gantt_task_update` sin `task_id` mantuvo error controlado `Falta task_id`.
+- Endpoint existente `seller` sin `seller_id` mantuvo error controlado `Falta seller_id en el formulario`.
+- Responses JSON mantuvieron formato estable.
+
+Observaciones:
+- La hoja real no expuso `visible_gantt` en el CSV consultado; por eso el smoke uso `mode = "cancel"` y no intento ocultar.
+- No se ejecutaron pruebas sobre tareas productivas.
+- No se modifico front ni se implementaron funciones nuevas durante 31C2C.
+
 ## 2026-05-20 - Etapa 31C2B endpoint QA baja logica tareas Gantt
 
 Tipo de cambio: Apps Script QA controlado y documentacion.

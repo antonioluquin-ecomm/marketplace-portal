@@ -803,3 +803,39 @@ Errores:
 - Si `visible_gantt` no existe en la hoja real, `hide` y `hide_and_cancel` fallaran con error controlado.
 - Si `estado` no existe, `cancel` y `hide_and_cancel` fallaran con error controlado.
 - No hay rollback automatico; la reversa seria otro update controlado sobre la tarea dummy.
+
+## Validacion real 31C2C - Alta/baja Gantt
+
+Fecha: 2026-05-20
+
+Estado: aprobado.
+
+Objetivo: confirmar en Apps Script real que los endpoints QA `gantt_task_create` y `gantt_task_disable` quedaron incorporados y operan sobre tarea dummy.
+
+### Resultados reales
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `doGet` real | `status:"ok"`, hojas esperadas | OK |
+| `gantt_task_create` | `ok:true`, `task_id:"TASK-DUMMY-QA-CREATE"`, `row_number:78` | OK |
+| Verificacion CSV post create | Fila encontrada; `Estado = Pendiente`; `Comentario = Alta QA controlada` | OK |
+| `gantt_task_disable` | `ok:true`, `row_number:78`, `disabled_fields:["estado","comentario"]` | OK |
+| Verificacion CSV post disable | Fila encontrada; `Estado = Cancelado`; `Comentario = Baja logica QA controlada` | OK |
+| No borrado fisico | La tarea dummy sigue presente en CSV | OK |
+| `gantt_task_update` | Error controlado sin `task_id`: `Falta task_id` | OK |
+| Endpoint `seller` | Error controlado sin `seller_id`: `Falta seller_id en el formulario` | OK |
+| Formato JSON | Responses OK/error estables | OK |
+
+### Interpretacion
+
+- El proyecto Apps Script real ya tiene incorporados `Apps_script_v5.js` y `Gantt.gs` actualizados.
+- `doPost` sigue funcionando como fachada estable.
+- El flujo QA create/disable opera sobre `timeline` con header visual `ID Tarea`.
+- La baja real se valido con `mode = "cancel"` porque la lectura CSV no expuso columna `visible_gantt`.
+- No se evidencio impacto sobre endpoints existentes en las pruebas no destructivas.
+
+### Riesgo residual
+
+- `hide` / `hide_and_cancel` requieren confirmar si existe columna `visible_gantt` en la hoja real; si no existe, fallaran con error controlado.
+- La tarea dummy quedo en estado `Cancelado`, como evidencia de smoke.
+- Antes de habilitar UI, falta definir permisos/UX y confirmar comportamiento esperado del CSV publicado tras escrituras.

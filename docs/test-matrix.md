@@ -1465,3 +1465,34 @@ Pendientes:
 - Confirmar que no se borra la fila.
 - Confirmar que la tarea queda oculta/cancelada segun modo.
 - Confirmar que no afecta tareas productivas.
+
+### Etapa 31C2C: smoke real alta/baja Gantt
+
+**Estado:** aprobado.
+
+| Validacion | Metodo | Resultado real | Estado |
+|---|---|---|---|
+| `doGet` real | GET Web App | `status:"ok"` y hojas esperadas | OK |
+| Alta dummy | POST `gantt_task_create` con `TASK-DUMMY-QA-CREATE` | `ok:true`, `row_number:78` | OK |
+| Fila existe | CSV publicado `timeline` | `TASK-DUMMY-QA-CREATE` encontrado | OK |
+| Estado post alta | CSV publicado | `Pendiente` | OK |
+| Comentario post alta | CSV publicado | `Alta QA controlada` | OK |
+| Baja dummy | POST `gantt_task_disable`, `mode:"cancel"` | `ok:true`, `row_number:78`, `disabled_fields:["estado","comentario"]` | OK |
+| Estado post baja | CSV publicado | `Cancelado` | OK |
+| Comentario post baja | CSV publicado | `Baja logica QA controlada` | OK |
+| No borrado fisico | CSV publicado | La fila sigue presente | OK |
+| `gantt_task_update` | POST sin `task_id` | Error controlado `Falta task_id` | OK |
+| Endpoint existente `seller` | POST sin `seller_id` | Error controlado `Falta seller_id en el formulario` | OK |
+| Formato JSON | Revision de responses | OK/error estables | OK |
+| Tareas productivas | Alcance de payloads | No se probaron tareas productivas | OK |
+
+Observaciones:
+
+- La validacion de baja se hizo con `mode = "cancel"`.
+- La lectura CSV no expuso `visible_gantt`, por lo que no se ejecuto `hide` real.
+- `TASK-DUMMY-QA-CREATE` queda como evidencia QA en estado `Cancelado`.
+
+Decision:
+
+- 31C2C queda aprobada.
+- Se puede planificar una etapa futura de front controlado, manteniendo uso exclusivo de dummy hasta nueva autorizacion.
