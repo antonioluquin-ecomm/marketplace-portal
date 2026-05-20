@@ -476,39 +476,39 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 /* Etapa 31UX-B: cabecera operativa compacta, sin tocar logica ni render. */
 .exec-hero{
   grid-template-columns:minmax(0,1fr) minmax(220px,300px);
-  gap:8px;
-  padding:8px 22px;
+  gap:6px;
+  padding:6px 22px;
   align-items:start;
 }
 .exec-card{
-  padding:9px 11px;
+  padding:8px 10px;
   border-radius:8px;
 }
 .exec-eyebrow{
-  margin-bottom:2px;
-  font-size:8.5px;
+  margin-bottom:1px;
+  font-size:8px;
 }
 .exec-title{
-  margin-bottom:3px;
-  font-size:18px;
+  margin-bottom:2px;
+  font-size:17px;
 }
 .exec-copy{
   max-width:860px;
-  font-size:11.5px;
-  line-height:1.38;
+  font-size:11px;
+  line-height:1.32;
 }
 .exec-flow{
   display:flex;
   flex-wrap:wrap;
-  gap:5px;
-  margin-top:7px;
+  gap:4px;
+  margin-top:5px;
 }
 .exec-step{
   display:inline-flex;
   align-items:center;
-  gap:5px;
+  gap:4px;
   min-height:0;
-  padding:4px 7px;
+  padding:3px 6px;
   border-radius:999px;
 }
 .exec-step-num{
@@ -546,25 +546,25 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 }
 .exec-help .exec-rules{
   grid-template-columns:1fr;
-  gap:5px;
-  margin-top:8px;
+  gap:4px;
+  margin-top:6px;
 }
 .exec-help .exec-rule{
-  padding:5px 7px;
-  font-size:10.5px;
-  line-height:1.3;
+  padding:4px 6px;
+  font-size:10px;
+  line-height:1.25;
 }
 .exec-section-label{
-  padding:7px 22px 0;
+  padding:5px 22px 0;
   font-size:8.5px;
 }
 .exec-actions{
-  gap:6px;
-  padding:0 22px 7px;
+  gap:5px;
+  padding:0 22px 5px;
 }
 .exec-action{
-  min-height:30px;
-  padding:6px 9px;
+  min-height:28px;
+  padding:5px 8px;
   border-radius:7px;
   font-size:10.5px;
 }
@@ -572,17 +572,32 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   font-size:12px;
 }
 .summary{
-  padding-top:8px;
-  padding-bottom:8px;
+  gap:6px;
+  padding-top:6px;
+  padding-bottom:6px;
+}
+.kpi{
+  padding:7px 10px;
+}
+.kpi-l{
+  margin-bottom:2px;
+  font-size:8px;
+}
+.kpi-n{
+  font-size:22px;
+}
+.kpi-s{
+  margin-top:1px;
+  font-size:9.5px;
 }
 .control-group{
   display:flex;
   align-items:center;
-  gap:6px;
+  gap:4px;
   flex-wrap:wrap;
 }
 .control-label{
-  font-size:9px;
+  font-size:8.5px;
   font-weight:800;
   letter-spacing:.08em;
   text-transform:uppercase;
@@ -594,10 +609,10 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   flex-shrink:0;
 }
 .toolbar .ri{
-  min-height:28px;
+  min-height:24px;
   display:inline-flex;
   align-items:center;
-  padding:0 9px;
+  padding:0 8px;
   border:1px solid var(--bdr-l);
   border-radius:999px;
   background:rgba(255,255,255,.018);
@@ -605,7 +620,24 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   white-space:nowrap;
 }
 .toolbar .btn-sm{
-  min-height:28px;
+  min-height:24px;
+}
+.toolbar{
+  gap:6px;
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.tl-l,.tl-r{
+  gap:6px;
+}
+.toolbar .vtog,
+.toolbar .scale-tog{
+  padding:2px;
+}
+.toolbar .vbtn,
+.toolbar .sbtn{
+  padding-top:4px;
+  padding-bottom:4px;
 }
 
 @media(max-width:980px){
