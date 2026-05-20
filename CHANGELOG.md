@@ -4,6 +4,32 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2E smoke UI alta Gantt
+
+Tipo de cambio: validacion UI/backend controlada y documentacion.
+
+Estado: aprobado con observacion.
+
+Resultado:
+- Carga local de `internal/gantt/gantt-operativo.html` en Chrome headless: OK.
+- Boton `+ Nueva tarea` presente: OK.
+- Modal de creacion presente: OK.
+- Smoke logico de UI con DOM mockeado: apertura/cierre, validaciones, payload, feedback OK/error y recarga `loadData(true)` OK.
+- Payload generado por la UI no incluye `task_id`.
+- Payload generado por la UI no incluye `visible_gantt`.
+- Alta real dummy ejecutada con el payload de UI autorizado.
+- Apps Script respondio `ok:true`, `task_id:"SPT-001-T-30"`, `row_number:79`.
+- CSV publicado confirmo la tarea `SPT-001-T-30` con:
+  - `Tarea = Tarea dummy QA desde UI`
+  - `Hito = QA Front`
+  - `Estado = Pendiente`
+  - `Comentario = Alta QA desde UI 31C2E`
+- Carga posterior en Chrome headless confirmo que el DOM renderizado contiene la tarea y el `task_id`.
+
+Observacion:
+- No se pudo usar DevTools remoto para clicks reales por limitacion del entorno; la interaccion se valido con DOM mockeado ejecutando las funciones reales del front.
+- No se tocaron tareas productivas.
+
 ## 2026-05-20 - Etapa 31C2D UI crear tarea Gantt
 
 Tipo de cambio: UI operativa controlada.

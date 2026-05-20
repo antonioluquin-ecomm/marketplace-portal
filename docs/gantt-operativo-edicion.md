@@ -1066,3 +1066,101 @@ Riesgo residual:
 - Debe ejecutarse smoke manual en navegador antes de habilitar uso operativo.
 - No crear tareas productivas desde UI hasta definir permisos y confirmacion de uso.
 - El CSV puede tardar en reflejar el alta despues del OK de Apps Script.
+
+## Estado 31C2E - Smoke UI alta Gantt
+
+Estado: aprobado con observacion.
+
+Alcance ejecutado:
+
+- Carga local de `internal/gantt/gantt-operativo.html`.
+- Verificacion en Chrome headless.
+- Smoke logico de la UI con DOM mockeado ejecutando las funciones reales del front.
+- Alta real controlada con tarea dummy autorizada.
+- Verificacion por CSV publicado de `timeline`.
+- Sin cambios funcionales durante la etapa.
+
+### Resultados por validacion
+
+| # | Validacion | Resultado | Estado |
+|---|---|---|---|
+| 1 | Abrir Gantt Operativo sin errores | Chrome headless cargo DOM completo; sin log de error en stderr | OK |
+| 2 | Boton `+ Nueva tarea` visible | Presente en DOM | OK |
+| 3 | Modal/drawer abre | `openCreateTask()` agrega clase `open` en DOM mock | OK |
+| 4 | Modal/drawer cierra | `closeCreateModal()` remueve clase `open` | OK |
+| 5 | Validaciones obligatorias | `seller_id`, `fase`, `hito`, `tarea`, `responsable`, `inicio_plan`, `fin_plan` validadas | OK |
+| 6 | Validacion de rango | `fin_plan` anterior a `inicio_plan` rechaza | OK |
+| 7 | Estado default | `Pendiente` | OK |
+| 8 | `visible_gantt` no aparece en UI | No hay campo editable; solo nota informativa | OK |
+| 9 | Payload no incluye `task_id` | Confirmado en payload capturado | OK |
+| 10 | Crear tarea dummy autorizada | Apps Script OK, `task_id:"SPT-001-T-30"`, `row_number:79` | OK |
+| 11 | Respuesta OK visual | Feedback OK validado en DOM mock | OK |
+| 12 | `loadData(true)` recarga/intenta recargar CSV | Llamada posterior al OK validada en DOM mock | OK |
+| 13 | Tarea aparece en CSV/Sheet | CSV publicado encontro `SPT-001-T-30` | OK |
+| 14 | Edicion existente sigue funcionando | No se modifico contrato; pendiente smoke visual manual de clicks reales | Pendiente menor |
+| 15 | Filtros, timeline y modal detalle | Chrome headless renderizo timeline y tarea nueva en DOM | OK |
+| 16 | Consola sin errores JS nuevos | Sin stderr en Chrome headless; DevTools remoto no disponible | OK parcial |
+| 17 | No tocar tareas productivas | Solo se creo dummy QA `SPT-001-T-30` | OK |
+
+### Payload validado
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "front@gantt-operativo",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "QA Front",
+    "tarea": "Tarea dummy QA desde UI",
+    "responsable": "eCommerce",
+    "inicio_plan": "2026-06-22",
+    "fin_plan": "2026-06-23",
+    "estado": "Pendiente",
+    "comentario": "Alta QA desde UI 31C2E"
+  }
+}
+```
+
+### Evidencia textual
+
+Response real:
+
+```json
+{
+  "ok": true,
+  "task_id": "SPT-001-T-30",
+  "row_number": 79,
+  "message": "Tarea Gantt creada"
+}
+```
+
+CSV publicado:
+
+```json
+{
+  "found": true,
+  "task_id": "SPT-001-T-30",
+  "tarea": "Tarea dummy QA desde UI",
+  "hito": "QA Front",
+  "estado": "Pendiente",
+  "comentario": "Alta QA desde UI 31C2E"
+}
+```
+
+Chrome headless posterior:
+
+- `hasNewTaskButton = true`
+- `hasCreatedTask = true`
+- `hasTaskId = true`
+- `hasTimeline = true`
+
+### Observacion tecnica
+
+- El entorno no permitio conectar DevTools remoto para simular clicks reales dentro de Chrome.
+- La interaccion de formulario se valido ejecutando las funciones reales del front en DOM mockeado.
+- La carga/render real se valido con Chrome headless.
+
+### Decision
+
+31C2E queda aprobada para avanzar a una etapa futura de baja logica desde front, manteniendo pendiente un smoke visual manual humano si se requiere evidencia de clicks reales en navegador interactivo.

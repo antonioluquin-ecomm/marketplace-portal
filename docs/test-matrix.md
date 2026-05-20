@@ -1551,3 +1551,49 @@ Smoke manual recomendado:
 - Confirmar feedback OK/error.
 - Confirmar recarga CSV.
 - Confirmar que editar tarea sigue funcionando.
+
+### Etapa 31C2E: smoke UI alta Gantt
+
+**Estado:** aprobado con observacion.
+
+| Validacion | Metodo | Resultado real | Estado |
+|---|---|---|---|
+| Abrir Gantt Operativo | Chrome headless local | DOM renderizado, `exitCode:0` | OK |
+| Boton `+ Nueva tarea` | Chrome headless / DOM | Presente | OK |
+| Modal abre | DOM mock ejecutando `openCreateTask()` | Clase `open` aplicada | OK |
+| Modal cierra | DOM mock ejecutando `closeCreateModal()` | Clase `open` removida | OK |
+| Validacion `seller_id` | DOM mock | Rechaza campo vacio | OK |
+| Validacion `fase` | DOM mock | Rechaza campo vacio | OK |
+| Validacion rango fechas | DOM mock | Rechaza `fin_plan` anterior | OK |
+| Estado default | DOM mock | `Pendiente` | OK |
+| `visible_gantt` | Revision DOM/payload | No se envia; no hay campo editable | OK |
+| `task_id` | Payload capturado | No se envia desde front | OK |
+| Alta dummy autorizada | POST real con payload UI | `ok:true`, `task_id:"SPT-001-T-30"`, `row_number:79` | OK |
+| Feedback OK | DOM mock | Mensaje `Tarea creada` | OK |
+| Recarga CSV | DOM mock | `loadData(true)` invocado tras OK | OK |
+| Verificacion CSV | CSV publicado `timeline` | Fila `SPT-001-T-30` encontrada | OK |
+| Timeline render posterior | Chrome headless | DOM contiene tarea nueva y task id | OK |
+| Error endpoint | DOM mock con respuesta `ok:false` | Muestra error claro | OK |
+| Edicion existente | Revision de alcance | No se modifico contrato; pendiente click real humano si se requiere | Pendiente menor |
+| Tareas productivas | Alcance de payload | Solo tarea dummy QA | OK |
+
+Tarea dummy creada:
+
+| Campo | Valor |
+|---|---|
+| `task_id` | `SPT-001-T-30` |
+| `seller_id` | `SPT-001` |
+| `fase` | `Operativa` |
+| `hito` | `QA Front` |
+| `tarea` | `Tarea dummy QA desde UI` |
+| `responsable` | `eCommerce` |
+| `inicio_plan` | `2026-06-22` |
+| `fin_plan` | `2026-06-23` |
+| `estado` | `Pendiente` |
+| `comentario` | `Alta QA desde UI 31C2E` |
+
+Observacion:
+
+- DevTools remoto no estuvo disponible para clicks reales.
+- La interaccion se valido con DOM mockeado y la carga/render con Chrome headless.
+- El alta real fue ejecutada con el payload generado por el flujo UI.
