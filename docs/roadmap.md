@@ -2231,8 +2231,9 @@ Etapas propuestas:
 
 - 32A: auditoria critica de estructura actual de `timeline`.
 - 32B: diccionario de datos formal en `docs/data-dictionary-timeline.md`.
-- 32C: compatibilidad y aliases de columnas.
-- 32D: catalogos y normalizacion de fase, estado, responsable e hito.
+- 32C: auditoria de compatibilidad y aliases de columnas; detecta gap con `Ver en Gantt`.
+- 32D: compatibilidad minima de alias `Ver en Gantt` para `visible_gantt`, sin tocar datos.
+- 32D-bis: catalogos y normalizacion de fase, estado, responsable e hito.
 - 32E: validacion backend contra catalogos.
 - 32F: limpieza controlada de columnas derivadas.
 - 32G: smoke real con tarea dummy autorizada.
@@ -2242,3 +2243,4 @@ Decision vigente:
 - No eliminar columnas ni cambiar headers sin etapa de migracion.
 - `Atraso (dias)` y `Semana` deben tender a calcularse, no persistirse como datos maestros.
 - `visible_gantt` queda pendiente de decision formal; la baja logica estandar sigue asociada a `Estado = Cancelado`.
+- `Ver en Gantt` queda aceptado como alias visual de `visible_gantt` en Apps Script desde 32D, solo por compatibilidad.

@@ -121,7 +121,7 @@ El objetivo no es cambiar la hoja de inmediato, sino fijar una referencia establ
 | `atraso_dias` | `Atraso (dias)`, `atraso_dias`, `atraso` | number | Frontend | No | No | Derivado de fechas y estado | Calcular | No deberia ser dato maestro. |
 | `semana` | `Semana`, `semana` | number/string | Frontend | No | No | Derivado de `inicio_plan` | Calcular | No persistir salvo uso humano temporal. |
 | `comentario` | `Comentario`, `comentarios`, `comentario` | string | Usuario | Si | No | Largo maximo; texto libre | Mantener | No usar como unico campo de baja a futuro. |
-| `visible_gantt` | `Ver en Gantt`, `visible_gantt`, `visible` | enum `Si/No` | Decision pendiente | No por ahora | No | Si existe: `Si` / `No` | Revisar | No usar para baja estandar sin decision formal. |
+| `visible_gantt` | `Ver en Gantt`, `visible_gantt`, `visible`, `Visible Gantt` | enum `Si/No` | Decision pendiente | No por ahora | No | Si existe: `Si` / `No` | Revisar | `Ver en Gantt` es alias visual aceptado por Apps Script desde 32D; no usar para baja estandar sin decision formal. |
 | `created_at` | `created_at`, `fecha_creacion`, `fecha_alta` | timestamp | Apps Script | No | No | Timestamp server-side | Mantener opcional | Metadato. |
 | `created_by` | `created_by`, `creado_por`, `usuario_creacion` | string | Apps Script | No | No | Actor validado server-side futuro | Mantener opcional | No confiar solo en valor enviado por front. |
 | `updated_at` | `updated_at`, `fecha_actualizacion`, `ultima_actualizacion` | timestamp | Apps Script | No | No | Timestamp server-side | Mantener opcional | Metadato. |
@@ -223,12 +223,14 @@ La hoja deberia proteger:
 - `Semana` deberia calcularse desde `inicio_plan`.
 - `Hito` se mantiene por ahora, pero debe normalizarse.
 - `visible_gantt` queda pendiente de decision formal. La baja logica estandar actual debe sostenerse con `Estado = Cancelado` mientras no se apruebe otra semantica.
+- 32C detecto que la hoja real usa `Ver en Gantt` como header visual y 32D agrego compatibilidad minima para resolverlo como alias de `visible_gantt`, sin limpiar ni modificar Google Sheets.
 - `Comentario` se mantiene, pero conviene separar `disabled_reason` a futuro.
 
 ## Estrategia de migracion
 
-- 32C: compatibilidad y aliases. Confirmar headers reales, aliases aceptados y lectura CSV sin romper front.
-- 32D: catalogos y normalizacion. Definir `fases`, `responsables`, `hitos` y reglas de validacion en hoja.
+- 32C: auditoria de compatibilidad y aliases. Confirmar headers reales, aliases aceptados y lectura CSV sin romper front.
+- 32D: compatibilidad minima de alias `Ver en Gantt` -> `visible_gantt`, sin tocar datos ni decidir todavia si `visible_gantt` sigue o se retira.
+- 32D-bis: catalogos y normalizacion. Definir `fases`, `responsables`, `hitos` y reglas de validacion en hoja.
 - 32E: backend valida contra catalogos. Apps Script pasa a ser autoridad para enums y dependencias.
 - 32F: limpieza controlada de columnas derivadas. Dejar de usar `Atraso (dias)` y `Semana` como datos maestros.
 - 32G: smoke real con dummy. Ejecutar create, update y disable con tarea dummy autorizada.

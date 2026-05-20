@@ -1759,3 +1759,25 @@ Notas:
 
 - 32B no ejecuta smoke real, POST ni submit.
 - La matriz queda preparada para etapas 32C-32G.
+
+### Etapa 32D: compatibilidad minima Timeline / Ver en Gantt
+
+**Estado:** implementado localmente; sin POST real ni cambios en Google Sheets.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Alias visual | Revision `Gantt.gs` | `Ver en Gantt` resuelve como alias de `visible_gantt` | OK |
+| Aliases existentes | Revision `Gantt.gs` | Se conservan `visible_gantt`, `visible` y `Visible Gantt` | OK |
+| Disable `hide` | Smoke mockeado con header `Ver en Gantt` | Escribe `No` en la columna visual | OK |
+| Disable `hide_and_cancel` | Smoke mockeado con header `Ver en Gantt` | Escribe `No` y `Estado = Cancelado` | OK |
+| Disable `cancel` | Smoke mockeado con header `Ver en Gantt` | No depende de `visible_gantt`; cancela por estado/comentario | OK |
+| Compatibilidad update | Smoke mockeado `gantt_task_update` | Sigue OK | OK |
+| Compatibilidad create | Smoke mockeado `gantt_task_create` | Sigue OK | OK |
+| Contratos | Revision de alcance | Sin cambios en endpoints, payloads, responses ni frontend | OK |
+
+Notas:
+
+- 32C detecto el gap de alias y 32D agrega compatibilidad sin tocar datos.
+- `Ver en Gantt` queda como alias visual aceptado para `visible_gantt`.
+- La decision funcional sobre si `visible_gantt` seguira o se retirara queda pendiente.
+- No se limpio ni modifico Google Sheets.

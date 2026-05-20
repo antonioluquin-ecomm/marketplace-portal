@@ -44,7 +44,7 @@ const CAMPOS_GANTT_CREATE_ALIASES = {
   inicio_real: ["inicio_real", "fecha_inicio_real", "Inicio real"],
   fin_real: ["fin_real", "fecha_fin_real", "Fin real"],
   estado: ["estado_tarea", "estado"],
-  visible_gantt: ["visible_gantt", "visible", "Visible Gantt"],
+  visible_gantt: ["visible_gantt", "visible", "Visible Gantt", "Ver en Gantt"],
   comentario: ["comentario", "comentarios"],
 };
 

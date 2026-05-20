@@ -4,6 +4,26 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 32D compatibilidad minima Timeline / Ver en Gantt
+
+Tipo de cambio: backend Apps Script / documentacion.
+
+Estado: implementado localmente; sin cambios de datos.
+
+Resultado:
+- 32C detecto un gap de alias: la hoja real usa `Ver en Gantt`, el frontend soporta `ver_en_gantt`, pero `Gantt.gs` no reconocia explicitamente `Ver en Gantt` como alias de `visible_gantt`.
+- Agregado `Ver en Gantt` a los aliases de `visible_gantt` en `Gantt.gs`.
+- Se mantienen los aliases existentes: `visible_gantt`, `visible` y `Visible Gantt`.
+- La compatibilidad aplica si en el futuro se usa `gantt_task_disable` con `mode = "hide"` o `mode = "hide_and_cancel"`.
+- La baja logica estandar con `mode = "cancel"` no cambia y sigue asociada a `Estado = Cancelado`.
+- No se cambian contratos, payloads, responses, endpoints ni frontend.
+- La decision funcional sobre si `visible_gantt` sigue o se retira queda pendiente.
+
+Alcance:
+- Se modificaron `Gantt.gs`, `docs/data-dictionary-timeline.md`, `CHANGELOG.md`, `docs/roadmap.md` y `docs/test-matrix.md`.
+- No se limpiaron ni modificaron Google Sheets, Excel ni CSV.
+- No se tocaron `internal/gantt/gantt-operativo.html`, `Apps_script_v5.js`, endpoints, payloads, frontend, `public/`, `legacy/`, config ni assets.
+
 ## 2026-05-20 - Etapa 32B diccionario de datos Timeline / Gantt Operativo
 
 Tipo de cambio: documentacion / arquitectura de datos.
