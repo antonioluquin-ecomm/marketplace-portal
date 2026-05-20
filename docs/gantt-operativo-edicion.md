@@ -1420,3 +1420,72 @@ Alcance ejecutado:
   - `gantt_task_disable` con `mode:"cancel"`
 - Confirmar que no hay cambios de payload ni response.
 - Confirmar que la hoja `timeline` no recibe columnas nuevas.
+
+## Estado 31C2I - UI baja logica Gantt
+
+Estado: implementado localmente; POST real no ejecutado.
+
+Alcance ejecutado:
+
+- Modificado solo `internal/gantt/gantt-operativo.html`.
+- Documentacion actualizada.
+- No se tocaron Apps Script, `Gantt.gs`, `Apps_script_v5.js`, Google Sheets, config ni endpoints.
+
+### Cambios UI
+
+- Agregada accion `Dar de baja` dentro del modal de detalle de tarea.
+- En tareas con estado `Cancelado`, la accion aparece deshabilitada como `Tarea cancelada`.
+- La accion solicita motivo breve mediante prompt.
+- La accion solicita confirmacion antes del POST.
+- La baja usa exclusivamente `mode = "cancel"`.
+- No usa ni envia `visible_gantt`.
+- No borra filas.
+- Tras respuesta OK:
+  - muestra feedback en el modal;
+  - actualiza localmente estado/comentario;
+  - ejecuta `loadData(true)`.
+- Alta y edicion existentes quedan sin cambios de contrato.
+
+### Payload generado
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "...",
+  "updated_by": "front@gantt-operativo",
+  "mode": "cancel",
+  "reason": "..."
+}
+```
+
+### Validaciones locales
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| Boton `Dar de baja` | Agregado al modal de detalle | OK |
+| Tarea cancelada | Boton deshabilitado `Tarea cancelada` | OK |
+| Confirmacion previa | `window.confirm` antes del POST | OK |
+| Motivo breve | `window.prompt` y envio como `reason` | OK |
+| Payload | `gantt_task_disable`, `mode:"cancel"`, `updated_by:"front@gantt-operativo"` | OK |
+| `visible_gantt` | No se envia en payload de baja | OK |
+| Feedback OK/error | `lastDisableFeedback` renderiza mensaje en modal | OK |
+| Recarga CSV | `loadData(true)` tras OK | OK |
+| Smoke aislado | DOM/fetch mockeado con `TASK-DUMMY-QA` | OK |
+| Sintaxis total con Node local | Bloqueada por optional chaining preexistente del archivo, no por 31C2I | Limitacion |
+
+### Riesgos residuales
+
+- Falta smoke manual visual en navegador.
+- Falta POST real controlado contra tarea dummy autorizada.
+- CSV publicado puede tardar en reflejar `Cancelado`.
+- La baja desde UI depende del hardening backend ya deployado.
+- No ejecutar sobre tareas productivas durante smoke.
+
+### Validacion real sugerida
+
+- Usar solo tarea dummy QA.
+- Abrir modal de detalle.
+- Confirmar que `Dar de baja` aparece si no esta cancelada.
+- Enviar motivo.
+- Confirmar payload antes de autorizar POST real.
+- Verificar `ok:true`, recarga CSV y estado `Cancelado`.

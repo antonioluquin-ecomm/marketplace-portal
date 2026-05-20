@@ -224,6 +224,10 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .edit-help{font-size:11px;color:var(--t3);line-height:1.45}
 .btn-sm.primary{background:var(--g);border-color:var(--g-brd);color:#fff}
 .btn-sm.primary:hover{background:var(--g2);color:#fff}
+.btn-sm.danger{background:var(--dng-dim);border-color:var(--dng-brd);color:#f4b3b3}
+.btn-sm.danger:hover{background:rgba(217,64,64,.2);color:#ffd1d1}
+.btn-sm:disabled{opacity:.45;cursor:not-allowed}
+.btn-sm:disabled:hover{filter:none}
 
 /* ── STATES ── */
 .spinner{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--g);animation:spin .7s linear infinite}
@@ -899,6 +903,7 @@ let filters = { fase:'todos', estado:'todos', seller:'todos' };
 let weekPanelOpen = false;
 let activeEditTaskId = '';
 let lastEditFeedback = null;
+let lastDisableFeedback = null;
 
 /* ── UTILS ── */
 const $   = id => document.getElementById(id);
@@ -1792,6 +1797,80 @@ async function saveGanttTaskCreate(ev){
 }
 
 /* ── MODAL ── */
+function setDisableSaving(taskId,saving){
+  const btn=$('disable-task-btn');
+  if(!btn) return;
+  btn.disabled=saving;
+  btn.textContent=saving?'Dando de baja...':'Dar de baja';
+}
+async function disableGanttTask(taskId){
+  const t=TASKS.find(x=>x.task_id===taskId);
+  if(!t){
+    lastDisableFeedback={task_id:taskId,type:'err',message:'No se encontro la tarea activa para dar de baja.'};
+    openModal(taskId);
+    return;
+  }
+  if(!t.task_id){
+    lastDisableFeedback={task_id:taskId,type:'err',message:'La tarea no tiene task_id. No se puede dar de baja desde la UI.'};
+    openModal(taskId);
+    return;
+  }
+  if(estadoNorm(t.estado)==='Cancelado'){
+    lastDisableFeedback={task_id:t.task_id,type:'err',message:'La tarea ya esta cancelada.'};
+    openModal(t.task_id);
+    return;
+  }
+
+  const rawReason=window.prompt('Motivo breve de baja logica:', t.comentario||'Baja logica desde Gantt Operativo');
+  if(rawReason===null) return;
+  const reason=(rawReason||'Baja logica desde Gantt Operativo').trim();
+  if(reason.length>1000){
+    lastDisableFeedback={task_id:t.task_id,type:'err',message:'El motivo supera 1000 caracteres.'};
+    openModal(t.task_id);
+    return;
+  }
+
+  const qaMsg=t.task_id==='TASK-DUMMY-QA'||t.task_id.includes('QA')?'':'\n\nQA: usar esta accion solo sobre tareas dummy autorizadas durante smoke.';
+  const ok=window.confirm(`Confirmar baja logica de ${t.task_id}. La tarea quedara en estado Cancelado y no se borrara la fila.${qaMsg}`);
+  if(!ok) return;
+
+  const payload={
+    tipo_formulario:'gantt_task_disable',
+    task_id:t.task_id,
+    updated_by:'front@gantt-operativo',
+    mode:'cancel',
+    reason,
+  };
+
+  setDisableSaving(t.task_id,true);
+  try{
+    const res=await fetch(CONFIG.APPS_SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload),
+    });
+    const txt=await res.text();
+    let json={};
+    try{ json=txt?JSON.parse(txt):{}; }catch(parseErr){ throw new Error('Respuesta no JSON del endpoint.'); }
+    if(!res.ok||json.ok===false||json.status==='error'){
+      throw new Error(json.error||json.message||('HTTP '+res.status));
+    }
+    t.estado='Cancelado';
+    t.comentario=reason;
+    lastDisableFeedback={task_id:t.task_id,type:'ok',message:'Baja logica enviada al Apps Script. Recargando datos desde CSV; puede haber latencia normal de publicacion.'};
+    render();
+    await loadData(true);
+    const refreshed=TASKS.find(x=>x.task_id===t.task_id);
+    if(refreshed) openModal(refreshed.task_id);
+  }catch(err){
+    console.error(err);
+    lastDisableFeedback={task_id:t.task_id,type:'err',message:err.message||'No se pudo dar de baja la tarea.'};
+    openModal(t.task_id);
+  }finally{
+    setDisableSaving(t.task_id,false);
+  }
+}
+
 function openModal(taskId){
   const t=TASKS.find(x=>x.task_id===taskId);
   if(!t) return;
@@ -1802,8 +1881,13 @@ function openModal(taskId){
   const atr=t.atraso_calc||0;
   const blkHTML=t.estado==='Bloqueado'?`<div class="m-blk"><span>⚠</span><div><strong style="color:#f29a9a">Tarea bloqueada</strong><br>${esc(t.comentario||seller.bloqueo_res||'Sin descripción del bloqueo.')}</div></div>`:'';
   const editHTML=lastEditFeedback&&lastEditFeedback.task_id===t.task_id?`<div class="m-edit-note">${esc(lastEditFeedback.message)}</div>`:'';
+  const disableHTML=lastDisableFeedback&&lastDisableFeedback.task_id===t.task_id?`<div class="edit-status visible ${lastDisableFeedback.type==='ok'?'ok':'err'}" style="margin-bottom:12px">${esc(lastDisableFeedback.message)}</div>`:'';
+  const disableAction=estadoNorm(t.estado)==='Cancelado'
+    ? `<button type="button" class="btn-sm" disabled>Tarea cancelada</button>`
+    : `<button type="button" class="btn-sm danger" id="disable-task-btn" onclick="disableGanttTask('${esc(t.task_id)}')">Dar de baja</button>`;
   $('m-body').innerHTML=`
     ${editHTML}
+    ${disableHTML}
     ${blkHTML}
     <div class="msec-t">Identificación</div>
     ${row('ID tarea',esc(t.task_id))}
@@ -1821,7 +1905,10 @@ function openModal(taskId){
     ${row('Fin real',fmtDfull(t.fin_real)||'—')}
     ${row('Atraso',atr>0?`<span style="color:${atr<=3?'var(--warn)':'var(--danger)'};font-weight:700">+${atr} días</span>`:(t.estado==='Completado'?'<span style="color:var(--g)">A tiempo ✓</span>':'—'))}
     ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}
-    <div class="m-actions"><button type="button" class="btn-sm primary" onclick="openEditTask('${esc(t.task_id)}')">Editar tarea</button></div>`;
+    <div class="m-actions">
+      ${disableAction}
+      <button type="button" class="btn-sm primary" onclick="openEditTask('${esc(t.task_id)}')">Editar tarea</button>
+    </div>`;
   $('modal-ov').classList.add('open');
 }
 function closeModal(e){

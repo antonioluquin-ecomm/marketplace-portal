@@ -4,6 +4,42 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2I UI baja logica Gantt
+
+Tipo de cambio: UI operativa controlada.
+
+Estado: implementado localmente; POST real no ejecutado.
+
+Resultado:
+- Agregada accion `Dar de baja` en el modal de detalle de `internal/gantt/gantt-operativo.html`.
+- En tareas `Cancelado`, la accion queda deshabilitada como `Tarea cancelada`.
+- La accion solicita motivo breve y confirmacion antes de enviar.
+- Payload generado:
+  - `tipo_formulario = "gantt_task_disable"`
+  - `updated_by = "front@gantt-operativo"`
+  - `mode = "cancel"`
+  - `reason`
+- No se usa ni envia `visible_gantt`.
+- No se borra ninguna fila.
+- Tras OK se muestra feedback y se ejecuta `loadData(true)`.
+- Alta y edicion existentes quedan sin cambios de contrato.
+
+Validaciones:
+- Smoke aislado con DOM/fetch mockeado sobre `TASK-DUMMY-QA`: OK.
+- Payload capturado con `mode:"cancel"` y sin `visible_gantt`: OK.
+- Feedback OK y recarga `loadData(true)` mockeada: OK.
+- Rama de error mantiene feedback en modal: revisada.
+- Sintaxis total con Node local no aplica por optional chaining preexistente en el archivo.
+
+Alcance:
+- Se modifico `internal/gantt/gantt-operativo.html` y documentacion.
+- No se tocaron Apps Script, `Gantt.gs`, `Apps_script_v5.js`, Google Sheets, backend, config, `public/`, `legacy/`, formularios ni simuladores.
+
+Riesgos residuales:
+- Falta smoke manual visual en navegador.
+- Falta POST real controlado solo con tarea dummy autorizada.
+- CSV publicado puede demorar en reflejar el estado `Cancelado`.
+
 ## 2026-05-20 - Etapa 31C2G hardening minimo backend Gantt
 
 Tipo de cambio: backend Apps Script / hardening acotado.

@@ -1671,3 +1671,47 @@ Validacion real pendiente:
   - create OK;
   - disable OK con `mode:"cancel"`;
   - timeout no se fuerza en real salvo prueba controlada.
+
+### Etapa 31C2I: UI baja logica Gantt
+
+**Estado:** implementado localmente; POST real no ejecutado.
+
+| # | Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|---|
+| 1 | Gantt carga sin errores | Pendiente smoke navegador | No ejecutado en browser interactivo | Pendiente |
+| 2 | Modal de detalle abre | Revision estatica / flujo existente | `openModal(taskId)` conserva contrato | OK |
+| 3 | Boton `Dar de baja` visible | Revision estatica | Presente en tareas no canceladas | OK |
+| 4 | Boton no disponible en canceladas | Revision estatica | Renderiza `Tarea cancelada` disabled | OK |
+| 5 | Confirmacion previa | Revision estatica | `window.confirm` antes del POST | OK |
+| 6 | Motivo como `reason` | Smoke aislado DOM/fetch mock | `reason:"Motivo QA"` | OK |
+| 7 | Payload `mode = "cancel"` | Smoke aislado | OK | OK |
+| 8 | Sin `visible_gantt` en payload | Revision estatica / smoke aislado | No se envia | OK |
+| 9 | Respuesta `ok:true` | Smoke aislado | Feedback y estado local `Cancelado` | OK |
+| 10 | Respuesta `ok:false` | Revision de rama catch | Mensaje en modal via `lastDisableFeedback` | OK |
+| 11 | Recarga CSV | Smoke aislado | `loadData(true)` invocado | OK |
+| 12 | Alta y edicion existentes | Revision de diff | Sin cambios de contrato | OK |
+| 13 | Filtros/timeline/detalle | Revision de alcance | Render central no modificado | OK |
+| 14 | Tareas productivas | Alcance de smoke | No se ejecuto POST real | OK |
+| 15 | `git diff --check` | Pendiente cierre | Validar al final | Pendiente |
+
+Payload validado en smoke aislado:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "TASK-DUMMY-QA",
+  "updated_by": "front@gantt-operativo",
+  "mode": "cancel",
+  "reason": "Motivo QA"
+}
+```
+
+Limitacion:
+
+- La validacion sintactica del script completo con Node local sigue bloqueada por optional chaining preexistente en el archivo.
+- La funcion nueva se valido aislada con mocks de DOM, `fetch`, `window.prompt`, `window.confirm`, `render` y `loadData`.
+
+Validacion real pendiente:
+
+- Ejecutar solo con tarea dummy autorizada.
+- No ejecutar bajas sobre tareas productivas.
