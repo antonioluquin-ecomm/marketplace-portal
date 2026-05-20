@@ -238,6 +238,100 @@ function crearTareaGantt(d) {
   };
 }
 
+function darDeBajaTareaGantt(d) {
+  const taskId = limpiarValor(d.task_id || d.id_tarea || d["ID Tarea"]);
+  if (!taskId) throw new Error("Falta task_id");
+
+  const mode = normalizarModoBajaGantt(d.mode || "hide_and_cancel");
+  const reason = validarTextoGantt(d.reason || "", "reason", 1000);
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE);
+  if (!ws) throw new Error('No existe la hoja "timeline"');
+
+  const timelineHeaders = obtenerHeadersTimelineGantt(ws);
+  const headerMap = timelineHeaders.headerMap;
+  const taskCol = resolverIndiceHeaderGantt(
+    headerMap,
+    GANTT_TASK_ID_HEADER_ALIASES,
+  );
+  if (taskCol === -1) {
+    throw new Error('La hoja "timeline" no tiene columna task_id / id_tarea / ID Tarea');
+  }
+
+  const values = ws.getDataRange().getValues();
+  const coincidencias = buscarCoincidenciasTaskGantt(
+    values,
+    taskCol,
+    timelineHeaders.dataStartRowNumber,
+    taskId,
+  );
+
+  if (!coincidencias.length) throw new Error("task_id no existe: " + taskId);
+  if (coincidencias.length > 1) {
+    throw new Error("task_id duplicado en timeline: " + taskId);
+  }
+
+  const rowNumber = coincidencias[0].rowNumber;
+  const row = coincidencias[0].row;
+  const updates = [];
+  const before = {};
+  const after = {};
+
+  if (mode === "hide" || mode === "hide_and_cancel") {
+    const col = resolverIndiceHeader(
+      headerMap,
+      CAMPOS_GANTT_CREATE_ALIASES.visible_gantt,
+    );
+    if (col === -1) {
+      throw new Error("La hoja timeline no tiene columna visible_gantt");
+    }
+    before.visible_gantt = limpiarValor(row[col]);
+    after.visible_gantt = "No";
+    updates.push({ campo: "visible_gantt", col, valor: "No" });
+  }
+
+  if (mode === "cancel" || mode === "hide_and_cancel") {
+    const col = resolverIndiceHeader(headerMap, CAMPOS_GANTT_CREATE_ALIASES.estado);
+    if (col === -1) {
+      throw new Error("La hoja timeline no tiene columna estado");
+    }
+    before.estado = limpiarValor(row[col]);
+    after.estado = "Cancelado";
+    updates.push({ campo: "estado", col, valor: "Cancelado" });
+  }
+
+  const comentarioCol = resolverIndiceHeader(
+    headerMap,
+    CAMPOS_GANTT_CREATE_ALIASES.comentario,
+  );
+  if (comentarioCol !== -1 && reason) {
+    before.comentario = limpiarValor(row[comentarioCol]);
+    after.comentario = reason;
+    updates.push({ campo: "comentario", col: comentarioCol, valor: reason });
+  }
+
+  updates.forEach((update) => {
+    ws.getRange(rowNumber, update.col + 1).setValue(update.valor);
+  });
+
+  registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, d.updated_by);
+  registrarAuditoriaGanttSiExiste(
+    ss,
+    taskId,
+    d.updated_by,
+    before,
+    after,
+    "gantt_task_disable",
+  );
+
+  return {
+    task_id: taskId,
+    disabled_fields: updates.map((u) => u.campo),
+    row_number: rowNumber,
+  };
+}
+
 function construirMapaHeadersNormalizados(headers) {
   const map = {};
   headers.forEach((header, idx) => {
@@ -343,11 +437,19 @@ function escaparRegexGantt(valor) {
 }
 
 function existeTaskIdGantt(values, taskCol, dataStartRowNumber, taskId) {
+  return buscarCoincidenciasTaskGantt(values, taskCol, dataStartRowNumber, taskId)
+    .length > 0;
+}
+
+function buscarCoincidenciasTaskGantt(values, taskCol, dataStartRowNumber, taskId) {
   const taskIdNorm = normalizarIdGantt(taskId);
+  const coincidencias = [];
   for (let i = dataStartRowNumber - 1; i < values.length; i++) {
-    if (normalizarIdGantt(values[i][taskCol]) === taskIdNorm) return true;
+    if (normalizarIdGantt(values[i][taskCol]) === taskIdNorm) {
+      coincidencias.push({ rowNumber: i + 1, row: values[i] });
+    }
   }
-  return false;
+  return coincidencias;
 }
 
 function normalizarIdGantt(valor) {
@@ -446,6 +548,12 @@ function normalizarVisibleGantt(valor) {
   if (["si", "s"].includes(key)) return "Si";
   if (["no", "n"].includes(key)) return "No";
   throw new Error("visible_gantt invalido: " + raw);
+}
+
+function normalizarModoBajaGantt(valor) {
+  const mode = normalizarHeaderGantt(valor);
+  if (["hide", "cancel", "hide_and_cancel"].includes(mode)) return mode;
+  throw new Error("mode invalido para gantt_task_disable: " + limpiarValor(valor));
 }
 
 function registrarMetadatosAltaGanttSiExisten(ws, headerMap, rowNumber, createdBy) {

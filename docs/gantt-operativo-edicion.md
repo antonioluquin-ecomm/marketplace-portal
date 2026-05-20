@@ -803,3 +803,91 @@ Pendiente real:
 - Subir `Gantt.gs` y `Apps_script_v5.js` actualizados al proyecto Apps Script real.
 - Ejecutar POST real solo con autorizacion explicita y payload QA con `visible_gantt = No`.
 - Confirmar que el CSV publicado refleja la fila despues de la latencia normal.
+
+## Estado 31C2B - Endpoint QA para baja logica de tareas Gantt
+
+Estado: implementado localmente. No se ejecuto escritura real contra Google Sheets.
+
+Operacion agregada:
+
+- `tipo_formulario = "gantt_task_disable"`
+
+Archivos funcionales modificados:
+
+- `Apps_script_v5.js`: routing minimo hacia `darDeBajaTareaGantt(data)`.
+- `Gantt.gs`: funcion `darDeBajaTareaGantt` y helper especifico para modo de baja.
+
+### Contrato implementado
+
+Payload QA recomendado:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "updated_by": "qa@marketplace.local",
+  "mode": "hide_and_cancel",
+  "reason": "Baja logica QA controlada"
+}
+```
+
+Respuesta OK:
+
+```json
+{
+  "ok": true,
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "disabled_fields": ["visible_gantt", "estado", "comentario"],
+  "row_number": 123,
+  "message": "Tarea Gantt dada de baja logicamente"
+}
+```
+
+Errores:
+
+- Usa `errorResponse(err)`.
+- Mantiene formato `ok:false`, `status:"error"`, `error`, `message`.
+
+### Reglas implementadas
+
+- No borra fisicamente filas.
+- Busca la tarea por `task_id` / `ID Tarea` usando la fila real de headers detectada por `obtenerHeadersTimelineGantt()`.
+- Rechaza `task_id` faltante.
+- Rechaza `task_id` inexistente.
+- Rechaza `task_id` duplicado.
+- No crea columnas nuevas.
+- No modifica estructura de hoja.
+- No altera formulas.
+- Registra `reason` en `comentario` si la columna existe.
+- Registra `updated_at` / `updated_by` solo si esas columnas existen.
+- Registra auditoria solo si existe hoja compatible.
+
+Modos soportados:
+
+| Mode | Efecto | Error si falta columna |
+|---|---|---|
+| `hide` | `visible_gantt = No` | Error si no existe `visible_gantt`. |
+| `cancel` | `estado = Cancelado` | Error si no existe `estado`. |
+| `hide_and_cancel` | `visible_gantt = No` y `estado = Cancelado` | Error si falta cualquiera de las columnas requeridas. |
+
+### Validacion local
+
+| Caso | Resultado | Estado |
+|---|---|---|
+| Disable `hide` | Escribe `visible_gantt = No`; registra comentario | OK |
+| Disable `cancel` | Escribe `estado = Cancelado`; registra comentario | OK |
+| Disable `hide_and_cancel` | Escribe ambos campos con headers reales en fila 3 | OK |
+| `task_id` faltante | Error controlado `Falta task_id` | OK |
+| `task_id` inexistente | Error controlado `task_id no existe` | OK |
+| `task_id` duplicado | Error controlado `task_id duplicado en timeline` | OK |
+| Falta `visible_gantt` en modo `hide` | Error controlado | OK |
+| Falta `estado` en modo `cancel` | Error controlado | OK |
+| `gantt_task_update` | Sigue OK | OK |
+| `gantt_task_create` | Sigue OK | OK |
+
+Pendiente real:
+
+- Subir `Gantt.gs` y `Apps_script_v5.js` actualizados al proyecto Apps Script real.
+- Ejecutar POST real solo contra `TASK-DUMMY-QA-CREATE` creada en 31C2A y con autorizacion explicita.
+- Confirmar que no se borra la fila.
+- Confirmar que `visible_gantt = No` y/o `estado = Cancelado` quedan aplicados segun modo.

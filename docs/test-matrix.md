@@ -1424,3 +1424,44 @@ Pendientes:
 - Ejecutar POST real solo si se autoriza escritura dummy.
 - Confirmar que la fila creada queda con `visible_gantt = No`.
 - Confirmar que no afecta el Gantt visible ni tareas productivas.
+
+### Etapa 31C2B: endpoint QA `gantt_task_disable`
+
+**Estado:** implementado localmente; escritura real pendiente de autorizacion.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Routing | `tipo_formulario=gantt_task_disable` | `doPost` deriva a `darDeBajaTareaGantt` antes de exigir `seller_id` raiz | OK |
+| Disable `hide` | Smoke mockeado | Escribe `visible_gantt = No` y comentario si existe | OK |
+| Disable `cancel` | Smoke mockeado | Escribe `estado = Cancelado` y comentario si existe | OK |
+| Disable `hide_and_cancel` | Smoke mockeado con headers reales en fila 3 | Escribe `visible_gantt = No`, `estado = Cancelado` y comentario | OK |
+| `task_id` faltante | Smoke mockeado | `ok:false`, `error:"Falta task_id"` | OK |
+| `task_id` inexistente | Smoke mockeado | `ok:false`, error `task_id no existe` | OK |
+| `task_id` duplicado | Smoke mockeado | `ok:false`, error `task_id duplicado en timeline` | OK |
+| Falta `visible_gantt` | Smoke mockeado modo `hide` | `ok:false`, error claro | OK |
+| Falta `estado` | Smoke mockeado modo `cancel` | `ok:false`, error claro | OK |
+| Compatibilidad update | Smoke mockeado `gantt_task_update` | Sigue OK | OK |
+| Compatibilidad create | Smoke mockeado `gantt_task_create` | Sigue OK | OK |
+| Sintaxis fachada | `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | Sin errores | OK |
+| Escritura real | No ejecutada | Sin cambios en Google Sheets | OK |
+
+Payload QA recomendado para validacion real autorizada:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "updated_by": "qa@marketplace.local",
+  "mode": "hide_and_cancel",
+  "reason": "Baja logica QA controlada"
+}
+```
+
+Pendientes:
+
+- Subir `Apps_script_v5.js` y `Gantt.gs` al proyecto Apps Script real.
+- Ejecutar POST real solo sobre `TASK-DUMMY-QA-CREATE`.
+- Confirmar que no se borra la fila.
+- Confirmar que la tarea queda oculta/cancelada segun modo.
+- Confirmar que no afecta tareas productivas.

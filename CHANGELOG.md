@@ -4,6 +4,57 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2B endpoint QA baja logica tareas Gantt
+
+Tipo de cambio: Apps Script QA controlado y documentacion.
+
+Estado: implementado localmente; escritura real no ejecutada.
+
+Resultado:
+- Agregado routing minimo `tipo_formulario = "gantt_task_disable"` en `Apps_script_v5.js`.
+- Agregada funcion `darDeBajaTareaGantt` en `Gantt.gs`.
+- El endpoint busca tareas por `task_id` / `ID Tarea` usando los helpers Gantt existentes.
+- No borra filas fisicamente.
+- Modos soportados:
+  - `hide`: escribe `visible_gantt = No`.
+  - `cancel`: escribe `estado = Cancelado`.
+  - `hide_and_cancel`: escribe ambos campos.
+- Registra `reason` en `comentario` si existe la columna.
+- Registra `updated_at` / `updated_by` solo si esas columnas existen.
+- Registra auditoria solo si existe hoja compatible.
+- No crea columnas nuevas ni modifica estructura de hoja.
+
+Validaciones:
+- `node --check Apps_script_v5.js` OK.
+- Carga conjunta local de `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs` y `Apps_script_v5.js` OK.
+- Smoke mockeado `hide` OK.
+- Smoke mockeado `cancel` OK.
+- Smoke mockeado `hide_and_cancel` OK con headers reales en fila 3.
+- Error por `task_id` faltante OK.
+- Error por `task_id` inexistente OK.
+- Error por `task_id` duplicado OK.
+- Error por falta de `visible_gantt` en modo `hide` OK.
+- Error por falta de `estado` en modo `cancel` OK.
+- Smoke extra `gantt_task_update` OK.
+- Smoke extra `gantt_task_create` OK.
+- Escritura real no ejecutada.
+
+Payload QA sugerido:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "updated_by": "qa@marketplace.local",
+  "mode": "hide_and_cancel",
+  "reason": "Baja logica QA controlada"
+}
+```
+
+Alcance:
+- No se tocaron `internal/`, `public/`, `legacy/`, `config.js`, `assets/js/config.js`, Google Sheets, front, sellers, gestion_seller, calificacion, relevamiento, definicion_tecnica ni endpoints existentes.
+- `gantt_task_update` y `gantt_task_create` se mantienen compatibles.
+
 ## 2026-05-20 - Etapa 31C2A endpoint QA crear tareas Gantt
 
 Tipo de cambio: Apps Script QA controlado y documentacion.

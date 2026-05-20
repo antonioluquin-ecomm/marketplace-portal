@@ -713,3 +713,93 @@ Errores:
 - La prueba real debe usar tarea dummy con `visible_gantt = No`.
 - Si la hoja `timeline` no tiene columna opcional `visible_gantt`, el endpoint no la crea; solo escribe columnas existentes.
 - La generacion de ID reduce duplicados, pero en concurrencia extrema debe revalidarse contra la hoja real antes de habilitar uso productivo.
+
+## Estado 31C2B - Endpoint QA `gantt_task_disable`
+
+Fecha: 2026-05-20
+
+Estado: implementado localmente sin escritura real.
+
+### Cambios funcionales acotados
+
+`Apps_script_v5.js`:
+
+- Agrega routing minimo para `tipo_formulario = "gantt_task_disable"`.
+- Mantiene `doPost` como fachada estable.
+- No cambia los flujos `seller`, `gestion_seller`, `calificacion`, `relevamiento`, `definicion_tecnica`, `gantt_task_update` ni `gantt_task_create`.
+
+`Gantt.gs`:
+
+- Agrega `darDeBajaTareaGantt`.
+- Reutiliza `obtenerHeadersTimelineGantt`, alias `ID Tarea`, normalizacion de IDs, metadatos y auditoria Gantt.
+- Agrega helper `normalizarModoBajaGantt`.
+- Reutiliza busqueda por task en `buscarCoincidenciasTaskGantt`.
+
+### Contrato
+
+Payload:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "updated_by": "qa@marketplace.local",
+  "mode": "hide_and_cancel",
+  "reason": "Baja logica QA controlada"
+}
+```
+
+Response OK:
+
+```json
+{
+  "ok": true,
+  "task_id": "TASK-DUMMY-QA-CREATE",
+  "disabled_fields": ["visible_gantt", "estado", "comentario"],
+  "row_number": 123,
+  "message": "Tarea Gantt dada de baja logicamente"
+}
+```
+
+Errores:
+
+- Conservan formato `errorResponse`.
+- No cambian responses existentes de otros endpoints.
+
+### Reglas
+
+- No eliminar filas fisicamente.
+- Resolver la fila real por `task_id` / `ID Tarea`.
+- `hide`: requiere columna `visible_gantt` y escribe `No`.
+- `cancel`: requiere columna `estado` y escribe `Cancelado`.
+- `hide_and_cancel`: requiere ambas columnas.
+- Si existe `comentario` y se envia `reason`, se registra el motivo.
+- Si existen `updated_at` / `updated_by`, se registran.
+- Si existe hoja de auditoria compatible, se registra operacion `gantt_task_disable`.
+- No crear columnas nuevas.
+
+### Validacion local
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | OK |
+| Disable `hide` | Actualiza `visible_gantt` y comentario | OK |
+| Disable `cancel` | Actualiza `estado` y comentario | OK |
+| Disable `hide_and_cancel` | Detecta headers fila 3 y actualiza ambos campos | OK |
+| Error `task_id` faltante | `ok:false`, error claro | OK |
+| Error `task_id` inexistente | `ok:false`, error claro | OK |
+| Error `task_id` duplicado | `ok:false`, error claro | OK |
+| Error falta `visible_gantt` | `ok:false`, error claro en modo `hide` | OK |
+| Error falta `estado` | `ok:false`, error claro en modo `cancel` | OK |
+| Compatibilidad `gantt_task_update` | Sigue OK | OK |
+| Compatibilidad `gantt_task_create` | Sigue OK | OK |
+| Escritura real | No ejecutada | OK |
+
+### Riesgo residual
+
+- Falta deploy/incorporacion real de `Apps_script_v5.js` y `Gantt.gs`.
+- La prueba real debe limitarse a `TASK-DUMMY-QA-CREATE`.
+- Si `visible_gantt` no existe en la hoja real, `hide` y `hide_and_cancel` fallaran con error controlado.
+- Si `estado` no existe, `cancel` y `hide_and_cancel` fallaran con error controlado.
+- No hay rollback automatico; la reversa seria otro update controlado sobre la tarea dummy.
