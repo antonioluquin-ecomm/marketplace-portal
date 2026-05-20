@@ -4,6 +4,27 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C modularizacion controlada Gantt Apps Script
+
+Tipo de cambio: refactor tecnico acotado.
+
+Estado: implementado localmente sin deploy activo.
+
+Resultado:
+- Creado `Gantt.gs`.
+- Movida desde `Apps_script_v5.js` solo la logica exclusiva de `gantt_task_update`, incluyendo validaciones, helpers Gantt, metadatos y auditoria Gantt.
+- `Apps_script_v5.js` conserva `doPost`, `doGet` y routing principal como fachada estable.
+- Payloads y responses de `gantt_task_update` se mantienen identicos.
+- No se tocaron sellers, gestion_seller, calificacion, relevamiento, definicion tecnica, formularios, simuladores, `internal/`, `public/`, `legacy/`, config, endpoints ni Google Sheets.
+
+Validaciones:
+- `node --check Apps_script_v5.js` OK.
+- Carga conjunta mockeada de `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs` y `Apps_script_v5.js` OK.
+- Revision de simbolos: 84 simbolos, sin duplicados.
+- Smoke mockeado `gantt_task_update` OK.
+- Smoke mockeado error por `task_id` faltante OK.
+- No se ejecuto escritura real.
+
 ## 2026-05-19 - Etapa 31B modularizacion minima Apps Script
 
 Tipo de cambio: refactor tecnico acotado.

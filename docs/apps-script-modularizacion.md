@@ -280,3 +280,78 @@ Riesgo residual:
 
 - Para confirmar incorporacion remota de `Config.gs`, `Headers.gs` y `Utils.gs` en el editor Apps Script hace falta acceso al proyecto real o `clasp`. El repo no tiene metadata de vinculacion. La validacion actual confirma compatibilidad local fuerte y `doGet` real operativo, pero no lista archivos remotos.
 - Los POST reales siguen pendientes hasta que exista tarea/seller dummy aprobado para escritura controlada.
+
+## Estado 31C - Modularizacion controlada Gantt
+
+Fecha: 2026-05-20
+
+Implementado sin deploy ni escritura real.
+
+Archivo creado:
+
+- `Gantt.gs`
+
+Funciones y constantes movidas desde `Apps_script_v5.js` hacia `Gantt.gs`:
+
+- `CAMPOS_GANTT_EDITABLES_QA`
+- `ESTADOS_GANTT_PERMITIDOS`
+- `actualizarTareaGantt`
+- `construirMapaHeadersNormalizados`
+- `normalizarHeaderGantt`
+- `resolverIndiceHeader`
+- `normalizarIdGantt`
+- `normalizarValorGantt`
+- `normalizarEstadoGantt`
+- `validarFechaGantt`
+- `validarRangoFechasGantt`
+- `validarTextoGantt`
+- `registrarMetadatosGanttSiExisten`
+- `registrarAuditoriaGanttSiExiste`
+
+Se mantuvo:
+
+- `doPost` en `Apps_script_v5.js` como fachada estable.
+- Routing `tipo_formulario = "gantt_task_update"` sin cambios.
+- Payload de entrada sin cambios.
+- Response OK sin cambios:
+
+```json
+{
+  "ok": true,
+  "task_id": "TASK-DUMMY-QA",
+  "updated_fields": ["estado"]
+}
+```
+
+- Response error sin cambios:
+
+```json
+{
+  "ok": false,
+  "status": "error",
+  "error": "Falta task_id",
+  "message": "Error: Falta task_id"
+}
+```
+
+Validacion local 31C:
+
+- `node --check Apps_script_v5.js` OK.
+- Carga conjunta via `vm` de `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs` y `Apps_script_v5.js` OK.
+- Revision de simbolos en 5 archivos: 84 simbolos, 0 duplicados.
+- Smoke mockeado `gantt_task_update` OK con `TASK-DUMMY-QA`.
+- Smoke mockeado error por `task_id` faltante OK.
+- No se ejecutaron POST reales ni escrituras en Google Sheets.
+
+No se movio ni modifico:
+
+- Sellers / Gestion Sellers.
+- Calificacion.
+- Relevamiento.
+- Definicion tecnica.
+- Formularios, simuladores, `internal/`, `public/`, `legacy/`, `config.js`, `assets/js/config.js`.
+
+Riesgo residual:
+
+- Falta incorporar y validar `Gantt.gs` en el proyecto real de Apps Script antes de deploy activo.
+- POST real con `TASK-DUMMY-QA` sigue pendiente hasta aprobacion de escritura controlada.

@@ -1219,3 +1219,34 @@ Pendiente antes de 31C:
 
 - Confirmar en el editor Apps Script real o mediante `clasp` que `Config.gs`, `Headers.gs` y `Utils.gs` fueron subidos al proyecto remoto.
 - Ejecutar POST real solo con dummy aprobado si se decide validar escritura controlada.
+
+## Etapa 31C: modularizacion controlada Gantt Apps Script
+
+**Estado:** implementado localmente, sin deploy activo ni escritura real.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Archivo creado | `Gantt.gs` | Logica exclusiva Gantt movida | OK |
+| Fachada principal | Revision `Apps_script_v5.js` | `doPost` y `doGet` permanecen en fachada | OK |
+| Routing Gantt | Revision estatica | `doPost` sigue llamando `actualizarTareaGantt(data)` | OK |
+| Duplicados | Revision de simbolos en 5 archivos | 84 simbolos, 0 duplicados | OK |
+| Sintaxis fachada | `node --check Apps_script_v5.js` | Sin errores | OK |
+| Sintaxis conjunta | Carga via `vm` de `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` | Sin errores | OK |
+| Smoke `gantt_task_update` | Hoja `timeline` mockeada con `TASK-DUMMY-QA` | `ok:true`, `task_id` y `updated_fields` estables | OK |
+| Error `task_id` faltante | Smoke mockeado | `ok:false`, `status:"error"`, `error:"Falta task_id"`, `message:"Error: Falta task_id"` | OK |
+| Escritura real | No ejecutada | Sin cambios en Google Sheets | OK |
+
+Funciones movidas a `Gantt.gs`:
+
+- `actualizarTareaGantt`
+- helpers exclusivos Gantt de headers, ids, valores, estados, fechas, textos, metadatos y auditoria.
+- constantes `CAMPOS_GANTT_EDITABLES_QA` y `ESTADOS_GANTT_PERMITIDOS`.
+
+Funciones no movidas:
+
+- Sellers / Gestion Sellers.
+- Calificacion.
+- Relevamiento.
+- Definicion tecnica.
+- Helpers Sheets compartidos.
+- `HEADERS_*` y `CAMPOS_*` no Gantt.
