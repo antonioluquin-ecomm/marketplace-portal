@@ -28,6 +28,9 @@ const GANTT_TASK_ID_HEADER_ALIASES = [
   "id tarea",
 ];
 
+const GANTT_LOCK_TIMEOUT_MS = 10000;
+const GANTT_ACTOR_FALLBACK = "gantt_backend_no_declarado";
+
 const CAMPOS_GANTT_CREATE_ALIASES = {
   task_id: GANTT_TASK_ID_HEADER_ALIASES,
   seller_id: ["seller_id", "id_seller", "seller"],
@@ -46,8 +49,15 @@ const CAMPOS_GANTT_CREATE_ALIASES = {
 };
 
 function actualizarTareaGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_task_update", () =>
+    actualizarTareaGanttSinLock(d),
+  );
+}
+
+function actualizarTareaGanttSinLock(d) {
   const taskId = limpiarValor(d.task_id || d.id_tarea);
   if (!taskId) throw new Error("Falta task_id");
+  const actor = normalizarActorDeclaradoGantt(d.updated_by, "gantt_update_sin_updated_by");
 
   const fields = d.fields;
   if (!fields || Array.isArray(fields) || typeof fields !== "object") {
@@ -120,8 +130,8 @@ function actualizarTareaGantt(d) {
     ws.getRange(rowNumber, update.col + 1).setValue(update.valor);
   });
 
-  registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, d.updated_by);
-  registrarAuditoriaGanttSiExiste(ss, taskId, d.updated_by, before, after);
+  registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, actor);
+  registrarAuditoriaGanttSiExiste(ss, taskId, actor, before, after);
 
   return {
     task_id: taskId,
@@ -130,10 +140,17 @@ function actualizarTareaGantt(d) {
 }
 
 function crearTareaGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_task_create", () =>
+    crearTareaGanttSinLock(d),
+  );
+}
+
+function crearTareaGanttSinLock(d) {
   const task = d.task;
   if (!task || Array.isArray(task) || typeof task !== "object") {
     throw new Error("Falta task como objeto de tarea a crear");
   }
+  const actor = normalizarActorDeclaradoGantt(d.created_by, "gantt_create_sin_created_by");
 
   const sellerId = normalizarIdGantt(task.seller_id);
   if (!sellerId) throw new Error("seller_id obligatorio");
@@ -221,11 +238,11 @@ function crearTareaGantt(d) {
   const rowNumber = ws.getLastRow() + 1;
   ws.appendRow(row);
 
-  registrarMetadatosAltaGanttSiExisten(ws, headerMap, rowNumber, d.created_by);
+  registrarMetadatosAltaGanttSiExisten(ws, headerMap, rowNumber, actor);
   registrarAuditoriaGanttSiExiste(
     ss,
     taskId,
-    d.created_by,
+    actor,
     {},
     datos,
     "gantt_task_create",
@@ -239,8 +256,15 @@ function crearTareaGantt(d) {
 }
 
 function darDeBajaTareaGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_task_disable", () =>
+    darDeBajaTareaGanttSinLock(d),
+  );
+}
+
+function darDeBajaTareaGanttSinLock(d) {
   const taskId = limpiarValor(d.task_id || d.id_tarea || d["ID Tarea"]);
   if (!taskId) throw new Error("Falta task_id");
+  const actor = normalizarActorDeclaradoGantt(d.updated_by, "gantt_disable_sin_updated_by");
 
   const mode = normalizarModoBajaGantt(d.mode || "hide_and_cancel");
   const reason = validarTextoGantt(d.reason || "", "reason", 1000);
@@ -315,11 +339,11 @@ function darDeBajaTareaGantt(d) {
     ws.getRange(rowNumber, update.col + 1).setValue(update.valor);
   });
 
-  registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, d.updated_by);
+  registrarMetadatosGanttSiExisten(ws, headerMap, rowNumber, actor);
   registrarAuditoriaGanttSiExiste(
     ss,
     taskId,
-    d.updated_by,
+    actor,
     before,
     after,
     "gantt_task_disable",
@@ -330,6 +354,37 @@ function darDeBajaTareaGantt(d) {
     disabled_fields: updates.map((u) => u.campo),
     row_number: rowNumber,
   };
+}
+
+function ejecutarOperacionGanttConLock(operacion, callback) {
+  let lock = null;
+  let lockTomado = false;
+
+  try {
+    if (typeof LockService !== "undefined" && LockService.getScriptLock) {
+      lock = LockService.getScriptLock();
+      lockTomado = lock.tryLock(GANTT_LOCK_TIMEOUT_MS);
+      if (!lockTomado) {
+        throw new Error(
+          "No se pudo obtener lock Gantt para " +
+            operacion +
+            ". Reintentar en unos segundos.",
+        );
+      }
+    }
+
+    return callback();
+  } finally {
+    if (lock && lockTomado) {
+      lock.releaseLock();
+    }
+  }
+}
+
+function normalizarActorDeclaradoGantt(valor, fallback) {
+  const actor = limpiarValor(valor);
+  const resolved = actor || fallback || GANTT_ACTOR_FALLBACK;
+  return validarTextoGantt(resolved, "actor_gantt", 180);
 }
 
 function construirMapaHeadersNormalizados(headers) {
@@ -620,7 +675,13 @@ function registrarAuditoriaGanttSiExiste(
   const headerMap = construirMapaHeadersNormalizados(headers);
   if (
     resolverIndiceHeaderGantt(headerMap, GANTT_TASK_ID_HEADER_ALIASES) === -1 ||
-    resolverIndiceHeader(headerMap, ["updated_at", "fecha", "fecha_actualizacion"]) === -1
+    resolverIndiceHeader(headerMap, [
+      "updated_at",
+      "created_at",
+      "timestamp",
+      "fecha",
+      "fecha_actualizacion",
+    ]) === -1
   ) {
     return;
   }
@@ -628,18 +689,41 @@ function registrarAuditoriaGanttSiExiste(
   const now = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
   const row = headers.map((header) => {
     const key = normalizarHeaderGantt(header);
-    if (["updated_at", "fecha", "fecha_actualizacion"].includes(key)) return now;
+    if (
+      ["updated_at", "created_at", "timestamp", "fecha", "fecha_actualizacion"].includes(
+        key,
+      )
+    ) {
+      return now;
+    }
     if (["task_id", "id_tarea"].includes(key)) return taskId;
-    if (["updated_by", "usuario", "actualizado_por"].includes(key)) {
+    if (
+      [
+        "updated_by",
+        "created_by",
+        "usuario",
+        "actualizado_por",
+        "creado_por",
+        "actor",
+        "usuario_declarado",
+        "client_actor",
+      ].includes(key)
+    ) {
       return limpiarValor(updatedBy);
     }
-    if (["created_by", "creado_por", "usuario_creacion"].includes(key)) {
-      return limpiarValor(updatedBy);
-    }
-    if (["tipo_formulario", "operacion", "accion"].includes(key)) {
+    if (["tipo_formulario", "operacion", "operation", "accion"].includes(key)) {
       return accion;
     }
-    if (["updated_fields", "campos_actualizados"].includes(key)) {
+    if (
+      [
+        "updated_fields",
+        "created_fields",
+        "disabled_fields",
+        "fields_changed",
+        "campos_actualizados",
+        "campos_afectados",
+      ].includes(key)
+    ) {
       return Object.keys(after).join(", ");
     }
     if (["before", "valor_anterior"].includes(key)) return JSON.stringify(before);

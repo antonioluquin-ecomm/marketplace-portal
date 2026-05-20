@@ -1597,3 +1597,77 @@ Observacion:
 - DevTools remoto no estuvo disponible para clicks reales.
 - La interaccion se valido con DOM mockeado y la carga/render con Chrome headless.
 - El alta real fue ejecutada con el payload generado por el flujo UI.
+
+### Etapa 31C2F: auditoria hardening Gantt Apps Script
+
+**Estado:** documentada; sin cambios funcionales.
+
+Objetivo: definir validaciones futuras para permisos, concurrencia y auditoria antes de ampliar UI de escritura.
+
+| Area | Validacion futura | Resultado esperado | Estado |
+|---|---|---|---|
+| Permisos | POST sin token/usuario autorizado a `gantt_task_create` | `ok:false`, error de autorizacion, sin escritura | Futuro |
+| Permisos | POST autorizado a `gantt_task_create` | `ok:true`, tarea dummy creada | Futuro |
+| Permisos | POST no autorizado a `gantt_task_update` | `ok:false`, sin modificar tarea | Futuro |
+| Permisos | POST no autorizado a `gantt_task_disable` | `ok:false`, sin cancelar tarea | Futuro |
+| Identidad | Payload con `updated_by` manipulado | Apps Script registra actor server-side o rechaza | Futuro |
+| Identidad | Payload sin `created_by` pero con autorizacion valida | Apps Script registra actor resuelto en backend | Futuro |
+| Concurrencia create | Dos altas simultaneas para mismo seller | IDs unicos; sin duplicados | Futuro |
+| Concurrencia create | Colision de `task_id` manual | Rechazo controlado dentro del lock | Futuro |
+| Concurrencia update | Dos updates simultaneos misma tarea | Sin corrupcion; log deja trazabilidad | Futuro |
+| Concurrencia disable | Dos bajas simultaneas misma tarea | Operacion idempotente o error controlado | Futuro |
+| LockService | Timeout de lock | `ok:false`, error claro, sin escritura parcial | Futuro |
+| Auditoria | Update autorizado | Registra operation, actor, task_id, before/after, status | Futuro |
+| Auditoria | Create autorizado | Registra task_id creado, actor, request_id si existe | Futuro |
+| Auditoria | Disable autorizado | Registra motivo, actor, estado anterior y posterior | Futuro |
+| Auditoria | Error de autorizacion | Registra intento solo si existe log seguro | Futuro |
+| Baja logica | UI futura usa `mode = "cancel"` | No depende de `visible_gantt` | Futuro |
+| Integridad | `visible_gantt` ausente en CSV real | UI no muestra opcion `hide` | Futuro |
+| Alcance | No borrar filas fisicamente | Fila permanece en `timeline` | Futuro |
+
+Orden recomendado de smoke futuro:
+
+1. Permisos server-side.
+2. `LockService` en create/update/disable.
+3. Auditoria/log.
+4. UI baja logica con `mode = "cancel"`.
+
+No ejecutar pruebas sobre tareas productivas. Usar solo tareas dummy autorizadas.
+
+### Etapa 31C2G: hardening minimo backend Gantt
+
+**Estado:** implementado localmente; pendiente validacion real post deploy.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Sintaxis fachada | `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` via `vm` | Sin errores | OK |
+| Duplicados | `rg` de funciones publicas Gantt | Sin duplicados conflictivos | OK |
+| Lock update | Smoke mock `gantt_task_update` | Toma lock, actualiza y libera | OK |
+| Lock create | Smoke mock `gantt_task_create` | Toma lock, crea tarea y libera | OK |
+| Lock disable | Smoke mock `gantt_task_disable` | Toma lock, cancela tarea y libera | OK |
+| Timeout lock | Mock con `tryLock=false` | Error controlado `No se pudo obtener lock Gantt...` | OK |
+| Identidad update | Payload con `updated_by` | Actor normalizado usado en metadata/auditoria | OK |
+| Identidad create | Payload con `created_by` | Actor normalizado usado en metadata/auditoria | OK |
+| Fallback identidad | Payload sin actor en timeout mock | No rompe contrato; fallback definido | OK |
+| Auditoria opcional | Hoja mock `timeline_log` compatible | Registra operacion, task_id, actor y campos | OK |
+| Payloads | Revision estatica | Sin cambios de nombres ni estructura | OK |
+| Front | Revision de archivos modificados | No se toco | OK |
+| `git diff --check` | Validacion Git | Sin errores; solo avisos CRLF | OK |
+
+Smoke mock ejecutado:
+
+- `gantt_task_update` sobre `SPT-001-T-01`: `updated_fields = ["estado","comentario"]`.
+- `gantt_task_create` sin `task_id`: genero `SPT-001-T-02`.
+- `gantt_task_disable` con `mode:"cancel"`: `disabled_fields = ["estado","comentario"]`.
+- Timeout de lock simulado: error controlado.
+
+Validacion real pendiente:
+
+- Copiar `Gantt.gs` actualizado al Apps Script real.
+- Crear nuevo deploy.
+- Revalidar solo con tarea dummy:
+  - update OK;
+  - create OK;
+  - disable OK con `mode:"cancel"`;
+  - timeout no se fuerza en real salvo prueba controlada.

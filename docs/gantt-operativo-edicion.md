@@ -1164,3 +1164,259 @@ Chrome headless posterior:
 ### Decision
 
 31C2E queda aprobada para avanzar a una etapa futura de baja logica desde front, manteniendo pendiente un smoke visual manual humano si se requiere evidencia de clicks reales en navegador interactivo.
+
+## Etapa 31C2F - Auditoria hardening Gantt Apps Script
+
+Estado: documentada.
+
+Alcance:
+
+- Solo auditoria y diseno tecnico.
+- No se implemento codigo funcional.
+- No se tocaron Apps Script, front, Google Sheets, endpoints ni payloads.
+
+### Diagnostico
+
+Los endpoints `gantt_task_update`, `gantt_task_create` y `gantt_task_disable` ya fueron validados con tarea dummy y mantienen contrato estable. El siguiente riesgo no esta en la funcionalidad base, sino en la exposicion operativa: quien puede escribir, como se evita una carrera de escrituras, y que evidencia queda despues de cada cambio.
+
+El campo `created_by` / `updated_by` hoy debe considerarse informativo si viene desde el front. No prueba identidad por si solo, porque el cliente puede enviarlo con cualquier valor. Antes de ampliar UI o permisos, Apps Script debe validar autorizacion en servidor con un mecanismo explicito.
+
+`visible_gantt` no aparece en el CSV real validado, por lo que la baja operativa real debe seguir usando `mode = "cancel"` hasta confirmar columna real o aprobar un cambio estructural de hoja.
+
+### Riesgos priorizados
+
+| Prioridad | Riesgo | Impacto | Recomendacion |
+|---|---|---|---|
+| P0 | Endpoint Apps Script expuesto sin control fuerte de escritura | Altas, bajas o updates no autorizados | Implementar autorizacion antes de nuevas UI de escritura amplia. |
+| P0 | `created_by` / `updated_by` confiado desde cliente | Suplantacion de usuario en auditoria | Validar usuario/token en Apps Script y registrar identidad resuelta por backend. |
+| P0 | Alta simultanea con generacion de `task_id` por correlativo | Duplicados o colision de IDs | Usar `LockService` alrededor de lectura, validacion de duplicado e insercion. |
+| P1 | Update simultaneo sobre la misma tarea | Last-write-wins sin aviso | Incorporar version ligera o auditoria suficiente antes de edicion masiva. |
+| P1 | Baja simultanea sobre tarea ya cancelada | Doble comentario o estado inesperado | Hacer baja idempotente y registrar intentos repetidos. |
+| P1 | Auditoria incompleta o no estandarizada | Baja trazabilidad y dificil rollback manual | Estandarizar `timeline_log` o hoja equivalente antes de permisos avanzados. |
+| P2 | Filas incompletas por create | Timeline con datos minimos insuficientes | Mantener validacion backend y documentar campos requeridos por hoja. |
+| P2 | UI create con `created_by` fijo | No identifica operador real | Reemplazar por usuario autenticado/token resuelto en backend. |
+| P2 | Recarga CSV posterior al OK puede demorar | La UI puede no ver la tarea inmediatamente | Mantener feedback claro y considerar estado transitorio local. |
+
+### Permisos minimos recomendados
+
+Modelo minimo seguro:
+
+- `gantt_task_update`: permitir solo a usuarios/roles operativos autorizados.
+- `gantt_task_create`: restringir a operadores internos autorizados; no exponer a seller-facing.
+- `gantt_task_disable`: restringir mas que create/update porque impacta visibilidad operativa o estado.
+- `task_id`, `seller_id`, `seller_nombre`, columnas calculadas y formulas siguen fuera de edicion.
+
+Opciones de autorizacion, de menor a mayor robustez:
+
+1. Token simple compartido por entorno QA.
+2. Allowlist de emails con `Session.getActiveUser().getEmail()` cuando el deploy y dominio lo permitan.
+3. Token por usuario o rol, almacenado fuera del front publico.
+4. Modelo mixto: token de entorno + allowlist server-side.
+
+Recomendacion: para la proxima etapa, usar modelo mixto simple. El front no debe decidir permisos; solo envia la operacion. Apps Script valida y rechaza.
+
+### Validacion de `created_by` / `updated_by`
+
+Reglas sugeridas:
+
+- Si hay usuario autenticado confiable en Apps Script, usarlo como identidad primaria.
+- Si no hay usuario autenticado, exigir token o clave operativa.
+- Guardar `created_by` / `updated_by` enviado por cliente solo como `client_actor` o dato auxiliar si se decide conservarlo.
+- Rechazar operaciones sin identidad/autorizacion valida.
+- No aceptar cambios de permisos desde payload.
+
+### Concurrencia y LockService
+
+`LockService` deberia aplicarse primero a `gantt_task_create` y luego a `gantt_task_update` / `gantt_task_disable`.
+
+Para create:
+
+- Tomar lock.
+- Leer headers reales y filas.
+- Validar payload.
+- Generar o validar `task_id`.
+- Revalidar duplicado dentro del lock.
+- Insertar fila.
+- Registrar log.
+- Liberar lock.
+
+Para update/disable:
+
+- Tomar lock.
+- Buscar `task_id`.
+- Rechazar duplicados.
+- Validar estado actual si corresponde.
+- Escribir campos permitidos.
+- Registrar log.
+- Liberar lock.
+
+La generacion de `task_id` no deberia depender solo de la ultima fila visible sin lock. Si se mantiene correlativo por seller, debe recalcularse dentro del lock y validar duplicado antes de escribir.
+
+### Auditoria recomendada
+
+`timeline_log` puede ser suficiente si existe y acepta estructura consistente. Si no existe o no es compatible, conviene estandarizar una hoja de log antes de habilitar permisos avanzados.
+
+Campos minimos de log:
+
+- `timestamp`
+- `operation`
+- `task_id`
+- `seller_id`
+- `actor`
+- `client_actor`
+- `status`
+- `fields_changed`
+- `before_json`
+- `after_json`
+- `reason`
+- `request_id`
+- `source`
+
+Reglas:
+
+- No crear columnas ni hojas nuevas sin etapa explicita.
+- Si no hay log compatible, registrar en respuesta/documentacion como riesgo pendiente.
+- Para errores de autorizacion, registrar intento solo si existe log seguro.
+
+### Riesgos actuales por endpoint
+
+`gantt_task_create`:
+
+- Riesgo principal: duplicado concurrente durante generacion de `task_id`.
+- Riesgo secundario: actor no confiable si `created_by` viene del front.
+- Riesgo operativo: fila valida pero incompleta para lectura humana si aparecen columnas nuevas no contempladas.
+
+`gantt_task_disable`:
+
+- Riesgo principal: baja no autorizada.
+- Riesgo operativo: `visible_gantt` no existe en CSV real, por lo que UI no debe ofrecer `hide`.
+- Riesgo de trazabilidad: si solo cambia `estado = Cancelado`, se necesita comentario/log claro.
+
+`gantt_task_update`:
+
+- Riesgo principal: update simultaneo sin version.
+- Riesgo operativo: cambios de fechas reales o estado pueden afectar alertas/KPIs.
+- Riesgo de identidad: `updated_by` debe resolverse en backend.
+
+UI create:
+
+- Riesgo principal: cualquier usuario con acceso al HTML y endpoint podria intentar crear si no hay autorizacion server-side.
+- Riesgo UX: CSV puede tardar en reflejar el alta tras `ok:true`.
+- Riesgo de datos: el front no genera `task_id`, correctamente, pero depende del backend para evitar duplicados.
+
+### Que implementar primero
+
+Orden recomendado:
+
+1. 31C2F1 - Autorizacion server-side minima para operaciones Gantt de escritura.
+2. 31C2F2 - `LockService` para create/update/disable.
+3. 31C2F3 - Auditoria estandarizada o compatibilidad formal con `timeline_log`.
+4. 31C2G - UI baja logica solo con `mode = "cancel"`.
+5. 31C2H - Permisos por rol y auditoria avanzada.
+
+La UI de baja logica no deberia implementarse antes de permisos y lock, porque expone una accion destructiva a nivel operativo aunque no borre filas.
+
+### Que no implementar todavia
+
+- No implementar `hide` en UI mientras `visible_gantt` no exista en CSV real.
+- No agregar columnas nuevas a `timeline`.
+- No borrar filas fisicamente.
+- No exponer permisos en el front como fuente de verdad.
+- No permitir creacion productiva masiva.
+- No editar `fase`, `hito`, `dependencia`, fechas planificadas ni columnas calculadas desde UI sin una etapa separada.
+
+### Etapas futuras sugeridas
+
+| Etapa | Objetivo | Archivos probables |
+|---|---|---|
+| 31C2F1 | Autorizacion minima Gantt write ops | `Gantt.gs`, docs |
+| 31C2F2 | LockService en create/update/disable | `Gantt.gs`, docs |
+| 31C2F3 | Log/auditoria estandarizada | `Gantt.gs`, docs; hoja solo si se aprueba |
+| 31C2G | UI baja logica con `mode = "cancel"` | `internal/gantt/gantt-operativo.html`, docs |
+| 31C2H | Roles avanzados y controles operativos | Apps Script, UI interna, docs |
+
+Confirmacion 31C2F:
+
+- No se implemento codigo funcional.
+- No se modificaron endpoints ni payloads.
+- No se tocaron Apps Script, front ni Google Sheets.
+
+## Estado 31C2G - Hardening minimo backend Gantt
+
+Estado: implementado localmente; pendiente copiar/deployar en Apps Script real.
+
+Alcance ejecutado:
+
+- Modificado solo `Gantt.gs`.
+- Documentacion actualizada.
+- No se tocaron `Apps_script_v5.js`, front, Google Sheets, endpoints ni payloads.
+
+### Cambios aplicados
+
+`Gantt.gs`:
+
+- `actualizarTareaGantt`, `crearTareaGantt` y `darDeBajaTareaGantt` mantienen los nombres publicos usados por `doPost`.
+- Las tres funciones publicas ahora envuelven la escritura con `ejecutarOperacionGanttConLock`.
+- Se agregaron funciones internas sin lock:
+  - `actualizarTareaGanttSinLock`
+  - `crearTareaGanttSinLock`
+  - `darDeBajaTareaGanttSinLock`
+- Se agrego timeout controlado de lock:
+  - `GANTT_LOCK_TIMEOUT_MS = 10000`
+- Se libera el lock en `finally`.
+- Se agrego normalizacion de actor declarado con fallback controlado:
+  - `normalizarActorDeclaradoGantt`
+  - fallback general `gantt_backend_no_declarado`
+  - fallback por operacion cuando falta `created_by` / `updated_by`
+- La identidad declarativa se registra como metadata/auditoria, pero no se usa como permiso real.
+- La auditoria opcional reconoce columnas adicionales sin crear estructura nueva:
+  - `timestamp`
+  - `operation`
+  - `actor`
+  - `usuario_declarado`
+  - `client_actor`
+  - `fields_changed`
+  - `campos_afectados`
+
+### Compatibilidad
+
+- `gantt_task_update` conserva payload y response.
+- `gantt_task_create` conserva payload y response.
+- `gantt_task_disable` conserva payload y response.
+- `Apps_script_v5.js` sigue como fachada estable.
+- No se agregaron permisos/allowlist todavia.
+- No se crean hojas ni columnas nuevas.
+- No se toca `visible_gantt`; la UI sigue sin usarlo.
+
+### Validaciones locales
+
+| Validacion | Resultado | Estado |
+|---|---|---|
+| `node --check Apps_script_v5.js` | Sin errores | OK |
+| Carga conjunta local | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` con `vm` | OK |
+| Smoke mock `gantt_task_update` | Actualiza `estado` y `comentario` con lock | OK |
+| Smoke mock `gantt_task_create` | Crea tarea `SPT-001-T-02` y registra auditoria | OK |
+| Smoke mock `gantt_task_disable` | `mode:"cancel"` actualiza `estado` y `comentario` | OK |
+| Lock timeout simulado | Error controlado: `No se pudo obtener lock Gantt...` | OK |
+| Liberacion de lock | `releaseLock` ejecutado | OK |
+| Revision de duplicados | Funciones publicas Gantt sin duplicados conflictivos | OK |
+| `git diff --check` | Sin errores; solo avisos CRLF | OK |
+
+### Riesgos residuales
+
+- Falta validacion real post deploy con tarea dummy.
+- Aun no existe autorizacion server-side por allowlist/token.
+- `created_by` / `updated_by` siguen siendo identidad declarativa, aunque normalizada.
+- Lock reduce carreras, pero no implementa versionado ni control de last-write-wins.
+- Auditoria depende de que exista una hoja compatible; si no existe, no rompe ni crea estructura.
+
+### Validacion real sugerida
+
+- Copiar `Gantt.gs` actualizado al proyecto Apps Script real.
+- Crear nuevo deploy.
+- Ejecutar solo sobre tarea dummy:
+  - `gantt_task_update`
+  - `gantt_task_create`
+  - `gantt_task_disable` con `mode:"cancel"`
+- Confirmar que no hay cambios de payload ni response.
+- Confirmar que la hoja `timeline` no recibe columnas nuevas.

@@ -4,6 +4,76 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 31C2G hardening minimo backend Gantt
+
+Tipo de cambio: backend Apps Script / hardening acotado.
+
+Estado: implementado localmente; pendiente deploy y smoke real con tarea dummy.
+
+Resultado:
+- Agregado hardening minimo en `Gantt.gs` para:
+  - `gantt_task_update`
+  - `gantt_task_create`
+  - `gantt_task_disable`
+- Las funciones publicas mantienen nombres y contratos usados por `Apps_script_v5.js`.
+- Agregado wrapper con `LockService.getScriptLock()` y timeout controlado de 10000 ms.
+- El lock se libera en `finally`.
+- Agregada normalizacion de identidad declarativa:
+  - `created_by`
+  - `updated_by`
+  - fallbacks controlados por operacion si no vienen.
+- La identidad declarativa no se usa todavia como permiso real.
+- Reutilizada auditoria opcional existente sin crear hojas ni columnas nuevas.
+- Ampliados alias de columnas de auditoria para registrar timestamp, operacion, actor y campos afectados si la hoja compatible existe.
+
+Validaciones:
+- `node --check Apps_script_v5.js`: OK.
+- Carga conjunta local con `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs` y `Apps_script_v5.js`: OK.
+- Smoke mock `gantt_task_update`: OK.
+- Smoke mock `gantt_task_create`: OK.
+- Smoke mock `gantt_task_disable`: OK.
+- Timeout de lock simulado: error controlado OK.
+- Revision de duplicados: OK.
+- `git diff --check`: OK, solo avisos CRLF.
+
+Alcance:
+- Se modifico `Gantt.gs` y documentacion.
+- No se toco `Apps_script_v5.js`.
+- No se tocaron front, Google Sheets, endpoints, payloads, `internal/`, `public/`, `legacy/`, `config.js` ni `assets/js/config.js`.
+
+Riesgos residuales:
+- Falta deploy y smoke real con tarea dummy.
+- Falta autorizacion server-side por token/allowlist.
+- Falta idempotencia por `request_id`.
+- La auditoria sigue dependiendo de que exista una hoja compatible.
+
+## 2026-05-20 - Etapa 31C2F auditoria hardening Gantt Apps Script
+
+Tipo de cambio: auditoria tecnica / documentacion.
+
+Estado: documentado.
+
+Resultado:
+- Auditado el hardening necesario antes de seguir agregando UI o permisos avanzados sobre Gantt Operativo.
+- Priorizados riesgos de autorizacion, identidad declarativa, concurrencia, auditoria y baja logica.
+- Documentada recomendacion de no confiar en `created_by` / `updated_by` enviados desde el front como identidad real.
+- Documentado uso recomendado de autorizacion server-side mediante allowlist, token simple o modelo mixto.
+- Documentado uso recomendado de `LockService` para `gantt_task_create`, `gantt_task_update` y `gantt_task_disable`.
+- Documentado modelo de auditoria sugerido para `timeline_log` o log equivalente.
+- Confirmado criterio operativo: no usar `visible_gantt` en UI mientras no exista en CSV real.
+- Recomendado implementar primero permisos, luego lock, luego logs, y recien despues UI de baja logica con `mode = "cancel"`.
+
+Riesgos priorizados:
+- P0: endpoint Apps Script expuesto sin autorizacion fuerte.
+- P0: `created_by` / `updated_by` manipulables desde cliente.
+- P0: duplicados concurrentes durante generacion de `task_id`.
+- P1: updates simultaneos sin control de version.
+- P1: auditoria insuficiente para rollback o trazabilidad.
+
+Alcance:
+- Solo documentacion.
+- No se tocaron Apps Script, front, Google Sheets, endpoints, payloads, `internal/`, `public/`, `legacy/`, `config.js` ni `assets/js/config.js`.
+
 ## 2026-05-20 - Etapa 31C-HANDOFF consolidacion post 31C2E
 
 Tipo de cambio: documentacion / handoff.
