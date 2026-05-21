@@ -6,6 +6,18 @@ Convertir el reporte automatico 32F en una guia operativa para sanear manualment
 
 Este checklist no autoriza cambios masivos ni limpieza fisica. Cada tanda debe ser pequena, revisable y validada antes de avanzar.
 
+## Nota 33B - congelar saneamiento hasta compatibilidad nuevo modelo
+
+Antes de ejecutar cualquier tanda manual sobre Google Sheets, el checklist debe adaptarse al nuevo contrato:
+
+- `Inicio plan` / `Fin plan` pasan a ser legacy; el canónico futuro es `inicio` / `fin`.
+- `Inicio real` / `Fin real` quedan deprecados y no deben editarse como parte del contrato operativo futuro.
+- `entorno` pasa a ser obligatorio: `QA` o `Productivo`.
+- `dependencia` pasa a canónico `depende_de`.
+- `visible_gantt` pasa a canónico `ver_en_gantt`, pero sigue pendiente de decision funcional final.
+
+Por lo tanto, las tandas que mencionan fechas plan o fechas reales quedan como checklist historico de 32G. La ejecucion manual real debe esperar que el auditor 33C regenere inconsistencias contra `inicio`, `fin` y `entorno`.
+
 ## 2. Reglas previas obligatorias
 
 - Exportar o duplicar la hoja antes de editar.

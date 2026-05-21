@@ -2251,3 +2251,32 @@ Decision vigente:
 - Antes de tocar la hoja real, generar reporte automatico de inconsistencias o checklist concreto para 32F.
 - 32F ya genera `docs/timeline-data-audit-report.md`; el siguiente paso operativo debe usar ese checklist antes de editar la hoja.
 - 32G crea `docs/timeline-cleanup-checklist.md`; la ejecucion manual sigue pendiente y debe hacerse por tandas.
+
+## Bloque 33: migracion a nuevo modelo Timeline
+
+Estado: iniciado en modo documental.
+
+Objetivo:
+
+- Migrar el contrato de `timeline` desde `inicio_plan` / `fin_plan` y fechas reales hacia `inicio` / `fin` + `entorno`.
+- Mantener compatibilidad con aliases historicos mientras frontend, Apps Script y auditor automatico se actualizan.
+- Evitar renombres o limpieza fisica de headers sin smoke previo.
+
+Etapas propuestas:
+
+- 33A: auditoria de impacto por nuevo modelo Timeline.
+- 33B: contrato documental nuevo modelo Timeline.
+- 33C: actualizar auditor automatico para nuevo modelo + legacy.
+- 33D: actualizar frontend solo lectura / normalizacion.
+- 33E: actualizar Apps Script aliases y validaciones.
+- 33F: migrar create/update frontend.
+- 33G: smoke mockeado completo.
+- 33H: smoke real con tarea dummy autorizada.
+
+Decision vigente:
+
+- Canónicos nuevos: `inicio`, `fin`, `entorno`, `depende_de`, `ver_en_gantt`.
+- Legacy obligatorio: `Inicio plan`, `Fin plan`, `inicio_plan`, `fin_plan`, `Inicio real`, `Fin real`, `visible_gantt`, `Ver en Gantt`, `Depende de`, `Seller / Marca`.
+- `inicio_real` y `fin_real` quedan deprecados y no deben enviarse en payloads futuros.
+- `entorno` es obligatorio y acepta `QA` o `Productivo`.
+- No tocar Google Sheets hasta que auditor, frontend y Apps Script toleren modelo nuevo + legacy.

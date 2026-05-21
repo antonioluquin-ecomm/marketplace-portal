@@ -4,6 +4,24 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 33B contrato documental nuevo modelo Timeline
+
+Tipo de cambio: documentacion / contrato de datos.
+
+Estado: completado sin implementacion funcional.
+
+Resultado:
+- Formalizado en `docs/data-dictionary-timeline.md` el nuevo contrato canonico de `timeline`: `inicio`, `fin`, `entorno`, `depende_de` y `ver_en_gantt`.
+- Documentados aliases legacy obligatorios para `Inicio plan`, `Fin plan`, fechas reales deprecadas, `Ver en Gantt`, `Depende de` y `Seller / Marca`.
+- Documentados payloads futuros esperados para `gantt_task_create`, `gantt_task_update` y `gantt_task_disable`.
+- Actualizados plan y checklist de saneamiento para indicar que la ejecucion manual debe esperar compatibilidad del bloque 33.
+- Registrado plan futuro 33C-33H antes de tocar frontend, Apps Script o Google Sheets.
+
+Alcance:
+- Solo documentacion.
+- No se tocaron HTML, JS, Apps Script, auditor automatico, Google Sheets, Excel, CSV, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-20 - Etapa 32G checklist manual de saneamiento Timeline
 
 Tipo de cambio: documentacion / checklist operativo.

@@ -6,6 +6,20 @@ Definir un camino seguro para sanear datos reales de la hoja `timeline` sin camb
 
 Este plan no autoriza todavia cambios en Google Sheets. Primero debe existir un reporte automatico o checklist concreto de inconsistencias, luego una ventana de saneamiento manual controlado con backup/export previo.
 
+## Actualizacion 33B - contrato nuevo
+
+El saneamiento manual debe alinearse con el nuevo contrato canonico de `timeline` antes de tocar datos reales:
+
+- Reemplazar criterio canonico `inicio_plan` / `fin_plan` por `inicio` / `fin`.
+- Tratar `Inicio plan`, `Fin plan`, `inicio_plan`, `fin_plan`, `fecha_inicio_plan` y `fecha_fin_plan` como aliases legacy durante transicion.
+- Tratar `Inicio real`, `Fin real`, `inicio_real` y `fin_real` como legacy/deprecados de solo lectura si aparecen; no usarlos como objetivo de saneamiento operativo futuro.
+- Incorporar `entorno` como campo obligatorio con valores `QA` o `Productivo`.
+- Renombrar mentalmente `dependencia` a `depende_de`, manteniendo alias `Depende de` y `dependencia`.
+- Renombrar mentalmente `visible_gantt` a `ver_en_gantt`, manteniendo alias `Ver en Gantt`, `visible_gantt`, `visible` y `Visible Gantt`.
+- No ejecutar limpieza fisica ni renombre de headers hasta que frontend, Apps Script y auditor automatico soporten nuevo modelo + legacy.
+
+Implicancia: las etapas de saneamiento 32F-32G quedan como base historica, pero la ejecucion real debe esperar el ajuste documental/tecnico del bloque 33.
+
 ## 2. Estado actual detectado
 
 Hallazgos consolidados de 32C y lectura del CSV publicado:

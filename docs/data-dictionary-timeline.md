@@ -6,6 +6,155 @@ La hoja `timeline` funciona como base de datos liviana para el Gantt Operativo. 
 
 El objetivo no es cambiar la hoja de inmediato, sino fijar una referencia estable para futuras etapas de compatibilidad, normalizacion y limpieza.
 
+## Contrato canonico 33B - nuevo modelo Timeline
+
+Estado: contrato documental aprobado para implementacion futura. No implica cambios automaticos en Google Sheets, frontend ni Apps Script.
+
+### Columnas canonicas
+
+1. `task_id`
+2. `seller_id`
+3. `seller_nombre`
+4. `fase`
+5. `hito`
+6. `tarea`
+7. `responsable`
+8. `depende_de`
+9. `entorno`
+10. `inicio`
+11. `fin`
+12. `estado`
+13. `comentario`
+14. `ver_en_gantt`
+
+Decisiones 33B:
+
+- `inicio_real` y `fin_real` salen del contrato operativo. Si aparecen en datos historicos, deben tratarse como legacy/deprecados y solo lectura durante la transicion.
+- `inicio_plan` y `fin_plan` dejan de ser nombres canonicos. El modelo usa solo `inicio` y `fin`.
+- `entorno` es obligatorio y acepta `QA` o `Productivo`.
+- `estado` sigue separado de `entorno`.
+- `depende_de` queda opcional.
+- `ver_en_gantt` queda opcional y pendiente de decision funcional final.
+
+### Matriz canonica 33B
+
+| Campo canonico | Aliases legacy aceptados | Tipo | Obligatorio | Editable frontend | Validacion | Observaciones |
+|---|---|---|---|---|---|---|
+| `task_id` | `ID Tarea`, `id_tarea`, `task_id` | string | Si | No | Unico; formato `SPT-###-T-##` o dummy QA autorizado | Clave primaria logica. |
+| `seller_id` | `seller_id`, `id_seller`, `seller` | string | Si | Solo alta | Debe existir en `sellers` | FK logica. |
+| `seller_nombre` | `Seller / Marca`, `seller_nombre`, `seller_marca` | string | No | No | Fallback visual; no autoridad | Preferir resolver por `seller_id`. |
+| `fase` | `Fase`, `fase` | enum/texto catalogado | Si | Alta; edit futuro controlado | Catalogo sugerido | Impacta filtros y color. |
+| `hito` | `Hito`, `hito` | enum/texto catalogado | Si | Alta; edit futuro controlado | Requerido; ideal por fase | Contexto visual y operativo. |
+| `tarea` | `Tarea`, `tarea`, `actividad` | string | Si | Alta | Requerido; largo maximo | Nombre principal mostrado. |
+| `responsable` | `Responsable`, `responsable` | enum/texto catalogado | Si | Si | Catalogo futuro o lista cerrada | Evita variantes para reporting. |
+| `depende_de` | `Depende de`, `depende_de`, `dependencia` | string/lista | No | Futuro controlado | `task_id` existente o vacio | Puede aceptar multiples dependencias en etapa futura. |
+| `entorno` | `Entorno`, `entorno` | enum | Si | Alta; edit si se aprueba | `QA` / `Productivo` | Separado de `estado`. |
+| `inicio` | `Inicio`, `inicio`, `Inicio plan`, `inicio_plan`, `fecha_inicio_plan` | date | Si | Alta; edit si se aprueba | Fecha valida `YYYY-MM-DD` | Reemplaza `inicio_plan`. |
+| `fin` | `Fin`, `fin`, `Fin plan`, `fin_plan`, `fecha_fin_plan` | date | Si | Alta; edit si se aprueba | Fecha valida `YYYY-MM-DD`; >= `inicio` | Reemplaza `fin_plan`. |
+| `estado` | `Estado`, `estado`, `estado_tarea` | enum | Si | Si | `Pendiente`, `En curso`, `Bloqueado`, `Completado`, `Cancelado` | Comunica avance y baja logica con `Cancelado`. |
+| `comentario` | `Comentario`, `comentario`, `comentarios` | string | No | Si | Largo maximo; texto libre | No usar como unico campo de auditoria futura. |
+| `ver_en_gantt` | `Ver en Gantt`, `ver_en_gantt`, `visible_gantt`, `visible`, `Visible Gantt` | enum `Si/No` | No | No por ahora | Si existe: `Si` / `No` | Pendiente decision final. |
+| `inicio_real` | `Inicio real`, `inicio_real`, `fecha_inicio_real` | date legacy | No | No | Solo lectura si aparece | Deprecado; no enviar en payload futuro. |
+| `fin_real` | `Fin real`, `fin_real`, `fecha_fin_real` | date legacy | No | No | Solo lectura si aparece | Deprecado; no enviar en payload futuro. |
+
+### Payload futuro esperado
+
+Create:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "task": {
+    "seller_id": "SPT-001",
+    "fase": "Operativa",
+    "hito": "QA",
+    "tarea": "Nueva tarea",
+    "responsable": "eCommerce",
+    "depende_de": "",
+    "entorno": "QA",
+    "inicio": "2026-06-20",
+    "fin": "2026-06-21",
+    "estado": "Pendiente",
+    "comentario": "",
+    "ver_en_gantt": "Si"
+  }
+}
+```
+
+Update:
+
+```json
+{
+  "tipo_formulario": "gantt_task_update",
+  "task_id": "SPT-001-T-01",
+  "fields": {
+    "estado": "En curso",
+    "responsable": "eCommerce",
+    "entorno": "QA",
+    "inicio": "2026-06-20",
+    "fin": "2026-06-21",
+    "comentario": "",
+    "depende_de": ""
+  }
+}
+```
+
+Campos retirados del update futuro:
+
+- `inicio_real`
+- `fin_real`
+
+Disable:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "SPT-001-T-01",
+  "mode": "cancel",
+  "reason": "Motivo de baja"
+}
+```
+
+La baja logica estandar mantiene `estado = Cancelado`. `ver_en_gantt` solo debe usarse para ocultamiento si se formaliza esa decision funcional.
+
+### Reglas de compatibilidad 33B
+
+- No romper headers legacy.
+- No eliminar aliases.
+- No renombrar columnas sin etapa especifica.
+- Frontend debe leer modelo nuevo y legacy durante la transicion.
+- Apps Script debe escribir al modelo nuevo, pero tolerar legacy mientras haya datos historicos.
+- Auditor automatico debe soportar ambos modelos.
+- `inicio_real` y `fin_real` pueden leerse como legado, pero no deben enviarse ni editarse en payloads futuros.
+
+### Impacto por componente
+
+| Componente | Impacto futuro |
+|---|---|
+| Frontend | `normalizeTasks()` debe producir `inicio`, `fin`, `entorno`, `depende_de`, `ver_en_gantt`; `renderGantt()` debe usar `inicio` / `fin`; modal/lista deben retirar fechas reales. |
+| `Gantt.gs` | Debe agregar aliases canonicos nuevos, validar `entorno`, exigir `inicio` / `fin`, retirar update de `inicio_real` / `fin_real` y mantener compatibilidad legacy. |
+| `tools/audit-timeline-data.js` | Debe auditar `inicio`, `fin`, `entorno` y seguir reconociendo `inicio_plan` / `fin_plan` legacy. |
+| Documentacion | Planes, checklist, matriz y roadmap deben migrar lenguaje desde `inicio_plan` / `fin_plan` hacia `inicio` / `fin`. |
+| Smoke tests | Deben cubrir CSV nuevo, CSV legacy, create/update/disable mockeados y render Mes/Semana/Hoy. |
+
+### Plan de implementacion futuro
+
+- 33C: actualizar auditor automatico para nuevo modelo + legacy.
+- 33D: actualizar frontend solo lectura / normalizacion.
+- 33E: actualizar Apps Script aliases y validaciones.
+- 33F: migrar create/update frontend.
+- 33G: smoke mockeado completo.
+- 33H: smoke real con tarea dummy autorizada.
+
+### Riesgos 33B
+
+- Render vacio si no se reconocen `Inicio` / `Fin`.
+- Create fallando si backend exige `inicio_plan` / `fin_plan`.
+- Update enviando campos eliminados.
+- Perdida de compatibilidad historica si se quitan aliases.
+- `entorno` sin default o sin validacion puede bloquear altas o contaminar reporting.
+- Cambios de KPIs por diferencias temporales entre modelo viejo y nuevo.
+
 ## Principios del modelo
 
 - Persistir solo datos maestros u operativos necesarios.

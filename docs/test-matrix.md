@@ -1832,6 +1832,29 @@ Notas:
 - No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
 - No se ejecuto POST real ni submit real.
 
+### Etapa 33B: contrato documental nuevo modelo Timeline
+
+**Estado:** documentado; sin implementacion funcional.
+
+Documento principal: `docs/data-dictionary-timeline.md`.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Contrato canonico | Revision documental | Campos `task_id` a `ver_en_gantt` definidos | OK |
+| Aliases legacy | Revision documental | `Inicio plan`, `Fin plan`, reales legacy, `Ver en Gantt`, `Depende de`, `Seller / Marca` documentados | OK |
+| `entorno` | Revision documental | Obligatorio; valores `QA` / `Productivo` | OK |
+| Payload create futuro | Revision documental | Usa `inicio`, `fin`, `entorno`, `depende_de`, `ver_en_gantt` opcional | OK |
+| Payload update futuro | Revision documental | Retira `inicio_real` / `fin_real`; permite campos nuevos si se aprueba | OK |
+| Disable futuro | Revision documental | Mantiene baja logica por `estado = Cancelado`; `ver_en_gantt` pendiente | OK |
+| Compatibilidad | Revision documental | Front, Apps Script y auditor deben soportar modelo nuevo + legacy | OK |
+| Plan futuro | Revision documental | 33C-33H definidos | OK |
+| Alcance | Revision de diff | Solo documentacion permitida modificada | OK |
+
+Notas:
+
+- No se modifico HTML, JS, Apps Script, auditor automatico, Google Sheets, Excel, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ### Etapa 32G: checklist manual de saneamiento Timeline
 
 **Estado:** documentado; saneamiento no ejecutado.
