@@ -23,7 +23,7 @@ const REPORT_PATH = path.join(
   "timeline-data-audit-report.md",
 );
 
-const SUGGESTED_PHASES = ["Comercial", "Técnica", "Operativa", "Cierre"];
+const SUGGESTED_PHASES = ["Comercial", "Tecnica", "Operativa", "Cierre"];
 const SUGGESTED_STATES = [
   "Pendiente",
   "En curso",
@@ -31,6 +31,38 @@ const SUGGESTED_STATES = [
   "Completado",
   "Cancelado",
 ];
+const SUGGESTED_ENVIRONMENTS = ["QA", "Productivo"];
+
+const FIELD_ALIASES = {
+  taskId: ["ID Tarea", "task_id", "id_tarea"],
+  sellerId: ["seller_id"],
+  sellerNombre: ["Seller / Marca", "seller_nombre", "seller_marca"],
+  fase: ["Fase", "fase"],
+  hito: ["Hito", "hito"],
+  tarea: ["Tarea", "tarea"],
+  responsable: ["Responsable", "responsable"],
+  dependeDe: ["Depende de", "depende_de", "dependencia"],
+  entorno: ["Entorno", "entorno"],
+  inicio: ["Inicio", "inicio", "Inicio plan", "inicio_plan", "fecha_inicio_plan"],
+  fin: ["Fin", "fin", "Fin plan", "fin_plan", "fecha_fin_plan"],
+  estado: ["Estado", "estado"],
+  comentario: ["Comentario", "comentario"],
+  verEnGantt: [
+    "Ver en Gantt",
+    "ver_en_gantt",
+    "visible_gantt",
+    "visible",
+    "Visible Gantt",
+  ],
+  inicioReal: ["Inicio real", "inicio_real", "fecha_inicio_real"],
+  finReal: ["Fin real", "fin_real", "fecha_fin_real"],
+  atrasoDias: ["Atraso (dias)", "Atraso (días)", "atraso_dias"],
+};
+
+const NEW_MODEL_START_HEADERS = new Set(["inicio"]);
+const NEW_MODEL_END_HEADERS = new Set(["fin"]);
+const LEGACY_START_HEADERS = new Set(["inicio_plan", "fecha_inicio_plan"]);
+const LEGACY_END_HEADERS = new Set(["fin_plan", "fecha_fin_plan"]);
 
 function fetchText(url, redirectsLeft = 5) {
   return new Promise((resolve, reject) => {
@@ -132,12 +164,43 @@ function normalizeCatalogValue(value) {
   return normalize(value).replace(/\u00ad/g, "");
 }
 
-function valueOf(record, names) {
+function buildHeaderMap(raw) {
+  const byNormalized = {};
+  Object.keys(raw).forEach((header) => {
+    const normalized = normalizeHeader(header);
+    if (!byNormalized[normalized]) byNormalized[normalized] = header;
+  });
+  return byNormalized;
+}
+
+function valueWithSource(raw, names) {
+  const byNormalized = raw.__byNormalized || buildHeaderMap(raw);
+
   for (const name of names) {
-    const direct = record[name];
-    if (direct !== undefined) return clean(direct);
+    if (raw[name] !== undefined) {
+      return { value: clean(raw[name]), source: name };
+    }
   }
-  return "";
+
+  for (const name of names) {
+    const normalized = normalizeHeader(name);
+    const source = byNormalized[normalized];
+    if (source !== undefined) {
+      return { value: clean(raw[source]), source };
+    }
+  }
+
+  return { value: "", source: "" };
+}
+
+function hasAnyColumn(headers, aliases) {
+  const normalizedHeaders = new Set(headers.map(normalizeHeader));
+  return aliases.some((alias) => normalizedHeaders.has(normalizeHeader(alias)));
+}
+
+function matchedColumns(headers, aliases) {
+  const aliasSet = new Set(aliases.map(normalizeHeader));
+  return headers.filter((header) => aliasSet.has(normalizeHeader(header)));
 }
 
 function isValidIsoDate(value) {
@@ -218,24 +281,45 @@ function listIssues(title, issues) {
   ].join("\n");
 }
 
-function buildReport({ rows, headerIndex, records, issues, generatedAt }) {
+function countRecords(records, predicate) {
+  return records.filter(predicate).length;
+}
+
+function buildReport({
+  rows,
+  headerIndex,
+  headers,
+  records,
+  issues,
+  generatedAt,
+  headerFacts,
+}) {
   const sptRecords = records.filter((record) => /^SPT-/.test(record.taskId));
   const nonSptRecords = records.filter((record) => !/^SPT-/.test(record.taskId));
   const renderableRecords = sptRecords.filter(
-    (record) =>
-      record.inicioPlan &&
-      record.finPlan &&
-      normalize(record.verEnGantt) !== "no",
+    (record) => record.inicio && record.fin && normalize(record.verEnGantt) !== "no",
   );
   const visibleNoRecords = sptRecords.filter(
     (record) => normalize(record.verEnGantt) === "no",
   );
-  const derivedColumns = records[0]
-    ? records[0].headers.filter((header) =>
-        ["atraso_dias", "atraso_dias"].includes(normalizeHeader(header)),
-      )
-    : [];
-  const derivedColumnSummary = derivedColumns.length ? "Atraso (dias)" : "Ninguna";
+  const newModelRecords = sptRecords.filter(
+    (record) => record.usesNewInicio && record.usesNewFin,
+  );
+  const legacyDateRecords = sptRecords.filter(
+    (record) => record.usesLegacyInicio || record.usesLegacyFin,
+  );
+  const mixedDateRecords = sptRecords.filter(
+    (record) =>
+      (record.usesNewInicio || record.usesNewFin) &&
+      (record.usesLegacyInicio || record.usesLegacyFin),
+  );
+  const missingEntornoRecords = sptRecords.filter((record) => !record.entorno);
+  const missingInicioFinRecords = sptRecords.filter(
+    (record) => !record.inicio || !record.fin,
+  );
+  const legacyRealValueRecords = sptRecords.filter(
+    (record) => record.inicioReal || record.finReal,
+  );
 
   const bySeverity = issues.reduce((acc, issue) => {
     acc[issue.severity] = (acc[issue.severity] || 0) + 1;
@@ -298,15 +382,19 @@ function buildReport({ rows, headerIndex, records, issues, generatedAt }) {
     "",
     `Fuente CSV: ${TIMELINE_CSV_URL}`,
     "",
-    "## Resumen ejecutivo",
+    "## Resumen ejecutivo v33",
     "",
-    "Auditoria read-only del CSV publicado de `timeline`. El reporte no modifica Google Sheets, no ejecuta POST y no usa credenciales.",
+    "Auditoria read-only del CSV publicado de `timeline`, actualizada para el modelo v33 y aliases legacy. El reporte no modifica Google Sheets, no ejecuta POST y no usa credenciales.",
     "",
     `- Inconsistencias criticas: ${bySeverity.critica || 0}.`,
     `- Inconsistencias medias: ${bySeverity.media || 0}.`,
     `- Hallazgos bajos: ${bySeverity.baja || 0}.`,
     `- Decisiones pendientes detectadas: ${bySeverity.decision || 0}.`,
-    "- Proximo paso recomendado: revisar este checklist, aprobar criterios de correccion y ejecutar saneamiento manual controlado con backup/export previo.",
+    `- Tareas sin \`entorno\`: ${missingEntornoRecords.length}.`,
+    `- Tareas sin \`inicio\` o \`fin\`: ${missingInicioFinRecords.length}.`,
+    `- Tareas con fechas legacy \`inicio_plan\` / \`fin_plan\`: ${legacyDateRecords.length}.`,
+    `- Tareas con valores legacy \`inicio_real\` / \`fin_real\`: ${legacyRealValueRecords.length}.`,
+    "- Proximo paso recomendado: resolver compatibilidad de frontend y Apps Script antes de editar datos reales.",
     "",
     "## Conteos principales",
     "",
@@ -316,15 +404,27 @@ function buildReport({ rows, headerIndex, records, issues, generatedAt }) {
     `| Fila de headers | ${headerIndex + 1} |`,
     `| Filas CSV de datos | ${records.length} |`,
     `| Tareas con ID SPT-* | ${sptRecords.length} |`,
-    `| Tareas renderizables por frontend | ${renderableRecords.length} |`,
+    `| Tareas renderizables por modelo v33 | ${renderableRecords.length} |`,
+    `| Tareas modelo nuevo Inicio/Fin | ${newModelRecords.length} |`,
+    `| Tareas modelo legacy Inicio plan/Fin plan | ${legacyDateRecords.length} |`,
+    `| Tareas con mezcla nuevo/legacy | ${mixedDateRecords.length} |`,
     `| Filas no productivas / no SPT-* | ${nonSptRecords.length} |`,
-    `| Tareas con Ver en Gantt = No | ${visibleNoRecords.length} |`,
-    `| Columnas derivables presentes | ${derivedColumnSummary} |`,
+    `| Tareas con ver_en_gantt = No | ${visibleNoRecords.length} |`,
+    "",
+    "## Columnas detectadas",
+    "",
+    "| Tipo | Columnas |",
+    "|---|---|",
+    `| Canonicas v33 presentes | ${headerFacts.newColumns.length ? headerFacts.newColumns.join(", ") : "Ninguna"} |`,
+    `| Legacy de fechas plan presentes | ${headerFacts.legacyPlanColumns.length ? headerFacts.legacyPlanColumns.join(", ") : "Ninguna"} |`,
+    `| Legacy reales presentes | ${headerFacts.legacyRealColumns.length ? headerFacts.legacyRealColumns.join(", ") : "Ninguna"} |`,
+    `| Derivables presentes | ${headerFacts.derivedColumns.length ? headerFacts.derivedColumns.join(", ") : "Ninguna"} |`,
     "",
     "## Catalogos sugeridos",
     "",
     `- Fase: ${SUGGESTED_PHASES.join(", ")}.`,
     `- Estado: ${SUGGESTED_STATES.join(", ")}.`,
+    `- Entorno: ${SUGGESTED_ENVIRONMENTS.join(", ")}.`,
     "",
     "## Tabla de inconsistencias por severidad",
     "",
@@ -354,26 +454,25 @@ function buildReport({ rows, headerIndex, records, issues, generatedAt }) {
     "## Detalle por tarea",
     "",
     detailByTask.length ? detailByTask.join("\n") : "Sin inconsistencias por tarea.\n",
-    "## Checklist de saneamiento manual",
+    "## Checklist de saneamiento manual v33",
     "",
-    "- [ ] Exportar backup del CSV o duplicar la hoja antes de tocar datos.",
+    "- [ ] Confirmar que frontend y Apps Script ya leen/escriben modelo v33 + legacy antes de tocar Google Sheets.",
+    "- [ ] Completar `entorno` en tareas `SPT-*` con `QA` o `Productivo`.",
+    "- [ ] Completar `inicio` y `fin` o resolver aliases legacy para tareas que deban renderizar.",
+    "- [ ] Convertir dependencias legacy a `depende_de` sin romper referencias.",
+    "- [ ] Revisar campos legacy `inicio_real` / `fin_real`; no migrarlos como contrato operativo.",
     "- [ ] Completar estados vacios en tareas `SPT-*`.",
-    "- [ ] Completar `Inicio plan` y `Fin plan` o marcar fuera de Gantt las tareas que no deban renderizar.",
-    "- [ ] Corregir fechas no canonicas a `YYYY-MM-DD`.",
-    "- [ ] Corregir dependencias rotas o vaciarlas con motivo documentado.",
     "- [ ] Completar fase, hito y responsable faltantes.",
     "- [ ] Clasificar filas no `SPT-*` como instrucciones, dummies o datos a archivar.",
-    "- [ ] Confirmar si cada `Ver en Gantt = No` es intencional.",
-    "- [ ] Validar CSV publicado despues de cada tanda de cambios.",
-    "- [ ] Renderizar Gantt y revisar filtros, Mes, Semana y boton Hoy.",
+    "- [ ] Confirmar si cada `ver_en_gantt = No` es intencional.",
+    "- [ ] Reejecutar `node tools/audit-timeline-data.js` despues de cada tanda.",
     "",
     "## Recomendaciones de siguiente paso",
     "",
-    "1. Revisar los casos criticos antes de cualquier saneamiento manual.",
-    "2. Aprobar responsables y valores destino para estado, fase, hito y responsable.",
-    "3. Ejecutar 32G como saneamiento manual controlado por tandas pequenas.",
-    "4. Reejecutar este script despues de cada tanda hasta llegar a 0 criticos.",
-    "5. Recien despues avanzar a catalogos y validaciones frontend/backend.",
+    "1. Usar este reporte como base para 33D/33E, no para editar Google Sheets todavia.",
+    "2. Actualizar frontend de solo lectura para consumir `inicio`, `fin`, `entorno`, `depende_de` y `ver_en_gantt` con fallback legacy.",
+    "3. Actualizar Apps Script para escribir modelo v33 y tolerar aliases legacy.",
+    "4. Reejecutar este auditor despues de cada cambio tecnico y antes de cualquier saneamiento manual.",
     "",
   ].join("\n");
 }
@@ -395,30 +494,93 @@ async function main() {
     .slice(headerIndex + 1)
     .filter((row) => row.length > 1 || row.some((value) => clean(value)));
 
+  const headerFacts = {
+    newColumns: matchedColumns(headers, [
+      "Inicio",
+      "inicio",
+      "Fin",
+      "fin",
+      "Entorno",
+      "entorno",
+      "depende_de",
+      "ver_en_gantt",
+    ]),
+    legacyPlanColumns: matchedColumns(headers, [
+      "Inicio plan",
+      "inicio_plan",
+      "fecha_inicio_plan",
+      "Fin plan",
+      "fin_plan",
+      "fecha_fin_plan",
+    ]),
+    legacyRealColumns: matchedColumns(headers, [
+      "Inicio real",
+      "inicio_real",
+      "fecha_inicio_real",
+      "Fin real",
+      "fin_real",
+      "fecha_fin_real",
+    ]),
+    derivedColumns: matchedColumns(headers, FIELD_ALIASES.atrasoDias),
+  };
+
   const records = dataRows.map((row, index) => {
     const raw = {};
     headers.forEach((header, colIndex) => {
       raw[header] = clean(row[colIndex]);
     });
+    raw.__byNormalized = buildHeaderMap(raw);
+
+    const taskId = valueWithSource(raw, FIELD_ALIASES.taskId);
+    const sellerId = valueWithSource(raw, FIELD_ALIASES.sellerId);
+    const sellerNombre = valueWithSource(raw, FIELD_ALIASES.sellerNombre);
+    const fase = valueWithSource(raw, FIELD_ALIASES.fase);
+    const hito = valueWithSource(raw, FIELD_ALIASES.hito);
+    const tarea = valueWithSource(raw, FIELD_ALIASES.tarea);
+    const responsable = valueWithSource(raw, FIELD_ALIASES.responsable);
+    const dependeDe = valueWithSource(raw, FIELD_ALIASES.dependeDe);
+    const entorno = valueWithSource(raw, FIELD_ALIASES.entorno);
+    const inicio = valueWithSource(raw, FIELD_ALIASES.inicio);
+    const fin = valueWithSource(raw, FIELD_ALIASES.fin);
+    const estado = valueWithSource(raw, FIELD_ALIASES.estado);
+    const comentario = valueWithSource(raw, FIELD_ALIASES.comentario);
+    const verEnGantt = valueWithSource(raw, FIELD_ALIASES.verEnGantt);
+    const inicioReal = valueWithSource(raw, FIELD_ALIASES.inicioReal);
+    const finReal = valueWithSource(raw, FIELD_ALIASES.finReal);
+    const atrasoDias = valueWithSource(raw, FIELD_ALIASES.atrasoDias);
+
+    const inicioSourceKey = normalizeHeader(inicio.source);
+    const finSourceKey = normalizeHeader(fin.source);
 
     return {
       rowNumber: headerIndex + 2 + index,
       headers,
       raw,
-      taskId: valueOf(raw, ["ID Tarea", "task_id", "id_tarea"]),
-      sellerId: valueOf(raw, ["seller_id", "id_seller", "seller"]),
-      fase: valueOf(raw, ["Fase", "fase"]),
-      hito: valueOf(raw, ["Hito", "hito"]),
-      tarea: valueOf(raw, ["Tarea", "tarea", "actividad"]),
-      responsable: valueOf(raw, ["Responsable", "responsable"]),
-      dependencia: valueOf(raw, ["Depende de", "dependencia", "depende_de"]),
-      inicioPlan: valueOf(raw, ["Inicio plan", "inicio_plan", "fecha_inicio_plan"]),
-      finPlan: valueOf(raw, ["Fin plan", "fin_plan", "fecha_fin_plan"]),
-      inicioReal: valueOf(raw, ["Inicio real", "inicio_real", "fecha_inicio_real"]),
-      finReal: valueOf(raw, ["Fin real", "fin_real", "fecha_fin_real"]),
-      estado: valueOf(raw, ["Estado", "estado", "estado_tarea"]),
-      verEnGantt: valueOf(raw, ["Ver en Gantt", "visible_gantt", "visible"]),
-      atrasoDias: valueOf(raw, ["Atraso (dias)", "Atraso (días)", "atraso_dias"]),
+      taskId: taskId.value,
+      sellerId: sellerId.value,
+      sellerNombre: sellerNombre.value,
+      fase: fase.value,
+      hito: hito.value,
+      tarea: tarea.value,
+      responsable: responsable.value,
+      dependeDe: dependeDe.value,
+      entorno: entorno.value,
+      inicio: inicio.value,
+      inicioSource: inicio.source,
+      fin: fin.value,
+      finSource: fin.source,
+      estado: estado.value,
+      comentario: comentario.value,
+      verEnGantt: verEnGantt.value,
+      inicioReal: inicioReal.value,
+      inicioRealSource: inicioReal.source,
+      finReal: finReal.value,
+      finRealSource: finReal.source,
+      atrasoDias: atrasoDias.value,
+      usesNewInicio: NEW_MODEL_START_HEADERS.has(inicioSourceKey),
+      usesNewFin: NEW_MODEL_END_HEADERS.has(finSourceKey),
+      usesLegacyInicio: LEGACY_START_HEADERS.has(inicioSourceKey),
+      usesLegacyFin: LEGACY_END_HEADERS.has(finSourceKey),
     };
   });
 
@@ -427,9 +589,12 @@ async function main() {
   );
   const suggestedPhaseSet = new Set(SUGGESTED_PHASES.map(normalizeCatalogValue));
   const suggestedStateSet = new Set(SUGGESTED_STATES.map(normalizeCatalogValue));
+  const suggestedEnvironmentSet = new Set(
+    SUGGESTED_ENVIRONMENTS.map(normalizeCatalogValue),
+  );
   const issues = [];
 
-  if (headers.some((header) => normalizeHeader(header) === "atraso_dias")) {
+  if (headerFacts.derivedColumns.length) {
     addIssue(
       issues,
       "baja",
@@ -437,8 +602,21 @@ async function main() {
       headerIndex + 1,
       "",
       "Atraso (dias)",
-      "presente",
+      headerFacts.derivedColumns.join(", "),
       "Tratar como dato derivado; no usar como autoridad.",
+    );
+  }
+
+  if (headerFacts.legacyRealColumns.length) {
+    addIssue(
+      issues,
+      "baja",
+      "columnas legacy reales presentes",
+      headerIndex + 1,
+      "",
+      "Inicio real / Fin real",
+      headerFacts.legacyRealColumns.join(", "),
+      "Mantener solo lectura durante transicion; no usar en contrato operativo v33.",
     );
   }
 
@@ -458,6 +636,141 @@ async function main() {
       );
       return;
     }
+
+    if (!record.entorno) {
+      addIssue(
+        issues,
+        "critica",
+        "tarea SPT-* sin entorno",
+        record.rowNumber,
+        record.taskId,
+        "Entorno",
+        record.entorno,
+        "Completar con QA o Productivo.",
+      );
+    } else if (!suggestedEnvironmentSet.has(normalizeCatalogValue(record.entorno))) {
+      addIssue(
+        issues,
+        "critica",
+        "entorno fuera de catalogo",
+        record.rowNumber,
+        record.taskId,
+        "Entorno",
+        record.entorno,
+        "Normalizar a QA o Productivo.",
+      );
+    }
+
+    if (!record.inicio || !record.fin) {
+      addIssue(
+        issues,
+        "critica",
+        "tarea SPT-* sin inicio o fin",
+        record.rowNumber,
+        record.taskId,
+        "Inicio / Fin",
+        `${record.inicio || "(vacio)"} / ${record.fin || "(vacio)"}`,
+        "Completar inicio/fin o revisar aliases legacy.",
+      );
+    }
+
+    if (record.inicio && (record.usesLegacyInicio || !record.usesNewInicio)) {
+      addIssue(
+        issues,
+        "media",
+        "tarea usa inicio legacy",
+        record.rowNumber,
+        record.taskId,
+        record.inicioSource || "inicio",
+        record.inicio,
+        "Migrar header/campo hacia inicio cuando el stack v33 este listo.",
+      );
+    }
+
+    if (record.fin && (record.usesLegacyFin || !record.usesNewFin)) {
+      addIssue(
+        issues,
+        "media",
+        "tarea usa fin legacy",
+        record.rowNumber,
+        record.taskId,
+        record.finSource || "fin",
+        record.fin,
+        "Migrar header/campo hacia fin cuando el stack v33 este listo.",
+      );
+    }
+
+    [
+      ["Inicio", record.inicio],
+      ["Fin", record.fin],
+    ].forEach(([field, value]) => {
+      const dateStatus = classifyDate(value);
+      if (dateStatus === "invalid") {
+        addIssue(
+          issues,
+          "critica",
+          "fecha inicio/fin invalida",
+          record.rowNumber,
+          record.taskId,
+          field,
+          value,
+          "Corregir a formato canonico YYYY-MM-DD.",
+        );
+      } else if (dateStatus === "dmy") {
+        addIssue(
+          issues,
+          "media",
+          "fecha inicio/fin en formato no canonico",
+          record.rowNumber,
+          record.taskId,
+          field,
+          value,
+          "Convertir a YYYY-MM-DD.",
+        );
+      }
+    });
+
+    [
+      ["Inicio real", record.inicioReal, record.inicioRealSource],
+      ["Fin real", record.finReal, record.finRealSource],
+    ].forEach(([field, value, source]) => {
+      if (!value) return;
+      addIssue(
+        issues,
+        "baja",
+        "fecha legacy real presente",
+        record.rowNumber,
+        record.taskId,
+        source || field,
+        value,
+        "Mantener solo lectura; no enviar en payload v33.",
+      );
+
+      const dateStatus = classifyDate(value);
+      if (dateStatus === "invalid") {
+        addIssue(
+          issues,
+          "media",
+          "fecha legacy real invalida",
+          record.rowNumber,
+          record.taskId,
+          source || field,
+          value,
+          "Corregir solo si se conserva como dato historico.",
+        );
+      } else if (dateStatus === "dmy") {
+        addIssue(
+          issues,
+          "media",
+          "fecha legacy real en formato no canonico",
+          record.rowNumber,
+          record.taskId,
+          source || field,
+          value,
+          "Convertir a YYYY-MM-DD si se conserva como historico.",
+        );
+      }
+    });
 
     if (!record.estado) {
       addIssue(
@@ -503,7 +816,7 @@ async function main() {
         record.taskId,
         "Fase",
         record.fase,
-        "Normalizar a Comercial, Técnica, Operativa o Cierre.",
+        "Normalizar a Comercial, Tecnica, Operativa o Cierre.",
       );
     }
 
@@ -533,63 +846,7 @@ async function main() {
       );
     }
 
-    if (!record.inicioPlan || !record.finPlan) {
-      addIssue(
-        issues,
-        "critica",
-        "tarea SPT-* sin inicio_plan o fin_plan",
-        record.rowNumber,
-        record.taskId,
-        "Inicio plan / Fin plan",
-        `${record.inicioPlan || "(vacio)"} / ${record.finPlan || "(vacio)"}`,
-        "Completar plan o marcar fuera de Gantt.",
-      );
-    }
-
-    [
-      ["Inicio plan", record.inicioPlan, false],
-      ["Fin plan", record.finPlan, false],
-      ["Inicio real", record.inicioReal, true],
-      ["Fin real", record.finReal, true],
-    ].forEach(([field, value, isRealDate]) => {
-      const dateStatus = classifyDate(value);
-      if (dateStatus === "invalid") {
-        addIssue(
-          issues,
-          "critica",
-          "fecha invalida",
-          record.rowNumber,
-          record.taskId,
-          field,
-          value,
-          "Corregir a formato canonico YYYY-MM-DD o vaciar si es opcional.",
-        );
-      } else if (dateStatus === "dmy" && isRealDate) {
-        addIssue(
-          issues,
-          "critica",
-          "fecha real en formato no canonico",
-          record.rowNumber,
-          record.taskId,
-          field,
-          value,
-          "Convertir a YYYY-MM-DD.",
-        );
-      } else if (dateStatus === "dmy") {
-        addIssue(
-          issues,
-          "media",
-          "fecha plan en formato no canonico",
-          record.rowNumber,
-          record.taskId,
-          field,
-          value,
-          "Convertir a YYYY-MM-DD.",
-        );
-      }
-    });
-
-    const dependencyIds = Array.from(record.dependencia.matchAll(/SPT-\d+-T-\d+/g)).map(
+    const dependencyIds = Array.from(record.dependeDe.matchAll(/SPT-\d+-T-\d+/g)).map(
       (match) => match[0],
     );
     dependencyIds.forEach((dependencyId) => {
@@ -597,10 +854,10 @@ async function main() {
         addIssue(
           issues,
           "critica",
-          "dependencia apunta a task_id inexistente",
+          "depende_de apunta a task_id inexistente",
           record.rowNumber,
           record.taskId,
-          "Depende de",
+          "depende_de",
           dependencyId,
           "Corregir destino existente o vaciar dependencia con motivo documentado.",
         );
@@ -611,10 +868,10 @@ async function main() {
       addIssue(
         issues,
         "decision",
-        "tarea con Ver en Gantt = No",
+        "tarea con ver_en_gantt = No",
         record.rowNumber,
         record.taskId,
-        "Ver en Gantt",
+        "ver_en_gantt",
         record.verEnGantt,
         "Confirmar si la ocultacion es intencional.",
       );
@@ -624,9 +881,11 @@ async function main() {
   const report = buildReport({
     rows,
     headerIndex,
+    headers,
     records,
     issues,
     generatedAt: new Date().toISOString(),
+    headerFacts,
   });
 
   fs.writeFileSync(REPORT_PATH, report, "utf8");
@@ -637,7 +896,7 @@ async function main() {
 
   console.log(`Reporte generado: ${REPORT_PATH}`);
   console.log(`Filas CSV de datos: ${records.length}`);
-  console.log(`Tareas SPT-*: ${records.filter((record) => /^SPT-/.test(record.taskId)).length}`);
+  console.log(`Tareas SPT-*: ${countRecords(records, (record) => /^SPT-/.test(record.taskId))}`);
   console.log(`Criticas: ${counts.critica || 0}`);
   console.log(`Medias: ${counts.media || 0}`);
   console.log(`Bajas: ${counts.baja || 0}`);

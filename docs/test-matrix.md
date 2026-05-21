@@ -1855,6 +1855,33 @@ Notas:
 - No se modifico HTML, JS, Apps Script, auditor automatico, Google Sheets, Excel, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
 - No se ejecuto POST real ni submit real.
 
+### Etapa 33C: auditor automatico Timeline v33 + legacy
+
+**Estado:** implementado localmente; auditoria read-only.
+
+Artefactos:
+
+- `tools/audit-timeline-data.js`
+- `docs/timeline-data-audit-report.md`
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Ejecucion script | `node tools\\audit-timeline-data.js` | Genera reporte Markdown v33 | OK |
+| Seguridad | Revision script / ejecucion | Solo HTTPS GET; sin POST; sin credenciales | OK |
+| Reporte generado | Revision archivo | `docs/timeline-data-audit-report.md` actualizado | OK |
+| Aliases v33 | Revision script | Reconoce `inicio`, `fin`, `entorno`, `depende_de`, `ver_en_gantt` y legacy | OK |
+| Entorno | Reporte | Detecta faltantes/fuera de catalogo; actual CSV sin faltantes | OK |
+| Inicio/fin | Reporte | Detecta 4 tareas `SPT-*` sin `inicio`/`fin` | OK |
+| Legacy plan | Reporte | 0 tareas con `inicio_plan` / `fin_plan` legacy | OK |
+| Legacy reales | Reporte | 0 valores `inicio_real` / `fin_real` legacy | OK |
+| Conteos v33 | Reporte | 14 columnas, 29 tareas `SPT-*`, 25 renderizables | OK |
+| Alcance | Revision de diff | Sin cambios en frontend, Apps Script ni Sheets | OK |
+
+Notas:
+
+- No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ### Etapa 32G: checklist manual de saneamiento Timeline
 
 **Estado:** documentado; saneamiento no ejecutado.

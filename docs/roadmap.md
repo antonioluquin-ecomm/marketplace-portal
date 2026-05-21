@@ -2280,3 +2280,4 @@ Decision vigente:
 - `inicio_real` y `fin_real` quedan deprecados y no deben enviarse en payloads futuros.
 - `entorno` es obligatorio y acepta `QA` o `Productivo`.
 - No tocar Google Sheets hasta que auditor, frontend y Apps Script toleren modelo nuevo + legacy.
+- 33C actualiza el auditor automatico y confirma que el CSV publicado ya expone 14 columnas compatibles con v33; siguen pendientes frontend y Apps Script.

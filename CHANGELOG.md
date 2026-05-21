@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 33C auditor automatico Timeline v33 + legacy
+
+Tipo de cambio: herramienta read-only / auditoria de datos.
+
+Estado: implementado localmente; sin modificar datos reales.
+
+Resultado:
+- Actualizado `tools/audit-timeline-data.js` para reconocer el modelo v33 y aliases legacy.
+- El auditor ahora valida `entorno`, `inicio`, `fin`, `depende_de`, `ver_en_gantt`, fechas legacy reales y columnas derivables.
+- Regenerado `docs/timeline-data-audit-report.md` con resumen v33, conteo nuevo vs legacy, inconsistencias por severidad y checklist actualizado.
+- Resultado del CSV publicado al ejecutar 33C: 14 columnas, 29 tareas `SPT-*`, 25 renderizables, 4 criticas por falta de `inicio`/`fin`, 3 filas no productivas/no `SPT-*`, 0 legacy de fechas plan y 0 legacy de fechas reales.
+
+Alcance:
+- Solo lectura del CSV publicado y escritura local del reporte Markdown.
+- No se tocaron HTML, frontend, Apps Script, Google Sheets, Excel, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 33B contrato documental nuevo modelo Timeline
 
 Tipo de cambio: documentacion / contrato de datos.
