@@ -1831,3 +1831,26 @@ Notas:
 
 - No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
 - No se ejecuto POST real ni submit real.
+
+### Etapa 32G: checklist manual de saneamiento Timeline
+
+**Estado:** documentado; saneamiento no ejecutado.
+
+Documento principal: `docs/timeline-cleanup-checklist.md`.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Base documental | Revision | Usa reporte 32F, plan 32E y diccionario de datos | OK |
+| Reglas previas | Revision | Backup, no borrar filas/columnas, no renombrar headers, no cambiar IDs | OK |
+| Resumen ejecutivo | Revision | Incluye conteos principales detectados | OK |
+| Criticos | Revision | Fechas plan faltantes, dependencia rota y fechas no canonicas separadas | OK |
+| Medios | Revision | Estados, fase, hito y responsable vacios documentados | OK |
+| Bajos | Revision | Dummies/no productivas, `Ver en Gantt = No` y derivables documentados | OK |
+| Tandas | Revision | 5 tandas operativas definidas | OK |
+| Validacion por tanda | Revision | CSV, Gantt, KPIs, filtros, Mes/Semana, Hoy y endpoints QA | OK |
+| Alcance | Revision de diff | Solo documentacion modificada | OK |
+
+Notas:
+
+- No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.

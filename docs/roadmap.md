@@ -2235,11 +2235,12 @@ Etapas propuestas:
 - 32D: compatibilidad minima de alias `Ver en Gantt` para `visible_gantt`, sin tocar datos.
 - 32E: plan de saneamiento real de datos `timeline`, sin tocar Google Sheets.
 - 32F: reporte automatico read-only de inconsistencias reales del CSV publicado.
-- 32G: saneamiento manual controlado de campos minimos, con backup/export previo.
-- 32H: validacion post-saneamiento de CSV, render, conteos, filtros, Mes/Semana y boton `Hoy`.
-- 32I: catalogos basicos de fase, estado, responsable e hitos.
-- 32J: validaciones frontend/backend contra catalogos.
-- 32K: limpieza controlada de columnas derivadas y decision formal sobre `visible_gantt`.
+- 32G: checklist manual accionable para saneamiento controlado, sin tocar datos.
+- 32H: ejecucion manual controlada de saneamiento, con backup/export previo.
+- 32I: validacion post-saneamiento de CSV, render, conteos, filtros, Mes/Semana y boton `Hoy`.
+- 32J: catalogos basicos de fase, estado, responsable e hitos.
+- 32K: validaciones frontend/backend contra catalogos.
+- 32L: limpieza controlada de columnas derivadas y decision formal sobre `visible_gantt`.
 
 Decision vigente:
 
@@ -2249,3 +2250,4 @@ Decision vigente:
 - `Ver en Gantt` queda aceptado como alias visual de `visible_gantt` en Apps Script desde 32D, solo por compatibilidad.
 - Antes de tocar la hoja real, generar reporte automatico de inconsistencias o checklist concreto para 32F.
 - 32F ya genera `docs/timeline-data-audit-report.md`; el siguiente paso operativo debe usar ese checklist antes de editar la hoja.
+- 32G crea `docs/timeline-cleanup-checklist.md`; la ejecucion manual sigue pendiente y debe hacerse por tandas.

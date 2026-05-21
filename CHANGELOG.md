@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-20 - Etapa 32G checklist manual de saneamiento Timeline
+
+Tipo de cambio: documentacion / checklist operativo.
+
+Estado: completado sin modificar datos reales.
+
+Resultado:
+- Creado `docs/timeline-cleanup-checklist.md` como checklist manual accionable para sanear `timeline`.
+- El checklist transforma el reporte 32F en tandas operativas seguras: correcciones mecanicas, estados, campos operativos, tareas no renderizables y dummies/instrucciones.
+- Se documentaron reglas previas obligatorias, validacion despues de cada tanda y decisiones pendientes.
+- El saneamiento manual sigue pendiente de ejecucion controlada.
+
+Alcance:
+- Solo documentacion.
+- No se tocaron Google Sheets, Excel, frontend, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-20 - Etapa 32F reporte automatico de inconsistencias Timeline
 
 Tipo de cambio: herramienta read-only / documentacion de datos.
