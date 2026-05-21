@@ -1781,3 +1781,25 @@ Notas:
 - `Ver en Gantt` queda como alias visual aceptado para `visible_gantt`.
 - La decision funcional sobre si `visible_gantt` seguira o se retirara queda pendiente.
 - No se limpio ni modifico Google Sheets.
+
+### Etapa 32E: plan de saneamiento real Timeline
+
+**Estado:** documentado; sin cambios en Google Sheets.
+
+Documento principal: `docs/timeline-data-cleanup-plan.md`.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| CSV publicado | Lectura solo consulta | Accesible; headers visuales en fila 3 confirmados | OK |
+| Conteos 32C | Lectura CSV / consolidacion documental | 77 filas, 57 tareas `SPT-*`, 44 renderizables, 12 sin plan | OK |
+| Problemas priorizados | Revision documental | Criticos, medios, bajos y decisiones pendientes separados | OK |
+| Plan por etapas | Revision documental | 32F-32J definidos sin cambios destructivos inmediatos | OK |
+| Matriz de correcciones | Revision documental | Accion, responsable, riesgo y etapa sugerida documentados | OK |
+| Reglas manuales | Revision documental | Backup, no borrar filas, no renombrar headers, no cambiar IDs | OK |
+| Recomendacion final | Revision documental | Primero reporte automatico/checklist; luego saneamiento manual controlado | OK |
+| Alcance | Revision de diff | Solo documentacion modificada | OK |
+
+Notas:
+
+- No se ejecuto POST real ni submit real.
+- No se modificaron Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.

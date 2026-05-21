@@ -2233,10 +2233,12 @@ Etapas propuestas:
 - 32B: diccionario de datos formal en `docs/data-dictionary-timeline.md`.
 - 32C: auditoria de compatibilidad y aliases de columnas; detecta gap con `Ver en Gantt`.
 - 32D: compatibilidad minima de alias `Ver en Gantt` para `visible_gantt`, sin tocar datos.
-- 32D-bis: catalogos y normalizacion de fase, estado, responsable e hito.
-- 32E: validacion backend contra catalogos.
-- 32F: limpieza controlada de columnas derivadas.
-- 32G: smoke real con tarea dummy autorizada.
+- 32E: plan de saneamiento real de datos `timeline`, sin tocar Google Sheets.
+- 32F: saneamiento manual controlado de campos minimos, con backup/export previo.
+- 32G: validacion post-saneamiento de CSV, render, conteos, filtros, Mes/Semana y boton `Hoy`.
+- 32H: catalogos basicos de fase, estado, responsable e hitos.
+- 32I: validaciones frontend/backend contra catalogos.
+- 32J: limpieza controlada de columnas derivadas y decision formal sobre `visible_gantt`.
 
 Decision vigente:
 
@@ -2244,3 +2246,4 @@ Decision vigente:
 - `Atraso (dias)` y `Semana` deben tender a calcularse, no persistirse como datos maestros.
 - `visible_gantt` queda pendiente de decision formal; la baja logica estandar sigue asociada a `Estado = Cancelado`.
 - `Ver en Gantt` queda aceptado como alias visual de `visible_gantt` en Apps Script desde 32D, solo por compatibilidad.
+- Antes de tocar la hoja real, generar reporte automatico de inconsistencias o checklist concreto para 32F.
