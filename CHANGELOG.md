@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 33F frontend create/update Timeline v33
+
+Tipo de cambio: frontend operativo / migracion de payloads.
+
+Estado: implementado localmente; sin POST real.
+
+Resultado:
+- Actualizado `internal/gantt/gantt-operativo.html` para que alta y edicion usen `inicio`, `fin`, `entorno` y `depende_de`.
+- El modal de alta ya no envia `inicio_plan`, `fin_plan`, `inicio_real` ni `fin_real`.
+- El modal de edicion ya no envia `inicio_real` ni `fin_real`.
+- `gantt_task_disable` queda sin cambios.
+
+Alcance:
+- Se modificaron `internal/gantt/gantt-operativo.html`, `CHANGELOG.md`, `docs/roadmap.md` y `docs/test-matrix.md`.
+- No se tocaron `Gantt.gs`, `Apps_script_v5.js`, Google Sheets, Excel, CSV manual, auditor automatico, endpoints, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 33E Apps Script compatible Timeline v33
 
 Tipo de cambio: backend Apps Script / compatibilidad de modelo.

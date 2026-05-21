@@ -929,7 +929,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 <div class="modal-ov" id="edit-ov" onclick="closeEditModal(event)">
   <div class="modal edit-modal">
     <div class="modal-hd">
-      <div><div class="mhd-task">Editar tarea</div><div class="mhd-sub" id="edit-sub">Campos operativos de bajo riesgo</div></div>
+      <div><div class="mhd-task">Editar tarea</div><div class="mhd-sub" id="edit-sub">Campos operativos v33</div></div>
       <button class="modal-close" onclick="closeEditModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -962,19 +962,33 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         </div>
         <div class="edit-grid">
           <div class="edit-field">
-            <label class="edit-label" for="edit-inicio-real">Inicio real</label>
-            <input class="edit-input" id="edit-inicio-real" name="inicio_real" type="date">
+            <label class="edit-label" for="edit-entorno">Entorno</label>
+            <select class="edit-select" id="edit-entorno" name="entorno">
+              <option value="">Seleccionar entorno</option>
+              <option value="QA">QA</option>
+              <option value="Productivo">Productivo</option>
+            </select>
           </div>
           <div class="edit-field">
-            <label class="edit-label" for="edit-fin-real">Fin real</label>
-            <input class="edit-input" id="edit-fin-real" name="fin_real" type="date">
+            <label class="edit-label" for="edit-depende-de">Depende de</label>
+            <input class="edit-input" id="edit-depende-de" name="depende_de" maxlength="120" autocomplete="off">
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
+            <label class="edit-label" for="edit-inicio">Inicio</label>
+            <input class="edit-input" id="edit-inicio" name="inicio" type="date">
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="edit-fin">Fin</label>
+            <input class="edit-input" id="edit-fin" name="fin" type="date">
           </div>
         </div>
         <div class="edit-field">
           <label class="edit-label" for="edit-comentario">Comentario</label>
           <textarea class="edit-textarea" id="edit-comentario" name="comentario" maxlength="1000"></textarea>
         </div>
-        <div class="edit-help">No se editan task_id, seller_id, seller, fase, hito, dependencias ni fechas planificadas.</div>
+        <div class="edit-help">No se editan task_id, seller_id, seller, fase ni hito.</div>
         <div class="edit-status" id="edit-status"></div>
         <div class="edit-actions">
           <button type="button" class="btn-sm" onclick="closeEditModal()">Cancelar</button>
@@ -1013,6 +1027,20 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         </div>
         <div class="edit-grid">
           <div class="edit-field">
+            <label class="edit-label" for="create-entorno">Entorno</label>
+            <select class="edit-select" id="create-entorno" name="entorno">
+              <option value="">Seleccionar entorno</option>
+              <option value="QA">QA</option>
+              <option value="Productivo">Productivo</option>
+            </select>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="create-depende-de">Depende de</label>
+            <input class="edit-input" id="create-depende-de" name="depende_de" maxlength="120" autocomplete="off">
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
             <label class="edit-label" for="create-fase">Fase</label>
             <input class="edit-input" id="create-fase" name="fase" maxlength="120" autocomplete="off">
           </div>
@@ -1031,14 +1059,14 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
             <input class="edit-input" id="create-responsable" name="responsable" maxlength="120" autocomplete="off">
           </div>
           <div class="edit-field">
-            <label class="edit-label" for="create-inicio-plan">Inicio plan</label>
-            <input class="edit-input" id="create-inicio-plan" name="inicio_plan" type="date">
+            <label class="edit-label" for="create-inicio">Inicio</label>
+            <input class="edit-input" id="create-inicio" name="inicio" type="date">
           </div>
         </div>
         <div class="edit-grid">
           <div class="edit-field">
-            <label class="edit-label" for="create-fin-plan">Fin plan</label>
-            <input class="edit-input" id="create-fin-plan" name="fin_plan" type="date">
+            <label class="edit-label" for="create-fin">Fin</label>
+            <input class="edit-input" id="create-fin" name="fin" type="date">
           </div>
           <div class="edit-field">
             <label class="edit-label">Task ID</label>
@@ -1049,7 +1077,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           <label class="edit-label" for="create-comentario">Comentario</label>
           <textarea class="edit-textarea" id="create-comentario" name="comentario" maxlength="1000"></textarea>
         </div>
-        <div class="edit-help">No se envia task_id desde el front. Apps Script genera el ID definitivo. visible_gantt queda fuera de la UI hasta confirmar la columna real.</div>
+        <div class="edit-help">No se envia task_id desde el front. Apps Script genera el ID definitivo. ver_en_gantt queda fuera de la UI operativa.</div>
         <div class="edit-status" id="create-status"></div>
         <div class="edit-actions">
           <button type="button" class="btn-sm" onclick="closeCreateModal()">Cancelar</button>
@@ -1811,10 +1839,16 @@ function setEditSaving(saving){
 function validateTaskEditFields(fields){
   if(!fields.estado) return 'El estado es obligatorio.';
   if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(fields.estado)) return 'Estado no permitido.';
-  if(!isValidEditDate(fields.inicio_real)) return 'Inicio real debe usar formato YYYY-MM-DD.';
-  if(!isValidEditDate(fields.fin_real)) return 'Fin real debe usar formato YYYY-MM-DD.';
-  if(fields.inicio_real&&fields.fin_real&&new Date(fields.fin_real+'T00:00:00')<new Date(fields.inicio_real+'T00:00:00')) return 'Fin real no puede ser anterior a inicio real.';
+  if(!fields.entorno) return 'El entorno es obligatorio.';
+  if(!['QA','Productivo'].includes(fields.entorno)) return 'Entorno no permitido.';
+  if(!fields.inicio) return 'Inicio es obligatorio.';
+  if(!fields.fin) return 'Fin es obligatorio.';
+  if(!isValidEditDate(fields.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
+  if(!isValidEditDate(fields.fin)) return 'Fin debe usar formato YYYY-MM-DD.';
+  if(new Date(fields.fin+'T00:00:00')<new Date(fields.inicio+'T00:00:00')) return 'Fin no puede ser anterior a inicio.';
+  if(fields.depende_de&&fields.depende_de===activeEditTaskId) return 'Depende de no puede apuntar a la misma tarea.';
   if(fields.responsable.length>120) return 'Responsable supera 120 caracteres.';
+  if(fields.depende_de.length>120) return 'Depende de supera 120 caracteres.';
   if(fields.comentario.length>1000) return 'Comentario supera 1000 caracteres.';
   return '';
 }
@@ -1834,8 +1868,10 @@ function openEditTask(taskId){
   $('edit-seller').textContent=`${seller.nombre||t.seller_nombre||t.seller_id} · ${t.seller_id}`;
   $('edit-estado').value=t.estado||'Pendiente';
   $('edit-responsable').value=t.responsable||'';
-  $('edit-inicio-real').value=dateInputValue(t.inicio_real);
-  $('edit-fin-real').value=dateInputValue(t.fin_real);
+  $('edit-entorno').value=t.entorno||'';
+  $('edit-depende-de').value=t.depende_de||'';
+  $('edit-inicio').value=dateInputValue(t.inicio);
+  $('edit-fin').value=dateInputValue(t.fin);
   $('edit-comentario').value=t.comentario||'';
   $('edit-ov').classList.add('open');
 }
@@ -1849,17 +1885,24 @@ function readEditFields(){
   return {
     estado: $('edit-estado').value,
     responsable: ($('edit-responsable').value||'').trim(),
-    inicio_real: $('edit-inicio-real').value||'',
-    fin_real: $('edit-fin-real').value||'',
+    entorno: $('edit-entorno').value||'',
+    inicio: $('edit-inicio').value||'',
+    fin: $('edit-fin').value||'',
     comentario: ($('edit-comentario').value||'').trim(),
+    depende_de: ($('edit-depende-de').value||'').trim(),
   };
 }
 function applyLocalTaskEdit(t,fields){
   t.estado=estadoNorm(fields.estado);
   t.responsable=fields.responsable;
-  t.inicio_real=parseDate(fields.inicio_real);
-  t.fin_real=parseDate(fields.fin_real);
+  t.entorno=fields.entorno;
+  t.inicio=parseDate(fields.inicio);
+  t.fin=parseDate(fields.fin);
   t.comentario=fields.comentario;
+  t.depende_de=fields.depende_de;
+  t.dependencia=fields.depende_de;
+  t.inicio_plan=t.inicio;
+  t.fin_plan=t.fin;
   calcProgreso();
 }
 async function saveGanttTaskEdit(ev){
@@ -1870,14 +1913,22 @@ async function saveGanttTaskEdit(ev){
   const validation=validateTaskEditFields(fields);
   if(validation){ showEditStatus('err',validation); return; }
   const qaMsg=t.task_id==='TASK-DUMMY-QA'?'':'\n\nQA: validar primero con TASK-DUMMY-QA antes de editar tareas reales.';
-  const ok=window.confirm(`Confirmar actualizacion de ${t.task_id}. Se modificaran solo estado, responsable, fechas reales y comentario.${qaMsg}`);
+  const ok=window.confirm(`Confirmar actualizacion de ${t.task_id}. Se modificaran estado, responsable, entorno, inicio, fin, dependencia y comentario.${qaMsg}`);
   if(!ok) return;
 
   const payload={
     tipo_formulario:'gantt_task_update',
     task_id:t.task_id,
-    updated_by:'gantt-operativo-ui',
-    fields,
+    updated_by:'front@gantt-operativo',
+    fields:{
+      estado: fields.estado,
+      responsable: fields.responsable,
+      entorno: fields.entorno,
+      inicio: fields.inicio,
+      fin: fields.fin,
+      comentario: fields.comentario,
+      ...(fields.depende_de||t.depende_de?{depende_de:fields.depende_de}:{}),
+    },
   };
 
   setEditSaving(true);
@@ -1930,6 +1981,7 @@ function openCreateTask(){
   if(form) form.reset();
   clearCreateStatus();
   $('create-estado').value='Pendiente';
+  $('create-entorno').value='QA';
   const selectedSeller=filters.seller&&filters.seller!=='todos'?filters.seller:'';
   if(selectedSeller&&$('create-seller-id')){
     $('create-seller-id').value=selectedSeller;
@@ -1949,8 +2001,10 @@ function readCreateFields(){
     hito: ($('create-hito').value||'').trim(),
     tarea: ($('create-tarea').value||'').trim(),
     responsable: ($('create-responsable').value||'').trim(),
-    inicio_plan: $('create-inicio-plan').value||'',
-    fin_plan: $('create-fin-plan').value||'',
+    depende_de: ($('create-depende-de').value||'').trim(),
+    entorno: $('create-entorno').value||'',
+    inicio: $('create-inicio').value||'',
+    fin: $('create-fin').value||'',
     estado: $('create-estado').value||'Pendiente',
     comentario: ($('create-comentario').value||'').trim(),
   };
@@ -1961,12 +2015,15 @@ function validateTaskCreateFields(task){
   if(!task.hito) return 'El hito es obligatorio.';
   if(!task.tarea) return 'La tarea es obligatoria.';
   if(!task.responsable) return 'El responsable es obligatorio.';
-  if(!task.inicio_plan) return 'Inicio plan es obligatorio.';
-  if(!task.fin_plan) return 'Fin plan es obligatorio.';
+  if(!task.entorno) return 'El entorno es obligatorio.';
+  if(!task.inicio) return 'Inicio es obligatorio.';
+  if(!task.fin) return 'Fin es obligatorio.';
   if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(task.estado)) return 'Estado no permitido.';
-  if(!isValidEditDate(task.inicio_plan)) return 'Inicio plan debe usar formato YYYY-MM-DD.';
-  if(!isValidEditDate(task.fin_plan)) return 'Fin plan debe usar formato YYYY-MM-DD.';
-  if(new Date(task.fin_plan+'T00:00:00')<new Date(task.inicio_plan+'T00:00:00')) return 'Fin plan no puede ser anterior a inicio plan.';
+  if(!['QA','Productivo'].includes(task.entorno)) return 'Entorno no permitido.';
+  if(!isValidEditDate(task.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
+  if(!isValidEditDate(task.fin)) return 'Fin debe usar formato YYYY-MM-DD.';
+  if(new Date(task.fin+'T00:00:00')<new Date(task.inicio+'T00:00:00')) return 'Fin no puede ser anterior a inicio.';
+  if(task.depende_de.length>120) return 'Depende de supera 120 caracteres.';
   if(task.comentario.length>1000) return 'Comentario supera 1000 caracteres.';
   return '';
 }
@@ -1981,7 +2038,19 @@ async function saveGanttTaskCreate(ev){
   const payload={
     tipo_formulario:'gantt_task_create',
     created_by:'front@gantt-operativo',
-    task,
+    task:{
+      seller_id: task.seller_id,
+      fase: task.fase,
+      hito: task.hito,
+      tarea: task.tarea,
+      responsable: task.responsable,
+      entorno: task.entorno,
+      inicio: task.inicio,
+      fin: task.fin,
+      estado: task.estado,
+      comentario: task.comentario,
+      ...(task.depende_de?{depende_de:task.depende_de}:{}),
+    },
   };
 
   setCreateSaving(true);

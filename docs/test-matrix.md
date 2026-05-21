@@ -1904,6 +1904,26 @@ Notas:
 - No se modifico Google Sheets, Excel, HTML, JS frontend, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
 - No se ejecuto POST real ni submit real.
 
+### Etapa 33F: frontend create/update Timeline v33
+
+**Estado:** implementado localmente; sin POST real.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Modal alta | Smoke mockeado | Abre y arma payload con `inicio`, `fin`, `entorno` | OK |
+| Payload alta | Revision/smoke | No envia `inicio_plan`, `fin_plan`, `inicio_real`, `fin_real` | OK |
+| Modal edicion | Smoke mockeado | Abre y arma `fields` con `inicio`, `fin`, `entorno` | OK |
+| Payload edicion | Revision/smoke | No envia `inicio_real` ni `fin_real` | OK |
+| Validacion fechas | Smoke mockeado | `fin < inicio` bloquea envio | OK |
+| Validacion entorno | Smoke mockeado | Entorno invalido bloquea envio | OK |
+| Disable | Revision de diff | `gantt_task_disable` queda sin cambios funcionales | OK |
+| Alcance | Revision de diff | Sin cambios en `Gantt.gs`, `Apps_script_v5.js`, endpoints ni config | OK |
+
+Notas:
+
+- El POST fue mockeado; no se ejecuto escritura real contra Apps Script.
+- La prueba real queda pendiente hasta confirmar deploy Apps Script v33 y autorizar tarea dummy.
+
 ### Etapa 32G: checklist manual de saneamiento Timeline
 
 **Estado:** documentado; saneamiento no ejecutado.
