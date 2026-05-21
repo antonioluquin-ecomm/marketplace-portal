@@ -1803,3 +1803,31 @@ Notas:
 
 - No se ejecuto POST real ni submit real.
 - No se modificaron Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
+
+### Etapa 32F: reporte automatico de inconsistencias Timeline
+
+**Estado:** implementado localmente; auditoria read-only.
+
+Artefactos:
+
+- `tools/audit-timeline-data.js`
+- `docs/timeline-data-audit-report.md`
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Ejecucion script | `node tools/audit-timeline-data.js` | Genera reporte Markdown | OK |
+| Fuente CSV | HTTPS GET publicado | Sin credenciales, sin POST | OK |
+| Reporte generado | Revision de archivo | `docs/timeline-data-audit-report.md` existe | OK |
+| Conteos principales | Reporte | 77 filas CSV, 57 tareas `SPT-*`, 44 renderizables | OK |
+| Campos minimos | Reporte | Detecta estado, fase, hito, responsable y fechas plan faltantes | OK |
+| Fechas | Reporte | Detecta fechas invalidas/no canonicas | OK |
+| Dependencias | Reporte | Detecta `SPT-002-T-23 -> SPT-002-T-22` | OK |
+| Filas no productivas | Reporte | Lista filas no `SPT-*` | OK |
+| Catalogos sugeridos | Reporte | Valida fase y estado contra catalogos sugeridos | OK |
+| Columnas derivables | Reporte | Detecta `Atraso (dias)` presente | OK |
+| Alcance | Revision de diff | Sin cambios funcionales | OK |
+
+Notas:
+
+- No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
