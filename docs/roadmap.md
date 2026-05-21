@@ -2254,7 +2254,7 @@ Decision vigente:
 
 ## Bloque 33: migracion a nuevo modelo Timeline
 
-Estado: iniciado en modo documental.
+Estado: en implementacion controlada.
 
 Objetivo:
 
@@ -2268,7 +2268,7 @@ Etapas propuestas:
 - 33B: contrato documental nuevo modelo Timeline.
 - 33C: actualizar auditor automatico para nuevo modelo + legacy.
 - 33D: actualizar frontend solo lectura / normalizacion.
-- 33E: actualizar Apps Script aliases y validaciones.
+- 33E: actualizar Apps Script aliases y validaciones. Completada localmente sin POST real.
 - 33F: migrar create/update frontend.
 - 33G: smoke mockeado completo.
 - 33H: smoke real con tarea dummy autorizada.
@@ -2280,4 +2280,7 @@ Decision vigente:
 - `inicio_real` y `fin_real` quedan deprecados y no deben enviarse en payloads futuros.
 - `entorno` es obligatorio y acepta `QA` o `Productivo`.
 - No tocar Google Sheets hasta que auditor, frontend y Apps Script toleren modelo nuevo + legacy.
-- 33C actualiza el auditor automatico y confirma que el CSV publicado ya expone 14 columnas compatibles con v33; siguen pendientes frontend y Apps Script.
+- 33C actualiza el auditor automatico y confirma que el CSV publicado ya expone 14 columnas compatibles con v33.
+- 33D actualiza el frontend en modo read-only para renderizar `inicio` / `fin` y mostrar `entorno`, sin migrar create/update.
+- 33E actualiza `Gantt.gs` para create/update/disable compatibles con v33 + legacy; `inicio_real` y `fin_real` quedan fuera del set editable.
+- Sigue pendiente 33F para migrar create/update del frontend al contrato v33 antes de pruebas reales.

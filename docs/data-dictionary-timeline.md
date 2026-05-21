@@ -8,7 +8,7 @@ El objetivo no es cambiar la hoja de inmediato, sino fijar una referencia establ
 
 ## Contrato canonico 33B - nuevo modelo Timeline
 
-Estado: contrato documental aprobado para implementacion futura. No implica cambios automaticos en Google Sheets, frontend ni Apps Script.
+Estado: contrato documental aprobado. Desde 33E, `Gantt.gs` soporta aliases y validaciones v33 en create/update/disable de forma local, sin modificar Google Sheets ni payloads reales del frontend.
 
 ### Columnas canonicas
 
@@ -123,7 +123,7 @@ La baja logica estandar mantiene `estado = Cancelado`. `ver_en_gantt` solo debe 
 - No eliminar aliases.
 - No renombrar columnas sin etapa especifica.
 - Frontend debe leer modelo nuevo y legacy durante la transicion.
-- Apps Script debe escribir al modelo nuevo, pero tolerar legacy mientras haya datos historicos.
+- Apps Script escribe al modelo nuevo cuando existan headers v33 y tolera headers/payloads legacy durante la transicion.
 - Auditor automatico debe soportar ambos modelos.
 - `inicio_real` y `fin_real` pueden leerse como legado, pero no deben enviarse ni editarse en payloads futuros.
 
@@ -132,7 +132,7 @@ La baja logica estandar mantiene `estado = Cancelado`. `ver_en_gantt` solo debe 
 | Componente | Impacto futuro |
 |---|---|
 | Frontend | `normalizeTasks()` debe producir `inicio`, `fin`, `entorno`, `depende_de`, `ver_en_gantt`; `renderGantt()` debe usar `inicio` / `fin`; modal/lista deben retirar fechas reales. |
-| `Gantt.gs` | Debe agregar aliases canonicos nuevos, validar `entorno`, exigir `inicio` / `fin`, retirar update de `inicio_real` / `fin_real` y mantener compatibilidad legacy. |
+| `Gantt.gs` | 33E agrega aliases canonicos nuevos, valida `entorno`, exige `inicio` / `fin`, retira update de `inicio_real` / `fin_real` y mantiene compatibilidad legacy. |
 | `tools/audit-timeline-data.js` | Debe auditar `inicio`, `fin`, `entorno` y seguir reconociendo `inicio_plan` / `fin_plan` legacy. |
 | Documentacion | Planes, checklist, matriz y roadmap deben migrar lenguaje desde `inicio_plan` / `fin_plan` hacia `inicio` / `fin`. |
 | Smoke tests | Deben cubrir CSV nuevo, CSV legacy, create/update/disable mockeados y render Mes/Semana/Hoy. |
@@ -141,7 +141,7 @@ La baja logica estandar mantiene `estado = Cancelado`. `ver_en_gantt` solo debe 
 
 - 33C: actualizar auditor automatico para nuevo modelo + legacy.
 - 33D: actualizar frontend solo lectura / normalizacion.
-- 33E: actualizar Apps Script aliases y validaciones.
+- 33E: actualizar Apps Script aliases y validaciones. Completada localmente sin POST real.
 - 33F: migrar create/update frontend.
 - 33G: smoke mockeado completo.
 - 33H: smoke real con tarea dummy autorizada.

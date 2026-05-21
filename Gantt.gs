@@ -7,9 +7,11 @@
 const CAMPOS_GANTT_EDITABLES_QA = {
   estado: ["estado_tarea", "estado"],
   responsable: ["responsable"],
-  inicio_real: ["fecha_inicio_real", "inicio_real"],
-  fin_real: ["fecha_fin_real", "fin_real"],
+  entorno: ["Entorno", "entorno"],
+  inicio: ["Inicio", "inicio", "Inicio plan", "inicio_plan", "fecha_inicio_plan"],
+  fin: ["Fin", "fin", "Fin plan", "fin_plan", "fecha_fin_plan"],
   comentario: ["comentario"],
+  depende_de: ["Depende de", "depende_de", "dependencia"],
 };
 
 const ESTADOS_GANTT_PERMITIDOS = {
@@ -18,6 +20,11 @@ const ESTADOS_GANTT_PERMITIDOS = {
   bloqueado: "Bloqueado",
   completado: "Completado",
   cancelado: "Cancelado",
+};
+
+const ENTORNOS_GANTT_PERMITIDOS = {
+  qa: "QA",
+  productivo: "Productivo",
 };
 
 const GANTT_TASK_ID_HEADER_ALIASES = [
@@ -38,13 +45,12 @@ const CAMPOS_GANTT_CREATE_ALIASES = {
   hito: ["hito"],
   tarea: ["tarea", "actividad"],
   responsable: ["responsable"],
-  dependencia: ["dependencia", "depende_de", "Depende de"],
-  inicio_plan: ["inicio_plan", "fecha_inicio_plan", "Inicio plan"],
-  fin_plan: ["fin_plan", "fecha_fin_plan", "Fin plan"],
-  inicio_real: ["inicio_real", "fecha_inicio_real", "Inicio real"],
-  fin_real: ["fin_real", "fecha_fin_real", "Fin real"],
+  depende_de: ["Depende de", "depende_de", "dependencia"],
+  entorno: ["Entorno", "entorno"],
+  inicio: ["Inicio", "inicio", "Inicio plan", "inicio_plan", "fecha_inicio_plan"],
+  fin: ["Fin", "fin", "Fin plan", "fin_plan", "fecha_fin_plan"],
   estado: ["estado_tarea", "estado"],
-  visible_gantt: ["visible_gantt", "visible", "Visible Gantt", "Ver en Gantt"],
+  ver_en_gantt: ["Ver en Gantt", "ver_en_gantt", "visible_gantt", "visible", "Visible Gantt"],
   comentario: ["comentario", "comentarios"],
 };
 
@@ -64,7 +70,8 @@ function actualizarTareaGanttSinLock(d) {
     throw new Error("Falta fields como objeto de campos a actualizar");
   }
 
-  const nombresCampos = Object.keys(fields);
+  const fieldsCanonicos = normalizarFieldsUpdateGantt(fields);
+  const nombresCampos = Object.keys(fieldsCanonicos);
   if (!nombresCampos.length) throw new Error("fields no puede estar vacio");
 
   const camposNoPermitidos = nombresCampos.filter(
@@ -118,13 +125,22 @@ function actualizarTareaGanttSinLock(d) {
       throw new Error("Columna inexistente para campo permitido: " + campo);
     }
 
-    const valor = normalizarValorGantt(campo, fields[campo]);
+    const valor = normalizarValorGantt(campo, fieldsCanonicos[campo]);
     before[campo] = limpiarValor(row[col]);
     after[campo] = valor;
     updates.push({ campo, col, valor });
   });
 
-  validarRangoFechasGantt(fields);
+  validarRangoInicioFinUpdateGantt(row, headerMap, after);
+  if (after.depende_de !== undefined) {
+    validarDependenciaGantt(
+      after.depende_de,
+      values,
+      taskCol,
+      timelineHeaders.dataStartRowNumber,
+      taskId,
+    );
+  }
 
   updates.forEach((update) => {
     ws.getRange(rowNumber, update.col + 1).setValue(update.valor);
@@ -163,21 +179,31 @@ function crearTareaGanttSinLock(d) {
     "responsable",
     120,
   );
-  const inicioPlan = validarFechaObligatoriaGantt(task.inicio_plan, "inicio_plan");
-  const finPlan = validarFechaObligatoriaGantt(task.fin_plan, "fin_plan");
-  validarRangoPlanGantt(inicioPlan, finPlan);
+  const entorno = normalizarEntornoGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.entorno),
+  );
+  const inicio = validarFechaObligatoriaGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.inicio),
+    "inicio",
+  );
+  const fin = validarFechaObligatoriaGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.fin),
+    "fin",
+  );
+  validarRangoInicioFinGantt(inicio, fin, "inicio", "fin");
 
-  const estado = normalizarEstadoGantt(task.estado || "Pendiente");
-  const visibleGantt = normalizarVisibleGantt(task.visible_gantt || "No");
+  const estado = normalizarEstadoGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.estado),
+  );
+  const visibleGantt = normalizarVisibleGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.ver_en_gantt) || "Si",
+  );
   const comentario = validarTextoGantt(task.comentario || "", "comentario", 1000);
-  const dependencia = validarTextoGantt(
-    task.dependencia || "",
-    "dependencia",
+  const dependeDe = validarTextoGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.depende_de),
+    "depende_de",
     120,
   );
-  const inicioReal = validarFechaGantt(task.inicio_real || "", "inicio_real");
-  const finReal = validarFechaGantt(task.fin_real || "", "fin_real");
-  validarRangoFechasGantt({ inicio_real: inicioReal, fin_real: finReal });
 
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const ws = ss.getSheetByName(HOJA_TIMELINE);
@@ -207,6 +233,13 @@ function crearTareaGanttSinLock(d) {
   if (existeTaskIdGantt(values, taskCol, timelineHeaders.dataStartRowNumber, taskId)) {
     throw new Error("task_id duplicado en timeline: " + taskId);
   }
+  validarDependenciaGantt(
+    dependeDe,
+    values,
+    taskCol,
+    timelineHeaders.dataStartRowNumber,
+    taskId,
+  );
 
   const datos = {
     task_id: taskId,
@@ -215,13 +248,12 @@ function crearTareaGanttSinLock(d) {
     hito,
     tarea,
     responsable,
-    dependencia,
-    inicio_plan: inicioPlan,
-    fin_plan: finPlan,
-    inicio_real: inicioReal,
-    fin_real: finReal,
+    depende_de: dependeDe,
+    entorno,
+    inicio,
+    fin,
     estado,
-    visible_gantt: visibleGantt,
+    ver_en_gantt: visibleGantt,
     comentario,
   };
 
@@ -305,14 +337,14 @@ function darDeBajaTareaGanttSinLock(d) {
   if (mode === "hide" || mode === "hide_and_cancel") {
     const col = resolverIndiceHeader(
       headerMap,
-      CAMPOS_GANTT_CREATE_ALIASES.visible_gantt,
+      CAMPOS_GANTT_CREATE_ALIASES.ver_en_gantt,
     );
     if (col === -1) {
-      throw new Error("La hoja timeline no tiene columna visible_gantt");
+      throw new Error("La hoja timeline no tiene columna ver_en_gantt / visible_gantt");
     }
-    before.visible_gantt = limpiarValor(row[col]);
-    after.visible_gantt = "No";
-    updates.push({ campo: "visible_gantt", col, valor: "No" });
+    before.ver_en_gantt = limpiarValor(row[col]);
+    after.ver_en_gantt = "No";
+    updates.push({ campo: "ver_en_gantt", col, valor: "No" });
   }
 
   if (mode === "cancel" || mode === "hide_and_cancel") {
@@ -444,6 +476,48 @@ function resolverIndiceHeaderGantt(headerMap, alias) {
   return -1;
 }
 
+function obtenerValorPayloadGantt(obj, alias) {
+  if (!obj || !alias) return "";
+  const aliasesNormalizados = alias.map((key) => normalizarHeaderGantt(key));
+  for (const key of alias) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) return obj[key];
+  }
+  for (const key of Object.keys(obj)) {
+    if (aliasesNormalizados.includes(normalizarHeaderGantt(key))) return obj[key];
+  }
+  return "";
+}
+
+function normalizarFieldsUpdateGantt(fields) {
+  const canonicos = {};
+  const aliasPorCampo = Object.keys(CAMPOS_GANTT_EDITABLES_QA).map((campo) => ({
+    campo,
+    aliases: CAMPOS_GANTT_EDITABLES_QA[campo].map((key) => normalizarHeaderGantt(key)),
+  }));
+  const noPermitidos = [];
+
+  Object.keys(fields).forEach((key) => {
+    const keyNormalizado = normalizarHeaderGantt(key);
+    const match = aliasPorCampo.find((item) => item.aliases.includes(keyNormalizado));
+    if (!match) {
+      noPermitidos.push(key);
+      return;
+    }
+    if (canonicos[match.campo] !== undefined) {
+      throw new Error("Campo duplicado para gantt_task_update: " + match.campo);
+    }
+    canonicos[match.campo] = fields[key];
+  });
+
+  if (noPermitidos.length) {
+    throw new Error(
+      "Campos no permitidos para gantt_task_update: " + noPermitidos.join(", "),
+    );
+  }
+
+  return canonicos;
+}
+
 function validarColumnasCreateGantt(headerMap) {
   const requeridas = [
     "task_id",
@@ -452,8 +526,9 @@ function validarColumnasCreateGantt(headerMap) {
     "hito",
     "tarea",
     "responsable",
-    "inicio_plan",
-    "fin_plan",
+    "entorno",
+    "inicio",
+    "fin",
     "estado",
   ];
 
@@ -513,11 +588,13 @@ function normalizarIdGantt(valor) {
 
 function normalizarValorGantt(campo, valor) {
   if (campo === "estado") return normalizarEstadoGantt(valor);
-  if (campo === "inicio_real" || campo === "fin_real") {
+  if (campo === "entorno") return normalizarEntornoGantt(valor);
+  if (campo === "inicio" || campo === "fin") {
     return validarFechaGantt(valor, campo);
   }
   if (campo === "responsable") return validarTextoGantt(valor, campo, 120);
   if (campo === "comentario") return validarTextoGantt(valor, campo, 1000);
+  if (campo === "depende_de") return validarTextoGantt(valor, campo, 120);
   return limpiarValor(valor);
 }
 
@@ -529,6 +606,16 @@ function normalizarEstadoGantt(valor) {
     throw new Error("estado invalido: " + raw);
   }
   return ESTADOS_GANTT_PERMITIDOS[key];
+}
+
+function normalizarEntornoGantt(valor) {
+  const raw = limpiarValor(valor);
+  if (!raw) throw new Error("entorno no puede estar vacio");
+  const key = normalizarHeaderGantt(raw);
+  if (!ENTORNOS_GANTT_PERMITIDOS[key]) {
+    throw new Error("entorno invalido: " + raw);
+  }
+  return ENTORNOS_GANTT_PERMITIDOS[key];
 }
 
 function validarFechaGantt(valor, campo) {
@@ -557,28 +644,51 @@ function validarFechaObligatoriaGantt(valor, campo) {
   return fecha;
 }
 
-function validarRangoPlanGantt(inicioPlan, finPlan) {
-  const inicio = new Date(inicioPlan + "T00:00:00");
-  const fin = new Date(finPlan + "T00:00:00");
+function validarRangoInicioFinGantt(inicioValor, finValor, campoInicio, campoFin) {
+  if (!limpiarValor(inicioValor) || !limpiarValor(finValor)) return;
+  const inicio = new Date(limpiarValor(inicioValor) + "T00:00:00");
+  const fin = new Date(limpiarValor(finValor) + "T00:00:00");
   if (fin < inicio) {
-    throw new Error("fin_plan no puede ser anterior a inicio_plan");
+    throw new Error(campoFin + " no puede ser anterior a " + campoInicio);
   }
 }
 
-function validarRangoFechasGantt(fields) {
-  if (
-    fields.inicio_real === undefined ||
-    fields.fin_real === undefined ||
-    !limpiarValor(fields.inicio_real) ||
-    !limpiarValor(fields.fin_real)
-  ) {
-    return;
+function obtenerValorFilaGantt(row, headerMap, aliases) {
+  const col = resolverIndiceHeader(headerMap, aliases);
+  if (col === -1) return "";
+  return limpiarValor(row[col]);
+}
+
+function validarRangoInicioFinUpdateGantt(row, headerMap, after) {
+  if (after.inicio === undefined && after.fin === undefined) return;
+  const inicio =
+    after.inicio !== undefined
+      ? after.inicio
+      : obtenerValorFilaGantt(row, headerMap, CAMPOS_GANTT_CREATE_ALIASES.inicio);
+  const fin =
+    after.fin !== undefined
+      ? after.fin
+      : obtenerValorFilaGantt(row, headerMap, CAMPOS_GANTT_CREATE_ALIASES.fin);
+  validarRangoInicioFinGantt(inicio, fin, "inicio", "fin");
+}
+
+function validarDependenciaGantt(
+  dependencia,
+  values,
+  taskCol,
+  dataStartRowNumber,
+  taskIdActual,
+) {
+  const dependeDe = normalizarIdGantt(dependencia);
+  if (!dependeDe) return;
+  const actual = normalizarIdGantt(taskIdActual);
+  if (actual && dependeDe === actual) {
+    throw new Error("depende_de no puede apuntar a la misma tarea");
   }
 
-  const inicio = new Date(limpiarValor(fields.inicio_real) + "T00:00:00");
-  const fin = new Date(limpiarValor(fields.fin_real) + "T00:00:00");
-  if (fin < inicio) {
-    throw new Error("fin_real no puede ser anterior a inicio_real");
+  const existe = existeTaskIdGantt(values, taskCol, dataStartRowNumber, dependeDe);
+  if (!existe) {
+    throw new Error("depende_de apunta a task_id inexistente: " + limpiarValor(dependencia));
   }
 }
 
@@ -602,7 +712,7 @@ function normalizarVisibleGantt(valor) {
   const key = normalizarHeaderGantt(raw);
   if (["si", "s"].includes(key)) return "Si";
   if (["no", "n"].includes(key)) return "No";
-  throw new Error("visible_gantt invalido: " + raw);
+  throw new Error("ver_en_gantt invalido: " + raw);
 }
 
 function normalizarModoBajaGantt(valor) {

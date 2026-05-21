@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 33E Apps Script compatible Timeline v33
+
+Tipo de cambio: backend Apps Script / compatibilidad de modelo.
+
+Estado: implementado localmente; sin tocar datos reales.
+
+Resultado:
+- Actualizado `Gantt.gs` para resolver aliases v33 de `inicio`, `fin`, `entorno`, `depende_de` y `ver_en_gantt`.
+- `gantt_task_create` acepta payload v33 y compatibilidad temporal con `inicio_plan`, `fin_plan`, `dependencia` y `visible_gantt`.
+- `gantt_task_update` permite `estado`, `responsable`, `entorno`, `inicio`, `fin`, `comentario` y `depende_de`; rechaza `inicio_real` y `fin_real`.
+- `gantt_task_disable` mantiene `mode:"cancel"` como `Estado = Cancelado` y conserva compatibilidad de ocultamiento con `Ver en Gantt` / `visible_gantt`.
+
+Alcance:
+- Se modificaron `Gantt.gs`, `CHANGELOG.md`, `docs/roadmap.md`, `docs/test-matrix.md` y `docs/data-dictionary-timeline.md`.
+- No se tocaron HTML, `Apps_script_v5.js`, Google Sheets, Excel, CSV manual, endpoints, payloads reales desde frontend, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 33C auditor automatico Timeline v33 + legacy
 
 Tipo de cambio: herramienta read-only / auditoria de datos.

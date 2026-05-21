@@ -1882,6 +1882,28 @@ Notas:
 - No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
 - No se ejecuto POST real ni submit real.
 
+### Etapa 33E: Apps Script compatible Timeline v33 + legacy
+
+**Estado:** implementado localmente; sin POST real.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Carga conjunta | `Config.gs`, `Headers.gs`, `Utils.gs`, `Gantt.gs`, `Apps_script_v5.js` via mock local | Sin errores | OK |
+| Create v33 | Smoke mockeado `gantt_task_create` con `inicio`, `fin`, `entorno` | Crea fila con campos canonicos v33 | OK |
+| Create legacy | Smoke mockeado con `inicio_plan`, `fin_plan`, `dependencia`, `visible_gantt` | Resuelve aliases y escribe en headers legacy | OK |
+| Update v33 | Smoke mockeado `gantt_task_update` con `inicio`, `fin`, `entorno`, `depende_de`, `estado` | Actualiza campos permitidos | OK |
+| Update legacy real | Smoke mockeado con `inicio_real` | Rechaza campo no permitido | OK |
+| Disable `cancel` | Smoke mockeado | Mantiene `Estado = Cancelado` sin depender de visibilidad | OK |
+| Disable `hide` | Smoke mockeado con header `Ver en Gantt` | Escribe `No` por alias visual | OK |
+| Routing | Revision | `Apps_script_v5.js` no modificado; endpoints se mantienen | OK |
+
+Notas:
+
+- `inicio_real` y `fin_real` quedan fuera del contrato editable.
+- Frontend create/update todavia requiere migracion posterior a v33.
+- No se modifico Google Sheets, Excel, HTML, JS frontend, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ### Etapa 32G: checklist manual de saneamiento Timeline
 
 **Estado:** documentado; saneamiento no ejecutado.
