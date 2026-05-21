@@ -957,7 +957,18 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           </div>
           <div class="edit-field">
             <label class="edit-label" for="edit-responsable">Responsable</label>
-            <input class="edit-input" id="edit-responsable" name="responsable" maxlength="120" autocomplete="off">
+            <select class="edit-select" id="edit-responsable" name="responsable">
+              <option value="">Seleccionar responsable</option>
+              <option value="eCommerce">eCommerce</option>
+              <option value="InfraCommerce">InfraCommerce</option>
+              <option value="Agente PIM">Agente PIM</option>
+              <option value="Administración">Administración</option>
+              <option value="Seller">Seller</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Operaciones">Operaciones</option>
+              <option value="QA">QA</option>
+              <option value="IT">IT</option>
+            </select>
           </div>
         </div>
         <div class="edit-grid">
@@ -1042,7 +1053,14 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         <div class="edit-grid">
           <div class="edit-field">
             <label class="edit-label" for="create-fase">Fase</label>
-            <input class="edit-input" id="create-fase" name="fase" maxlength="120" autocomplete="off">
+            <select class="edit-select" id="create-fase" name="fase">
+              <option value="">Seleccionar fase</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Técnica">Técnica</option>
+              <option value="Operativa">Operativa</option>
+              <option value="QA / Validación">QA / Validación</option>
+              <option value="Go Live">Go Live</option>
+            </select>
           </div>
           <div class="edit-field">
             <label class="edit-label" for="create-hito">Hito</label>
@@ -1051,12 +1069,23 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         </div>
         <div class="edit-field">
           <label class="edit-label" for="create-tarea">Tarea</label>
-          <input class="edit-input" id="create-tarea" name="tarea" maxlength="220" autocomplete="off">
+          <input class="edit-input" id="create-tarea" name="tarea" maxlength="220" autocomplete="off" placeholder="Ej.: Configurar condición comercial del seller">
         </div>
         <div class="edit-grid">
           <div class="edit-field">
             <label class="edit-label" for="create-responsable">Responsable</label>
-            <input class="edit-input" id="create-responsable" name="responsable" maxlength="120" autocomplete="off">
+            <select class="edit-select" id="create-responsable" name="responsable">
+              <option value="">Seleccionar responsable</option>
+              <option value="eCommerce">eCommerce</option>
+              <option value="InfraCommerce">InfraCommerce</option>
+              <option value="Agente PIM">Agente PIM</option>
+              <option value="Administración">Administración</option>
+              <option value="Seller">Seller</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Operaciones">Operaciones</option>
+              <option value="QA">QA</option>
+              <option value="IT">IT</option>
+            </select>
           </div>
           <div class="edit-field">
             <label class="edit-label" for="create-inicio">Inicio</label>
@@ -1119,6 +1148,10 @@ let activeEditTaskId = '';
 let lastEditFeedback = null;
 let lastDisableFeedback = null;
 let lastTodayScrollLeft = 0;
+
+const FASES_GANTT_PERMITIDAS = ['Comercial','Técnica','Operativa','QA / Validación','Go Live'];
+const RESPONSABLES_GANTT_PERMITIDOS = ['eCommerce','InfraCommerce','Agente PIM','Administración','Seller','Comercial','Operaciones','QA','IT'];
+const ENTORNOS_GANTT_PERMITIDOS_UI = ['QA','Productivo'];
 
 /* ── UTILS ── */
 const $   = id => document.getElementById(id);
@@ -1840,13 +1873,15 @@ function validateTaskEditFields(fields){
   if(!fields.estado) return 'El estado es obligatorio.';
   if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(fields.estado)) return 'Estado no permitido.';
   if(!fields.entorno) return 'El entorno es obligatorio.';
-  if(!['QA','Productivo'].includes(fields.entorno)) return 'Entorno no permitido.';
+  if(!ENTORNOS_GANTT_PERMITIDOS_UI.includes(fields.entorno)) return 'Entorno no permitido.';
   if(!fields.inicio) return 'Inicio es obligatorio.';
   if(!fields.fin) return 'Fin es obligatorio.';
   if(!isValidEditDate(fields.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
   if(!isValidEditDate(fields.fin)) return 'Fin debe usar formato YYYY-MM-DD.';
   if(new Date(fields.fin+'T00:00:00')<new Date(fields.inicio+'T00:00:00')) return 'Fin no puede ser anterior a inicio.';
   if(fields.depende_de&&fields.depende_de===activeEditTaskId) return 'Depende de no puede apuntar a la misma tarea.';
+  if(!fields.responsable) return 'El responsable es obligatorio.';
+  if(!RESPONSABLES_GANTT_PERMITIDOS.includes(fields.responsable)) return 'Responsable no permitido.';
   if(fields.responsable.length>120) return 'Responsable supera 120 caracteres.';
   if(fields.depende_de.length>120) return 'Depende de supera 120 caracteres.';
   if(fields.comentario.length>1000) return 'Comentario supera 1000 caracteres.';
@@ -1976,6 +2011,13 @@ function setCreateSaving(saving){
   btn.disabled=saving;
   btn.textContent=saving?'Creando...':'Crear tarea';
 }
+function sellerNombreParaPayload(sellerId){
+  const sid=String(sellerId||'').trim();
+  if(!sid) return '';
+  const seller=SELLERS[sid]||{};
+  const desdeTask=TASKS.find(t=>t.seller_id===sid&&t.seller_nombre);
+  return seller.nombre||desdeTask?.seller_nombre||sid;
+}
 function openCreateTask(){
   const form=$('create-form');
   if(form) form.reset();
@@ -1995,8 +2037,10 @@ function closeCreateModal(e){
   }
 }
 function readCreateFields(){
+  const sellerId=($('create-seller-id').value||'').trim();
   return {
-    seller_id: ($('create-seller-id').value||'').trim(),
+    seller_id: sellerId,
+    seller_nombre: sellerNombreParaPayload(sellerId),
     fase: ($('create-fase').value||'').trim(),
     hito: ($('create-hito').value||'').trim(),
     tarea: ($('create-tarea').value||'').trim(),
@@ -2011,15 +2055,18 @@ function readCreateFields(){
 }
 function validateTaskCreateFields(task){
   if(!task.seller_id) return 'Seleccioná un seller_id.';
+  if(!task.seller_nombre) return 'No se pudo resolver Seller / Marca para el seller seleccionado.';
   if(!task.fase) return 'La fase es obligatoria.';
+  if(!FASES_GANTT_PERMITIDAS.includes(task.fase)) return 'Fase no permitida.';
   if(!task.hito) return 'El hito es obligatorio.';
   if(!task.tarea) return 'La tarea es obligatoria.';
   if(!task.responsable) return 'El responsable es obligatorio.';
+  if(!RESPONSABLES_GANTT_PERMITIDOS.includes(task.responsable)) return 'Responsable no permitido.';
   if(!task.entorno) return 'El entorno es obligatorio.';
   if(!task.inicio) return 'Inicio es obligatorio.';
   if(!task.fin) return 'Fin es obligatorio.';
   if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(task.estado)) return 'Estado no permitido.';
-  if(!['QA','Productivo'].includes(task.entorno)) return 'Entorno no permitido.';
+  if(!ENTORNOS_GANTT_PERMITIDOS_UI.includes(task.entorno)) return 'Entorno no permitido.';
   if(!isValidEditDate(task.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
   if(!isValidEditDate(task.fin)) return 'Fin debe usar formato YYYY-MM-DD.';
   if(new Date(task.fin+'T00:00:00')<new Date(task.inicio+'T00:00:00')) return 'Fin no puede ser anterior a inicio.';
@@ -2040,6 +2087,7 @@ async function saveGanttTaskCreate(ev){
     created_by:'front@gantt-operativo',
     task:{
       seller_id: task.seller_id,
+      seller_nombre: task.seller_nombre,
       fase: task.fase,
       hito: task.hito,
       tarea: task.tarea,

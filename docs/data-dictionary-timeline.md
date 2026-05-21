@@ -42,7 +42,7 @@ Decisiones 33B:
 |---|---|---|---|---|---|---|
 | `task_id` | `ID Tarea`, `id_tarea`, `task_id` | string | Si | No | Unico; formato `SPT-###-T-##` o dummy QA autorizado | Clave primaria logica. |
 | `seller_id` | `seller_id`, `id_seller`, `seller` | string | Si | Solo alta | Debe existir en `sellers` | FK logica. |
-| `seller_nombre` | `Seller / Marca`, `seller_nombre`, `seller_marca` | string | No | No | Fallback visual; no autoridad | Preferir resolver por `seller_id`. |
+| `seller_nombre` | `Seller / Marca`, `seller_nombre`, `seller_marca`, `seller` | string | No | No | Fallback visual; no autoridad | Snapshot opcional; desde 33F-BACKEND-FIX Apps Script lo persiste en create si viene en payload y existe columna compatible. |
 | `fase` | `Fase`, `fase` | enum/texto catalogado | Si | Alta; edit futuro controlado | Catalogo sugerido | Impacta filtros y color. |
 | `hito` | `Hito`, `hito` | enum/texto catalogado | Si | Alta; edit futuro controlado | Requerido; ideal por fase | Contexto visual y operativo. |
 | `tarea` | `Tarea`, `tarea`, `actividad` | string | Si | Alta | Requerido; largo maximo | Nombre principal mostrado. |

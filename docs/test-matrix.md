@@ -1924,6 +1924,24 @@ Notas:
 - El POST fue mockeado; no se ejecuto escritura real contra Apps Script.
 - La prueba real queda pendiente hasta confirmar deploy Apps Script v33 y autorizar tarea dummy.
 
+### Etapa 33F-BACKEND-FIX: persistir seller_nombre en create v33
+
+**Estado:** implementado localmente; sin POST real.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Create v33 con `seller_nombre` | Smoke mockeado `gantt_task_create` | Escribe `seller_nombre` en columna `Seller / Marca` | OK |
+| Create v33 sin `seller_nombre` | Smoke mockeado | No rompe; crea fila sin snapshot visual | OK |
+| Create legacy | Smoke mockeado | Sigue creando con aliases legacy | OK |
+| Update | Smoke mockeado | Sigue OK | OK |
+| Disable | Smoke mockeado | Sigue OK | OK |
+| Routing | Revision de diff | `Apps_script_v5.js` no modificado | OK |
+
+Notas:
+
+- `seller_nombre` es snapshot opcional; `seller_id` sigue siendo la referencia operativa.
+- No se ejecuto POST real ni se modifico Google Sheets.
+
 ### Etapa 32G: checklist manual de saneamiento Timeline
 
 **Estado:** documentado; saneamiento no ejecutado.

@@ -4,6 +4,23 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 33F-BACKEND-FIX persistencia seller_nombre
+
+Tipo de cambio: backend Apps Script / compatibilidad create v33.
+
+Estado: implementado localmente; sin POST real.
+
+Resultado:
+- Actualizado `Gantt.gs` para aceptar `seller_nombre` como campo opcional en `gantt_task_create`.
+- Aliases soportados: `seller_nombre`, `seller_marca`, `Seller / Marca`, `seller`.
+- Si la hoja tiene columna `Seller / Marca` o alias compatible, create escribe el snapshot visual del seller.
+- Create sin `seller_nombre` sigue funcionando; el campo no es obligatorio.
+
+Alcance:
+- Se modificaron `Gantt.gs`, `CHANGELOG.md`, `docs/roadmap.md`, `docs/test-matrix.md` y `docs/data-dictionary-timeline.md`.
+- No se tocaron frontend, `Apps_script_v5.js`, Google Sheets, Excel, CSV manual, auditor automatico, endpoints, payloads reales, config, assets, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 33F frontend create/update Timeline v33
 
 Tipo de cambio: frontend operativo / migracion de payloads.

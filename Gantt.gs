@@ -41,6 +41,7 @@ const GANTT_ACTOR_FALLBACK = "gantt_backend_no_declarado";
 const CAMPOS_GANTT_CREATE_ALIASES = {
   task_id: GANTT_TASK_ID_HEADER_ALIASES,
   seller_id: ["seller_id", "id_seller", "seller"],
+  seller_nombre: ["seller_nombre", "seller_marca", "Seller / Marca", "seller"],
   fase: ["fase"],
   hito: ["hito"],
   tarea: ["tarea", "actividad"],
@@ -170,6 +171,11 @@ function crearTareaGanttSinLock(d) {
 
   const sellerId = normalizarIdGantt(task.seller_id);
   if (!sellerId) throw new Error("seller_id obligatorio");
+  const sellerNombre = validarTextoGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.seller_nombre),
+    "seller_nombre",
+    180,
+  );
 
   const fase = validarTextoObligatorioGantt(task.fase, "fase", 120);
   const hito = validarTextoObligatorioGantt(task.hito, "hito", 160);
@@ -244,6 +250,7 @@ function crearTareaGanttSinLock(d) {
   const datos = {
     task_id: taskId,
     seller_id: sellerId,
+    ...(sellerNombre ? { seller_nombre: sellerNombre } : {}),
     fase,
     hito,
     tarea,

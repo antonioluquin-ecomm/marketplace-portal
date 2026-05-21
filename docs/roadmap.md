@@ -2270,6 +2270,7 @@ Etapas propuestas:
 - 33D: actualizar frontend solo lectura / normalizacion.
 - 33E: actualizar Apps Script aliases y validaciones. Completada localmente sin POST real.
 - 33F: migrar create/update frontend. Completada localmente sin POST real.
+- 33F-BACKEND-FIX: persistir `seller_nombre` / `Seller / Marca` en create v33. Completada localmente sin POST real.
 - 33G: smoke mockeado completo.
 - 33H: smoke real con tarea dummy autorizada.
 
@@ -2284,4 +2285,5 @@ Decision vigente:
 - 33D actualiza el frontend en modo read-only para renderizar `inicio` / `fin` y mostrar `entorno`, sin migrar create/update.
 - 33E actualiza `Gantt.gs` para create/update/disable compatibles con v33 + legacy; `inicio_real` y `fin_real` quedan fuera del set editable.
 - 33F migra los modales y payloads del frontend para alta/edicion v33; `gantt_task_disable` queda sin cambios.
+- 33F-BACKEND-FIX permite que Apps Script escriba `seller_nombre` en `Seller / Marca` si el payload create lo envia y la columna existe.
 - Sigue pendiente 33G para smoke mockeado completo y 33H para prueba real con tarea dummy autorizada.
