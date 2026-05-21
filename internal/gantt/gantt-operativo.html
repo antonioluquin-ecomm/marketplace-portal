@@ -149,6 +149,11 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .st-pend{background:rgba(255,255,255,.07);color:var(--t3)}
 .st-blk{background:var(--dng-dim);color:#f29a9a}
 .st-can{background:rgba(255,255,255,.04);color:var(--t3);text-decoration:line-through}
+.entorno-badge{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:2px 7px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.04em;white-space:nowrap;text-transform:uppercase}
+.env-qa{background:var(--info-dim);border:1px solid rgba(100,181,246,.22);color:var(--info)}
+.env-prod{background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g)}
+.env-empty{background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--t3)}
+.env-mini{position:relative;z-index:1;margin-right:5px;min-width:auto;padding:1px 5px;font-size:8px;background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.18);color:inherit}
 .tr-gantt{flex:1;position:relative;min-height:36px;overflow:hidden}
 
 /* bars */
@@ -794,6 +799,15 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   </div>
 
   <div class="sb-s">
+    <div class="sb-lbl">Entorno</div>
+    <select class="sel" id="entorno-sel" onchange="setEntornoFilter(this.value)">
+      <option value="todos">Todos</option>
+      <option value="QA">QA</option>
+      <option value="Productivo">Productivo</option>
+    </select>
+  </div>
+
+  <div class="sb-s">
     <div class="sb-lbl">Fase</div>
     <button class="fb on" onclick="setF('fase','todos')" id="ff-todos"><span class="fb-l"><span class="fase-dot" style="background:var(--t3)"></span>Todas</span><span class="fc" id="ffc-todos">0</span></button>
     <button class="fb" onclick="setF('fase','Comercial')"  id="ff-Comercial"><span class="fb-l"><span class="fase-dot" style="background:var(--f-com)"></span>Comercial</span><span class="fc"  id="ffc-Comercial">0</span></button>
@@ -982,7 +996,9 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           </div>
           <div class="edit-field">
             <label class="edit-label" for="edit-depende-de">Depende de</label>
-            <input class="edit-input" id="edit-depende-de" name="depende_de" maxlength="120" autocomplete="off">
+            <select class="edit-select" id="edit-depende-de" name="depende_de">
+              <option value="">Sin dependencia</option>
+            </select>
           </div>
         </div>
         <div class="edit-grid">
@@ -1021,7 +1037,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         <div class="edit-grid">
           <div class="edit-field">
             <label class="edit-label" for="create-seller-id">Seller ID</label>
-            <select class="edit-select" id="create-seller-id" name="seller_id">
+            <select class="edit-select" id="create-seller-id" name="seller_id" onchange="populateCreateDependencyOptions()">
               <option value="">Seleccionar seller</option>
             </select>
           </div>
@@ -1047,7 +1063,9 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           </div>
           <div class="edit-field">
             <label class="edit-label" for="create-depende-de">Depende de</label>
-            <input class="edit-input" id="create-depende-de" name="depende_de" maxlength="120" autocomplete="off">
+            <select class="edit-select" id="create-depende-de" name="depende_de">
+              <option value="">Sin dependencia</option>
+            </select>
           </div>
         </div>
         <div class="edit-grid">
@@ -1142,7 +1160,7 @@ let SELLERS  = {};
 let TASKS    = [];
 let currentView  = 'gantt';
 let currentScale = 'mes';   // 'mes' | 'semana'
-let filters = { fase:'todos', estado:'todos', seller:'todos' };
+let filters = { fase:'todos', estado:'todos', seller:'todos', entorno:'todos' };
 let weekPanelOpen = false;
 let activeEditTaskId = '';
 let lastEditFeedback = null;
@@ -1358,6 +1376,38 @@ function populateCreateSellerOptions(ids){
     sel.appendChild(o);
   });
   sel.value=(ids||[]).includes(current)?current:'';
+  populateCreateDependencyOptions();
+}
+
+function dependencyTasksForSeller(sellerId, excludeTaskId=''){
+  const sid=String(sellerId||'').trim();
+  const excluded=normalizarIdLocal(excludeTaskId);
+  if(!sid) return [];
+  return TASKS
+    .filter(t=>t.seller_id===sid&&t.task_id&&normalizarIdLocal(t.task_id)!==excluded)
+    .sort((a,b)=>String(a.task_id).localeCompare(String(b.task_id),'es'));
+}
+
+function fillDependencySelect(selectId, sellerId, currentValue='', excludeTaskId=''){
+  const sel=$(selectId);
+  if(!sel) return;
+  const current=String(currentValue||'').trim();
+  while(sel.options.length) sel.remove(0);
+  const empty=document.createElement('option');
+  empty.value='';
+  empty.textContent='Sin dependencia';
+  sel.appendChild(empty);
+  dependencyTasksForSeller(sellerId, excludeTaskId).forEach(t=>{
+    const o=document.createElement('option');
+    o.value=t.task_id;
+    o.textContent=`${t.task_id} — ${t.tarea||'Sin tarea'}`;
+    sel.appendChild(o);
+  });
+  sel.value=[...sel.options].some(o=>o.value===current)?current:'';
+}
+
+function populateCreateDependencyOptions(){
+  fillDependencySelect('create-depende-de',$('create-seller-id')?.value||'');
 }
 
 /* ── RESPONSABLES únicos → poblar select ── */
@@ -1437,13 +1487,18 @@ function setSellerFilter(sid){
 }
 function clearFilters(){
   $('search').value=''; $('resp-sel').value='todos';
+  if($('entorno-sel')) $('entorno-sel').value='todos';
   if($('seller-sel')) $('seller-sel').value='todos';
-  filters={fase:'todos',estado:'todos',seller:'todos'};
+  filters={fase:'todos',estado:'todos',seller:'todos',entorno:'todos'};
   $('solo-activos').checked=false;
   updateSellerHint();
   document.querySelectorAll('[id^="ff-"],[id^="fe-"]').forEach(b=>b.classList.remove('on'));
   const ff=$('ff-todos');if(ff)ff.classList.add('on');
   const fe=$('fe-todos');if(fe)fe.classList.add('on');
+  render();
+}
+function setEntornoFilter(value){
+  filters.entorno=value||'todos';
   render();
 }
 function setView(v){
@@ -1493,6 +1548,26 @@ function barClass(e){
   switch(e){case'Completado':return'done';case'En curso':return'wip';case'Bloqueado':return'blk';case'Cancelado':return'can';}
   return 'pend';
 }
+function normalizarIdLocal(value){
+  return String(value||'').trim().toUpperCase();
+}
+function entornoClass(entorno){
+  const n=norm(entorno);
+  if(n==='qa') return 'env-qa';
+  if(n==='productivo') return 'env-prod';
+  return 'env-empty';
+}
+function entornoLabel(entorno){
+  const raw=String(entorno||'').trim();
+  return raw||'—';
+}
+function entornoShort(entorno){
+  const raw=String(entorno||'').trim();
+  return norm(raw)==='productivo'?'PROD':(raw||'—');
+}
+function entornoBadge(entorno,extraClass=''){
+  return `<span class="entorno-badge ${entornoClass(entorno)} ${extraClass}">${esc(entornoShort(entorno))}</span>`;
+}
 function progStyle(pct){
   if(pct>=100) return 'background:var(--teal)';
   if(pct>=60)  return 'background:var(--g)';
@@ -1505,6 +1580,7 @@ function render(){
   const search=($('search').value||'').trim().toLowerCase();
   const resp=($('resp-sel')?.value)||'todos';
   const sellerFilter=filters.seller||'todos';
+  const entornoFilter=filters.entorno||'todos';
   const soloAct=$('solo-activos').checked;
   const today=new Date(); today.setHours(0,0,0,0);
   updateSellerHint();
@@ -1513,6 +1589,7 @@ function render(){
     if(sellerFilter!=='todos'&&t.seller_id!==sellerFilter) return false;
     if(filters.fase!=='todos'&&norm(t.fase)!==norm(filters.fase)) return false;
     if(filters.estado!=='todos'&&t.estado!==filters.estado) return false;
+    if(entornoFilter!=='todos'&&t.entorno!==entornoFilter) return false;
     if(resp!=='todos'&&t.responsable!==resp) return false;
     if(soloAct&&t.estado!=='En curso'&&t.estado!=='Bloqueado') return false;
     if(search){
@@ -1750,6 +1827,7 @@ function renderGantt(tasks,sellerIds,today){
       const barW=(left!==null&&right!==null)?Math.max(currentScale==='semana'?COL_W:4,right-left):0;
       const isOver=t.atraso_calc>0&&!['Completado','Cancelado'].includes(t.estado);
       const shortLabel=barW>60?esc((t.hito||t.tarea).substring(0,currentScale==='semana'?18:22)):'';
+      const envMini=barW>90&&t.entorno?entornoBadge(t.entorno,'env-mini'):'';
 
       html+=`
           <div class="task-row" style="display:flex" onclick="openModal('${esc(t.task_id)}')">
@@ -1768,8 +1846,8 @@ function renderGantt(tasks,sellerIds,today){
               ${left!==null?`
               <div class="g-bar ${barClass(t.estado)}${isOver?' overrun':''}"
                    style="left:${left}px;width:${barW}px"
-                   title="${esc(t.tarea)} · ${fmtD(t.inicio)} → ${fmtD(t.fin)}">
-                ${shortLabel}
+                   title="${esc(t.tarea)} · ${fmtD(t.inicio)} → ${fmtD(t.fin)} · ${esc(entornoLabel(t.entorno))}">
+                ${envMini}${shortLabel}
               </div>`:''}
             </div>
           </div>`;
@@ -1820,7 +1898,7 @@ function renderLista(tasks,sellerIds,today){
                 <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
                 <td><span class="estado-badge ${estadoClass(t.estado)}">${t.estado}</span></td>
                 <td class="td-resp">${esc(t.responsable||'—')}</td>
-                <td class="td-resp">${esc(t.entorno||'—')}</td>
+                <td class="td-resp">${entornoBadge(t.entorno)}</td>
                 <td class="td-dates">${fmtDfull(t.inicio)}</td>
                 <td class="td-dates">${fmtDfull(t.fin)}</td>
                 <td class="td-atraso ${ac}">${atr>0?'+'+atr+'d':t.estado==='Completado'?'✓':'—'}</td>
@@ -1879,7 +1957,8 @@ function validateTaskEditFields(fields){
   if(!isValidEditDate(fields.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
   if(!isValidEditDate(fields.fin)) return 'Fin debe usar formato YYYY-MM-DD.';
   if(new Date(fields.fin+'T00:00:00')<new Date(fields.inicio+'T00:00:00')) return 'Fin no puede ser anterior a inicio.';
-  if(fields.depende_de&&fields.depende_de===activeEditTaskId) return 'Depende de no puede apuntar a la misma tarea.';
+  if(fields.depende_de&&normalizarIdLocal(fields.depende_de)===normalizarIdLocal(activeEditTaskId)) return 'Depende de no puede apuntar a la misma tarea.';
+  if(fields.depende_de&&!dependencyTasksForSeller(TASKS.find(t=>t.task_id===activeEditTaskId)?.seller_id,activeEditTaskId).some(t=>normalizarIdLocal(t.task_id)===normalizarIdLocal(fields.depende_de))) return 'Depende de debe ser una tarea existente del mismo seller.';
   if(!fields.responsable) return 'El responsable es obligatorio.';
   if(!RESPONSABLES_GANTT_PERMITIDOS.includes(fields.responsable)) return 'Responsable no permitido.';
   if(fields.responsable.length>120) return 'Responsable supera 120 caracteres.';
@@ -1904,7 +1983,7 @@ function openEditTask(taskId){
   $('edit-estado').value=t.estado||'Pendiente';
   $('edit-responsable').value=t.responsable||'';
   $('edit-entorno').value=t.entorno||'';
-  $('edit-depende-de').value=t.depende_de||'';
+  fillDependencySelect('edit-depende-de',t.seller_id,t.depende_de,t.task_id);
   $('edit-inicio').value=dateInputValue(t.inicio);
   $('edit-fin').value=dateInputValue(t.fin);
   $('edit-comentario').value=t.comentario||'';
@@ -2028,6 +2107,7 @@ function openCreateTask(){
   if(selectedSeller&&$('create-seller-id')){
     $('create-seller-id').value=selectedSeller;
   }
+  populateCreateDependencyOptions();
   $('create-ov').classList.add('open');
 }
 function closeCreateModal(e){
@@ -2070,6 +2150,7 @@ function validateTaskCreateFields(task){
   if(!isValidEditDate(task.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
   if(!isValidEditDate(task.fin)) return 'Fin debe usar formato YYYY-MM-DD.';
   if(new Date(task.fin+'T00:00:00')<new Date(task.inicio+'T00:00:00')) return 'Fin no puede ser anterior a inicio.';
+  if(task.depende_de&&!dependencyTasksForSeller(task.seller_id).some(t=>normalizarIdLocal(t.task_id)===normalizarIdLocal(task.depende_de))) return 'Depende de debe ser una tarea existente del mismo seller.';
   if(task.depende_de.length>120) return 'Depende de supera 120 caracteres.';
   if(task.comentario.length>1000) return 'Comentario supera 1000 caracteres.';
   return '';
@@ -2228,7 +2309,7 @@ function openModal(taskId){
     ${row('Depende de',esc(t.depende_de))}
     <div style="margin-top:13px" class="msec-t">Fechas y estado</div>
     ${row('Estado',`<span class="estado-badge ${estadoClass(t.estado)}">${t.estado}</span>`)}
-    ${row('Entorno',esc(t.entorno))}
+    ${row('Entorno',entornoBadge(t.entorno))}
     ${row('Inicio',fmtDfull(t.inicio))}
     ${row('Fin',fmtDfull(t.fin))}
     ${row('Semana','S'+( t.inicio?isoWeek(t.inicio):'—'))}
