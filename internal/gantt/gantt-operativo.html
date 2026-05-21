@@ -1071,8 +1071,8 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 //   TIMELINE_URL: hoja "timeline"  · gid=1623881837
 // Las columnas esperadas en "timeline":
 //   ID Tarea · seller_id · Seller / Marca · Fase · Hito · Tarea · Responsable
-//   Depende de · Inicio plan · Fin plan · Inicio real · Fin real
-//   Estado · Atraso (días) · Comentario · Ver en Gantt
+//   Depende de · Entorno · Inicio · Fin · Estado · Comentario · Ver en Gantt
+// Legacy read-only tolerado: Inicio plan / Fin plan, Inicio real / Fin real.
 // ─────────────────────────────────────────────────────────────────────────
 const CONFIG = {
   SELLERS_URL:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
@@ -1186,7 +1186,7 @@ function normalizeSellers(rows) {
 // La columna "Atraso (días)" en el Sheet usa fórmulas IFERROR que Google Sheets
 // exporta como texto literal cuando el CSV se descarga sin evaluar.
 // Este helper detecta fórmulas (=IFERROR...) y retorna '' para que el Gantt
-// calcule el atraso en runtime comparando fin_plan vs fecha actual.
+// calcule el atraso en runtime comparando fin vs fecha actual.
 function parseAtrasoSheet(v) {
   const s = String(v || '').trim();
   if (!s || s.startsWith('=') || s === '—') return '';
@@ -1208,28 +1208,41 @@ function normalizeTasks(rows) {
   return rows.filter(r=>{
     const id=r.task_id||r.id_tarea;
     return id&&String(id).trim()!==''&&/^SPT-/i.test(String(id).trim());
-  }).map(r=>({
-    task_id:   r.task_id||r.id_tarea||'',
-    seller_id: r.seller_id||'',
+  }).map(r=>{
+    const dependeDe = r.depende_de||r.dependencia||'';
+    const inicio = parseDate(r.inicio||r.fecha_inicio_plan||r.inicio_plan);
+    const fin = parseDate(r.fin||r.fecha_fin_plan||r.fin_plan);
+    const inicioRealLegacy = parseDate(r.fecha_inicio_real||r.inicio_real);
+    const finRealLegacy = parseDate(r.fecha_fin_real||r.fin_real);
+    const verEnGantt = r.ver_en_gantt||r.visible_gantt||r.visible||'si';
+    return {
+      task_id:   r.task_id||r.id_tarea||'',
+      seller_id: r.seller_id||'',
     // "Seller / Marca" normaliza a seller_marca en el CSV — alias incluido
-    seller_nombre: r.seller_nombre||r.seller_marca||r.seller___marca||'',
-    fase:      r.fase||'',
-    hito:      r.hito||'',
-    tarea:     r.tarea||'',
-    responsable: r.responsable||'',
+      seller_nombre: r.seller_nombre||r.seller_marca||r.seller___marca||'',
+      fase:      r.fase||'',
+      hito:      r.hito||'',
+      tarea:     r.tarea||'',
+      responsable: r.responsable||'',
     // "Depende de" normaliza a depende_de en el CSV — alias incluido
-    dependencia: r.dependencia||r.depende_de||'',
-    inicio_plan: parseDate(r.fecha_inicio_plan||r.inicio_plan),
-    fin_plan:    parseDate(r.fecha_fin_plan   ||r.fin_plan),
-    inicio_real: parseDate(r.fecha_inicio_real||r.inicio_real),
-    fin_real:    parseDate(r.fecha_fin_real   ||r.fin_real),
-    estado:      estadoNorm(r.estado_tarea||r.estado),
+      depende_de: dependeDe,
+      dependencia: dependeDe,
+      entorno: r.entorno||'',
+      inicio,
+      fin,
+      inicio_plan: inicio,
+      fin_plan: fin,
+      inicio_real: inicioRealLegacy,
+      fin_real: finRealLegacy,
+      estado:      estadoNorm(r.estado_tarea||r.estado),
     // "Atraso (días)" → el CSV exporta fórmulas IFERROR como texto — ignorar, calcular en runtime
-    atraso_raw:  parseAtrasoSheet(r.atraso_dias_||r.atraso_dias||r.atraso||''),
-    comentario:  r.comentario||'',
+      atraso_raw:  parseAtrasoSheet(r.atraso_dias_||r.atraso_dias||r.atraso||''),
+      comentario:  r.comentario||'',
     // "Ver en Gantt" normaliza a ver_en_gantt en el CSV — alias incluido
-    visible:     norm(r.visible_gantt||r.ver_en_gantt||r.visible||'si')!=='no',
-  })).filter(t=>t.visible&&t.inicio_plan&&t.fin_plan);
+      ver_en_gantt: verEnGantt,
+      visible:     norm(verEnGantt)!=='no',
+    };
+  }).filter(t=>t.visible&&t.inicio&&t.fin);
 }
 
 /* ── PROGRESO AUTOMÁTICO POR SELLER ── */
@@ -1451,9 +1464,9 @@ function render(){
   // Calcular atraso real
   tasks=tasks.map(t=>{
     let atr=parseFloat(t.atraso_raw)||0;
-    if(!atr&&t.fin_plan){
-      const finRef=t.fin_real||((['En curso','Bloqueado'].includes(t.estado))?today:null);
-      if(finRef&&finRef>t.fin_plan) atr=dBetween(t.fin_plan,finRef)||0;
+    if(!atr&&t.fin){
+      const finRef=(['En curso','Bloqueado'].includes(t.estado))?today:null;
+      if(finRef&&finRef>t.fin) atr=dBetween(t.fin,finRef)||0;
     }
     return{...t,atraso_calc:atr};
   });
@@ -1526,7 +1539,7 @@ function renderWeekPanel(tasks,today){
 
   const blk=tasks.filter(t=>t.estado==='Bloqueado');
   const wip=tasks.filter(t=>t.estado==='En curso');
-  const due=tasks.filter(t=>t.fin_plan&&t.fin_plan>=startW&&t.fin_plan<=endW&&!['Completado','Cancelado'].includes(t.estado));
+  const due=tasks.filter(t=>t.fin&&t.fin>=startW&&t.fin<=endW&&!['Completado','Cancelado'].includes(t.estado));
 
   const showBadge=(id,count,label)=>{const e=$(id);if(e){e.textContent=`${count} ${label}`;e.style.display=count>0?'inline-block':'none';}};
   showBadge('wpb-blk',blk.length,'bloqueadas');
@@ -1538,7 +1551,7 @@ function renderWeekPanel(tasks,today){
     return`<div class="week-task" onclick="openModal('${esc(t.task_id)}')">
       <div class="wt-seller">${esc(s.nombre||t.seller_id)}</div>
       <div class="wt-tarea">${esc(t.tarea)}</div>
-      <div class="wt-resp">${esc(t.responsable||'—')} · ${fmtD(t.fin_plan)}</div>
+      <div class="wt-resp">${esc(t.responsable||'—')} · ${fmtD(t.fin)}</div>
     </div>`;
   };
 
@@ -1671,8 +1684,8 @@ function renderGantt(tasks,sellerIds,today){
         <div class="task-rows">`;
 
     st.forEach(t=>{
-      const left=dateLeft(t.inicio_plan);
-      const right=dateLeft(t.fin_plan);
+      const left=dateLeft(t.inicio);
+      const right=dateLeft(t.fin);
       const barW=(left!==null&&right!==null)?Math.max(currentScale==='semana'?COL_W:4,right-left):0;
       const isOver=t.atraso_calc>0&&!['Completado','Cancelado'].includes(t.estado);
       const shortLabel=barW>60?esc((t.hito||t.tarea).substring(0,currentScale==='semana'?18:22)):'';
@@ -1694,7 +1707,7 @@ function renderGantt(tasks,sellerIds,today){
               ${left!==null?`
               <div class="g-bar ${barClass(t.estado)}${isOver?' overrun':''}"
                    style="left:${left}px;width:${barW}px"
-                   title="${esc(t.tarea)} · ${fmtD(t.inicio_plan)} → ${fmtD(t.fin_plan)}">
+                   title="${esc(t.tarea)} · ${fmtD(t.inicio)} → ${fmtD(t.fin)}">
                 ${shortLabel}
               </div>`:''}
             </div>
@@ -1734,7 +1747,7 @@ function renderLista(tasks,sellerIds,today){
         <table class="lista-table">
           <thead><tr>
             <th>Tarea</th><th>Hito</th><th>Fase</th><th>Estado</th>
-            <th>Responsable</th><th>Inicio plan</th><th>Fin plan</th><th>Fin real</th><th>Atraso</th><th>Comentario</th>
+            <th>Responsable</th><th>Entorno</th><th>Inicio</th><th>Fin</th><th>Atraso</th><th>Comentario</th>
           </tr></thead>
           <tbody>
             ${st.map(t=>{
@@ -1746,9 +1759,9 @@ function renderLista(tasks,sellerIds,today){
                 <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
                 <td><span class="estado-badge ${estadoClass(t.estado)}">${t.estado}</span></td>
                 <td class="td-resp">${esc(t.responsable||'—')}</td>
-                <td class="td-dates">${fmtDfull(t.inicio_plan)}</td>
-                <td class="td-dates">${fmtDfull(t.fin_plan)}</td>
-                <td class="td-dates">${fmtDfull(t.fin_real)}</td>
+                <td class="td-resp">${esc(t.entorno||'—')}</td>
+                <td class="td-dates">${fmtDfull(t.inicio)}</td>
+                <td class="td-dates">${fmtDfull(t.fin)}</td>
                 <td class="td-atraso ${ac}">${atr>0?'+'+atr+'d':t.estado==='Completado'?'✓':'—'}</td>
                 <td class="td-comment">${esc((t.comentario||'').substring(0,70))}${t.comentario&&t.comentario.length>70?'…':''}</td>
               </tr>`;
@@ -2095,14 +2108,13 @@ function openModal(taskId){
     ${row('Fase',`<span style="display:inline-flex;align-items:center;gap:4px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span>`)}
     ${row('Hito',esc(t.hito))}
     ${row('Responsable',esc(t.responsable))}
-    ${row('Depende de',esc(t.dependencia))}
+    ${row('Depende de',esc(t.depende_de))}
     <div style="margin-top:13px" class="msec-t">Fechas y estado</div>
     ${row('Estado',`<span class="estado-badge ${estadoClass(t.estado)}">${t.estado}</span>`)}
-    ${row('Inicio planificado',fmtDfull(t.inicio_plan))}
-    ${row('Fin planificado',fmtDfull(t.fin_plan))}
-    ${row('Semana','S'+( t.inicio_plan?isoWeek(t.inicio_plan):'—'))}
-    ${row('Inicio real',fmtDfull(t.inicio_real)||'—')}
-    ${row('Fin real',fmtDfull(t.fin_real)||'—')}
+    ${row('Entorno',esc(t.entorno))}
+    ${row('Inicio',fmtDfull(t.inicio))}
+    ${row('Fin',fmtDfull(t.fin))}
+    ${row('Semana','S'+( t.inicio?isoWeek(t.inicio):'—'))}
     ${row('Atraso',atr>0?`<span style="color:${atr<=3?'var(--warn)':'var(--danger)'};font-weight:700">+${atr} días</span>`:(t.estado==='Completado'?'<span style="color:var(--g)">A tiempo ✓</span>':'—'))}
     ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}
     <div class="m-actions">
