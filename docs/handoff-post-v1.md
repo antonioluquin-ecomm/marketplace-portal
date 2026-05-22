@@ -14,6 +14,76 @@ Fecha: 2026-05-20
 - Bloque Apps Script 31B-31C2E queda funcionalmente estabilizado.
 - V1 sigue estable; no hubo refactor masivo ni ruptura detectada de endpoints existentes.
 
+## Estado consolidado Gantt / Timeline v33-v35
+
+El Gantt Operativo queda funcionalmente estabilizado sobre el modelo `timeline` v33 y las mejoras UX v34-v35.
+
+Contrato `timeline` vigente:
+
+- `task_id`
+- `seller_id`
+- `seller_nombre`
+- `fase`
+- `hito`
+- `tarea`
+- `responsable`
+- `depende_de`
+- `entorno`
+- `inicio`
+- `fin`
+- `estado`
+- `comentario`
+- `ver_en_gantt`
+
+Decisiones clave:
+
+- `inicio` y `fin` son las fechas oficiales.
+- `inicio_plan` y `fin_plan` quedan como aliases legacy.
+- `inicio_real` y `fin_real` quedan deprecados/read-only si aparecen; no deben enviarse en payloads nuevos.
+- `entorno` es obligatorio y acepta `QA` / `Productivo`.
+- `seller_nombre` es snapshot visual opcional; `seller_id` sigue siendo la referencia operativa.
+- `depende_de` es una dependencia simple hacia un `task_id` existente.
+- `ver_en_gantt` sigue oculto en UI y pendiente de decision funcional.
+
+Estado frontend:
+
+- Render v33 con `inicio`, `fin`, `entorno`, `depende_de` y `ver_en_gantt`.
+- Create/update v33 implementados.
+- Modal de alta usa fase, responsable, entorno e hito controlados.
+- Modal de edicion permite `hito`, `estado`, `responsable`, `entorno`, `inicio`, `fin`, `comentario` y `depende_de`.
+- `depende_de` es selector de tareas del mismo seller; en edicion excluye la tarea actual.
+- Hito es selector dependiente de fase; tareas historicas fuera de catalogo se muestran como legacy temporal.
+- Vista Mes conserva rango amplio.
+- Vista Semana enfoca semana actual, semana anterior y proximas semanas.
+- Boton `Hoy` lleva el scroll horizontal al foco temporal.
+- Hero, accesos, KPIs y toolbar quedan compactados para priorizar el timeline.
+
+Estado backend Apps Script:
+
+- `Gantt.gs` soporta create/update/disable v33 + aliases legacy.
+- `gantt_task_create` acepta `seller_nombre`, `hito`, `depende_de`, `entorno`, `inicio` y `fin`.
+- `gantt_task_update` acepta `hito`, `estado`, `responsable`, `entorno`, `inicio`, `fin`, `comentario` y `depende_de`.
+- `gantt_task_update` rechaza `inicio_real` y `fin_real`.
+- `gantt_task_disable` mantiene baja logica estandar con `mode = "cancel"` y `Estado = Cancelado`.
+- Backend valida `hito` no vacio, pero no valida aun pertenencia fase->hito.
+
+Estado auditor / datos:
+
+- `tools/audit-timeline-data.js` audita modelo v33 y legacy en modo read-only.
+- `docs/timeline-data-audit-report.md` funciona como checklist previo a saneamiento manual.
+- No se debe modificar Google Sheets sin etapa explicita, backup/export previo y validacion por tandas.
+
+Riesgos y pendientes:
+
+- Catalogo fase->hito esta hardcodeado en frontend.
+- Backend no valida catalogo fase->hito.
+- No hay quick actions.
+- No hay templates de onboarding.
+- No hay drag and drop.
+- No hay persistencia de filtros.
+- No hay edicion masiva.
+- `ver_en_gantt` esta soportado por aliases, pero no formalizado como accion UI.
+
 ## Cambios recientes
 
 - `assets/css/internal-components.css` fue creado y aplicado a paginas internas autorizadas.
@@ -126,6 +196,13 @@ Riesgos residuales:
   - Auditoria avanzada.
   - Permisos por rol.
   - Evitar duplicados concurrentes.
+- Proximas lineas Gantt v35 recomendadas:
+  - estabilizacion UX fina con validacion visual humana;
+  - quick actions acotadas (`En curso`, `Completado`) solo si se aprueba;
+  - templates de onboarding por seller;
+  - KPIs/dashboard operativo;
+  - automatizaciones sobre bloqueos o vencimientos;
+  - persistencia de filtros si aparece necesidad real.
 
 ## Recomendacion para continuar
 

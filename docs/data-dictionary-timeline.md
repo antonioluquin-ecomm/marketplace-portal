@@ -6,6 +6,152 @@ La hoja `timeline` funciona como base de datos liviana para el Gantt Operativo. 
 
 El objetivo no es cambiar la hoja de inmediato, sino fijar una referencia estable para futuras etapas de compatibilidad, normalizacion y limpieza.
 
+## Estado consolidado 35B - Timeline v33/v34/v35
+
+Estado real al cierre documental 35B:
+
+- El contrato operativo vigente usa 14 columnas canonicas.
+- Frontend lee/renderiza modelo v33 y mantiene aliases legacy.
+- Frontend create/update envia `inicio`, `fin`, `entorno`, `depende_de` e `hito`.
+- Apps Script soporta create/update/disable v33 + legacy.
+- Auditor automatico soporta modelo v33 + legacy.
+- UX vigente incluye filtro por entorno, badges QA/Productivo, selector `depende_de`, hitos dinamicos por fase, boton `Hoy` y foco temporal en vista Semana.
+- No se modifico Google Sheets durante la consolidacion documental.
+
+### Columnas oficiales actuales
+
+| Orden | Campo canonico | Semantica | Obligatorio | Editable actual | Validacion actual |
+|---|---|---|---|---|---|
+| 1 | `task_id` | ID unico de tarea | Si | No | Unico; alias visual `ID Tarea` aceptado |
+| 2 | `seller_id` | FK logica hacia seller | Si | Solo alta | Requerido; no se modifica en update |
+| 3 | `seller_nombre` | Snapshot visual `Seller / Marca` | No | No | Opcional; se persiste en create si viene |
+| 4 | `fase` | Agrupador funcional | Si | Alta; bloqueada en update UI | Catalogo frontend cerrado |
+| 5 | `hito` | Subcategoria operativa dependiente de fase | Si | Alta y update UI | Frontend valida fase->hito; backend valida no vacio |
+| 6 | `tarea` | Descripcion principal | Si | Alta | Requerido |
+| 7 | `responsable` | Equipo/persona responsable | Si | Alta y update | Catalogo frontend cerrado |
+| 8 | `depende_de` | Dependencia simple a otra tarea | No | Alta y update | Frontend y backend validan task_id existente o vacio |
+| 9 | `entorno` | Ambito de ejecucion | Si | Alta y update | `QA` / `Productivo` |
+| 10 | `inicio` | Fecha de inicio planificada oficial | Si | Alta y update | Fecha `YYYY-MM-DD` |
+| 11 | `fin` | Fecha de fin planificada oficial | Si | Alta y update | Fecha `YYYY-MM-DD`; `fin >= inicio` |
+| 12 | `estado` | Estado operativo | Si | Alta y update | `Pendiente`, `En curso`, `Bloqueado`, `Completado`, `Cancelado` |
+| 13 | `comentario` | Nota operativa | No | Alta y update | Texto libre con largo maximo |
+| 14 | `ver_en_gantt` | Visibilidad logica opcional | No | Oculto en UI | Alias soportado; decision funcional pendiente |
+
+### Aliases legacy consolidados
+
+| Campo canonico | Aliases aceptados |
+|---|---|
+| `task_id` | `ID Tarea`, `Id Tarea`, `id tarea`, `id_tarea`, `task_id` |
+| `seller_nombre` | `Seller / Marca`, `seller_nombre`, `seller_marca`, `seller` |
+| `hito` | `Hito`, `hito` |
+| `depende_de` | `Depende de`, `depende_de`, `dependencia` |
+| `inicio` | `Inicio`, `inicio`, `Inicio plan`, `inicio_plan`, `fecha_inicio_plan` |
+| `fin` | `Fin`, `fin`, `Fin plan`, `fin_plan`, `fecha_fin_plan` |
+| `ver_en_gantt` | `Ver en Gantt`, `ver_en_gantt`, `visible_gantt`, `visible`, `Visible Gantt` |
+| `inicio_real` | `Inicio real`, `inicio_real`, `fecha_inicio_real` |
+| `fin_real` | `Fin real`, `fin_real`, `fecha_fin_real` |
+
+`inicio_real` y `fin_real` estan deprecados. Si aparecen en datos historicos, se tratan como legacy/read-only; no son editables y no deben enviarse en payloads nuevos.
+
+### Payloads reales vigentes
+
+Create:
+
+```json
+{
+  "tipo_formulario": "gantt_task_create",
+  "created_by": "front@gantt-operativo",
+  "task": {
+    "seller_id": "SPT-001",
+    "seller_nombre": "Seller Demo",
+    "fase": "Comercial",
+    "hito": "Contrato y firma",
+    "tarea": "Enviar contrato al seller",
+    "responsable": "Comercial",
+    "depende_de": "",
+    "entorno": "QA",
+    "inicio": "2026-06-01",
+    "fin": "2026-06-03",
+    "estado": "Pendiente",
+    "comentario": ""
+  }
+}
+```
+
+Update:
+
+```json
+{
+  "tipo_formulario": "gantt_task_update",
+  "task_id": "SPT-001-T-01",
+  "updated_by": "front@gantt-operativo",
+  "fields": {
+    "hito": "Configuracion comercial VTEX",
+    "estado": "En curso",
+    "responsable": "eCommerce",
+    "entorno": "QA",
+    "inicio": "2026-06-01",
+    "fin": "2026-06-04",
+    "comentario": "",
+    "depende_de": ""
+  }
+}
+```
+
+Disable:
+
+```json
+{
+  "tipo_formulario": "gantt_task_disable",
+  "task_id": "SPT-001-T-01",
+  "updated_by": "front@gantt-operativo",
+  "mode": "cancel",
+  "reason": "Motivo de baja"
+}
+```
+
+La baja logica estandar usa `Estado = Cancelado`. `ver_en_gantt` no esta expuesto en UI.
+
+### Hitos validos por fase
+
+| Fase | Hitos validos |
+|---|---|
+| `Comercial` | Definicion comercial inicial; Configuracion comercial VTEX; Condiciones comerciales; Medios de pago; Documentacion comercial; Contrato y firma; Carga comercial inicial |
+| `Tecnica` | Configuracion logistica VTEX; Configuracion base PIM; Integracion seller; Configuracion storefront; Configuracion checkout; Configuracion OMS; Configuracion depositos; Configuracion APIs; Configuracion mails |
+| `Operativa` | Configuracion administrativa; Configuracion postventa; Operacion logistica; Operacion financiera; Capacitacion; Comunicacion operativa |
+| `QA / Validacion` | QA tecnica; QA operativa; QA storefront; QA checkout; QA logistica; Validacion integral |
+| `Go Live` | Aprobacion final; Go Live seller; Monitoreo inicial; Estabilizacion inicial; Cierre onboarding |
+
+Notas:
+
+- El catalogo fase->hito esta hardcodeado en el frontend.
+- El frontend bloquea hitos fuera del catalogo de la fase seleccionada.
+- Si una tarea historica trae un hito fuera de catalogo, el frontend lo muestra temporalmente como legacy para no romper la edicion.
+- Apps Script permite update de `hito` y valida que no venga vacio, pero aun no valida pertenencia fase->hito.
+
+### UX operativa documentada
+
+- Filtros activos: seller, entorno, fase, estado, responsable, busqueda y solo activos.
+- `Entorno` filtra localmente entre `Todos`, `QA` y `Productivo`.
+- Badges QA/Productivo aparecen en lista, detalle y barras si el ancho lo permite.
+- `depende_de` se elige desde tareas existentes del mismo seller; en edicion excluye la tarea actual.
+- Vista Mes mantiene rango amplio.
+- Vista Semana enfoca la semana actual: una semana anterior y proximas semanas.
+- Boton `Hoy` mueve el scroll horizontal al foco temporal.
+- Hero, accesos operativos, KPIs y toolbar fueron compactados para priorizar el timeline.
+
+### Decisiones pendientes
+
+- `ver_en_gantt` sigue oculto en UI y pendiente de decision funcional.
+- No hay quick actions.
+- No hay templates de onboarding.
+- No hay drag and drop.
+- No hay persistencia de filtros.
+- No hay edicion masiva.
+- No hay editor de catalogos.
+- `depende_de` sigue siendo dependencia simple, no grafo avanzado ni lista multiple.
+- El catalogo fase->hito sigue local en frontend.
+
 ## Contrato canonico 33B - nuevo modelo Timeline
 
 Estado: contrato documental aprobado. Desde 33E, `Gantt.gs` soporta aliases y validaciones v33 en create/update/disable de forma local, sin modificar Google Sheets ni payloads reales del frontend.
@@ -154,6 +300,10 @@ La baja logica estandar mantiene `estado = Cancelado`. `ver_en_gantt` solo debe 
 - Perdida de compatibilidad historica si se quitan aliases.
 - `entorno` sin default o sin validacion puede bloquear altas o contaminar reporting.
 - Cambios de KPIs por diferencias temporales entre modelo viejo y nuevo.
+
+## Referencia historica 32B / pre-v33
+
+Las secciones siguientes conservan decisiones y analisis previos a la consolidacion v33-v35. Cuando haya conflicto, prevalece el bloque **Estado consolidado 35B - Timeline v33/v34/v35**.
 
 ## Principios del modelo
 

@@ -4,6 +4,25 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 35B consolidacion documental Timeline v33/v34/v35
+
+Tipo de cambio: documentacion / handoff operativo.
+
+Estado: completado sin cambios funcionales.
+
+Resultado:
+- Consolidado el contrato real de `timeline` v33: `task_id`, `seller_id`, `seller_nombre`, `fase`, `hito`, `tarea`, `responsable`, `depende_de`, `entorno`, `inicio`, `fin`, `estado`, `comentario`, `ver_en_gantt`.
+- Documentada la UX operativa vigente: filtros, badges, create/update v33, selector `depende_de`, catalogo de hitos por fase, Mes/Semana, boton `Hoy`, compactacion visual y foco temporal.
+- Documentado que `inicio_real` y `fin_real` quedan deprecados; `inicio` y `fin` son oficiales.
+- Documentado que `entorno` es obligatorio y acepta `QA` / `Productivo`.
+- Documentado que el catalogo fase->hito vive hardcodeado en frontend; backend solo valida `hito` no vacio y no valida aun pertenencia fase->hito.
+- Actualizados roadmap, matriz de pruebas, handoff y diccionario para continuidad de futuros chats/equipos.
+
+Alcance:
+- Solo documentacion: `CHANGELOG.md`, `docs/roadmap.md`, `docs/test-matrix.md`, `docs/handoff-post-v1.md`, `docs/data-dictionary-timeline.md`.
+- No se tocaron frontend, backend, Apps Script, Google Sheets, Excel, CSV, assets, config, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 33F-BACKEND-FIX persistencia seller_nombre
 
 Tipo de cambio: backend Apps Script / compatibilidad create v33.

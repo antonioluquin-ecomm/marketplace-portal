@@ -1964,3 +1964,44 @@ Notas:
 
 - No se modifico Google Sheets, Excel, HTML, JS, Apps Script, endpoints, payloads, config, assets, `public/` ni `legacy/`.
 - No se ejecuto POST real ni submit real.
+
+### Etapa 35B: consolidacion documental Timeline v33/v34/v35
+
+**Estado:** documentado; sin cambios funcionales.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Contrato v33 | Revision documental | 14 columnas canonicas documentadas | OK |
+| Campos deprecados | Revision documental | `inicio_real` / `fin_real` marcados legacy/read-only | OK |
+| Entorno | Revision documental | `QA` / `Productivo` documentados como valores vigentes | OK |
+| Payload create | Revision documental | Usa `seller_nombre`, `hito`, `depende_de`, `entorno`, `inicio`, `fin` | OK |
+| Payload update | Revision documental | Usa `hito`, `estado`, `responsable`, `entorno`, `inicio`, `fin`, `comentario`, `depende_de` | OK |
+| Disable | Revision documental | Baja estandar sigue con `mode = "cancel"` y `Estado = Cancelado` | OK |
+| Hitos por fase | Revision documental | Catalogo oficial frontend documentado por fase | OK |
+| Backend hitos | Revision documental | Se aclara que backend valida no vacio, no pertenencia fase->hito | OK |
+| UX actual | Revision documental | Filtros, badges, dependencias, Mes/Semana, `Hoy` y compactacion documentados | OK |
+| Riesgos pendientes | Revision documental | `ver_en_gantt`, templates, quick actions, drag/drop, filtros persistidos y edicion masiva documentados | OK |
+| Alcance | Revision de diff | Solo documentacion editada en 35B | OK |
+
+### Smoke vigente Gantt v33/v34/v35
+
+| Area | Validacion | Resultado esperado | Estado |
+|---|---|---|---|
+| Lectura CSV | `normalizeTasks()` acepta v33 y legacy | Tareas renderizables con `inicio` / `fin` | OK mock / pendiente smoke real post deploy |
+| Vista Mes | Rango amplio | Mantiene contexto historico y futuro | OK mock |
+| Vista Semana | Foco temporal | Semana actual centrada; sin arranque excesivamente historico | OK mock |
+| Boton `Hoy` | Scroll horizontal | Lleva a la linea actual | OK mock |
+| Filtro Entorno | `Todos`, `QA`, `Productivo` | Filtrado local sin modificar datos | OK mock |
+| Badges Entorno | Lista, modal y barra/tooltip | QA/Productivo visibles | OK mock |
+| Create v33 | Payload frontend | Envia `inicio`, `fin`, `entorno`, `hito`, `depende_de`, `seller_nombre` | OK mock |
+| Update v33 | Payload frontend | Envia `hito`, `estado`, `responsable`, `entorno`, `inicio`, `fin`, `comentario`, `depende_de` | OK mock |
+| Dependencia | Selector mismo seller | Excluye inexistentes; en edit excluye tarea actual | OK mock |
+| Hito por fase | Selector dinamico | Resetea al cambiar fase; bloquea hito invalido | OK mock |
+| Disable | `mode = "cancel"` | Cancela logicamente; no borra filas | OK mock |
+| Legacy | Hito historico fuera de catalogo | Renderiza y se muestra como legacy temporal | OK mock |
+
+Notas:
+
+- No ejecutar POST real ni submit real salvo etapa explicita con tarea dummy autorizada.
+- No tocar Google Sheets para validaciones documentales.
+- La validacion visual humana sigue recomendada despues de publicar cambios UX.

@@ -2287,3 +2287,66 @@ Decision vigente:
 - 33F migra los modales y payloads del frontend para alta/edicion v33; `gantt_task_disable` queda sin cambios.
 - 33F-BACKEND-FIX permite que Apps Script escriba `seller_nombre` en `Seller / Marca` si el payload create lo envia y la columna existe.
 - Sigue pendiente 33G para smoke mockeado completo y 33H para prueba real con tarea dummy autorizada.
+
+## Bloque 34: UX operativa segura Gantt v33
+
+Estado: implementado localmente y consolidado documentalmente en 35B.
+
+Objetivo:
+
+- Mejorar la operacion diaria del Gantt sin cambiar backend ni contratos.
+- Reducir errores de carga manual mediante controles locales.
+- Mantener compatibilidad con el modelo Timeline v33.
+
+Resultado:
+
+- 34A audito mejoras UX posibles y recomendo empezar por bajo riesgo.
+- 34B agrego filtro local por `Entorno` (`Todos`, `QA`, `Productivo`).
+- 34B agrego badges QA/Productivo en lista, detalle y barras/tooltip cuando hay espacio.
+- 34B convirtio `depende_de` en selector de tareas existentes del mismo seller.
+- 34C convirtio `Hito` en selector dinamico dependiente de `Fase`.
+- 34C-BACKEND-FIX permitio update de `hito` en `Gantt.gs`, validando que no venga vacio.
+
+Decision vigente:
+
+- `depende_de` sigue siendo dependencia simple contra un solo `task_id`.
+- El catalogo fase->hito esta hardcodeado en frontend.
+- Backend no valida todavia pertenencia fase->hito; valida `hito` no vacio.
+- Tareas historicas con hito fuera de catalogo se muestran como legacy temporal en UI.
+- No implementar aun quick actions, templates, drag and drop, editor de catalogos ni edicion masiva.
+
+## Bloque 35: compactacion UX y consolidacion documental Timeline
+
+Estado: 35A implementado localmente; 35B documentado.
+
+Objetivo:
+
+- Priorizar el timeline como superficie principal de trabajo.
+- Mejorar foco temporal y densidad visual.
+- Dejar documentado el estado real v33/v34/v35 para continuidad.
+
+Resultado:
+
+- Vista Mes mantiene rango amplio.
+- Vista Semana se enfoca en semana actual, una semana anterior y proximas semanas.
+- Boton `Hoy` conserva scroll al foco temporal.
+- Hero, accesos operativos, KPIs y toolbar se compactaron para subir el timeline.
+- Se mejoro contraste de headers, KPIs, linea de hoy, pills activas, grid y badges.
+- 35B consolida contrato, UX, validaciones, riesgos y proximas lineas recomendadas.
+
+Proximas lineas recomendadas:
+
+- Estabilizacion UX fina con validacion visual humana.
+- Quick actions acotadas: marcar `En curso` / `Completado`.
+- Templates de onboarding por seller.
+- Dashboard/KPIs operativo.
+- Automatizaciones o recordatorios sobre bloqueos/vencimientos.
+- Persistencia de filtros solo si el uso operativo lo justifica.
+
+Riesgos pendientes:
+
+- `ver_en_gantt` sigue oculto y pendiente de decision funcional.
+- Catalogos locales pueden desalinearse con la hoja si no se gobiernan.
+- Backend no valida aun fase->hito.
+- No existe persistencia de filtros.
+- No existe edicion masiva ni drag and drop.
