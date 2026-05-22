@@ -904,6 +904,209 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 .tr-estado-cell{
   border-right-color:rgba(255,255,255,.11);
 }
+
+/* Etapa 35D: refinamiento UX operativo compacto. */
+.exec-hero{
+  grid-template-columns:minmax(0,1fr) minmax(170px,220px);
+  gap:4px;
+  padding:3px 16px 2px;
+  background:#0f130f;
+}
+.exec-card{
+  padding:5px 8px;
+  background:#121612;
+  border-color:rgba(255,255,255,.11);
+  box-shadow:0 1px 0 rgba(255,255,255,.025);
+}
+.exec-title{
+  font-size:15px;
+  line-height:1.05;
+  color:#f5faf2;
+}
+.exec-eyebrow{
+  color:#9fcf82;
+}
+.exec-copy{
+  max-width:680px;
+  margin-top:1px;
+  font-size:10px;
+  line-height:1.16;
+  color:#b4c1af;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.exec-flow{
+  gap:3px;
+  margin-top:3px;
+}
+.exec-step{
+  padding:2px 5px;
+  background:#171d17;
+  border-color:rgba(255,255,255,.12);
+}
+.exec-step-num{
+  color:#b6e891;
+}
+.exec-step-title{
+  color:#f0f6ed;
+}
+.exec-step-desc{
+  color:#93a08d;
+}
+.exec-help{
+  max-width:220px;
+}
+.exec-help[open]{
+  z-index:60;
+}
+.exec-help .exec-rule{
+  background:#171d17;
+  border-color:rgba(255,255,255,.10);
+}
+.exec-section-label{
+  padding:3px 16px 0;
+  color:#9faa98;
+}
+.exec-actions{
+  gap:4px;
+  padding:0 16px 3px;
+  background:#0f130f;
+  border-bottom-color:rgba(255,255,255,.09);
+}
+.exec-action{
+  padding:3px 7px;
+  background:#151a15;
+  border-color:rgba(255,255,255,.12);
+  color:#c4d0bf;
+  line-height:1;
+}
+.exec-action span{
+  color:#b6e891;
+}
+.summary{
+  gap:5px;
+  padding:5px 16px;
+  background:#111511;
+}
+.kpi{
+  padding:5px 8px;
+  background:#0f140f;
+  border-color:rgba(255,255,255,.12);
+}
+.kpi-l{
+  color:#aab6a5;
+}
+.kpi-n{
+  color:#ffffff;
+  line-height:1;
+}
+.kpi-s{
+  color:#8d9b87;
+}
+.kpi.rd .kpi-n{color:#ffb0b0}
+.kpi.am .kpi-n{color:#ffd778}
+.kpi.gn .kpi-n{color:#bdf0a0}
+.kpi.bl .kpi-n{color:#aad5ff}
+.toolbar{
+  padding:4px 16px;
+  background:#0f140f;
+}
+.toolbar .ri{
+  background:#171d17;
+  border-color:rgba(255,255,255,.11);
+  color:#c4d0bf;
+}
+.vbtn.on{
+  background:#8ed06a;
+  color:#061006;
+  box-shadow:0 0 0 1px rgba(255,255,255,.16) inset;
+}
+.sbtn.on{
+  background:#d8efc9;
+  color:#0b140a;
+}
+.gantt-months{
+  background:#0c110c;
+  border-bottom-color:rgba(255,255,255,.14);
+}
+.gm-fixed{
+  background:#0c110c;
+  box-shadow:12px 0 20px rgba(0,0,0,.34),1px 0 0 rgba(255,255,255,.13);
+}
+.sh-fixed{
+  background:#101610;
+  box-shadow:12px 0 20px rgba(0,0,0,.30),1px 0 0 rgba(255,255,255,.12);
+}
+.tr-fixed{
+  background:#131813;
+  box-shadow:12px 0 20px rgba(0,0,0,.24),1px 0 0 rgba(255,255,255,.09);
+}
+.gm-fixed-cell,
+.period-cell{
+  color:#bbc9b5;
+  border-color:rgba(255,255,255,.10);
+}
+.period-cell.current{
+  color:#ffffff;
+  background:rgba(198,242,158,.20);
+  box-shadow:inset 0 -2px 0 #d5ffb5;
+}
+.seller-header{
+  background:#101610;
+}
+.seller-header:hover,
+.seller-header:hover .sh-fixed{
+  background:#172017;
+}
+.task-row{
+  border-color:rgba(255,255,255,.06);
+}
+.task-row:hover .tr-fixed{
+  background:#192019;
+}
+.tr-tarea{
+  color:#eef5ea;
+}
+.tr-fase{
+  color:#a9b7a4;
+}
+.tr-gantt{
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.038),rgba(255,255,255,.038) 1px,transparent 1px,transparent 34px),
+    linear-gradient(180deg,rgba(255,255,255,.012),transparent);
+}
+.g-line{
+  background:rgba(255,255,255,.07);
+}
+.g-line.today{
+  background:#e8ffba;
+  width:2px;
+  box-shadow:0 0 0 1px rgba(232,255,186,.34),0 0 16px rgba(232,255,186,.36);
+}
+.estado-badge,
+.entorno-badge{
+  border-color:rgba(255,255,255,.16);
+  filter:saturate(1.12);
+}
+.env-prod{
+  background:rgba(142,208,106,.17);
+  border-color:rgba(189,229,168,.45);
+  color:#d7f5c9;
+}
+.env-qa{
+  background:rgba(69,160,255,.18);
+  border-color:rgba(158,208,251,.45);
+  color:#cce8ff;
+}
+@media(max-width:980px){
+  .exec-copy{
+    white-space:normal;
+  }
+  .exec-help{
+    max-width:none;
+  }
+}
 @media(max-width:560px){
   .sidebar{
     grid-template-columns:1fr;
@@ -919,7 +1122,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
     white-space:normal;
   }
   .exec-title{
-    font-size:19px;
+    font-size:16px;
   }
   .exec-flow,.exec-actions,.summary{
     grid-template-columns:1fr;
@@ -1041,7 +1244,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <div class="exec-eyebrow">Marketplace Sporting</div>
       <div class="exec-title">Gantt operativo de onboarding seller</div>
       <p class="exec-copy">
-        Este Gantt concentra los sellers que ya tienen planificación operativa. El Backlog define qué sellers avanzan; este panel organiza tareas, responsables, fechas, riesgos y bloqueos hasta el Go Live.
+        Tareas, responsables, fechas, riesgos y bloqueos de sellers en ejecución hasta Go Live.
       </p>
       <div class="exec-flow">
         <div class="exec-step"><div class="exec-step-num">01</div><div class="exec-step-title">Backlog</div><div class="exec-step-desc">Seller priorizado y validado.</div></div>
@@ -1062,12 +1265,12 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
     </details>
   </section>
 
-  <div class="exec-section-label">Accesos operativos</div>
+  <div class="exec-section-label">Recursos</div>
   <section class="exec-actions">
-  <a class="exec-action" href="../backlog/backlog-sellers.html"><div>Ver Backlog de Sellers</div><span>→</span></a>
-    <a class="exec-action" href="../estrategia/proceso-onboarding.html"><div>Consultar Onboarding</div><span>→</span></a>
-    <a class="exec-action" href="../estrategia/modelo-integracion.html"><div>Ver Modelo de Integración</div><span>→</span></a>
-    <a class="exec-action" href="../seller-center/index.html"><div>Ir a Seller Center</div><span>→</span></a>
+  <a class="exec-action" href="../backlog/backlog-sellers.html"><div>Backlog</div><span>→</span></a>
+    <a class="exec-action" href="../estrategia/proceso-onboarding.html"><div>Onboarding</div><span>→</span></a>
+    <a class="exec-action" href="../estrategia/modelo-integracion.html"><div>Modelo</div><span>→</span></a>
+    <a class="exec-action" href="../seller-center/index.html"><div>Seller Center</div><span>→</span></a>
   </section>
 
   <!-- Panel Mi semana -->
