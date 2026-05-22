@@ -6,6 +6,7 @@
 
 const CAMPOS_GANTT_EDITABLES_QA = {
   estado: ["estado_tarea", "estado"],
+  hito: ["hito", "Hito"],
   responsable: ["responsable"],
   entorno: ["Entorno", "entorno"],
   inicio: ["Inicio", "inicio", "Inicio plan", "inicio_plan", "fecha_inicio_plan"],
@@ -599,6 +600,7 @@ function normalizarValorGantt(campo, valor) {
   if (campo === "inicio" || campo === "fin") {
     return validarFechaGantt(valor, campo);
   }
+  if (campo === "hito") return validarTextoObligatorioGantt(valor, campo, 160);
   if (campo === "responsable") return validarTextoGantt(valor, campo, 120);
   if (campo === "comentario") return validarTextoGantt(valor, campo, 1000);
   if (campo === "depende_de") return validarTextoGantt(valor, campo, 120);

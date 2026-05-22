@@ -960,6 +960,25 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         </div>
         <div class="edit-grid">
           <div class="edit-field">
+            <label class="edit-label" for="edit-fase">Fase</label>
+            <select class="edit-select" id="edit-fase" name="fase" disabled>
+              <option value="">Seleccionar fase</option>
+              <option value="Comercial">Comercial</option>
+              <option value="Técnica">Técnica</option>
+              <option value="Operativa">Operativa</option>
+              <option value="QA / Validación">QA / Validación</option>
+              <option value="Go Live">Go Live</option>
+            </select>
+          </div>
+          <div class="edit-field">
+            <label class="edit-label" for="edit-hito">Hito</label>
+            <select class="edit-select" id="edit-hito" name="hito">
+              <option value="">Seleccionar hito...</option>
+            </select>
+          </div>
+        </div>
+        <div class="edit-grid">
+          <div class="edit-field">
             <label class="edit-label" for="edit-estado">Estado</label>
             <select class="edit-select" id="edit-estado" name="estado">
               <option value="Pendiente">Pendiente</option>
@@ -1015,7 +1034,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           <label class="edit-label" for="edit-comentario">Comentario</label>
           <textarea class="edit-textarea" id="edit-comentario" name="comentario" maxlength="1000"></textarea>
         </div>
-        <div class="edit-help">No se editan task_id, seller_id, seller, fase ni hito.</div>
+        <div class="edit-help">No se editan task_id, seller_id, seller, fase ni tarea.</div>
         <div class="edit-status" id="edit-status"></div>
         <div class="edit-actions">
           <button type="button" class="btn-sm" onclick="closeEditModal()">Cancelar</button>
@@ -1071,7 +1090,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
         <div class="edit-grid">
           <div class="edit-field">
             <label class="edit-label" for="create-fase">Fase</label>
-            <select class="edit-select" id="create-fase" name="fase">
+            <select class="edit-select" id="create-fase" name="fase" onchange="populateCreateHitoOptions(true)">
               <option value="">Seleccionar fase</option>
               <option value="Comercial">Comercial</option>
               <option value="Técnica">Técnica</option>
@@ -1082,7 +1101,9 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           </div>
           <div class="edit-field">
             <label class="edit-label" for="create-hito">Hito</label>
-            <input class="edit-input" id="create-hito" name="hito" maxlength="160" autocomplete="off">
+            <select class="edit-select" id="create-hito" name="hito" disabled>
+              <option value="">Seleccionar hito...</option>
+            </select>
           </div>
         </div>
         <div class="edit-field">
@@ -1170,6 +1191,51 @@ let lastTodayScrollLeft = 0;
 const FASES_GANTT_PERMITIDAS = ['Comercial','Técnica','Operativa','QA / Validación','Go Live'];
 const RESPONSABLES_GANTT_PERMITIDOS = ['eCommerce','InfraCommerce','Agente PIM','Administración','Seller','Comercial','Operaciones','QA','IT'];
 const ENTORNOS_GANTT_PERMITIDOS_UI = ['QA','Productivo'];
+const HITOS_GANTT_POR_FASE = {
+  Comercial: [
+    'Definición comercial inicial',
+    'Configuración comercial VTEX',
+    'Condiciones comerciales',
+    'Medios de pago',
+    'Documentación comercial',
+    'Contrato y firma',
+    'Carga comercial inicial',
+  ],
+  Técnica: [
+    'Configuración logística VTEX',
+    'Configuración base PIM',
+    'Integración seller',
+    'Configuración storefront',
+    'Configuración checkout',
+    'Configuración OMS',
+    'Configuración depósitos',
+    'Configuración APIs',
+    'Configuración mails',
+  ],
+  Operativa: [
+    'Configuración administrativa',
+    'Configuración postventa',
+    'Operación logística',
+    'Operación financiera',
+    'Capacitación',
+    'Comunicación operativa',
+  ],
+  'QA / Validación': [
+    'QA técnica',
+    'QA operativa',
+    'QA storefront',
+    'QA checkout',
+    'QA logística',
+    'Validación integral',
+  ],
+  'Go Live': [
+    'Aprobación final',
+    'Go Live seller',
+    'Monitoreo inicial',
+    'Estabilización inicial',
+    'Cierre onboarding',
+  ],
+};
 
 /* ── UTILS ── */
 const $   = id => document.getElementById(id);
@@ -1408,6 +1474,48 @@ function fillDependencySelect(selectId, sellerId, currentValue='', excludeTaskId
 
 function populateCreateDependencyOptions(){
   fillDependencySelect('create-depende-de',$('create-seller-id')?.value||'');
+}
+
+function hitosParaFase(fase){
+  return HITOS_GANTT_POR_FASE[fase]||[];
+}
+
+function hitoPerteneceAFase(fase,hito){
+  return hitosParaFase(fase).includes(hito);
+}
+
+function fillHitoSelect(selectId,fase,currentValue='',opts={}){
+  const sel=$(selectId);
+  if(!sel) return;
+  const current=String(currentValue||'').trim();
+  const hitos=hitosParaFase(fase);
+  while(sel.options.length) sel.remove(0);
+  const empty=document.createElement('option');
+  empty.value='';
+  empty.textContent='Seleccionar hito...';
+  sel.appendChild(empty);
+  sel.disabled=!fase;
+  hitos.forEach(hito=>{
+    const o=document.createElement('option');
+    o.value=hito;
+    o.textContent=hito;
+    sel.appendChild(o);
+  });
+  if(opts.allowLegacy&&current&&fase&&!hitos.includes(current)){
+    const legacy=document.createElement('option');
+    legacy.value=current;
+    legacy.textContent=`${current} (legacy)`;
+    sel.appendChild(legacy);
+  }
+  sel.value=opts.reset?'':([...sel.options].some(o=>o.value===current)?current:'');
+}
+
+function populateCreateHitoOptions(reset=false){
+  fillHitoSelect('create-hito',$('create-fase')?.value||'',$('create-hito')?.value||'',{reset});
+}
+
+function populateEditHitoOptions(currentValue=''){
+  fillHitoSelect('edit-hito',$('edit-fase')?.value||'',currentValue,{allowLegacy:true});
 }
 
 /* ── RESPONSABLES únicos → poblar select ── */
@@ -1948,6 +2056,11 @@ function setEditSaving(saving){
   btn.textContent=saving?'Guardando...':'Guardar cambios';
 }
 function validateTaskEditFields(fields){
+  const original=TASKS.find(t=>t.task_id===activeEditTaskId);
+  if(!fields.fase) return 'La fase es obligatoria.';
+  if(!FASES_GANTT_PERMITIDAS.includes(fields.fase)) return 'Fase no permitida.';
+  if(!fields.hito) return 'El hito es obligatorio.';
+  if(!hitoPerteneceAFase(fields.fase,fields.hito)&&fields.hito!==(original?.hito||'')) return 'Hito no permitido para la fase seleccionada.';
   if(!fields.estado) return 'El estado es obligatorio.';
   if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(fields.estado)) return 'Estado no permitido.';
   if(!fields.entorno) return 'El entorno es obligatorio.';
@@ -1980,6 +2093,8 @@ function openEditTask(taskId){
   $('edit-sub').textContent=`${seller.nombre||t.seller_id} · ${t.hito||'Sin hito'} · ${t.fase||'Sin fase'}`;
   $('edit-task-id').textContent=t.task_id;
   $('edit-seller').textContent=`${seller.nombre||t.seller_nombre||t.seller_id} · ${t.seller_id}`;
+  $('edit-fase').value=t.fase||'';
+  populateEditHitoOptions(t.hito||'');
   $('edit-estado').value=t.estado||'Pendiente';
   $('edit-responsable').value=t.responsable||'';
   $('edit-entorno').value=t.entorno||'';
@@ -1997,6 +2112,8 @@ function closeEditModal(e){
 }
 function readEditFields(){
   return {
+    fase: $('edit-fase').value||'',
+    hito: ($('edit-hito').value||'').trim(),
     estado: $('edit-estado').value,
     responsable: ($('edit-responsable').value||'').trim(),
     entorno: $('edit-entorno').value||'',
@@ -2007,6 +2124,7 @@ function readEditFields(){
   };
 }
 function applyLocalTaskEdit(t,fields){
+  t.hito=fields.hito;
   t.estado=estadoNorm(fields.estado);
   t.responsable=fields.responsable;
   t.entorno=fields.entorno;
@@ -2027,7 +2145,7 @@ async function saveGanttTaskEdit(ev){
   const validation=validateTaskEditFields(fields);
   if(validation){ showEditStatus('err',validation); return; }
   const qaMsg=t.task_id==='TASK-DUMMY-QA'?'':'\n\nQA: validar primero con TASK-DUMMY-QA antes de editar tareas reales.';
-  const ok=window.confirm(`Confirmar actualizacion de ${t.task_id}. Se modificaran estado, responsable, entorno, inicio, fin, dependencia y comentario.${qaMsg}`);
+  const ok=window.confirm(`Confirmar actualizacion de ${t.task_id}. Se modificaran hito, estado, responsable, entorno, inicio, fin, dependencia y comentario.${qaMsg}`);
   if(!ok) return;
 
   const payload={
@@ -2035,6 +2153,7 @@ async function saveGanttTaskEdit(ev){
     task_id:t.task_id,
     updated_by:'front@gantt-operativo',
     fields:{
+      hito: fields.hito,
       estado: fields.estado,
       responsable: fields.responsable,
       entorno: fields.entorno,
@@ -2108,6 +2227,7 @@ function openCreateTask(){
     $('create-seller-id').value=selectedSeller;
   }
   populateCreateDependencyOptions();
+  populateCreateHitoOptions(true);
   $('create-ov').classList.add('open');
 }
 function closeCreateModal(e){
@@ -2139,6 +2259,7 @@ function validateTaskCreateFields(task){
   if(!task.fase) return 'La fase es obligatoria.';
   if(!FASES_GANTT_PERMITIDAS.includes(task.fase)) return 'Fase no permitida.';
   if(!task.hito) return 'El hito es obligatorio.';
+  if(!hitoPerteneceAFase(task.fase,task.hito)) return 'Hito no permitido para la fase seleccionada.';
   if(!task.tarea) return 'La tarea es obligatoria.';
   if(!task.responsable) return 'El responsable es obligatorio.';
   if(!RESPONSABLES_GANTT_PERMITIDOS.includes(task.responsable)) return 'Responsable no permitido.';
