@@ -2254,7 +2254,7 @@ Decision vigente:
 
 ## Bloque 33: migracion a nuevo modelo Timeline
 
-Estado: en implementacion controlada.
+Estado: cerrado dentro del bloque 33-35.
 
 Objetivo:
 
@@ -2286,7 +2286,7 @@ Decision vigente:
 - 33E actualiza `Gantt.gs` para create/update/disable compatibles con v33 + legacy; `inicio_real` y `fin_real` quedan fuera del set editable.
 - 33F migra los modales y payloads del frontend para alta/edicion v33; `gantt_task_disable` queda sin cambios.
 - 33F-BACKEND-FIX permite que Apps Script escriba `seller_nombre` en `Seller / Marca` si el payload create lo envia y la columna existe.
-- Sigue pendiente 33G para smoke mockeado completo y 33H para prueba real con tarea dummy autorizada.
+- Smoke mockeado y smoke real manual quedaron reportados como OK dentro del cierre 33-35.
 
 ## Bloque 34: UX operativa segura Gantt v33
 
@@ -2317,7 +2317,7 @@ Decision vigente:
 
 ## Bloque 35: compactacion UX y consolidacion documental Timeline
 
-Estado: 35A implementado localmente; 35B documentado.
+Estado: cerrado documentalmente en 35E.
 
 Objetivo:
 
@@ -2330,9 +2330,10 @@ Resultado:
 - Vista Mes mantiene rango amplio.
 - Vista Semana se enfoca en semana actual, una semana anterior y proximas semanas.
 - Boton `Hoy` conserva scroll al foco temporal.
-- Hero, accesos operativos, KPIs y toolbar se compactaron para subir el timeline.
-- Se mejoro contraste de headers, KPIs, linea de hoy, pills activas, grid y badges.
-- 35B consolida contrato, UX, validaciones, riesgos y proximas lineas recomendadas.
+- 35C agrego columnas operativas sticky para mantener visible seller/tarea y estado durante el scroll horizontal.
+- 35D refino hero, recursos/accesos, KPIs, toolbar, contraste y densidad para que el timeline sea protagonista.
+- Se mejoro contraste de headers temporales, KPIs, linea de hoy, pills activas, grid, badges y columnas sticky.
+- 35E consolida contrato, UX, validaciones, riesgos y proximas lineas recomendadas del bloque 33-35.
 
 Proximas lineas recomendadas:
 
@@ -2350,3 +2351,35 @@ Riesgos pendientes:
 - Backend no valida aun fase->hito.
 - No existe persistencia de filtros.
 - No existe edicion masiva ni drag and drop.
+
+## Cierre bloque 33-35: Timeline v33 + UX operativa
+
+Estado: cerrado documentalmente en 35E.
+
+Estado operativo real:
+
+- Timeline v33 queda como contrato vigente con 14 columnas canonicas.
+- Frontend renderiza, crea y edita con `inicio`, `fin`, `entorno`, `depende_de`, `seller_nombre` e `hito`.
+- Apps Script soporta create/update/disable v33 + aliases legacy.
+- Auditor automatico soporta modelo v33 + legacy en modo read-only.
+- Create/update/disable reportados OK.
+- Smoke real manual reportado OK.
+- Sticky columns, vista Semana centrada, boton `Hoy`, filtros, badges y recursos compactos quedan como UX vigente.
+
+Arquitectura y decisiones:
+
+- Backend no valida todavia pertenencia fase->hito; solo valida `hito` no vacio.
+- Catalogo fase->hito vive en frontend.
+- `depende_de` sigue siendo simple contra una tarea del mismo seller.
+- `ver_en_gantt` queda oculto en UI y pendiente de decision funcional.
+- No hay quick actions, templates, drag and drop, persistencia de filtros ni edicion masiva.
+
+Futuros caminos posibles sin compromiso inmediato:
+
+- Quick actions acotadas.
+- Templates de onboarding.
+- KPIs/dashboard operativo.
+- Automatizaciones sobre bloqueos o vencimientos.
+- Persistencia de filtros.
+- Drag and drop con validacion fuerte.
+- Edicion masiva controlada.

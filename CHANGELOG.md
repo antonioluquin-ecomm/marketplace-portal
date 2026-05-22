@@ -4,6 +4,24 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-21 - Etapa 35E cierre documental bloque 33-35
+
+Tipo de cambio: documentacion / cierre operativo.
+
+Estado: completado sin cambios funcionales.
+
+Resultado:
+- Cerrado documentalmente el bloque 33-35 del Gantt Operativo Marketplace.
+- Consolidado el estado final Timeline v33: columnas oficiales, aliases legacy, campos deprecados, payloads create/update/disable, `QA` / `Productivo`, `seller_nombre`, `depende_de`, hitos por fase y validaciones frontend/backend.
+- Documentada la UX operativa vigente: vista Mes, vista Semana centrada, boton `Hoy`, columnas sticky, badges, filtros, recursos compactos, hero compacto, timeline protagonista, selector `depende_de` y dropdowns controlados.
+- Registradas decisiones vigentes: backend no valida todavia fase->hito, catalogo fase->hito vive en frontend, `depende_de` es simple, `ver_en_gantt` sigue oculto, sin quick actions/templates/persistencia de filtros/drag and drop/edicion masiva.
+- Actualizado handoff para dejar el sistema como estable: smoke real manual OK, create/update/disable OK, sticky columns OK y UX refinada.
+
+Alcance:
+- Solo documentacion: `CHANGELOG.md`, `docs/roadmap.md`, `docs/test-matrix.md`, `docs/handoff-post-v1.md`, `docs/data-dictionary-timeline.md`.
+- No se tocaron frontend, backend, Apps Script, Google Sheets, Excel, CSV, assets, config, `public/` ni `legacy/`.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 35B consolidacion documental Timeline v33/v34/v35
 
 Tipo de cambio: documentacion / handoff operativo.

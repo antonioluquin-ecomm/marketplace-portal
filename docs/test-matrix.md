@@ -1983,14 +1983,33 @@ Notas:
 | Riesgos pendientes | Revision documental | `ver_en_gantt`, templates, quick actions, drag/drop, filtros persistidos y edicion masiva documentados | OK |
 | Alcance | Revision de diff | Solo documentacion editada en 35B | OK |
 
+### Etapa 35E: cierre documental bloque 33-35
+
+**Estado:** documentado; sin cambios funcionales.
+
+| Validacion | Metodo | Resultado | Estado |
+|---|---|---|---|
+| Timeline v33 | Revision documental | Columnas oficiales, aliases legacy y campos deprecados alineados | OK |
+| Create/update/disable | Revision documental | Contratos reales v33 documentados y sin cambios nuevos | OK |
+| QA/Productivo | Revision documental | `entorno` vigente y separado de `estado` | OK |
+| `seller_nombre` | Revision documental | Snapshot visual opcional documentado | OK |
+| `depende_de` | Revision documental | Dependencia simple y selector mismo seller documentados | OK |
+| Hitos por fase | Revision documental | Catalogo frontend y limite backend documentados | OK |
+| UX vigente | Revision documental | Mes, Semana centrada, `Hoy`, sticky columns, filtros, badges, recursos compactos y hero compacto documentados | OK |
+| Decisiones pendientes | Revision documental | `ver_en_gantt`, quick actions, templates, persistencia filtros, drag/drop y edicion masiva documentados | OK |
+| Estado operativo | Revision documental | Sistema estable, smoke real manual OK, create/update/disable OK y sticky OK registrados en handoff | OK |
+| Alcance | Revision de diff | Solo documentacion editada en 35E | OK |
+
 ### Smoke vigente Gantt v33/v34/v35
 
 | Area | Validacion | Resultado esperado | Estado |
 |---|---|---|---|
-| Lectura CSV | `normalizeTasks()` acepta v33 y legacy | Tareas renderizables con `inicio` / `fin` | OK mock / pendiente smoke real post deploy |
+| Lectura CSV | `normalizeTasks()` acepta v33 y legacy | Tareas renderizables con `inicio` / `fin` | OK mock / smoke real manual OK reportado |
 | Vista Mes | Rango amplio | Mantiene contexto historico y futuro | OK mock |
 | Vista Semana | Foco temporal | Semana actual centrada; sin arranque excesivamente historico | OK mock |
 | Boton `Hoy` | Scroll horizontal | Lleva a la linea actual | OK mock |
+| Sticky columns | Scroll horizontal timeline | Seller/tarea y estado siguen visibles | OK mock / smoke visual OK |
+| UX compacta | Hero, recursos, KPIs, toolbar y timeline | Timeline queda mas arriba y con mayor jerarquia | OK mock / smoke visual OK |
 | Filtro Entorno | `Todos`, `QA`, `Productivo` | Filtrado local sin modificar datos | OK mock |
 | Badges Entorno | Lista, modal y barra/tooltip | QA/Productivo visibles | OK mock |
 | Create v33 | Payload frontend | Envia `inicio`, `fin`, `entorno`, `hito`, `depende_de`, `seller_nombre` | OK mock |

@@ -6,17 +6,18 @@ La hoja `timeline` funciona como base de datos liviana para el Gantt Operativo. 
 
 El objetivo no es cambiar la hoja de inmediato, sino fijar una referencia estable para futuras etapas de compatibilidad, normalizacion y limpieza.
 
-## Estado consolidado 35B - Timeline v33/v34/v35
+## Estado final 35E - Timeline v33/v34/v35
 
-Estado real al cierre documental 35B:
+Estado real al cierre documental 35E:
 
 - El contrato operativo vigente usa 14 columnas canonicas.
 - Frontend lee/renderiza modelo v33 y mantiene aliases legacy.
 - Frontend create/update envia `inicio`, `fin`, `entorno`, `depende_de` e `hito`.
 - Apps Script soporta create/update/disable v33 + legacy.
 - Auditor automatico soporta modelo v33 + legacy.
-- UX vigente incluye filtro por entorno, badges QA/Productivo, selector `depende_de`, hitos dinamicos por fase, boton `Hoy` y foco temporal en vista Semana.
-- No se modifico Google Sheets durante la consolidacion documental.
+- UX vigente incluye filtro por entorno, badges QA/Productivo, selector `depende_de`, hitos dinamicos por fase, boton `Hoy`, vista Semana centrada, columnas sticky y refinamiento visual compacto.
+- Smoke real manual del Gantt v33/v34/v35 fue reportado como OK antes del cierre documental 35E.
+- No se modifico Google Sheets durante la consolidacion documental 35E.
 
 ### Columnas oficiales actuales
 
@@ -135,10 +136,13 @@ Notas:
 - `Entorno` filtra localmente entre `Todos`, `QA` y `Productivo`.
 - Badges QA/Productivo aparecen en lista, detalle y barras si el ancho lo permite.
 - `depende_de` se elige desde tareas existentes del mismo seller; en edicion excluye la tarea actual.
+- Fase, responsable, entorno e hito se operan con dropdowns controlados.
 - Vista Mes mantiene rango amplio.
 - Vista Semana enfoca la semana actual: una semana anterior y proximas semanas.
 - Boton `Hoy` mueve el scroll horizontal al foco temporal.
-- Hero, accesos operativos, KPIs y toolbar fueron compactados para priorizar el timeline.
+- Columnas operativas sticky mantienen visible seller/tarea y estado durante el scroll horizontal del timeline.
+- Hero, recursos/accesos, KPIs y toolbar fueron compactados para priorizar el timeline.
+- El timeline queda como superficie protagonista con contraste reforzado en headers temporales, grid, linea de hoy, badges y pills activas.
 
 ### Decisiones pendientes
 
@@ -303,7 +307,7 @@ La baja logica estandar mantiene `estado = Cancelado`. `ver_en_gantt` solo debe 
 
 ## Referencia historica 32B / pre-v33
 
-Las secciones siguientes conservan decisiones y analisis previos a la consolidacion v33-v35. Cuando haya conflicto, prevalece el bloque **Estado consolidado 35B - Timeline v33/v34/v35**.
+Las secciones siguientes conservan decisiones y analisis previos a la consolidacion v33-v35. Cuando haya conflicto, prevalece el bloque **Estado final 35E - Timeline v33/v34/v35**.
 
 ## Principios del modelo
 

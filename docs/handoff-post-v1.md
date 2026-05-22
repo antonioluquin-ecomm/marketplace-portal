@@ -1,6 +1,6 @@
 # Handoff corto post-V1 - Marketplace Portal
 
-Fecha: 2026-05-20
+Fecha: 2026-05-21
 
 ## Estado actual
 
@@ -16,7 +16,7 @@ Fecha: 2026-05-20
 
 ## Estado consolidado Gantt / Timeline v33-v35
 
-El Gantt Operativo queda funcionalmente estabilizado sobre el modelo `timeline` v33 y las mejoras UX v34-v35.
+El Gantt Operativo queda funcionalmente estabilizado sobre el modelo `timeline` v33 y las mejoras UX v34-v35. El bloque 33-35 queda cerrado documentalmente en 35E.
 
 Contrato `timeline` vigente:
 
@@ -56,7 +56,9 @@ Estado frontend:
 - Vista Mes conserva rango amplio.
 - Vista Semana enfoca semana actual, semana anterior y proximas semanas.
 - Boton `Hoy` lleva el scroll horizontal al foco temporal.
-- Hero, accesos, KPIs y toolbar quedan compactados para priorizar el timeline.
+- Columnas operativas sticky mantienen visible seller/tarea y estado durante scroll horizontal.
+- Hero, recursos/accesos, KPIs y toolbar quedan compactados para priorizar el timeline.
+- Timeline queda como superficie protagonista con contraste reforzado en headers, grid, linea de hoy, badges y pills activas.
 
 Estado backend Apps Script:
 
@@ -72,6 +74,15 @@ Estado auditor / datos:
 - `tools/audit-timeline-data.js` audita modelo v33 y legacy en modo read-only.
 - `docs/timeline-data-audit-report.md` funciona como checklist previo a saneamiento manual.
 - No se debe modificar Google Sheets sin etapa explicita, backup/export previo y validacion por tandas.
+
+Estado operativo real:
+
+- Sistema estable al cierre 35E.
+- Smoke real manual reportado OK.
+- `gantt_task_create`, `gantt_task_update` y `gantt_task_disable` reportados OK.
+- Sticky columns OK.
+- UX refinada y compacta OK.
+- No se ejecutaron POST reales durante el cierre documental 35E.
 
 Riesgos y pendientes:
 
@@ -103,6 +114,7 @@ Riesgos y pendientes:
 - Bloque 30D cerrado: diseno tecnico documentado para futura edicion del Gantt Operativo via Apps Script, sin implementacion de escritura.
 - Bloque 31A cerrado: auditoria critica de modularizacion Apps Script documentada en `docs/apps-script-modularizacion.md`, sin cambios funcionales.
 - Bloque 31B-31C2E cerrado: modularizacion minima Apps Script, Gantt modularizado, endpoints QA de update/create/disable validados y UI de alta Gantt validada con tarea dummy.
+- Bloque 33-35 cerrado: Timeline v33, frontend/backend compatibles, auditor automatico, UX operativa v34, sticky columns, foco temporal, compactacion/refinamiento visual y cierre documental 35E.
 
 ## Consolidacion 31B-31C2E
 
@@ -190,19 +202,15 @@ Riesgos residuales:
 - Revisar manualmente `.xlsx` y `Mapa del Hub.docx` solo si se decide ordenar documentacion fuente.
 - Evitar nuevas refactorizaciones CSS/JS salvo necesidad real.
 - Si se retoma Apps Script, leer primero `docs/apps-script-modularizacion.md` y no ejecutar refactor masivo unico.
-- Proximo bloque recomendado si se continua Gantt:
-  - 31C2F: hardening de permisos/concurrencia/logs.
-  - UI baja logica desde front.
-  - Auditoria avanzada.
-  - Permisos por rol.
-  - Evitar duplicados concurrentes.
-- Proximas lineas Gantt v35 recomendadas:
-  - estabilizacion UX fina con validacion visual humana;
+- Proximas lineas posibles para Gantt, sin compromiso inmediato:
   - quick actions acotadas (`En curso`, `Completado`) solo si se aprueba;
   - templates de onboarding por seller;
   - KPIs/dashboard operativo;
   - automatizaciones sobre bloqueos o vencimientos;
-  - persistencia de filtros si aparece necesidad real.
+  - persistencia de filtros si aparece necesidad real;
+  - drag and drop con validacion fuerte;
+  - edicion masiva controlada;
+  - hardening de permisos/concurrencia/logs.
 
 ## Recomendacion para continuar
 
@@ -211,7 +219,7 @@ Riesgos residuales:
   - Codex
   - Fast OFF
   - Inteligencia Alta
-- Primer mensaje sugerido: indicar que 31C-HANDOFF esta cerrado y pedir continuar desde `docs/handoff-post-v1.md`.
+- Primer mensaje sugerido: indicar que el bloque 33-35 esta cerrado y pedir continuar desde `docs/handoff-post-v1.md`.
 
 ## Contexto minimo para nueva sesion
 
