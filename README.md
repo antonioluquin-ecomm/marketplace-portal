@@ -14,6 +14,18 @@ El proyecto funciona y ya cuenta con estructura institucional migrada. Las pagin
 
 `sporting-marketplace_hub_v29.html` se conserva en raiz como URL legacy, pero desde Etapa 9C funciona como alias hacia `internal/hub-operativo.html`. El smoke test de Etapa 9D fue OK, preservando query string y hash. No se movio ni elimino el archivo legacy.
 
+## Estado operativo Gantt
+
+El Gantt Operativo Marketplace queda estabilizado al cierre del bloque 33-35. La ruta activa es `internal/gantt/gantt-operativo.html` y opera sobre el contrato `timeline` v33:
+
+- modelo canonico de 14 columnas con `inicio`, `fin`, `entorno`, `depende_de`, `seller_nombre` y `ver_en_gantt`;
+- frontend/backend compatibles con create, update y disable v33, manteniendo aliases legacy;
+- auditor automatico read-only compatible con modelo v33 y legacy;
+- UX operativa vigente con filtros, badges QA/Productivo, selector `depende_de`, hitos por fase, vista Mes, vista Semana centrada, boton `Hoy`, columnas sticky y timeline compacto/protagonista;
+- decisiones pendientes documentadas: `ver_en_gantt` oculto, catalogo fase->hito local en frontend, sin quick actions, templates, drag and drop, persistencia de filtros ni edicion masiva.
+
+Para retomar trabajo sobre Gantt, leer primero `docs/handoff-post-v1.md`, `docs/data-dictionary-timeline.md`, `docs/roadmap.md` y `docs/test-matrix.md`.
+
 Estructura actual resumida:
 
 ```txt
