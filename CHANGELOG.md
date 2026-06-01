@@ -4,11 +4,22 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-06-01 - Etapa 1B cierre smoke real Relevamiento Perfil
+
+Tipo de cambio: validacion en produccion / cierre documental.
+
+Estado: cerrado. Deploy real ejecutado y smoke OK.
+
+Resultado:
+- Deploy de `Apps_script_v5.js` a `Codigo.gs` en Apps Script real ejecutado sin errores.
+- Smoke real OK: `doGet`, `doPost` draft nuevo y update, aislamiento de email/sync/historico y submit historico intacto.
+- Etapa 1B queda cerrada. Proxima etapa: 1C migrador dry-run.
+
 ## 2026-05-23 - Etapa 1B backend aislado Relevamiento Perfil
 
 Tipo de cambio: backend Apps Script aislado / documentacion.
 
-Estado: implementado localmente; sin POST real.
+Estado: implementado localmente; smoke real pendiente.
 
 Resultado:
 - Agregado routing aislado para `relevamiento_profile_save` en `doPost`.

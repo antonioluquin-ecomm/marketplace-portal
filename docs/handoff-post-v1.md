@@ -33,8 +33,8 @@ Decisiones vigentes:
 
 Plan futuro:
 
-- 1B backend aislado: implementado localmente en `Apps_script_v5.js`; pendiente deploy/smoke real controlado.
-- 1C migrador dry-run desde filas historicas de `relevamientos`.
+- 1B backend aislado: **CERRADO**. Deploy real y smoke OK el 2026-06-01.
+- 1C migrador dry-run desde filas historicas de `relevamientos`. **PROXIMO**.
 - 1D frontend precarga por perfil.
 - 1E guardado parcial separado del submit.
 - 1F transicion submit final, solo despues de validar compatibilidad.
@@ -43,9 +43,9 @@ Estado 1B:
 
 - `doPost` soporta `tipo_formulario = "relevamiento_profile_save"`.
 - `doGet` soporta `action = "relevamiento_profile_get"`.
-- Hoja puente propuesta: `relevamientos_perfil`.
-- Validacion local mock OK para save draft nuevo, update, get existente, get inexistente, `clear_fields`, preservacion y rechazo de campo invalido.
-- No hubo POST real, submit real, frontend, migracion de historicos ni cambios en Google Sheets productivo.
+- Hoja puente `relevamientos_perfil` creada y operativa en Google Sheets real.
+- Smoke real OK: doGet, doPost draft, aislamiento email/sync/historico, submit historico intacto.
+- Deploy ejecutado el 2026-06-01.
 
 ## Estado consolidado Gantt / Timeline v33-v35
 

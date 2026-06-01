@@ -26,15 +26,19 @@ Validaciones ejecutadas:
 | Campo invalido | Rechaza field fuera de allowlist | OK | Aprobado | Mock local |
 | Draft aislado | No crea ni append en `relevamientos` historico | OK | Aprobado | Mock local |
 
-Smokes pendientes antes de release:
+Smokes reales ejecutados (2026-06-01):
 
-- Deploy Apps Script controlado.
-- `doGet` real con seller test.
-- `doPost` real solo con seller test aprobado.
-- Confirmar que draft no envia email.
-- Confirmar que draft no sincroniza `sellers`.
-- Confirmar que draft no actualiza `definicion_tecnica`.
-- Confirmar que submit historico `tipo_formulario = "relevamiento"` sigue intacto.
+| Validacion | Resultado esperado | Resultado real | Estado |
+|---|---|---|---|
+| Deploy Apps Script | Codigo publicado sin errores | OK | Aprobado |
+| `doGet` real con seller test | Respuesta `exists=false` o `exists=true` segun estado | OK | Aprobado |
+| `doPost` draft real | Crea/actualiza fila en `relevamientos_perfil` | OK | Aprobado |
+| Draft no envia email | Sin email disparado | OK | Aprobado |
+| Draft no sincroniza `sellers` | Sin cambios en hoja sellers | OK | Aprobado |
+| Draft no actualiza `definicion_tecnica` | Sin cambios en hoja definicion_tecnica | OK | Aprobado |
+| Submit historico intacto | `tipo_formulario = "relevamiento"` sigue operativo | OK | Aprobado |
+
+Estado 1B: **CERRADO**. Backend real validado en produccion.
 
 ## Etapa 1A: contrato Relevamiento Perfil
 
