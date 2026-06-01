@@ -4,6 +4,24 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-06-01 - Etapa 1D frontend precarga Relevamiento Perfil
+
+Tipo de cambio: frontend / UX.
+
+Estado: implementado.
+
+Resultado:
+- Agregada funcion `loadPerfilRelevamiento()` en `formulario-relevamiento.html`.
+- Al cargar el formulario con `seller_id`, llama `doGet?action=relevamiento_profile_get` y si el perfil existe rellena todos los campos con los datos guardados.
+- Encadenada despues de `loadSellerIdentity()` para evitar conflictos de estado.
+- Muestra mensaje "Datos precargados desde tu perfil guardado (N campos)" en el area de status.
+- Si el perfil no existe o la llamada falla, el formulario abre en blanco normalmente.
+- El submit sigue usando `tipo_formulario = "relevamiento"` sin cambios.
+
+Alcance:
+- Solo `public/formularios/formulario-relevamiento.html`.
+- No se tocaron Apps Script, CSS, otras paginas, submit historico ni endpoints.
+
 ## 2026-06-01 - Etapa 1B cierre smoke real Relevamiento Perfil
 
 Tipo de cambio: validacion en produccion / cierre documental.

@@ -34,7 +34,8 @@ Decisiones vigentes:
 Plan futuro:
 
 - 1B backend aislado: **CERRADO**. Deploy real y smoke OK el 2026-06-01.
-- 1C migrador dry-run desde filas historicas de `relevamientos`. **PROXIMO**.
+- 1C migrador dry-run desde filas historicas de `relevamientos`. **CERRADO**. Dry-run OK.
+- 1D frontend precarga desde perfil. **CERRADO**. `loadPerfilRelevamiento()` implementada.
 - 1D frontend precarga por perfil.
 - 1E guardado parcial separado del submit.
 - 1F transicion submit final, solo despues de validar compatibilidad.

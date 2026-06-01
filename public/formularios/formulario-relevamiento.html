@@ -2847,6 +2847,57 @@
         }
       }
 
+      async function loadPerfilRelevamiento() {
+        if (!sellerId || !APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_URL")) return;
+        try {
+          const url =
+            APPS_SCRIPT_URL +
+            "?action=relevamiento_profile_get&seller_id=" +
+            encodeURIComponent(sellerId) +
+            "&_ts=" +
+            Date.now();
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) return;
+          const json = await res.json();
+          if (!json.exists || !json.profile) return;
+
+          const profile = json.profile;
+          let filled = 0;
+
+          Object.keys(profile).forEach(function (fieldName) {
+            const val = String(profile[fieldName] || "").trim();
+            if (!val) return;
+            const input = document.querySelector('[name="' + fieldName + '"]');
+            if (!input) return;
+            if (input.tagName === "SELECT") {
+              const opt = Array.from(input.options).find(
+                (o) => o.value === val || o.textContent.trim() === val,
+              );
+              if (opt) {
+                input.value = opt.value;
+                filled++;
+              }
+            } else {
+              input.value = val;
+              filled++;
+            }
+          });
+
+          if (filled > 0) {
+            applyConditionals();
+            updateProgress();
+            setStatus(
+              "Datos precargados desde tu perfil guardado (" +
+                filled +
+                " campos). Revisá y completá lo que falte.",
+              "ok",
+            );
+          }
+        } catch (err) {
+          console.warn("No se pudo cargar el perfil guardado:", err);
+        }
+      }
+
       function formToObject(form) {
         const fd = new FormData(form);
         const obj = {};
@@ -3041,7 +3092,7 @@
 
       applyConditionals();
       updateProgress();
-      loadSellerIdentity();
+      loadSellerIdentity().then(loadPerfilRelevamiento);
     </script>
   </body>
 </html>
