@@ -2958,7 +2958,8 @@
             body: JSON.stringify(buildDraftPayload()),
           });
           const json = await res.json();
-          if (!json.ok) throw new Error(json.message || "No se pudo guardar el borrador.");
+          console.log("[saveDraft] response:", JSON.stringify(json));
+          if (!json.ok) throw new Error(json.message || json.error || JSON.stringify(json) || "No se pudo guardar el borrador.");
           setStatus(
             "Borrador guardado ✓ — " + json.completitud + "% completitud · " +
             json.estado_relevamiento + " · " + json.fecha_ultima_actualizacion,
