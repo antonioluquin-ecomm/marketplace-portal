@@ -470,7 +470,7 @@ body{font-size:15px;line-height:1.65;background:var(--bg)}
             <div class="svc-rate" id="svc-rate-so">Fee mensual</div>
           </div>
           <label class="tog">
-            <input type="checkbox" id="inc-so" onchange="toggleSvcSub('sub-so', this.checked); recalc()">
+            <input type="checkbox" id="inc-so" onchange="if(!this.checked){var _f=document.getElementById('f-sofee');if(_f)_f.value=0;} toggleSvcSub('sub-so', this.checked); recalc()">
             <div class="tog-track"></div><div class="tog-thumb"></div>
           </label>
         </div>
@@ -575,6 +575,11 @@ body{font-size:15px;line-height:1.65;background:var(--bg)}
 
       <div class="disclaimer">
         ⚠ Esta simulación es orientativa y sirve para análisis interno. Los valores definitivos se confirman en la propuesta comercial y en el contrato de adhesión. No constituye compromiso contractual.
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-sm" onclick="window.print()">Imprimir / PDF</button>
+        <button class="btn-sm" onclick="copyInternalSummary()">Copiar resumen</button>
       </div>
 
     </div>
@@ -1200,6 +1205,38 @@ function pctOf(a, b)     { return b > 0 ? a / b : 0 }
 
 function toggleSvcSub(id, show) {
   $(id).classList.toggle('visible', show);
+}
+
+function copyInternalSummary() {
+  const gmv = parseFloat($('f-gmv')?.value) || 0;
+  const r   = calcAll(gmv);
+  const seller = ($('f-seller')?.value || '').trim() || '—';
+  const netPct = gmv > 0 ? (r.neto / gmv * 100).toFixed(1).replace('.', ',') : '0,0';
+  const svcs = [
+    chk('inc-ld') ? 'Logística directa' : '',
+    chk('inc-li') ? 'Logística inversa' : '',
+    chk('inc-gd') ? 'Gest. devoluciones' : '',
+    chk('inc-ca') ? 'Catalogación' : '',
+    chk('inc-ff') ? 'Fulfillment' : '',
+    chk('inc-so') ? 'Soporte' : '',
+  ].filter(Boolean).join(', ') || 'Ninguno';
+  const txt = [
+    '📊 Simulación económica — Sporting Marketplace (Interno)',
+    `Seller: ${seller}`,
+    `GMV mensual: ${fmtARS(gmv)}`,
+    `Neto estimado: ${fmtARS(r.neto)} (${netPct}% margen)`,
+    `Cargos totales: ${fmtARS(r.total)}`,
+    `Servicios: ${svcs}`,
+    '',
+    'Solo para uso interno. No compartir con el seller.',
+  ].join('\n');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt)
+      .then(() => alert('Resumen copiado al portapapeles'))
+      .catch(() => alert('No se pudo copiar automáticamente'));
+  } else {
+    alert('Tu navegador no soporta copiado automático');
+  }
 }
 
 /* ═══════════════════════════════════════════════
