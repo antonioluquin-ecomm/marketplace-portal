@@ -1200,6 +1200,83 @@ function fechaHoraPerfil() {
   return Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
 }
 
+// ───────────────────────────────────────────────
+// ETAPA 1C — MIGRADOR DRY-RUN relevamientos → relevamientos_perfil
+// Ejecutar manualmente desde el editor de Apps Script.
+// No escribe nada. Solo loguea en Registro de ejecución.
+// ───────────────────────────────────────────────
+function migrarPerfilesDryRun() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const wsOrigen = ss.getSheetByName(HOJA_RELEVAMIENTO);
+
+  if (!wsOrigen) {
+    console.log("ERROR: hoja 'relevamientos' no encontrada.");
+    return;
+  }
+
+  const data = wsOrigen.getDataRange().getValues();
+  if (data.length < 2) {
+    console.log("Sin filas de datos en relevamientos.");
+    return;
+  }
+
+  const headersOrigen = data[0].map((h) => limpiarValor(h));
+  const sellerCol = headersOrigen.indexOf("seller_id");
+  if (sellerCol === -1) {
+    console.log("ERROR: columna seller_id no encontrada en relevamientos.");
+    return;
+  }
+
+  // Ultima fila por seller_id (la mas reciente wins)
+  const mapaUltimaFila = {};
+  for (let i = 1; i < data.length; i++) {
+    const sellerId = normalizarSellerIdPerfil(data[i][sellerCol]);
+    if (sellerId) mapaUltimaFila[sellerId] = { filaNum: i + 1, row: data[i] };
+  }
+
+  const sellers = Object.keys(mapaUltimaFila);
+  console.log("Sellers distintos en relevamientos: " + sellers.length);
+
+  const camposPermitidos = obtenerCamposPermitidosPerfil();
+  const resultados = [];
+
+  sellers.forEach(function (sellerId) {
+    const entrada = mapaUltimaFila[sellerId];
+    const perfilObj = {};
+
+    headersOrigen.forEach(function (header, idx) {
+      if (camposPermitidos.includes(header)) {
+        perfilObj[header] = limpiarValor(entrada.row[idx]);
+      }
+    });
+
+    const completitud = calcularCompletitudPerfil(perfilObj);
+    const estado = obtenerEstadoPerfil(completitud, "migration");
+    const completos = camposPermitidos.filter(function (c) { return perfilObj[c] !== ""; }).length;
+
+    console.log(
+      "[DRY-RUN] " + sellerId +
+      " | fila origen: " + entrada.filaNum +
+      " | completitud: " + completitud + "%" +
+      " | estado: " + estado +
+      " | campos completos: " + completos + "/" + camposPermitidos.length
+    );
+
+    resultados.push({ seller_id: sellerId, completitud: completitud, estado: estado });
+  });
+
+  const promedio = resultados.length
+    ? Math.round(resultados.reduce(function (acc, r) { return acc + r.completitud; }, 0) / resultados.length)
+    : 0;
+
+  console.log("=== RESUMEN DRY-RUN ===");
+  console.log("Total sellers: " + resultados.length);
+  console.log("Completitud promedio: " + promedio + "%");
+  console.log("Con 100%: " + resultados.filter(function (r) { return r.completitud === 100; }).length);
+  console.log("Con < 50%: " + resultados.filter(function (r) { return r.completitud < 50; }).length);
+  console.log("No se escribio nada en relevamientos_perfil.");
+}
+
 function calcularResultadoSugerido(d) {
   const plataforma = normalizarTexto(d.plataforma);
   const enviaPais = normalizarTexto(d.envia_pais);
