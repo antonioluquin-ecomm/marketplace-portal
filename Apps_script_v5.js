@@ -19,12 +19,30 @@
 // ───────────────────────────────────────────────
 // ENTRY POINT
 // ───────────────────────────────────────────────
+const HOJA_RELEVAMIENTO_PERFIL = "relevamientos_perfil";
+
 function doPost(e) {
   try {
     const raw = e && e.postData ? e.postData.contents : "";
     const data = JSON.parse(raw || "{}");
 
     const tipoFormulario = normalizarTipoFormulario(data.tipo_formulario);
+
+    if (tipoFormulario === "relevamiento_profile_save") {
+      const resultadoPerfil = upsertPerfilRelevamiento(data);
+      return jsonResponse({
+        ok: true,
+        status: "ok",
+        tipo_formulario: tipoFormulario,
+        seller_id: resultadoPerfil.seller_id,
+        accion: resultadoPerfil.accion,
+        hoja: resultadoPerfil.hoja,
+        fila: resultadoPerfil.fila,
+        estado_relevamiento: resultadoPerfil.estado_relevamiento,
+        completitud: resultadoPerfil.completitud,
+        fecha_ultima_actualizacion: resultadoPerfil.fecha_ultima_actualizacion,
+      });
+    }
 
     if (tipoFormulario === "gantt_task_update") {
       const resultadoGantt = actualizarTareaGantt(data);
@@ -86,7 +104,7 @@ function doPost(e) {
 
       enviarNotificacionRelevamiento(sellerId, data, resultado);
     } else {
-      throw new Error("tipo_formulario invalido. Usar 'seller', 'gestion_seller', 'calificacion', 'relevamiento', 'gantt_task_update', 'gantt_task_create' o 'gantt_task_disable'.");
+      throw new Error("tipo_formulario invalido. Usar 'seller', 'gestion_seller', 'calificacion', 'relevamiento', 'relevamiento_profile_save', 'gantt_task_update', 'gantt_task_create' o 'gantt_task_disable'.");
     }
 
     return jsonResponse({
@@ -110,7 +128,19 @@ function doPost(e) {
   }
 }
 
-function doGet() {
+function doGet(e) {
+  try {
+    const params = (e && e.parameter) || {};
+    const action = String(params.action || "").trim().toLowerCase();
+
+    if (action === "relevamiento_profile_get") {
+      return jsonResponse(obtenerPerfilRelevamiento(params));
+    }
+  } catch (err) {
+    console.error("Error en doGet:", err.toString());
+    return errorResponse(err);
+  }
+
   return jsonResponse({
     status: "ok",
     message: "Apps Script activo - Marketplace Sporting",
@@ -141,6 +171,10 @@ function normalizarTipoFormulario(valor) {
     return "calificacion";
   if (["relevamiento", "formulario_2", "form2", "f2"].includes(tipo))
     return "relevamiento";
+  if (
+    ["relevamiento_profile_save", "relevamiento_perfil_save", "profile_save"].includes(tipo)
+  )
+    return "relevamiento_profile_save";
   if (
     ["gantt_task_update", "gantt_update", "timeline_update"].includes(tipo)
   )
@@ -856,6 +890,316 @@ function obtenerEstado(completitud) {
 // ───────────────────────────────────────────────
 // LÓGICA DE DECISIÓN — FORMULARIO 1
 // ───────────────────────────────────────────────
+// Backend aislado para Relevamiento Perfil. No participa del submit historico
+// `tipo_formulario = "relevamiento"` ni dispara sus efectos secundarios.
+function obtenerPerfilRelevamiento(params) {
+  const sellerId = normalizarSellerIdPerfil(params && params.seller_id);
+  if (!sellerId) throw new Error("Falta seller_id");
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  validarSellerExisteParaPerfil(ss, sellerId, "draft");
+
+  const ws = obtenerHojaPerfilRelevamiento(ss);
+  const rowNumber = buscarFilaPerfilSeller(ws, sellerId);
+
+  if (!rowNumber) {
+    return {
+      ok: true,
+      status: "ok",
+      tipo_formulario: "relevamiento_profile_get",
+      seller_id: sellerId,
+      exists: false,
+    };
+  }
+
+  const headers = obtenerHeadersPerfil(ws);
+  const values = ws.getRange(rowNumber, 1, 1, headers.length).getValues()[0];
+  const rowObj = rowToObject(headers, values);
+
+  return {
+    ok: true,
+    status: "ok",
+    tipo_formulario: "relevamiento_profile_get",
+    seller_id: sellerId,
+    exists: true,
+    profile: construirProfileResponse(rowObj),
+    metadata: {
+      estado_relevamiento: rowObj.estado_relevamiento || "",
+      completitud: rowObj.completitud || "",
+      fecha_ultima_actualizacion: rowObj.fecha_ultima_actualizacion || "",
+      modo_guardado: rowObj.modo_guardado || "",
+      payload_version: rowObj.payload_version || "",
+    },
+  };
+}
+
+function upsertPerfilRelevamiento(data) {
+  const sellerId = normalizarSellerIdPerfil(data && data.seller_id);
+  if (!sellerId) throw new Error("Falta seller_id");
+
+  const modoGuardado = normalizarModoGuardadoPerfil(data && data.modo_guardado);
+  const fields = validarFieldsPerfil(data && data.fields);
+  const clearFields = validarClearFieldsPerfil(data && data.clear_fields);
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  validarSellerExisteParaPerfil(ss, sellerId, modoGuardado);
+
+  const ws = obtenerHojaPerfilRelevamiento(ss);
+  const headers = obtenerHeadersPerfil(ws);
+  const now = fechaHoraPerfil();
+  const rowNumber = buscarFilaPerfilSeller(ws, sellerId);
+  const allowlist = obtenerCamposPermitidosPerfil();
+
+  let currentObj = {};
+  let accion = "creado";
+
+  if (rowNumber) {
+    const currentValues = ws.getRange(rowNumber, 1, 1, headers.length).getValues()[0];
+    currentObj = rowToObject(headers, currentValues);
+    accion = "actualizado";
+  }
+
+  const finalObj = {};
+  headers.forEach((header) => {
+    finalObj[header] = currentObj[header] || "";
+  });
+
+  finalObj.seller_id = sellerId;
+  finalObj.fecha_creacion = currentObj.fecha_creacion || now;
+  finalObj.fecha_ultima_actualizacion = now;
+  finalObj.modo_guardado = modoGuardado;
+  finalObj.payload_version = limpiarValor(data && data.payload_version) || "relevamiento_profile_v1";
+  finalObj.ultima_accion = rowNumber ? "updated" : "created";
+  finalObj.actualizado_por = limpiarValor(data && data.actualizado_por) || (modoGuardado === "migration" ? "migration" : "public_form");
+
+  allowlist.forEach((fieldName) => {
+    if (!Object.prototype.hasOwnProperty.call(fields, fieldName)) return;
+
+    const incoming = limpiarValor(fields[fieldName]);
+    const shouldClear =
+      clearFields.includes(fieldName) || (modoGuardado === "final" && incoming === "");
+
+    if (incoming !== "") {
+      finalObj[fieldName] = incoming;
+    } else if (shouldClear) {
+      finalObj[fieldName] = "";
+    }
+  });
+
+  aplicarProgresoClientePerfil(finalObj, data && data.client_progress);
+
+  const completitud = calcularCompletitudPerfil(finalObj);
+  finalObj.completitud = completitud + "%";
+  finalObj.estado_relevamiento = obtenerEstadoPerfil(completitud, modoGuardado);
+
+  if (modoGuardado === "migration") {
+    finalObj.origen_ultima_fila_historica = limpiarValor(data && data.origen_ultima_fila_historica);
+    finalObj.historial_count = limpiarValor(data && data.historial_count);
+    finalObj.ultima_accion = rowNumber ? "updated_from_migration" : "migrated";
+  }
+
+  if (rowNumber) {
+    ws.getRange(rowNumber, 1, 1, headers.length).setValues([
+      headers.map((header) => limpiarValor(finalObj[header])),
+    ]);
+  } else {
+    ws.appendRow(headers.map((header) => limpiarValor(finalObj[header])));
+  }
+
+  return {
+    seller_id: sellerId,
+    hoja: HOJA_RELEVAMIENTO_PERFIL,
+    accion: accion,
+    fila: rowNumber || ws.getLastRow(),
+    estado_relevamiento: finalObj.estado_relevamiento,
+    completitud: finalObj.completitud,
+    fecha_ultima_actualizacion: finalObj.fecha_ultima_actualizacion,
+  };
+}
+
+function obtenerHojaPerfilRelevamiento(ss) {
+  let ws = ss.getSheetByName(HOJA_RELEVAMIENTO_PERFIL);
+  const headers = obtenerHeadersEsperadosPerfilRelevamiento();
+
+  if (!ws) {
+    ws = ss.insertSheet(HOJA_RELEVAMIENTO_PERFIL);
+    ws.appendRow(headers);
+    ws.setFrozenRows(1);
+    formatearHoja(ws, headers.length);
+    return ws;
+  }
+
+  asegurarHeadersPerfilNoDestructivo(ws, headers);
+  return ws;
+}
+
+function asegurarHeadersPerfilNoDestructivo(ws, headersEsperados) {
+  const lastColumn = ws.getLastColumn();
+
+  if (lastColumn === 0) {
+    ws.appendRow(headersEsperados);
+    ws.setFrozenRows(1);
+    formatearHoja(ws, headersEsperados.length);
+    return;
+  }
+
+  const headersActuales = obtenerHeadersPerfil(ws);
+  const faltantes = headersEsperados.filter((h) => !headersActuales.includes(h));
+
+  if (faltantes.length) {
+    ws.getRange(1, lastColumn + 1, 1, faltantes.length).setValues([faltantes]);
+    formatearHoja(ws, lastColumn + faltantes.length);
+  }
+}
+
+function obtenerHeadersPerfil(ws) {
+  const lastColumn = ws.getLastColumn();
+  if (lastColumn === 0) return [];
+  return ws.getRange(1, 1, 1, lastColumn).getValues()[0].map((h) => limpiarValor(h));
+}
+
+function obtenerHeadersEsperadosPerfilRelevamiento() {
+  return [
+    "seller_id",
+    "fecha_creacion",
+    "fecha_ultima_actualizacion",
+    "estado_relevamiento",
+    "completitud",
+    "modo_guardado",
+    "payload_version",
+    "ultima_accion",
+    "actualizado_por",
+    "secciones_completas",
+    "secciones_pendientes",
+    "origen_ultima_fila_historica",
+    "historial_count",
+  ].concat(obtenerCamposPermitidosPerfil());
+}
+
+function obtenerCamposPermitidosPerfil() {
+  return HEADERS_RELEVAMIENTO.filter(
+    (header) =>
+      ![
+        "seller_id",
+        "fecha_envio",
+        "estado_relevamiento",
+        "completitud",
+      ].includes(header),
+  );
+}
+
+function buscarFilaPerfilSeller(ws, sellerId) {
+  const values = ws.getDataRange().getValues();
+  if (values.length < 2) return null;
+
+  const headers = values[0].map((h) => limpiarValor(h));
+  const sellerCol = headers.indexOf("seller_id");
+  if (sellerCol === -1) return null;
+
+  const target = normalizarSellerIdPerfil(sellerId);
+  for (let i = values.length - 1; i >= 1; i--) {
+    if (normalizarSellerIdPerfil(values[i][sellerCol]) === target) return i + 1;
+  }
+
+  return null;
+}
+
+function calcularCompletitudPerfil(profileObj) {
+  const campos = obtenerCamposPermitidosPerfil();
+  const total = campos.length;
+  if (!total) return 0;
+
+  const completos = campos.filter((campo) => limpiarValor(profileObj[campo]) !== "").length;
+  return Math.round((completos / total) * 100);
+}
+
+function normalizarSellerIdPerfil(valor) {
+  return String(valor || "").trim().toUpperCase();
+}
+
+function normalizarModoGuardadoPerfil(valor) {
+  const modo = String(valor || "draft").trim().toLowerCase();
+  if (["draft", "final", "migration"].includes(modo)) return modo;
+  throw new Error("modo_guardado invalido");
+}
+
+function validarFieldsPerfil(fields) {
+  if (!fields || typeof fields !== "object" || Array.isArray(fields)) {
+    throw new Error("fields debe ser un objeto");
+  }
+
+  const permitidos = obtenerCamposPermitidosPerfil();
+  Object.keys(fields).forEach((fieldName) => {
+    if (!permitidos.includes(fieldName)) {
+      throw new Error("Campo no permitido en relevamiento_profile_save: " + fieldName);
+    }
+  });
+
+  return fields;
+}
+
+function validarClearFieldsPerfil(clearFields) {
+  if (clearFields === undefined || clearFields === null || clearFields === "") return [];
+  if (!Array.isArray(clearFields)) throw new Error("clear_fields debe ser un array");
+
+  const permitidos = obtenerCamposPermitidosPerfil();
+  return clearFields.map((fieldName) => limpiarValor(fieldName)).filter(Boolean).map((fieldName) => {
+    if (!permitidos.includes(fieldName)) {
+      throw new Error("Campo no permitido en clear_fields: " + fieldName);
+    }
+    return fieldName;
+  });
+}
+
+function validarSellerExisteParaPerfil(ss, sellerId, modoGuardado) {
+  if (modoGuardado === "migration") return true;
+
+  const ws = ss.getSheetByName(HOJA_SELLERS);
+  if (!ws) throw new Error("seller_id no encontrado en sellers");
+
+  const values = ws.getDataRange().getValues();
+  if (values.length < 2) throw new Error("seller_id no encontrado en sellers");
+
+  const headers = values[0].map((h) => limpiarValor(h));
+  const sellerCol = headers.indexOf("seller_id");
+  if (sellerCol === -1) throw new Error("seller_id no encontrado en sellers");
+
+  const target = normalizarSellerIdPerfil(sellerId);
+  const exists = values.slice(1).some((row) => normalizarSellerIdPerfil(row[sellerCol]) === target);
+  if (!exists) throw new Error("seller_id no encontrado en sellers");
+
+  return true;
+}
+
+function aplicarProgresoClientePerfil(finalObj, clientProgress) {
+  if (!clientProgress || typeof clientProgress !== "object" || Array.isArray(clientProgress)) return;
+
+  if (Array.isArray(clientProgress.secciones_completas)) {
+    finalObj.secciones_completas = clientProgress.secciones_completas.map((v) => limpiarValor(v)).filter(Boolean).join(", ");
+  }
+
+  if (Array.isArray(clientProgress.secciones_pendientes)) {
+    finalObj.secciones_pendientes = clientProgress.secciones_pendientes.map((v) => limpiarValor(v)).filter(Boolean).join(", ");
+  }
+}
+
+function obtenerEstadoPerfil(completitud, modoGuardado) {
+  if (modoGuardado === "final" && completitud >= 80) return "En revision";
+  return obtenerEstado(completitud);
+}
+
+function construirProfileResponse(rowObj) {
+  const profile = {};
+  obtenerCamposPermitidosPerfil().forEach((fieldName) => {
+    profile[fieldName] = rowObj[fieldName] || "";
+  });
+  return profile;
+}
+
+function fechaHoraPerfil() {
+  return Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
+}
+
 function calcularResultadoSugerido(d) {
   const plataforma = normalizarTexto(d.plataforma);
   const enviaPais = normalizarTexto(d.envia_pais);
