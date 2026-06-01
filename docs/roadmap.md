@@ -2,6 +2,56 @@
 
 Este roadmap organiza la reestructuracion del Marketplace Portal en etapas incrementales. Cada etapa debe cerrarse con validacion y documentacion antes de avanzar.
 
+## Etapa 1B: backend aislado Relevamiento Perfil
+
+Objetivo: implementar backend aislado para `relevamiento_profile_get` y `relevamiento_profile_save`, usando hoja puente `relevamientos_perfil` y sin tocar el submit historico.
+
+Estado: implementado localmente; pendiente deploy/smoke real controlado.
+
+Resultado:
+
+- `doPost` soporta `tipo_formulario = "relevamiento_profile_save"`.
+- `doGet` soporta `action = "relevamiento_profile_get"`.
+- `relevamientos_perfil` se crea de forma segura si no existe.
+- Los headers de perfil se aseguran de forma no destructiva.
+- El upsert usa `seller_id` como clave logica.
+- Los campos omitidos se preservan.
+- Los campos vacios solo limpian con `clear_fields` o modo `final`.
+- `draft` no dispara email, sync seller, definicion tecnica ni append historico.
+
+Excluido:
+
+- Frontend.
+- Submit real `tipo_formulario = "relevamiento"`.
+- Migracion de historicos.
+- Google Sheets productivo real.
+
+## Etapa 1A: contrato Relevamiento Perfil
+
+Objetivo: formalizar el diseno tecnico para convertir el Formulario de Relevamiento en un perfil editable persistente por seller, sin tocar todavia frontend, Apps Script, Config, Google Sheets ni endpoints reales.
+
+Estado: documentacion completada.
+
+Decision:
+
+- `tipo_formulario = "relevamiento"` se mantiene intacto.
+- `relevamientos` queda como historico append-only.
+- La nueva persistencia se disena sobre hoja puente `relevamientos_perfil`.
+- `seller_id` es la clave logica del perfil.
+- Los guardados `draft` no deben disparar emails, sync de sellers, definicion tecnica ni append historico.
+
+Documento base:
+
+- `docs/relevamiento-profile-contract.md`.
+
+Plan futuro:
+
+- 1B backend aislado: `relevamiento_profile_get` y `relevamiento_profile_save`.
+- 1C migrador dry-run desde historicos.
+- 1D frontend precarga desde perfil.
+- 1E guardado parcial separado del submit.
+- 1F transicion controlada del submit final.
+
 ## Etapa 0: documentacion
 
 Objetivo: crear la base institucional y tecnica para migrar con control.

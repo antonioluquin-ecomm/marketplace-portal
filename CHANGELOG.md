@@ -4,6 +4,46 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-05-23 - Etapa 1B backend aislado Relevamiento Perfil
+
+Tipo de cambio: backend Apps Script aislado / documentacion.
+
+Estado: implementado localmente; sin POST real.
+
+Resultado:
+- Agregado routing aislado para `relevamiento_profile_save` en `doPost`.
+- Agregado `action=relevamiento_profile_get` en `doGet`.
+- Agregada hoja puente `relevamientos_perfil` con creacion segura y headers no destructivos.
+- Implementado upsert por `seller_id`, preservacion de campos omitidos, limpieza solo con `clear_fields` o modo `final`, modos `draft`, `final` y `migration`, validacion de `seller_id` contra `sellers` salvo migracion y rechazo de campos fuera de allowlist.
+- `draft` queda aislado: no llama a `escribirEnRelevamientos`, no hace append historico, no envia email, no sincroniza sellers y no actualiza definicion tecnica.
+
+Alcance:
+- Se modificaron `Apps_script_v5.js`, `CHANGELOG.md`, `docs/roadmap.md`, `docs/test-matrix.md` y `docs/handoff-post-v1.md`.
+- No se tocaron frontend HTML, `Config.gs`, `Gantt.gs`, Google Sheets reales, endpoints publicados, `HEADERS_RELEVAMIENTO`, `escribirEnRelevamientos()`, submit historico, aliases, CSV ni assets.
+- No se ejecuto POST real ni submit real.
+
+Validacion:
+- `node --check Apps_script_v5.js` OK.
+- Smoke mock local OK: save draft nuevo, save draft update, get existente, get inexistente, `clear_fields`, preservacion de campos omitidos y rechazo de campo invalido.
+- `git diff --check` OK.
+
+## 2026-05-21 - Etapa 1A contrato Relevamiento Perfil
+
+Tipo de cambio: documentacion / diseno tecnico.
+
+Estado: completado sin cambios funcionales.
+
+Resultado:
+- Creado `docs/relevamiento-profile-contract.md` con el contrato propuesto para convertir el Formulario de Relevamiento en perfil editable persistente por `seller_id`.
+- Documentados `relevamiento_profile_get` y `relevamiento_profile_save`, payloads, respuestas OK/Error, validaciones minimas, allowlist de campos, modelo de `relevamientos_perfil`, reglas de preservacion, campos vacios y condicionales.
+- Documentada la decision de mantener `tipo_formulario = "relevamiento"` intacto y la hoja `relevamientos` como historico append-only.
+- Documentados riesgos de lectura publica por `seller_id`, recomendacion futura de token/HMAC y estrategia de migracion desde historicos.
+
+Alcance:
+- Solo documentacion: `docs/relevamiento-profile-contract.md`, `CHANGELOG.md`, `docs/roadmap.md`, `docs/test-matrix.md`, `docs/handoff-post-v1.md`.
+- No se tocaron frontend, Apps Script, `Config.gs`, Google Sheets, endpoints, payloads reales, CSV, assets, `public/`, `internal/` ni archivos funcionales.
+- No se ejecuto POST real ni submit real.
+
 ## 2026-05-21 - Etapa 35E cierre documental bloque 33-35
 
 Tipo de cambio: documentacion / cierre operativo.

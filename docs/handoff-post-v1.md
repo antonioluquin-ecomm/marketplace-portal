@@ -14,6 +14,39 @@ Fecha: 2026-05-21
 - Bloque Apps Script 31B-31C2E queda funcionalmente estabilizado.
 - V1 sigue estable; no hubo refactor masivo ni ruptura detectada de endpoints existentes.
 
+## Estado Relevamiento Perfil
+
+La Etapa 1A dejo formalizado el contrato tecnico para una futura evolucion del Formulario de Relevamiento hacia perfil editable persistente por seller.
+
+Documento base:
+
+- `docs/relevamiento-profile-contract.md`.
+
+Decisiones vigentes:
+
+- `tipo_formulario = "relevamiento"` permanece intacto hasta una etapa critica futura.
+- La hoja `relevamientos` queda como historico append-only.
+- La nueva hoja puente propuesta es `relevamientos_perfil`.
+- `seller_id` sera la clave logica de una unica fila principal por seller.
+- Los guardados `draft` no deben ejecutar emails, sincronizacion de `sellers`, definicion tecnica, cambios de pipeline ni append historico.
+- La lectura publica por `seller_id` requiere hardening posterior; se recomienda token simple o HMAC para links nuevos.
+
+Plan futuro:
+
+- 1B backend aislado: implementado localmente en `Apps_script_v5.js`; pendiente deploy/smoke real controlado.
+- 1C migrador dry-run desde filas historicas de `relevamientos`.
+- 1D frontend precarga por perfil.
+- 1E guardado parcial separado del submit.
+- 1F transicion submit final, solo despues de validar compatibilidad.
+
+Estado 1B:
+
+- `doPost` soporta `tipo_formulario = "relevamiento_profile_save"`.
+- `doGet` soporta `action = "relevamiento_profile_get"`.
+- Hoja puente propuesta: `relevamientos_perfil`.
+- Validacion local mock OK para save draft nuevo, update, get existente, get inexistente, `clear_fields`, preservacion y rechazo de campo invalido.
+- No hubo POST real, submit real, frontend, migracion de historicos ni cambios en Google Sheets productivo.
+
 ## Estado consolidado Gantt / Timeline v33-v35
 
 El Gantt Operativo queda funcionalmente estabilizado sobre el modelo `timeline` v33 y las mejoras UX v34-v35. El bloque 33-35 queda cerrado documentalmente en 35E.

@@ -2,6 +2,67 @@
 
 Esta matriz documenta las pruebas manuales requeridas para validar las rutas migradas del Marketplace Portal antes de avanzar con redirects, limpieza legacy, extraccion de CSS/JS o cambios funcionales.
 
+## Etapa 1B: backend aislado Relevamiento Perfil
+
+Alcance:
+
+- Backend Apps Script local.
+- Smoke mock local.
+- Sin POST real.
+- Sin frontend.
+- Sin cambios en Google Sheets reales.
+
+Validaciones ejecutadas:
+
+| Validacion | Resultado esperado | Resultado real | Estado | Observaciones |
+|---|---|---|---|---|
+| `node --check Apps_script_v5.js` | Sintaxis valida | OK | Aprobado | Sin ejecutar Apps Script real |
+| Save draft nuevo | Crea fila en `relevamientos_perfil` | OK | Aprobado | Mock local |
+| Save draft update | Actualiza fila por `seller_id` | OK | Aprobado | Mock local |
+| Get existente | Devuelve `exists=true`, `profile` y `metadata` | OK | Aprobado | Mock local |
+| Get inexistente | Devuelve `exists=false` sin listar perfiles | OK | Aprobado | Mock local |
+| Field preservation | Campo omitido o vacio sin `clear_fields` se preserva en draft | OK | Aprobado | Mock local |
+| `clear_fields` | Limpia solo campo permitido indicado | OK | Aprobado | Mock local |
+| Campo invalido | Rechaza field fuera de allowlist | OK | Aprobado | Mock local |
+| Draft aislado | No crea ni append en `relevamientos` historico | OK | Aprobado | Mock local |
+
+Smokes pendientes antes de release:
+
+- Deploy Apps Script controlado.
+- `doGet` real con seller test.
+- `doPost` real solo con seller test aprobado.
+- Confirmar que draft no envia email.
+- Confirmar que draft no sincroniza `sellers`.
+- Confirmar que draft no actualiza `definicion_tecnica`.
+- Confirmar que submit historico `tipo_formulario = "relevamiento"` sigue intacto.
+
+## Etapa 1A: contrato Relevamiento Perfil
+
+Alcance:
+
+- Solo documentacion.
+- Sin cambios en frontend, Apps Script, Config, Google Sheets, endpoints ni payloads reales.
+- Sin submit real.
+
+Validaciones documentales:
+
+| Validacion | Resultado esperado | Estado | Observaciones |
+|---|---|---|---|
+| Contrato nuevo documentado | `docs/relevamiento-profile-contract.md` existe y describe `relevamiento_profile_get/save` | OK | Sin implementacion funcional |
+| Submit historico preservado | El documento declara que `tipo_formulario = "relevamiento"` queda intacto | OK | `relevamientos` sigue como historico append-only |
+| Hoja puente definida | El documento define `relevamientos_perfil` y headers recomendados | OK | No se creo ni modifico Google Sheets |
+| Efectos secundarios bloqueados en draft | El documento declara que draft no dispara emails, sync sellers ni definicion tecnica | OK | Pendiente validacion real en 1B/1E |
+| Seguridad documentada | Riesgo de lectura publica por `seller_id` y token/HMAC futuro documentados | OK | Pendiente decision antes de publicar lectura |
+
+Smokes futuros minimos:
+
+- `relevamiento_profile_get` sin `seller_id` debe responder error controlado.
+- `relevamiento_profile_get` con seller inexistente debe responder error o `exists=false` segun politica aprobada.
+- `relevamiento_profile_save` draft nuevo debe crear perfil sin email, sin sync seller, sin definicion tecnica y sin append en `relevamientos`.
+- `relevamiento_profile_save` draft existente debe preservar campos omitidos.
+- `clear_fields` debe limpiar solo campos permitidos.
+- Submit historico con `tipo_formulario = "relevamiento"` debe seguir usando la logica actual.
+
 Alcance de esta etapa:
 
 - Validacion manual y documental.
