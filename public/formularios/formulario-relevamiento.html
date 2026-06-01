@@ -2522,9 +2522,14 @@
           <div class="status" id="statusMsg">
             Antes de enviar, verificá que el formulario esté completo.
           </div>
-          <button class="btn" id="submitBtn" type="submit">
-            Enviar relevamiento →
-          </button>
+          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+            <button class="btn secondary" id="saveDraftBtn" type="button">
+              Guardar borrador
+            </button>
+            <button class="btn" id="submitBtn" type="submit">
+              Enviar relevamiento →
+            </button>
+          </div>
         </div>
       </form>
     </div>
@@ -2547,6 +2552,7 @@
       const chip = document.getElementById("sellerChip");
       const sellerInput = document.getElementById("seller_id");
       const submitBtn = document.getElementById("submitBtn");
+      const saveDraftBtn = document.getElementById("saveDraftBtn");
       const statusMsg = document.getElementById("statusMsg");
       const sellerIdentity = document.getElementById("sellerIdentity");
       const sellerLogo = document.getElementById("sellerLogo");
@@ -2898,6 +2904,77 @@
         }
       }
 
+      function getClientProgress() {
+        const completas = [];
+        const pendientes = [];
+        sections.forEach(function (sec) {
+          const n = sec.dataset.section;
+          const secFields = Array.from(
+            sec.querySelectorAll('input:not([type="hidden"]),select,textarea'),
+          ).filter(function (el) { return !el.closest(".hidden"); });
+          const total = secFields.length;
+          const done = secFields.filter(function (el) {
+            return String(el.value || "").trim() !== "";
+          }).length;
+          const label = SECTION_LABELS[n] || "Sección " + n;
+          if (total > 0 && done === total) completas.push(label);
+          else pendientes.push(label);
+        });
+        return { secciones_completas: completas, secciones_pendientes: pendientes };
+      }
+
+      function buildDraftPayload() {
+        const form = document.getElementById("sellerForm");
+        const fd = new FormData(form);
+        const fields = {};
+        fd.forEach(function (value, key) {
+          if (key === "seller_id") return;
+          if (fields[key]) {
+            fields[key] = fields[key] + ", " + String(value || "").trim();
+          } else {
+            fields[key] = String(value || "").trim();
+          }
+        });
+        return {
+          seller_id: sellerId,
+          tipo_formulario: "relevamiento_profile_save",
+          modo_guardado: "draft",
+          payload_version: "relevamiento_profile_v1",
+          actualizado_por: "public_form",
+          fields: fields,
+          client_progress: getClientProgress(),
+        };
+      }
+
+      async function saveDraft() {
+        if (!sellerId) return;
+        if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_URL")) return;
+        saveDraftBtn.disabled = true;
+        saveDraftBtn.textContent = "Guardando…";
+        try {
+          const res = await fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(buildDraftPayload()),
+          });
+          const json = await res.json();
+          if (!json.ok) throw new Error(json.message || "No se pudo guardar el borrador.");
+          setStatus(
+            "Borrador guardado ✓ — " + json.completitud + "% completitud · " +
+            json.estado_relevamiento + " · " + json.fecha_ultima_actualizacion,
+            "ok",
+          );
+          saveDraftBtn.textContent = "Guardado ✓";
+          setTimeout(function () { saveDraftBtn.textContent = "Guardar borrador"; }, 3000);
+        } catch (err) {
+          console.error(err);
+          setStatus("Error al guardar borrador: " + err.message, "err");
+          saveDraftBtn.textContent = "Guardar borrador";
+        } finally {
+          saveDraftBtn.disabled = false;
+        }
+      }
+
       function formToObject(form) {
         const fd = new FormData(form);
         const obj = {};
@@ -3089,6 +3166,9 @@
             submitBtn.disabled = false;
           }
         });
+
+      saveDraftBtn.addEventListener("click", saveDraft);
+      if (!sellerId) saveDraftBtn.disabled = true;
 
       applyConditionals();
       updateProgress();

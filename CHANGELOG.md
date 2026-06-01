@@ -4,6 +4,25 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-06-01 - Etapa 1E guardado parcial Relevamiento Perfil
+
+Tipo de cambio: frontend / UX.
+
+Estado: implementado.
+
+Resultado:
+- Agregado botón "Guardar borrador" en el area de acciones del formulario de relevamiento.
+- Implementadas funciones `buildDraftPayload()`, `getClientProgress()` y `saveDraft()`.
+- Al hacer click, postea `tipo_formulario=relevamiento_profile_save` y `modo_guardado=draft` con los campos actuales del form anidados en `fields`.
+- Incluye `client_progress` con secciones_completas y secciones_pendientes derivado del progreso visual.
+- Feedback en area de status: "Borrador guardado ✓ — X% completitud · estado · fecha".
+- Boton deshabilitado si no hay seller_id en la URL.
+- Submit historico intacto: sigue usando `tipo_formulario=relevamiento`.
+
+Alcance:
+- Solo `public/formularios/formulario-relevamiento.html`.
+- No se tocaron Apps Script, CSS externo, otras paginas ni endpoints.
+
 ## 2026-06-01 - Etapa 1D frontend precarga Relevamiento Perfil
 
 Tipo de cambio: frontend / UX.
