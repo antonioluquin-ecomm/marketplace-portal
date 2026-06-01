@@ -665,27 +665,28 @@ const CONFIG_URL = '';
 /* URLs directas visibles en la hoja config actual.
    Se usan como respaldo cuando CONFIG_URL no está informada. */
 const DIRECT_CSV_URLS = {
-  csv_sellers: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qlMhoH1poJpaTZqN-705IGAfPDTxsIBAX8LCPogTkwheW2vWsq59JkvyYakM8ndCKgUQoaIQvj/pub?gid=899415596&single=true&output=csv',
-  csv_tarifas: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qlMhoH1poJpaTZqN-705IGAfPDTxsIBAX8LCPogTkwheW2vWsq59JkvyYakM8ndCKgUQoaIQvj/pub?gid=42870561&single=true&output=csv',
-  csv_overrides: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qlMhoH1poJpaTZqN-705IGAfPDTxsIBAX8LCPogTkwheW2vWsq59JkvyYakM8ndCKgUQoaIQvj/pub?gid=649807159&single=true&output=csv'
+  csv_sellers: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
+  csv_tarifas: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv',
+  csv_overrides: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv'
 };
 
 /* Tarifas de respaldo — se usan si falla la carga remota */
 const FALLBACK_RATES = {
   comision_default: 7,
   c1: 0,
-  c3: 9.3,
-  c6: 14,
+  c3: 8,
+  c6: 13,
   c12: 21,
   mix_c1: 8.47,
   mix_c3: 21.33,
   mix_c6: 52.74,
   mix_c12: 17.46,
-  t_ld: 8500,
-  t_li: 6000,
+  t_ld: 10527,
+  t_li: 7260,
   t_gd: 400,
   t_ca: 300,
-  t_ff: 200
+  t_ff: 200,
+  t_soporte: 0
 };
 
 let BASE_RATES = { ...FALLBACK_RATES };
@@ -773,7 +774,8 @@ function parseRatesCSV(text) {
   const out = {};
 
   rows.slice(1).forEach(row => {
-    const key = clean(row[0]);
+    const rawKey = clean(row[0]);
+    const key = normalizeRateField(rawKey) || rawKey;
     const value = toNumber(row[1]);
     if (key && Number.isFinite(value)) out[key] = value;
   });
@@ -971,16 +973,21 @@ function normalizeRateField(field) {
     comision: 'comision_default',
     comision_marketplace: 'comision_default',
     comision_default: 'comision_default',
+    comision_pct: 'comision_default',
     c1: 'c1',
+    c1_pct: 'c1',
     cuota_1: 'c1',
     una_cuota: 'c1',
     c3: 'c3',
+    c3_pct: 'c3',
     cuota_3: 'c3',
     tres_cuotas: 'c3',
     c6: 'c6',
+    c6_pct: 'c6',
     cuota_6: 'c6',
     seis_cuotas: 'c6',
     c12: 'c12',
+    c12_pct: 'c12',
     cuota_12: 'c12',
     doce_cuotas: 'c12',
     mix_c1: 'mix_c1',
@@ -988,17 +995,24 @@ function normalizeRateField(field) {
     mix_c6: 'mix_c6',
     mix_c12: 'mix_c12',
     t_ld: 't_ld',
+    t_logistica_dir: 't_ld',
     logistica_directa: 't_ld',
     envio: 't_ld',
     t_li: 't_li',
+    t_logistica_inv: 't_li',
     logistica_inversa: 't_li',
     devolucion_logistica: 't_li',
     t_gd: 't_gd',
+    t_gestion_devol: 't_gd',
     gestion_devoluciones: 't_gd',
     t_ca: 't_ca',
+    t_catalogacion: 't_ca',
     catalogacion: 't_ca',
     t_ff: 't_ff',
-    fulfillment: 't_ff'
+    t_fulfillment: 't_ff',
+    fulfillment: 't_ff',
+    t_soporte: 't_soporte',
+    soporte: 't_soporte'
   };
 
   return aliases[key] || (Object.prototype.hasOwnProperty.call(FALLBACK_RATES, key) ? key : null);

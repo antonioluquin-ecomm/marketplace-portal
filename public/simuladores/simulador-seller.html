@@ -550,7 +550,7 @@
           <div class="mini-scenarios">
             <div class="scenario">
               <div class="scenario-label">Conservador</div>
-              <div class="scenario-vol">−30% de ventas</div>
+              <div class="scenario-vol">−40% de ventas</div>
               <div id="lowNet" class="scenario-value">$ 0</div>
               <div id="lowPct" class="scenario-pct">Margen 0%</div>
               <div class="scen-bar-wrap"><div class="scen-bar-fill" id="lowBar" style="width:0%"></div></div>
@@ -564,7 +564,7 @@
             </div>
             <div class="scenario">
               <div class="scenario-label">Optimista</div>
-              <div class="scenario-vol">+30% de ventas</div>
+              <div class="scenario-vol">+60% de ventas</div>
               <div id="highNet" class="scenario-value">$ 0</div>
               <div id="highPct" class="scenario-pct">Margen 0%</div>
               <div class="scen-bar-wrap"><div class="scen-bar-fill" id="highBar" style="width:0%"></div></div>
@@ -637,11 +637,11 @@ const FALLBACK_RATES = {
   mix_c1: 8.47, mix_c3: 21.33,mix_c6: 52.74, mix_c12: 17.46,
   t_logistica_dir: 10527,
   t_logistica_inv: 7260,
-  t_catalogacion:  3000,
+  t_catalogacion:  300,
   t_fulfillment:   200,
   t_gestion_devol: 400,
   t_soporte:       0,
-  devol_pct_default:  0,
+  devol_pct_default:  5,
   cuotas_max_default: 12
 };
 
@@ -757,7 +757,9 @@ function canonicalRateKey(key){
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[\s-]+/g, "_");
+    .replace(/[%$]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 
   const aliases = {
     comision_default: "comision_pct",
@@ -1218,7 +1220,7 @@ function render(){
     const s=calculate(mult);
     return {net:s.netClamped,pct:s.gross?((s.netClamped/s.gross)*100):0,gross:s.gross};
   }
-  const lo=scen(.7),mi=scen(1),hi=scen(1.3);
+  const lo=scen(.6),mi=scen(1),hi=scen(1.6);
   const maxNet=Math.max(lo.net,mi.net,hi.net)||1;
   [$("lowNet"),$("midNet"),$("highNet")].forEach((el,i)=>el.textContent=fmt([lo,mi,hi][i].net));
   [$("lowPct"),$("midPct"),$("highPct")].forEach((el,i)=>el.textContent="Margen "+fmtPct([lo,mi,hi][i].pct));
