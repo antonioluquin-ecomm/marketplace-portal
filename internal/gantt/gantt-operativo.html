@@ -1298,18 +1298,6 @@ html,body{height:100%;overflow:hidden}
   <div class="alert-strip" id="alert-strip"></div>
 
 
-  <!-- Panel Mi semana -->
-  <div class="week-panel collapsed" id="week-panel">
-    <div class="week-panel-hd" onclick="toggleWeekPanel()">
-      <span class="week-panel-title">Esta semana</span>
-      <span class="week-badge wb-blk" id="wpb-blk" style="display:none">0 bloqueadas</span>
-      <span class="week-badge wb-wip" id="wpb-wip" style="display:none">0 en curso</span>
-      <span class="week-badge wb-due" id="wpb-due" style="display:none">0 vencen hoy</span>
-      <span class="week-chevron">▾</span>
-    </div>
-    <div class="week-body" id="week-body"></div>
-  </div>
-
   <section class="toolbar">
     <div class="tl-l">
       <div class="control-group">
@@ -2552,9 +2540,9 @@ function renderLista(tasks,sellerIds,today){
 
 function renderKanban(tasks,today){
   const cols=[
-    {key:'Bloqueado',  label:'Bloqueado',  accent:'#f29a9a',      border:'rgba(217,64,64,.55)'},
-    {key:'En curso',   label:'En curso',   accent:'var(--info)',  border:'rgba(33,150,243,.45)'},
     {key:'Pendiente',  label:'Pendiente',  accent:'var(--t2)',    border:'rgba(255,255,255,.18)'},
+    {key:'En curso',   label:'En curso',   accent:'var(--info)',  border:'rgba(33,150,243,.45)'},
+    {key:'Bloqueado',  label:'Bloqueado',  accent:'#f29a9a',      border:'rgba(217,64,64,.55)'},
     {key:'Completado', label:'Completado', accent:'var(--g)',     border:'rgba(106,168,79,.45)'},
   ];
   let html=`<div class="kanban-wrap"><div class="kanban-board">`;
