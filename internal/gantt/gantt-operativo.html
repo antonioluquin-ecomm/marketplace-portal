@@ -1141,6 +1141,42 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
     width:min(520px,calc(100vw - 24px));
   }
 }
+
+/* ── VIEWPORT: scrollbar del gantt siempre visible ── */
+html,body{height:100%;overflow:hidden}
+.shell{height:calc(100vh - 56px);min-height:0;overflow:hidden}
+.sidebar{overflow-y:auto}
+#content{min-height:0}
+
+/* ── LEGIBILIDAD: tamaños de fuente ── */
+.kpi-l{font-size:10px}
+.kpi-s{font-size:11px}
+.tr-fase{font-size:11px}
+.gm-fixed-cell,.period-cell{font-size:11px}
+.lista-table th{font-size:10px;letter-spacing:.04em}
+.lista-table td{font-size:12px}
+.estado-badge{font-size:10px}
+.week-panel-title{font-size:12px;letter-spacing:.04em}
+.wt-tarea{font-size:12px}
+.tr-tarea{font-size:12px}
+
+/* ── FILTROS ACTIVOS ── */
+#filter-chips{display:none;align-items:center;gap:5px;padding:5px 16px;border-bottom:1px solid var(--bdr);background:rgba(106,168,79,.04);flex-wrap:wrap;flex-shrink:0}
+.filter-chip{display:inline-flex;align-items:center;padding:3px 9px;background:rgba(106,168,79,.12);border:1px solid rgba(106,168,79,.28);border-radius:999px;color:#d8ead0;font-size:10px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;white-space:nowrap;transition:background .12s}
+.filter-chip:hover{background:rgba(106,168,79,.22);border-color:rgba(106,168,79,.45)}
+
+/* ── RESALTADO POR ESTADO EN LISTA ── */
+.lista-table tr.row-blk td{background:rgba(217,64,64,.055)}
+.lista-table tr.row-blk:hover td{background:rgba(217,64,64,.10)}
+.lista-table tr.row-done td{background:rgba(78,167,106,.04)}
+.lista-table tr.row-done:hover td{background:rgba(78,167,106,.08)}
+
+/* ── GO LIVE LINE ── */
+.g-line.go-live-line{background:var(--f-gl);opacity:.75;width:2px;z-index:4;box-shadow:0 0 6px rgba(129,199,132,.22)}
+
+/* ── SORT HEADERS ── */
+.lista-table th.sortable{cursor:pointer;user-select:none}
+.lista-table th.sortable:hover{color:var(--t1)}
 </style>
 </head>
 <body>
@@ -1229,9 +1265,13 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   <div class="sb-div"></div>
   <div class="sb-s"><button class="btn-sm" style="width:100%" onclick="clearFilters()">Limpiar filtros</button></div>
 
-  <div class="sb-note">
-    Datos desde <strong style="color:var(--t2)">sellers</strong> + <strong style="color:var(--t2)">timeline</strong> de Google Sheets.<br><br>
-    Referencia operativa para seguimiento interno: el Backlog mantiene el pipeline y este panel ordena tareas planificadas, responsables y estado de avance.
+  <div class="sb-div"></div>
+  <div class="sb-s">
+    <div class="sb-lbl">Recursos</div>
+    <a class="fb" href="../backlog/backlog-sellers.html" style="text-decoration:none">Backlog</a>
+    <a class="fb" href="../estrategia/proceso-onboarding.html" style="text-decoration:none">Onboarding</a>
+    <a class="fb" href="../estrategia/modelo-integracion.html" style="text-decoration:none">Modelo</a>
+    <a class="fb" href="../seller-center/index.html" style="text-decoration:none">Seller Center</a>
   </div>
 </aside>
 
@@ -1240,39 +1280,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 
   <div class="alert-strip" id="alert-strip"></div>
 
-  <section class="exec-hero" aria-label="Contexto operativo del Gantt">
-    <div class="exec-card">
-      <div class="exec-eyebrow">Marketplace Sporting</div>
-      <div class="exec-title">Gantt operativo de onboarding seller</div>
-      <p class="exec-copy">
-        Tareas, responsables, fechas, riesgos y bloqueos de sellers en ejecución hasta Go Live.
-      </p>
-      <div class="exec-flow">
-        <div class="exec-step"><div class="exec-step-num">01</div><div class="exec-step-title">Backlog</div><div class="exec-step-desc">Seller priorizado y validado.</div></div>
-        <div class="exec-step"><div class="exec-step-num">02</div><div class="exec-step-title">Definición</div><div class="exec-step-desc">Modelo operativo y alcance acordado.</div></div>
-        <div class="exec-step"><div class="exec-step-num">03</div><div class="exec-step-title">Plan</div><div class="exec-step-desc">Tareas, fechas y responsables.</div></div>
-        <div class="exec-step"><div class="exec-step-num">04</div><div class="exec-step-title">Ejecución</div><div class="exec-step-desc">Seguimiento de avances, riesgos y bloqueos.</div></div>
-        <div class="exec-step"><div class="exec-step-num">05</div><div class="exec-step-title">Go Live</div><div class="exec-step-desc">Activación y control inicial.</div></div>
-        </div>
-    </div>
-    <details class="exec-card exec-help">
-      <summary class="exec-eyebrow">Reglas de lectura</summary>
-      <div class="exec-rules">
-        <div class="exec-rule">🔴 <div><strong>Bloqueado:</strong> requiere gestión antes de continuar.</div></div>
-        <div class="exec-rule">🟡 <div><strong>En riesgo:</strong> revisar atraso, dependencia o responsable.</div></div>
-        <div class="exec-rule">🟢 <div><strong>Completado:</strong> tarea cerrada y validada.</div></div>
-        <div class="exec-rule">📌 <div><strong>Solo activos:</strong> enfoca el seguimiento en sellers con ejecución vigente.</div></div>
-      </div>
-    </details>
-  </section>
-
-  <div class="exec-section-label">Recursos</div>
-  <section class="exec-actions">
-  <a class="exec-action" href="../backlog/backlog-sellers.html"><div>Backlog</div><span>→</span></a>
-    <a class="exec-action" href="../estrategia/proceso-onboarding.html"><div>Onboarding</div><span>→</span></a>
-    <a class="exec-action" href="../estrategia/modelo-integracion.html"><div>Modelo</div><span>→</span></a>
-    <a class="exec-action" href="../seller-center/index.html"><div>Seller Center</div><span>→</span></a>
-  </section>
 
   <!-- Panel Mi semana -->
   <div class="week-panel collapsed" id="week-panel">
@@ -1299,11 +1306,11 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <div class="control-group">
         <span class="control-label">Vista</span>
         <div class="vtog">
-          <button class="vbtn on" id="btn-gantt" onclick="setView('gantt')">Gantt</button>
-          <button class="vbtn" id="btn-lista" onclick="setView('lista')">Lista</button>
+          <button class="vbtn" id="btn-gantt" onclick="setView('gantt')">Gantt</button>
+          <button class="vbtn on" id="btn-lista" onclick="setView('lista')">Lista</button>
         </div>
       </div>
-      <div class="control-group" id="scale-group">
+      <div class="control-group" id="scale-group" style="display:none">
         <span class="control-label">Escala</span>
         <div class="scale-tog">
           <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
@@ -1318,9 +1325,11 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>
+      <button class="btn-sm" id="btn-export" onclick="exportListaCSV()" title="Exportar vista lista a CSV">↓ CSV</button>
     </div>
   </section>
 
+  <div id="filter-chips"></div>
   <div id="content" style="flex:1;overflow:auto">
     <div class="center-state"><div class="spinner"></div><span>Cargando timeline operativo desde Google Sheets…</span></div>
   </div>
@@ -1578,7 +1587,7 @@ const CONFIG = {
 /* ── STATE ── */
 let SELLERS  = {};
 let TASKS    = [];
-let currentView  = 'gantt';
+let currentView  = 'lista';
 let currentScale = 'mes';   // 'mes' | 'semana'
 let filters = { fase:'todos', estado:'todos', seller:'todos', entorno:'todos' };
 let weekPanelOpen = false;
@@ -1586,6 +1595,8 @@ let activeEditTaskId = '';
 let lastEditFeedback = null;
 let lastDisableFeedback = null;
 let lastTodayScrollLeft = 0;
+let listSort = {col:'inicio',dir:1};
+let weekPanelInitialized = false;
 
 const FASES_GANTT_PERMITIDAS = ['Comercial','Técnica','Operativa','QA / Validación','Go Live'];
 const RESPONSABLES_GANTT_PERMITIDOS = ['eCommerce','InfraCommerce','Agente PIM','Administración','Seller','Comercial','Operaciones','QA','IT'];
@@ -1942,6 +1953,7 @@ function setStatus(type,txt){
 
 /* ── LOAD ── */
 async function loadData(manual=false){
+  weekPanelInitialized=false;
   $('btn-refresh').disabled=true;
   setStatus('load',manual?'Actualizando…':'Cargando…');
   try{
@@ -2015,6 +2027,8 @@ function setView(v){
   const ganttOnly=v==='gantt';
   const sg=$('scale-group');
   if(sg) sg.style.display=ganttOnly?'':'none';
+  const eb=$('btn-export');
+  if(eb) eb.style.display=ganttOnly?'none':'';
   render();
 }
 function setScale(s){
@@ -2142,6 +2156,7 @@ function render(){
     return;
   }
 
+  renderFilterChips();
   if(currentView==='gantt') renderGantt(tasks,sellerIds,today);
   else renderLista(tasks,sellerIds,today);
 }
@@ -2196,6 +2211,14 @@ function renderWeekPanel(tasks,today){
   showBadge('wpb-blk',blk.length,'bloqueadas');
   showBadge('wpb-wip',wip.length,'en curso');
   showBadge('wpb-due',due.length,'vencen esta semana');
+  if(!weekPanelInitialized){
+    weekPanelInitialized=true;
+    if(blk.length>0||due.length>0){
+      weekPanelOpen=true;
+      const p=$('week-panel');
+      if(p){p.classList.remove('collapsed');p.classList.add('expanded');}
+    }
+  }
 
   const taskCard=t=>{
     const s=SELLERS[t.seller_id]||{};
@@ -2225,6 +2248,68 @@ function toggleWeekPanel(){
   weekPanelOpen=!weekPanelOpen;
   p.classList.toggle('expanded',weekPanelOpen);
   p.classList.toggle('collapsed',!weekPanelOpen);
+}
+
+/* ── FILTER CHIPS ── */
+function renderFilterChips(){
+  const chips=[];
+  if(filters.seller!=='todos'){
+    const name=SELLERS[filters.seller]?.nombre||filters.seller;
+    chips.push(`<button class="filter-chip" onclick="setSellerFilter('todos');if($('seller-sel'))$('seller-sel').value='todos'">Seller: ${esc(name)} ×</button>`);
+  }
+  if(filters.fase!=='todos') chips.push(`<button class="filter-chip" onclick="setF('fase','todos')">Fase: ${esc(filters.fase)} ×</button>`);
+  if(filters.estado!=='todos') chips.push(`<button class="filter-chip" onclick="setF('estado','todos')">Estado: ${esc(filters.estado)} ×</button>`);
+  if(filters.entorno!=='todos') chips.push(`<button class="filter-chip" onclick="setEntornoFilter('todos');if($('entorno-sel'))$('entorno-sel').value='todos'">Entorno: ${esc(filters.entorno)} ×</button>`);
+  const resp=$('resp-sel')?.value;
+  if(resp&&resp!=='todos') chips.push(`<button class="filter-chip" onclick="$('resp-sel').value='todos';render()">Resp: ${esc(resp)} ×</button>`);
+  const srch=($('search')?.value||'').trim();
+  if(srch) chips.push(`<button class="filter-chip" onclick="$('search').value='';render()">"${esc(srch)}" ×</button>`);
+  if($('solo-activos')?.checked) chips.push(`<button class="filter-chip" onclick="$('solo-activos').checked=false;render()">Solo activos ×</button>`);
+  const el=$('filter-chips');
+  if(!el) return;
+  if(!chips.length){el.style.display='none';return;}
+  el.style.display='flex';
+  el.innerHTML=chips.join('');
+}
+
+/* ── EXPORT CSV ── */
+function exportListaCSV(){
+  const search=($('search').value||'').trim().toLowerCase();
+  const resp=($('resp-sel')?.value)||'todos';
+  const sellerFilter=filters.seller||'todos';
+  const entornoFilter=filters.entorno||'todos';
+  const soloAct=$('solo-activos').checked;
+  const today=new Date();today.setHours(0,0,0,0);
+  let tasks=TASKS.filter(t=>{
+    if(sellerFilter!=='todos'&&t.seller_id!==sellerFilter) return false;
+    if(filters.fase!=='todos'&&norm(t.fase)!==norm(filters.fase)) return false;
+    if(filters.estado!=='todos'&&t.estado!==filters.estado) return false;
+    if(entornoFilter!=='todos'&&t.entorno!==entornoFilter) return false;
+    if(resp!=='todos'&&t.responsable!==resp) return false;
+    if(soloAct&&t.estado!=='En curso'&&t.estado!=='Bloqueado') return false;
+    if(search){const hay=[t.seller_id,t.seller_nombre,t.tarea,t.hito,t.fase,t.responsable,t.comentario].join(' ').toLowerCase();if(!hay.includes(search)) return false;}
+    return true;
+  }).map(t=>{let atr=parseFloat(t.atraso_raw)||0;if(!atr&&t.fin){const finRef=['En curso','Bloqueado'].includes(t.estado)?today:null;if(finRef&&finRef>t.fin)atr=dBetween(t.fin,finRef)||0;}return{...t,atraso_calc:atr};});
+  const q=v=>`"${String(v||'').replace(/"/g,'""')}"`;
+  const headers=['Task ID','Seller','Fase','Hito','Tarea','Responsable','Entorno','Estado','Inicio','Fin','Atraso (días)','Comentario'];
+  const rows=tasks.map(t=>[t.task_id,SELLERS[t.seller_id]?.nombre||t.seller_nombre||t.seller_id,t.fase,t.hito,t.tarea,t.responsable,t.entorno,t.estado,dateInputValue(t.inicio),dateInputValue(t.fin),t.atraso_calc||'',t.comentario].map(q).join(','));
+  const csv=[headers.map(q).join(','),...rows].join('\r\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`gantt-operativo-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* ── SORT LISTA ── */
+function setListSort(col){
+  if(listSort.col===col) listSort.dir*=-1; else listSort={col,dir:1};
+  render();
+}
+function sortArrow(col){
+  if(listSort.col!==col) return '<span style="opacity:.25;font-size:9px">⇅</span>';
+  return listSort.dir===1?'<span style="color:var(--g);font-size:9px">▲</span>':'<span style="color:var(--g);font-size:9px">▼</span>';
 }
 
 /* ══════════════════════════════════════════
@@ -2320,6 +2405,9 @@ function renderGantt(tasks,sellerIds,today){
     if(!st.length) return;
     const hasBloq=st.some(t=>t.estado==='Bloqueado');
     const pct=seller.progreso_pct||0;
+    const goLiveDate=seller.go_live?parseDate(seller.go_live):null;
+    const goLiveLeft=goLiveDate?dateLeft(goLiveDate):null;
+    const glInRange=goLiveLeft!==null&&goLiveLeft>=0&&goLiveLeft<=ganttW;
 
     html+=`
       <div class="seller-group" id="sg-${esc(sid)}">
@@ -2340,6 +2428,7 @@ function renderGantt(tasks,sellerIds,today){
           </div>
           <div style="flex:1;min-width:${ganttW}px;height:100%;position:relative;min-height:40px">
             <div class="g-line today" style="left:${todayLeft}px"></div>
+            ${glInRange?`<div class="g-line go-live-line" style="left:${goLiveLeft}px" title="Go Live estimado: ${fmtDfull(goLiveDate)}"></div>`:''}
           </div>
         </div>
         <div class="task-rows">`;
@@ -2366,10 +2455,11 @@ function renderGantt(tasks,sellerIds,today){
             </div>
             <div class="tr-gantt" style="flex:1;min-width:${ganttW}px;position:relative;min-height:36px">
               <div class="g-line today" style="left:${todayLeft}px;opacity:.2"></div>
+              ${glInRange?`<div class="g-line go-live-line" style="left:${goLiveLeft}px;opacity:.18"></div>`:''}
               ${left!==null?`
               <div class="g-bar ${barClass(t.estado)}${isOver?' overrun':''}"
                    style="left:${left}px;width:${barW}px"
-                   title="${esc(t.tarea)} · ${fmtD(t.inicio)} → ${fmtD(t.fin)} · ${esc(entornoLabel(t.entorno))}">
+                   title="${esc(t.tarea)} · ${fmtD(t.inicio)} → ${fmtD(t.fin)}${t.responsable?' · '+esc(t.responsable):''} · ${esc(entornoLabel(t.entorno))}${t.atraso_calc>0?' · +'+t.atraso_calc+'d atraso':t.estado==='Completado'?' · ✓':''}">
                 ${envMini}${shortLabel}
               </div>`:''}
             </div>
@@ -2411,14 +2501,29 @@ function renderLista(tasks,sellerIds,today){
         </div>
         <table class="lista-table">
           <thead><tr>
-            <th>Tarea</th><th>Hito</th><th>Fase</th><th>Estado</th>
-            <th>Responsable</th><th>Entorno</th><th>Inicio</th><th>Fin</th><th>Atraso</th><th>Comentario</th>
+            <th class="sortable" onclick="setListSort('tarea')">Tarea ${sortArrow('tarea')}</th>
+            <th class="sortable" onclick="setListSort('hito')">Hito ${sortArrow('hito')}</th>
+            <th class="sortable" onclick="setListSort('fase')">Fase ${sortArrow('fase')}</th>
+            <th class="sortable" onclick="setListSort('estado')">Estado ${sortArrow('estado')}</th>
+            <th class="sortable" onclick="setListSort('responsable')">Responsable ${sortArrow('responsable')}</th>
+            <th>Entorno</th>
+            <th class="sortable" onclick="setListSort('inicio')">Inicio ${sortArrow('inicio')}</th>
+            <th class="sortable" onclick="setListSort('fin')">Fin ${sortArrow('fin')}</th>
+            <th class="sortable" onclick="setListSort('atraso_calc')">Atraso ${sortArrow('atraso_calc')}</th>
+            <th>Comentario</th>
           </tr></thead>
           <tbody>
-            ${st.map(t=>{
+            ${[...st].sort((a,b)=>{
+              let va=a[listSort.col],vb=b[listSort.col];
+              if(listSort.col==='inicio'||listSort.col==='fin'){va=va?va.getTime():0;vb=vb?vb.getTime():0;}
+              else if(listSort.col==='atraso_calc'){va=a.atraso_calc||0;vb=b.atraso_calc||0;}
+              else{va=String(va||'').toLowerCase();vb=String(vb||'').toLowerCase();}
+              return va<vb?-listSort.dir:va>vb?listSort.dir:0;
+            }).map(t=>{
               const atr=t.atraso_calc;
               const ac=atr===0?'atraso-ok':atr<=3?'atraso-warn':'atraso-bad';
-              return`<tr onclick="openModal('${esc(t.task_id)}')">
+              const rowCls=t.estado==='Bloqueado'?'row-blk':t.estado==='Completado'?'row-done':'';
+              return`<tr class="${rowCls}" onclick="openModal('${esc(t.task_id)}')">
                 <td class="td-tarea">${esc(t.tarea)}</td>
                 <td style="font-size:11px;color:var(--t3);max-width:140px">${esc(t.hito||'—')}</td>
                 <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
