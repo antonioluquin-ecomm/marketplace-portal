@@ -24,7 +24,7 @@
   --warn:    #ffb74d; --warn-dim:rgba(255,152,0,.12);
   --violet:  #ce93d8;
   --shadow:  0 6px 20px rgba(0,0,0,.22);
-  --f-com:#408ff4; --f-tec:#4db6ac; --f-op:#ce93d8; --f-cie:#5ea832;
+  --f-com:#408ff4; --f-tec:#4db6ac; --f-op:#ce93d8; --f-cie:#5ea832; --f-qa:#ffb74d; --f-gl:#81c784;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{font-size:15px}
@@ -1207,11 +1207,12 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 
   <div class="sb-s">
     <div class="sb-lbl">Fase</div>
-    <button class="fb on" onclick="setF('fase','todos')" id="ff-todos"><span class="fb-l"><span class="fase-dot" style="background:var(--t3)"></span>Todas</span><span class="fc" id="ffc-todos">0</span></button>
-    <button class="fb" onclick="setF('fase','Comercial')"  id="ff-Comercial"><span class="fb-l"><span class="fase-dot" style="background:var(--f-com)"></span>Comercial</span><span class="fc"  id="ffc-Comercial">0</span></button>
-    <button class="fb" onclick="setF('fase','Técnica')"    id="ff-Técnica"><span class="fb-l"><span class="fase-dot" style="background:var(--f-tec)"></span>Técnica</span><span class="fc"    id="ffc-Técnica">0</span></button>
-    <button class="fb" onclick="setF('fase','Operativa')"  id="ff-Operativa"><span class="fb-l"><span class="fase-dot" style="background:var(--f-op)"></span>Operativa</span><span class="fc"  id="ffc-Operativa">0</span></button>
-    <button class="fb" onclick="setF('fase','Cierre')"     id="ff-Cierre"><span class="fb-l"><span class="fase-dot" style="background:var(--f-cie)"></span>Cierre</span><span class="fc"     id="ffc-Cierre">0</span></button>
+    <button class="fb on" onclick="setF('fase','todos')"         id="ff-todos"><span class="fb-l"><span class="fase-dot" style="background:var(--t3)"></span>Todas</span><span class="fc" id="ffc-todos">0</span></button>
+    <button class="fb" onclick="setF('fase','Comercial')"        id="ff-comercial"><span class="fb-l"><span class="fase-dot" style="background:var(--f-com)"></span>Comercial</span><span class="fc" id="ffc-comercial">0</span></button>
+    <button class="fb" onclick="setF('fase','Técnica')"          id="ff-tecnica"><span class="fb-l"><span class="fase-dot" style="background:var(--f-tec)"></span>Técnica</span><span class="fc" id="ffc-tecnica">0</span></button>
+    <button class="fb" onclick="setF('fase','Operativa')"        id="ff-operativa"><span class="fb-l"><span class="fase-dot" style="background:var(--f-op)"></span>Operativa</span><span class="fc" id="ffc-operativa">0</span></button>
+    <button class="fb" onclick="setF('fase','QA / Validación')"  id="ff-qa_validacion"><span class="fb-l"><span class="fase-dot" style="background:var(--f-qa)"></span>QA / Valid.</span><span class="fc" id="ffc-qa_validacion">0</span></button>
+    <button class="fb" onclick="setF('fase','Go Live')"          id="ff-go_live"><span class="fb-l"><span class="fase-dot" style="background:var(--f-gl)"></span>Go Live</span><span class="fc" id="ffc-go_live">0</span></button>
   </div>
 
   <div class="sb-div"></div>
@@ -1219,10 +1220,10 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   <div class="sb-s">
     <div class="sb-lbl">Estado tarea</div>
     <button class="fb on" onclick="setF('estado','todos')"      id="fe-todos"><span>Todos</span><span class="fc" id="fec-todos">0</span></button>
-    <button class="fb"    onclick="setF('estado','En curso')"   id="fe-En_curso"><span>En curso</span><span class="fc" id="fec-wip">0</span></button>
-    <button class="fb"    onclick="setF('estado','Bloqueado')"  id="fe-Bloqueado"><span style="color:#f29a9a">⚠ Bloqueado</span><span class="fc" id="fec-blk">0</span></button>
-    <button class="fb"    onclick="setF('estado','Pendiente')"  id="fe-Pendiente"><span>Pendiente</span><span class="fc" id="fec-pend">0</span></button>
-    <button class="fb"    onclick="setF('estado','Completado')" id="fe-Completado"><span>Completado</span><span class="fc" id="fec-done">0</span></button>
+    <button class="fb"    onclick="setF('estado','En curso')"   id="fe-en_curso"><span>En curso</span><span class="fc" id="fec-wip">0</span></button>
+    <button class="fb"    onclick="setF('estado','Bloqueado')"  id="fe-bloqueado"><span style="color:#f29a9a">⚠ Bloqueado</span><span class="fc" id="fec-blk">0</span></button>
+    <button class="fb"    onclick="setF('estado','Pendiente')"  id="fe-pendiente"><span>Pendiente</span><span class="fc" id="fec-pend">0</span></button>
+    <button class="fb"    onclick="setF('estado','Completado')" id="fe-completado"><span>Completado</span><span class="fc" id="fec-done">0</span></button>
   </div>
 
   <div class="sb-div"></div>
@@ -1302,7 +1303,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
           <button class="vbtn" id="btn-lista" onclick="setView('lista')">Lista</button>
         </div>
       </div>
-      <div class="control-group">
+      <div class="control-group" id="scale-group">
         <span class="control-label">Escala</span>
         <div class="scale-tog">
           <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
@@ -1973,7 +1974,7 @@ async function loadData(manual=false){
 function setF(type,val){
   filters[type]=val;
   document.querySelectorAll(`[id^="f${type[0]}-"]`).forEach(b=>b.classList.remove('on'));
-  const btn=$(`f${type[0]}-${val.replace(' ','_')}`); if(btn) btn.classList.add('on');
+  const btn=$(`f${type[0]}-${norm(val)}`); if(btn) btn.classList.add('on');
   render();
 }
 function updateSellerHint(){
@@ -2011,6 +2012,9 @@ function setView(v){
   currentView=v;
   $('btn-gantt').classList.toggle('on',v==='gantt');
   $('btn-lista').classList.toggle('on',v==='lista');
+  const ganttOnly=v==='gantt';
+  const sg=$('scale-group');
+  if(sg) sg.style.display=ganttOnly?'':'none';
   render();
 }
 function setScale(s){
@@ -2041,9 +2045,11 @@ function isoWeek(d){
 function faseColor(f){
   const n=norm(f);
   if(n.includes('comercial')) return 'var(--f-com)';
-  if(n.includes('tecnica')||n.includes('técnica')) return 'var(--f-tec)';
+  if(n.includes('tecnica'))   return 'var(--f-tec)';
   if(n.includes('operativa')) return 'var(--f-op)';
-  if(n.includes('cierre')) return 'var(--f-cie)';
+  if(n.includes('qa'))        return 'var(--f-qa)';
+  if(n.includes('go'))        return 'var(--f-gl)';
+  if(n.includes('cierre'))    return 'var(--f-cie)';
   return 'var(--t3)';
 }
 function estadoClass(e){
@@ -2151,10 +2157,11 @@ function updateCounts(tasks,nSel,sellerFilter='todos'){
   const by=fn=>countBase.filter(fn).length;
   const fc=(id,n)=>{const e=$(id);if(e)e.textContent=n;};
   fc('ffc-todos',countBase.length);
-  fc('ffc-Comercial',by(t=>norm(t.fase).includes('comercial')));
-  fc('ffc-Técnica',by(t=>norm(t.fase).includes('tecnica')||norm(t.fase).includes('técnica')));
-  fc('ffc-Operativa',by(t=>norm(t.fase).includes('operativa')));
-  fc('ffc-Cierre',by(t=>norm(t.fase).includes('cierre')));
+  fc('ffc-comercial',     by(t=>norm(t.fase).includes('comercial')));
+  fc('ffc-tecnica',       by(t=>norm(t.fase).includes('tecnica')));
+  fc('ffc-operativa',     by(t=>norm(t.fase).includes('operativa')));
+  fc('ffc-qa_validacion', by(t=>norm(t.fase)===norm('QA / Validación')));
+  fc('ffc-go_live',       by(t=>norm(t.fase)===norm('Go Live')));
   fc('fec-todos',countBase.length);
   fc('fec-wip',by(t=>t.estado==='En curso'));
   fc('fec-blk',by(t=>t.estado==='Bloqueado'));
@@ -2181,8 +2188,8 @@ function renderWeekPanel(tasks,today){
   const startW=new Date(today); startW.setDate(today.getDate()-today.getDay()+1);
   const endW=new Date(startW); endW.setDate(startW.getDate()+6);
 
-  const blk=tasks.filter(t=>t.estado==='Bloqueado');
-  const wip=tasks.filter(t=>t.estado==='En curso');
+  const blk=tasks.filter(t=>t.estado==='Bloqueado'&&t.inicio&&t.fin&&t.inicio<=endW&&t.fin>=startW);
+  const wip=tasks.filter(t=>t.estado==='En curso'&&t.inicio&&t.fin&&t.inicio<=endW&&t.fin>=startW);
   const due=tasks.filter(t=>t.fin&&t.fin>=startW&&t.fin<=endW&&!['Completado','Cancelado'].includes(t.estado));
 
   const showBadge=(id,count,label)=>{const e=$(id);if(e){e.textContent=`${count} ${label}`;e.style.display=count>0?'inline-block':'none';}};
@@ -2555,8 +2562,7 @@ async function saveGanttTaskEdit(ev){
   const fields=readEditFields();
   const validation=validateTaskEditFields(fields);
   if(validation){ showEditStatus('err',validation); return; }
-  const qaMsg=t.task_id==='TASK-DUMMY-QA'?'':'\n\nQA: validar primero con TASK-DUMMY-QA antes de editar tareas reales.';
-  const ok=window.confirm(`Confirmar actualizacion de ${t.task_id}. Se modificaran hito, estado, responsable, entorno, inicio, fin, dependencia y comentario.${qaMsg}`);
+  const ok=window.confirm(`Confirmar actualización de ${t.task_id}. Se modificarán: hito, estado, responsable, entorno, inicio, fin, dependencia y comentario.`);
   if(!ok) return;
 
   const payload={
@@ -2773,8 +2779,7 @@ async function disableGanttTask(taskId){
     return;
   }
 
-  const qaMsg=t.task_id==='TASK-DUMMY-QA'||t.task_id.includes('QA')?'':'\n\nQA: usar esta accion solo sobre tareas dummy autorizadas durante smoke.';
-  const ok=window.confirm(`Confirmar baja logica de ${t.task_id}. La tarea quedara en estado Cancelado y no se borrara la fila.${qaMsg}`);
+  const ok=window.confirm(`Confirmar baja lógica de ${t.task_id}. La tarea quedará en estado Cancelado y no se borrará la fila.`);
   if(!ok) return;
 
   const payload={
