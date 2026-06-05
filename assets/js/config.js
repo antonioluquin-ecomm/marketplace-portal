@@ -79,6 +79,10 @@ window.MP_CONFIG = {
     }
   },
 
+  // GitHub repo para upload de logos vía API (el token se guarda en localStorage por el usuario)
+  GITHUB_REPO: "antonioluquin-ecomm/sporting-marketplace",
+  GITHUB_BRANCH: "main",
+
   ACCESS: {
     INTERNAL: "Interno",
     SELLER: "Seller"
