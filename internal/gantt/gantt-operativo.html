@@ -1181,7 +1181,7 @@ html,body{height:100%;overflow:hidden}
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>
-      <button class="btn-sm" id="btn-export" onclick="exportListaCSV()" title="Exportar vista lista a CSV">↓ CSV</button>
+      <button class="btn-sm" id="btn-export" onclick="exportExcel()" title="Exportar vista lista a Excel">↓ Excel</button>
     </div>
   </section>
 
@@ -2069,34 +2069,102 @@ function renderFilterChips(){
   el.innerHTML=chips.join('');
 }
 
-/* ── EXPORT CSV ── */
-function exportListaCSV(){
+/* ── EXPORT EXCEL ── */
+function filteredTasksForExport(){
   const search=($('search').value||'').trim().toLowerCase();
   const resp=($('resp-sel')?.value)||'todos';
   const sellerFilter=filters.seller||'todos';
   const entornoFilter=filters.entorno||'todos';
   const soloAct=$('solo-activos').checked;
   const today=new Date();today.setHours(0,0,0,0);
-  let tasks=TASKS.filter(t=>{
+  return TASKS.filter(t=>{
     if(sellerFilter!=='todos'&&t.seller_id!==sellerFilter) return false;
     if(filters.fase!=='todos'&&norm(t.fase)!==norm(filters.fase)) return false;
     if(filters.estado!=='todos'&&t.estado!==filters.estado) return false;
     if(entornoFilter!=='todos'&&t.entorno!==entornoFilter) return false;
     if(resp!=='todos'&&t.responsable!==resp) return false;
     if(soloAct&&t.estado!=='En curso'&&t.estado!=='Bloqueado') return false;
-    if(search){const hay=[t.seller_id,t.seller_nombre,t.tarea,t.hito,t.fase,t.responsable,t.comentario].join(' ').toLowerCase();if(!hay.includes(search)) return false;}
+    if(search){const hay=[t.seller_id,t.seller_nombre,t.tarea,t.hito,t.fase,t.responsable,t.comentario].join(' ').toLowerCase();if(!hay.includes(search))return false;}
     return true;
-  }).map(t=>{let atr=parseFloat(t.atraso_raw)||0;if(!atr&&t.fin){const finRef=['En curso','Bloqueado'].includes(t.estado)?today:null;if(finRef&&finRef>t.fin)atr=dBetween(t.fin,finRef)||0;}return{...t,atraso_calc:atr};});
-  const q=v=>`"${String(v||'').replace(/"/g,'""')}"`;
-  const headers=['Task ID','Seller','Fase','Hito','Tarea','Responsable','Entorno','Estado','Inicio','Fin','Atraso (días)','Comentario'];
-  const rows=tasks.map(t=>[t.task_id,SELLERS[t.seller_id]?.nombre||t.seller_nombre||t.seller_id,t.fase,t.hito,t.tarea,t.responsable,t.entorno,t.estado,dateInputValue(t.inicio),dateInputValue(t.fin),t.atraso_calc||'',t.comentario].map(q).join(','));
-  const csv=[headers.map(q).join(','),...rows].join('\r\n');
-  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download=`gantt-operativo-${new Date().toISOString().slice(0,10)}.csv`;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }).map(t=>{
+    let atr=parseFloat(t.atraso_raw)||0;
+    if(!atr&&t.fin){const today2=new Date();today2.setHours(0,0,0,0);const finRef=['En curso','Bloqueado'].includes(t.estado)?today2:null;if(finRef&&finRef>t.fin)atr=dBetween(t.fin,finRef)||0;}
+    return{...t,atraso_calc:atr};
+  });
+}
+
+async function exportExcel(){
+  const btn=$('btn-export');
+  if(!window.XLSX){
+    const orig=btn.textContent;
+    btn.textContent='Cargando…';btn.disabled=true;
+    await new Promise((ok,fail)=>{
+      const s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+      s.onload=ok;s.onerror=fail;
+      document.head.appendChild(s);
+    }).catch(()=>{btn.textContent=orig;btn.disabled=false;alert('No se pudo cargar la librería de exportación. Verificá tu conexión.');return null;});
+    btn.textContent=orig;btn.disabled=false;
+    if(!window.XLSX) return;
+  }
+
+  const tasks=filteredTasksForExport();
+  if(!tasks.length){alert('No hay tareas para exportar con los filtros actuales.');return;}
+
+  const HDR=['Task ID','Seller','Fase','Hito','Tarea','Responsable','Entorno','Estado','Inicio','Fin','Atraso (días)','Comentario'];
+  const aoa=[HDR,...tasks.map(t=>[
+    t.task_id,
+    SELLERS[t.seller_id]?.nombre||t.seller_nombre||t.seller_id,
+    t.fase, t.hito, t.tarea, t.responsable, t.entorno, t.estado,
+    t.inicio instanceof Date?t.inicio:null,
+    t.fin   instanceof Date?t.fin:null,
+    t.atraso_calc||0,
+    t.comentario||''
+  ])];
+
+  const ws=XLSX.utils.aoa_to_sheet(aoa,{cellDates:true,dateNF:'dd/mm/yyyy'});
+
+  // Anchos de columna
+  ws['!cols']=[
+    {wch:14},{wch:26},{wch:14},{wch:30},{wch:44},
+    {wch:16},{wch:12},{wch:12},{wch:12},{wch:12},{wch:14},{wch:42}
+  ];
+
+  // Freeze header
+  ws['!freeze']={xSplit:0,ySplit:1};
+
+  // Estilos
+  const S={
+    hdrFill:{patternType:'solid',fgColor:{rgb:'1a3320'}},
+    hdrFont:{bold:true,sz:10,color:{rgb:'d4edda'}},
+    blkFill:{patternType:'solid',fgColor:{rgb:'3d1515'}},
+    wipFill:{patternType:'solid',fgColor:{rgb:'0e1e35'}},
+    doneFill:{patternType:'solid',fgColor:{rgb:'0e2a14'}},
+    baseFont:{sz:10},
+    center:{vertical:'center'},
+    wrap:{vertical:'center',wrapText:true},
+  };
+  const rng=XLSX.utils.decode_range(ws['!ref']);
+  for(let R=rng.s.r;R<=rng.e.r;R++){
+    const estadoCell=ws[XLSX.utils.encode_cell({r:R,c:7})];
+    const estado=R===0?null:(estadoCell?.v||'');
+    for(let C=rng.s.c;C<=rng.e.c;C++){
+      const addr=XLSX.utils.encode_cell({r:R,c:C});
+      if(!ws[addr]) ws[addr]={t:'z',v:null};
+      const isWrap=C===4||C===11;
+      if(R===0){
+        ws[addr].s={font:S.hdrFont,fill:S.hdrFill,alignment:S.center};
+      } else {
+        const fill=estado==='Bloqueado'?S.blkFill:estado==='En curso'?S.wipFill:estado==='Completado'?S.doneFill:null;
+        ws[addr].s={font:S.baseFont,alignment:isWrap?S.wrap:S.center,...(fill?{fill}:{})};
+      }
+    }
+  }
+  ws['!rows']=[{hpt:22}];
+
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Gantt Operativo');
+  XLSX.writeFile(wb,`gantt-operativo-${new Date().toISOString().slice(0,10)}.xlsx`,{cellStyles:true});
 }
 
 /* ── SORT LISTA ── */
