@@ -12,6 +12,7 @@
 <!-- 14G: componentes internos pasivos. El CSS inline permanece como fallback. -->
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
 <link rel="stylesheet" href="../../assets/css/pages/backlog.css">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --g:#5ea832;--g2:#4a8a26;--gd:rgba(94,168,50,.10);--gb:rgba(94,168,50,.24);--gb2:rgba(94,168,50,.12);
@@ -207,9 +208,10 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <span id="status-txt">Cargando…</span>
     </div>
     <div class="view-toggle">
-      <button class="view-btn active" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
-      <button class="view-btn" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
+      <button class="view-btn" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
+      <button class="view-btn active" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
     </div>
+    <button class="tb-btn" id="btn-export" onclick="exportExcel()" title="Exportar tabla filtrada a Excel">↓ Excel</button>
     <a class="tb-btn" href="../../index.html">← Portal</a>
     <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻</button>
     <a class="tb-btn primary" href="./gestion-sellers.html">+ Seller</a>
@@ -393,7 +395,7 @@ const PROXIMO_PASO_MAP = {
 };
 
 /* ── STATE ── */
-let ALL = [], currentView = "kanban", activeQuick = null;
+let ALL = [], currentView = "tabla", activeQuick = null;
 
 /* ── UTILS ── */
 const $ = id => document.getElementById(id);
@@ -962,6 +964,42 @@ function setView(v){
   $("btn-kanban").classList.toggle("active",v==="kanban");
   $("btn-tabla").classList.toggle("active",v==="tabla");
   renderContent();
+}
+
+/* ── EXPORT EXCEL ── */
+function exportExcel(){
+  const filtered = applySort(applyFilters(ALL));
+  if(!filtered.length){ showToast("Sin datos para exportar"); return; }
+
+  const headers = ["ID","Seller","Categoría","Grupo","Marca operativa","Pipeline","Modelo de integración","Prioridad","Avance %","Próximo paso","Responsable","Plataforma","Contacto","Email","Tel"];
+  const rows = filtered.map(s => [
+    s.seller_id,
+    s.nombre,
+    s.categoria||"",
+    s.empresa_grupo||"",
+    s.marca_seller_operativo||"",
+    s.pipeline_estado||"",
+    s.modelo_integracion||"",
+    s.prioridad||"",
+    Math.round(s.progreso_pct),
+    s.proximo_paso||"",
+    s.responsable||"",
+    s.plataforma||"",
+    s.contacto_nombre||"",
+    s.contacto_email||"",
+    s.contacto_tel||""
+  ]);
+
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  // Ancho mínimo de columnas
+  ws["!cols"] = [8,24,18,20,20,18,22,10,10,36,16,14,18,24,14].map(w=>({wch:w}));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Backlog Sellers");
+
+  const fecha = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `backlog-sellers-${fecha}.xlsx`);
+  showToast(`✓ ${filtered.length} sellers exportados`);
 }
 
 /* ── INIT ── */
