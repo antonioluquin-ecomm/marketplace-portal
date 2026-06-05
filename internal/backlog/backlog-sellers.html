@@ -52,6 +52,8 @@ input,select{font-family:inherit}
 .alert-item:hover{background:rgba(248,113,113,.25)}
 
 /* ── CONTENT TOOLBAR ── */
+.tl-l{display:flex;align-items:center;gap:10px}
+.control-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);white-space:nowrap}
 .c-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 22px;border-bottom:1px solid var(--b2);flex-wrap:wrap}
 .c-toolbar-r{display:flex;align-items:center;gap:8px}
 .btn-sm{display:inline-flex;align-items:center;padding:5px 11px;border:1px solid var(--b);border-radius:7px;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--t3);background:transparent;cursor:pointer;transition:.15s;font-family:inherit}
@@ -225,8 +227,8 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <span class="tb-dot loading" id="status-dot"></span>
       <span id="status-txt">Cargando…</span>
     </div>
-    <a class="tb-btn" href="../../index.html">← Portal</a>
-    <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻</button>
+    <a class="tb-btn" href="../../index.html">← Hub</a>
+    <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
     <a class="tb-btn primary" href="./gestion-sellers.html">+ Seller</a>
   </div>
 </header>
@@ -332,12 +334,15 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <div class="kpi"><div class="kpi-val g" id="kpi-marcas">—</div><div class="kpi-lbl">Marcas</div></div>
     </div>
     <div class="c-toolbar">
-      <div class="view-toggle">
-        <button class="view-btn" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
-        <button class="view-btn active" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
+      <div class="tl-l">
+        <span class="control-label">Vista</span>
+        <div class="view-toggle">
+          <button class="view-btn" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
+          <button class="view-btn active" id="btn-lista" onclick="setView('lista')">Lista</button>
+        </div>
       </div>
       <div class="c-toolbar-r">
-        <button class="btn-sm" onclick="exportExcel()" title="Exportar tabla filtrada a Excel">↓ Excel</button>
+        <button class="btn-sm" onclick="exportExcel()" title="Exportar vista filtrada a Excel">↓ Excel</button>
       </div>
     </div>
     <div class="content-area" id="content-area">
@@ -426,7 +431,8 @@ const PROXIMO_PASO_MAP = {
 };
 
 /* ── STATE ── */
-let ALL = [], currentView = "tabla", activeQuick = null;
+let ALL = [], currentView = "lista", activeQuick = null;
+let tableSort = { col: null, dir: 1 };
 
 /* ── UTILS ── */
 const $ = id => document.getElementById(id);
@@ -782,13 +788,34 @@ function applySort(sellers){
   return copy;
 }
 
+/* ── TABLE SORT ── */
+function setSortCol(col){
+  if(tableSort.col===col) tableSort.dir*=-1; else { tableSort.col=col; tableSort.dir=1; }
+  renderContent();
+}
+function applyTableSort(sellers){
+  if(!tableSort.col) return sellers;
+  const {col,dir}=tableSort;
+  const priOrder={"Alta":0,"Media":1,"Baja":2};
+  return [...sellers].sort((a,b)=>{
+    if(col==="prioridad") return dir*((priOrder[a.prioridad]??2)-(priOrder[b.prioridad]??2));
+    if(col==="progreso_pct") return dir*(a.progreso_pct-b.progreso_pct);
+    return dir*String(a[col]??"").localeCompare(String(b[col]??""),"es");
+  });
+}
+function thSort(col,label){
+  const arr=tableSort.col===col?(tableSort.dir===1?" ↑":" ↓"):"";
+  return `<th onclick="setSortCol('${col}')" style="cursor:pointer;user-select:none">${label}${arr}</th>`;
+}
+
 /* ── RENDER ── */
 function renderContent(){
-  const filtered=applySort(applyFilters(ALL));
+  let filtered=applySort(applyFilters(ALL));
   if(!filtered.length){
     setHTML("content-area",`<div class="state-box"><div class="state-icon">○</div><div class="state-title">Sin resultados</div><div class="state-desc">Ajustá los filtros o la búsqueda.</div></div>`);
     return;
   }
+  if(currentView==="lista") filtered=applyTableSort(filtered);
   currentView==="kanban"?renderKanban(filtered):renderTabla(filtered);
 }
 
@@ -879,8 +906,8 @@ function renderTabla(filtered){
   setHTML("content-area",`<div class="table-wrap"><table>
     <thead><tr>
       <th class="td-blk"></th>
-      <th>ID</th><th>Seller</th><th>Grupo</th><th>Marca operativa</th><th>Pipeline</th><th>Modelo</th>
-      <th>Prioridad</th><th>Avance</th><th>Próximo paso</th><th>Responsable</th>
+      ${thSort("seller_id","ID")}${thSort("nombre","Seller")}<th>Grupo</th>${thSort("marca_seller_operativo","Marca operativa")}${thSort("pipeline_estado","Pipeline")}<th>Modelo</th>
+      ${thSort("prioridad","Prioridad")}${thSort("progreso_pct","Avance")}<th>Próximo paso</th>${thSort("responsable","Responsable")}
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`);
@@ -1005,7 +1032,8 @@ function showToast(msg){
 function setView(v){
   currentView=v;
   $("btn-kanban").classList.toggle("active",v==="kanban");
-  $("btn-tabla").classList.toggle("active",v==="tabla");
+  $("btn-lista").classList.toggle("active",v==="lista");
+  if(v==="kanban") tableSort={col:null,dir:1};
   renderContent();
 }
 
