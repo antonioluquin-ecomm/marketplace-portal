@@ -183,6 +183,20 @@ tbody tr:last-child td{border-bottom:none}
 .maction:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
 .maction.primary{background:var(--g);border-color:var(--g);color:#fff}
 .maction.primary:hover{background:var(--g2)}
+/* ── MODAL EDIT FORM ── */
+.medit-row{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.medit-row:last-of-type{margin-bottom:0}
+.medit-lbl{font-size:11px;font-weight:700;color:var(--t4)}
+.medit-inp,.medit-sel,.medit-ta{width:100%;padding:8px 10px;border-radius:7px;border:1px solid var(--b);background:rgba(255,255,255,.05);color:var(--t1);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s}
+.medit-inp:focus,.medit-sel:focus,.medit-ta:focus{border-color:rgba(106,168,79,.45);box-shadow:0 0 0 2px rgba(106,168,79,.12)}
+.medit-sel option{background:var(--k2)}
+.medit-ta{min-height:72px;resize:vertical}
+.medit-btns{display:flex;gap:7px;padding-top:8px;border-top:1px solid var(--b2)}
+.medit-save{padding:8px 16px;border-radius:7px;font-size:11px;font-weight:800;letter-spacing:.07em;background:var(--g);border:1px solid var(--g);color:#fff;cursor:pointer;font-family:inherit;transition:.15s}
+.medit-save:hover{background:var(--g2)}
+.medit-save:disabled{opacity:.5;cursor:not-allowed}
+.medit-cancel{padding:8px 14px;border-radius:7px;font-size:11px;font-weight:800;letter-spacing:.07em;background:transparent;border:1px solid var(--b);color:var(--t3);cursor:pointer;font-family:inherit;transition:.15s}
+.medit-cancel:hover{border-color:rgba(248,113,113,.35);color:var(--da)}
 
 /* ── PROG BAR (table) ── */
 .prog-wrap{display:flex;align-items:center;gap:6px}
@@ -386,6 +400,7 @@ const CONFIG = {
   RELEVAMIENTO_PATH: "/public/formularios/formulario-relevamiento.html",
   SIMULADOR_SELLER_PATH: "/public/simuladores/simulador-seller.html",
 };
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
 
 /* ── ALIASES ── */
 const ALIASES = {
@@ -993,7 +1008,8 @@ function openModal(id){
       <div class="share-links">${shareHTML}</div>
     </div>
     <div class="modal-actions">
-      <button class="maction primary" onclick="window.open(publicUrl('/internal/backlog/gestion-sellers.html', '${sid}') + '&modo=editar','_blank')">Editar seller</button>
+      <button class="maction primary" onclick="enterEditMode('${sid}')">Editar</button>
+      <button class="maction" onclick="window.open(publicUrl('/internal/backlog/gestion-sellers.html', '${sid}') + '&modo=editar','_blank')">Editar ficha completa</button>
       ${s.url_seller?`<button class="maction" onclick="window.open('${esc(s.url_seller)}','_blank')">Web seller</button>`:""}
     </div>
   `);
@@ -1009,6 +1025,117 @@ function handleModalLogoError(logo, ini){
     if(list[next]){logo.dataset.logoIndex=String(next);logo.src=list[next];return;}
   }catch(e){}
   logo.classList.add("hidden");ini.classList.remove("hidden");
+}
+
+/* ── MODAL QUICK EDIT ── */
+function enterEditMode(id){
+  const s=ALL.find(x=>x.seller_id===id);
+  if(!s)return;
+
+  const pipelineOpts=[
+    ["identificados","Identificados"],
+    ["contactados","Contactados"],
+    ["en evaluación","En evaluación"],
+    ["en definición técnica","En definición técnica"],
+    ["listos para integrar","Listos para integrar"],
+    ["en integración","En integración"],
+    ["live","Live"],
+    ["pausado","Pausado"],
+    ["descartado","Descartado"],
+  ].map(([v,l])=>`<option value="${esc(v)}"${norm(s.pipeline_estado)===norm(v)?" selected":""}>${l}</option>`).join("");
+
+  const prioOpts=["Alta","Media","Baja"].map(v=>`<option${norm(s.prioridad)===norm(v)?" selected":""}>${v}</option>`).join("");
+
+  setHTML("modal-body",`
+    <div class="msec">
+      <div class="msec-title">Edición rápida · ${esc(s.nombre)}</div>
+      <div style="display:flex;flex-direction:column;gap:0;padding-top:6px">
+        <div class="medit-row">
+          <label class="medit-lbl" for="me-estado">Estado en el pipeline</label>
+          <select id="me-estado" class="medit-sel">${pipelineOpts}</select>
+        </div>
+        <div class="medit-row">
+          <label class="medit-lbl" for="me-prioridad">Prioridad</label>
+          <select id="me-prioridad" class="medit-sel">${prioOpts}</select>
+        </div>
+        <div class="medit-row">
+          <label class="medit-lbl" for="me-responsable">Responsable</label>
+          <input id="me-responsable" class="medit-inp" value="${esc(s.responsable!=="—"?s.responsable:"")}" placeholder="Responsable interno" />
+        </div>
+        <div class="medit-row">
+          <label class="medit-lbl" for="me-paso">Próximo paso</label>
+          <input id="me-paso" class="medit-inp" value="${esc(s.proximo_paso||"")}" placeholder="Próximo paso operativo" />
+        </div>
+        <div class="medit-row" style="margin-bottom:0">
+          <label class="medit-lbl" for="me-notas">Notas operativas</label>
+          <textarea id="me-notas" class="medit-ta" placeholder="Observaciones internas">${esc(s.notas_operativas||"")}</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="medit-btns">
+      <button class="medit-save" id="me-save-btn" onclick="saveQuickEdit('${esc(id)}')">Guardar cambios</button>
+      <button class="medit-cancel" onclick="openModal('${esc(id)}')">Cancelar</button>
+    </div>
+  `);
+}
+
+async function saveQuickEdit(id){
+  const s=ALL.find(x=>x.seller_id===id);
+  if(!s)return;
+
+  const estado=document.getElementById("me-estado")?.value||s.pipeline_estado;
+  const prioridad=document.getElementById("me-prioridad")?.value||s.prioridad;
+  const responsable=document.getElementById("me-responsable")?.value||s.responsable;
+  const proximo_paso=document.getElementById("me-paso")?.value||"";
+  const notas=document.getElementById("me-notas")?.value??"";
+
+  const btn=document.getElementById("me-save-btn");
+  if(btn){btn.disabled=true;btn.textContent="Guardando…";}
+
+  const payload={
+    tipo_formulario:"seller",
+    seller_id:s.seller_id,
+    seller_id_original:s.seller_id,
+    seller_nombre:s.nombre,
+    empresa_grupo:s.empresa_grupo||"",
+    marca_seller_operativo:s.marca_seller_operativo||"",
+    url_seller:s.url_seller||"",
+    categoria_estimada:s.categoria||"",
+    plataforma_estimada:s.plataforma||"",
+    modelo_integracion_estimado:s.modelo_integracion||"",
+    sitio_objetivo:s.sitio_objetivo||"Sporting",
+    activo:s.activo?"SI":"NO",
+    contacto_nombre:s.contacto_nombre||"",
+    contacto_email:s.contacto_email||"",
+    contacto_tel:s.contacto_tel||"",
+    estado_pipeline:estado,
+    prioridad:prioridad,
+    responsable:responsable,
+    proximo_paso:proximo_paso,
+    observaciones:notas,
+  };
+
+  try{
+    await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+    const idx=ALL.findIndex(x=>x.seller_id===id);
+    if(idx>=0){
+      ALL[idx].pipeline_estado=normalizePipeline(estado);
+      ALL[idx].prioridad=cap(prioridad);
+      ALL[idx].responsable=responsable||"—";
+      ALL[idx].notas_operativas=notas;
+      const pp=computeProximoPaso(normalizePipeline(estado),proximo_paso);
+      ALL[idx].proximo_paso=pp.paso;
+      ALL[idx].proximo_paso_criterio=pp.criterio;
+      ALL[idx].proximo_paso_resp=pp.resp;
+    }
+    showToast("✓ Cambios guardados");
+    renderContent();
+    openModal(id);
+  }catch(e){
+    console.error(e);
+    if(btn){btn.disabled=false;btn.textContent="Guardar cambios";}
+    showToast("Error al guardar. Intentá de nuevo.");
+  }
 }
 
 function closeModal(e){
