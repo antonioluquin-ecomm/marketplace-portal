@@ -53,40 +53,6 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .alert-item{display:inline-flex;align-items:center;gap:5px;background:rgba(217,64,64,.15);border:1px solid var(--dng-brd);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
 .alert-item:hover{background:rgba(217,64,64,.25)}
 
-/* ── PANEL MI SEMANA ── */
-.week-panel{border-bottom:1px solid var(--bdr);overflow:hidden;transition:max-height .3s ease}
-.week-panel.collapsed{max-height:36px}
-.week-panel.expanded{max-height:300px}
-.week-panel-hd{display:flex;align-items:center;gap:10px;padding:9px 22px;cursor:pointer;user-select:none;border-bottom:1px solid transparent}
-.week-panel.expanded .week-panel-hd{border-bottom-color:var(--bdr-l)}
-.week-panel-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
-.week-chevron{font-size:10px;color:var(--t3);transition:transform .25s;margin-left:auto}
-.week-panel.expanded .week-chevron{transform:rotate(180deg)}
-.week-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px}
-.wb-blk{background:var(--dng-dim);color:#f29a9a;border:1px solid var(--dng-brd)}
-.wb-wip{background:var(--info-dim);color:var(--info)}
-.wb-due{background:var(--warn-dim);color:var(--warn)}
-.week-body{padding:10px 22px 14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.week-col-title{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
-.week-task{background:var(--k2);border:1px solid var(--bdr);border-radius:6px;padding:8px 10px;cursor:pointer;transition:border-color .12s;margin-bottom:5px}
-.week-task:hover{border-color:var(--g-brd)}
-.week-task:last-child{margin-bottom:0}
-.wt-seller{font-size:9px;color:var(--t3);font-weight:700;letter-spacing:.06em;margin-bottom:2px}
-.wt-tarea{font-size:11px;color:var(--t1);line-height:1.3}
-.wt-resp{font-size:10px;color:var(--t3);margin-top:3px}
-.week-empty{font-size:11px;color:var(--t3);font-style:italic;padding:4px 0}
-
-/* ── SUMMARY ── */
-.summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:14px 22px;border-bottom:1px solid var(--bdr)}
-.kpi{background:var(--k2);border:1px solid var(--bdr);border-radius:9px;padding:11px 14px}
-.kpi-l{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
-.kpi-n{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--w);line-height:1}
-.kpi-s{font-size:10px;color:var(--t3);margin-top:2px}
-.kpi.rd{border-color:rgba(217,64,64,.28)} .kpi.rd .kpi-n{color:#f29a9a}
-.kpi.gn{border-color:rgba(94,168,50,.28)} .kpi.gn .kpi-n{color:var(--g)}
-.kpi.bl{border-color:rgba(33,150,243,.28)} .kpi.bl .kpi-n{color:var(--info)}
-.kpi.am{border-color:rgba(255,152,0,.28)}  .kpi.am .kpi-n{color:var(--warn)}
-
 /* ── TOOLBAR ── */
 .toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
 .tl-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -263,7 +229,7 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 .exec-action span{font-size:16px}
 .exec-section-label{padding:13px 22px 0;color:var(--t3);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.012)}
 @media(max-width:980px){.exec-hero{grid-template-columns:1fr}.exec-flow{grid-template-columns:repeat(2,1fr)}.exec-actions{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.exec-flow,.exec-actions{grid-template-columns:1fr}.exec-hero{padding:14px}.summary{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.exec-flow,.exec-actions{grid-template-columns:1fr}.exec-hero{padding:14px}}
 @media(max-width:640px){.modal,.edit-modal{width:calc(100vw - 24px);max-height:92vh}.modal-hd{padding:15px 16px 12px}.modal-body{padding:14px 16px}.edit-grid{grid-template-columns:1fr}.edit-actions,.m-actions{justify-content:stretch;flex-direction:column}.edit-actions .btn-sm,.m-actions .btn-sm{width:100%}}
 
 @media(max-width:860px){.shell{grid-template-columns:1fr}}
@@ -272,9 +238,9 @@ body{font-family:'Barlow',sans-serif;background:var(--k);color:var(--t1);min-hei
 :root{--g:#6aa84f;--g2:#54873d;--g-dim:rgba(106,168,79,.09);--g-brd:rgba(106,168,79,.20);--k:#101311;--k2:#151915;--k3:#191d19;--k4:#1f241f;--bdr:rgba(255,255,255,.10);--bdr-l:rgba(255,255,255,.065);--t1:#f1f4ef;--t2:#b7c1b3;--t3:#889386;--w:#fff;--shadow:0 10px 24px rgba(0,0,0,.16)}
 body{font-size:15px;line-height:1.65;background:var(--k)}
 .main,.gantt-months,.seller-header,.lista-seller,.modal,.exec-card,.exec-action{background:var(--k3);border-color:var(--bdr);box-shadow:none}
-.week-panel,.summary,.toolbar,.exec-hero,.exec-actions{border-color:var(--bdr)}
-.kpi,.week-task,.exec-step,.m-comment{background:var(--k2);border-color:var(--bdr)}
-.week-panel-title,.kpi-l,.il-lbl,.period-cell,.week-col-title,.msec-t,.exec-eyebrow,.exec-section-label{letter-spacing:.08em;color:var(--t3)}
+.toolbar,.exec-hero,.exec-actions{border-color:var(--bdr)}
+.exec-step,.m-comment{background:var(--k2);border-color:var(--bdr)}
+.il-lbl,.period-cell,.msec-t,.exec-eyebrow,.exec-section-label{letter-spacing:.08em;color:var(--t3)}
 .vbtn,.sbtn,.fb,.estado-badge{text-transform:none;letter-spacing:.015em}
 .vbtn.on{background:var(--g);color:#fff}
 .sbtn.on{background:rgba(255,255,255,.10)}
@@ -367,35 +333,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 .exec-action span{
   color:var(--t3);
   font-size:14px;
-}
-.week-panel.collapsed{
-  max-height:34px;
-}
-.week-panel-hd{
-  min-height:34px;
-  padding:7px 22px;
-}
-.week-body{
-  gap:8px;
-  padding:9px 22px 12px;
-}
-.week-task{
-  padding:7px 9px;
-  border-radius:7px;
-}
-.summary{
-  gap:8px;
-  padding:10px 22px;
-}
-.kpi{
-  padding:9px 12px;
-  border-radius:8px;
-}
-.kpi-l{
-  font-size:8.5px;
-}
-.kpi-n{
-  font-size:24px;
 }
 .toolbar{
   padding:8px 22px;
@@ -576,25 +513,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 .exec-action span{
   font-size:12px;
 }
-.summary{
-  gap:6px;
-  padding-top:6px;
-  padding-bottom:6px;
-}
-.kpi{
-  padding:7px 10px;
-}
-.kpi-l{
-  margin-bottom:2px;
-  font-size:8px;
-}
-.kpi-n{
-  font-size:22px;
-}
-.kpi-s{
-  margin-top:1px;
-  font-size:9.5px;
-}
 .control-group{
   display:flex;
   align-items:center;
@@ -698,15 +616,9 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
     grid-template-columns:repeat(2,minmax(0,1fr));
     padding:0 14px 8px;
   }
-  .exec-section-label,.summary,.toolbar,.week-panel-hd,.week-body,.alert-strip{
+  .exec-section-label,.toolbar,.alert-strip{
     padding-left:14px;
     padding-right:14px;
-  }
-  .summary{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-  .week-body{
-    grid-template-columns:1fr;
   }
 }
 
@@ -779,33 +691,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 .exec-action span{
   font-size:11px;
   color:#8fa786;
-}
-.week-panel.collapsed{
-  max-height:30px;
-}
-.week-panel-hd{
-  min-height:30px;
-  padding:5px 18px;
-}
-.summary{
-  gap:6px;
-  padding:6px 18px;
-  background:#151a15;
-}
-.kpi{
-  padding:6px 9px;
-  background:#111611;
-  border-color:rgba(255,255,255,.09);
-}
-.kpi-l{
-  color:#87937f;
-}
-.kpi-n{
-  font-size:21px;
-  color:#f4f7f2;
-}
-.kpi-s{
-  color:#778472;
 }
 .toolbar{
   padding:5px 18px;
@@ -984,30 +869,6 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 .exec-action span{
   color:#b6e891;
 }
-.summary{
-  gap:5px;
-  padding:5px 16px;
-  background:#111511;
-}
-.kpi{
-  padding:5px 8px;
-  background:#0f140f;
-  border-color:rgba(255,255,255,.12);
-}
-.kpi-l{
-  color:#aab6a5;
-}
-.kpi-n{
-  color:#ffffff;
-  line-height:1;
-}
-.kpi-s{
-  color:#8d9b87;
-}
-.kpi.rd .kpi-n{color:#ffb0b0}
-.kpi.am .kpi-n{color:#ffd778}
-.kpi.gn .kpi-n{color:#bdf0a0}
-.kpi.bl .kpi-n{color:#aad5ff}
 .toolbar{
   padding:4px 16px;
   background:#0f140f;
@@ -1124,7 +985,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
   .exec-title{
     font-size:16px;
   }
-  .exec-flow,.exec-actions,.summary{
+  .exec-flow,.exec-actions{
     grid-template-columns:1fr;
   }
   .toolbar{
@@ -1149,15 +1010,11 @@ html,body{height:100%;overflow:hidden}
 #content{min-height:0}
 
 /* ── LEGIBILIDAD: tamaños de fuente ── */
-.kpi-l{font-size:10px}
-.kpi-s{font-size:11px}
 .tr-fase{font-size:11px}
 .gm-fixed-cell,.period-cell{font-size:11px}
 .lista-table th{font-size:10px;letter-spacing:.04em}
 .lista-table td{font-size:12px}
 .estado-badge{font-size:10px}
-.week-panel-title{font-size:12px;letter-spacing:.04em}
-.wt-tarea{font-size:12px}
 .tr-tarea{font-size:12px}
 
 /* ── FILTROS ACTIVOS ── */
@@ -1193,6 +1050,7 @@ html,body{height:100%;overflow:hidden}
 .kc-meta{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
 .kc-resp{font-size:9px;color:var(--t3)}
 .kc-fin{font-size:10px;color:var(--t3)}
+.kc-fin.late{color:#f29a9a;font-weight:700}
 .kc-atraso{font-size:10px;font-weight:800;color:#f29a9a}
 </style>
 </head>
@@ -1588,13 +1446,11 @@ let TASKS    = [];
 let currentView  = 'lista';
 let currentScale = 'mes';   // 'mes' | 'semana'
 let filters = { fase:'todos', estado:'todos', seller:'todos', entorno:'todos' };
-let weekPanelOpen = false;
 let activeEditTaskId = '';
 let lastEditFeedback = null;
 let lastDisableFeedback = null;
 let lastTodayScrollLeft = 0;
 let listSort = {col:'inicio',dir:1};
-let weekPanelInitialized = false;
 
 const FASES_GANTT_PERMITIDAS = ['Comercial','Técnica','Operativa','QA / Validación','Go Live'];
 const RESPONSABLES_GANTT_PERMITIDOS = ['eCommerce','InfraCommerce','Agente PIM','Administración','Seller','Comercial','Operaciones','QA','IT'];
@@ -1951,7 +1807,6 @@ function setStatus(type,txt){
 
 /* ── LOAD ── */
 async function loadData(manual=false){
-  weekPanelInitialized=false;
   $('btn-refresh').disabled=true;
   setStatus('load',manual?'Actualizando…':'Cargando…');
   try{
@@ -2143,7 +1998,6 @@ function render(){
 
   updateCounts(tasks,sellerIds.length,sellerFilter);
   renderAlertStrip(tasks);
-  renderWeekPanel(tasks,today);
 
   if(!TASKS.length){
     $('content').innerHTML=`<div class="center-state"><div style="font-size:28px;opacity:.3">○</div><span>No hay tareas en el timeline. Agregá filas en la hoja "timeline" del Google Sheet.</span></div>`;
@@ -2192,57 +2046,6 @@ function renderAlertStrip(tasks){
   strip.innerHTML=html; strip.classList.add('visible');
 }
 
-/* ── PANEL MI SEMANA ── */
-function renderWeekPanel(tasks,today){
-  const startW=new Date(today); startW.setDate(today.getDate()-today.getDay()+1);
-  const endW=new Date(startW); endW.setDate(startW.getDate()+6);
-
-  const blk=tasks.filter(t=>t.estado==='Bloqueado'&&t.inicio&&t.fin&&t.inicio<=endW&&t.fin>=startW);
-  const wip=tasks.filter(t=>t.estado==='En curso'&&t.inicio&&t.fin&&t.inicio<=endW&&t.fin>=startW);
-  const due=tasks.filter(t=>t.fin&&t.fin>=startW&&t.fin<=endW&&!['Completado','Cancelado'].includes(t.estado));
-
-  const showBadge=(id,count,label)=>{const e=$(id);if(e){e.textContent=`${count} ${label}`;e.style.display=count>0?'inline-block':'none';}};
-  showBadge('wpb-blk',blk.length,'bloqueadas');
-  showBadge('wpb-wip',wip.length,'en curso');
-  showBadge('wpb-due',due.length,'vencen esta semana');
-  if(!weekPanelInitialized){
-    weekPanelInitialized=true;
-    if(blk.length>0||due.length>0){
-      weekPanelOpen=true;
-      const p=$('week-panel');
-      if(p){p.classList.remove('collapsed');p.classList.add('expanded');}
-    }
-  }
-
-  const taskCard=t=>{
-    const s=SELLERS[t.seller_id]||{};
-    return`<div class="week-task" onclick="openModal('${esc(t.task_id)}')">
-      <div class="wt-seller">${esc(s.nombre||t.seller_id)}</div>
-      <div class="wt-tarea">${esc(t.tarea)}</div>
-      <div class="wt-resp">${esc(t.responsable||'—')} · ${fmtD(t.fin)}</div>
-    </div>`;
-  };
-
-  $('week-body').innerHTML=`
-    <div>
-      <div class="week-col-title">Bloqueadas</div>
-      ${blk.length?blk.map(taskCard).join(''):'<div class="week-empty">Ninguna ✓</div>'}
-    </div>
-    <div>
-      <div class="week-col-title">En curso</div>
-      ${wip.length?wip.slice(0,5).map(taskCard).join('')+(wip.length>5?`<div class="week-empty">+${wip.length-5} más</div>`:''): '<div class="week-empty">Sin tareas activas</div>'}
-    </div>
-    <div>
-      <div class="week-col-title">Vencen esta semana</div>
-      ${due.length?due.map(taskCard).join(''):'<div class="week-empty">Ninguna esta semana</div>'}
-    </div>`;
-}
-function toggleWeekPanel(){
-  const p=$('week-panel');
-  weekPanelOpen=!weekPanelOpen;
-  p.classList.toggle('expanded',weekPanelOpen);
-  p.classList.toggle('collapsed',!weekPanelOpen);
-}
 
 /* ── FILTER CHIPS ── */
 function renderFilterChips(){
@@ -2569,7 +2372,7 @@ function renderKanban(tasks,today){
           <div class="kc-meta">
             <span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;color:var(--t3)"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span>
             ${t.responsable?`<span class="kc-resp">${esc(t.responsable)}</span>`:''}
-            ${t.fin?`<span class="kc-fin">${fmtDfull(t.fin)}</span>`:''}
+            ${t.fin?`<span class="kc-fin${t.fin<today&&col.key!=='Completado'&&col.key!=='Cancelado'?' late':''}">${fmtDfull(t.fin)}</span>`:''}
             ${atr>0?`<span class="kc-atraso">+${atr}d</span>`:''}
             ${entornoBadge(t.entorno,'env-mini')}
           </div>
