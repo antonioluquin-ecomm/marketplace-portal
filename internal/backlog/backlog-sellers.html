@@ -44,6 +44,24 @@ input,select{font-family:inherit}
 
 /* ── CONTENT ── */
 
+/* ── ALERT STRIP ── */
+.alert-strip{display:none;align-items:center;gap:8px;padding:7px 22px;background:var(--dad);border-bottom:1px solid rgba(248,113,113,.2);font-size:12px;color:#f29a9a;flex-wrap:wrap}
+.alert-strip.visible{display:flex}
+.alert-strip strong{color:var(--t1);font-size:12px}
+.alert-item{display:inline-flex;align-items:center;gap:5px;background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.28);border-radius:4px;padding:2px 9px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;color:var(--da)}
+.alert-item:hover{background:rgba(248,113,113,.25)}
+
+/* ── CONTENT TOOLBAR ── */
+.c-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 22px;border-bottom:1px solid var(--b2);flex-wrap:wrap}
+.c-toolbar-r{display:flex;align-items:center;gap:8px}
+.btn-sm{display:inline-flex;align-items:center;padding:5px 11px;border:1px solid var(--b);border-radius:7px;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--t3);background:transparent;cursor:pointer;transition:.15s;font-family:inherit}
+.btn-sm:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
+
+/* ── SIDEBAR RECURSOS ── */
+.sb-recursos{border-top:1px solid var(--b2);margin-top:4px;padding-top:4px}
+.sb-link{display:block;padding:6px 8px;font-size:12px;color:var(--t3);border-radius:6px;transition:.12s;text-decoration:none}
+.sb-link:hover{color:var(--g);background:var(--gd)}
+
 /* ── KANBAN ── */
 .kanban{display:grid;grid-auto-flow:column;grid-auto-columns:240px;gap:10px;overflow-x:auto;padding-bottom:12px}
 .kanban::-webkit-scrollbar{height:4px}
@@ -207,16 +225,13 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <span class="tb-dot loading" id="status-dot"></span>
       <span id="status-txt">Cargando…</span>
     </div>
-    <div class="view-toggle">
-      <button class="view-btn" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
-      <button class="view-btn active" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
-    </div>
-    <button class="tb-btn" id="btn-export" onclick="exportExcel()" title="Exportar tabla filtrada a Excel">↓ Excel</button>
     <a class="tb-btn" href="../../index.html">← Portal</a>
     <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻</button>
     <a class="tb-btn primary" href="./gestion-sellers.html">+ Seller</a>
   </div>
 </header>
+
+<div class="alert-strip" id="alert-strip"></div>
 
 <div class="shell">
   <aside class="sidebar">
@@ -293,6 +308,13 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       </select>
     </div>
 
+    <div class="sb-block sb-recursos">
+      <div class="sb-lbl">Recursos</div>
+      <a class="sb-link" href="./gestion-sellers.html">+ Gestión de sellers</a>
+      <a class="sb-link" href="../gantt/gantt-operativo.html">Gantt operativo</a>
+      <a class="sb-link" href="../estrategia/proceso-onboarding.html" target="_blank">Proceso onboarding</a>
+    </div>
+
   </aside>
 
   <div class="content-wrap">
@@ -308,6 +330,15 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
       <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val i" id="kpi-grupos">—</div><div class="kpi-lbl">Grupos</div></div>
       <div class="kpi"><div class="kpi-val g" id="kpi-marcas">—</div><div class="kpi-lbl">Marcas</div></div>
+    </div>
+    <div class="c-toolbar">
+      <div class="view-toggle">
+        <button class="view-btn" id="btn-kanban" onclick="setView('kanban')">Kanban</button>
+        <button class="view-btn active" id="btn-tabla" onclick="setView('tabla')">Tabla</button>
+      </div>
+      <div class="c-toolbar-r">
+        <button class="btn-sm" onclick="exportExcel()" title="Exportar tabla filtrada a Excel">↓ Excel</button>
+      </div>
     </div>
     <div class="content-area" id="content-area">
       <div class="state-box"><div class="state-icon">⟳</div><div class="state-title">Cargando backlog</div><div class="state-desc">Conectando con la base operativa de sellers…</div></div>
@@ -679,6 +710,18 @@ function updateKPIs(){
     sin_relevamiento: ALL.filter(s=>!s._rel||!s._rel.has).length,
   };
   Object.entries(qc).forEach(([k,n])=>setText("qc-"+k,n));
+  buildAlertBar();
+}
+
+/* ── ALERT STRIP ── */
+function buildAlertBar(){
+  const strip=document.getElementById('alert-strip');
+  if(!strip) return;
+  const blk=ALL.filter(s=>s.bloqueo_flag);
+  if(!blk.length){ strip.className='alert-strip'; return; }
+  let html='<strong>⚠ Alertas:</strong>';
+  blk.forEach(s=>{ html+=`<span class="alert-item" onclick="openModal('${esc(s.seller_id)}')">🔴 ${esc(s.nombre||s.seller_id)}</span>`; });
+  strip.innerHTML=html; strip.className='alert-strip visible';
 }
 
 /* ── FILTERS ── */
