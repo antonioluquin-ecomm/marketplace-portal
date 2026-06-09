@@ -825,8 +825,8 @@
       if (finEl) {
         const parts = [];
         if (Number.isFinite(rates.c1_pct))  parts.push(fmtPct(rates.c1_pct)  + " (contado)");
+        if (Number.isFinite(rates.c3_pct))  parts.push(fmtPct(rates.c3_pct)  + " (3 cuotas)");
         if (Number.isFinite(rates.c6_pct))  parts.push(fmtPct(rates.c6_pct)  + " (6 cuotas)");
-        if (Number.isFinite(rates.c12_pct)) parts.push(fmtPct(rates.c12_pct) + " (12 cuotas)");
         if (parts.length) {
           finEl.textContent = parts.join(" · ");
           finEl.classList.add("visible");
