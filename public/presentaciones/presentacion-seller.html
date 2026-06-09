@@ -175,6 +175,8 @@
     .eco-card-tag.t2{background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.22);color:#38bdf8}
     .eco-card-title{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;color:var(--t1);margin-bottom:8px}
     .eco-card-desc{font-size:13px;color:var(--t3);line-height:1.6}
+    .eco-card-value{font-family:"Barlow Condensed",sans-serif;font-size:26px;font-weight:900;color:var(--g);margin:4px 0 10px;letter-spacing:.01em;display:none}
+    .eco-card-value.visible{display:block}
     .eco-highlight{background:var(--k3);border:1px solid var(--g-brd);border-left:4px solid var(--g);border-radius:var(--r);padding:18px 20px;font-size:14px;color:var(--t2);line-height:1.6}
     .eco-highlight strong{color:var(--g)}
 
@@ -569,11 +571,13 @@
         <div class="eco-card">
           <span class="eco-card-tag t1">Capa 1 · Por venta</span>
           <div class="eco-card-title">Comisión del Marketplace</div>
+          <div id="ecoComisionValor" class="eco-card-value"></div>
           <div class="eco-card-desc">Remunera el acceso al canal: tráfico, infraestructura, checkout, medios de pago, antifraude y atención al cliente. La comisión se acuerda según el modelo de integración, el volumen operado y los servicios habilitados.</div>
         </div>
         <div class="eco-card">
           <span class="eco-card-tag t1">Capa 1 · Por venta</span>
           <div class="eco-card-title">Costo financiero</div>
+          <div id="ecoCostoValor" class="eco-card-value"></div>
           <div class="eco-card-desc">Aplica únicamente sobre pedidos abonados en cuotas. Se calcula por pedido según la financiación utilizada por el cliente final. No aplica en pagos en una cuota.</div>
         </div>
         <div class="eco-card">
@@ -622,7 +626,9 @@
     })();
 
     const CONFIG = {
-      SELLERS_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
+      SELLERS_URL:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
+      TARIFAS_URL:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
+      OVERRIDES_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv",
       CLASSIFICATION_URL: BASE_URL + "/public/formularios/formulario-calificacion.html"
     };
 
@@ -747,18 +753,98 @@
       return sellers.find(s=>normalizeKey(pick(s,["seller_id","id_unico_del_seller","id_unico"]))===target)||null;
     }
 
+    const num = v => {
+      const s = String(v||"").replace(/\./g,"").replace(",",".").replace(/[^\d.-]/g,"");
+      const n = parseFloat(s); return Number.isFinite(n) ? n : null;
+    };
+    const fmtPct = v => Number.isFinite(v) ? (v%1===0 ? v+"%" : v.toFixed(1).replace(".",",")+"%") : null;
+
+    async function fetchCSVRows(url) {
+      if (!url) return [];
+      const sep = url.includes("?") ? "&" : "?";
+      const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
+      if (!res.ok) return [];
+      return rowsToObjects(parseCSV(await res.text()));
+    }
+
+    function parseRateRows(rows) {
+      const ALIASES = {
+        comision:"comision_pct", comision_default:"comision_pct", comision_pct:"comision_pct",
+        porcentaje_comision:"comision_pct",
+        c1:"c1_pct", c1_pct:"c1_pct", cuota_1:"c1_pct",
+        c3:"c3_pct", c3_pct:"c3_pct", cuota_3:"c3_pct",
+        c6:"c6_pct", c6_pct:"c6_pct", cuota_6:"c6_pct",
+        c12:"c12_pct", c12_pct:"c12_pct", cuota_12:"c12_pct"
+      };
+      const out = {};
+      rows.forEach(r => {
+        const campo = pick(r, ["campo","Campo","parametro","clave","key","concepto"]);
+        const valor = pick(r, ["Valor vigente","valor","Valor","value"]);
+        const nk = normalizeKey(campo);
+        const key = ALIASES[nk] || nk;
+        const v = num(valor);
+        if (key && v !== null) out[key] = v;
+      });
+      return out;
+    }
+
+    function parseSellerOverridesForPresentation(rows, sellerId) {
+      const sid = normalizeKey(sellerId);
+      const out = {};
+      rows.forEach(r => {
+        const rid = normalizeKey(pick(r, ["seller_id","Seller ID","id_seller","seller"]));
+        if (!rid || rid !== sid) return;
+        Object.entries(r).forEach(([k, v]) => {
+          const nk = normalizeKey(k);
+          const val = num(v);
+          if (val === null) return;
+          if (nk.includes("comision") && !nk.includes("bon")) out.comision_pct = val;
+        });
+      });
+      return out;
+    }
+
+    function applyEconomicValues(rates) {
+      const comEl = $("ecoComisionValor");
+      const finEl = $("ecoCostoValor");
+      if (comEl && Number.isFinite(rates.comision_pct)) {
+        comEl.textContent = fmtPct(rates.comision_pct);
+        comEl.classList.add("visible");
+      }
+      if (finEl) {
+        const parts = [];
+        if (Number.isFinite(rates.c1_pct))  parts.push(fmtPct(rates.c1_pct)  + " (contado)");
+        if (Number.isFinite(rates.c6_pct))  parts.push(fmtPct(rates.c6_pct)  + " (6 cuotas)");
+        if (Number.isFinite(rates.c12_pct)) parts.push(fmtPct(rates.c12_pct) + " (12 cuotas)");
+        if (parts.length) {
+          finEl.textContent = parts.join(" · ");
+          finEl.classList.add("visible");
+        }
+      }
+    }
+
     async function init() {
-    wirePublicLinks();
-    setCtaLinks();
+      wirePublicLinks();
+      setCtaLinks();
       applySellerIdentity({name:sellerNameParam||"Tu marca",logoUrl:logoParam});
       try {
-        const seller=await loadSellerFromSheet();
-        if(!seller) return;
-        const name=pick(seller,["nombre","seller_nombre","nombre_marca","nombre___marca","marca"]);
-        const logoUrl=pick(seller,["logo_url","logo","url_logo","imagen_logo"]);
-        applySellerIdentity({name,logoUrl});
-      } catch(e){
-        console.warn("No se pudo cargar identidad del seller:",e);
+        const [seller, tarifaRows, overrideRows] = await Promise.all([
+          loadSellerFromSheet(),
+          fetchCSVRows(CONFIG.TARIFAS_URL),
+          sellerId ? fetchCSVRows(CONFIG.OVERRIDES_URL) : Promise.resolve([])
+        ]);
+        if (seller) {
+          const name = pick(seller,["nombre","seller_nombre","nombre_marca","nombre___marca","marca"]);
+          const logoUrl = pick(seller,["logo_url","logo","url_logo","imagen_logo"]);
+          applySellerIdentity({name,logoUrl});
+        }
+        if (tarifaRows.length) {
+          const BASE = parseRateRows(tarifaRows);
+          const overrides = sellerId ? parseSellerOverridesForPresentation(overrideRows, sellerId) : {};
+          applyEconomicValues({...BASE, ...overrides});
+        }
+      } catch(e) {
+        console.warn("No se pudo cargar configuración:", e);
       }
     }
 
