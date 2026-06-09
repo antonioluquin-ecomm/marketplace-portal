@@ -12,7 +12,7 @@
 window.MP_CONFIG = {
   PROJECT_NAME: "Sporting Marketplace",
 
-  BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace",
+  BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal",
 
   // Apps Script central Marketplace
   APPS_SCRIPT_URL:
@@ -29,13 +29,13 @@ window.MP_CONFIG = {
 
   ASSETS: {
     LOGO_BASE_URL:
-      "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/",
+      "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/logos/",
     IMAGES_BASE_URL:
-      "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/imagenes/",
+      "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/imagenes/",
     CSS_BASE_URL:
-      "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/css/",
+      "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/css/",
     JS_BASE_URL:
-      "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/js/"
+      "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/js/"
   },
 
   ROUTES: {

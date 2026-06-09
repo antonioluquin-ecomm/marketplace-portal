@@ -148,10 +148,10 @@
 
   <script>
     const FALLBACK_CONFIG = {
-      BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace",
+      BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal",
       APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec",
       CSV: { SELLERS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv" },
-      ASSETS: { LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/" },
+      ASSETS: { LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/logos/" },
       ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html" }, INTERNAL:{ BACKLOG_SELLERS:"/internal/backlog/backlog-sellers.html" } },
       toAbsoluteUrl(path){ const base=this.BASE_URL.replace(/\/$/,""); return /^https?:\/\//i.test(path)?path:base+(String(path).startsWith("/")?path:"/"+path); }
     };
@@ -159,7 +159,7 @@
     const APPS_SCRIPT_URL = CFG.APPS_SCRIPT_URL || FALLBACK_CONFIG.APPS_SCRIPT_URL;
     const SELLERS_CSV_URL = (CFG.CSV && CFG.CSV.SELLERS) || FALLBACK_CONFIG.CSV.SELLERS;
     const LOGO_BASE_URL = ((CFG.ASSETS && CFG.ASSETS.LOGO_BASE_URL) || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL).replace(/\/$/,"/");
-    const GITHUB_REPO   = CFG.GITHUB_REPO   || "antonioluquin-ecomm/sporting-marketplace";
+    const GITHUB_REPO   = CFG.GITHUB_REPO   || "antonioluquin-ecomm/marketplace-portal";
     const GITHUB_BRANCH = CFG.GITHUB_BRANCH || "main";
     const LOGOS_PATH    = "assets/logos";
     const ROUTE_PUBLIC = (CFG.ROUTES && CFG.ROUTES.PUBLIC) || FALLBACK_CONFIG.ROUTES.PUBLIC;
