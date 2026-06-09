@@ -759,15 +759,23 @@
     };
     const fmtPct = v => Number.isFinite(v) ? (v%1===0 ? v+"%" : v.toFixed(1).replace(".",",")+"%") : null;
 
-    async function fetchCSVRows(url) {
+    async function fetchRawRows(url) {
       if (!url) return [];
-      const sep = url.includes("?") ? "&" : "?";
-      const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
-      if (!res.ok) return [];
-      return rowsToObjects(parseCSV(await res.text()));
+      try {
+        const sep = url.includes("?") ? "&" : "?";
+        const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
+        if (!res.ok) return [];
+        return parseCSV(await res.text());
+      } catch(e) { return []; }
     }
 
-    function parseRateRows(rows) {
+    function parseRateRows(rawRows) {
+      // Busca la fila de headers que contenga "campo" (soporta filas de título arriba)
+      const hi = rawRows.findIndex(r => r.some(v => ["campo","parametro","key","clave"].includes(normalizeKey(v))));
+      if (hi < 0) return {};
+      const iC = rawRows[hi].findIndex(v => ["campo","parametro","key","clave"].includes(normalizeKey(v)));
+      const iV = rawRows[hi].findIndex(v => normalizeKey(v).includes("valor"));
+      if (iC < 0 || iV < 0) return {};
       const ALIASES = {
         comision:"comision_pct", comision_default:"comision_pct", comision_pct:"comision_pct",
         porcentaje_comision:"comision_pct",
@@ -777,28 +785,31 @@
         c12:"c12_pct", c12_pct:"c12_pct", cuota_12:"c12_pct"
       };
       const out = {};
-      rows.forEach(r => {
-        const campo = pick(r, ["campo","Campo","parametro","clave","key","concepto"]);
-        const valor = pick(r, ["Valor vigente","valor","Valor","value"]);
-        const nk = normalizeKey(campo);
-        const key = ALIASES[nk] || nk;
+      rawRows.slice(hi + 1).forEach(r => {
+        const campo = normalizeKey(r[iC] || "");
+        const valor = String(r[iV] || "").trim();
+        const key = ALIASES[campo] || campo;
         const v = num(valor);
         if (key && v !== null) out[key] = v;
       });
       return out;
     }
 
-    function parseSellerOverridesForPresentation(rows, sellerId) {
+    function parseSellerOverridesForPresentation(rawRows, sellerId) {
       const sid = normalizeKey(sellerId);
+      // Busca la fila de headers que contenga "seller_id"
+      const hi = rawRows.findIndex(r => r.some(v => normalizeKey(v).includes("seller_id")));
+      if (hi < 0) return {};
+      const headers = rawRows[hi];
+      const iSid = headers.findIndex(h => normalizeKey(h).includes("seller_id"));
       const out = {};
-      rows.forEach(r => {
-        const rid = normalizeKey(pick(r, ["seller_id","Seller ID","id_seller","seller"]));
-        if (!rid || rid !== sid) return;
-        Object.entries(r).forEach(([k, v]) => {
-          const nk = normalizeKey(k);
-          const val = num(v);
-          if (val === null) return;
-          if (nk.includes("comision") && !nk.includes("bon")) out.comision_pct = val;
+      rawRows.slice(hi + 1).forEach(r => {
+        if (normalizeKey(r[iSid] || "") !== sid) return;
+        headers.forEach((h, i) => {
+          const nk = normalizeKey(h);
+          if (!nk.includes("comision") || nk.includes("bon")) return;
+          const val = num(r[i] || "");
+          if (val !== null && val > 0) out.comision_pct = val;
         });
       });
       return out;
@@ -827,25 +838,27 @@
       wirePublicLinks();
       setCtaLinks();
       applySellerIdentity({name:sellerNameParam||"Tu marca",logoUrl:logoParam});
+
+      // Carga de identidad y valores económicos en paralelo pero con catch independientes
+      const [tarifaRaw, overrideRaw] = await Promise.all([
+        fetchRawRows(CONFIG.TARIFAS_URL),
+        sellerId ? fetchRawRows(CONFIG.OVERRIDES_URL) : Promise.resolve([])
+      ]);
+
       try {
-        const [seller, tarifaRows, overrideRows] = await Promise.all([
-          loadSellerFromSheet(),
-          fetchCSVRows(CONFIG.TARIFAS_URL),
-          sellerId ? fetchCSVRows(CONFIG.OVERRIDES_URL) : Promise.resolve([])
-        ]);
+        const seller = await loadSellerFromSheet();
         if (seller) {
           const name = pick(seller,["nombre","seller_nombre","nombre_marca","nombre___marca","marca"]);
           const logoUrl = pick(seller,["logo_url","logo","url_logo","imagen_logo"]);
           applySellerIdentity({name,logoUrl});
         }
-        if (tarifaRows.length) {
-          const BASE = parseRateRows(tarifaRows);
-          const overrides = sellerId ? parseSellerOverridesForPresentation(overrideRows, sellerId) : {};
-          applyEconomicValues({...BASE, ...overrides});
-        }
-      } catch(e) {
-        console.warn("No se pudo cargar configuración:", e);
-      }
+      } catch(e) { console.warn("Identidad seller:", e); }
+
+      try {
+        const BASE = parseRateRows(tarifaRaw);
+        const overrides = sellerId ? parseSellerOverridesForPresentation(overrideRaw, sellerId) : {};
+        applyEconomicValues({...BASE, ...overrides});
+      } catch(e) { console.warn("Valores económicos:", e); }
     }
 
     init();
