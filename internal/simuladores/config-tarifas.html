@@ -24,6 +24,9 @@
   --warn-dim:   rgba(245,158,11,.08);
   --warn-brd:   rgba(245,158,11,.20);
   --warn-txt:   #d4a730;
+  --red:        #f87171;
+  --red-dim:    rgba(248,113,113,.08);
+  --red-brd:    rgba(248,113,113,.20);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
 html { font-size:15px }
@@ -107,6 +110,35 @@ body {
   border-color:var(--green);
   background:var(--surface-3);
 }
+.field input.modified {
+  border-color:var(--green);
+  background:rgba(94,168,50,.06);
+}
+
+/* Valor original debajo del input cuando está modificado */
+.field .orig-val {
+  display:none;
+  font-size:10px;
+  color:var(--text-3);
+}
+.field input.modified ~ .orig-val { display:block }
+
+/* Indicador suma del mix */
+.mix-sum {
+  grid-column:1 / -1;
+  font-size:11px;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:5px;
+  margin-top:2px;
+  transition:background .2s;
+}
+.mix-sum.ok  { color:var(--green) }
+.mix-sum.err {
+  color:var(--red);
+  background:var(--red-dim);
+  border:1px solid var(--red-brd);
+}
 
 .actions {
   display:flex;
@@ -129,8 +161,8 @@ body {
   letter-spacing:.02em;
   transition:background .15s, opacity .15s;
 }
-.btn-save:hover { background:var(--green-dark) }
-.btn-save:disabled { opacity:.5; cursor:not-allowed }
+.btn-save:hover:not(:disabled) { background:var(--green-dark) }
+.btn-save:disabled { opacity:.4; cursor:not-allowed }
 .btn-reload {
   background:transparent;
   color:var(--text-2);
@@ -148,6 +180,7 @@ body {
   margin-left:auto;
   font-size:11px;
   color:var(--text-3);
+  text-align:right;
 }
 
 .toast {
@@ -163,10 +196,12 @@ body {
   transform:translateY(8px);
   transition:opacity .25s, transform .25s;
   z-index:999;
+  max-width:340px;
 }
 .toast.show { opacity:1; transform:translateY(0) }
 .toast.ok  { background:#1a3d0e; border:1px solid var(--green-brd); color:#9de86a }
-.toast.err { background:#3d1414; border:1px solid rgba(217,64,64,.35); color:#f87171 }
+.toast.err { background:#3d1414; border:1px solid var(--red-brd); color:var(--red) }
+.toast.info{ background:var(--surface-2); border:1px solid var(--border); color:var(--text-2) }
 </style>
 </head>
 <body>
@@ -189,118 +224,144 @@ body {
     <span>Los cambios aplican a <strong>todos los sellers que no tengan override</strong>. Verificar con el equipo comercial antes de guardar.</span>
   </div>
 
+  <!-- COMISIÓN -->
   <div class="section">
     <div class="section-title">Comisión del Marketplace</div>
     <div class="fields-grid">
       <div class="field">
         <label for="f_comision_pct">Comisión base <span class="unit">% GMV</span></label>
         <input type="number" id="f_comision_pct" min="0" max="100" step="0.1">
+        <span class="orig-val" id="orig_comision_pct"></span>
       </div>
     </div>
   </div>
 
+  <!-- COSTO FINANCIERO -->
   <div class="section">
     <div class="section-title">Costo Financiero por Cuotas</div>
     <div class="fields-grid">
       <div class="field">
         <label for="f_c1_pct">Contado / 1 cuota <span class="unit">% GMV</span></label>
         <input type="number" id="f_c1_pct" min="0" max="100" step="0.1">
+        <span class="orig-val" id="orig_c1_pct"></span>
       </div>
       <div class="field">
         <label for="f_c3_pct">3 cuotas <span class="unit">% GMV</span></label>
         <input type="number" id="f_c3_pct" min="0" max="100" step="0.1">
+        <span class="orig-val" id="orig_c3_pct"></span>
       </div>
       <div class="field">
         <label for="f_c6_pct">6 cuotas <span class="unit">% GMV</span></label>
         <input type="number" id="f_c6_pct" min="0" max="100" step="0.1">
+        <span class="orig-val" id="orig_c6_pct"></span>
       </div>
       <div class="field">
         <label for="f_c12_pct">12 cuotas <span class="unit">% GMV</span></label>
         <input type="number" id="f_c12_pct" min="0" max="100" step="0.1">
+        <span class="orig-val" id="orig_c12_pct"></span>
       </div>
     </div>
   </div>
 
+  <!-- MIX HISTÓRICO -->
   <div class="section">
     <div class="section-title">Mix Histórico de Cuotas</div>
     <div class="fields-grid">
       <div class="field">
         <label for="f_mix_c1">Mix contado <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c1" min="0" max="100" step="0.01">
+        <span class="orig-val" id="orig_mix_c1"></span>
       </div>
       <div class="field">
         <label for="f_mix_c3">Mix 3 cuotas <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c3" min="0" max="100" step="0.01">
+        <span class="orig-val" id="orig_mix_c3"></span>
       </div>
       <div class="field">
         <label for="f_mix_c6">Mix 6 cuotas <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c6" min="0" max="100" step="0.01">
+        <span class="orig-val" id="orig_mix_c6"></span>
       </div>
       <div class="field">
         <label for="f_mix_c12">Mix 12 cuotas <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c12" min="0" max="100" step="0.01">
+        <span class="orig-val" id="orig_mix_c12"></span>
       </div>
+      <div id="mixSum" class="mix-sum"></div>
     </div>
   </div>
 
+  <!-- TARIFAS DE SERVICIOS -->
   <div class="section">
     <div class="section-title">Tarifas de Servicios</div>
     <div class="fields-grid">
       <div class="field">
         <label for="f_t_logistica_dir">Logística directa <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_logistica_dir" min="0" step="1">
+        <span class="orig-val" id="orig_t_logistica_dir"></span>
       </div>
       <div class="field">
         <label for="f_t_logistica_inv">Logística inversa <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_logistica_inv" min="0" step="1">
+        <span class="orig-val" id="orig_t_logistica_inv"></span>
       </div>
       <div class="field">
         <label for="f_t_catalogacion">Catalogación <span class="unit">ARS/SKU</span></label>
         <input type="number" id="f_t_catalogacion" min="0" step="1">
+        <span class="orig-val" id="orig_t_catalogacion"></span>
       </div>
       <div class="field">
         <label for="f_t_fulfillment">Fulfillment <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_fulfillment" min="0" step="1">
+        <span class="orig-val" id="orig_t_fulfillment"></span>
       </div>
       <div class="field">
         <label for="f_t_gestion_devol">Gestión devoluciones <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_gestion_devol" min="0" step="1">
+        <span class="orig-val" id="orig_t_gestion_devol"></span>
       </div>
       <div class="field">
         <label for="f_t_soporte">Soporte <span class="unit">ARS/mes</span></label>
         <input type="number" id="f_t_soporte" min="0" step="1">
+        <span class="orig-val" id="orig_t_soporte"></span>
       </div>
       <div class="field">
         <label for="f_t_almacenamiento">Almacenamiento <span class="unit">ARS/mes</span></label>
         <input type="number" id="f_t_almacenamiento" min="0" step="1">
+        <span class="orig-val" id="orig_t_almacenamiento"></span>
       </div>
     </div>
   </div>
 
+  <!-- PARÁMETROS OPERATIVOS -->
   <div class="section">
     <div class="section-title">Parámetros Operativos</div>
     <div class="fields-grid">
       <div class="field">
         <label for="f_dias_habiles">Días hábiles <span class="unit">días/mes</span></label>
         <input type="number" id="f_dias_habiles" min="1" max="31" step="1">
+        <span class="orig-val" id="orig_dias_habiles"></span>
       </div>
       <div class="field">
         <label for="f_dias_calendario">Días calendario <span class="unit">días/mes</span></label>
         <input type="number" id="f_dias_calendario" min="1" max="31" step="1">
+        <span class="orig-val" id="orig_dias_calendario"></span>
       </div>
       <div class="field">
         <label for="f_capacidad_deposito">Capacidad depósito <span class="unit">SKU</span></label>
         <input type="number" id="f_capacidad_deposito" min="0" step="1">
+        <span class="orig-val" id="orig_capacidad_deposito"></span>
       </div>
       <div class="field">
         <label for="f_devol_pct_default">Devoluciones default <span class="unit">%</span></label>
         <input type="number" id="f_devol_pct_default" min="0" max="100" step="0.1">
+        <span class="orig-val" id="orig_devol_pct_default"></span>
       </div>
     </div>
   </div>
 
   <div class="actions">
-    <button class="btn-save" id="btnSave" onclick="saveForm()">Guardar cambios</button>
+    <button class="btn-save" id="btnSave" onclick="saveForm()" disabled>Guardar cambios</button>
     <button class="btn-reload" onclick="reload()">↺ Recargar valores</button>
     <span class="status-txt" id="statusTxt"></span>
   </div>
@@ -336,6 +397,22 @@ const FIELD_MAP = {
   devol_pct_default: "f_devol_pct_default"
 };
 
+const LABELS = {
+  comision_pct:"Comisión base", c1_pct:"Contado", c3_pct:"3 cuotas", c6_pct:"6 cuotas", c12_pct:"12 cuotas",
+  mix_c1:"Mix contado", mix_c3:"Mix 3c", mix_c6:"Mix 6c", mix_c12:"Mix 12c",
+  t_logistica_dir:"Logística directa", t_logistica_inv:"Logística inversa",
+  t_catalogacion:"Catalogación", t_fulfillment:"Fulfillment",
+  t_gestion_devol:"Gestión devol.", t_soporte:"Soporte", t_almacenamiento:"Almacenamiento",
+  dias_habiles:"Días hábiles", dias_calendario:"Días calendario",
+  capacidad_deposito:"Cap. depósito", devol_pct_default:"Devol. default"
+};
+
+const MIX_KEYS = ["mix_c1","mix_c3","mix_c6","mix_c12"];
+
+let ORIGINAL_VALUES = {};
+let dataLoaded = false;
+
+// ── CSV ──────────────────────────────────────────────────────────
 function parseCSV(text) {
   const rows = [];
   for (const line of text.split(/\r?\n/)) {
@@ -364,12 +441,20 @@ async function fetchRawRows() {
   return parseCSV(await res.text());
 }
 
+function parseSheetNum(s) {
+  const t = String(s || "").trim();
+  return t.includes(",")
+    ? parseFloat(t.replace(/\./g, "").replace(",", "."))
+    : parseFloat(t);
+}
+
+// ── FORM ─────────────────────────────────────────────────────────
 function populateForm(rows) {
   const hi = rows.findIndex(r => r.some(v => normalizeKey(v) === "campo"));
-  if (hi < 0) return;
+  if (hi < 0) return false;
   const iCampo = rows[hi].findIndex(v => normalizeKey(v) === "campo");
   const iValor = rows[hi].findIndex(v => normalizeKey(v).includes("valor"));
-  if (iCampo < 0 || iValor < 0) return;
+  if (iCampo < 0 || iValor < 0) return false;
 
   rows.slice(hi + 1).forEach(row => {
     const campo = normalizeKey(row[iCampo] || "");
@@ -377,16 +462,60 @@ function populateForm(rows) {
     if (!inputId) return;
     const el = document.getElementById(inputId);
     if (!el) return;
-    const s = String(row[iValor] || "").trim();
-    // Si tiene coma: formato argentino (punto=miles, coma=decimal). Si solo tiene punto: punto=decimal.
-    const val = s.includes(",")
-      ? parseFloat(s.replace(/\./g, "").replace(",", "."))
-      : parseFloat(s);
+    const val = parseSheetNum(row[iValor]);
     if (Number.isFinite(val)) el.value = val;
   });
+  return true;
+}
 
-  const hhmm = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  document.getElementById("statusTxt").textContent = "Valores cargados a las " + hhmm;
+function snapshotOriginals() {
+  ORIGINAL_VALUES = {};
+  Object.entries(FIELD_MAP).forEach(([campo, inputId]) => {
+    const el = document.getElementById(inputId);
+    if (el && el.value !== "") ORIGINAL_VALUES[campo] = parseFloat(el.value);
+  });
+}
+
+function resetModifiedState() {
+  Object.entries(FIELD_MAP).forEach(([campo, inputId]) => {
+    const el = document.getElementById(inputId);
+    if (!el) return;
+    el.classList.remove("modified");
+    const origEl = document.getElementById("orig_" + campo);
+    if (origEl) origEl.textContent = "";
+  });
+}
+
+function attachListeners() {
+  Object.entries(FIELD_MAP).forEach(([campo, inputId]) => {
+    const el = document.getElementById(inputId);
+    if (!el) return;
+    el.addEventListener("input", () => {
+      const val = parseFloat(el.value);
+      const orig = ORIGINAL_VALUES[campo];
+      const changed = Number.isFinite(val) && Number.isFinite(orig) && Math.abs(val - orig) > 0.0001;
+      el.classList.toggle("modified", changed);
+      const origEl = document.getElementById("orig_" + campo);
+      if (origEl) origEl.textContent = changed ? "Antes: " + orig : "";
+      if (MIX_KEYS.includes(campo)) updateMixSum();
+    });
+  });
+}
+
+function updateMixSum() {
+  const sum = MIX_KEYS.reduce((acc, k) => {
+    const el = document.getElementById(FIELD_MAP[k]);
+    return acc + (parseFloat(el?.value) || 0);
+  }, 0);
+  const el = document.getElementById("mixSum");
+  const rounded = Math.round(sum * 100) / 100;
+  if (Math.abs(sum - 100) < 0.11) {
+    el.textContent = "✓ Suma: " + rounded + "%";
+    el.className = "mix-sum ok";
+  } else {
+    el.textContent = "⚠ Suma: " + rounded + "% — debe ser exactamente 100%";
+    el.className = "mix-sum err";
+  }
 }
 
 function collectForm() {
@@ -400,18 +529,46 @@ function collectForm() {
   return campos;
 }
 
+// ── TOAST ────────────────────────────────────────────────────────
 function showToast(msg, type) {
   const el = document.getElementById("toast");
   el.textContent = msg;
   el.className = "toast " + type + " show";
   clearTimeout(el._timer);
-  el._timer = setTimeout(() => { el.className = "toast " + type; }, 3200);
+  el._timer = setTimeout(() => { el.className = "toast " + type; }, 4000);
 }
 
+// ── SAVE ─────────────────────────────────────────────────────────
 async function saveForm() {
-  const campos = collectForm();
-  if (!Object.keys(campos).length) { showToast("No hay valores para guardar.", "err"); return; }
-  if (!confirm("¿Guardar cambios en tarifas?\n\nLos valores nuevos aplican a todos los sellers sin override activo.")) return;
+  if (!dataLoaded) { showToast("Esperá a que carguen los valores del sheet.", "err"); return; }
+
+  // Validación mix
+  const mixSum = MIX_KEYS.reduce((acc, k) => {
+    const el = document.getElementById(FIELD_MAP[k]);
+    return acc + (parseFloat(el?.value) || 0);
+  }, 0);
+  if (Math.abs(mixSum - 100) > 0.11) {
+    showToast("El mix de cuotas debe sumar 100%. Suma actual: " + Math.round(mixSum * 100) / 100 + "%.", "err");
+    return;
+  }
+
+  const allCampos = collectForm();
+  if (!Object.keys(allCampos).length) { showToast("No hay valores para guardar.", "err"); return; }
+
+  // Solo campos que cambiaron respecto al original
+  const changed = Object.entries(allCampos).filter(([k, v]) => {
+    const orig = ORIGINAL_VALUES[k];
+    return !Number.isFinite(orig) || Math.abs(v - orig) > 0.0001;
+  });
+
+  if (!changed.length) { showToast("Sin cambios para guardar.", "info"); return; }
+
+  const diffText = changed.map(([k, v]) => {
+    const orig = Number.isFinite(ORIGINAL_VALUES[k]) ? ORIGINAL_VALUES[k] : "—";
+    return `  · ${LABELS[k] || k}: ${orig} → ${v}`;
+  }).join("\n");
+
+  if (!confirm(`¿Confirmar cambios en tarifas?\n\n${diffText}\n\nEstos valores aplican a todos los sellers sin override.`)) return;
 
   const btn = document.getElementById("btnSave");
   btn.disabled = true;
@@ -422,9 +579,12 @@ async function saveForm() {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ tipo_formulario: "tarifas_update", campos })
+      body: JSON.stringify({ tipo_formulario: "tarifas_update", campos: Object.fromEntries(changed) })
     });
-    showToast("Guardado. Los cambios aplican en unos segundos.", "ok");
+    // Actualizar baseline a los nuevos valores guardados
+    changed.forEach(([k, v]) => { ORIGINAL_VALUES[k] = v; });
+    resetModifiedState();
+    showToast(`Guardado (${changed.length} campo${changed.length > 1 ? "s" : ""}). Cambios activos en segundos.`, "ok");
   } catch(e) {
     showToast("Error al guardar. Revisá la conexión.", "err");
   } finally {
@@ -433,23 +593,54 @@ async function saveForm() {
   }
 }
 
+// ── RELOAD / INIT ─────────────────────────────────────────────────
+function setStatus(txt) {
+  document.getElementById("statusTxt").textContent = txt;
+}
+
+function timestampStatus() {
+  const hhmm = new Date().toLocaleTimeString("es-AR", { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+  setStatus("Valores cargados a las " + hhmm);
+}
+
 async function reload() {
-  document.getElementById("statusTxt").textContent = "Recargando…";
+  setStatus("Recargando…");
   try {
-    populateForm(await fetchRawRows());
+    const rows = await fetchRawRows();
+    const ok = populateForm(rows);
+    if (ok) {
+      snapshotOriginals();
+      resetModifiedState();
+      updateMixSum();
+      timestampStatus();
+    } else {
+      setStatus("No se encontraron datos en el sheet");
+    }
   } catch(e) {
-    document.getElementById("statusTxt").textContent = "Error al recargar";
+    setStatus("Error al recargar");
     showToast("No se pudieron cargar los valores del sheet.", "err");
   }
 }
 
 async function init() {
-  document.getElementById("statusTxt").textContent = "Cargando valores…";
+  setStatus("Cargando valores…");
   try {
-    populateForm(await fetchRawRows());
+    const rows = await fetchRawRows();
+    const ok = populateForm(rows);
+    if (ok) {
+      snapshotOriginals();
+      attachListeners();
+      updateMixSum();
+      dataLoaded = true;
+      document.getElementById("btnSave").disabled = false;
+      timestampStatus();
+    } else {
+      setStatus("No se encontraron datos");
+      showToast("No se pudo parsear el sheet de tarifas.", "err");
+    }
   } catch(e) {
-    document.getElementById("statusTxt").textContent = "Error al cargar";
-    showToast("No se pudieron cargar los valores del sheet.", "err");
+    setStatus("Error al cargar valores del sheet");
+    showToast("No se pudieron cargar los valores. Verificá la conexión.", "err");
   }
 }
 
