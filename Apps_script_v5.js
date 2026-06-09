@@ -75,6 +75,10 @@ function doPost(e) {
       });
     }
 
+    if (tipoFormulario === "tarifas_update") {
+      return jsonResponse(actualizarTarifas(data));
+    }
+
     const sellerId = String(data.seller_id || "").trim();
 
     if (!sellerId) {
@@ -187,6 +191,8 @@ function normalizarTipoFormulario(valor) {
     ["gantt_task_disable", "gantt_disable", "timeline_disable"].includes(tipo)
   )
     return "gantt_task_disable";
+
+  if (["tarifas_update", "tarifas"].includes(tipo)) return "tarifas_update";
 
   return tipo;
 }
@@ -2045,3 +2051,39 @@ const HEADERS_RELEVAMIENTO = [
   "particularidades",
   "comentarios",
 ];
+
+// ───────────────────────────────────────────────
+// TARIFAS — ACTUALIZACIÓN DESDE FRONT
+// ───────────────────────────────────────────────
+function actualizarTarifas(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(HOJA_TARIFAS);
+  if (!sheet) throw new Error("Hoja 'tarifas' no encontrada");
+
+  const allValues = sheet.getDataRange().getValues();
+  const hi = allValues.findIndex(r =>
+    r.some(v => String(v).trim().toLowerCase() === "campo")
+  );
+  if (hi < 0) throw new Error("No se encontró fila de encabezados en hoja tarifas");
+
+  const headers = allValues[hi].map(v => String(v).trim().toLowerCase());
+  const iCampo = headers.indexOf("campo");
+  const iValor = headers.findIndex(h => h.includes("valor"));
+  if (iCampo < 0 || iValor < 0) throw new Error("Columnas 'campo' o 'valor vigente' no encontradas");
+
+  const campos = data.campos || {};
+  const updated = [];
+
+  allValues.slice(hi + 1).forEach((row, i) => {
+    const campo = String(row[iCampo] || "").trim().toLowerCase();
+    if (campo in campos) {
+      const sheetRow = hi + 2 + i; // 1-based
+      const sheetCol = iValor + 1;  // 1-based
+      sheet.getRange(sheetRow, sheetCol).setValue(Number(campos[campo]));
+      updated.push({ campo, valor: Number(campos[campo]) });
+    }
+  });
+
+  SpreadsheetApp.flush();
+  return { ok: true, updated, total: updated.length, fecha: new Date().toISOString() };
+}
