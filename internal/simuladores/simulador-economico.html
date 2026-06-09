@@ -909,9 +909,13 @@ async function loadOverrides(url) {
     const rows = parseCSVRows(text);
     if (rows.length < 2) return [];
 
-    const headers = rows[0].map(h => normalizeKey(h));
+    // La pestaña overrides tiene banner + fila de instrucciones antes de los headers reales
+    const hi = rows.findIndex(r => r.some(v => normalizeKey(v).includes('seller_id')));
+    if (hi < 0 || hi >= rows.length - 1) return [];
 
-    return rows.slice(1)
+    const headers = rows[hi].map(h => normalizeKey(h));
+
+    return rows.slice(hi + 1)
       .map(row => rowToObject(headers, row))
       .filter(o => Object.values(o).some(v => String(v || '').trim() !== ''));
   } catch (e) {
@@ -934,16 +938,22 @@ function applyOverridesForCurrentSeller(forceRender = false) {
   const nextRates = { ...BASE_RATES };
 
   activeOverrides.forEach(o => {
-    const field = pickFirst(o, ['campo', 'key', 'tarifa', 'concepto', 'servicio']);
-    const valueRaw = pickFirst(o, ['valor', 'value', 'importe', 'monto', 'porcentaje', 'rate']);
     const status = normalizeText(pickFirst(o, ['activo', 'habilitado', 'estado', 'aplica']));
-    const value = toNumber(valueRaw);
-
-    if (!field || !Number.isFinite(value)) return;
     if (status && ['no', 'false', 'inactivo', 'deshabilitado', '0'].includes(status)) return;
 
-    const normalizedField = normalizeRateField(field);
-    if (normalizedField) nextRates[normalizedField] = value;
+    // Formato largo: una fila por (seller, campo, valor)
+    const field = pickFirst(o, ['campo', 'key', 'tarifa', 'concepto', 'servicio']);
+    if (field) {
+      const value = toNumber(pickFirst(o, ['valor', 'value', 'importe', 'monto', 'porcentaje', 'rate']));
+      if (!Number.isFinite(value)) return;
+      const normalizedField = normalizeRateField(field);
+      if (normalizedField) nextRates[normalizedField] = value;
+      return;
+    }
+
+    // Formato ancho (pestaña overrides actual): una fila por seller.
+    // Comisión override % reemplaza la comisión; Bon. * % descuenta sobre la tarifa base.
+    aplicarOverrideAncho(o, nextRates);
   });
 
   const signature = JSON.stringify(nextRates) + '|' + activeOverrides.length;
@@ -953,6 +963,31 @@ function applyOverridesForCurrentSeller(forceRender = false) {
     activeOverrideSignature = signature;
     renderRatesPanel(RATES, activeOverrides.length ? 'override' : lastRatesSource);
   }
+}
+
+function aplicarOverrideAncho(o, nextRates) {
+  Object.entries(o).forEach(([k, v]) => {
+    const value = toNumber(v);
+    if (!Number.isFinite(value)) return;
+
+    if (k.includes('comision') && k.includes('override')) {
+      nextRates.comision_default = value;
+      return;
+    }
+    if (!k.startsWith('bon')) return;
+
+    const baseKey =
+      k.includes('dir')     ? 't_ld' :
+      k.includes('inv')     ? 't_li' :
+      k.includes('catalog') ? 't_ca' :
+      k.includes('fulfil')  ? 't_ff' :
+      k.includes('devol')   ? 't_gd' :
+      k.includes('soporte') ? 't_soporte' : null;
+
+    if (baseKey && Number.isFinite(BASE_RATES[baseKey])) {
+      nextRates[baseKey] = Math.round(BASE_RATES[baseKey] * (1 - value / 100) * 100) / 100;
+    }
+  });
 }
 
 function overrideMatchesSeller(o, sellerInput) {

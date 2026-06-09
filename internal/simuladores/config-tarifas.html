@@ -202,6 +202,113 @@ body {
 .toast.ok  { background:#1a3d0e; border:1px solid var(--green-brd); color:#9de86a }
 .toast.err { background:#3d1414; border:1px solid var(--red-brd); color:var(--red) }
 .toast.info{ background:var(--surface-2); border:1px solid var(--border); color:var(--text-2) }
+
+/* ── OVERRIDE POR SELLER ─────────────────────────────────── */
+.field select {
+  width:100%;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:8px 10px;
+  font-family:'Barlow', sans-serif;
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-1);
+  outline:none;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  padding-right:28px;
+  transition:border-color .15s, background .15s;
+}
+.field select:focus { border-color:var(--green); background:var(--surface-3); }
+.select-wrap { position:relative }
+.select-wrap::after {
+  content:"▾";
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  color:var(--text-3);
+  font-size:12px;
+}
+.ov-hint {
+  font-size:10px;
+  color:var(--text-3);
+  display:block;
+  margin-top:3px;
+  line-height:1.4;
+}
+.ov-intro {
+  font-size:12px;
+  color:var(--text-3);
+  margin-bottom:16px;
+  line-height:1.6;
+  padding:10px 12px;
+  background:var(--surface-2);
+  border-radius:6px;
+  border:1px solid var(--border);
+}
+.ov-intro strong { color:var(--text-2) }
+.ov-notes {
+  width:100%;
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:8px 10px;
+  font-family:'Barlow', sans-serif;
+  font-size:13px;
+  color:var(--text-1);
+  outline:none;
+  resize:vertical;
+  min-height:58px;
+  transition:border-color .15s, background .15s;
+}
+.ov-notes:focus { border-color:var(--green); background:var(--surface-3); }
+.ov-notes.ov-active { border-color:var(--green); background:rgba(94,168,50,.05); }
+.ov-subactions {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+
+.ov-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:16px }
+.ov-table th {
+  text-align:left;
+  padding:5px 8px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text-3);
+  border-bottom:1px solid var(--border);
+}
+.ov-table td {
+  padding:8px 8px;
+  border-bottom:1px solid var(--border);
+  color:var(--text-2);
+  vertical-align:middle;
+}
+.ov-table td:first-child { color:var(--text-1); font-weight:600; font-size:13px }
+.ov-table tr.has-ov:hover td { background:var(--surface-2); cursor:pointer }
+.ov-tag {
+  display:inline-block;
+  padding:2px 6px;
+  border-radius:4px;
+  font-size:10px;
+  font-weight:600;
+  background:var(--green-dim);
+  color:var(--green);
+  border:1px solid var(--green-brd);
+  margin:1px;
+  white-space:nowrap;
+}
+.ov-empty { font-size:12px; color:var(--text-3); padding:10px 0; text-align:center }
+.ov-loading { font-size:12px; color:var(--text-3); padding:8px 0 }
 </style>
 </head>
 <body>
@@ -360,6 +467,93 @@ body {
     </div>
   </div>
 
+  <!-- OVERRIDES POR SELLER -->
+  <div class="section">
+    <div class="section-title">Condiciones especiales por seller</div>
+    <p class="ov-intro">
+      <strong>Vacío</strong> = usa tarifa base estándar. &nbsp;
+      <strong>Comisión:</strong> % directo que reemplaza la base. &nbsp;
+      <strong>Bonificaciones:</strong> % de descuento sobre la tarifa base (50 = mitad de precio · 100 = gratis). &nbsp;
+      <strong>★</strong> = seller con condiciones ya cargadas. Para quitarlas: vaciá todos los campos y guardá.
+    </p>
+
+    <div style="max-width:300px; margin-bottom:18px">
+      <div class="field">
+        <label>Seller</label>
+        <div class="select-wrap">
+          <select id="ovSellerSelect" onchange="onSellerChange(this.value)">
+            <option value="">— Seleccioná un seller —</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="ovForm" style="display:none">
+      <div class="fields-grid">
+        <div class="field">
+          <label>Comisión override <span class="unit">% directo</span></label>
+          <input type="number" id="ov_comision_override" min="0" max="100" step="0.1"
+                 placeholder="Vacío = usa base">
+          <span class="ov-hint" id="ovbase_comision_override"></span>
+        </div>
+        <div class="field">
+          <label>Bon. logística dir. <span class="unit">% dto.</span></label>
+          <input type="number" id="ov_bon_logistica_dir" min="0" max="100" step="1"
+                 placeholder="Vacío = sin dto.">
+          <span class="ov-hint" id="ovhint_bon_logistica_dir">0 = sin descuento · 100 = gratis</span>
+        </div>
+        <div class="field">
+          <label>Bon. logística inv. <span class="unit">% dto.</span></label>
+          <input type="number" id="ov_bon_logistica_inv" min="0" max="100" step="1"
+                 placeholder="Vacío = sin dto.">
+          <span class="ov-hint" id="ovhint_bon_logistica_inv">0 = sin descuento · 100 = gratis</span>
+        </div>
+        <div class="field">
+          <label>Bon. catalogación <span class="unit">% dto.</span></label>
+          <input type="number" id="ov_bon_catalogacion" min="0" max="100" step="1"
+                 placeholder="Vacío = sin dto.">
+          <span class="ov-hint" id="ovhint_bon_catalogacion">0 = sin descuento · 100 = gratis</span>
+        </div>
+        <div class="field">
+          <label>Bon. fulfillment <span class="unit">% dto.</span></label>
+          <input type="number" id="ov_bon_fulfillment" min="0" max="100" step="1"
+                 placeholder="Vacío = sin dto.">
+          <span class="ov-hint" id="ovhint_bon_fulfillment">0 = sin descuento · 100 = gratis</span>
+        </div>
+        <div class="field">
+          <label>Bon. gest. devol. <span class="unit">% dto.</span></label>
+          <input type="number" id="ov_bon_gest_devol" min="0" max="100" step="1"
+                 placeholder="Vacío = sin dto.">
+          <span class="ov-hint" id="ovhint_bon_gest_devol">0 = sin descuento · 100 = gratis</span>
+        </div>
+        <div class="field">
+          <label>Bon. soporte <span class="unit">% dto.</span></label>
+          <input type="number" id="ov_bon_soporte" min="0" max="100" step="1"
+                 placeholder="Vacío = sin dto.">
+          <span class="ov-hint" id="ovhint_bon_soporte">0 = sin descuento · 100 = gratis</span>
+        </div>
+        <div class="field">
+          <label>Cuotas máx. override <span class="unit">cuotas</span></label>
+          <input type="number" id="ov_cuotas_max" min="1" max="24" step="1"
+                 placeholder="Vacío = sin límite">
+          <span class="ov-hint">Reemplaza el máximo global</span>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label>Notas comerciales</label>
+          <textarea class="ov-notes" id="ov_notas"
+                    placeholder="Condiciones especiales, acuerdos, vigencia…"></textarea>
+        </div>
+      </div>
+      <div class="ov-subactions">
+        <button class="btn-save" id="btnSaveOverride" onclick="saveOverride()">Guardar override</button>
+        <button class="btn-reload" onclick="clearOverride()">Limpiar campos</button>
+        <span class="status-txt" id="ovStatusTxt"></span>
+      </div>
+    </div>
+
+    <div id="ovSummary"><p class="ov-loading">Cargando overrides…</p></div>
+  </div>
+
   <div class="actions">
     <button class="btn-save" id="btnSave" onclick="saveForm()" disabled>Guardar cambios</button>
     <button class="btn-reload" onclick="reload()">↺ Recargar valores</button>
@@ -432,7 +626,12 @@ function parseCSV(text) {
 }
 
 function normalizeKey(v) {
-  return String(v || "").toLowerCase().replace(/[^a-z0-9_]/g, "").trim();
+  return String(v || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9_]/g, "")
+    .trim();
 }
 
 async function fetchRawRows() {
@@ -605,6 +804,7 @@ function timestampStatus() {
 
 async function reload() {
   setStatus("Recargando…");
+  initOverrides();
   try {
     const rows = await fetchRawRows();
     const ok = populateForm(rows);
@@ -644,7 +844,370 @@ async function init() {
   }
 }
 
+// ── OVERRIDES POR SELLER ─────────────────────────────────────
+// Pestaña "overrides" (gid 649807159): la misma que consumen simuladores, presentación y backlog.
+const OVERRIDES_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv";
+// Pestaña "sellers" (gid 899415596): permite agregar overrides a sellers que aún no figuran en la pestaña overrides.
+const SELLERS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv";
+
+const OVERRIDE_FIELD_MAP = {
+  comision_override: { id:"ov_comision_override", label:"Comisión override",  unit:"% directo", type:"number" },
+  bon_logistica_dir: { id:"ov_bon_logistica_dir", label:"Bon. logística dir.",unit:"% dto.",    type:"number" },
+  bon_logistica_inv: { id:"ov_bon_logistica_inv", label:"Bon. logística inv.",unit:"% dto.",    type:"number" },
+  bon_catalogacion:  { id:"ov_bon_catalogacion",  label:"Bon. catalogación",  unit:"% dto.",    type:"number" },
+  bon_fulfillment:   { id:"ov_bon_fulfillment",   label:"Bon. fulfillment",   unit:"% dto.",    type:"number" },
+  bon_gest_devol:    { id:"ov_bon_gest_devol",    label:"Bon. gest. devol.",  unit:"% dto.",    type:"number" },
+  bon_soporte:       { id:"ov_bon_soporte",       label:"Bon. soporte",       unit:"% dto.",    type:"number" },
+  cuotas_max:        { id:"ov_cuotas_max",        label:"Cuotas máx.",        unit:"cuotas",    type:"number" },
+  notas:             { id:"ov_notas",             label:"Notas comerciales",  unit:"",          type:"text"   }
+};
+
+// Detección de columna por contenido del header — tolerante a renombres menores del sheet
+function ovFieldFromHeader(h) {
+  const nk = normalizeKey(h);
+  if (!nk) return null;
+  if (nk.includes("seller_id") || nk === "sellerid") return "_sid";
+  if (nk === "seller" || nk === "seller_nombre" || nk === "sellernombre" || nk === "nombre") return "_sname";
+  if (nk.includes("comision") && nk.includes("override")) return "comision_override";
+  if (nk.includes("cuotas") && nk.includes("max")) return "cuotas_max";
+  if (nk.includes("notas")) return "notas";
+  if (nk.includes("bon")) {
+    if (nk.includes("dir")) return "bon_logistica_dir";
+    if (nk.includes("inv")) return "bon_logistica_inv";
+    if (nk.includes("catalog")) return "bon_catalogacion";
+    if (nk.includes("fulfil")) return "bon_fulfillment";
+    if (nk.includes("devol")) return "bon_gest_devol";
+    if (nk.includes("soporte")) return "bon_soporte";
+  }
+  return null;
+}
+
+// Bonificación % → tarifa base sobre la que aplica (para mostrar el valor efectivo)
+const OV_BON_TO_BASE = {
+  bon_logistica_dir: "t_logistica_dir",
+  bon_logistica_inv: "t_logistica_inv",
+  bon_catalogacion:  "t_catalogacion",
+  bon_fulfillment:   "t_fulfillment",
+  bon_gest_devol:    "t_gestion_devol",
+  bon_soporte:       "t_soporte"
+};
+
+let OV_DATA = {};
+let OV_SELLERS = [];
+let OV_CURRENT_SELLER = null;
+
+function parseOverrides(rows) {
+  // La pestaña tiene banner + fila de instrucciones antes de los headers reales
+  const hi = rows.findIndex(r => r.some(v => normalizeKey(v).includes("seller_id")));
+  if (hi < 0) return null;
+  const headers = rows[hi];
+  const colIdx = {};
+  let iSid = -1, iSname = -1;
+  headers.forEach((h, i) => {
+    const fk = ovFieldFromHeader(h);
+    if (fk === "_sid") { if (iSid < 0) iSid = i; }
+    else if (fk === "_sname") { if (iSname < 0) iSname = i; }
+    else if (fk) colIdx[i] = fk;
+  });
+  if (iSid < 0) return null;
+
+  const result = {};
+  rows.slice(hi + 1).forEach(row => {
+    const sid = (row[iSid] || "").trim();
+    if (!sid) return;
+    const sname = iSname >= 0 ? (row[iSname] || "").trim() : "";
+    const campos = {};
+    Object.entries(colIdx).forEach(([ci, fk]) => {
+      const v = (row[ci] || "").trim();
+      if (v === "") return;
+      const fm = OVERRIDE_FIELD_MAP[fk];
+      if (fm?.type === "text") { campos[fk] = v; }
+      else { const n = parseSheetNum(v); if (Number.isFinite(n)) campos[fk] = n; }
+    });
+    result[sid] = { seller_id: sid, seller_nombre: sname, campos };
+  });
+  return result;
+}
+
+function parseSellers(rows) {
+  const hi = rows.findIndex(r => r.some(v => normalizeKey(v).includes("seller_id")));
+  if (hi < 0) return [];
+  const headers = rows[hi];
+  const iSid = headers.findIndex(v => normalizeKey(v).includes("seller_id"));
+  const iName = headers.findIndex(v => {
+    const nk = normalizeKey(v);
+    return nk === "seller_nombre" || nk === "sellernombre" || nk === "nombre" || nk === "seller";
+  });
+  const out = [];
+  rows.slice(hi + 1).forEach(row => {
+    const id = (row[iSid] || "").trim();
+    if (!id) return;
+    out.push({ seller_id: id, seller_nombre: iName >= 0 ? (row[iName] || "").trim() : "" });
+  });
+  return out;
+}
+
+function populateSellerSelect() {
+  const sel = document.getElementById("ovSellerSelect");
+  const prev = sel.value;
+  while (sel.options.length > 1) sel.remove(1);
+
+  // Unión: pestaña sellers (lista completa) + pestaña overrides (por si un seller solo figura ahí)
+  const byId = {};
+  OV_SELLERS.forEach(s => { byId[s.seller_id] = { ...s }; });
+  Object.values(OV_DATA).forEach(d => {
+    if (!byId[d.seller_id]) byId[d.seller_id] = { seller_id: d.seller_id, seller_nombre: d.seller_nombre };
+    else if (!byId[d.seller_id].seller_nombre && d.seller_nombre) byId[d.seller_id].seller_nombre = d.seller_nombre;
+  });
+
+  Object.values(byId)
+    .sort((a, b) => (a.seller_nombre || a.seller_id).localeCompare(b.seller_nombre || b.seller_id, "es"))
+    .forEach(({ seller_id, seller_nombre }) => {
+      const hasOv = Object.keys(OV_DATA[seller_id]?.campos || {}).length > 0;
+      const opt = document.createElement("option");
+      opt.value = seller_id;
+      opt.textContent = (seller_nombre || seller_id) + "  ·  " + seller_id + (hasOv ? "  ★" : "");
+      sel.appendChild(opt);
+    });
+
+  if (prev && byId[prev]) sel.value = prev;
+}
+
+function ovSellerName(id) {
+  return OV_DATA[id]?.seller_nombre
+    || OV_SELLERS.find(s => s.seller_id === id)?.seller_nombre
+    || id;
+}
+
+function ovFmtMoney(n) {
+  return "$" + Number(n).toLocaleString("es-AR", { maximumFractionDigits: 2 });
+}
+
+function updateOvComisionHint() {
+  const hintEl = document.getElementById("ovbase_comision_override");
+  if (!hintEl) return;
+  const base = ORIGINAL_VALUES.comision_pct;
+  const v = parseFloat(document.getElementById("ov_comision_override")?.value);
+  if (Number.isFinite(base) && Number.isFinite(v)) hintEl.textContent = `Reemplaza la base de ${base}% → cobra ${v}%`;
+  else if (Number.isFinite(base)) hintEl.textContent = `Base actual: ${base}% · vacío = usa base`;
+  else hintEl.textContent = "Vacío = usa comisión base";
+}
+
+function updateOvHint(fk) {
+  const fm = OVERRIDE_FIELD_MAP[fk];
+  const hintEl = document.getElementById("ovhint_" + fk);
+  if (!fm || !hintEl) return;
+  const base = ORIGINAL_VALUES[OV_BON_TO_BASE[fk]];
+  const v = parseFloat(document.getElementById(fm.id)?.value);
+  if (Number.isFinite(base) && Number.isFinite(v)) {
+    const eff = Math.round(base * (1 - v / 100) * 100) / 100;
+    hintEl.textContent = `Base ${ovFmtMoney(base)} → queda ${ovFmtMoney(eff)} (${v}% dto.)`;
+  } else if (Number.isFinite(base)) {
+    hintEl.textContent = `Base ${ovFmtMoney(base)} · 0 = sin dto. · 100 = gratis`;
+  } else {
+    hintEl.textContent = "0 = sin descuento · 100 = gratis";
+  }
+}
+
+function refreshOvHints() {
+  updateOvComisionHint();
+  Object.keys(OV_BON_TO_BASE).forEach(updateOvHint);
+}
+
+function attachOvListeners() {
+  Object.entries(OVERRIDE_FIELD_MAP).forEach(([fk, fm]) => {
+    const el = document.getElementById(fm.id);
+    if (!el) return;
+    el.addEventListener("input", () => {
+      if (fm.type === "text") { el.classList.toggle("ov-active", el.value.trim() !== ""); return; }
+      el.classList.toggle("modified", Number.isFinite(parseFloat(el.value)));
+      if (fk === "comision_override") updateOvComisionHint();
+      else if (OV_BON_TO_BASE[fk]) updateOvHint(fk);
+    });
+  });
+}
+
+function onSellerChange(sellerId) {
+  const form = document.getElementById("ovForm");
+  if (!sellerId) { form.style.display = "none"; OV_CURRENT_SELLER = null; return; }
+  OV_CURRENT_SELLER = sellerId;
+  loadSellerOverride(sellerId);
+  form.style.display = "block";
+}
+
+function loadSellerOverride(sellerId) {
+  const entry = OV_DATA[sellerId] || { campos: {} };
+  Object.entries(OVERRIDE_FIELD_MAP).forEach(([fk, fm]) => {
+    const el = document.getElementById(fm.id);
+    if (!el) return;
+    if (fm.type === "text") {
+      const v = entry.campos[fk] || "";
+      el.value = v;
+      el.classList.toggle("ov-active", v !== "");
+    } else {
+      const v = entry.campos[fk];
+      el.value = (v !== undefined && Number.isFinite(v)) ? v : "";
+      el.classList.toggle("modified", v !== undefined);
+    }
+  });
+  refreshOvHints();
+  document.getElementById("ovStatusTxt").textContent = "";
+}
+
+function clearOverride() {
+  Object.values(OVERRIDE_FIELD_MAP).forEach(({ id, type }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = "";
+    el.classList.remove("modified");
+    if (type === "text") el.classList.remove("ov-active");
+  });
+  refreshOvHints();
+  document.getElementById("ovStatusTxt").textContent = "";
+}
+
+async function saveOverride() {
+  if (!OV_CURRENT_SELLER) return;
+
+  // Payload completo: los campos vacíos viajan como "" para que el Apps Script limpie la celda
+  const campos = {};
+  let setCount = 0;
+  Object.entries(OVERRIDE_FIELD_MAP).forEach(([fk, fm]) => {
+    const el = document.getElementById(fm.id);
+    if (!el) return;
+    if (fm.type === "text") {
+      const v = el.value.trim();
+      campos[fk] = v;
+      if (v) setCount++;
+    } else {
+      const v = parseFloat(el.value);
+      if (Number.isFinite(v)) { campos[fk] = v; setCount++; }
+      else campos[fk] = "";
+    }
+  });
+
+  const sellerName = ovSellerName(OV_CURRENT_SELLER);
+  const hadOverride = Object.keys(OV_DATA[OV_CURRENT_SELLER]?.campos || {}).length > 0;
+
+  let confirmMsg;
+  if (setCount) {
+    const summary = Object.entries(campos)
+      .filter(([, v]) => v !== "")
+      .map(([k, v]) => `  · ${OVERRIDE_FIELD_MAP[k]?.label || k}: ${v}`)
+      .join("\n");
+    confirmMsg = `¿Guardar condiciones especiales para ${sellerName}?\n\n${summary}`;
+  } else if (hadOverride) {
+    confirmMsg = `${sellerName} quedará SIN condiciones especiales (vuelve a tarifas base).\n\n¿Confirmar?`;
+  } else {
+    showToast("No hay condiciones para guardar.", "info");
+    return;
+  }
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById("btnSaveOverride");
+  btn.disabled = true;
+  btn.textContent = "Guardando…";
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        tipo_formulario: "override_update",
+        seller_id: OV_CURRENT_SELLER,
+        seller_nombre: sellerName,
+        campos
+      })
+    });
+    const saved = {};
+    Object.entries(campos).forEach(([k, v]) => { if (v !== "") saved[k] = v; });
+    OV_DATA[OV_CURRENT_SELLER] = { seller_id: OV_CURRENT_SELLER, seller_nombre: sellerName, campos: saved };
+    renderOvSummary();
+    populateSellerSelect();
+    loadSellerOverride(OV_CURRENT_SELLER);
+    document.getElementById("ovStatusTxt").textContent = "Guardado a las " + new Date().toLocaleTimeString("es-AR", { hour:"2-digit", minute:"2-digit" });
+    showToast(setCount ? `Override de ${sellerName} guardado.` : `Override de ${sellerName} eliminado.`, "ok");
+  } catch(e) {
+    showToast("Error al guardar override.", "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Guardar override";
+  }
+}
+
+function escHtml(v) {
+  return String(v ?? "").replace(/[&<>"']/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[ch]));
+}
+
+function renderOvSummary() {
+  const el = document.getElementById("ovSummary");
+  if (!el) return;
+  const withOv = Object.values(OV_DATA).filter(d => Object.keys(d.campos).length > 0);
+  if (!withOv.length) {
+    el.innerHTML = '<p class="ov-empty">Sin overrides activos — todos los sellers usan tarifas base.</p>';
+    return;
+  }
+  let html = `<table class="ov-table">
+    <thead><tr><th>Seller</th><th>ID</th><th>Condiciones activas</th></tr></thead><tbody>`;
+  withOv
+    .sort((a, b) => (a.seller_nombre || a.seller_id).localeCompare(b.seller_nombre || b.seller_id, "es"))
+    .forEach(({ seller_id, seller_nombre, campos }) => {
+      const tags = Object.entries(campos).map(([k, v]) => {
+        const label = OVERRIDE_FIELD_MAP[k]?.label || k;
+        const display = OVERRIDE_FIELD_MAP[k]?.type === "text" ? label : `${label}: ${v}`;
+        return `<span class="ov-tag">${escHtml(display)}</span>`;
+      }).join(" ");
+      html += `<tr class="has-ov" data-sid="${escHtml(seller_id)}">
+        <td>${escHtml(seller_nombre || seller_id)}</td>
+        <td style="color:var(--text-3);font-size:11px">${escHtml(seller_id)}</td>
+        <td>${tags}</td>
+      </tr>`;
+    });
+  html += "</tbody></table>";
+  el.innerHTML = html;
+  el.querySelectorAll("tr.has-ov").forEach(tr => {
+    tr.addEventListener("click", () => {
+      const sid = tr.getAttribute("data-sid");
+      document.getElementById("ovSellerSelect").value = sid;
+      onSellerChange(sid);
+      document.getElementById("ovForm").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+}
+
+async function fetchCsvRows(url) {
+  const sep = url.includes("?") ? "&" : "?";
+  const res = await fetch(url + sep + "_ts=" + Date.now(), { cache: "no-store" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return parseCSV(await res.text());
+}
+
+async function initOverrides() {
+  const summaryEl = document.getElementById("ovSummary");
+  summaryEl.innerHTML = '<p class="ov-loading">Cargando overrides…</p>';
+  try {
+    const [ovRows, sellerRows] = await Promise.all([
+      fetchCsvRows(OVERRIDES_URL),
+      fetchCsvRows(SELLERS_URL).catch(() => null) // si falla, el selector usa solo la pestaña overrides
+    ]);
+    const data = parseOverrides(ovRows);
+    if (!data) {
+      summaryEl.innerHTML = '<p class="ov-empty">No se encontró la fila de encabezados (seller_id) en la hoja overrides.</p>';
+      return;
+    }
+    OV_DATA = data;
+    OV_SELLERS = sellerRows ? parseSellers(sellerRows) : [];
+    populateSellerSelect();
+    renderOvSummary();
+    if (OV_CURRENT_SELLER) loadSellerOverride(OV_CURRENT_SELLER);
+  } catch(e) {
+    summaryEl.innerHTML = '<p class="ov-empty">No se pudieron cargar los overrides del sheet.</p>';
+  }
+}
+
 init();
+attachOvListeners();
+initOverrides();
 </script>
 </body>
 </html>
