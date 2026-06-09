@@ -4,6 +4,32 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-06-09 - Consolidacion estructural: Hub Central unico y limpieza de raiz
+
+Tipo de cambio: estructural / navegacion / documentacion.
+
+Estado: implementado.
+
+Resultado:
+- `index.html` ahora ES el Hub Central: se unificaron la portada institucional y el hub operativo en un solo centro de navegacion en la URL raiz. El contenido proviene del hub operativo (buscador, flujo, secciones, mapa) con rutas ajustadas a raiz.
+- `internal/hub-operativo.html` convertido en alias que redirige a `../index.html` preservando query y hash.
+- `sporting-marketplace_hub_v29.html` retargeteado para redirigir directo a `index.html` (evita doble salto).
+- Links "← Hub" de `gantt-operativo.html` y `config-tarifas.html` actualizados a `../../index.html`. El resto de las paginas internas ya apuntaba a `../../index.html`, por lo que caen en el centro unificado sin cambios.
+- Agregada `config-tarifas` al catalogo RESOURCES del buscador del hub (faltaba).
+- Limpieza de raiz: `Apps_script_v5.js`, `Config.gs`, `Gantt.gs`, `Headers.gs`, `Utils.gs` movidos a `integrations/apps-script/`; `Mapa del Hub.docx` a `docs/source/`; `MarketPlace Sporting - Sellers (BD).xlsx` a `data/`.
+- Eliminados duplicados sin referencias: `config.js` de raiz (superado por `assets/js/config.js`) y carpeta `Logos/` (canonico: `assets/logos/`; cero referencias verificadas por grep).
+- Creado `CLAUDE.md` en raiz: mapa del repo y reglas criticas para agentes.
+- `README.md` reescrito reflejando la estructura consolidada.
+
+Alcance:
+- Los aliases versionados de raiz se mantienen intactos como compatibility layer.
+- No se modifico logica funcional de paginas operativas, formularios ni simuladores.
+- No se modifico el Apps Script (solo cambio de ubicacion del fuente en el repo).
+
+Validacion:
+- grep sin rutas relativas rotas en el nuevo `index.html`.
+- referencias a `Logos/` y `config.js` de raiz verificadas como inexistentes antes de eliminar.
+
 ## 2026-06-01 - Etapa 1E guardado parcial Relevamiento Perfil
 
 Tipo de cambio: frontend / UX.

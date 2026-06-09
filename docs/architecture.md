@@ -1,5 +1,7 @@
 # Arquitectura del Proyecto
 
+> **Estado 2026-06-09:** la estructura objetivo quedo implementada y consolidada. `index.html` es el Hub Central unico (portada + hub operativo unificados), las paginas viven en `internal/` y `public/`, las fuentes de Apps Script en `integrations/apps-script/`, los datos en `data/`, los documentos fuente en `docs/source/` y los HTML versionados de raiz son aliases de compatibilidad. Ver `CLAUDE.md` para el mapa vigente y las reglas criticas. Las secciones siguientes se conservan como registro del diagnostico y los criterios originales.
+
 ## Diagnostico actual
 
 Marketplace Portal se encuentra en una etapa funcional pero estructuralmente organica. La raiz del repositorio concentra paginas HTML, configuracion, integraciones, documentacion, datos y assets.

@@ -1,112 +1,55 @@
 # Marketplace Portal
 
-Marketplace Portal es el repositorio operativo del ecosistema Marketplace Sporting. Reune el hub central, paginas internas, formularios publicos, simuladores, modelos de integracion, governance, seller center, roadmaps y herramientas de gestion necesarias para operar y evolucionar el marketplace.
+Marketplace Portal es el repositorio operativo del ecosistema Marketplace Sporting: hub central, herramientas internas de gestión, formularios públicos, simuladores, modelos de estrategia y el backend de Google Apps Script.
 
-## Objetivo del proyecto
+Es un sitio estático compatible con GitHub Pages, sin build step: cada página HTML es autocontenida.
 
-El objetivo es convertir el conjunto actual de paginas y herramientas en una plataforma estatica estructurada, mantenible y escalable, compatible con GitHub Pages y preparada para migraciones incrementales sin romper funcionalidades existentes.
+**URL pública:** https://antonioluquin-ecomm.github.io/marketplace-portal/
 
-## Estado actual
+## Centro único de navegación
 
-El proyecto funciona y ya cuenta con estructura institucional migrada. Las paginas nuevas viven en `internal/` y `public/`, mientras que los HTML versionados de raiz que ya tienen ruta nueva funcionan como aliases de compatibilidad.
+`index.html` es el **Hub Central**: la única entrada del portal. Unifica lo que antes eran dos páginas separadas (portada institucional + hub operativo interno). Incluye buscador de recursos, flujo de incorporación de sellers, accesos a gestión diaria, Seller Center, estrategia y recursos públicos.
 
-`internal/hub-operativo.html` es el hub operativo interno oficial post-V1, creado a partir de la funcionalidad util de `sporting-marketplace_hub_v29.html`. `index.html` mantiene el rol de portada institucional liviana.
+`internal/hub-operativo.html` y `sporting-marketplace_hub_v29.html` se mantienen como aliases que redirigen al Hub Central preservando query y hash.
 
-`sporting-marketplace_hub_v29.html` se conserva en raiz como URL legacy, pero desde Etapa 9C funciona como alias hacia `internal/hub-operativo.html`. El smoke test de Etapa 9D fue OK, preservando query string y hash. No se movio ni elimino el archivo legacy.
-
-## Estado operativo Gantt
-
-El Gantt Operativo Marketplace queda estabilizado al cierre del bloque 33-35. La ruta activa es `internal/gantt/gantt-operativo.html` y opera sobre el contrato `timeline` v33:
-
-- modelo canonico de 14 columnas con `inicio`, `fin`, `entorno`, `depende_de`, `seller_nombre` y `ver_en_gantt`;
-- frontend/backend compatibles con create, update y disable v33, manteniendo aliases legacy;
-- auditor automatico read-only compatible con modelo v33 y legacy;
-- UX operativa vigente con filtros, badges QA/Productivo, selector `depende_de`, hitos por fase, vista Mes, vista Semana centrada, boton `Hoy`, columnas sticky y timeline compacto/protagonista;
-- decisiones pendientes documentadas: `ver_en_gantt` oculto, catalogo fase->hito local en frontend, sin quick actions, templates, drag and drop, persistencia de filtros ni edicion masiva.
-
-Para retomar trabajo sobre Gantt, leer primero `docs/handoff-post-v1.md`, `docs/data-dictionary-timeline.md`, `docs/roadmap.md` y `docs/test-matrix.md`.
-
-Estructura actual resumida:
+## Estructura
 
 ```txt
 /
-├─ Logos/
-├─ Apps_script_v5.js
-├─ config.js
-├─ PROJECT_WORKFLOW.md
-├─ Mapa del Hub.docx
-├─ MarketPlace Sporting - Sellers (BD).xlsx
-├─ sporting-marketplace_hub_v29.html
-├─ internal/
-│  └─ hub-operativo.html
-├─ backlog-sellers_v27.html
-├─ gestion-sellers_v7.html
-├─ gantt-operativo_v18.html
-├─ gantt-seller-center_v2.html
-├─ seller-center_v2.html
-├─ maqueta-seller-center_v2.html
-├─ formularios, simuladores y modelos HTML
-└─ docs/
+├─ index.html                  Hub Central (único centro de navegación)
+├─ CLAUDE.md                   Guía para agentes: mapa del repo y reglas críticas
+├─ internal/                   Páginas de uso interno
+│  ├─ backlog/                 Gestión de Sellers · Backlog de Sellers
+│  ├─ gantt/                   Gantt Operativo · Gantt Seller Center
+│  ├─ seller-center/           Dashboard · Maqueta
+│  ├─ simuladores/             Simulador Económico · Config Tarifas y Overrides
+│  └─ estrategia/              Proyecto · Modelos · Governance · Onboarding
+├─ public/                     Páginas compartibles con sellers (?seller_id=SPT-XXX)
+│  ├─ formularios/             Calificación · Relevamiento
+│  ├─ presentaciones/          Presentación Seller
+│  └─ simuladores/             Simulador Seller
+├─ assets/                     css/ · js/config.js (config central) · logos/
+├─ integrations/apps-script/   Fuente del backend (Apps_script_v5.js, Config.gs, …)
+├─ data/                       Datos fuente (xlsx)
+├─ docs/                       Documentación viva · docs/source/ (documentos fuente)
+├─ tools/                      Scripts de auditoría
+├─ legacy/                     Reservado para snapshots históricos
+└─ *_v[0-9]*.html              Aliases de compatibilidad (redirects, no borrar)
 ```
 
-## Estado V1
+## Datos y backend
 
-Marketplace Portal V1 queda estable y listo para release:
+- **Base de datos:** Google Sheets, publicado como CSV por pestaña. Pestañas clave: `tarifas`, `overrides`, `sellers`, `timeline`.
+- **Lectura:** las páginas cargan los CSV publicados en runtime.
+- **Escritura:** POST a Google Apps Script (`doPost` con router por `tipo_formulario`).
+- **Importante:** tras modificar `integrations/apps-script/*`, pegar el código en el editor de Google Apps Script y **redeployar**. El repo es la fuente de verdad del código, pero el script corre en Google.
 
-- estructura base creada;
-- `index.html` institucional creado;
-- paginas internas y publicas migradas por copia segura;
-- assets/logos copiados y fallbacks locales aplicados por etapas;
-- `tokens.css` validado en paginas internas seleccionadas;
-- aliases legacy implementados para todos los HTML versionados migrados;
-- `sporting-marketplace_hub_v29.html` quedo intacto durante V1 y desde Etapa 9C funciona como alias al hub operativo oficial.
-- `internal/hub-operativo.html` recibio mejoras post-V1 acotadas en Etapa 10B: regreso al portal, buscador mejorado, aviso de `seller_id`, mapa clickeable y ajuste mobile minimo.
-- `assets/css/internal-components.css` quedo aplicado a paginas internas autorizadas en Etapa 14, manteniendo CSS inline como fallback y sin extraer JavaScript.
-- La limpieza CSS interna se cerro en Etapa 15: se aplico solo a paginas informativas de estrategia y las paginas operativas quedaron excluidas por relacion riesgo/beneficio.
-- `assets/js/internal-navigation.js` quedo creado en Etapa 16 como helper minimo para navegacion activa por scroll, aplicado solo a paginas informativas seleccionadas. No se extrajo JS operativo.
+## Compatibilidad de URLs
 
-Validacion previa a release V1:
+Los HTML versionados de la raíz (`backlog-sellers_v27.html`, `simulador-seller_v12.html`, etc.) son aliases de ~1 KB que redirigen a las rutas nuevas preservando query string y hash. Protegen URLs ya compartidas con el equipo y con sellers — no se mueven ni se eliminan.
 
-- smoke test manual completo de aliases ejecutado con resultado OK;
-- paginas publicas validadas con `?seller_id=SPT-001`;
-- query string y hash preservados en aliases;
-- no se ejecuto submit real en Gestion ni formularios;
-- release notes V1 creadas en `docs/release-notes-v1.md`.
+## Metodología
 
-Pendientes post-V1:
+El proyecto se gestiona según `PROJECT_WORKFLOW.md`: etapas pequeñas y verificables, separación entre auditoría/implementación/validación, documentación viva (`CHANGELOG.md`, `docs/`) y protección de URLs existentes.
 
-- definir siguientes mejoras post-9D sobre el hub operativo sin tocar formularios, simuladores, Backlog, Gestion, Apps Script ni config sin etapa especifica;
-- mantener la raiz como compatibility layer de aliases; no mover aliases a `legacy/` sin etapa explicita;
-- evaluar extraccion CSS/JS solo con auditoria y smoke test por grupo;
-- mantener paginas publicas seller-facing independientes del CSS interno compartido;
-- no extraer JavaScript ni eliminar CSS inline operativo sin nueva auditoria especifica;
-- no extraer JS operativo sin auditoria dedicada por pagina;
-- no realizar limpieza fisica de aliases, legacy, logos o archivos fuente por ahora; Etapa 18A/18B cerro la auditoria estructural sin links locales rotos detectados;
-- revisar documentacion/handoff o ejecutar smoke test post-push como proximo bloque recomendado;
-- mantener Apps Script, endpoints, payloads y submit sin cambios salvo etapa autorizada.
-- usar `docs/handoff-post-v1.md` como contexto inicial para nuevas sesiones.
-
-## Metodologia de trabajo
-
-El proyecto se gestiona segun `PROJECT_WORKFLOW.md`, respetando estos principios:
-
-- separar auditoria, implementacion, validacion y release;
-- trabajar en etapas pequenas, controladas y verificables;
-- no mezclar cambios funcionales, visuales, estructurales y documentales;
-- mantener documentacion viva;
-- registrar decisiones importantes;
-- validar antes de publicar;
-- proteger URLs existentes y compatibilidad con GitHub Pages.
-
-## Alcance de la Etapa 0
-
-Esta etapa crea la base documental e institucional del proyecto. No incluye cambios funcionales, visuales, estructurales sobre paginas existentes, migraciones de HTML, cambios de rutas, cambios de Apps Script ni modificaciones sobre formularios o simuladores.
-
-Archivos documentales principales:
-
-- `CHANGELOG.md`
-- `docs/architecture.md`
-- `docs/hub-map.md`
-- `docs/roadmap.md`
-- `docs/test-matrix.md`
-- `docs/decisions/README.md`
+Para retomar trabajo sobre el Gantt/timeline, leer `docs/handoff-post-v1.md` y `docs/data-dictionary-timeline.md`. Para contexto general de agentes, leer `CLAUDE.md`.
