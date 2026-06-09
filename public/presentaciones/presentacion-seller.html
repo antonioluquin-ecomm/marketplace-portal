@@ -839,12 +839,7 @@
       setCtaLinks();
       applySellerIdentity({name:sellerNameParam||"Tu marca",logoUrl:logoParam});
 
-      // Carga de identidad y valores económicos en paralelo pero con catch independientes
-      const [tarifaRaw, overrideRaw] = await Promise.all([
-        fetchRawRows(CONFIG.TARIFAS_URL),
-        sellerId ? fetchRawRows(CONFIG.OVERRIDES_URL) : Promise.resolve([])
-      ]);
-
+      // Identidad del seller (independiente)
       try {
         const seller = await loadSellerFromSheet();
         if (seller) {
@@ -854,9 +849,15 @@
         }
       } catch(e) { console.warn("Identidad seller:", e); }
 
+      // Valores económicos (independiente — nunca se cancela por errores de identidad)
       try {
+        const tarifaRaw = await fetchRawRows(CONFIG.TARIFAS_URL);
         const BASE = parseRateRows(tarifaRaw);
-        const overrides = sellerId ? parseSellerOverridesForPresentation(overrideRaw, sellerId) : {};
+        const overrides = {};
+        if (sellerId && CONFIG.OVERRIDES_URL) {
+          const overrideRaw = await fetchRawRows(CONFIG.OVERRIDES_URL);
+          Object.assign(overrides, parseSellerOverridesForPresentation(overrideRaw, sellerId));
+        }
         applyEconomicValues({...BASE, ...overrides});
       } catch(e) { console.warn("Valores económicos:", e); }
     }
