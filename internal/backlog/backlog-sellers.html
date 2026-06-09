@@ -389,8 +389,10 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 <script>
 /* ── CONFIG ── */
 const CONFIG = {
-  SELLERS_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
+  SELLERS_URL:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
   RELEVAMIENTOS_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=233624428&single=true&output=csv",
+  TARIFAS_URL:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
+  OVERRIDES_URL:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv",
   CALIFICACIONES_URL: "", // completar con el CSV publicado de la hoja calificaciones si se quiere cruzar la tercera fuente
   PUBLIC_BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace",
   LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/sporting-marketplace/assets/logos/",
@@ -632,6 +634,7 @@ async function loadData(force=false){
     ALL=transform(rows);
     await mergeRelevamientos();
     await mergeCalificaciones();
+    await mergeOverrides();
     dot.className="tb-dot"; txt.textContent="Actualizado "+new Date().toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"});
     populateResponsableSelect();
     updateKPIs();
@@ -694,6 +697,64 @@ async function mergeCalificaciones(){
     const latest=rowsToLatestBySeller(parseCSV(await res.text()));
     ALL.forEach(s=>{s._cal=latest[s.seller_id]||{has:false,fecha:""}; fillSellerFromExternal(s,s._cal,"calificacion");});
   }catch(e){ ALL.forEach(s=>{s._cal=s._cal||{has:false,fecha:""};}); }
+}
+
+const fmtComision = v => Number.isFinite(v) ? (v%1===0 ? v+"%" : v.toFixed(1).replace(".",",")+"%") : "—";
+
+async function mergeOverrides(){
+  try{
+    const [tarifasRes, overridesRes] = await Promise.all([
+      CONFIG.TARIFAS_URL   ? fetch(CONFIG.TARIFAS_URL  +"&_ts="+Date.now(),{cache:"no-store"}) : Promise.resolve(null),
+      CONFIG.OVERRIDES_URL ? fetch(CONFIG.OVERRIDES_URL+"&_ts="+Date.now(),{cache:"no-store"}) : Promise.resolve(null)
+    ]);
+
+    // Comisión base desde tarifas (formato campo / Valor vigente)
+    let comisionBase = null;
+    if(tarifasRes && tarifasRes.ok){
+      const rows = parseCSV(await tarifasRes.text());
+      const hi = rows.findIndex(r=>r.some(v=>["campo","parametro"].includes(norm(v))));
+      if(hi>=0){
+        const iC = rows[hi].findIndex(v=>["campo","parametro"].includes(norm(v)));
+        const iV = rows[hi].findIndex(v=>norm(v).includes("valor"));
+        rows.slice(hi+1).forEach(r=>{
+          const campo = norm(r[iC]||"");
+          if(["comision","comision_pct","comision_default","porcentaje_comision"].includes(campo)){
+            const val = parseFloat(String(r[iV]||"").replace(",","."));
+            if(Number.isFinite(val)) comisionBase = val;
+          }
+        });
+      }
+    }
+
+    // Overrides por seller (formato una fila por seller, columnas por campo)
+    const overrideMap = {};
+    if(overridesRes && overridesRes.ok){
+      const rows = parseCSV(await overridesRes.text());
+      const hi = rows.findIndex(r=>r.some(v=>norm(v).includes("seller_id")));
+      if(hi>=0){
+        const headers = rows[hi];
+        const iSeller = headers.findIndex(h=>norm(h).includes("seller_id"));
+        rows.slice(hi+1).forEach(r=>{
+          const sid = norm(r[iSeller]||"");
+          if(!sid) return;
+          headers.forEach((h,i)=>{
+            const nk = norm(h);
+            if(!nk.includes("comision")||nk.includes("bon")) return;
+            const val = parseFloat(String(r[i]||"").replace(",","."));
+            if(Number.isFinite(val)&&val>0) overrideMap[sid]=val;
+          });
+        });
+      }
+    }
+
+    ALL.forEach(s=>{
+      const sid = norm(s.seller_id);
+      if(sid in overrideMap){ s._comision_pct=overrideMap[sid]; s._comision_override=true; }
+      else { s._comision_pct=comisionBase; s._comision_override=false; }
+    });
+  }catch(e){
+    console.warn("No se pudo cargar condiciones comerciales:", e);
+  }
 }
 
 function populateSelect(id, values, allLabel="Todos"){
@@ -912,6 +973,7 @@ function renderTabla(filtered){
       <td>${esc(s.marca_seller_operativo||"—")}</td>
       <td><span class="status-pill ${pipelineClass(s.pipeline_estado)}">${esc(s.pipeline_estado)}</span></td>
       <td>${s.modelo_integracion&&s.modelo_integracion!=="—"?`<span class="chip i">${esc(s.modelo_integracion)}</span>`:`<span style="color:var(--t4)">—</span>`}</td>
+      <td style="white-space:nowrap">${s._comision_pct!=null?s._comision_override?`<span class="chip i" style="font-size:11px">${esc(fmtComision(s._comision_pct))}</span>`:`<span style="color:var(--t3);font-size:12px">${esc(fmtComision(s._comision_pct))}</span>`:`<span style="color:var(--t4)">—</span>`}</td>
       <td class="${priCls}">${esc(s.prioridad)}</td>
       <td>${prog}</td>
       <td class="td-next"><div class="td-next-text">${esc(s.proximo_paso||"—")}</div>${s.proximo_paso_resp&&s.proximo_paso_resp!=="—"?`<div class="td-next-resp">${esc(s.proximo_paso_resp)}</div>`:""}</td>
@@ -922,7 +984,7 @@ function renderTabla(filtered){
   setHTML("content-area",`<div class="table-wrap"><table>
     <thead><tr>
       <th class="td-blk"></th>
-      ${thSort("seller_id","ID")}${thSort("nombre","Seller")}<th>Grupo</th>${thSort("marca_seller_operativo","Marca operativa")}${thSort("pipeline_estado","Pipeline")}<th>Modelo</th>
+      ${thSort("seller_id","ID")}${thSort("nombre","Seller")}<th>Grupo</th>${thSort("marca_seller_operativo","Marca operativa")}${thSort("pipeline_estado","Pipeline")}<th>Modelo</th><th>Comisión</th>
       ${thSort("prioridad","Prioridad")}${thSort("progreso_pct","Avance")}<th>Próximo paso</th>${thSort("responsable","Responsable")}
     </tr></thead>
     <tbody>${rows}</tbody>
@@ -982,6 +1044,7 @@ function openModal(id){
       <div class="msec-title">Estado</div>
       ${row("Responsable",s.responsable)}
       ${row("Prioridad",s.prioridad)}
+      ${s._comision_pct!=null?`<div class="mrow"><span class="ml">Comisión</span><span class="mv">${s._comision_override?`<span class="chip i" style="font-size:11px;margin-right:5px">${esc(fmtComision(s._comision_pct))}</span><span style="color:var(--t4);font-size:11px">condición especial</span>`:`<span style="color:var(--g)">${esc(fmtComision(s._comision_pct))}</span><span style="color:var(--t4);font-size:11px;margin-left:6px">tarifa base</span>`}</span></div>`:""}
       ${row("Riesgo",s.riesgo_nivel)}
       ${row("Avance",s.progreso_pct+"%")}
       ${row("Empresa / grupo",s.empresa_grupo)}
