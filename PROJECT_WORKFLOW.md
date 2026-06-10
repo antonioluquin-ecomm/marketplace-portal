@@ -47,6 +47,7 @@
 - 33. Niveles de madurez visual.
 - 34. Auditoria documental y limpieza controlada.
 - 35. Nota final.
+- 36. Seguridad en integraciones: Apps Script y GitHub.
 
 # 1. Objetivo del documento
 
@@ -1638,3 +1639,140 @@ Un proyecto asistido por IA funciona mejor cuando:
 - el equipo humano conserva la decision final.
 
 La IA no reemplaza al equipo: ayuda a ordenar, acelerar, validar y documentar mejor el trabajo.
+
+# 36. Seguridad en integraciones: Apps Script y GitHub
+
+Esta seccion consolida lo aprendido al implementar proteccion de escritura y proxy de credenciales en Marketplace Portal. Los patrones son reutilizables en cualquier proyecto que combine un sitio estatico con Apps Script como backend.
+
+## Principio base
+
+Nunca exponer credenciales en codigo cliente (HTML, JS inline) ni en localStorage cuando exista una alternativa server-side. Apps Script actua como backend seguro: puede almacenar secretos via Script Properties sin exponerlos al navegador.
+
+## Script Properties como almacen de secretos
+
+Las Script Properties son el mecanismo correcto para guardar secretos en Apps Script.
+
+Configurar en: editor de Apps Script → Configuracion del proyecto → Propiedades de secuencia de comandos.
+
+| Clave | Proposito |
+| --- | --- |
+| `WRITE_SECRET` | Clave de escritura que el cliente debe enviar para operaciones sensibles (tarifas, overrides, uploads) |
+| `GITHUB_PAT` | Token Fine-grained de GitHub para que Apps Script suba archivos al repositorio via UrlFetchApp |
+
+Buenas practicas:
+- Nombres en MAYUSCULAS_SNAKE_CASE.
+- Nunca loggear el valor de una propiedad en respuestas ni en console.
+- Si la propiedad no existe, puede omitirse la validacion para retro-compatibilidad o lanzar un error segun el riesgo del endpoint.
+- Rotar el secreto si hay sospecha de exposicion: se actualiza solo en Script Properties, no requiere cambio de codigo.
+
+## Patron WRITE_SECRET: proteger endpoints de escritura
+
+Aplica a cualquier handler de `doPost` que modifique datos sensibles.
+
+Flujo:
+1. El cliente lee el secreto desde `localStorage` con clave `mp_write_secret`.
+2. Lo incluye en el payload como campo `write_secret`.
+3. Apps Script ejecuta `validarWriteSecret(data)` al inicio del handler.
+4. Si la Script Property no esta configurada, la validacion se omite (modo de gracia para primeros deployments).
+
+```javascript
+function validarWriteSecret(data) {
+  const esperado = PropertiesService.getScriptProperties().getProperty("WRITE_SECRET");
+  if (!esperado) return; // sin propiedad = sin validacion (retro-compat)
+  if (String(data.write_secret || "").trim() !== esperado)
+    throw new Error("Clave de escritura invalida");
+}
+```
+
+El equipo configura el secreto una sola vez desde `config-tarifas.html` (panel de clave de escritura con clave `mp_write_secret`). Todos los formularios internos leen la misma clave del localStorage.
+
+Rotacion del secreto:
+1. Actualizar el valor en Script Properties (no requiere redeploy si no cambia el codigo).
+2. Actualizar el valor en el panel de config-tarifas.
+3. No se necesita tocar codigo.
+
+## Patron GITHUB_PAT: proxy de subida de archivos
+
+Cuando el frontend necesita subir archivos a un repositorio de GitHub:
+
+- **No** almacenar el PAT en `localStorage`, variables JS ni codigo HTML.
+- El cliente convierte el archivo a base64 en el navegador.
+- Envia el base64 al endpoint de Apps Script junto con `seller_id` y `write_secret`.
+- Apps Script lee el PAT de Script Properties y llama a la GitHub API via `UrlFetchApp`.
+
+Ventajas:
+- El PAT nunca llega al navegador ni a los logs del cliente.
+- Si el PAT rota, solo se actualiza en Script Properties; el frontend no cambia.
+- Un unico punto de control para todas las subidas.
+
+Token recomendado: Fine-grained con permiso `contents: write` sobre el repositorio especifico unicamente.
+
+## Limitacion critica: no-cors
+
+Todas las llamadas del frontend a Apps Script usan `mode: "no-cors"`. Esto significa que la respuesta es opaca: el cliente no puede leer el cuerpo ni el status code.
+
+Consecuencias:
+- No hay forma de distinguir exito de error en el cliente.
+- Los mensajes al usuario deben ser optimistas y honestos al mismo tiempo.
+- Errores en Apps Script (clave incorrecta, PAT vencido, error de Sheet) fallan en silencio en el browser.
+- Para diagnosticar errores, revisar los logs de ejecucion en el editor de Apps Script.
+
+Mensajes recomendados:
+
+| Accion | Mensaje correcto | Mensaje a evitar |
+| --- | --- | --- |
+| Subida de logo | "Logo enviado — aparecera en el repositorio en breve" | "Logo subido correctamente" |
+| Guardado de seller | "Solicitud enviada — validar en Google Sheet" | "Guardado con exito" |
+| Actualizacion de tarifa | "Cambios enviados — verificar en Google Sheet" | "Tarifa actualizada" |
+
+Regla: si el resultado depende de no-cors, nunca confirmar exito; solo confirmar que se envio.
+
+## Redeploy de Apps Script: paso obligatorio y no automatico
+
+Cada vez que se modifica el codigo de Apps Script en el repositorio, el deploy **no se actualiza automaticamente**. El frontend seguira llamando a la version anterior hasta que se haga un nuevo deploy manual.
+
+Este es uno de los errores mas dificiles de detectar porque falla en silencio (no-cors).
+
+Flujo obligatorio al cambiar Apps Script:
+
+```txt
+1. Modificar codigo en integrations/apps-script/
+2. Commit y push al repositorio
+3. Abrir script.google.com
+4. Pegar el codigo actualizado en cada archivo (Apps_script_v5.js, Config.gs, etc.)
+5. Deploy → Manage deployments → nueva version
+6. Verificar que la URL del deploy coincida con MP_CONFIG.APPS_SCRIPT_URL
+```
+
+Checklist de release para cambios que incluyan Apps Script:
+
+```txt
+[ ] Codigo pegado en el editor de Apps Script
+[ ] Nueva version creada en Manage deployments
+[ ] URL del deploy verificada en assets/js/config.js
+[ ] Script Properties configuradas si se agrego un secreto nuevo
+[ ] Smoke basico: enviar un formulario de prueba y revisar logs
+```
+
+## URL unica del endpoint
+
+La URL del deploy de Apps Script debe vivir en un unico lugar: `assets/js/config.js` bajo `MP_CONFIG.APPS_SCRIPT_URL`.
+
+Todas las paginas que necesiten el endpoint deben leerla con fallback:
+
+```javascript
+const APPS_SCRIPT_URL =
+  (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) ||
+  "https://...url-de-respaldo...";
+```
+
+Si la URL cambia al hacer un nuevo deploy, el cambio se hace en un solo archivo. Nunca hardcodear la URL directamente en una pagina sin pasar por `MP_CONFIG`.
+
+## Resumen: que va donde
+
+| Secreto / Dato | Donde guardarlo | Donde NO guardarlo |
+| --- | --- | --- |
+| Clave de escritura del equipo | Script Properties (`WRITE_SECRET`) y localStorage (`mp_write_secret`) | Codigo fuente, variables JS globales |
+| PAT de GitHub | Script Properties (`GITHUB_PAT`) | localStorage, codigo HTML, variables JS |
+| URL del endpoint de Apps Script | `assets/js/config.js` (MP_CONFIG) | Hardcodeada en cada pagina |
+| Credenciales de Google Sheets | No aplica (acceso via Apps Script con cuenta del proyecto) | Nunca en cliente |
