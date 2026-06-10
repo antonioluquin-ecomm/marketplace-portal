@@ -82,3 +82,12 @@ h2,h3{letter-spacing:.01em}
 .lead{font-size:15px;color:#b7c1b3}
 .note{background:rgba(106,168,79,.08);border-left-color:#6aa84f;color:#b7c1b3}
 .pill{background:rgba(106,168,79,.08);border-color:rgba(106,168,79,.22);color:#b9d9aa;letter-spacing:.015em}
+
+/* Modo claro: override de superficies hardcodeadas arriba. */
+html[data-theme="light"] .panel{background:#ffffff;border-color:rgba(0,0,0,.12)}
+html[data-theme="light"] .panel.soft{background:rgba(0,0,0,.03)}
+html[data-theme="light"] .btn{background:#46792f}
+html[data-theme="light"] .btn.secondary{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.12);color:#44503f}
+html[data-theme="light"] .lead{color:#44503f}
+html[data-theme="light"] .note{background:rgba(70,121,47,.08);border-left-color:#46792f;color:#44503f}
+html[data-theme="light"] .pill{color:#2f5220}

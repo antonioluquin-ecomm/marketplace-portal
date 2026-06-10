@@ -231,6 +231,23 @@ body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
 .rates-edit-note{background:rgba(106,168,79,.07);border-left-color:rgba(106,168,79,.28)}
 .disclaimer{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.16)}
 
+/* Modo claro: override de superficies estructurales hardcodeadas arriba. */
+html[data-theme="light"] .topbar{background:rgba(246,248,245,.96);border-bottom-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .topbar-badge,
+html[data-theme="light"] .col-title,
+html[data-theme="light"] .section-label{color:#5f6c59}
+html[data-theme="light"] .col-inputs,
+html[data-theme="light"] .col-rates{background:#eef2ec;border-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .col-results{background:#ffffff}
+html[data-theme="light"] .col-header,
+html[data-theme="light"] .section,
+html[data-theme="light"] .results-header,
+html[data-theme="light"] .tab-bar{border-color:rgba(0,0,0,.09)}
+html[data-theme="light"] .tab-btn.active{color:#2f5220;border-bottom-color:#46792f}
+html[data-theme="light"] .update-btn:hover{border-color:rgba(70,121,47,.4);color:#2f5220}
+html[data-theme="light"] .rates-edit-note{background:rgba(70,121,47,.08);border-left-color:rgba(70,121,47,.30)}
+html[data-theme="light"] .topbar-logo{color:#1a1f19}
+
 /* Etapa 27B: header comun para simuladores internos. */
 .topbar-logo{
   font-family:Barlow,system-ui,sans-serif;

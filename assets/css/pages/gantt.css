@@ -146,3 +146,42 @@ body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
 .sb-note{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09);color:#9ba69a}
 .legend{background:rgba(16,19,17,.96);border-top-color:rgba(255,255,255,.09)}
 .center-state,.loading,.empty,.error-state{font-size:14px;color:#8f9a8b}
+
+/* Modo claro: override de superficies estructurales hardcodeadas arriba. */
+html[data-theme="light"] .topbar{background:rgba(246,248,245,.96);border-bottom-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .tb-logo span{color:#46792f}
+html[data-theme="light"] .tb-module,
+html[data-theme="light"] .tb-crumb,
+html[data-theme="light"] .tb-date,
+html[data-theme="light"] .sb-lbl,
+html[data-theme="light"] .lg-sep{color:#5f6c59}
+html[data-theme="light"] .tb-badge{background:rgba(70,121,47,.10);border-color:rgba(70,121,47,.26);color:#2f5220}
+html[data-theme="light"] .btn-sm,
+html[data-theme="light"] .tb-btn{background:rgba(0,0,0,.04)}
+html[data-theme="light"] .btn-sm:hover,
+html[data-theme="light"] .tb-btn:hover{border-color:rgba(70,121,47,.34);color:#2f5220;background:rgba(70,121,47,.10)}
+html[data-theme="light"] .sidebar{background:#eef2ec;border-right-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .fi,
+html[data-theme="light"] .sel,
+html[data-theme="light"] .fsel,
+html[data-theme="light"] .sb-search{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.12);color:#1a1f19}
+html[data-theme="light"] .fi:focus,
+html[data-theme="light"] .sel:focus,
+html[data-theme="light"] .fsel:focus,
+html[data-theme="light"] .sb-search:focus{border-color:rgba(70,121,47,.5);box-shadow:0 0 0 3px rgba(70,121,47,.14)}
+html[data-theme="light"] .sb-note{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.10);color:#5f6c59}
+html[data-theme="light"] .legend{background:rgba(246,248,245,.96);border-top-color:rgba(0,0,0,.09)}
+html[data-theme="light"] .center-state,
+html[data-theme="light"] .loading,
+html[data-theme="light"] .empty,
+html[data-theme="light"] .error-state{color:#5f6c59}
+/* Superficies estructurales del timeline (hardcodeadas en el <style> inline). */
+html[data-theme="light"] .main,
+html[data-theme="light"] .gantt-months,
+html[data-theme="light"] .seller-header,
+html[data-theme="light"] .lista-seller,
+html[data-theme="light"] .modal,
+html[data-theme="light"] .exec-card,
+html[data-theme="light"] .exec-action{background:#ffffff}
+html[data-theme="light"] .toolbar{background:#eef2ec}
+html[data-theme="light"] .toolbar .ri{background:#f4f7f2}

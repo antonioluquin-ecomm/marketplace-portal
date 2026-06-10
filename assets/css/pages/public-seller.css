@@ -366,7 +366,7 @@ small {
   --shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 body {
-  background: #101311;
+  background: var(--bg, #101311);
   font-size: 15px;
   line-height: 1.65;
 }

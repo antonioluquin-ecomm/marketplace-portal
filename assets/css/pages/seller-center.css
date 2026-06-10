@@ -91,6 +91,28 @@ h1{font-size:40px}
 .tool-desc,.sec-desc,.flow-sub,.footer-left{color:#8f9a8b}
 .tool-name,.sec-title{letter-spacing:.01em}
 
+/* Modo claro: override de superficies estructurales hardcodeadas arriba. */
+html[data-theme="light"] .topbar{background:rgba(246,248,245,.96);border-bottom-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .logo span{color:#46792f}
+html[data-theme="light"] .crumb,
+html[data-theme="light"] .sb-label,
+html[data-theme="light"] .eyebrow{color:#5f6c59}
+html[data-theme="light"] .sidebar{background:#eef2ec;border-right-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .nav{color:#44503f}
+html[data-theme="light"] .nav:hover{background:rgba(0,0,0,.04)}
+html[data-theme="light"] .nav.active{background:rgba(70,121,47,.10);color:#2f5220;border-left-color:#46792f}
+html[data-theme="light"] .lead{color:#44503f}
+html[data-theme="light"] .tool-card,
+html[data-theme="light"] .flow-step,
+html[data-theme="light"] .alert,
+html[data-theme="light"] .footer{background:#ffffff;border-color:rgba(0,0,0,.12)}
+html[data-theme="light"] .tool-card:hover{border-color:rgba(70,121,47,.28);background:#f4f7f2}
+html[data-theme="light"] .tool-card:hover::before{background:#46792f}
+html[data-theme="light"] .tool-desc,
+html[data-theme="light"] .sec-desc,
+html[data-theme="light"] .flow-sub,
+html[data-theme="light"] .footer-left{color:#5f6c59}
+
 @media(max-width:980px){
   .topbar{height:auto;min-height:var(--tb);align-items:flex-start;flex-wrap:wrap;padding:10px 16px;gap:8px}
   .brand,.topbar-right{min-width:0}

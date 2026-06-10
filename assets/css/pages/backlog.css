@@ -128,3 +128,23 @@ body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
 .content-area{padding:26px 28px 68px}
 .state-title{font-family:Barlow,system-ui,sans-serif;text-transform:none;font-size:17px;letter-spacing:0;color:#c8d0c4}
 .state-desc{font-size:13.5px;color:#8f9a8b}
+
+/* Modo claro: override de las superficies estructurales hardcodeadas arriba. */
+html[data-theme="light"] .topbar{background:rgba(246,248,245,.96);border-bottom-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .tb-logo span{color:#46792f}
+html[data-theme="light"] .tb-crumb,
+html[data-theme="light"] .sb-lbl,
+html[data-theme="light"] .fi-label,
+html[data-theme="light"] .kpi-lbl{color:#5f6c59}
+html[data-theme="light"] .sidebar{background:#eef2ec;border-right-color:rgba(0,0,0,.10)}
+html[data-theme="light"] .kpi-bar{background:#eef2ec;border-bottom-color:rgba(0,0,0,.08)}
+html[data-theme="light"] .search-input,
+html[data-theme="light"] .fi-select{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.12);color:#1a1f19}
+html[data-theme="light"] .search-input:focus,
+html[data-theme="light"] .fi-select:focus{border-color:rgba(70,121,47,.5);box-shadow:0 0 0 3px rgba(70,121,47,.14)}
+html[data-theme="light"] .qbtn{border-color:rgba(0,0,0,.12);color:#44503f}
+html[data-theme="light"] .qbtn:hover{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.18)}
+html[data-theme="light"] .qbtn.active{background:rgba(70,121,47,.10);border-color:rgba(70,121,47,.30);color:#2f5220}
+html[data-theme="light"] .view-btn.active{background:#46792f;color:#fff}
+html[data-theme="light"] .state-title{color:#2a3326}
+html[data-theme="light"] .state-desc{color:#5f6c59}

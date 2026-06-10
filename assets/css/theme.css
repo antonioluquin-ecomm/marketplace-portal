@@ -1,0 +1,232 @@
+/* ============================================================================
+   theme.css — Capa compartida de tema (claro/oscuro) + baseline de legibilidad
+   ----------------------------------------------------------------------------
+   Cargar SIEMPRE como ÚLTIMO stylesheet de cada página, después del CSS propio,
+   para que estas reglas ganen por orden de cascada.
+
+   El tema se controla con  html[data-theme="light"] | html[data-theme="dark"].
+   theme.js setea el atributo antes del paint (default: dark).
+
+   Por qué redefine tantas variables: cada página nombra sus tokens distinto
+   (--bg / --k / --surface-1 / --panel; --t1 / --text-1 / --text / --muted).
+   Como los nombres son inconsistentes pero enumerables, el modo claro redefine
+   TODAS las variantes de una sola vez. Solo se tocan variables de COLOR; las de
+   layout (--tb alto topbar, --sb ancho sidebar, --r/--rl radios) NO se tocan.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   1) MODO CLARO — redefinición global de todas las variantes de nombre
+   --------------------------------------------------------------------------- */
+html[data-theme="light"] {
+  /* Fondos base */
+  --bg:        #f6f8f5;
+  --bg2:       #eef2ec;
+  --k:         #f6f8f5;
+  --k2:        #eef2ec;
+  --k3:        #ffffff;
+  --k4:        #f1f4ef;
+
+  /* Superficies / paneles */
+  --s1:        #ffffff;
+  --s2:        #f1f4ef;
+  --s3:        #e9eee6;
+  --surface-1: #ffffff;
+  --surface-2: #f1f4ef;
+  --surface-3: #e9eee6;
+  --surface-raised: #ffffff;
+  --surface-muted:  rgba(0,0,0,.03);
+  --panel:     #ffffff;
+  --panel2:    #f1f4ef;
+  --panel3:    #e9eee6;
+
+  /* Texto */
+  --t1:        #1a1f19;
+  --t2:        #44503f;
+  --t3:        #5f6c59;
+  --t4:        #79856f;
+  --text:      #1a1f19;
+  --text-1:    #1a1f19;
+  --text-2:    #44503f;
+  --text-3:    #5f6c59;
+  --text-muted: #44503f;
+  --text-soft:  #5f6c59;
+  --text-dim:   #79856f;
+  --muted:     #44503f;
+  --muted2:    #6b7464;
+  --w:         #1a1f19;            /* lo que antes era blanco puro pasa a texto oscuro */
+
+  /* Bordes / separadores */
+  --ln:        rgba(0,0,0,.14);
+  --ln2:       rgba(0,0,0,.08);
+  --b:         rgba(0,0,0,.14);
+  --b2:        rgba(0,0,0,.08);
+  --bdr:       rgba(0,0,0,.14);
+  --bdr2:      rgba(0,0,0,.08);
+  --bdr-m:     rgba(0,0,0,.10);
+  --border:    rgba(0,0,0,.14);
+  --border-soft: rgba(0,0,0,.08);
+  --line:      rgba(0,0,0,.14);
+  --line2:     rgba(0,0,0,.08);
+  --line-soft: rgba(0,0,0,.08);
+
+  /* Verde primario — oscurecido para contraste sobre claro */
+  --g:         #46792f;
+  --g2:        #3a6627;
+  --green:     #46792f;
+  --green-dark:#3a6627;
+  --gb:        rgba(70,121,47,.14);
+  --gb2:       rgba(70,121,47,.22);
+  --gd:        rgba(70,121,47,.10);
+  --g-dim:     rgba(70,121,47,.10);
+  --green-dim: rgba(70,121,47,.10);
+  --g-brd:     rgba(70,121,47,.28);
+  --g-brd2:    rgba(70,121,47,.34);
+  --green-brd: rgba(70,121,47,.28);
+  --accent:        #46792f;
+  --accent-soft:   rgba(70,121,47,.10);
+  --accent-border: rgba(70,121,47,.28);
+  --focus-ring:    0 0 0 3px rgba(70,121,47,.18);
+
+  /* Semánticos — un poco más oscuros para leer sobre fondo claro */
+  --warn:   #b9770c;   --wa:  #b9770c;   --amber: #b9770c;   --amber-dim: rgba(185,119,12,.10);
+  --warn-dim: rgba(185,119,12,.10);  --wad: rgba(185,119,12,.10);  --warn-brd: rgba(185,119,12,.26); --wab: rgba(185,119,12,.26);
+  --info:   #2563eb;   --in:  #2563eb;  --ind: rgba(37,99,235,.10);  --inb: rgba(37,99,235,.24);
+  --danger: #c0392b;   --da:  #c0392b;  --dad: rgba(192,57,43,.10);
+  --red:    #c0392b;   --red-dim: rgba(192,57,43,.08); --red-brd: rgba(192,57,43,.22);
+  --teal:   #0d9488;   --te:  #0d9488;  --ted: rgba(13,148,136,.10);
+  --vio:    #7c3aed;   --vi:  #7c3aed;  --vid: rgba(124,58,237,.10);  --violet: #7c3aed;
+
+  /* Sombras más suaves sobre claro */
+  --shadow:        0 10px 40px rgba(0,0,0,.10);
+  --shadow-soft:   0 8px 20px rgba(0,0,0,.08);
+  --shadow-panel:  0 14px 32px rgba(0,0,0,.10);
+
+  /* Glows de páginas públicas → tinte verde claro */
+  --g-glow:    rgba(70,121,47,.10);
+  color-scheme: light;
+}
+
+/* Algunas páginas hardcodean body{background:#101311} en su <style> inline.
+   html[data-theme="light"] body (esp. 0,0,1,2) le gana por especificidad y
+   garantiza que el fondo vire en todas, sin editar cada página. */
+html[data-theme="light"] body {
+  background: var(--bg, #f6f8f5);
+}
+
+/* Override universal de superficies estructurales en claro.
+   Muchas páginas hardcodean .topbar/.sidebar en su <style> inline; el selector
+   html[data-theme="light"] .topbar (esp. 0,0,2,1) le gana por especificidad sin
+   importar el orden, así no hay que editar cada topbar a mano. Las reglas en los
+   CSS de página (backlog/gantt/seller-center/simuladores) refinan bordes y casos
+   propios; esto cubre el resto. */
+html[data-theme="light"] .topbar {
+  background: rgba(246,248,245,.96);
+  border-bottom-color: rgba(0,0,0,.10);
+}
+html[data-theme="light"] .sidebar {
+  background: #eef2ec;
+  border-right-color: rgba(0,0,0,.10);
+}
+html[data-theme="light"] footer {
+  background: #eef2ec;
+  border-top-color: rgba(0,0,0,.10);
+}
+/* Opciones de <select> hardcodeadas oscuras en varias páginas. */
+html[data-theme="light"] option,
+html[data-theme="light"] select option {
+  background: #ffffff;
+  color: #1a1f19;
+}
+
+/* Transición suave al alternar tema (no en carga inicial gracias a theme.js) */
+html.mp-theme-ready body {
+  transition: background-color .25s ease, color .25s ease;
+}
+
+/* ---------------------------------------------------------------------------
+   2) BASELINE DE LEGIBILIDAD (ambos temas)
+   Sube el piso de las fuentes diminutas. Usa un bump de especificidad de un
+   nivel (prefijo `body`) para ganarle a las reglas de clase simple de cada
+   página SIN recurrir a !important.
+   --------------------------------------------------------------------------- */
+
+/* Cuerpo y bloques de lectura */
+body { font-size: 15.5px; line-height: 1.66; }
+body p, body li, body .lead, body .hero-lead, body .sec-desc,
+body .tool-desc, body .state-desc, body .section-desc {
+  line-height: 1.66;
+}
+
+/* Eyebrows / labels minúsculos: 9px → 11px */
+body .crumb, body .tb-crumb, body .tb-module, body .topbar-badge,
+body .sb-lbl, body .hero-eyebrow, body .eyebrow, body .sec-eyebrow,
+body .zoom-lbl, body .m-name {
+  font-size: 11px;
+  letter-spacing: .06em;
+}
+
+/* Botones chicos, pills, chips, links secundarios: 10–11px → 12.5px */
+body .btn-sm, body .tbtn, body .tb-btn, body .btn-top, body .qbtn,
+body .pill, body .chip, body .tag, body .badge, body .load-badge,
+body .live-badge, body .card-path, body .help, body .sec-link,
+body .sb-cnt, body .sb-qlink {
+  font-size: 12.5px;
+}
+
+/* Navegación lateral, celdas de tabla, descripciones: 12–13px → 13.5px */
+body .sb-nav, body .card-desc, body .mrow, body .sec-desc,
+body table td, body .table td {
+  font-size: 13.5px;
+}
+
+/* Headers de tabla: 8.5px → 11px con más aire */
+body table thead th, body .table thead th, body thead th {
+  font-size: 11px;
+  letter-spacing: .07em;
+}
+
+/* Inputs y selects: piso legible */
+body input, body select, body textarea, body button {
+  font-size: 14px;
+}
+
+/* ---------------------------------------------------------------------------
+   3) BOTÓN DE TOGGLE (inyectado por theme.js)
+   --------------------------------------------------------------------------- */
+.mp-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid var(--ln, var(--bdr, var(--border, rgba(255,255,255,.14))));
+  background: var(--s1, var(--surface-1, var(--panel, transparent)));
+  color: var(--t1, var(--text, var(--text-1, inherit)));
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  user-select: none;
+}
+.mp-theme-toggle:hover {
+  border-color: var(--g-brd, var(--green-brd, rgba(106,168,79,.4)));
+  background: var(--g-dim, var(--green-dim, rgba(106,168,79,.1)));
+}
+.mp-theme-toggle:active { transform: scale(.96); }
+.mp-theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring, 0 0 0 3px rgba(106,168,79,.25));
+}
+.mp-theme-toggle .mp-theme-ico { font-size: 15px; line-height: 1; }
+.mp-theme-toggle .mp-theme-txt {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+@media (max-width: 720px) {
+  .mp-theme-toggle .mp-theme-txt { display: none; }
+}
