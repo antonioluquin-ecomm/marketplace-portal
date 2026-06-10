@@ -1439,6 +1439,7 @@ html,body{height:100%;overflow:hidden}
   </div>
 </div>
 
+<script src="../../assets/js/config.js"></script>
 <script>
 /* ═══════════════════════════════════════════
    CONFIG
@@ -1456,7 +1457,7 @@ html,body{height:100%;overflow:hidden}
 const CONFIG = {
   SELLERS_URL:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
   TIMELINE_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1623881837&single=true&output=csv',
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec',
+  APPS_SCRIPT_URL: (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || 'https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec',
 };
 
 /* ── STATE ── */

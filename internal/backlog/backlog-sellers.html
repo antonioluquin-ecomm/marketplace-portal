@@ -386,6 +386,7 @@ body{font-size:15px;line-height:1.65;background:var(--k)}
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<script src="../../assets/js/config.js"></script>
 <script>
 /* ── CONFIG ── */
 const CONFIG = {
@@ -402,7 +403,7 @@ const CONFIG = {
   RELEVAMIENTO_PATH: "/public/formularios/formulario-relevamiento.html",
   SIMULADOR_SELLER_PATH: "/public/simuladores/simulador-seller.html",
 };
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
+const APPS_SCRIPT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
 
 /* ── ALIASES ── */
 const ALIASES = {

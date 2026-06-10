@@ -1032,12 +1032,23 @@ function applySellerInfo(shouldPrefill = true){
   }else{
     clearCuotaSelection();
   }
+  enforceMaxCuotas();
 }
 function onSellerSelectChange(){
   const select = $("sellerSelect");
   CURRENT_SELLER_ID = select ? select.value : "";
   applySellerInfo(true);
   render();
+}
+
+function enforceMaxCuotas(){
+  const max = RATES.cuotas_max_default || 12;
+  document.querySelectorAll(".cuota-chip").forEach(chip => {
+    const q = parseInt(chip.dataset.q);
+    const allowed = q <= max;
+    chip.style.display = allowed ? "" : "none";
+    if(!allowed && chip.classList.contains("active")) clearCuotaSelection();
+  });
 }
 
 /* ── cuotas chips ── */

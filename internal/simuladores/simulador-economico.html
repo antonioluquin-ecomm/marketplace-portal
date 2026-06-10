@@ -963,6 +963,24 @@ function applyOverridesForCurrentSeller(forceRender = false) {
     activeOverrideSignature = signature;
     renderRatesPanel(RATES, activeOverrides.length ? 'override' : lastRatesSource);
   }
+  enforceMaxCuotasSelect();
+}
+
+function enforceMaxCuotasSelect() {
+  const max = RATES.cuotas_max_override || 12;
+  const select = $('f-cuotas');
+  if (!select) return;
+  Array.from(select.options).forEach(opt => {
+    const q = parseInt(opt.value);
+    opt.hidden = q > max;
+    opt.disabled = q > max;
+  });
+  const cur = parseInt(select.value);
+  if (cur > max) {
+    const capped = [1, 3, 6, 12].filter(q => q <= max).pop() || 1;
+    select.value = String(capped);
+    recalc();
+  }
 }
 
 function aplicarOverrideAncho(o, nextRates) {
@@ -972,6 +990,10 @@ function aplicarOverrideAncho(o, nextRates) {
 
     if (k.includes('comision') && k.includes('override')) {
       nextRates.comision_default = value;
+      return;
+    }
+    if (k.includes('cuotas') && k.includes('max')) {
+      nextRates.cuotas_max_override = value;
       return;
     }
     if (!k.startsWith('bon')) return;
