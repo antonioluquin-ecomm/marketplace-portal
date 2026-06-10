@@ -10,7 +10,7 @@ Es un sitio estático compatible con GitHub Pages, sin build step: cada página 
 
 `index.html` es el **Hub Central**: la única entrada del portal. Unifica lo que antes eran dos páginas separadas (portada institucional + hub operativo interno). Incluye buscador de recursos, flujo de incorporación de sellers, accesos a gestión diaria, Seller Center, estrategia y recursos públicos.
 
-`internal/hub-operativo.html` y `sporting-marketplace_hub_v29.html` se mantienen como aliases que redirigen al Hub Central preservando query y hash.
+`internal/hub-operativo.html` se mantiene como alias que redirige al Hub Central preservando query y hash. Los demás HTML versionados de raíz fueron eliminados el 2026-06-09.
 
 ## Estructura
 
@@ -33,8 +33,7 @@ Es un sitio estático compatible con GitHub Pages, sin build step: cada página 
 ├─ data/                       Datos fuente (xlsx)
 ├─ docs/                       Documentación viva · docs/source/ (documentos fuente)
 ├─ tools/                      Scripts de auditoría
-├─ legacy/                     Reservado para snapshots históricos
-└─ *_v[0-9]*.html              Aliases de compatibilidad (redirects, no borrar)
+└─ legacy/                     Reservado para snapshots históricos
 ```
 
 ## Datos y backend
@@ -46,7 +45,7 @@ Es un sitio estático compatible con GitHub Pages, sin build step: cada página 
 
 ## Compatibilidad de URLs
 
-Los HTML versionados de la raíz (`backlog-sellers_v27.html`, `simulador-seller_v12.html`, etc.) son aliases de ~1 KB que redirigen a las rutas nuevas preservando query string y hash. Protegen URLs ya compartidas con el equipo y con sellers — no se mueven ni se eliminan.
+Los HTML versionados de la raíz fueron eliminados el 2026-06-09 (eran redirects puros). Las URLs canónicas son las de `internal/` y `public/`; los links a sellers siempre se generan con esas rutas más `?seller_id=SPT-XXX`.
 
 ## Metodología
 

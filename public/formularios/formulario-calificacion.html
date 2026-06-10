@@ -1245,7 +1245,8 @@
             // ── CONFIRMACIÓN COMPLETA ──────────────────────────────────
             // 1. Mensaje claro con próximo paso
             const sellerNombre = form.querySelector('[name="nombre"]')?.value?.trim() || "";
-            const nombreDisplay = sellerNombre ? ` para <strong>${sellerNombre}</strong>` : "";
+            const sellerNombreSafe = sellerNombre.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+            const nombreDisplay = sellerNombreSafe ? ` para <strong>${sellerNombreSafe}</strong>` : "";
             statusMsg.innerHTML =
               `✓ Calificación enviada correctamente${nombreDisplay}. ` +
               `El equipo de Sporting Marketplace revisará la información ` +

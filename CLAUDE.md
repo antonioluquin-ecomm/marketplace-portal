@@ -21,7 +21,7 @@ Google Sheets (base de datos) → CSV publicado → páginas HTML (lectura) · G
 │  ├─ seller-center/           dashboard, maqueta PIM
 │  ├─ simuladores/             simulador-economico, config-tarifas (editor de tarifas + overrides)
 │  ├─ estrategia/              páginas informativas (proyecto, modelos, governance, onboarding)
-│  └─ hub-operativo.html       ALIAS → redirige a /index.html (no editar)
+│  └─ hub-operativo.html       ALIAS → redirige a /index.html (única redirección que queda)
 ├─ public/                     Páginas compartibles con sellers (llevan ?seller_id=SPT-XXX en la URL)
 │  ├─ formularios/             formulario-calificacion, formulario-relevamiento
 │  ├─ presentaciones/          presentacion-seller
@@ -34,14 +34,15 @@ Google Sheets (base de datos) → CSV publicado → páginas HTML (lectura) · G
 ├─ data/                       Archivos de datos fuente (xlsx)
 ├─ docs/                       Documentación viva (architecture, roadmap, data-dictionary, handoff)
 │  └─ source/                  Documentos fuente (docx)
-├─ tools/                      Scripts de auditoría (node)
-├─ legacy/                     Reservado para snapshots históricos
-└─ *_v[0-9]*.html              ALIASES de compatibilidad en raíz (redirigen a rutas nuevas — NO borrar)
+├─ tools/                      Scripts de auditoría (node): audit-links.js, audit-timeline-data.js
+└─ legacy/                     Reservado para snapshots históricos
 ```
+
+La raíz tiene un solo HTML: `index.html`. Los aliases versionados (`*_v27.html`, etc.) fueron eliminados el 2026-06-09; las URLs viejas ya no resuelven.
 
 ## Reglas críticas
 
-1. **Aliases de raíz** (`backlog-sellers_v27.html`, `sporting-marketplace_hub_v29.html`, etc.): son redirects de ~1 KB que protegen URLs ya compartidas con el equipo y con sellers. No moverlos, no borrarlos, no editarlos salvo para retargetear.
+1. **Un solo centro**: `index.html` es el Hub Central. No crear páginas HTML en la raíz; las páginas viven en `internal/` o `public/`.
 2. **Apps Script**: el código en `integrations/apps-script/` es la fuente de verdad del repo, pero corre en Google Apps Script. Tras modificarlo hay que **pegarlo en el editor de Apps Script y redeployar** (Deploy → Manage deployments → nueva versión). Sin redeploy, los POST del frontend fallan en silencio (se envían con `no-cors`).
 3. **URLs públicas con `seller_id`**: las páginas de `public/` se comparten con sellers como links con `?seller_id=SPT-XXX`. Cualquier alias/redirect debe preservar query string y hash.
 4. **Google Sheet** (id `1S_pl358H8nbJC3xgd7UpRpOxTYkC_hopYcBX6WzMlzU`): pestañas clave publicadas como CSV — `tarifas` (gid 42870561), `overrides` (gid 649807159), `sellers` (gid 899415596). No renombrar columnas ni pestañas sin revisar los parsers.

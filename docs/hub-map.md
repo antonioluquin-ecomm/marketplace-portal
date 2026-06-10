@@ -1,6 +1,6 @@
 # Mapa Inicial del Hub
 
-> **Actualizacion 2026-06-09 — Consolidacion Hub Central:** `index.html` ahora ES el hub (portada institucional y hub operativo unificados). `internal/hub-operativo.html` quedo como alias hacia `../index.html` y `sporting-marketplace_hub_v29.html` redirige directo a `index.html`. Ademas: fuentes de Apps Script movidas a `integrations/apps-script/`, `Mapa del Hub.docx` a `docs/source/`, xlsx a `data/`, y eliminados `config.js` de raiz y `Logos/` (duplicados sin referencias). Las filas de la tabla siguiente reflejan el estado historico previo.
+> **Actualizacion 2026-06-09 — Consolidacion Hub Central:** `index.html` ahora ES el hub (portada institucional y hub operativo unificados). `internal/hub-operativo.html` quedo como alias hacia `../index.html`. Ademas: fuentes de Apps Script movidas a `integrations/apps-script/`, `Mapa del Hub.docx` a `docs/source/`, xlsx a `data/`, y eliminados `config.js` de raiz y `Logos/` (duplicados sin referencias). En una segunda etapa del mismo dia se ELIMINARON todos los aliases versionados de raiz (`*_vNN.html`, incluido `sporting-marketplace_hub_v29.html`): la raiz quedo con `index.html` como unico HTML. Las filas de la tabla siguiente reflejan el estado historico previo.
 
 Este inventario documenta los archivos actuales y una ruta futura sugerida. No implica que esas rutas existan actualmente ni que deban migrarse sin validacion previa.
 
