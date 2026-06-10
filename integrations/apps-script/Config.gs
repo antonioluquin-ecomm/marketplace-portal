@@ -17,7 +17,11 @@ const HOJA_TIMELINE = "timeline";
 const HOJA_TARIFAS = "tarifas";
 const HOJA_OVERRIDES = "overrides";
 
-// Clave de escritura para operaciones sensibles (tarifas_update, override_update).
+// Clave de escritura para operaciones sensibles (tarifas_update, override_update, logo_upload).
 // Configurar en: Proyecto → Configuración del proyecto → Propiedades de secuencia de comandos
 // Clave: WRITE_SECRET  |  Valor: <clave que usará el equipo>
 // Si la propiedad no está configurada, la validación se omite (retro-compatibilidad).
+
+// PAT de GitHub para subir logos via Apps Script (logo_upload).
+// Fine-grained token con permisos contents:write sobre antonioluquin-ecomm/marketplace-portal.
+// Clave: GITHUB_PAT  |  Valor: <token generado en github.com/settings/tokens>

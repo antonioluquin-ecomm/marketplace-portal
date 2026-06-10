@@ -10,21 +10,21 @@
 <link rel="stylesheet" href="assets/css/internal-components.css">
 <style>
 :root {
-  --g:     #5ea832;
-  --g2:    #4a8a26;
-  --g-dim: rgba(94,168,50,.10);
-  --g-brd: rgba(94,168,50,.22);
-  --bg:    #0b0f0b;
-  --bg2:   #0f140f;
-  --s1:    #141c13;
-  --s2:    #1a2319;
-  --s3:    #212b20;
-  --ln:    rgba(255,255,255,.07);
-  --ln2:   rgba(255,255,255,.04);
-  --t1:    #edf3e9;
-  --t2:    #a6b79d;
-  --t3:    #6e7f6a;
-  --t4:    #475244;
+  --g:     #6aa84f;
+  --g2:    #54873d;
+  --g-dim: rgba(106,168,79,.09);
+  --g-brd: rgba(106,168,79,.20);
+  --bg:    #101311;
+  --bg2:   #151915;
+  --s1:    #191d19;
+  --s2:    #1f241f;
+  --s3:    #252b25;
+  --ln:    rgba(255,255,255,.10);
+  --ln2:   rgba(255,255,255,.065);
+  --t1:    #f1f4ef;
+  --t2:    #b7c1b3;
+  --t3:    #889386;
+  --t4:    #687264;
   --w:     #fff;
   --warn:  #f59e0b;
   --info:  #60a5fa;
@@ -39,6 +39,8 @@
 html { scroll-behavior:smooth; }
 body {
   font-family:Barlow,system-ui,sans-serif;
+  font-size:15px;
+  line-height:1.65;
   background:var(--bg);
   color:var(--t1);
   min-height:100vh;
@@ -488,16 +490,6 @@ h1 { font-size:clamp(40px,4.8vw,62px); line-height:.96; letter-spacing:0; }
   h1 { font-size:36px; }
 }
 
-/* Etapa 27A: UI foundation enterprise. */
-:root {
-  --g:#6aa84f; --g2:#54873d;
-  --g-dim:rgba(106,168,79,.09); --g-brd:rgba(106,168,79,.20);
-  --bg:#101311; --bg2:#151915;
-  --s1:#191d19; --s2:#1f241f; --s3:#252b25;
-  --ln:rgba(255,255,255,.10); --ln2:rgba(255,255,255,.065);
-  --t1:#f1f4ef; --t2:#b7c1b3; --t3:#889386; --t4:#687264;
-}
-body { font-size:15px; line-height:1.65; background:var(--bg); }
 .topbar { background:rgba(16,19,17,.96); border-bottom-color:var(--ln); }
 .logo { font-family:Barlow,system-ui,sans-serif; font-size:18px; text-transform:none; letter-spacing:.01em; }
 .crumb,.pill,.hero-eyebrow,.sec-eyebrow,.fs-num,.card-type { letter-spacing:.04em; }
