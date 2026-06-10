@@ -76,10 +76,12 @@ function doPost(e) {
     }
 
     if (tipoFormulario === "tarifas_update") {
+      validarWriteSecret(data);
       return jsonResponse(actualizarTarifas(data));
     }
 
     if (tipoFormulario === "override_update") {
+      validarWriteSecret(data);
       return jsonResponse(actualizarOverridesSeller(data));
     }
 
@@ -159,6 +161,15 @@ function doGet(e) {
       HOJA_DEFINICION_TECNICA,
     ],
   });
+}
+
+// Valida la clave de escritura para operaciones sensibles.
+// Si WRITE_SECRET no está configurado en Script Properties, se omite (retro-compat).
+function validarWriteSecret(data) {
+  const esperado = PropertiesService.getScriptProperties().getProperty("WRITE_SECRET");
+  if (!esperado) return;
+  const recibido = String(data.write_secret || "").trim();
+  if (recibido !== esperado) throw new Error("Clave de escritura inválida");
 }
 
 function normalizarTipoFormulario(valor) {

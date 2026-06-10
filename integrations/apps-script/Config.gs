@@ -16,3 +16,8 @@ const HOJA_DEFINICION_TECNICA = "definicion_tecnica";
 const HOJA_TIMELINE = "timeline";
 const HOJA_TARIFAS = "tarifas";
 const HOJA_OVERRIDES = "overrides";
+
+// Clave de escritura para operaciones sensibles (tarifas_update, override_update).
+// Configurar en: Proyecto → Configuración del proyecto → Propiedades de secuencia de comandos
+// Clave: WRITE_SECRET  |  Valor: <clave que usará el equipo>
+// Si la propiedad no está configurada, la validación se omite (retro-compatibilidad).
