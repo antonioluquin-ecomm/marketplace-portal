@@ -138,6 +138,22 @@ html[data-theme="light"] select option {
   color: #1a1f19;
 }
 
+/* MODO OSCURO - contraste ajustado para lectura operativa.
+   Varias paginas usan --t2/--t3/--t4 en lugar de --text-*; se alinean aqui
+   para evitar grises demasiado apagados sobre fondos verdes oscuros. */
+html[data-theme="dark"] {
+  --text-muted: #c3cbbf;
+  --text-soft:  #9aa695;
+  --text-dim:   #7f8a7b;
+  --t2:         #c3cbbf;
+  --t3:         #9aa695;
+  --t4:         #7f8a7b;
+  --muted:      #c3cbbf;
+  --muted2:     #9aa695;
+  --w:          #f1f4ef;
+  color-scheme: dark;
+}
+
 /* Transición suave al alternar tema (no en carga inicial gracias a theme.js) */
 html.mp-theme-ready body {
   transition: background-color .25s ease, color .25s ease;
@@ -151,18 +167,25 @@ html.mp-theme-ready body {
    --------------------------------------------------------------------------- */
 
 /* Cuerpo y bloques de lectura */
-body { font-size: 15.5px; line-height: 1.66; }
+body {
+  font-family: var(--font-ui, system-ui, -apple-system, "Segoe UI", sans-serif);
+  font-size: var(--font-body, 16px);
+  line-height: var(--lh-body, 1.64);
+  text-rendering: optimizeLegibility;
+}
 body p, body li, body .lead, body .hero-lead, body .sec-desc,
 body .tool-desc, body .state-desc, body .section-desc {
-  line-height: 1.66;
+  font-size: 14.5px;
+  line-height: 1.64;
 }
 
 /* Eyebrows / labels minúsculos: 9px → 11px */
 body .crumb, body .tb-crumb, body .tb-module, body .topbar-badge,
 body .sb-lbl, body .hero-eyebrow, body .eyebrow, body .sec-eyebrow,
 body .zoom-lbl, body .m-name {
-  font-size: 11px;
-  letter-spacing: .06em;
+  font-size: 12px;
+  letter-spacing: .045em;
+  line-height: 1.35;
 }
 
 /* Botones chicos, pills, chips, links secundarios: 10–11px → 12.5px */
@@ -171,23 +194,86 @@ body .pill, body .chip, body .tag, body .badge, body .load-badge,
 body .live-badge, body .card-path, body .help, body .sec-link,
 body .sb-cnt, body .sb-qlink {
   font-size: 12.5px;
+  letter-spacing: .02em;
+  line-height: 1.35;
 }
 
 /* Navegación lateral, celdas de tabla, descripciones: 12–13px → 13.5px */
 body .sb-nav, body .card-desc, body .mrow, body .sec-desc,
 body table td, body .table td {
-  font-size: 13.5px;
+  font-size: 13.75px;
+  line-height: 1.5;
 }
 
 /* Headers de tabla: 8.5px → 11px con más aire */
 body table thead th, body .table thead th, body thead th {
-  font-size: 11px;
-  letter-spacing: .07em;
+  font-size: 11.5px;
+  letter-spacing: .045em;
 }
 
 /* Inputs y selects: piso legible */
 body input, body select, body textarea, body button {
-  font-size: 14px;
+  font-family: inherit;
+  font-size: 14.5px;
+}
+
+/* Refuerzos para clases no cubiertas por el baseline original. */
+body .card-desc, body .fs-desc, body .ac-desc, body .result-desc,
+body .mnext-criterio, body .modal-note, body .msg-preview {
+  font-size: 14.5px;
+  line-height: 1.64;
+}
+
+body .snap-eyebrow, body .page-eyebrow, body .section-title,
+body .msg-title, body .msec-title, body .sb-label, body .kpi-lbl,
+body .lbl, body .fi-label, body .field-label, body .control-label {
+  font-size: 12px;
+  letter-spacing: .045em;
+  line-height: 1.35;
+}
+
+body .card-badge, body .card-go, body .fs-num, body .fs-tag,
+body .status-pill, body .badge-meta, body .share-btn, body .maction,
+body .clear-btn, body .tb-status, body .status-row, body .filter-hint,
+body .fc {
+  font-size: 12.5px;
+  letter-spacing: .02em;
+  line-height: 1.35;
+}
+
+body .sb-link, body .fb, body .fb-l, body .td-next-text,
+body .scard-entity, body .share-desc {
+  font-size: 13.75px;
+  line-height: 1.5;
+}
+
+body .status, body .alert-item, body .vbtn, body .sbtn,
+body .ri, body .il-lbl, body .edit-label, body .edit-help,
+body .exec-eyebrow, body .exec-step-num, body .exec-section-label,
+body .msec-t, body .kanban-col-title, body .kanban-col-count,
+body .kc-seller, body .kc-resp, body .kc-fin, body .kc-atraso,
+body .flow-num, body .nav small, body .flow-step small,
+body .rule span, body .link-card span, body .footer {
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: .035em;
+}
+
+body .matrix th, body .lista-table th,
+body .gm-fixed-cell, body .period-cell {
+  font-size: 11.5px;
+  letter-spacing: .045em;
+  line-height: 1.35;
+}
+
+body small {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+body h1, body h2, body h3,
+body .logo, body .tb-logo, body .topbar-logo {
+  text-rendering: geometricPrecision;
 }
 
 /* ---------------------------------------------------------------------------

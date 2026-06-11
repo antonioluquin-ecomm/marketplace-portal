@@ -43,10 +43,13 @@
   --topbar-height: 58px;
 
   /* Etapa 26B: escala visual PRO global */
-  --font-body: 15px;
-  --font-meta: 13px;
+  --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-brand: Barlow, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", Barlow, system-ui, sans-serif;
+  --font-body: 16px;
+  --font-meta: 13.5px;
   --font-label: 12px;
-  --lh-body: 1.65;
+  --lh-body: 1.64;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
