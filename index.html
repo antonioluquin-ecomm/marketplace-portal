@@ -782,6 +782,13 @@ h1 { font-size:clamp(38px,4.5vw,58px); line-height:1; }
         <div class="card-path">/internal/estrategia/proceso-onboarding.html</div>
         <div class="card-go">Abrir →</div>
       </a>
+      <a class="card accent-info" href="internal/estrategia/proceso-onboarding.html#hardware">
+        <div class="card-top"><div class="card-icon">HW</div><span class="card-badge">Interno</span></div>
+        <div class="card-title">Checklist de Instalación</div>
+        <div class="card-desc">Hardware, permisos, insumos y condiciones a validar con el seller antes de la visita.</div>
+        <div class="card-path">/internal/estrategia/proceso-onboarding.html#hardware</div>
+        <div class="card-go">Abrir →</div>
+      </a>
     </div>
   </section>
 
@@ -908,6 +915,7 @@ const RESOURCES = [
   { key:'modelo_economico',       label:'Modelo Económico',         access:'Interno', icon:'$', accent:'var(--warn)', route:'/internal/estrategia/modelo-economico.html',       desc:'Marco económico interno: comisiones, costos y liquidación.' },
   { key:'governance',             label:'Governance',               access:'Interno', icon:'⚑', accent:'var(--vio)',  route:'/internal/estrategia/governance.html',             desc:'Decisiones, responsables y criterios de excepción del Marketplace.' },
   { key:'onboarding',             label:'Proceso de Onboarding',    access:'Interno', icon:'→', accent:'var(--teal)', route:'/internal/estrategia/proceso-onboarding.html',     desc:'Incorporación del seller desde evaluación hasta salida productiva.' },
+  { key:'checklist_instalacion',  label:'Checklist de Instalación', access:'Interno', icon:'HW', accent:'var(--info)', route:'/internal/estrategia/proceso-onboarding.html#hardware', desc:'Hardware, permisos, insumos y condiciones para coordinar la visita al seller.' },
   { key:'presentacion_seller',    label:'Presentación Seller',      access:'Seller',  icon:'▰', accent:'var(--teal)', route:'/public/presentaciones/presentacion-seller.html',  desc:'Presentación pública para explicar el modelo al seller.' },
   { key:'formulario_calificacion',label:'Formulario Calificación',  access:'Seller',  icon:'✓', accent:'var(--teal)', route:'/public/formularios/formulario-calificacion.html', desc:'Primer formulario para evaluar viabilidad y potencial del seller.' },
   { key:'formulario_relevamiento',label:'Formulario Relevamiento',  access:'Seller',  icon:'✎', accent:'var(--teal)', route:'/public/formularios/formulario-relevamiento.html', desc:'Relevamiento técnico completo: integración, catálogo y operación.' },
@@ -969,4 +977,3 @@ updateActiveNav();
 </script>
 </body>
 </html>
-
