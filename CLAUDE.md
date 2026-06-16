@@ -1,61 +1,79 @@
-# Marketplace Portal — Guía para agentes
+# Marketplace Portal — Instrucciones para Claude Code y Codex
 
-Sitio estático (GitHub Pages) que opera el ecosistema Marketplace Sporting.
-No hay build step ni framework: cada página HTML es autocontenida (CSS/JS inline).
-Idioma del proyecto: español.
+> Las reglas generales y los docs maestros están en `../CLAUDE.md` (nivel Proyectos).
+> Este archivo contiene solo lo específico de este proyecto.
 
-**URL pública:** https://antonioluquin-ecomm.github.io/marketplace-portal/
+---
 
-## Arquitectura en una línea
+## Reglas activas — específicas de este proyecto
 
-Google Sheets (base de datos) → CSV publicado → páginas HTML (lectura) · Google Apps Script `doPost` (escritura).
+- **Un solo centro de navegación**: `index.html` es el Hub Central. No crear HTML en la raíz; las páginas nuevas van en `internal/` (uso interno) o `public/` (compartido con sellers).
+- **Sin auth de usuario** — las páginas internas no tienen login. El acceso se controla por URL y por conocimiento del link.
+- **Apps Script requiere redeploy manual**: el código en `integrations/apps-script/` es la fuente de verdad del repo, pero debe **pegarse en el editor de GAS y redeployarse** (nueva versión). Sin redeploy, los POST del frontend fallan en silencio (usan `no-cors`).
+- **No renombrar columnas ni pestañas del Sheet** sin revisar todos los parsers. Las URLs CSV publicadas usan `gid` numérico — si se cambia el nombre de una pestaña, el gid no cambia, pero el texto puede romper parsers que buscan por nombre.
+- **Pestaña `overrides`**: tiene una fila de banner y una fila de instrucciones ANTES del header real. Todo parser debe buscar la fila que contiene `seller_id`, nunca asumir que la fila 0 es el header.
+- **Logos solo en `assets/logos/`** — los fallbacks dinámicos construyen `assets/logos/{seller_id en minúsculas}.png`. La vieja carpeta `Logos/` de raíz fue eliminada.
+- **URLs públicas con `seller_id`**: las páginas de `public/` se comparten con sellers con `?seller_id=SPT-XXX`. Cualquier redirect debe preservar query string y hash.
+- **No hacer push** sin confirmación explícita del usuario.
 
-## Mapa del repositorio
+---
+
+## Stack específico
+
+- **Sin auth de sesión** — sitio estático puro, sin login
+- **Sin framework, sin build step** — HTML/CSS/JS inline por página; todo funciona como archivo estático en GitHub Pages
+- **Backend**: Google Apps Script (`integrations/apps-script/Apps_script_v5.js`) vía `fetch` con `no-cors` para escritura; Google Sheets publicados como CSV para lectura
+- **Configuración central**: `window.MP_CONFIG` en `assets/js/config.js` — URLs de Sheets, Apps Script, rutas, logos
+- **CSS**: `assets/css/tokens.css` (variables globales) + `assets/css/internal-components.css` (componentes compartidos) + `assets/css/pages/` (estilos por página)
+- **Sin multi-store** — contexto único (Sporting Marketplace)
+
+---
+
+## Arquitectura del repositorio
 
 ```
 /
-├─ index.html                  ← HUB CENTRAL: único centro de navegación (portal + hub operativo unificados)
-├─ internal/                   Páginas de uso interno del equipo
-│  ├─ backlog/                 gestion-sellers (alta/edición), backlog-sellers (pipeline)
-│  ├─ gantt/                   gantt-operativo (timeline v33), gantt-seller-center
+├─ index.html                  Hub Central — único HTML en la raíz
+├─ internal/                   Uso interno del equipo
+│  ├─ backlog/                 gestion-sellers, backlog-sellers
+│  ├─ gantt/                   gantt-operativo, gantt-seller-center
 │  ├─ seller-center/           dashboard, maqueta PIM
-│  ├─ simuladores/             simulador-economico, config-tarifas (editor de tarifas + overrides)
-│  ├─ estrategia/              páginas informativas (proyecto, modelos, governance, onboarding)
-│  └─ hub-operativo.html       ALIAS → redirige a /index.html (única redirección que queda)
-├─ public/                     Páginas compartibles con sellers (llevan ?seller_id=SPT-XXX en la URL)
+│  ├─ simuladores/             simulador-economico, config-tarifas
+│  └─ estrategia/              páginas informativas
+├─ public/                     Páginas compartibles con sellers (?seller_id=SPT-XXX)
 │  ├─ formularios/             formulario-calificacion, formulario-relevamiento
 │  ├─ presentaciones/          presentacion-seller
 │  └─ simuladores/             simulador-seller
-├─ assets/
-│  ├─ css/                     tokens.css, internal-components.css, pages/
-│  ├─ js/config.js             MP_CONFIG: URLs de Sheets/Apps Script, rutas, config central
-│  └─ logos/                   spt-XXX.png (minúsculas) — ÚNICA carpeta de logos
-├─ integrations/apps-script/   Código fuente del backend (Apps_script_v5.js, Config.gs, Gantt.gs, …)
-├─ data/                       Archivos de datos fuente (xlsx)
-├─ docs/                       Documentación viva (architecture, roadmap, data-dictionary, handoff)
-│  └─ source/                  Documentos fuente (docx)
-├─ tools/                      Scripts de auditoría (node): audit-links.js, audit-timeline-data.js
-└─ legacy/                     Reservado para snapshots históricos
+├─ assets/js/config.js         MP_CONFIG: URLs, rutas, config central
+├─ integrations/apps-script/   Fuente del backend GAS
+└─ docs/                       Documentación viva
 ```
 
-La raíz tiene un solo HTML: `index.html`. Los aliases versionados (`*_v27.html`, etc.) fueron eliminados el 2026-06-09; las URLs viejas ya no resuelven.
+---
 
-## Reglas críticas
+## Google Sheet clave
 
-1. **Un solo centro**: `index.html` es el Hub Central. No crear páginas HTML en la raíz; las páginas viven en `internal/` o `public/`.
-2. **Apps Script**: el código en `integrations/apps-script/` es la fuente de verdad del repo, pero corre en Google Apps Script. Tras modificarlo hay que **pegarlo en el editor de Apps Script y redeployar** (Deploy → Manage deployments → nueva versión). Sin redeploy, los POST del frontend fallan en silencio (se envían con `no-cors`).
-3. **URLs públicas con `seller_id`**: las páginas de `public/` se comparten con sellers como links con `?seller_id=SPT-XXX`. Cualquier alias/redirect debe preservar query string y hash.
-4. **Google Sheet** (id `1S_pl358H8nbJC3xgd7UpRpOxTYkC_hopYcBX6WzMlzU`): pestañas clave publicadas como CSV — `tarifas` (gid 42870561), `overrides` (gid 649807159), `sellers` (gid 899415596). No renombrar columnas ni pestañas sin revisar los parsers.
-5. **Pestaña `overrides`** (condiciones especiales por seller, formato ancho: una fila por seller): tiene un banner y una fila de instrucciones ANTES de los headers reales. Todo parser debe buscar la fila que contenga `seller_id`, nunca asumir que la fila 0 es el header. Semántica: `comisión override %` reemplaza la comisión base; las columnas `Bon. * %` son % de descuento sobre la tarifa base (50 = mitad, 100 = gratis); celda vacía = hereda la base.
-6. **Logos**: solo `assets/logos/` (la vieja `Logos/` de raíz fue eliminada). Los fallbacks dinámicos construyen `assets/logos/{seller_id en minúsculas}.png`.
-7. **No introducir build steps, frameworks ni dependencias**: todo debe seguir funcionando como archivos estáticos en GitHub Pages.
+ID: `1S_pl358H8nbJC3xgd7UpRpOxTYkC_hopYcBX6WzMlzU`
+
+Pestañas publicadas como CSV:
+- `tarifas` (gid `42870561`)
+- `overrides` (gid `649807159`) — ver regla de parser arriba
+- `sellers` (gid `899415596`)
+
+---
 
 ## Dónde mirar según la tarea
 
 | Tarea | Empezar por |
-|---|---|
-| Tarifas / overrides / simuladores | `internal/simuladores/config-tarifas.html` (editor) y los parsers en ambos simuladores |
+|-------|-------------|
+| Tarifas / overrides / simuladores | `internal/simuladores/config-tarifas.html` y los parsers en ambos simuladores |
 | Gantt / timeline | `docs/handoff-post-v1.md`, `docs/data-dictionary-timeline.md` |
 | Backend (formularios, guardado) | `integrations/apps-script/Apps_script_v5.js` (router `doPost` por `tipo_formulario`) |
+| Configuración de URLs y rutas | `assets/js/config.js` (`MP_CONFIG`) |
 | Historia del proyecto | `CHANGELOG.md`, `docs/roadmap.md` |
-| Metodología de trabajo | `PROJECT_WORKFLOW.md` |
+
+---
+
+## Versionado
+
+Este proyecto usa `CHANGELOG.md` en la raíz. No hay versionado embebido en `config.js`. Actualizar el changelog al hacer cambios funcionales visibles.
