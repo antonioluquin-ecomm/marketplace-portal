@@ -124,8 +124,8 @@ html[data-theme="light"] .topbar {
   border-bottom-color: rgba(0,0,0,.10);
 }
 html[data-theme="light"] .sidebar {
-  background: #eef2ec;
-  border-right-color: rgba(0,0,0,.10);
+  background: #f1f5f9;
+  border-right-color: #e2e8f0;
 }
 html[data-theme="light"] footer {
   background: #eef2ec;
