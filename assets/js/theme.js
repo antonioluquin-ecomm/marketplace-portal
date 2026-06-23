@@ -44,7 +44,7 @@
   }
 
   // Set pre-paint
-  apply(readStored() || "dark");
+  apply(readStored() || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 
   // ---- Botón de toggle ----
   var ICON = { dark: "☀", light: "🌙" }; // muestra el ícono del tema AL QUE se cambiaría
