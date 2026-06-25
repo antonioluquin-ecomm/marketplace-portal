@@ -1,6 +1,6 @@
 # Marketplace Portal — Instrucciones para Claude Code y Codex
 
-> Las reglas generales y los docs maestros están en `../CLAUDE.md` (nivel Proyectos).
+> Las reglas generales y los docs maestros están en `../project-standards/` (`ai_rules.md`, `style_guide.md`, `apps_script_standards.md`).
 > Este archivo contiene solo lo específico de este proyecto.
 
 ---
@@ -77,3 +77,23 @@ Pestañas publicadas como CSV:
 ## Versionado
 
 Este proyecto usa `CHANGELOG.md` en la raíz. No hay versionado embebido en `config.js`. Actualizar el changelog al hacer cambios funcionales visibles.
+
+---
+
+## Documentación estándar compartida
+
+La documentación estándar compartida se encuentra en `../project-standards/`:
+
+- [`../project-standards/ai_rules.md`](../project-standards/ai_rules.md) — reglas de colaboración con IA
+- [`../project-standards/style_guide.md`](../project-standards/style_guide.md) — colores, tipografía, componentes CSS, Git
+- [`../project-standards/apps_script_standards.md`](../project-standards/apps_script_standards.md) — convenciones GAS
+- [`../project-standards/google_sheets_standards.md`](../project-standards/google_sheets_standards.md) — estructura de Sheets
+- [`../project-standards/login_standard.md`](../project-standards/login_standard.md) — patrón de autenticación
+- [`../project-standards/application_shell.md`](../project-standards/application_shell.md) — shell de aplicación
+
+### Entorno de trabajo
+
+- El desarrollo se realiza desde `C:\Users\gluna\Documents\Repos`
+- No usar OneDrive/SharePoint como carpeta de desarrollo
+- GitHub es la fuente principal para versionado y colaboración
+- OneDrive/SharePoint queda reservado para documentación funcional: archivos compartidos, PDFs, presentaciones, actas e imágenes
