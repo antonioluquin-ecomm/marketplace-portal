@@ -25,6 +25,27 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 3 (Lote A) de alineacion al design system estandar: Backlog
+
+Tipo de cambio: CSS / topbar de modulo.
+
+Estado: implementado.
+
+Resultado:
+- `internal/backlog/gestion-sellers.html` y `internal/backlog/backlog-sellers.html` migrados a DM Sans + DM Mono y paleta canonica, siguiendo el mismo patron de alias de `:root` usado en `index.html` (Etapa 2).
+- `assets/css/pages/gestion-sellers.css` y `assets/css/pages/backlog.css` reescritos: se eliminan los bloques duplicados "Etapa 27A" (base oscura) + `html[data-theme="light"]` (override), dejando un unico set de reglas nativamente claras. Topbar de ambas paginas a 50px de alto fijo (antes 56/60px con min-height inconsistente).
+- Titulos y labels que usaban "Barlow Condensed" en mayusculas (h1, modal-name, k-col-title, scard-id, td-id, kpi-val, etc.) pasan a DM Sans/DM Mono; se sacó el tratamiento uppercase del nombre del seller en el modal de detalle (antes 24px/900/uppercase, ahora 20px/700).
+- Barrido de overlays `rgba(255,255,255,.0X)` pensados para fondo oscuro (kanban, cards, chips, modal, badges, inputs de edicion inline) reemplazados por tokens claros (`var(--bg)`, `var(--card)`).
+
+Alcance:
+- Solo los 2 HTML del lote y sus 2 CSS de pagina. No se toco `MP_CONFIG`, el parser de sellers, ni la logica de kanban/tabla/modal/edicion inline.
+- El link "← Backlog" / "← Hub" del topbar de modulo se mantiene tal cual (patron Tipo A) — no se fuerza el texto generico "Volver al inicio" porque el destino especifico es mas util para el flujo real.
+
+Validacion:
+- Preview server: ambas paginas cargan en claro sin errores de consola, sidebar de backlog a 224px, topbar de ambas a 50px (confirmado por inspeccion de estilos computados).
+- Modal de detalle de seller en backlog-sellers.html probado (abre/cierra, contenido legible).
+- Mobile (375px): backlog-sellers.html sin errores de consola, sidebar oculto como estaba previsto.
+
 ## 2026-07-01 - Etapa 2 de alineacion al design system estandar: index.html (Hub Central)
 
 Tipo de cambio: CSS / estructura de shell.
