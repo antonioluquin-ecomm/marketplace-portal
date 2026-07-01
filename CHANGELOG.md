@@ -25,6 +25,24 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 3 (Lote C) de alineacion al design system estandar: Simuladores
+
+Tipo de cambio: CSS / topbar de modulo. Freeze zone parcial.
+
+Estado: implementado.
+
+Resultado:
+- `internal/simuladores/config-tarifas.html` y `internal/simuladores/simulador-economico.html` migrados a DM Sans + DM Mono y paleta canonica via alias de `:root`. `assets/css/pages/simuladores.css` reescrito: elimina el par de bloques oscuro+override-claro, topbar a 50px fijo (se agrego `min-height:50px` explicito para neutralizar el `min-height:56px` que impone `internal-components.css` via `:where(.topbar)`).
+- Colores hardcodeados especificos (toasts de config-tarifas, badges de simulador-economico) migrados a los tokens canonicos correspondientes en vez de quedar con verdes/rojos de la paleta anterior.
+
+Alcance:
+- Solo los 2 HTML del lote y `assets/css/pages/simuladores.css`.
+- **`config-tarifas.html` es freeze zone parcial** (alimenta la pestana `overrides` del Sheet): no se toco el parser de overrides, la logica de guardado, ni el manejo de la clave de escritura — confirmado revisando que el diff del archivo solo afecta al bloque `<style>` y comentarios.
+
+Validacion:
+- Preview server: ambas paginas cargan en claro sin errores de consola, topbar a 50px confirmado por inspeccion de estilos computados (tras corregir el min-height heredado).
+- Mobile (375px): ambas paginas sin overflow, formularios legibles.
+
 ## 2026-07-01 - Etapa 3 (Lote B) de alineacion al design system estandar: Gantt
 
 Tipo de cambio: CSS / topbar de modulo.

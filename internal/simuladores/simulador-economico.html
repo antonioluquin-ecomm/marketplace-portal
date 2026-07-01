@@ -4,33 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Simulador Económico | Sporting Marketplace</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
 <!-- 14G: componentes internos pasivos. El CSS inline permanece como fallback. -->
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
 <link rel="stylesheet" href="../../assets/css/pages/simuladores.css">
 <style>
 /* ═══════════════════════════════════════════════
-   TOKENS
+   TOKENS — 2026-07-01: alias locales apuntando a tokens.css
+   (ver docs/decisions/2026-07-01-alineacion-design-system.md)
 ═══════════════════════════════════════════════ */
 :root {
-  --green:      #5ea832;
-  --green-dark: #4a8a26;
-  --green-dim:  rgba(94,168,50,.1);
-  --green-brd:  rgba(94,168,50,.22);
-  --white:      #ffffff;
-  --bg:         #0e100e;
-  --surface-1:  #141714;
-  --surface-2:  #191d18;
-  --surface-3:  #1e231d;
-  --border:     rgba(255,255,255,.07);
-  --border-l:   rgba(255,255,255,.04);
-  --text-1:     #e8ede5;
-  --text-2:     #94a48e;
-  --text-3:     #5f6e5a;
-  --red:        #d94040;
-  --red-dim:    rgba(217,64,64,.1);
-  --amber:      #c97a10;
-  --amber-dim:  rgba(201,122,16,.1);
+  --green:      var(--primary);
+  --green-dark: var(--primary-hover);
+  --green-dim:  var(--primary-soft);
+  --green-brd:  var(--primary-mid);
+  --white:      var(--text);
+  --bg:         var(--bg);
+  --surface-1:  var(--card);
+  --surface-2:  var(--bg);
+  --surface-3:  var(--card);
+  --border:     var(--line);
+  --border-l:   rgba(17,24,39,.05);
+  --text-1:     var(--text);
+  --text-2:     var(--muted);
+  --text-3:     #7c8698;
+  --red:        var(--danger);
+  --red-dim:    var(--danger-bg);
+  --amber:      var(--warning);
+  --amber-dim:  var(--warning-bg);
 }
 
 /* ═══════════════════════════════════════════════
@@ -39,7 +41,7 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
 html { font-size:15px; scroll-behavior:smooth }
 body {
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   background:var(--bg);
   color:var(--text-1);
   min-height:100vh;
@@ -74,24 +76,24 @@ body {
 
 .inp {
   width:100%; padding:8px 11px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
+  background:rgba(17,24,39,.05);
+  border:1px solid rgba(17,24,39,.09);
   border-radius:5px;
   color:var(--text-1);
-  font-family:'Barlow', sans-serif; font-size:13px;
+  font-family:var(--font); font-size:13px;
   transition:border-color .15s, background .15s;
   -moz-appearance:textfield;
 }
-.inp:focus { outline:none; border-color:var(--green); background:rgba(255,255,255,.07) }
+.inp:focus { outline:none; border-color:var(--green); background:rgba(17,24,39,.07) }
 .inp::-webkit-inner-spin-button, .inp::-webkit-outer-spin-button { -webkit-appearance:none }
 
 .sel {
   width:100%; padding:8px 11px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.09);
+  background:rgba(17,24,39,.05);
+  border:1px solid rgba(17,24,39,.09);
   border-radius:5px;
   color:var(--text-1);
-  font-family:'Barlow', sans-serif; font-size:13px; cursor:pointer;
+  font-family:var(--font); font-size:13px; cursor:pointer;
 }
 .sel:focus { outline:none; border-color:var(--green) }
 .sel option { background:var(--surface-1) }
@@ -113,7 +115,7 @@ body {
 .tog input { display:none }
 .tog-track {
   position:absolute; inset:0;
-  background:rgba(255,255,255,.1); border-radius:10px;
+  background:rgba(17,24,39,.1); border-radius:10px;
   transition:background .15s;
 }
 .tog-thumb {
@@ -130,8 +132,8 @@ body {
 .svc-sub {
   display:none;
   margin-top:8px; padding:10px 12px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.07);
+  background:rgba(17,24,39,.03);
+  border:1px solid rgba(17,24,39,.07);
   border-radius:5px;
 }
 .svc-sub.visible { display:block }
@@ -152,20 +154,20 @@ body {
   font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
   color:var(--text-3); margin-bottom:6px;
 }
-.kpi.primary .kpi-lbl { color:rgba(255,255,255,.65) }
+.kpi.primary .kpi-lbl { color:rgba(17,24,39,.65) }
 .kpi-val {
-  font-family:'Barlow Condensed',sans-serif;
+  font-family:var(--font);
   font-size:28px; font-weight:900; color:var(--white); line-height:1;
 }
 .kpi.primary .kpi-val { font-size:34px }
 .kpi-sub { font-size:11px; color:var(--text-3); margin-top:4px }
-.kpi.primary .kpi-sub { color:rgba(255,255,255,.6) }
+.kpi.primary .kpi-sub { color:rgba(17,24,39,.6) }
 
 /* composition bar */
 .comp-bar-wrap { background:var(--surface-3); border:1px solid var(--border); border-radius:7px; padding:16px 18px }
 .comp-bar-title { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--text-3); margin-bottom:12px }
 .comp-bar-track {
-  height:8px; background:rgba(255,255,255,.06); border-radius:4px;
+  height:8px; background:rgba(17,24,39,.06); border-radius:4px;
   overflow:hidden; margin-bottom:10px;
   display:flex;
 }
@@ -184,7 +186,7 @@ body {
 .bd-title {
   font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
   color:var(--text-3); padding:13px 18px; border-bottom:1px solid var(--border);
-  background:rgba(255,255,255,.02);
+  background:rgba(17,24,39,.02);
 }
 .bd-row {
   display:grid; grid-template-columns:1fr 110px 80px;
@@ -192,10 +194,10 @@ body {
   font-size:12px; align-items:center;
   transition:background .12s;
 }
-.bd-row:hover { background:rgba(255,255,255,.02) }
+.bd-row:hover { background:rgba(17,24,39,.02) }
 .bd-row:last-child { border-bottom:none }
-.bd-row.subtotal { background:rgba(255,255,255,.02); border-top:1px solid var(--border) }
-.bd-row.total    { background:rgba(255,255,255,.04); border-top:1px solid var(--border) }
+.bd-row.subtotal { background:rgba(17,24,39,.02); border-top:1px solid var(--border) }
+.bd-row.total    { background:rgba(17,24,39,.04); border-top:1px solid var(--border) }
 .bd-row.net      { background:var(--green-dim); border-top:1px solid var(--green-brd) }
 .bd-row.inactive { opacity:.35 }
 .bd-name { color:var(--text-2) }
@@ -218,22 +220,22 @@ body {
   display:inline-block; font-size:9px; font-weight:800; letter-spacing:.1em;
   text-transform:uppercase; padding:2px 8px; border-radius:3px; margin-bottom:10px;
 }
-.sc-pill.cons { background:rgba(255,255,255,.06); color:var(--text-3) }
+.sc-pill.cons { background:rgba(17,24,39,.06); color:var(--text-3) }
 .sc-pill.mid  { background:rgba(94,168,50,.25);   color:var(--green) }
 .sc-pill.exp  { background:rgba(94,168,50,.1);    color:var(--green) }
-.sc-title { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:800; text-transform:uppercase; color:var(--white); margin-bottom:12px }
+.sc-title { font-family:var(--font); font-size:16px; font-weight:800; text-transform:uppercase; color:var(--white); margin-bottom:12px }
 .sc-stat { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border-l); font-size:12px }
 .sc-stat:last-of-type { border-bottom:none }
 .sc-lbl { color:var(--text-3) }
 .sc-val { font-weight:600; color:var(--text-1) }
 .sc-neto { margin-top:12px; padding-top:12px; border-top:1px solid var(--border) }
 .sc-neto-lbl { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:3px }
-.sc-neto-val { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; color:var(--green) }
+.sc-neto-val { font-family:var(--font); font-size:26px; font-weight:900; color:var(--green) }
 
 /* financing mix */
 .mix-row { display:grid; grid-template-columns:90px 1fr 55px; gap:8px; align-items:center; padding:6px 0; font-size:12px }
 .mix-lbl  { color:var(--text-3) }
-.mix-track { height:5px; background:rgba(255,255,255,.06); border-radius:3px; overflow:hidden }
+.mix-track { height:5px; background:rgba(17,24,39,.06); border-radius:3px; overflow:hidden }
 .mix-fill  { height:100%; background:var(--green); border-radius:3px; transition:width .4s }
 .mix-val   { text-align:right; color:var(--text-2); font-size:11px }
 .mix-disabled .mix-fill { background:var(--text-3) }
@@ -259,7 +261,7 @@ body {
 
 .spin {
   width:14px; height:14px; border-radius:50%;
-  border:2px solid rgba(255,255,255,.1);
+  border:2px solid rgba(17,24,39,.1);
   border-top-color:var(--green);
   animation:spin .7s linear infinite;
 }
@@ -286,16 +288,10 @@ body {
   .scenarios-grid { grid-template-columns:1fr }
 }
 
-/* Etapa 27A: UI foundation enterprise local. */
-:root{--green:#6aa84f;--green-dark:#54873d;--green-dim:rgba(106,168,79,.09);--green-brd:rgba(106,168,79,.20);--bg:#101311;--surface-1:#151915;--surface-2:#191d19;--surface-3:#1f241f;--border:rgba(255,255,255,.10);--border-l:rgba(255,255,255,.065);--text-1:#f1f4ef;--text-2:#b7c1b3;--text-3:#889386}
-body{font-size:15px;line-height:1.65;background:var(--bg)}
-.inp,.sel{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.11);border-radius:9px;font-size:14px}
-.inp:focus,.sel:focus{border-color:rgba(106,168,79,.45);box-shadow:0 0 0 3px rgba(106,168,79,.12)}
-.field-label,.seller-helper,.svc-name{font-size:12.5px}
+.inp,.sel{background:var(--surface-2);border-color:var(--border);border-radius:9px;font-size:14.5px}
+.inp:focus,.sel:focus{border-color:var(--green-brd);box-shadow:0 0 0 3px var(--green-dim)}
 .kpi,.comp-bar-wrap,.breakdown,.sc-card,.svc-sub{border-radius:12px;border-color:var(--border);box-shadow:none}
 .kpi.primary{background:var(--green);border-color:var(--green)}
-.kpi-lbl,.bd-title,.comp-bar-title,.sc-pill{text-transform:none;letter-spacing:.04em}
-.sc-title{letter-spacing:.01em}
 .tog input:checked ~ .tog-track{background:var(--green)}
 </style>
 <script src="../../assets/js/theme.js"></script>
@@ -607,7 +603,7 @@ body{font-size:15px;line-height:1.65;background:var(--bg)}
       </div>
       <div class="breakdown">
         <div class="bd-title">Detalle por modalidad de pago</div>
-        <div class="bd-row" style="background:rgba(255,255,255,.02);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)">
+        <div class="bd-row" style="background:rgba(17,24,39,.02);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)">
           <span>Modalidad</span><span style="text-align:right">Mix ajustado</span><span style="text-align:right">Cargo fin.</span>
         </div>
         <div id="mix-rows"><!-- JS --></div>

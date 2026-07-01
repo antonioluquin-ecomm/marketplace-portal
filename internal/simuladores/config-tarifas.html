@@ -4,34 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Config Tarifas | Sporting Marketplace</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
 <link rel="stylesheet" href="../../assets/css/pages/simuladores.css">
 <style>
+/* 2026-07-01 — alineación al design system estándar (ver
+   docs/decisions/2026-07-01-alineacion-design-system.md). Alias locales
+   de los nombres históricos de esta página apuntando a tokens.css.
+   No se modificó el parser de overrides ni la lógica de guardado (freeze
+   zone parcial, ver CLAUDE.md). */
 :root {
-  --green:      #5ea832;
-  --green-dark: #4a8a26;
-  --green-dim:  rgba(94,168,50,.1);
-  --green-brd:  rgba(94,168,50,.22);
-  --bg:         #0e100e;
-  --surface-1:  #141714;
-  --surface-2:  #191d18;
-  --surface-3:  #1e231d;
-  --border:     rgba(255,255,255,.07);
-  --text-1:     #e8ede5;
-  --text-2:     #94a48e;
-  --text-3:     #5f6e5a;
-  --warn-dim:   rgba(245,158,11,.08);
-  --warn-brd:   rgba(245,158,11,.20);
-  --warn-txt:   #d4a730;
-  --red:        #f87171;
-  --red-dim:    rgba(248,113,113,.08);
-  --red-brd:    rgba(248,113,113,.20);
+  --green:      var(--primary);
+  --green-dark: var(--primary-hover);
+  --green-dim:  var(--primary-soft);
+  --green-brd:  var(--primary-mid);
+  --bg:         var(--bg);
+  --surface-1:  var(--card);
+  --surface-2:  var(--bg);
+  --surface-3:  var(--card);
+  --border:     var(--line);
+  --text-1:     var(--text);
+  --text-2:     var(--muted);
+  --text-3:     #7c8698;
+  --warn-dim:   var(--warning-bg);
+  --warn-brd:   rgba(146,64,14,.20);
+  --warn-txt:   var(--warning);
+  --red:        var(--danger);
+  --red-dim:    var(--danger-bg);
+  --red-brd:    rgba(153,27,27,.20);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
 html { font-size:15px }
 body {
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   background:var(--bg);
   color:var(--text-1);
   min-height:100vh;
@@ -61,7 +67,7 @@ body {
 
 .section { margin-bottom:28px }
 .section-title {
-  font-family:'Barlow Condensed', sans-serif;
+  font-family:var(--font);
   font-size:11px;
   font-weight:700;
   letter-spacing:.16em;
@@ -96,7 +102,7 @@ body {
   border:1px solid var(--border);
   border-radius:6px;
   padding:8px 10px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:14px;
   font-weight:500;
   color:var(--text-1);
@@ -112,7 +118,7 @@ body {
 }
 .field input.modified {
   border-color:var(--green);
-  background:rgba(94,168,50,.06);
+  background:var(--green-dim);
 }
 
 /* Valor original debajo del input cuando está modificado */
@@ -154,7 +160,7 @@ body {
   border:none;
   border-radius:7px;
   padding:10px 22px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:13px;
   font-weight:700;
   cursor:pointer;
@@ -169,7 +175,7 @@ body {
   border:1px solid var(--border);
   border-radius:7px;
   padding:9px 16px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:13px;
   font-weight:600;
   cursor:pointer;
@@ -199,8 +205,8 @@ body {
   max-width:340px;
 }
 .toast.show { opacity:1; transform:translateY(0) }
-.toast.ok  { background:#1a3d0e; border:1px solid var(--green-brd); color:#9de86a }
-.toast.err { background:#3d1414; border:1px solid var(--red-brd); color:var(--red) }
+.toast.ok  { background:var(--green-dim); border:1px solid var(--green-brd); color:var(--green-dark) }
+.toast.err { background:var(--red-dim); border:1px solid var(--red-brd); color:var(--red) }
 .toast.info{ background:var(--surface-2); border:1px solid var(--border); color:var(--text-2) }
 
 /* Clave de escritura */
@@ -224,7 +230,7 @@ body {
   border:1px solid var(--border);
   border-radius:5px;
   padding:6px 10px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:13px;
   color:var(--text-1);
   outline:none;
@@ -239,7 +245,7 @@ body {
   border:1px solid var(--border);
   border-radius:5px;
   padding:5px 10px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:11px;
   font-weight:600;
   cursor:pointer;
@@ -255,7 +261,7 @@ body {
   border:1px solid var(--border);
   border-radius:6px;
   padding:8px 10px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:14px;
   font-weight:500;
   color:var(--text-1);
@@ -302,7 +308,7 @@ body {
   border:1px solid var(--border);
   border-radius:6px;
   padding:8px 10px;
-  font-family:'Barlow', sans-serif;
+  font-family:var(--font);
   font-size:13px;
   color:var(--text-1);
   outline:none;
@@ -311,7 +317,7 @@ body {
   transition:border-color .15s, background .15s;
 }
 .ov-notes:focus { border-color:var(--green); background:var(--surface-3); }
-.ov-notes.ov-active { border-color:var(--green); background:rgba(94,168,50,.05); }
+.ov-notes.ov-active { border-color:var(--green); background:var(--green-dim); }
 .ov-subactions {
   display:flex;
   align-items:center;
