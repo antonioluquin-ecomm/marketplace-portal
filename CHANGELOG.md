@@ -25,6 +25,25 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 3 (Lote E) de alineacion al design system estandar: Estrategia
+
+Tipo de cambio: CSS / topbar de modulo.
+
+Estado: implementado.
+
+Resultado:
+- Las 5 paginas de `internal/estrategia/` (`governance.html`, `modelo-economico.html`, `modelo-integracion.html`, `proceso-onboarding.html`, `proyecto-marketplace.html`) migradas a DM Sans + DM Mono y paleta canonica via alias de `:root` a `tokens.css`, siguiendo el mismo patron de las etapas anteriores.
+- Titulos h1 (antes 44-46px, uppercase, Barlow Condensed 900) pasan a DM Sans 32px/700 sin uppercase, en linea con el resto de las paginas migradas.
+- Se eliminaron los pares de bloques duplicados "Etapa 26B/27A/27B" en cada archivo (base oscura + override claro), consolidando en reglas base unicas. Se corrigio en cada archivo un caso donde `.topbar,.sidebar{background:...}` combinaba ambos selectores con el mismo valor — el sidebar quedaba con el mismo blanco translucido del topbar en vez de `--sidebar-bg` (slate); se separaron las reglas.
+- Colores hardcodeados de acento (verde/rojo/naranja/celeste/teal/violeta usados para KPIs, tags, pills y decision-cards en estas 5 paginas) migrados a valores canonicos o equivalentes decorativos consistentes con los usados en Gantt/Seller Center.
+
+Alcance:
+- Solo los 5 HTML de `internal/estrategia/`. No se toco contenido, copy, ni estructura de navegacion/enlaces entre paginas.
+
+Validacion:
+- Preview server: las 5 paginas cargan en claro sin errores de consola, sidebar 224px / topbar 50px confirmados por inspeccion en `governance.html` y `proyecto-marketplace.html`.
+- Mobile (375px): las 5 sin overflow horizontal real (un crumb de topbar queda visualmente recortado por ancho fijo del contenedor — comportamiento preexistente no relacionado con esta migracion).
+
 ## 2026-07-01 - Etapa 3 (Lote D) de alineacion al design system estandar: Seller Center
 
 Tipo de cambio: CSS / topbar de modulo. Exclusion documentada.
