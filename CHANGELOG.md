@@ -25,6 +25,29 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 2 de alineacion al design system estandar: index.html (Hub Central)
+
+Tipo de cambio: CSS / estructura de shell.
+
+Estado: implementado.
+
+Resultado:
+- `index.html` migrado a DM Sans + DM Mono, referencia a `assets/css/tokens.css`, y paleta canonica (azul institucional en vez de verde). El `:root` inline ahora solo declara alias locales (`--g`, `--t1`, `--s1`...) apuntando a los tokens canonicos, para no reescribir cada regla de la hoja de estilos existente.
+- Titulos (`h1`, `.sec-title`, `.card-title`, `.access-head`) dejan de usar Barlow Condensed en mayusculas y pasan a DM Sans en peso normal, alineados a la escala tipografica del style guide.
+- Sidebar y topbar alineados a las medidas canonicas: sidebar 224px (antes 252px) con fondo slate `--sidebar-bg`, topbar 50px de alto fijo (antes 58px, con un `min-height:56px` heredado de `internal-components.css` que se neutralizo explicitamente).
+- Overlays y sombras pensados para fondo oscuro (`rgba(255,255,255,.0X)`, `rgba(0,0,0,.28)`, verdes/teal hardcodeados) reemplazados por tokens o variantes claras equivalentes.
+- Nav del sidebar reestructurado: "Inicio" como item de Overview sin etiqueta (primero, separado), resto de las secciones agrupadas bajo la etiqueta "Secciones", siguiendo `navigation_standard.md §2.1`.
+- Se eliminaron los tres bloques de parches en cascada ("Etapa 26B/27A/27B") que quedaban dentro del `<style>`, consolidando sus reglas vigentes directamente en las reglas base.
+
+Alcance:
+- Solo `index.html`. No se tocaron rutas, `MP_CONFIG`, ni el JS de `RESOURCES`/buscador/scroll-spy (sus referencias a variables de color siguen funcionando via el alias del `:root`).
+- Checkpoint de la Etapa 2 del plan de estandarizacion — sirve de referencia visual para migrar los modulos internos y publicos en las etapas siguientes.
+
+Validacion:
+- Preview server en desktop (1280px) y mobile (375px): sidebar 224px / topbar 50px confirmados por inspeccion de estilos computados, sin errores de consola, sin overflow horizontal.
+- Buscador de "Todos los recursos" probado (filtro por texto funcionando).
+- Scroll-spy de la navegacion del sidebar sin cambios de comportamiento.
+
 ## 2026-06-09 - Consolidacion estructural: Hub Central unico y limpieza de raiz
 
 Tipo de cambio: estructural / navegacion / documentacion.
