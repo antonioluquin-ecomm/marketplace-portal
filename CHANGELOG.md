@@ -25,6 +25,16 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 4 cancelada: paginas publicas quedan fuera de alcance permanente
+
+Tipo de cambio: decision de alcance. Sin cambios de codigo.
+
+Estado: decidido.
+
+Resultado:
+- Las 4 paginas de `public/` (`formularios/formulario-calificacion.html`, `formularios/formulario-relevamiento.html`, `presentaciones/presentacion-seller.html`, `simuladores/simulador-seller.html`) **no se migran** al design system estandar. Decision explicita del usuario: son las paginas que se comparten directamente con sellers externos via `?seller_id=SPT-XXX` y deben mantener el verde de Sporting como identidad de marca reconocible para el seller. Documentado en `docs/decisions/2026-07-01-alineacion-design-system.md` (punto 7).
+- La Etapa 4 del plan de estandarizacion queda cancelada (no pospuesta). Ningun archivo de `public/` fue modificado en esta iniciativa.
+
 ## 2026-07-01 - Etapa 3 (Lote E) de alineacion al design system estandar: Estrategia
 
 Tipo de cambio: CSS / topbar de modulo.
