@@ -18,6 +18,7 @@ Alinear Marketplace Portal al design system estándar del ecosistema, en etapas 
 3. **Modo oscuro:** queda fuera de alcance de esta alineación. `style_guide.md §3.6` lo trata como opcional — se puede agregar después como mejora incremental sobre los tokens ya migrados a claro.
 4. **Versionado:** se mantiene `CHANGELOG.md` en la raíz del proyecto (alternativa explícitamente válida en `style_guide.md §9.1` para proyectos sin `config.js` de versión). No se agrega badge de versión en sidebar como parte de esta alineación.
 5. **Alcance de módulos internos:** `index.html` es el único archivo con sidebar completo. Los 14 módulos de `internal/` y las 4 páginas de `public/` siguen el patrón Tipo A de `application_shell.md §11` (multi-página sin sidebar, topbar de módulo con eyebrow + H1 + subtítulo + "← Volver al inicio"). No se agrega sidebar a los módulos.
+6. **Excepción — `internal/seller-center/maqueta-seller-center.html`:** este archivo queda **excluido** de la migración. A diferencia del resto del portal, ya usa un tema claro con una paleta propia (gris `#3b3b3b` / azul `#0b7fe8`) que simula intencionalmente la interfaz de una herramienta tipo PIM genérica, ajena a la marca Sporting Marketplace — es un prototipo de producto, no una pantalla del portal. Migrarlo a DM Sans/azul institucional destruiría su propósito como demo. Decisión tomada durante la Etapa 3 (Lote D) al detectar la divergencia intencional.
 
 ## Alternativas consideradas
 

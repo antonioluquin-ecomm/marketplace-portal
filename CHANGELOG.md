@@ -25,6 +25,23 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 3 (Lote D) de alineacion al design system estandar: Seller Center
+
+Tipo de cambio: CSS / topbar de modulo. Exclusion documentada.
+
+Estado: implementado (parcial, por decision de alcance).
+
+Resultado:
+- `internal/seller-center/index.html` migrado a DM Sans + DM Mono y paleta canonica via alias de `:root`. `assets/css/pages/seller-center.css` reescrito: elimina el par de bloques oscuro+override-claro, topbar 50px fijo, sidebar 224px con `--sidebar-bg`.
+- **`internal/seller-center/maqueta-seller-center.html` se excluye de esta migracion.** Ya usa un tema claro con paleta propia (gris `#3b3b3b` / azul `#0b7fe8`) que simula intencionalmente una herramienta tipo PIM generica, no la marca Sporting Marketplace — es un prototipo de producto. Decision confirmada con el usuario y documentada en `docs/decisions/2026-07-01-alineacion-design-system.md` (punto 6). No se modifico ningun byte de este archivo.
+
+Alcance:
+- Solo `internal/seller-center/index.html` y `assets/css/pages/seller-center.css` (usado unicamente por `index.html`; se confirmo que `maqueta-seller-center.html` no depende de este archivo antes de reescribirlo).
+
+Validacion:
+- Preview server: `index.html` carga en claro sin errores de consola, sidebar 224px / topbar 50px confirmados por inspeccion. Mobile (375px) sin overflow, KPIs y modulos legibles.
+- El link "Ver maqueta" hacia la pagina excluida sigue funcionando sin cambios.
+
 ## 2026-07-01 - Etapa 3 (Lote C) de alineacion al design system estandar: Simuladores
 
 Tipo de cambio: CSS / topbar de modulo. Freeze zone parcial.
