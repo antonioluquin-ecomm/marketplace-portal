@@ -25,6 +25,26 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 3 (Lote B) de alineacion al design system estandar: Gantt
+
+Tipo de cambio: CSS / topbar de modulo.
+
+Estado: implementado.
+
+Resultado:
+- `internal/gantt/gantt-operativo.html` y `internal/gantt/gantt-seller-center.html` migrados a DM Sans + DM Mono y paleta canonica, mismo patron de alias de `:root` de las etapas anteriores. `assets/css/pages/gantt.css` reescrito: elimina el par de bloques oscuro+override-claro, topbar a 50px fijo, sidebar con `--sidebar-bg`.
+- `gantt-operativo.html` es el archivo mas grande del proyecto (~2900 lineas, con logica de render de timeline/kanban/lista inline). Barrido sistematico via sustitucion de patrones: overlays `rgba(255,255,255,.0X)` -> `rgba(17,24,39,.0X)` (tinte oscuro sutil sobre claro, equivalente semantico del tinte claro sobre oscuro), hexes de superficie casi-negros (`#111611`, `#151a15`, `#171d17`, etc., ~11 variantes) -> `var(--card)`/`var(--bg)` segun profundidad de capa, ancho de sidebar 234px -> 224px, alto de topbar 56/58px -> 50px, tipografia Barlow/Barlow Condensed -> DM Sans.
+- `gantt-seller-center.html` recibio el mismo tratamiento; ademas se corrigieron dos casos puntuales donde el barrido automatico no alcanzaba: `.mod-row`/`.mod-row-left` (barra divisoria de modulo, quedaba con fondo casi negro solido) y el rotulo "Hoy" de la linea de fecha actual (fondo oscuro con texto verde ilegible sobre claro) — ambos detectados en la verificacion visual mobile, no por el barrido de patrones.
+- Colores de fase del Gantt (`--f-com`, `--f-tec`, `--f-op`, `--f-cie`, `--f-qa`, `--f-gl`) y acentos decorativos (`--teal`, `--violet`, `--info`) se mantienen como categorizacion visual propia de esta pagina — no forman parte de la paleta semantica compartida, igual que en el Hub (Etapa 2).
+
+Alcance:
+- Solo los 2 HTML del lote y `assets/css/pages/gantt.css`. No se toco la logica de render de timeline, kanban, lista, filtros, ni el modal de edicion de tareas.
+
+Validacion:
+- Preview server: ambas paginas cargan en claro sin errores de consola, sidebar 224px / topbar 50px confirmados por inspeccion de estilos computados.
+- gantt-operativo.html: vistas Lista, Kanban y Gantt probadas; modal de detalle de tarea abre/cierra con contenido legible.
+- gantt-seller-center.html: drawer de detalle probado; mobile (375px) revisado — ahi se detectaron y corrigieron los dos casos puntuales mencionados arriba.
+
 ## 2026-07-01 - Etapa 3 (Lote A) de alineacion al design system estandar: Backlog
 
 Tipo de cambio: CSS / topbar de modulo.

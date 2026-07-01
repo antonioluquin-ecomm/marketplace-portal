@@ -1,51 +1,53 @@
 /* Gantt family visual layer.
-   Timeline, bars, dates, filters and modal/drawer rules remain inline. */
+   Timeline, bars, dates, filters and modal/drawer rules remain inline.
+   2026-07-01 — alineación al design system estándar (ver
+   docs/decisions/2026-07-01-alineacion-design-system.md). Tema claro único,
+   sin bloque de override [data-theme="light"] separado. */
 
 /* Shared topbar */
 .topbar{
   position:sticky;
   top:0;
   z-index:300;
-  height:var(--tb,56px);
+  height:var(--tb,50px);
+  min-height:var(--tb,50px);
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:14px;
   padding:0 24px;
-  background:rgba(13,15,13,.97);
-  border-bottom:1px solid var(--g-brd, var(--bdr));
+  background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--line, var(--bdr));
   backdrop-filter:blur(18px);
 }
 .tb-brand,.tb-left{display:flex;align-items:center;gap:12px}
-.tb-logo{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;color:var(--w);white-space:nowrap}
+.tb-logo{font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:.01em;color:var(--w, var(--text));white-space:nowrap}
 .tb-logo span{color:var(--g)}
-.tb-module,.tb-crumb{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
-.tb-module{border-left:1px solid var(--bdr);padding-left:12px}
-.tb-pipe{width:1px;height:16px;background:var(--bdr)}
+.tb-module,.tb-crumb{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
+.tb-module{border-left:1px solid var(--line, var(--bdr));padding-left:12px}
+.tb-pipe{width:1px;height:16px;background:var(--line, var(--bdr))}
 .tb-crumb em{color:var(--t2);font-style:normal}
 .tb-right{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
 .status-row,.tb-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
 .dot,.live-dot{width:7px;height:7px;border-radius:50%;background:var(--g);flex-shrink:0}
-.dot.live,.live-dot{box-shadow:0 0 0 3px rgba(94,168,50,.16);animation:ganttPulse 2s infinite}
+.dot.live,.live-dot{box-shadow:0 0 0 3px var(--g-brd, var(--g-dim));animation:ganttPulse 2s infinite}
 .dot.err{background:var(--danger)}
 .dot.load{background:var(--warn);animation:ganttPulse 1s infinite}
 @keyframes ganttPulse{0%,100%{opacity:1}50%{opacity:.45}}
-.tb-date{font-size:10px;color:var(--t3);white-space:nowrap}
-.tb-badge{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px;border:1px solid var(--g-brd);color:var(--g);background:var(--g-dim);white-space:nowrap}
+.tb-date{font-size:11px;color:var(--t3);white-space:nowrap}
+.tb-badge{font-size:11px;font-weight:700;letter-spacing:.02em;padding:4px 10px;border-radius:var(--radius-sm,5px);border:1px solid var(--g-brd);color:var(--g);background:var(--g-dim);white-space:nowrap}
 .btn-sm,.tb-btn{
   display:inline-flex;
   align-items:center;
   gap:5px;
   padding:7px 12px;
-  border:1px solid var(--bdr);
-  border-radius:var(--radius-control,8px);
-  background:rgba(255,255,255,.025);
+  border:1px solid var(--line, var(--bdr));
+  border-radius:var(--radius-sm,8px);
+  background:var(--card);
   color:var(--t2);
-  font-family:'Barlow',sans-serif;
-  font-size:10.5px;
-  font-weight:700;
-  letter-spacing:.07em;
-  text-transform:uppercase;
+  font-family:var(--font);
+  font-size:12px;
+  font-weight:600;
   cursor:pointer;
   transition:all .15s;
   white-space:nowrap;
@@ -55,36 +57,35 @@
 
 /* Shared sidebar visuals */
 .sidebar{
-  background:var(--k2);
-  border-right:1px solid var(--bdr);
+  background:var(--sidebar-bg, var(--k2));
+  border-right:1px solid var(--sidebar-line, var(--bdr));
   padding:16px 0;
   position:sticky;
-  top:var(--tb,56px);
-  height:calc(100vh - var(--tb,56px));
+  top:var(--tb,50px);
+  height:calc(100vh - var(--tb,50px));
   overflow-y:auto;
-  box-shadow:inset -1px 0 0 rgba(94,168,50,.05);
 }
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--bdr-m, var(--bdr));border-radius:3px}
 .sb-s,.sb-section{padding:0 14px;margin-bottom:18px}
-.sb-lbl{font-size:8.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--t4, var(--t3));margin-bottom:7px;padding:0 2px}
-.sb-div{height:1px;background:var(--bdr);margin:0 13px 15px}
+.sb-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t4, var(--t3));margin-bottom:7px;padding:0 2px}
+.sb-div{height:1px;background:var(--line, var(--bdr));margin:0 13px 15px}
 .fi,.sel,.fsel,.sb-search{
   width:100%;
   padding:9px 10px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:var(--radius-control,8px);
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm,8px);
   color:var(--t1);
-  font-family:'Barlow',sans-serif;
-  font-size:12px;
+  font-family:var(--font);
+  font-size:12.5px;
   outline:none;
 }
-.fi:focus,.sel:focus,.fsel:focus,.sb-search:focus{border-color:var(--g)}
+.fi:focus,.sel:focus,.fsel:focus,.sb-search:focus{border-color:var(--g);box-shadow:0 0 0 3px var(--g-dim)}
 .fi::placeholder,.sb-search::placeholder{color:var(--t4, var(--t3))}
 .sel,.fsel{cursor:pointer}
-.sel option,.fsel option{background:var(--k2)}
-.sb-note{margin:0 14px;padding:11px 12px;border-radius:var(--radius-card,12px);background:rgba(255,255,255,.03);border:1px solid var(--bdr);font-size:11px;color:var(--t3);line-height:1.6}
+.sel option,.fsel option{background:var(--card);color:var(--t1)}
+.sb-note{margin:0 14px;padding:11px 12px;border-radius:var(--radius,12px);background:var(--bg);border:1px solid var(--line, var(--bdr));font-size:11px;color:var(--t3);line-height:1.6}
 
 /* Empty, loading and error states */
 .center-state,.loading,.empty,.error-state{
@@ -97,7 +98,7 @@
   padding:44px 24px;
   text-align:center;
   color:var(--t3);
-  font-size:13.5px;
+  font-size:14px;
 }
 .center-state span{font-size:13px;color:var(--t3)}
 .error-state{align-items:flex-start;text-align:left;color:var(--warn);max-width:700px;margin:0 auto}
@@ -110,78 +111,33 @@
   gap:12px;
   flex-wrap:wrap;
   padding:9px 16px;
-  border-top:1px solid var(--bdr);
-  background:rgba(13,15,13,.95);
+  border-top:1px solid var(--line, var(--bdr));
+  background:rgba(255,255,255,.96);
   position:sticky;
   bottom:0;
   z-index:40;
-  font-size:10px;
+  font-size:11px;
   color:var(--t3);
 }
 .legend span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.lg-sep{font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-left:4px}
+.lg-sep{font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-left:4px}
+
+/* Superficies estructurales del timeline (definidas en el <style> inline de cada página) */
+.main,
+.gantt-months,
+.seller-header,
+.lista-seller,
+.modal,
+.exec-card,
+.exec-action{background:var(--card)}
+.toolbar{background:var(--sidebar-bg, var(--k2))}
+.toolbar .ri{background:var(--bg)}
 
 @media(max-width:860px){
   .sidebar{display:none}
-  .topbar{height:auto;min-height:var(--tb,56px);align-items:flex-start;flex-wrap:wrap;padding:10px 16px;gap:8px}
+  .topbar{height:auto;min-height:var(--tb,50px);align-items:flex-start;flex-wrap:wrap;padding:10px 16px;gap:8px}
   .tb-brand,.tb-left{flex:1 1 auto;min-width:0}
   .tb-module,.tb-crumb,.tb-pipe{display:none}
   .tb-right{flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;margin-left:0;gap:6px}
   .tb-date,.tb-badge{max-width:100%}
 }
-
-/* Etapa 27A: UI foundation enterprise para Gantt. */
-body{font-size:15px;line-height:1.65;background:#101311;color:#f1f4ef}
-.topbar{background:rgba(16,19,17,.96);border-bottom-color:rgba(255,255,255,.10);box-shadow:none}
-.tb-logo{font-size:17px;letter-spacing:.02em}
-.tb-logo span{color:#6aa84f}
-.tb-module,.tb-crumb,.tb-date,.sb-lbl,.lg-sep{letter-spacing:.08em;color:#7f8a7b}
-.tb-badge{background:rgba(106,168,79,.09);border-color:rgba(106,168,79,.22);color:#b9d9aa}
-.btn-sm,.tb-btn{text-transform:none;letter-spacing:.015em;background:rgba(255,255,255,.035)}
-.btn-sm:hover,.tb-btn:hover{border-color:rgba(106,168,79,.32);color:#d8ead0;background:rgba(106,168,79,.10)}
-.dot.live,.live-dot{box-shadow:0 0 0 2px rgba(106,168,79,.13)}
-.sidebar{background:#151915;border-right-color:rgba(255,255,255,.10);box-shadow:none}
-.fi,.sel,.fsel,.sb-search{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.11);font-size:12.5px}
-.fi:focus,.sel:focus,.fsel:focus,.sb-search:focus{border-color:rgba(106,168,79,.45);box-shadow:0 0 0 3px rgba(106,168,79,.12)}
-.sb-note{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09);color:#9ba69a}
-.legend{background:rgba(16,19,17,.96);border-top-color:rgba(255,255,255,.09)}
-.center-state,.loading,.empty,.error-state{font-size:14px;color:#8f9a8b}
-
-/* Modo claro: override de superficies estructurales hardcodeadas arriba. */
-html[data-theme="light"] .topbar{background:rgba(246,248,245,.96);border-bottom-color:rgba(0,0,0,.10)}
-html[data-theme="light"] .tb-logo span{color:#46792f}
-html[data-theme="light"] .tb-module,
-html[data-theme="light"] .tb-crumb,
-html[data-theme="light"] .tb-date,
-html[data-theme="light"] .sb-lbl,
-html[data-theme="light"] .lg-sep{color:#5f6c59}
-html[data-theme="light"] .tb-badge{background:rgba(70,121,47,.10);border-color:rgba(70,121,47,.26);color:#2f5220}
-html[data-theme="light"] .btn-sm,
-html[data-theme="light"] .tb-btn{background:rgba(0,0,0,.04)}
-html[data-theme="light"] .btn-sm:hover,
-html[data-theme="light"] .tb-btn:hover{border-color:rgba(70,121,47,.34);color:#2f5220;background:rgba(70,121,47,.10)}
-html[data-theme="light"] .sidebar{background:#eef2ec;border-right-color:rgba(0,0,0,.10)}
-html[data-theme="light"] .fi,
-html[data-theme="light"] .sel,
-html[data-theme="light"] .fsel,
-html[data-theme="light"] .sb-search{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.12);color:#1a1f19}
-html[data-theme="light"] .fi:focus,
-html[data-theme="light"] .sel:focus,
-html[data-theme="light"] .fsel:focus,
-html[data-theme="light"] .sb-search:focus{border-color:rgba(70,121,47,.5);box-shadow:0 0 0 3px rgba(70,121,47,.14)}
-html[data-theme="light"] .sb-note{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.10);color:#5f6c59}
-html[data-theme="light"] .legend{background:rgba(246,248,245,.96);border-top-color:rgba(0,0,0,.09)}
-html[data-theme="light"] .center-state,
-html[data-theme="light"] .loading,
-html[data-theme="light"] .empty,
-html[data-theme="light"] .error-state{color:#5f6c59}
-/* Superficies estructurales del timeline (hardcodeadas en el <style> inline). */
-html[data-theme="light"] .main,
-html[data-theme="light"] .gantt-months,
-html[data-theme="light"] .seller-header,
-html[data-theme="light"] .lista-seller,
-html[data-theme="light"] .modal,
-html[data-theme="light"] .exec-card,
-html[data-theme="light"] .exec-action{background:#ffffff}
-html[data-theme="light"] .toolbar{background:#eef2ec}
-html[data-theme="light"] .toolbar .ri{background:#f4f7f2}
