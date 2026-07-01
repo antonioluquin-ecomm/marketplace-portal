@@ -1,28 +1,35 @@
 /* ============================================================================
-   theme.css — Capa compartida de tema (claro/oscuro) + baseline de legibilidad
+   theme.css — Capa compartida de tema claro + baseline de legibilidad
    ----------------------------------------------------------------------------
    Cargar SIEMPRE como ÚLTIMO stylesheet de cada página, después del CSS propio,
    para que estas reglas ganen por orden de cascada.
 
-   El tema se controla con  html[data-theme="light"] | html[data-theme="dark"].
-   theme.js setea el atributo antes del paint (default: dark).
+   2026-07-01 — alineación al design system estándar del ecosistema (ver
+   docs/decisions/2026-07-01-alineacion-design-system.md). El modo oscuro
+   queda fuera de alcance: theme.js fuerza siempre data-theme="light" y este
+   archivo ya no define un bloque `html[data-theme="dark"]`.
 
    Por qué redefine tantas variables: cada página nombra sus tokens distinto
    (--bg / --k / --surface-1 / --panel; --t1 / --text-1 / --text / --muted).
-   Como los nombres son inconsistentes pero enumerables, el modo claro redefine
-   TODAS las variantes de una sola vez. Solo se tocan variables de COLOR; las de
-   layout (--tb alto topbar, --sb ancho sidebar, --r/--rl radios) NO se tocan.
+   Como los nombres son inconsistentes pero enumerables, este bloque redefine
+   TODAS las variantes de una sola vez con los valores del tema claro
+   canónico (azul institucional, ver tokens.css). Es una capa de transición
+   mientras cada página migra a los tokens canónicos directamente (etapas
+   siguientes del plan de estandarización) — una vez migradas todas las
+   páginas, este bloque de alias puede reducirse a solo los tokens de
+   tokens.css. Solo se tocan variables de COLOR; las de layout (--tb alto
+   topbar, --sb ancho sidebar, --r/--rl radios) NO se tocan acá.
    ========================================================================== */
 
 /* ---------------------------------------------------------------------------
-   1) MODO CLARO — redefinición global de todas las variantes de nombre
+   1) TEMA CLARO — redefinición global de todas las variantes de nombre
    --------------------------------------------------------------------------- */
 html[data-theme="light"] {
   /* Fondos base */
-  --bg:        #f6f8f5;
-  --bg2:       #eef2ec;
-  --k:         #f6f8f5;
-  --k2:        #eef2ec;
+  --bg:        #f0f2f7;
+  --bg2:       #e8ebf2;
+  --k:         #f0f2f7;
+  --k2:        #e8ebf2;
   --k3:        #ffffff;
   --k4:        #f1f4ef;
 
@@ -40,69 +47,69 @@ html[data-theme="light"] {
   --panel3:    #e9eee6;
 
   /* Texto */
-  --t1:        #1a1f19;
-  --t2:        #44503f;
-  --t3:        #5f6c59;
-  --t4:        #79856f;
-  --text:      #1a1f19;
-  --text-1:    #1a1f19;
-  --text-2:    #44503f;
-  --text-3:    #5f6c59;
-  --text-muted: #44503f;
-  --text-soft:  #5f6c59;
-  --text-dim:   #79856f;
-  --muted:     #44503f;
-  --muted2:    #6b7464;
-  --w:         #1a1f19;            /* lo que antes era blanco puro pasa a texto oscuro */
+  --t1:        #111827;
+  --t2:        #374151;
+  --t3:        #6b7280;
+  --t4:        #9ca3af;
+  --text:      #111827;
+  --text-1:    #111827;
+  --text-2:    #374151;
+  --text-3:    #6b7280;
+  --text-muted: #6b7280;
+  --text-soft:  #6b7280;
+  --text-dim:   #9ca3af;
+  --muted:     #6b7280;
+  --muted2:    #9ca3af;
+  --w:         #111827;            /* lo que antes era blanco puro pasa a texto oscuro */
 
   /* Bordes / separadores */
-  --ln:        rgba(0,0,0,.14);
-  --ln2:       rgba(0,0,0,.08);
-  --b:         rgba(0,0,0,.14);
-  --b2:        rgba(0,0,0,.08);
-  --bdr:       rgba(0,0,0,.14);
-  --bdr2:      rgba(0,0,0,.08);
-  --bdr-m:     rgba(0,0,0,.10);
-  --border:    rgba(0,0,0,.14);
-  --border-soft: rgba(0,0,0,.08);
-  --line:      rgba(0,0,0,.14);
-  --line2:     rgba(0,0,0,.08);
-  --line-soft: rgba(0,0,0,.08);
+  --ln:        #e5e7eb;
+  --ln2:       rgba(0,0,0,.06);
+  --b:         #e5e7eb;
+  --b2:        rgba(0,0,0,.06);
+  --bdr:       #e5e7eb;
+  --bdr2:      rgba(0,0,0,.06);
+  --bdr-m:     rgba(0,0,0,.08);
+  --border:    #e5e7eb;
+  --border-soft: rgba(0,0,0,.06);
+  --line:      #e5e7eb;
+  --line2:     rgba(0,0,0,.06);
+  --line-soft: rgba(0,0,0,.06);
 
-  /* Verde primario — oscurecido para contraste sobre claro */
-  --g:         #46792f;
-  --g2:        #3a6627;
-  --green:     #46792f;
-  --green-dark:#3a6627;
-  --gb:        rgba(70,121,47,.14);
-  --gb2:       rgba(70,121,47,.22);
-  --gd:        rgba(70,121,47,.10);
-  --g-dim:     rgba(70,121,47,.10);
-  --green-dim: rgba(70,121,47,.10);
-  --g-brd:     rgba(70,121,47,.28);
-  --g-brd2:    rgba(70,121,47,.34);
-  --green-brd: rgba(70,121,47,.28);
-  --accent:        #46792f;
-  --accent-soft:   rgba(70,121,47,.10);
-  --accent-border: rgba(70,121,47,.28);
-  --focus-ring:    0 0 0 3px rgba(70,121,47,.18);
+  /* Azul institucional — reemplaza el verde propio del proyecto */
+  --g:         #1a3f6b;
+  --g2:        #14325a;
+  --green:     #1a3f6b;
+  --green-dark:#14325a;
+  --gb:        #e8f0fb;
+  --gb2:       #bfd4f5;
+  --gd:        #e8f0fb;
+  --g-dim:     #e8f0fb;
+  --green-dim: #e8f0fb;
+  --g-brd:     #bfd4f5;
+  --g-brd2:    rgba(26,63,107,.34);
+  --green-brd: #bfd4f5;
+  --accent:        #1a3f6b;
+  --accent-soft:   #e8f0fb;
+  --accent-border: #bfd4f5;
+  --focus-ring:    0 0 0 3px rgba(26,63,107,.18);
 
-  /* Semánticos — un poco más oscuros para leer sobre fondo claro */
-  --warn:   #b9770c;   --wa:  #b9770c;   --amber: #b9770c;   --amber-dim: rgba(185,119,12,.10);
-  --warn-dim: rgba(185,119,12,.10);  --wad: rgba(185,119,12,.10);  --warn-brd: rgba(185,119,12,.26); --wab: rgba(185,119,12,.26);
-  --info:   #2563eb;   --in:  #2563eb;  --ind: rgba(37,99,235,.10);  --inb: rgba(37,99,235,.24);
-  --danger: #c0392b;   --da:  #c0392b;  --dad: rgba(192,57,43,.10);
-  --red:    #c0392b;   --red-dim: rgba(192,57,43,.08); --red-brd: rgba(192,57,43,.22);
+  /* Semánticos */
+  --warn:   #92400e;   --wa:  #92400e;   --amber: #92400e;   --amber-dim: #fffbeb;
+  --warn-dim: #fffbeb;  --wad: #fffbeb;  --warn-brd: rgba(146,64,14,.26); --wab: rgba(146,64,14,.26);
+  --info:   #1a3f6b;   --in:  #1a3f6b;  --ind: #e8f0fb;  --inb: #bfd4f5;
+  --danger: #991b1b;   --da:  #991b1b;  --dad: #fef2f2;
+  --red:    #991b1b;   --red-dim: #fef2f2; --red-brd: rgba(153,27,27,.22);
   --teal:   #0d9488;   --te:  #0d9488;  --ted: rgba(13,148,136,.10);
   --vio:    #7c3aed;   --vi:  #7c3aed;  --vid: rgba(124,58,237,.10);  --violet: #7c3aed;
 
-  /* Sombras más suaves sobre claro */
-  --shadow:        0 10px 40px rgba(0,0,0,.10);
-  --shadow-soft:   0 8px 20px rgba(0,0,0,.08);
-  --shadow-panel:  0 14px 32px rgba(0,0,0,.10);
+  /* Sombras estándar */
+  --shadow:        0 4px 16px rgba(17,24,39,.08), 0 1px 4px rgba(17,24,39,.04);
+  --shadow-soft:   0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-panel:  0 12px 36px rgba(17,24,39,.10);
 
-  /* Glows de páginas públicas → tinte verde claro */
-  --g-glow:    rgba(70,121,47,.10);
+  /* Glows de páginas públicas → tinte azul institucional */
+  --g-glow:    rgba(26,63,107,.10);
   color-scheme: light;
 }
 
@@ -110,7 +117,7 @@ html[data-theme="light"] {
    html[data-theme="light"] body (esp. 0,0,1,2) le gana por especificidad y
    garantiza que el fondo vire en todas, sin editar cada página. */
 html[data-theme="light"] body {
-  background: var(--bg, #f6f8f5);
+  background: var(--bg, #f0f2f7);
 }
 
 /* Override universal de superficies estructurales en claro.
@@ -120,38 +127,22 @@ html[data-theme="light"] body {
    CSS de página (backlog/gantt/seller-center/simuladores) refinan bordes y casos
    propios; esto cubre el resto. */
 html[data-theme="light"] .topbar {
-  background: rgba(246,248,245,.96);
-  border-bottom-color: rgba(0,0,0,.10);
+  background: rgba(255,255,255,.96);
+  border-bottom-color: #e5e7eb;
 }
 html[data-theme="light"] .sidebar {
   background: #f1f5f9;
   border-right-color: #e2e8f0;
 }
 html[data-theme="light"] footer {
-  background: #eef2ec;
-  border-top-color: rgba(0,0,0,.10);
+  background: #e8ebf2;
+  border-top-color: #e5e7eb;
 }
 /* Opciones de <select> hardcodeadas oscuras en varias páginas. */
 html[data-theme="light"] option,
 html[data-theme="light"] select option {
   background: #ffffff;
-  color: #1a1f19;
-}
-
-/* MODO OSCURO - contraste ajustado para lectura operativa.
-   Varias paginas usan --t2/--t3/--t4 en lugar de --text-*; se alinean aqui
-   para evitar grises demasiado apagados sobre fondos verdes oscuros. */
-html[data-theme="dark"] {
-  --text-muted: #c3cbbf;
-  --text-soft:  #9aa695;
-  --text-dim:   #7f8a7b;
-  --t2:         #c3cbbf;
-  --t3:         #9aa695;
-  --t4:         #7f8a7b;
-  --muted:      #c3cbbf;
-  --muted2:     #9aa695;
-  --w:          #f1f4ef;
-  color-scheme: dark;
+  color: #111827;
 }
 
 /* Transición suave al alternar tema (no en carga inicial gracias a theme.js) */
@@ -276,43 +267,6 @@ body .logo, body .tb-logo, body .topbar-logo {
   text-rendering: geometricPrecision;
 }
 
-/* ---------------------------------------------------------------------------
-   3) BOTÓN DE TOGGLE (inyectado por theme.js)
-   --------------------------------------------------------------------------- */
-.mp-theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  height: 32px;
-  min-width: 32px;
-  padding: 0 10px;
-  border-radius: 9px;
-  border: 1px solid var(--ln, var(--bdr, var(--border, rgba(255,255,255,.14))));
-  background: var(--s1, var(--surface-1, var(--panel, transparent)));
-  color: var(--t1, var(--text, var(--text-1, inherit)));
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 1;
-  cursor: pointer;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
-  user-select: none;
-}
-.mp-theme-toggle:hover {
-  border-color: var(--g-brd, var(--green-brd, rgba(106,168,79,.4)));
-  background: var(--g-dim, var(--green-dim, rgba(106,168,79,.1)));
-}
-.mp-theme-toggle:active { transform: scale(.96); }
-.mp-theme-toggle:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring, 0 0 0 3px rgba(106,168,79,.25));
-}
-.mp-theme-toggle .mp-theme-ico { font-size: 15px; line-height: 1; }
-.mp-theme-toggle .mp-theme-txt {
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: .02em;
-}
-@media (max-width: 720px) {
-  .mp-theme-toggle .mp-theme-txt { display: none; }
-}
+/* El botón de toggle claro/oscuro se retiró junto con el modo oscuro
+   (ver docs/decisions/2026-07-01-alineacion-design-system.md). theme.js ya
+   no inyecta `.mp-theme-toggle` en ninguna página. */

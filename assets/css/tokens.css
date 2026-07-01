@@ -1,9 +1,16 @@
 /*
- * tokens.css — Variables CSS canónicas del design system Sporting Marketplace
- * Etapa 6C — piloto creado: 2026-05-16
+ * tokens.css — Variables CSS canónicas del design system compartido
+ * (ver ../../project-standards/style_guide.md §2-4)
  *
  * ALCANCE: solo :root con tokens de color, superficie, texto y layout base.
  * NO incluye resets, layout, componentes ni estilos de página.
+ *
+ * 2026-07-01 — alineación al design system estándar del ecosistema
+ * (ver docs/decisions/2026-07-01-alineacion-design-system.md). Reemplaza la
+ * paleta verde/oscura propia por los tokens canónicos claros. Esta etapa no
+ * se propaga todavía a las páginas — cada página sigue con su :root inline,
+ * que gana por orden de cascada, así que el sitio no cambia visualmente
+ * hasta las etapas siguientes del plan de estandarización.
  *
  * Uso:
  *   <link rel="stylesheet" href="../../assets/css/tokens.css">
@@ -11,63 +18,72 @@
  */
 
 :root {
-  /* Verde primario */
-  --g: #6aa84f;
-  --g2: #54873d;
-  --g-dim: rgba(106, 168, 79, .09);
-  --g-brd: rgba(106, 168, 79, .20);
-
-  /* Fondos */
-  --bg: #101311;
-  --bg2: #141814;
-  --panel: #191d19;
-  --panel2: #1f241f;
-
-  /* Separadores */
-  --line: rgba(255, 255, 255, .10);
-  --line-soft: rgba(255, 255, 255, .065);
+  /* Fondo */
+  --bg:   #f0f2f7;
+  --card: #ffffff;
 
   /* Texto */
-  --text: #f1f4ef;
-  --text-muted: #b7c1b3;
-  --text-soft: #889386;
-  --text-dim: #687264;
+  --text:  #111827;
+  --muted: #6b7280;
 
-  /* Semánticos */
-  --warn: #f59e0b;
-  --info: #60a5fa;
-  --teal: #2dd4bf;
-  --danger: #f87171;
+  /* Líneas */
+  --line: #e5e7eb;
 
-  /* Layout */
-  --topbar-height: 58px;
+  /* Primary — azul institucional */
+  --primary:       #1a3f6b;
+  --primary-hover: #14325a;
+  --primary-soft:  #e8f0fb;
+  --primary-mid:   #bfd4f5;
 
-  /* Etapa 26B: escala visual PRO global */
-  --font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-brand: Barlow, system-ui, sans-serif;
-  --font-display: "Barlow Condensed", Barlow, system-ui, sans-serif;
-  --font-body: 16px;
-  --font-meta: 13.5px;
-  --font-label: 12px;
-  --lh-body: 1.64;
+  /* Success */
+  --success:    #0a7040;
+  --success-bg: #ecfdf5;
+
+  /* Warning */
+  --warning:    #92400e;
+  --warning-bg: #fffbeb;
+
+  /* Danger */
+  --danger:       #991b1b;
+  --danger-bg:    #fef2f2;
+  --danger-hover: #7f1d1d;
+
+  /* Info (alias de primary-soft) */
+  --info:     var(--primary-soft);
+  --info-mid: var(--primary-mid);
+
+  /* Sidebar */
+  --sidebar-bg:   #f1f5f9;
+  --sidebar-line: #e2e8f0;
+
+  /* Tipografía */
+  --font: 'DM Sans', system-ui, sans-serif;
+  --mono: 'DM Mono', 'Fira Mono', monospace;
+
+  /* Espaciado — múltiplos de 4px */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --radius-control: 9px;
-  --radius-card: 12px;
-  --radius-panel: 14px;
-  --shadow-soft: 0 10px 24px rgba(0, 0, 0, .16);
-  --shadow-panel: 0 16px 36px rgba(0, 0, 0, .20);
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --space-9: 64px;
 
-  /* Etapa 27A: UI foundation enterprise */
-  --surface-raised: #202620;
-  --surface-muted: rgba(255, 255, 255, .035);
-  --border-soft: rgba(255, 255, 255, .075);
-  --accent: var(--g);
-  --accent-soft: var(--g-dim);
-  --accent-border: var(--g-brd);
-  --focus-ring: 0 0 0 3px rgba(106, 168, 79, .14);
+  /* Border radius */
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius:      14px;
+  --radius-lg:   20px;
+  --radius-pill: 999px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+  --shadow:    0 4px 16px rgba(17,24,39,.08), 0 1px 4px rgba(17,24,39,.04);
+  --shadow-lg: 0 12px 36px rgba(17,24,39,.10);
+
+  /* Layout base */
+  --topbar-height: 50px;
+  --sidebar-w:     224px;
 }

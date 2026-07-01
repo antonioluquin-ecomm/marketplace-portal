@@ -4,6 +4,27 @@ Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse 
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.
 
+## 2026-07-01 - Etapa 1 de alineacion al design system estandar: tokens y tema base
+
+Tipo de cambio: CSS / fundacion de design system.
+
+Estado: implementado.
+
+Resultado:
+- `assets/css/tokens.css` reescrito con el naming canonico del ecosistema (`--bg`, `--card`, `--text`, `--muted`, `--line`, `--primary/-hover/-soft/-mid`, `--success/-bg`, `--warning/-bg`, `--danger/-bg/-hover`, radios `--radius-xs/-sm/(base)/-lg/-pill`, sombras `--shadow-sm/(base)/-lg`, tipografia `--font` (DM Sans) y `--mono` (DM Mono), y tokens de sidebar `--sidebar-bg`/`--sidebar-line`). Reemplaza la paleta verde/oscura propia (`--g`, `--k`, `--t1`...).
+- `assets/js/theme.js` simplificado: el modo oscuro queda fuera de alcance (ver decision), se fuerza siempre `data-theme="light"` y se retira el boton de toggle inyectado. Se conserva `window.MP_THEME` como no-op por compatibilidad.
+- `assets/css/theme.css`: el bloque `html[data-theme="light"]` se retonaliza de verde a azul institucional (`#1a3f6b`) sobre fondo claro estandar (`#f0f2f7`); se elimina el bloque `html[data-theme="dark"]` y el CSS del boton de toggle (ya no se inyecta).
+- Documentada la decision en `docs/decisions/2026-07-01-alineacion-design-system.md`.
+
+Alcance:
+- `assets/css/tokens.css` no se propaga todavia a las paginas (cada pagina sigue con su `:root` inline, que gana por cascada) — el cambio de tokens.css en si mismo no tiene efecto visual.
+- `theme.css`/`theme.js` si cambian el comportamiento observable: el sitio pasa de oscuro-por-defecto (con toggle) a claro-forzado (sin toggle). Quedan acentos verdes remanentes en paginas que redefinen sus propios tokens inline — se resuelven en las etapas siguientes del plan de estandarizacion (piloto index.html, luego modulos por lotes).
+- No se toco logica de parsers de CSV, Apps Script, ni `MP_CONFIG`.
+
+Validacion:
+- Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
+- Mobile (375px): sin overflow horizontal en el hub.
+
 ## 2026-06-09 - Consolidacion estructural: Hub Central unico y limpieza de raiz
 
 Tipo de cambio: estructural / navegacion / documentacion.
