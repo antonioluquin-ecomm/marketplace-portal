@@ -193,6 +193,60 @@
   text-transform: none;
 }
 
+/* 2026-07-01 — botones canónicos del design system estándar (ver
+   docs/decisions/2026-07-01-alineacion-design-system.md, style_guide.md §8).
+   Reemplaza .tbtn/.btn-top/.tb-btn/.btn-sm/.maction/.share-btn en los
+   módulos internos migrados. El tamaño (34px min-height, 12.5px) se
+   mantiene igual al que ya tenían esas clases para no generar un
+   cambio visual — solo cambia el nombre. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid transparent;
+  background: var(--primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.button:hover { background: var(--primary-hover); }
+.button:disabled { opacity: .5; cursor: not-allowed; }
+.button.secondary {
+  background: var(--card);
+  color: var(--muted);
+  border-color: var(--line);
+}
+.button.secondary:hover {
+  color: var(--primary);
+  border-color: var(--primary-mid);
+  background: var(--primary-soft);
+}
+.button.danger { background: var(--danger); color: #fff; }
+.button.danger:hover { background: var(--danger-hover); }
+.button.ghost {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--primary-mid);
+}
+.button.ghost:hover { background: var(--primary-soft); }
+
+/* Error inline de campo de formulario (style_guide.md §7.1) */
+.field-error {
+  font-size: 12px;
+  color: var(--danger);
+  font-weight: 500;
+}
+
 :where(.pill, .tag, .tb-badge, .nav-badge, .status) {
   letter-spacing: .035em;
 }

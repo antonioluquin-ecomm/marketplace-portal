@@ -36,24 +36,6 @@
 @keyframes ganttPulse{0%,100%{opacity:1}50%{opacity:.45}}
 .tb-date{font-size:11px;color:var(--t3);white-space:nowrap}
 .tb-badge{font-size:11px;font-weight:700;letter-spacing:.02em;padding:4px 10px;border-radius:var(--radius-sm,5px);border:1px solid var(--g-brd);color:var(--g);background:var(--g-dim);white-space:nowrap}
-.btn-sm,.tb-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:7px 12px;
-  border:1px solid var(--line, var(--bdr));
-  border-radius:var(--radius-sm,8px);
-  background:var(--card);
-  color:var(--t2);
-  font-family:var(--font);
-  font-size:12px;
-  font-weight:600;
-  cursor:pointer;
-  transition:all .15s;
-  white-space:nowrap;
-}
-.btn-sm:hover,.tb-btn:hover{border-color:var(--g-brd, var(--g));color:var(--g);background:var(--g-dim)}
-.btn-sm:disabled{opacity:.5;cursor:progress}
 
 /* Shared sidebar visuals */
 .sidebar{

@@ -205,15 +205,11 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .edit-status{display:none;padding:9px 10px;border-radius:7px;font-size:12px;line-height:1.45;border:1px solid var(--bdr)}
 .edit-status.visible{display:block}
 .edit-status.ok{background:var(--g-dim);border-color:var(--g-brd);color:var(--t1)}
-.edit-status.err{background:var(--dng-dim);border-color:var(--dng-brd);color:#f4b3b3}
+.edit-status.err{background:var(--dng-dim);border-color:var(--dng-brd);color:var(--danger)}
 .edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:2px}
 .edit-help{font-size:11px;color:var(--t3);line-height:1.45}
-.btn-sm.primary{background:var(--g);border-color:var(--g-brd);color:#fff}
-.btn-sm.primary:hover{background:var(--g2);color:#fff}
-.btn-sm.danger{background:var(--dng-dim);border-color:var(--dng-brd);color:#f4b3b3}
-.btn-sm.danger:hover{background:rgba(217,64,64,.2);color:#ffd1d1}
-.btn-sm:disabled{opacity:.45;cursor:not-allowed}
-.btn-sm:disabled:hover{filter:none}
+.button:disabled{opacity:.45;cursor:not-allowed}
+.button:disabled:hover{filter:none}
 
 /* ── STATES ── */
 .spinner{width:26px;height:26px;border-radius:50%;border:2px solid rgba(17,24,39,.1);border-top-color:var(--g);animation:spin .7s linear infinite}
@@ -245,7 +241,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .exec-section-label{padding:13px 22px 0;color:var(--t3);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;background:rgba(17,24,39,.012)}
 @media(max-width:980px){.exec-hero{grid-template-columns:1fr}.exec-flow{grid-template-columns:repeat(2,1fr)}.exec-actions{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.exec-flow,.exec-actions{grid-template-columns:1fr}.exec-hero{padding:14px}}
-@media(max-width:640px){.modal,.edit-modal{width:calc(100vw - 24px);max-height:92vh}.modal-hd{padding:15px 16px 12px}.modal-body{padding:14px 16px}.edit-grid{grid-template-columns:1fr}.edit-actions,.m-actions{justify-content:stretch;flex-direction:column}.edit-actions .btn-sm,.m-actions .btn-sm{width:100%}}
+@media(max-width:640px){.modal,.edit-modal{width:calc(100vw - 24px);max-height:92vh}.modal-hd{padding:15px 16px 12px}.modal-body{padding:14px 16px}.edit-grid{grid-template-columns:1fr}.edit-actions,.m-actions{justify-content:stretch;flex-direction:column}.edit-actions .button,.m-actions .button{width:100%}}
 
 @media(max-width:860px){.shell{grid-template-columns:1fr}}
 
@@ -554,7 +550,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
   color:var(--t2);
   white-space:nowrap;
 }
-.toolbar .btn-sm{
+.toolbar .button{
   min-height:24px;
 }
 .toolbar{
@@ -578,13 +574,13 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
   padding:4px 8px;
 }
 .period-cell.current{
-  color:#d8ead0;
-  background:rgba(106,168,79,.11);
+  color:var(--g2);
+  background:var(--g-dim);
   box-shadow:inset 0 -2px 0 var(--g);
 }
 .g-line.today{
   opacity:.9;
-  box-shadow:0 0 0 1px rgba(106,168,79,.22);
+  box-shadow:0 0 0 1px var(--g-brd);
 }
 
 @media(max-width:980px){
@@ -1078,9 +1074,9 @@ html,body{height:100%;overflow:hidden}
   <div class="tb-right">
     <div class="status-row"><div class="dot load" id="status-dot"></div><span id="status-txt">Cargando…</span></div>
     <div class="tb-date" id="last-update"></div>
-    <button class="btn-sm primary" type="button" onclick="openCreateTask()">+ Nueva tarea</button>
-    <button class="btn-sm" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
-    <a class="btn-sm" href="../../index.html" title="Volver al Hub Central">← Hub</a>
+    <button class="button" type="button" onclick="openCreateTask()">+ Nueva tarea</button>
+    <button class="button secondary" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
+    <a class="button secondary" href="../../index.html" title="Volver al Hub Central">← Hub</a>
   </div>
 </header>
 
@@ -1152,7 +1148,7 @@ html,body{height:100%;overflow:hidden}
   </div>
 
   <div class="sb-div"></div>
-  <div class="sb-s"><button class="btn-sm" style="width:100%" onclick="clearFilters()">Limpiar filtros</button></div>
+  <div class="sb-s"><button class="button secondary" style="width:100%" onclick="clearFilters()">Limpiar filtros</button></div>
 
   <div class="sb-div"></div>
   <div class="sb-s">
@@ -1197,7 +1193,7 @@ html,body{height:100%;overflow:hidden}
           <button class="sbtn on" id="sc-mes"    onclick="setScale('mes')">Mes</button>
           <button class="sbtn"    id="sc-semana" onclick="setScale('semana')">Semana</button>
         </div>
-        <button class="btn-sm today-btn" type="button" onclick="scrollToToday()">Hoy</button>
+        <button class="button secondary today-btn" type="button" onclick="scrollToToday()">Hoy</button>
       </div>
     </div>
     <div class="tl-r">
@@ -1206,7 +1202,7 @@ html,body{height:100%;overflow:hidden}
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>
-      <button class="btn-sm" id="btn-export" onclick="exportExcel()" title="Exportar vista lista a Excel">↓ Excel</button>
+      <button class="button secondary" id="btn-export" onclick="exportExcel()" title="Exportar vista lista a Excel">↓ Excel</button>
     </div>
   </section>
 
@@ -1326,8 +1322,8 @@ html,body{height:100%;overflow:hidden}
         <div class="edit-help">No se editan task_id, seller_id, seller, fase ni tarea.</div>
         <div class="edit-status" id="edit-status"></div>
         <div class="edit-actions">
-          <button type="button" class="btn-sm" onclick="closeEditModal()">Cancelar</button>
-          <button type="submit" class="btn-sm primary" id="edit-submit">Guardar cambios</button>
+          <button type="button" class="button secondary" onclick="closeEditModal()">Cancelar</button>
+          <button type="submit" class="button" id="edit-submit">Guardar cambios</button>
         </div>
       </form>
     </div>
@@ -1437,8 +1433,8 @@ html,body{height:100%;overflow:hidden}
         <div class="edit-help">No se envia task_id desde el front. Apps Script genera el ID definitivo. ver_en_gantt queda fuera de la UI operativa.</div>
         <div class="edit-status" id="create-status"></div>
         <div class="edit-actions">
-          <button type="button" class="btn-sm" onclick="closeCreateModal()">Cancelar</button>
-          <button type="submit" class="btn-sm primary" id="create-submit">Crear tarea</button>
+          <button type="button" class="button secondary" onclick="closeCreateModal()">Cancelar</button>
+          <button type="submit" class="button" id="create-submit">Crear tarea</button>
         </div>
       </form>
     </div>
@@ -2887,8 +2883,8 @@ function openModal(taskId){
   const editHTML=lastEditFeedback&&lastEditFeedback.task_id===t.task_id?`<div class="m-edit-note">${esc(lastEditFeedback.message)}</div>`:'';
   const disableHTML=lastDisableFeedback&&lastDisableFeedback.task_id===t.task_id?`<div class="edit-status visible ${lastDisableFeedback.type==='ok'?'ok':'err'}" style="margin-bottom:12px">${esc(lastDisableFeedback.message)}</div>`:'';
   const disableAction=estadoNorm(t.estado)==='Cancelado'
-    ? `<button type="button" class="btn-sm" disabled>Tarea cancelada</button>`
-    : `<button type="button" class="btn-sm danger" id="disable-task-btn" onclick="disableGanttTask('${esc(t.task_id)}')">Dar de baja</button>`;
+    ? `<button type="button" class="button secondary" disabled>Tarea cancelada</button>`
+    : `<button type="button" class="button danger" id="disable-task-btn" onclick="disableGanttTask('${esc(t.task_id)}')">Dar de baja</button>`;
   $('m-body').innerHTML=`
     ${editHTML}
     ${disableHTML}
@@ -2910,7 +2906,7 @@ function openModal(taskId){
     ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}
     <div class="m-actions">
       ${disableAction}
-      <button type="button" class="btn-sm primary" onclick="openEditTask('${esc(t.task_id)}')">Editar tarea</button>
+      <button type="button" class="button" onclick="openEditTask('${esc(t.task_id)}')">Editar tarea</button>
     </div>`;
   $('modal-ov').classList.add('open');
 }

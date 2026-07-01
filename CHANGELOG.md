@@ -25,6 +25,28 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 5 de alineacion al design system estandar: componentes (botones, forms, tablas)
+
+Tipo de cambio: CSS + JS (paginacion). Riesgo medio (tabla de backlog).
+
+Estado: implementado.
+
+Resultado:
+- **Botones canonicos:** se agrego `.button`/`.secondary`/`.danger`/`.ghost` a `assets/css/internal-components.css` (style_guide.md §8), con el mismo tamano visual que ya tenían `.tbtn`/`.btn-top`/`.tb-btn`/`.btn-sm`/`.maction`/`.share-btn` (34px min-height, sin cambio de aspecto). Se renombraron las clases en los 13 archivos internos migrados (index.html + 12 modulos) preservando todos los `onclick` y handlers JS intactos (verificado que ninguna clase se consultaba desde JS antes de renombrar). Se eliminaron las reglas CSS locales que quedaron huerfanas en cada pagina/archivo de pagina.
+- **Bugs de contraste encontrados y corregidos en el camino** (no relacionados con el renombre en si, detectados al tocar el CSS de `gantt-operativo.html`): `.edit-status.err` y el boton "Dar de baja" tenían texto rosa claro pensado para fondo oscuro, ilegible sobre el nuevo fondo claro; `.period-cell.current` (dia actual del gantt) igual, texto verde claro sobre fondo verde claro. Los tres corregidos a colores oscuros legibles.
+- **`.field-error`:** agregada la clase canonica (style_guide.md §7.1) a `internal-components.css`, disponible para futuros formularios con validacion inline.
+- **Sorting + paginacion en `backlog-sellers.html`:** el sorting por columna ya existía (`setSortCol`/`applyTableSort`) — no fue necesario agregarlo. Se agrego paginacion 25/50/100 con Anterior/Siguiente siguiendo el patron canonico de `style_guide.md §6.5` (`currentPage`, `pageSize`, `_tableRows`). El cambio de filtros, busqueda o sorting resetea la pagina a 1. La exportacion a Excel ya usaba independientemente el dataset completo filtrado (no la pagina visible), sin cambios ahí.
+
+Alcance:
+- Los 13 archivos internos ya migrados en etapas anteriores + `assets/css/internal-components.css` y los 6 CSS de pagina.
+- `maqueta-seller-center.html` y las 4 paginas de `public/` no se tocaron (excluidas, ver decisiones previas).
+- No se modifico ningun `onclick`, endpoint, ni logica de negocio — solo nombres de clase, CSS y la nueva capacidad de paginacion.
+
+Validacion:
+- Preview server: las 13 paginas cargan sin errores de consola, botones visualmente identicos a como se veían (mismo tamano/color/hover).
+- `backlog-sellers.html`: paginacion probada (Siguiente/Anterior, cambio de tamano de pagina, reset al ordenar por columna), modal de detalle probado post-renombre de botones.
+- Mobile (375px): backlog-sellers.html con paginacion visible y usable, sin overflow horizontal fuera de la tabla (que ya tenía scroll horizontal propio).
+
 ## 2026-07-01 - Etapa 4 cancelada: paginas publicas quedan fuera de alcance permanente
 
 Tipo de cambio: decision de alcance. Sin cambios de codigo.

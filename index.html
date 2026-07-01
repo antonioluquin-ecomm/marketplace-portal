@@ -103,19 +103,6 @@ a { color:inherit; text-decoration:none; }
 }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-.tbtn {
-  display:inline-flex; align-items:center; gap:6px;
-  min-height:34px; padding:7px 13px; border-radius:var(--radius-sm);
-  border:1px solid var(--ln);
-  background:var(--card);
-  color:var(--t2); font-size:12.5px; font-weight:600;
-  letter-spacing:.01em;
-  transition:.14s; white-space:nowrap;
-}
-.tbtn:hover { border-color:var(--g-brd); color:var(--g); background:var(--g-dim); }
-.tbtn.cta { background:var(--g); border-color:var(--g); color:#fff; }
-.tbtn.cta:hover { background:var(--g2); border-color:var(--g2); }
-
 /* ─── LAYOUT ─── */
 .shell { display:grid; grid-template-columns:var(--sb) 1fr; min-height:calc(100vh - var(--tb)); }
 
@@ -470,8 +457,8 @@ h1 em { color:var(--g); font-style:normal; }
 @media (max-width:720px) {
   .topbar { padding:0 14px; gap:8px; }
   .tb-right { gap:6px; }
-  .tb-right .tbtn:not(.cta):not(.portal-link) { display:none; }
-  .tbtn { padding:7px 10px; }
+  .tb-right .button.secondary:not(.portal-link) { display:none; }
+  .button { padding:7px 10px; }
   .crumb, .pill { display:none; }
   .hero { padding:28px 20px; }
   .section { padding:28px 20px; }
@@ -479,7 +466,7 @@ h1 em { color:var(--g); font-style:normal; }
   .cards.col3, .cards.col2 { grid-template-columns:1fr; }
   .all-grid { grid-template-columns:1fr; }
   .access-grid { grid-template-columns:1fr; }
-  .hero-btns .tbtn:not(.cta) { display:none; }
+  .hero-btns .button.secondary { display:none; }
   .sec-head { flex-direction:column; align-items:stretch; }
   .search-wrap, .search { width:100%; max-width:100%; min-width:0; }
 }
@@ -496,9 +483,9 @@ h1 em { color:var(--g); font-style:normal; }
   </div>
   <div class="tb-right">
     <div class="pill"><span class="dot"></span>Operativo</div>
-    <a class="tbtn" href="internal/backlog/backlog-sellers.html">Backlog</a>
-    <a class="tbtn" href="internal/gantt/gantt-operativo.html">Gantt</a>
-    <a class="tbtn cta" href="internal/backlog/gestion-sellers.html">+ Seller</a>
+    <a class="button secondary" href="internal/backlog/backlog-sellers.html">Backlog</a>
+    <a class="button secondary" href="internal/gantt/gantt-operativo.html">Gantt</a>
+    <a class="button" href="internal/backlog/gestion-sellers.html">+ Seller</a>
   </div>
 </header>
 
@@ -562,9 +549,9 @@ h1 em { color:var(--g); font-style:normal; }
         es una herramienta de trabajo.
       </p>
       <div class="hero-btns">
-        <a class="tbtn cta" href="internal/backlog/gestion-sellers.html">Crear / gestionar seller</a>
-        <a class="tbtn" href="internal/backlog/backlog-sellers.html">Ver backlog</a>
-        <a class="tbtn" href="internal/gantt/gantt-operativo.html">Ver Gantt operativo</a>
+        <a class="button" href="internal/backlog/gestion-sellers.html">Crear / gestionar seller</a>
+        <a class="button secondary" href="internal/backlog/backlog-sellers.html">Ver backlog</a>
+        <a class="button secondary" href="internal/gantt/gantt-operativo.html">Ver Gantt operativo</a>
       </div>
     </div>
 

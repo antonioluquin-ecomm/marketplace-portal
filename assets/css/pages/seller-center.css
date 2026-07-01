@@ -12,8 +12,6 @@
 .crumb{border-left:1px solid var(--line, var(--bdr));padding-left:12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t4)}
 .topbar-right{display:flex;align-items:center;gap:8px}
 .load-badge,.live-badge{white-space:nowrap}
-.tb-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--line, var(--bdr));border-radius:var(--radius-sm,8px);font-size:12px;font-weight:600;color:var(--t3);transition:.15s;cursor:pointer;background:none;font-family:inherit}
-.tb-btn:hover{color:var(--g);border-color:var(--g-brd);background:var(--g-dim)}
 
 .shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
 .sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow-y:auto;background:var(--sidebar-bg, var(--k2));border-right:1px solid var(--sidebar-line, var(--bdr));padding:16px 0 34px}
@@ -85,7 +83,7 @@ h1{font-family:var(--font);font-size:32px;font-weight:700;letter-spacing:-.02em;
   .crumb{display:none}
   .topbar-right{flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;margin-left:0;gap:6px}
   .load-badge,.live-badge{max-width:100%}
-  .tb-btn{min-width:0}
+  .button{min-width:0}
   .shell{grid-template-columns:minmax(0,1fr);padding-top:calc(var(--tb) + 44px)}
   .main{width:100%;max-width:100%;min-width:0;padding:20px 16px 60px}
   .section,.status-row,.stat-card,.global-progress,.modulos-grid,.modulo-card,.hitos-panel,.tools-grid,.flow,.alert,.footer{min-width:0;max-width:100%}

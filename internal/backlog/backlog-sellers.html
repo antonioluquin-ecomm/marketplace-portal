@@ -58,8 +58,6 @@ input,select{font-family:inherit}
 .control-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t4);white-space:nowrap}
 .c-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 22px;border-bottom:1px solid var(--b2);flex-wrap:wrap}
 .c-toolbar-r{display:flex;align-items:center;gap:8px}
-.btn-sm{display:inline-flex;align-items:center;padding:5px 11px;border:1px solid var(--b);border-radius:7px;font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--t3);background:transparent;cursor:pointer;transition:.15s;font-family:inherit}
-.btn-sm:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
 
 /* ── SIDEBAR RECURSOS ── */
 .sb-recursos{border-top:1px solid var(--b2);margin-top:4px;padding-top:4px}
@@ -176,15 +174,7 @@ tbody tr:last-child td{border-bottom:none}
 .share-label{font-size:12.5px;font-weight:600;color:var(--t2)}
 .share-desc{font-size:11px;color:var(--t4);margin-top:1px}
 .share-actions{display:flex;gap:5px;flex-shrink:0}
-.share-btn{padding:5px 10px;border-radius:6px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--b);background:var(--bg);color:var(--t2);transition:.15s}
-.share-btn:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
-.share-btn.primary{background:var(--g);border-color:var(--g);color:#fff}
-.share-btn.primary:hover{background:var(--g2)}
 .modal-actions{display:flex;gap:7px;flex-wrap:wrap;padding-top:4px;border-top:1px solid var(--b2)}
-.maction{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:7px;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--b);background:var(--bg);color:var(--t2);transition:.15s}
-.maction:hover{border-color:var(--gb);color:var(--g);background:var(--gd)}
-.maction.primary{background:var(--g);border-color:var(--g);color:#fff}
-.maction.primary:hover{background:var(--g2)}
 /* ── MODAL EDIT FORM ── */
 .medit-row{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
 .medit-row:last-of-type{margin-bottom:0}
@@ -215,9 +205,8 @@ tbody tr:last-child td{border-bottom:none}
 }
 
 .scard-next,.mnext{background:var(--gd);border-left-color:var(--g)}
-.chip,.status-pill,.badge-meta,.share-btn,.maction{text-transform:none;letter-spacing:.015em}
+.chip,.status-pill,.badge-meta{text-transform:none;letter-spacing:.015em}
 .msec-title{letter-spacing:.08em;color:var(--t4)}
-.share-btn.primary,.maction.primary{background:var(--g);border-color:var(--g)}
 </style>
 <script src="../../assets/js/theme.js"></script>
 <link rel="stylesheet" href="../../assets/css/theme.css">
@@ -234,9 +223,9 @@ tbody tr:last-child td{border-bottom:none}
       <span class="tb-dot loading" id="status-dot"></span>
       <span id="status-txt">Cargando…</span>
     </div>
-    <a class="tb-btn" href="../../index.html">← Hub</a>
-    <button class="tb-btn" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
-    <a class="tb-btn primary" href="./gestion-sellers.html">+ Seller</a>
+    <a class="button secondary" href="../../index.html">← Hub</a>
+    <button class="button secondary" id="btn-refresh" onclick="loadData(true)">↻ Actualizar</button>
+    <a class="button" href="./gestion-sellers.html">+ Seller</a>
   </div>
 </header>
 
@@ -349,7 +338,7 @@ tbody tr:last-child td{border-bottom:none}
         </div>
       </div>
       <div class="c-toolbar-r">
-        <button class="btn-sm" onclick="exportExcel()" title="Exportar vista filtrada a Excel">↓ Excel</button>
+        <button class="button secondary" onclick="exportExcel()" title="Exportar vista filtrada a Excel">↓ Excel</button>
       </div>
     </div>
     <div class="content-area" id="content-area">
@@ -444,6 +433,7 @@ const PROXIMO_PASO_MAP = {
 /* ── STATE ── */
 let ALL = [], currentView = "lista", activeQuick = null;
 let tableSort = { col: null, dir: 1 };
+let currentPage = 1, pageSize = 25, _tableRows = [];
 
 /* ── UTILS ── */
 const $ = id => document.getElementById(id);
@@ -880,6 +870,7 @@ function thSort(col,label){
 
 /* ── RENDER ── */
 function renderContent(){
+  currentPage=1;
   let filtered=applySort(applyFilters(ALL));
   if(!filtered.length){
     setHTML("content-area",`<div class="state-box"><div class="state-icon">○</div><div class="state-title">Sin resultados</div><div class="state-desc">Ajustá los filtros o la búsqueda.</div></div>`);
@@ -952,8 +943,17 @@ function renderKanban(filtered){
 }
 
 /* ── TABLE ── */
+function setPageSize(v){ pageSize=Number(v); currentPage=1; renderTabla(_tableRows); }
+function changePage(delta){ currentPage+=delta; renderTabla(_tableRows); }
 function renderTabla(filtered){
-  const rows=filtered.map(s=>{
+  _tableRows=filtered;
+  const total=filtered.length;
+  const pageCount=Math.max(1,Math.ceil(total/pageSize));
+  if(currentPage>pageCount) currentPage=pageCount;
+  if(currentPage<1) currentPage=1;
+  const start=(currentPage-1)*pageSize;
+  const pageSlice=filtered.slice(start,start+pageSize);
+  const rows=pageSlice.map(s=>{
     const blkColor=s.bloqueo_flag?"var(--da)":norm(s.riesgo_nivel)==="alto"?"var(--wa)":"transparent";
     const logo=logoHTML(s,"seller-logo","seller-initials","width:22px;height:22px;border-radius:4px;object-fit:contain;background:var(--bg);flex-shrink:0;font-size:9px");
     const priCls=norm(s.prioridad)==="alta"?"pri-alta":norm(s.prioridad)==="media"?"pri-media":"pri-baja";
@@ -981,7 +981,17 @@ function renderTabla(filtered){
       ${thSort("prioridad","Prioridad")}${thSort("progreso_pct","Avance")}<th>Próximo paso</th>${thSort("responsable","Responsable")}
     </tr></thead>
     <tbody>${rows}</tbody>
-  </table></div>`);
+  </table></div>
+  <div class="pagination" style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap">
+    <span style="font-size:12.5px;color:var(--t3);flex:1">${total<=pageSize?`${total} filas`:`${start+1}–${Math.min(start+pageSize,total)} de ${total}`}</span>
+    <select class="fi-select" style="width:auto;margin:0" onchange="setPageSize(this.value)">
+      <option value="25" ${pageSize===25?"selected":""}>25 por página</option>
+      <option value="50" ${pageSize===50?"selected":""}>50 por página</option>
+      <option value="100" ${pageSize===100?"selected":""}>100 por página</option>
+    </select>
+    <button type="button" class="button secondary" ${currentPage<=1?"disabled":""} onclick="changePage(-1)">← Anterior</button>
+    <button type="button" class="button secondary" ${currentPage>=pageCount?"disabled":""} onclick="changePage(1)">Siguiente →</button>
+  </div>`);
 }
 
 /* ── MODAL ── */
@@ -1026,8 +1036,8 @@ function openModal(id){
     return `<div class="share-row">
       <div><div class="share-label">${l.title}</div><div class="share-desc">${l.desc}</div></div>
       <div class="share-actions">
-        <button class="share-btn ${l.primary?'primary':''}" onclick="copyLink('${url}')">Copiar</button>
-        <button class="share-btn" onclick="window.open('${url}','_blank')">Abrir</button>
+        <button class="button ${l.primary?'':'secondary'}" onclick="copyLink('${url}')">Copiar</button>
+        <button class="button secondary" onclick="window.open('${url}','_blank')">Abrir</button>
       </div>
     </div>`;
   }).join("");
@@ -1064,9 +1074,9 @@ function openModal(id){
       <div class="share-links">${shareHTML}</div>
     </div>
     <div class="modal-actions">
-      <button class="maction primary" onclick="enterEditMode('${sid}')">Editar</button>
-      <button class="maction" onclick="window.open(publicUrl('/internal/backlog/gestion-sellers.html', '${sid}') + '&modo=editar','_blank')">Editar ficha completa</button>
-      ${s.url_seller?`<button class="maction" onclick="window.open('${esc(s.url_seller)}','_blank')">Web seller</button>`:""}
+      <button class="button" onclick="enterEditMode('${sid}')">Editar</button>
+      <button class="button secondary" onclick="window.open(publicUrl('/internal/backlog/gestion-sellers.html', '${sid}') + '&modo=editar','_blank')">Editar ficha completa</button>
+      ${s.url_seller?`<button class="button secondary" onclick="window.open('${esc(s.url_seller)}','_blank')">Web seller</button>`:""}
     </div>
   `);
 
