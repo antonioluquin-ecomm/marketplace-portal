@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-02 - Backlog de Sellers: ajustes visuales
+
+Tipo de cambio: CSS / layout visual.
+
+Estado: implementado.
+
+Resultado:
+- `internal/backlog/backlog-sellers.html`: el tablero Kanban ahora distribuye sus columnas con `1fr` para ocupar todo el ancho disponible en desktop, evitando el espacio vacio a la derecha cuando hay pocas columnas.
+- En mobile se conserva el comportamiento de columnas horizontales de `85vw`.
+- Los logos de sellers ahora usan fondo oscuro, padding interno y mayor tamano en la vista Lista para que los PNG claros/transparentes sean visibles sobre el tema claro.
+- KPIs y filtros del Backlog se reorganizan: KPIs como cards del design system, atajos agrupados junto a la busqueda y filtros secundarios alineados en una fila previsible.
+
+Validacion:
+- Preview local en `http://127.0.0.1:8768/internal/backlog/backlog-sellers.html`: Kanban medido en 1920px, ocupa 1625px de 1625px utiles, sin errores de consola.
+- Logos verificados en vista Lista: `spt-001.png` carga completo, se renderiza en 28x28 con fondo `rgb(15, 23, 42)` y padding de 3px.
+- Layout de filtros verificado en 1920px: barra en grid de dos filas, KPIs con fondo blanco/borde `#e5e7eb`/radio 8px y sin errores de consola. Mobile 390px sin overflow horizontal.
+
 Todos los cambios relevantes del proyecto Marketplace Portal deben documentarse en este archivo.
 
 El formato recomendado es mantener entradas por fecha o version, indicando alcance, tipo de cambio, archivos afectados, validaciones realizadas y riesgos conocidos.

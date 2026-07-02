@@ -65,7 +65,7 @@ input,select{font-family:inherit}
 .sb-link:hover{color:var(--g);background:var(--gd)}
 
 /* ── KANBAN ── */
-.kanban{display:grid;grid-auto-flow:column;grid-auto-columns:240px;gap:10px;overflow-x:auto;padding-bottom:12px}
+.kanban{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;overflow-x:auto;padding-bottom:12px;width:100%}
 .kanban::-webkit-scrollbar{height:4px}
 .kanban::-webkit-scrollbar-thumb{background:var(--b);border-radius:99px}
 .k-col{}
@@ -85,7 +85,7 @@ input,select{font-family:inherit}
 .scard.risk-high::before{background:var(--wa)}
 .scard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
 .scard-brand{display:flex;align-items:center;gap:8px}
-.seller-logo{width:28px;height:28px;border-radius:5px;object-fit:contain;background:var(--bg);border:1px solid var(--b);flex-shrink:0}
+.seller-logo{width:28px;height:28px;border-radius:5px;object-fit:contain;background:#0f172a;border:1px solid var(--b);padding:3px;flex-shrink:0}
 .seller-initials{width:28px;height:28px;border-radius:5px;background:var(--gd);border:1px solid var(--gb2);display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:11px;font-weight:900;color:var(--g);flex-shrink:0}
 .scard-name{font-size:13.5px;font-weight:700;color:var(--t1);line-height:1.2}
 .scard-id{font-family:var(--font);font-size:11px;color:var(--t4);font-weight:700;letter-spacing:.06em}
@@ -144,7 +144,7 @@ tbody tr:last-child td{border-bottom:none}
 .modal{background:var(--k2);border:1px solid var(--b);border-radius:var(--rl);width:100%;max-width:620px;overflow:hidden;animation:mslide .2s ease}
 @keyframes mslide{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 .modal-hdr{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border-bottom:1px solid var(--b);background:var(--k3)}
-.modal-logo{width:44px;height:44px;border-radius:9px;object-fit:contain;background:var(--bg);border:1px solid var(--b);flex-shrink:0}
+.modal-logo{width:44px;height:44px;border-radius:9px;object-fit:contain;background:#0f172a;border:1px solid var(--b);padding:5px;flex-shrink:0}
 .modal-initials{width:44px;height:44px;border-radius:9px;background:var(--gd);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:18px;font-weight:900;color:var(--g);flex-shrink:0}
 .hidden{display:none!important}
 .modal-title-wrap{flex:1;min-width:0}
@@ -201,7 +201,7 @@ tbody tr:last-child td{border-bottom:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:960px){
-  .kanban{grid-auto-columns:85vw}
+  .kanban{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:85vw}
 }
 
 .scard-next,.mnext{background:var(--gd);border-left-color:var(--g)}
@@ -995,7 +995,7 @@ function renderTabla(filtered){
   const pageSlice=filtered.slice(start,start+pageSize);
   const rows=pageSlice.map(s=>{
     const blkColor=s.bloqueo_flag?"var(--da)":norm(s.riesgo_nivel)==="alto"?"var(--wa)":"transparent";
-    const logo=logoHTML(s,"seller-logo","seller-initials","width:22px;height:22px;border-radius:4px;object-fit:contain;background:var(--bg);flex-shrink:0;font-size:9px");
+    const logo=logoHTML(s,"seller-logo","seller-initials","width:28px;height:28px;border-radius:5px;object-fit:contain;background:#0f172a;padding:3px;flex-shrink:0;font-size:9px");
     const priCls=norm(s.prioridad)==="alta"?"pri-alta":norm(s.prioridad)==="media"?"pri-media":"pri-baja";
     const prog=`<div class="prog-wrap"><span class="prog-pct">${Math.round(s.progreso_pct)}%</span><div class="prog-bar" style="flex:1;margin:0"><div class="prog-fill" style="width:${s.progreso_pct}%"></div></div></div>`;
     return `<tr onclick="openModal('${esc(s.seller_id)}')">
