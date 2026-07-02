@@ -2866,6 +2866,8 @@
             APPS_SCRIPT_URL +
             "?action=relevamiento_profile_get&seller_id=" +
             encodeURIComponent(sellerId) +
+            "&session_token=" +
+            encodeURIComponent(SellerSESSION.token) +
             "&_ts=" +
             Date.now();
           const res = await fetch(url, { cache: "no-store" });

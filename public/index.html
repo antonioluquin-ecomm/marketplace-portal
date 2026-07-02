@@ -150,7 +150,8 @@
 
       try {
         const apiUrl = window.MP_CONFIG.APPS_SCRIPT_URL;
-        const url = apiUrl + '?action=relevamiento_profile_get&seller_id=' + encodeURIComponent(sellerId) + '&_ts=' + Date.now();
+        const url = apiUrl + '?action=relevamiento_profile_get&seller_id=' + encodeURIComponent(sellerId) +
+          '&session_token=' + encodeURIComponent(SellerSESSION.token) + '&_ts=' + Date.now();
         const res = await fetch(url, { cache: 'no-store' });
         const json = await res.json();
         if (json.ok && json.exists && json.metadata) {

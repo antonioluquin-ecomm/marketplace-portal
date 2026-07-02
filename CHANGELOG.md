@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-02 - Etapa 5: Hardening de corrección (post-auditoría)
+
+Tipo de cambio: fix / hardening de seguridad.
+
+Estado: implementado. Requiere redeploy de Apps Script (cambios en Auth.gs y Apps_script_v5.js).
+
+Resultado (4 fixes discretos surgidos de la auditoría crítica de las Etapas 1-4):
+- **Fuga del login interno**: `login.html` (raíz) ahora rechaza cuentas de tipo Seller (si la respuesta trae `usuario.seller_id`), con un mensaje que apunta al Portal de Sellers. Antes una cuenta Seller podía autenticar en el login interno y ver el Hub Central. Es el chequeo simétrico al que ya tenía `public/login.html`.
+- **`seller_id` duplicado**: `createUsuario`/`updateUsuario` (`Auth.gs`) ahora rechazan (`code:409`) crear/editar una cuenta Seller con un `seller_id` ya asignado a otra cuenta. Antes nada impedía dos logins para el mismo seller.
+- **Emails fabricados**: `crearCuentasSellerDesdeHoja` (`Auth.gs`) ya no inventa emails no entregables cuando falta `contacto_email` — omite ese seller y lo reporta en el log (también omite y reporta emails duplicados) para que el admin cargue el dato y reejecute.
+- **`relevamiento_profile_get` sin auth**: el `doGet` (`Apps_script_v5.js`) exigía solo un `seller_id` en la URL, así que cualquiera podía leer el borrador de relevamiento de cualquier seller. Ahora valida `session_token` (nuevo helper `validarSesionSellerParaLectura`) y que su `seller_id` coincida (admin exceptuado). Los dos llamadores públicos (`formulario-relevamiento.html`, `public/index.html`) ahora pasan el token.
+
+Nota: primera de tres etapas de ajustes post-auditoría. La Etapa 6 (aislamiento de datos real — despublicar CSVs y migrar lecturas a endpoints con sesión) y la Etapa 7 (deuda de escala) quedan pendientes.
+
 ## 2026-07-02 - Etapa 4: Gantt filtrado por Seller + resumen de progreso
 
 Tipo de cambio: feature.

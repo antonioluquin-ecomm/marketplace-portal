@@ -152,6 +152,9 @@
         if (!res.ok) throw new Error('Error de conexión (' + res.status + ').');
         const json = await res.json();
         if (!json.ok) throw new Error(json.error || 'Credenciales incorrectas.');
+        if (json.usuario && json.usuario.seller_id) {
+          throw new Error('Esta cuenta es de seller. Ingresá en el Portal de Sellers (public/login.html).');
+        }
 
         localStorage.setItem('mp_session', JSON.stringify({
           session_token: json.session_token,

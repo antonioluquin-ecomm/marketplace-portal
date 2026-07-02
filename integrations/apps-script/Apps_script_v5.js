@@ -157,6 +157,7 @@ function doGet(e) {
     const action = String(params.action || "").trim().toLowerCase();
 
     if (action === "relevamiento_profile_get") {
+      validarSesionSellerParaLectura(params, String(params.seller_id || "").trim());
       return jsonResponse(obtenerPerfilRelevamiento(params));
     }
   } catch (err) {
@@ -203,6 +204,23 @@ function validarSesionSellerParaFormulario(tipoFormulario, data, sellerId) {
   if (!esAdmin) {
     if (!sesVal.seller_id || sesVal.seller_id.toUpperCase() !== sellerId.toUpperCase()) {
       throw new Error("No autorizado a enviar este formulario para este seller.");
+    }
+  }
+}
+
+// Etapa 5 — mismo criterio para lecturas de datos de seller (ej.
+// relevamiento_profile_get): exige sesión válida cuyo seller_id coincida con
+// el pedido. Admin (id_rol=1) exceptuado. Sirve tanto para doGet (params) como
+// para doPost (data) porque ambos traen session_token en el mismo campo.
+function validarSesionSellerParaLectura(data, sellerId) {
+  const sesVal = _validateSessionToken(data.session_token);
+  if (!sesVal.ok) {
+    throw new Error("Sesión requerida para consultar estos datos. Iniciá sesión de nuevo.");
+  }
+  const esAdmin = sesVal.id_rol === 1;
+  if (!esAdmin) {
+    if (!sesVal.seller_id || sesVal.seller_id.toUpperCase() !== sellerId.toUpperCase()) {
+      throw new Error("No autorizado a consultar los datos de este seller.");
     }
   }
 }

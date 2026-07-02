@@ -221,6 +221,13 @@ function crearCuentasSellerDesdeHoja() {
   }
 
   var creados = [];
+  var omitidosSinEmail = [];
+  var emailsUsados = {};
+  for (var e = 1; e < usuariosData.length; e++) {
+    var em = String(usuariosData[e][usuariosHeaders.indexOf("email")] || "").trim().toLowerCase();
+    if (em) emailsUsados[em] = true;
+  }
+
   for (var r = 1; r < sellersData.length; r++) {
     var sellerId = String(sellersData[r][idxSellerId] || "").trim();
     if (!sellerId || existentes[sellerId.toUpperCase()]) continue;
@@ -229,7 +236,10 @@ function crearCuentasSellerDesdeHoja() {
     if (!nombre) nombre = sellerId;
 
     var email = idxEmail !== -1 ? String(sellersData[r][idxEmail] || "").trim().toLowerCase() : "";
-    if (!email) email = sellerId.toLowerCase() + "@sellers.sporting-marketplace.local";
+    // Sin email no se puede distribuir la credencial: se omite y se reporta
+    // para que el admin cargue el contacto_email antes de reintentar.
+    if (!email) { omitidosSinEmail.push(sellerId); continue; }
+    if (emailsUsados[email]) { omitidosSinEmail.push(sellerId + " (email " + email + " ya en uso)"); continue; }
 
     var plainPassword = Utilities.getUuid().split("-")[0];
     var salt = Utilities.getUuid();
@@ -239,17 +249,24 @@ function crearCuentasSellerDesdeHoja() {
 
     usuariosSheet.appendRow([nextId, nombre, email, hash, salt, 2, "SI", now, "", "migracion_seller", sellerId]);
     existentes[sellerId.toUpperCase()] = true;
+    emailsUsados[email] = true;
     creados.push(sellerId + " | " + email + " | " + plainPassword);
   }
 
-  if (!creados.length) {
-    Logger.log("crearCuentasSellerDesdeHoja: no había sellers pendientes de cuenta (todos ya la tenían).");
-    return;
+  if (creados.length) {
+    Logger.log(
+      creados.length + " cuenta(s) Seller creada(s) — seller_id | email | contraseña temporal:\n" +
+      creados.join("\n")
+    );
+  } else {
+    Logger.log("crearCuentasSellerDesdeHoja: no se creó ninguna cuenta nueva.");
   }
-  Logger.log(
-    creados.length + " cuenta(s) Seller creada(s) — seller_id | email | contraseña temporal:\n" +
-    creados.join("\n")
-  );
+  if (omitidosSinEmail.length) {
+    Logger.log(
+      "\n" + omitidosSinEmail.length + " seller(s) OMITIDO(s) por falta de contacto_email válido — " +
+      "cargá el email en la hoja 'sellers' y reejecutá:\n" + omitidosSinEmail.join("\n")
+    );
+  }
 }
 
 // ── HASHING ───────────────────────────────────────────────────
@@ -614,11 +631,18 @@ function createUsuario(body) {
   var sheet = ss.getSheetByName("USUARIOS");
   if (!sheet) return { ok: false, error: "Tabla de usuarios no disponible", code: 500 };
 
+  var sellerId  = String(data.seller_id || "").trim();
+
   var existing  = sheet.getDataRange().getValues();
   var eEmailIdx = existing[0].indexOf("email");
+  var eSelIdx   = existing[0].indexOf("seller_id");
   for (var i = 1; i < existing.length; i++) {
     if (String(existing[i][eEmailIdx]).toLowerCase() === email) {
       return { ok: false, error: "El email ya está en uso", code: 409 };
+    }
+    if (id_rol === 2 && sellerId && eSelIdx !== -1 &&
+        String(existing[i][eSelIdx] || "").trim().toUpperCase() === sellerId.toUpperCase()) {
+      return { ok: false, error: "Ya existe una cuenta para el seller " + sellerId, code: 409 };
     }
   }
 
@@ -627,7 +651,6 @@ function createUsuario(body) {
   var hash   = hashPassword(salt, password_hash);
   var now    = new Date().toISOString();
   var creadoPor = String(body._sesEmail || "");
-  var sellerId  = String(data.seller_id || "").trim();
 
   sheet.appendRow([nextId, nombre, email, hash, salt, id_rol, "SI", now, "", creadoPor, sellerId]);
   return { ok: true, id: nextId };
@@ -679,11 +702,27 @@ function updateUsuario(body) {
     sheet.getRange(rowNum, colEm + 1).setValue(newEmail);
   }
 
+  // Guard: no permitir dos cuentas Seller con el mismo seller_id.
+  var selColIdx  = headers.indexOf("seller_id");
+  var rolFinal   = data.id_rol !== undefined ? Number(data.id_rol) : Number(rowActual[rolColIdx]);
+  var sellerFinal = data.seller_id !== undefined
+    ? String(data.seller_id).trim()
+    : (selColIdx !== -1 ? String(rowActual[selColIdx] || "").trim() : "");
+  if (rolFinal === 2 && sellerFinal && selColIdx !== -1) {
+    var idColIdx = headers.indexOf("id");
+    for (var s = 1; s < allData.length; s++) {
+      if (Number(allData[s][idColIdx]) === id) continue;
+      if (String(allData[s][selColIdx] || "").trim().toUpperCase() === sellerFinal.toUpperCase()) {
+        return { ok: false, error: "Ya existe una cuenta para el seller " + sellerFinal, code: 409 };
+      }
+    }
+  }
+
   if (data.nombre !== undefined) sheet.getRange(rowNum, headers.indexOf("nombre") + 1).setValue(String(data.nombre).trim());
   if (data.id_rol !== undefined) sheet.getRange(rowNum, headers.indexOf("id_rol") + 1).setValue(Number(data.id_rol));
   if (data.activo !== undefined) sheet.getRange(rowNum, headers.indexOf("activo") + 1).setValue(data.activo === "SI" ? "SI" : "NO");
-  if (data.seller_id !== undefined && headers.indexOf("seller_id") !== -1) {
-    sheet.getRange(rowNum, headers.indexOf("seller_id") + 1).setValue(String(data.seller_id).trim());
+  if (data.seller_id !== undefined && selColIdx !== -1) {
+    sheet.getRange(rowNum, selColIdx + 1).setValue(String(data.seller_id).trim());
   }
   if (data.password_hash && String(data.password_hash).trim()) {
     var newSalt = Utilities.getUuid();
