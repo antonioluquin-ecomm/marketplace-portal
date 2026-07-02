@@ -73,6 +73,14 @@
 .clear-btn{width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line, var(--b));background:transparent;color:var(--t4);font-size:12px;font-weight:600;transition:.15s;margin-top:6px}
 .clear-btn:hover{border-color:var(--wa);color:var(--wa)}
 
+/* 2026-07-02 — controles dentro de la barra de filtros horizontal (.filter-bar
+   vive en internal-components.css). Overridean el layout vertical del sidebar. */
+.filter-bar .search-input{width:210px}
+.filter-bar .fi-select{width:auto;min-width:150px;margin:0}
+.filter-bar .quick-btns{flex-direction:row;flex-wrap:wrap;gap:6px}
+.filter-bar .qbtn{width:auto;gap:8px}
+.filter-bar .clear-btn{width:auto;margin:0}
+
 /* Static KPI strip and content frame */
 .kpi-bar{display:flex;gap:12px;padding:14px 22px;border-bottom:1px solid var(--b2);background:var(--sidebar-bg, var(--k2));flex-wrap:wrap}
 .kpi{display:flex;flex-direction:column;gap:2px;min-width:70px}

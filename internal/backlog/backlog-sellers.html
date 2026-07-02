@@ -269,85 +269,14 @@ tbody tr:last-child td{border-bottom:none}
       <a class="nav" href="../simuladores/config-tarifas.html">Config. Tarifas y Overrides</a>
     </div>
 
-    <div class="sb-divider" style="height:1px;background:var(--b);margin:4px 14px 16px"></div>
+    <div class="sb-divider"></div>
 
     <div class="sb-block">
-      <input class="search-input" id="search-input" type="text" placeholder="Buscar seller, ID, grupo o marca…" oninput="renderContent()">
-    </div>
-
-    <div class="sb-block">
-      <div class="sb-lbl">Atajos de seguimiento</div>
-      <div class="quick-btns" id="quick-btns">
-        <button class="qbtn" onclick="toggleQuick('bloqueados')">
-          <span>🔴 Bloqueados</span><span class="qbtn-count" id="qc-bloqueados">0</span>
-        </button>
-        <button class="qbtn" onclick="toggleQuick('alta')">
-          <span>⚡ Prioridad alta</span><span class="qbtn-count" id="qc-alta">0</span>
-        </button>
-        <button class="qbtn" onclick="toggleQuick('listos')">
-          <span>✓ Listos para integrar</span><span class="qbtn-count" id="qc-listos">0</span>
-        </button>
-        <button class="qbtn" onclick="toggleQuick('sin_relevamiento')">
-          <span>📝 Sin relevamiento</span><span class="qbtn-count" id="qc-sin_relevamiento">0</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="sb-block">
-      <div class="sb-lbl">Filtros operativos</div>
-      <label class="fi-label">Estado del pipeline</label>
-      <select class="fi-select" id="sel-pipeline" onchange="renderContent()">
-        <option value="">Todos</option>
-        <option>Identificados</option>
-        <option>Contactados</option>
-        <option>En evaluación</option>
-        <option>En definición técnica</option>
-        <option>Listos para integrar</option>
-        <option>En integración</option>
-        <option>Live</option>
-      </select>
-      <label class="fi-label">Modelo de integración</label>
-      <select class="fi-select" id="sel-modelo" onchange="renderContent()">
-        <option value="">Todos</option>
-        <option>VTEX → VTEX</option>
-        <option>Externo → Seller Center</option>
-        <option>Externo → PIM → VTEX</option>
-        <option>Híbrido / Transitorio</option>
-        <option>Sistemas actuales</option>
-        <option>A definir</option>
-      </select>
-      <label class="fi-label">Empresa / grupo</label>
-      <select class="fi-select" id="sel-empresa" onchange="renderContent()"></select>
-      <label class="fi-label">Marca / seller operativo</label>
-      <select class="fi-select" id="sel-marca" onchange="renderContent()"></select>
-      <label class="fi-label">Prioridad</label>
-      <select class="fi-select" id="sel-prioridad" onchange="renderContent()">
-        <option value="">Todas</option>
-        <option>Alta</option>
-        <option>Media</option>
-        <option>Baja</option>
-      </select>
-      <label class="fi-label">Responsable</label>
-      <select class="fi-select" id="sel-responsable" onchange="renderContent()"></select>
-      <button class="clear-btn" onclick="clearFilters()">✕ Limpiar vista</button>
-    </div>
-
-    <div class="sb-block">
-      <div class="sb-lbl">Ordenar vista</div>
-      <select class="fi-select" id="sel-orden" onchange="renderContent()">
-        <option value="prioridad">Prioridad alta primero</option>
-        <option value="bloqueados">Bloqueados primero</option>
-        <option value="avance_asc">Menor avance primero</option>
-        <option value="avance_desc">Mayor avance primero</option>
-        <option value="nombre">Nombre A → Z</option>
-      </select>
-    </div>
-
-    <div class="sb-block sb-recursos">
-      <div class="sb-lbl">Recursos</div>
-      <a class="sb-link" href="./gestion-sellers.html">+ Gestión de sellers</a>
-      <a class="sb-link" href="../gantt/gantt-operativo.html">Gantt operativo</a>
-      <a class="sb-link" href="../estrategia/proceso-onboarding.html" target="_blank">Proceso onboarding</a>
+      <div class="sb-lbl">Para sellers</div>
+      <a class="nav" href="../../public/presentaciones/presentacion-seller.html">Presentación seller <span>↗</span></a>
+      <a class="nav" href="../../public/formularios/formulario-calificacion.html">Calificación <span>↗</span></a>
+      <a class="nav" href="../../public/formularios/formulario-relevamiento.html">Relevamiento <span>↗</span></a>
+      <a class="nav" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
     </div>
 
   </aside>
@@ -365,6 +294,80 @@ tbody tr:last-child td{border-bottom:none}
       <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val i" id="kpi-grupos">—</div><div class="kpi-lbl">Grupos</div></div>
       <div class="kpi"><div class="kpi-val g" id="kpi-marcas">—</div><div class="kpi-lbl">Marcas</div></div>
+    </div>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label class="fi-label" for="search-input">Buscar</label>
+        <input class="search-input" id="search-input" type="text" placeholder="Seller, ID, grupo o marca…" oninput="renderContent()">
+      </div>
+      <div class="filter-group">
+        <span class="filter-group-label">Atajos</span>
+        <div class="quick-btns" id="quick-btns">
+          <button class="qbtn" onclick="toggleQuick('bloqueados')"><span>🔴 Bloqueados</span><span class="qbtn-count" id="qc-bloqueados">0</span></button>
+          <button class="qbtn" onclick="toggleQuick('alta')"><span>⚡ Prioridad alta</span><span class="qbtn-count" id="qc-alta">0</span></button>
+          <button class="qbtn" onclick="toggleQuick('listos')"><span>✓ Listos para integrar</span><span class="qbtn-count" id="qc-listos">0</span></button>
+          <button class="qbtn" onclick="toggleQuick('sin_relevamiento')"><span>📝 Sin relevamiento</span><span class="qbtn-count" id="qc-sin_relevamiento">0</span></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-pipeline">Estado</label>
+        <select class="fi-select" id="sel-pipeline" onchange="renderContent()">
+          <option value="">Todos</option>
+          <option>Identificados</option>
+          <option>Contactados</option>
+          <option>En evaluación</option>
+          <option>En definición técnica</option>
+          <option>Listos para integrar</option>
+          <option>En integración</option>
+          <option>Live</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-modelo">Modelo</label>
+        <select class="fi-select" id="sel-modelo" onchange="renderContent()">
+          <option value="">Todos</option>
+          <option>VTEX → VTEX</option>
+          <option>Externo → Seller Center</option>
+          <option>Externo → PIM → VTEX</option>
+          <option>Híbrido / Transitorio</option>
+          <option>Sistemas actuales</option>
+          <option>A definir</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-empresa">Empresa / grupo</label>
+        <select class="fi-select" id="sel-empresa" onchange="renderContent()"></select>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-marca">Marca</label>
+        <select class="fi-select" id="sel-marca" onchange="renderContent()"></select>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-prioridad">Prioridad</label>
+        <select class="fi-select" id="sel-prioridad" onchange="renderContent()">
+          <option value="">Todas</option>
+          <option>Alta</option>
+          <option>Media</option>
+          <option>Baja</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-responsable">Responsable</label>
+        <select class="fi-select" id="sel-responsable" onchange="renderContent()"></select>
+      </div>
+      <div class="filter-group">
+        <label class="fi-label" for="sel-orden">Ordenar</label>
+        <select class="fi-select" id="sel-orden" onchange="renderContent()">
+          <option value="prioridad">Prioridad alta primero</option>
+          <option value="bloqueados">Bloqueados primero</option>
+          <option value="avance_asc">Menor avance primero</option>
+          <option value="avance_desc">Mayor avance primero</option>
+          <option value="nombre">Nombre A → Z</option>
+        </select>
+      </div>
+      <div class="filter-bar-actions">
+        <button class="clear-btn" onclick="clearFilters()">✕ Limpiar</button>
+      </div>
     </div>
     <div class="c-toolbar">
       <div class="tl-l">

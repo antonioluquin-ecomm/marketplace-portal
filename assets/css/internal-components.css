@@ -384,6 +384,44 @@
   color: var(--primary, var(--g, #1a3f6b));
 }
 
+/* 2026-07-02 — barra de filtros horizontal. Reemplaza los filtros que antes
+   vivian en el sidebar de las herramientas de datos (backlog, gantt). Se
+   coloca arriba del contenido (tabla/gantt). Cada filtro es un .filter-group
+   (label chico + control). Los overrides de ancho de cada control (.fi-select,
+   .search-input, .qbtn) viven en el CSS de cada pagina. */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+  padding: 12px 22px 14px;
+  border-bottom: 1px solid var(--line, var(--bdr, var(--b2, #e5e7eb)));
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.filter-group > label,
+.filter-group > .fi-label,
+.filter-group > .filter-group-label {
+  margin: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted, var(--t3, var(--t4, #64748b)));
+  white-space: nowrap;
+}
+.filter-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  align-self: flex-end;
+}
+
 /* Etapa 27A: foundation visual enterprise. */
 :where(.sidebar) {
   box-shadow: none;
