@@ -30,7 +30,10 @@ window.MP_CONFIG = {
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
 
     OVERRIDES:
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv"
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv",
+
+    TIMELINE:
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1623881837&single=true&output=csv"
   },
 
   ASSETS: {
@@ -161,6 +164,12 @@ window.MP_CONFIG = {
       label: "Simulador Seller",
       access: "Seller",
       route: "/public/simuladores/simulador-seller.html"
+    },
+    {
+      key: "gantt_seller",
+      label: "Gantt de tu proyecto",
+      access: "Seller",
+      route: "/public/gantt/gantt-seller.html"
     }
   ],
 

@@ -48,7 +48,15 @@
 
   .empty{padding:32px;border:1px dashed var(--bdr);border-radius:14px;color:var(--t3);font-size:13px;text-align:center}
 
-  @media(max-width:720px){.grid{grid-template-columns:1fr}.main{padding:calc(var(--tb) + 40px) 20px 60px}}
+  .progress-section{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:36px}
+  .stat-card{padding:18px 20px;border:1px solid var(--bdr);border-radius:14px;background:linear-gradient(160deg,rgba(25,33,24,.95),rgba(14,22,14,.98))}
+  .stat-label{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+  .stat-value{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;color:var(--t1);margin-bottom:4px}
+  .stat-sub{font-size:12px;color:var(--t3)}
+  .bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-top:10px}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--g),var(--g2));border-radius:99px;transition:width .6s ease}
+
+  @media(max-width:720px){.grid{grid-template-columns:1fr}.progress-section{grid-template-columns:1fr}.main{padding:calc(var(--tb) + 40px) 20px 60px}}
 </style>
 </head>
 <body>
@@ -69,6 +77,20 @@
     <h1 id="hero-title">Tu espacio en el Marketplace</h1>
     <p class="lead">Desde acá accedés a la presentación, los formularios y las herramientas de tu proceso con Sporting Marketplace.</p>
 
+    <div class="progress-section" id="progress-section">
+      <div class="stat-card">
+        <div class="stat-label">Estado general</div>
+        <div class="stat-value" id="stat-pipeline">—</div>
+        <div class="stat-sub">Etapa actual de tu proceso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Relevamiento</div>
+        <div class="stat-value" id="stat-relevamiento">—</div>
+        <div class="stat-sub" id="stat-relevamiento-sub">Sin datos todavía</div>
+        <div class="bar-track"><div class="bar-fill" id="stat-relevamiento-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+
     <div class="grid" id="resources-grid"></div>
     <div class="empty" id="empty-state" hidden>Todavía no hay recursos disponibles para tu cuenta.</div>
   </main>
@@ -81,7 +103,70 @@
       formulario_relevamiento: "📋",
       presentacion_seller:     "📣",
       simulador_seller:        "🧮",
+      gantt_seller:            "📊",
     };
+
+    function parseCSVSimple(text) {
+      const rows = []; let row = []; let cell = ''; let q = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i], n = text[i + 1];
+        if (c === '"') { if (q && n === '"') { cell += '"'; i++; } else q = !q; }
+        else if (c === ',' && !q) { row.push(cell); cell = ''; }
+        else if ((c === '\n' || c === '\r') && !q) { if (c === '\r' && n === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+        else cell += c;
+      }
+      row.push(cell); if (row.length > 1 || row[0] !== '') rows.push(row);
+      return rows;
+    }
+
+    function normHeader(s) {
+      return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    }
+
+    function csvFindRow(text, sellerId) {
+      const matrix = parseCSVSimple(text).filter(r => r.some(v => String(v || '').trim()));
+      const hi = matrix.findIndex(r => r.some(v => normHeader(v) === 'seller_id'));
+      if (hi === -1) return null;
+      const headers = matrix[hi].map(normHeader);
+      for (let i = hi + 1; i < matrix.length; i++) {
+        const obj = {};
+        headers.forEach((h, idx) => obj[h] = String(matrix[i][idx] || '').trim());
+        if ((obj.seller_id || '').toUpperCase() === sellerId.toUpperCase()) return obj;
+      }
+      return null;
+    }
+
+    async function loadProgressSummary() {
+      const sellerId = SellerSESSION.sellerId;
+
+      try {
+        const res = await fetch(window.MP_CONFIG.CSV.SELLERS + '&_ts=' + Date.now(), { cache: 'no-store' });
+        const text = await res.text();
+        const row = csvFindRow(text, sellerId);
+        document.getElementById('stat-pipeline').textContent = (row && row.estado_pipeline) || 'Sin iniciar';
+      } catch (e) {
+        document.getElementById('stat-pipeline').textContent = 'Sin datos';
+      }
+
+      try {
+        const apiUrl = window.MP_CONFIG.APPS_SCRIPT_URL;
+        const url = apiUrl + '?action=relevamiento_profile_get&seller_id=' + encodeURIComponent(sellerId) + '&_ts=' + Date.now();
+        const res = await fetch(url, { cache: 'no-store' });
+        const json = await res.json();
+        if (json.ok && json.exists && json.metadata) {
+          const pct = parseInt(json.metadata.completitud, 10) || 0;
+          document.getElementById('stat-relevamiento').textContent = pct + '%';
+          document.getElementById('stat-relevamiento-sub').textContent = json.metadata.estado_relevamiento || '—';
+          document.getElementById('stat-relevamiento-bar').style.width = pct + '%';
+        } else {
+          document.getElementById('stat-relevamiento').textContent = '0%';
+          document.getElementById('stat-relevamiento-sub').textContent = 'Sin iniciar';
+        }
+      } catch (e) {
+        document.getElementById('stat-relevamiento').textContent = '—';
+        document.getElementById('stat-relevamiento-sub').textContent = 'Sin datos disponibles';
+      }
+    }
 
     function renderGrid() {
       const grid = document.getElementById('resources-grid');
@@ -107,6 +192,7 @@
       document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
       document.getElementById('hero-title').textContent = 'Hola, ' + (SellerSESSION.nombre || SellerSESSION.sellerId);
       renderGrid();
+      loadProgressSummary();
     });
   </script>
 </body>

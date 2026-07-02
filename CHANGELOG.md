@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-02 - Etapa 4: Gantt filtrado por Seller + resumen de progreso
+
+Tipo de cambio: feature.
+
+Estado: implementado, sin cambios de backend (reutiliza endpoints y hojas ya existentes).
+
+Resultado:
+- Investigando el alcance encontramos que el "onboarding progresivo" ya estaba implementado (guardado de borrador, precarga y progreso por sección en `formulario-relevamiento.html` + `obtenerPerfilRelevamiento`/`upsertPerfilRelevamiento`) — no se tocó.
+- Nuevo `public/gantt/gantt-seller.html`: vista de solo lectura del Gantt operativo, filtrada al `seller_id` de la sesión. Reutiliza la hoja `timeline` ya publicada (agregada como `MP_CONFIG.CSV.TIMELINE` en `config.js`) y una versión simplificada de la normalización de filas de `internal/gantt/gantt-operativo.html` (sin el renderizado de barras, que queda exclusivo del Gantt interno). Agregado como recurso `gantt_seller` en `MP_CONFIG.RESOURCES` — aparece automáticamente en la grilla de `public/index.html`.
+- `public/index.html`: nueva sección de resumen de progreso (estado general desde la hoja `sellers`, completitud del relevamiento desde el endpoint `relevamiento_profile_get` ya existente). Sin datos, muestra estados neutros ("Sin iniciar") en vez de error.
+- Sin cambios en Apps Script — no requiere redeploy ni pasos manuales, es 100% frontend sobre datos/endpoints ya publicados.
+
 ## 2026-07-02 - Etapa 3: Login obligatorio para Sellers (public/)
 
 Tipo de cambio: feature (con corte de acceso operativo — ver abajo).
