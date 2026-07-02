@@ -89,6 +89,24 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
 .stat-card.info .stat-num{color:var(--info)}
 .stat-card.vio .stat-num{color:var(--violet)}
 
+/* 2026-07-02 — filtros movidos del sidebar a barra horizontal + strip superior.
+   .filter-bar/.filter-group son genericos (internal-components.css). */
+.filter-bar{padding-inline:0}
+.filter-bar .sb-search,.filter-bar .fsel{width:auto;min-width:150px}
+.filter-bar .qf-grid{flex-direction:row;flex-wrap:wrap;gap:4px}
+.filter-bar .qf-btn{width:auto}
+.filter-bar-actions .zoom-row{padding:0}
+.sc-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 0 0}
+.sc-topbar .stats-strip{padding:0;flex:1;min-width:280px;max-width:560px}
+.sc-topbar .zoom-row{padding:0;min-width:200px}
+.sc-modprogress{border:1px solid var(--bdr);border-radius:8px;padding:8px 12px;margin:12px 0 0}
+.sc-modprogress>summary{cursor:pointer;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);list-style:none}
+.sc-modprogress>summary::-webkit-details-marker{display:none}
+.sc-modprogress>summary::before{content:"▸ ";color:var(--t4)}
+.sc-modprogress[open]>summary::before{content:"▾ "}
+.sc-modprogress .mod-list{flex-direction:row;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sc-modprogress .mod-stat-row{flex:1 1 150px;min-width:150px;max-width:220px}
+
 /* ── MAIN ─────────────────────────────────── */
 .main{display:flex;flex-direction:column;min-width:0;min-height:calc(100vh - var(--tb))}
 
@@ -411,103 +429,11 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
     </div>
     <div class="sb-div"></div>
     <div class="sb-section">
-      <div class="sb-lbl">Buscar</div>
-      <input class="sb-search" id="searchInput" placeholder="Tarea, módulo, ID, responsable…" oninput="applyFilters()">
-    </div>
-
-    <div class="sb-div"></div>
-
-    <div class="sb-section">
-      <div class="sb-lbl">Estado</div>
-      <select class="fsel" id="fEstado" onchange="applyFilters()"><option value="">Todos</option></select>
-    </div>
-    <div class="sb-section">
-      <div class="sb-lbl">Módulo</div>
-      <select class="fsel" id="fModulo" onchange="applyFilters()"><option value="">Todos</option></select>
-    </div>
-    <div class="sb-section">
-      <div class="sb-lbl">Responsable</div>
-      <select class="fsel" id="fResp" onchange="applyFilters()"><option value="">Todos</option></select>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <div class="sb-section">
-      <div class="sb-lbl" style="margin-bottom:8px">Modalidad</div>
-      <div class="qf-grid" id="qf-modal">
-        <button class="qf-btn active" data-key="modalidad" data-val="" onclick="qfClick(this)"><span>Todas</span><span class="qf-count" id="qc-modal-all">0</span></button>
-        <button class="qf-btn" data-key="modalidad" data-val="Manual" onclick="qfClick(this)"><span>Manual</span><span class="qf-count" id="qc-modal-manual">0</span></button>
-        <button class="qf-btn" data-key="modalidad" data-val="Masivo" onclick="qfClick(this)"><span>Masivo</span><span class="qf-count" id="qc-modal-masivo">0</span></button>
-        <button class="qf-btn" data-key="modalidad" data-val="API" onclick="qfClick(this)"><span>API</span><span class="qf-count" id="qc-modal-api">0</span></button>
-        <button class="qf-btn" data-key="modalidad" data-val="Sistema" onclick="qfClick(this)"><span>Sistema</span><span class="qf-count" id="qc-modal-sistema">0</span></button>
-      </div>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <div class="sb-section">
-      <div class="sb-lbl" style="margin-bottom:8px">Prioridad</div>
-      <div class="qf-grid" id="qf-pri">
-        <button class="qf-btn active" data-key="prioridad" data-val="" onclick="qfClick(this)"><span>Todas</span><span class="qf-count" id="qc-pri-all">0</span></button>
-        <button class="qf-btn" data-key="prioridad" data-val="Alta" onclick="qfClick(this)"><span>Alta</span><span class="qf-count" id="qc-pri-alta">0</span></button>
-        <button class="qf-btn" data-key="prioridad" data-val="Media" onclick="qfClick(this)"><span>Media</span><span class="qf-count" id="qc-pri-media">0</span></button>
-        <button class="qf-btn" data-key="prioridad" data-val="Baja" onclick="qfClick(this)"><span>Baja</span><span class="qf-count" id="qc-pri-baja">0</span></button>
-      </div>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <div class="sb-section">
-      <div class="sb-lbl" style="margin-bottom:8px">Hitos</div>
-      <div class="qf-grid">
-        <button class="qf-btn active" data-key="hito" data-val="" onclick="qfClick(this)"><span>Todos</span></button>
-        <button class="qf-btn" data-key="hito" data-val="si" onclick="qfClick(this)"><span>★ Solo hitos</span></button>
-      </div>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <div class="sb-section">
-      <div class="sb-lbl" style="margin-bottom:8px">Atrasadas</div>
-      <div class="qf-grid">
-        <button class="qf-btn" data-key="late" data-val="si" onclick="qfClick(this)"><span>⚠ Con atraso</span><span class="qf-count" id="qc-late">0</span></button>
-      </div>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <!-- Stats strip -->
-    <div class="stats-strip">
-      <div class="stat-card"><div class="stat-num" id="stTotal">—</div><div class="stat-lbl">Tareas</div></div>
-      <div class="stat-card"><div class="stat-num" id="stAvg">—</div><div class="stat-lbl">Avance</div></div>
-      <div class="stat-card warn"><div class="stat-num" id="stCurso">—</div><div class="stat-lbl">En curso</div></div>
-      <div class="stat-card vio"><div class="stat-num" id="stHitos">—</div><div class="stat-lbl">Hitos</div></div>
-    </div>
-
-    <div class="sb-div" style="margin-top:14px"></div>
-
-    <!-- Module progress -->
-    <div class="sb-section">
-      <div class="sb-lbl" style="margin-bottom:8px">Avance por módulo</div>
-      <div class="mod-list" id="modList"></div>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <!-- Zoom -->
-    <div class="sb-section">
-      <div class="sb-lbl" style="margin-bottom:8px">Zoom</div>
-      <div class="zoom-row">
-        <span class="zoom-lbl">Escala</span>
-        <input type="range" class="zoom-slider" id="zoomSlider" min="3" max="12" step=".5" value="5.8" oninput="setZoom(this.value)">
-        <span class="zoom-val" id="zoomVal">5.8px/d</span>
-      </div>
-    </div>
-
-    <div class="sb-div"></div>
-
-    <div class="sb-section">
-      <button onclick="resetAll()" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--bdr);background:rgba(17,24,39,.04);color:var(--t3);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t3)'">✕ Limpiar filtros</button>
+      <div class="sb-lbl">Para sellers</div>
+      <a class="nav" href="../../public/presentaciones/presentacion-seller.html">Presentación seller <span>↗</span></a>
+      <a class="nav" href="../../public/formularios/formulario-calificacion.html">Calificación <span>↗</span></a>
+      <a class="nav" href="../../public/formularios/formulario-relevamiento.html">Relevamiento <span>↗</span></a>
+      <a class="nav" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
     </div>
   </aside>
 
@@ -524,6 +450,79 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
         </div>
       </div>
     </div>
+
+    <div class="sc-topbar">
+      <div class="stats-strip">
+        <div class="stat-card"><div class="stat-num" id="stTotal">—</div><div class="stat-lbl">Tareas</div></div>
+        <div class="stat-card"><div class="stat-num" id="stAvg">—</div><div class="stat-lbl">Avance</div></div>
+        <div class="stat-card warn"><div class="stat-num" id="stCurso">—</div><div class="stat-lbl">En curso</div></div>
+        <div class="stat-card vio"><div class="stat-num" id="stHitos">—</div><div class="stat-lbl">Hitos</div></div>
+      </div>
+      <div class="zoom-row">
+        <span class="zoom-lbl">Escala</span>
+        <input type="range" class="zoom-slider" id="zoomSlider" min="3" max="12" step=".5" value="5.8" oninput="setZoom(this.value)">
+        <span class="zoom-val" id="zoomVal">5.8px/d</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label class="sb-lbl" for="searchInput">Buscar</label>
+        <input class="sb-search" id="searchInput" placeholder="Tarea, módulo, ID, responsable…" oninput="applyFilters()">
+      </div>
+      <div class="filter-group">
+        <label class="sb-lbl" for="fEstado">Estado</label>
+        <select class="fsel" id="fEstado" onchange="applyFilters()"><option value="">Todos</option></select>
+      </div>
+      <div class="filter-group">
+        <label class="sb-lbl" for="fModulo">Módulo</label>
+        <select class="fsel" id="fModulo" onchange="applyFilters()"><option value="">Todos</option></select>
+      </div>
+      <div class="filter-group">
+        <label class="sb-lbl" for="fResp">Responsable</label>
+        <select class="fsel" id="fResp" onchange="applyFilters()"><option value="">Todos</option></select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-group-label">Modalidad</span>
+        <div class="qf-grid" id="qf-modal">
+          <button class="qf-btn active" data-key="modalidad" data-val="" onclick="qfClick(this)"><span>Todas</span><span class="qf-count" id="qc-modal-all">0</span></button>
+          <button class="qf-btn" data-key="modalidad" data-val="Manual" onclick="qfClick(this)"><span>Manual</span><span class="qf-count" id="qc-modal-manual">0</span></button>
+          <button class="qf-btn" data-key="modalidad" data-val="Masivo" onclick="qfClick(this)"><span>Masivo</span><span class="qf-count" id="qc-modal-masivo">0</span></button>
+          <button class="qf-btn" data-key="modalidad" data-val="API" onclick="qfClick(this)"><span>API</span><span class="qf-count" id="qc-modal-api">0</span></button>
+          <button class="qf-btn" data-key="modalidad" data-val="Sistema" onclick="qfClick(this)"><span>Sistema</span><span class="qf-count" id="qc-modal-sistema">0</span></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-group-label">Prioridad</span>
+        <div class="qf-grid" id="qf-pri">
+          <button class="qf-btn active" data-key="prioridad" data-val="" onclick="qfClick(this)"><span>Todas</span><span class="qf-count" id="qc-pri-all">0</span></button>
+          <button class="qf-btn" data-key="prioridad" data-val="Alta" onclick="qfClick(this)"><span>Alta</span><span class="qf-count" id="qc-pri-alta">0</span></button>
+          <button class="qf-btn" data-key="prioridad" data-val="Media" onclick="qfClick(this)"><span>Media</span><span class="qf-count" id="qc-pri-media">0</span></button>
+          <button class="qf-btn" data-key="prioridad" data-val="Baja" onclick="qfClick(this)"><span>Baja</span><span class="qf-count" id="qc-pri-baja">0</span></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-group-label">Hitos</span>
+        <div class="qf-grid">
+          <button class="qf-btn active" data-key="hito" data-val="" onclick="qfClick(this)"><span>Todos</span></button>
+          <button class="qf-btn" data-key="hito" data-val="si" onclick="qfClick(this)"><span>★ Solo hitos</span></button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-group-label">Atrasadas</span>
+        <div class="qf-grid">
+          <button class="qf-btn" data-key="late" data-val="si" onclick="qfClick(this)"><span>⚠ Con atraso</span><span class="qf-count" id="qc-late">0</span></button>
+        </div>
+      </div>
+      <div class="filter-bar-actions">
+        <button class="button secondary" onclick="resetAll()">✕ Limpiar filtros</button>
+      </div>
+    </div>
+
+    <details class="sc-modprogress">
+      <summary>Avance por módulo</summary>
+      <div class="mod-list" id="modList"></div>
+    </details>
 
     <div class="gantt-wrap">
       <div class="gantt-scroll" id="ganttScroll">
