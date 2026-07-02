@@ -57,9 +57,24 @@ function _loginPath() {
   return 'login.html';
 }
 
+function _hubPath() {
+  const tag = document.querySelector('script[src*="config.js"]');
+  if (tag) {
+    const src = tag.getAttribute('src');
+    return src.replace(/assets\/js\/config\.js$/, '') + 'index.html';
+  }
+  return 'index.html';
+}
+
 /* ─── INIT ────────────────────────────────────────────────── */
 
-async function initAuth() {
+/**
+ * @param {string} [pageModule] - key de MP_RBAC_MODULOS que gobierna esta
+ *   página (ej. 'backlog'). Si se pasa y el usuario no es Admin ni tiene
+ *   permiso de ver ese módulo, se lo redirige al Hub. Omitir en páginas sin
+ *   módulo asociado (Hub, administración).
+ */
+async function initAuth(pageModule) {
   const apiUrl = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
 
   // Verificar si el sistema de usuarios está configurado en el Sheet
@@ -89,6 +104,12 @@ async function initAuth() {
     } catch (e) { /* sin conexión o sesión expirada: logoutUser() ya fue llamado */ }
 
     if (!SESSION.isLoggedIn()) { window.location.href = _loginPath(); return; }
+
+    if (pageModule && !SESSION.isAdmin() && !SESSION.canView(pageModule)) {
+      window.location.href = _hubPath() + '?acceso_denegado=' + encodeURIComponent(pageModule);
+      return;
+    }
+
     _applySession();
     return;
   }
@@ -98,6 +119,18 @@ async function initAuth() {
 
 function _applySession() {
   _renderUserIndicator();
+  applyPermissionsToSidebar();
+}
+
+/* ─── PERMISOS — SIDEBAR ─────────────────────────────────────── */
+
+function applyPermissionsToSidebar() {
+  if (SESSION.isAdmin()) return; // Admin ve todo, no hay nada que ocultar
+
+  document.querySelectorAll('[data-portal-nav] [data-page]').forEach(function (el) {
+    const mod = el.getAttribute('data-page');
+    el.style.display = SESSION.canView(mod) ? '' : 'none';
+  });
 }
 
 /* ─── LOGOUT ──────────────────────────────────────────────── */

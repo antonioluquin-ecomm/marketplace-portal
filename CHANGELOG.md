@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-07-02 - Etapa 2: RBAC por módulo (sidebar + acceso directo por URL)
+
+Tipo de cambio: feature.
+
+Estado: implementado y verificado en preview.
+
+Resultado:
+- Nuevo `window.MP_RBAC_MODULOS` en `assets/js/config.js`: 5 módulos (`backlog`, `gantt`, `seller_center`, `simuladores`, `estrategia`), uno por cada sección del sidebar. Es la fuente que alimenta la matriz de permisos de `internal/administracion/usuarios.html`.
+- Los links `<a class="nav">` del sidebar en `index.html` y las 13 páginas de `internal/` quedaron etiquetados con `data-page="modulo"`.
+- `assets/js/auth.js`: `applyPermissionsToSidebar()` oculta del sidebar los links a módulos que el usuario no puede ver (el Administrador siempre ve todo). Se llama automáticamente desde `_applySession()`.
+- `initAuth(pageModule)` ahora acepta el módulo de la página actual y bloquea el acceso directo por URL: si el usuario no es Admin y no tiene permiso de ver ese módulo, se lo redirige al Hub (`?acceso_denegado=modulo`) en vez de solo ocultarle el link. Cada página de `internal/` pasa su módulo (ej. `initAuth('backlog')`); `index.html` y `usuarios.html` no pasan módulo (sin restricción adicional más allá del login).
+- Cierra la brecha de la Etapa 1: antes solo existía la distinción Admin/no-Admin: un rol personalizado se podía loguear pero no se le ocultaba ni bloqueaba nada. Ahora sí queda listo para crear el primer rol no-admin desde `internal/administracion/usuarios.html` con permisos reales por sección.
+
 ## 2026-07-02 - Etapa 1: Login y gestión de usuarios (RBAC) para internal/
 
 Tipo de cambio: feature.

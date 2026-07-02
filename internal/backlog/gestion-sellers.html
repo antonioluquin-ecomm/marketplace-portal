@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/auth.js"></script>
-  <script>initAuth();</script>
+  <script>initAuth('backlog');</script>
   <link rel="stylesheet" href="../../assets/css/tokens.css">
   <!-- 14G: componentes internos pasivos. El CSS inline permanece como fallback. -->
   <link rel="stylesheet" href="../../assets/css/internal-components.css">
@@ -62,28 +62,28 @@
     </div>
     <div class="sb-section">
       <div class="sb-label">Flujo de incorporación</div>
-      <a class="nav active" href="./gestion-sellers.html">Gestión de Sellers</a>
-      <a class="nav" href="./backlog-sellers.html">Backlog de Sellers</a>
-      <a class="nav" href="../gantt/gantt-operativo.html">Gantt Operativo</a>
+      <a class="nav active" data-page="backlog" href="./gestion-sellers.html">Gestión de Sellers</a>
+      <a class="nav" data-page="backlog" href="./backlog-sellers.html">Backlog de Sellers</a>
+      <a class="nav" data-page="gantt" href="../gantt/gantt-operativo.html">Gantt Operativo</a>
     </div>
     <div class="sb-section">
       <div class="sb-label">Seller Center</div>
-      <a class="nav" href="../seller-center/index.html">Dashboard Seller Center</a>
-      <a class="nav" href="../seller-center/maqueta-seller-center.html">Maqueta Seller Center</a>
-      <a class="nav" href="../gantt/gantt-seller-center.html">Gantt Seller Center</a>
+      <a class="nav" data-page="seller_center" href="../seller-center/index.html">Dashboard Seller Center</a>
+      <a class="nav" data-page="seller_center" href="../seller-center/maqueta-seller-center.html">Maqueta Seller Center</a>
+      <a class="nav" data-page="gantt" href="../gantt/gantt-seller-center.html">Gantt Seller Center</a>
     </div>
     <div class="sb-section">
       <div class="sb-label">Modelo y estrategia</div>
-      <a class="nav" href="../estrategia/proyecto-marketplace.html">Proyecto Marketplace</a>
-      <a class="nav" href="../estrategia/modelo-integracion.html">Modelo de Integración</a>
-      <a class="nav" href="../estrategia/modelo-economico.html">Modelo Económico</a>
-      <a class="nav" href="../estrategia/governance.html">Governance</a>
-      <a class="nav" href="../estrategia/proceso-onboarding.html">Proceso de Onboarding</a>
+      <a class="nav" data-page="estrategia" href="../estrategia/proyecto-marketplace.html">Proyecto Marketplace</a>
+      <a class="nav" data-page="estrategia" href="../estrategia/modelo-integracion.html">Modelo de Integración</a>
+      <a class="nav" data-page="estrategia" href="../estrategia/modelo-economico.html">Modelo Económico</a>
+      <a class="nav" data-page="estrategia" href="../estrategia/governance.html">Governance</a>
+      <a class="nav" data-page="estrategia" href="../estrategia/proceso-onboarding.html">Proceso de Onboarding</a>
     </div>
     <div class="sb-section">
       <div class="sb-label">Simuladores</div>
-      <a class="nav" href="../simuladores/simulador-economico.html">Simulador Económico</a>
-      <a class="nav" href="../simuladores/config-tarifas.html">Config. Tarifas y Overrides</a>
+      <a class="nav" data-page="simuladores" href="../simuladores/simulador-economico.html">Simulador Económico</a>
+      <a class="nav" data-page="simuladores" href="../simuladores/config-tarifas.html">Config. Tarifas y Overrides</a>
     </div>
     <div class="sb-divider"></div>
     <div class="sb-section">

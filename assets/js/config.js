@@ -197,3 +197,21 @@ window.MP_CONFIG = {
     return url.toString();
   }
 };
+
+/**
+ * Módulos RBAC del equipo interno — usados por assets/js/auth.js para
+ * ocultar links del sidebar (applyPermissionsToSidebar) y bloquear el acceso
+ * directo por URL (initAuth(moduleKey)), y por la matriz de permisos en
+ * internal/administracion/usuarios.html.
+ *
+ * Cada key coincide con el data-page de los <a class="nav" data-page="...">
+ * del sidebar y con el módulo que se le pasa a initAuth() en cada página.
+ * El Administrador (id_rol=1) siempre tiene acceso a todos los módulos.
+ */
+window.MP_RBAC_MODULOS = [
+  { key: "backlog",       label: "Backlog de Sellers" },
+  { key: "gantt",         label: "Gantt (Operativo + Seller Center)" },
+  { key: "seller_center", label: "Seller Center" },
+  { key: "simuladores",   label: "Simuladores y Tarifas" },
+  { key: "estrategia",    label: "Modelo y Estrategia" }
+];
