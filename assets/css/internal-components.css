@@ -288,6 +288,51 @@
   border: 1px solid var(--g-brd);
 }
 
+/* 2026-07-02 — toggle de navegacion mobile. El sidebar/nav de cada pagina
+   se oculta por completo bajo ~900-960px; sin esto no hay forma de moverse
+   entre modulos desde el celular salvo volver al Hub. Generico via
+   [data-portal-nav] (no .sidebar) para no chocar con paginas que ya usan
+   ese nombre para otra cosa (ver simulador-economico.html/config-tarifas.html). */
+.mnav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.mnav-backdrop { display: none; }
+
+@media (max-width: 960px) {
+  .mnav-toggle { display: inline-flex; }
+
+  [data-portal-nav] {
+    display: none;
+    position: fixed !important;
+    top: var(--topbar-height, 50px);
+    left: 0;
+    bottom: 0;
+    z-index: 200;
+    width: min(84vw, 300px);
+    box-shadow: var(--shadow-lg, 0 12px 34px rgba(0, 0, 0, .24));
+  }
+  [data-portal-nav].mnav-open { display: flex !important; flex-direction: column; }
+
+  .mnav-backdrop.show {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 190;
+    background: rgba(17, 24, 39, .4);
+  }
+}
+
 /* Etapa 27A: foundation visual enterprise. */
 :where(.sidebar) {
   box-shadow: none;

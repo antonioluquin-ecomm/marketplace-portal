@@ -1072,6 +1072,7 @@ html,body{height:100%;overflow:hidden}
     <div class="crumb">GANTT OPERATIVO</div>
   </div>
   <div class="tb-right">
+    <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
     <div class="status-row"><div class="dot load" id="status-dot"></div><span id="status-txt">Cargando…</span></div>
     <div class="tb-date" id="last-update"></div>
     <button class="button" type="button" onclick="openCreateTask()">+ Nueva tarea</button>
@@ -1079,11 +1080,12 @@ html,body{height:100%;overflow:hidden}
     <a class="button secondary" href="../../index.html" title="Volver al Hub Central">← Hub</a>
   </div>
 </header>
+<div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
 
 <div class="shell">
 
 <!-- ══ SIDEBAR ══ -->
-<aside class="sidebar">
+<aside class="sidebar" data-portal-nav>
   <div class="sb-s">
     <a class="nav" href="../../index.html">Inicio</a>
   </div>

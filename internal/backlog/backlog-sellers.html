@@ -219,6 +219,7 @@ tbody tr:last-child td{border-bottom:none}
     <div class="crumb">BACKLOG DE SELLERS</div>
   </div>
   <div class="tb-right">
+    <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
     <div class="tb-status">
       <span class="tb-dot loading" id="status-dot"></span>
       <span id="status-txt">Cargando…</span>
@@ -228,11 +229,12 @@ tbody tr:last-child td{border-bottom:none}
     <a class="button" href="./gestion-sellers.html">+ Seller</a>
   </div>
 </header>
+<div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
 
 <div class="alert-strip" id="alert-strip"></div>
 
 <div class="shell">
-  <aside class="sidebar">
+  <aside class="sidebar" data-portal-nav>
 
     <div class="sb-block" style="margin-top:14px">
       <a class="nav" href="../../index.html">Inicio</a>

@@ -367,6 +367,7 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
     <div class="crumb">GANTT SELLER CENTER</div>
   </div>
   <div class="tb-right">
+    <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
     <div class="tb-status"><span class="live-dot"></span><span id="liveStatus">Conectando…</span></div>
     <div class="tb-badge" id="lastBadge">—</div>
     <a class="button secondary" href="../../index.html" title="Volver al Hub Central">← Hub</a>
@@ -374,11 +375,12 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
     <button class="button secondary" onclick="copyUrl()" title="Copiar link">🔗</button>
   </div>
 </header>
+<div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
 
 <div class="shell">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" data-portal-nav>
     <div class="sb-section">
       <a class="nav" href="../../index.html">Inicio</a>
     </div>

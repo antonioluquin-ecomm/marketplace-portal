@@ -161,6 +161,7 @@
       <div class="crumb">SELLER CENTER</div>
     </div>
     <div class="topbar-right">
+      <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
       <div class="load-badge" id="loadBadge"><span class="spinner"></span>Cargando datos…</div>
       <div class="live-badge" id="liveBadge" style="display:none"><span class="live-dot"></span><span id="liveTs">Actualizado</span></div>
       <a class="button secondary" href="../../index.html">← Hub</a>
@@ -168,9 +169,10 @@
     <a class="button secondary" href="../gantt/gantt-seller-center.html">Ver Gantt</a>
     </div>
   </header>
+  <div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
 
   <div class="shell">
-    <aside class="sidebar">
+    <aside class="sidebar" data-portal-nav>
       <div class="sb-group">
         <a class="nav" href="../../index.html">Inicio</a>
       </div>

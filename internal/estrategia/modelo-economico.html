@@ -532,13 +532,15 @@
     </div>
 
     <div class="top-actions">
+      <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
       <div class="status"><span class="dot"></span>Documento interno</div>
       <a class="button secondary" href="../../index.html">← Hub</a>
     </div>
   </header>
+  <div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
 
   <div class="shell">
-    <aside class="sidebar">
+    <aside class="sidebar" data-portal-nav>
       <div class="sb-section">
         <a class="nav" href="../../index.html">Inicio</a>
       </div>

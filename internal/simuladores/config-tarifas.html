@@ -401,13 +401,15 @@ body {
     <span class="crumb">CONFIG TARIFAS</span>
   </div>
   <div class="topbar-right">
+    <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
     <div class="disc-pill">Solo equipo comercial · Cambios en tiempo real</div>
     <a class="button secondary" href="../../index.html">← Hub</a>
   </div>
 </header>
+<div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
 
 <div class="nav-shell">
-<aside class="nav-sidebar">
+<aside class="nav-sidebar" data-portal-nav>
   <div class="sb-section">
     <a class="nav" href="../../index.html">Inicio</a>
   </div>
