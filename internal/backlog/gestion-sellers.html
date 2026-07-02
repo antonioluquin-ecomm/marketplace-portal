@@ -22,9 +22,20 @@
       --w:var(--text); --t1:var(--text); --t2:var(--muted); --t3:#7c8698; --t4:#9aa3b2;
       --bdr:var(--line); --bdr2:rgba(17,24,39,.06);
       --warn:var(--warning); --info:var(--primary); --danger:var(--danger);
-      --shadow:var(--shadow-lg); --tb:var(--topbar-height);
+      --shadow:var(--shadow-lg); --tb:var(--topbar-height); --sb:var(--sidebar-w);
     }
     *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-size:15px;line-height:1.65}a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:inherit}
+    /* 2026-07-01 — sidebar de navegación del portal (patrón canónico compartido, ver governance.html) */
+    .shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
+    .sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow:auto;background:var(--sidebar-bg);border-right:1px solid var(--bdr);padding:18px 0}
+    .sb-section{margin-bottom:18px}
+    .sb-label{display:flex;align-items:center;gap:8px;padding:0 16px;margin-bottom:7px;font-size:9px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}
+    .sb-label:after{content:"";height:1px;background:var(--bdr);flex:1}
+    .nav{display:flex;align-items:center;gap:9px;width:100%;padding:8px 16px;border-left:3px solid transparent;font-size:12.5px;color:var(--t2);transition:.15s}
+    .nav:hover,.nav.active{background:rgba(17,24,39,.04);color:var(--t1);border-left-color:var(--g)}
+    .nav.active{color:var(--g);background:var(--g-dim);font-weight:700}
+    .main{min-width:0}
+    @media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{display:none}}
     .section{padding:18px 0;border-bottom:1px solid var(--bdr2)}.section:first-child{padding-top:0}.section:last-child{border-bottom:0;padding-bottom:0}.section-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:12px}.field{margin-bottom:12px}.field:last-child{margin-bottom:0}.field label{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12.5px;font-weight:600;color:var(--t2);margin-bottom:6px}.field small{font-size:10px;color:var(--t4);font-weight:500}.inp,.sel,textarea{width:100%;padding:11px 12px;border-radius:var(--radius-sm,9px);border:1px solid var(--line);background:var(--card);color:var(--t1);font-size:14.5px;outline:none;transition:border-color .15s,box-shadow .15s}.inp:focus,.sel:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px var(--g-brd)}.sel option{background:var(--card);color:var(--t1)}textarea{min-height:92px;resize:vertical}.req::after{content:" *";color:var(--warn)}.help{font-size:11.5px;color:var(--t4);line-height:1.45;margin-top:6px}
     .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.full{grid-column:1/-1}.readonly{background:var(--bg);border-style:dashed;color:var(--t3)}
     .preview-card{border:1px solid var(--bdr);border-radius:var(--radius,16px);background:var(--k3);overflow:hidden}.preview-head{display:flex;align-items:center;gap:14px;padding:18px;border-bottom:1px solid var(--bdr)}.logo-box{width:58px;height:58px;border-radius:13px;border:1px solid var(--bdr);background:var(--bg);display:grid;place-items:center;overflow:hidden;flex-shrink:0}.logo-box img{max-width:100%;max-height:100%;object-fit:contain;padding:6px}.logo-fallback{font-family:var(--font);font-size:22px;font-weight:700;color:var(--g)}.preview-name{font-family:var(--font);font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.15}.preview-meta{font-size:12px;color:var(--t3);margin-top:3px}.preview-body{padding:16px;display:grid;gap:10px}.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--bdr2);font-size:13px}.kv:last-child{border-bottom:0}.kv span:first-child{color:var(--t3)}.kv span:last-child{font-weight:700;color:var(--t1);text-align:right;word-break:break-word}.links{display:grid;gap:8px;margin-top:14px}.link-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--bdr);border-radius:10px;background:var(--k3);padding:11px 12px}.link-row b{font-size:12px;color:var(--t2)}.link-row button,.link-row a{font-size:11.5px;font-weight:700;color:var(--g);background:transparent;border:0;cursor:pointer;white-space:nowrap}.msg-box{margin-top:14px;border:1px solid var(--bdr);border-radius:var(--radius-sm,12px);background:var(--k3);padding:14px}.msg-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:8px}.msg-preview{font-size:12px;line-height:1.55;color:var(--t2);white-space:pre-wrap;max-height:180px;overflow:auto}.alert{display:none;margin-bottom:14px;padding:12px 14px;border:1px solid rgba(153,27,27,.3);background:var(--danger-bg);color:var(--danger);border-radius:var(--radius-sm,10px);font-size:12px;line-height:1.45}.alert.visible{display:block}.success{display:none;margin-bottom:14px;padding:12px 14px;border:1px solid var(--g-brd);background:var(--g-dim);color:var(--g2);border-radius:var(--radius-sm,10px);font-size:12px;line-height:1.45}.success.visible{display:block}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);opacity:0;z-index:999;padding:10px 18px;border-radius:var(--radius-pill,999px);background:var(--k4);border:1px solid var(--g-brd);color:var(--g);font-size:12.5px;font-weight:700;box-shadow:var(--shadow-lg);transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -41,7 +52,38 @@
     <div class="top-actions"><div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Cargando…</span></div><a class="button secondary" href="../backlog/backlog-sellers.html">← Backlog</a></div>
   </header>
 
-  <main class="wrap">
+  <div class="shell">
+  <aside class="sidebar">
+    <div class="sb-section">
+      <a class="nav" href="../../index.html">Inicio</a>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Flujo de incorporación</div>
+      <a class="nav active" href="./gestion-sellers.html">Gestión de Sellers</a>
+      <a class="nav" href="./backlog-sellers.html">Backlog de Sellers</a>
+      <a class="nav" href="../gantt/gantt-operativo.html">Gantt Operativo</a>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Seller Center</div>
+      <a class="nav" href="../seller-center/index.html">Dashboard Seller Center</a>
+      <a class="nav" href="../seller-center/maqueta-seller-center.html">Maqueta Seller Center</a>
+      <a class="nav" href="../gantt/gantt-seller-center.html">Gantt Seller Center</a>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Modelo y estrategia</div>
+      <a class="nav" href="../estrategia/proyecto-marketplace.html">Proyecto Marketplace</a>
+      <a class="nav" href="../estrategia/modelo-integracion.html">Modelo de Integración</a>
+      <a class="nav" href="../estrategia/modelo-economico.html">Modelo Económico</a>
+      <a class="nav" href="../estrategia/governance.html">Governance</a>
+      <a class="nav" href="../estrategia/proceso-onboarding.html">Proceso de Onboarding</a>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Simuladores</div>
+      <a class="nav" href="../simuladores/simulador-economico.html">Simulador Económico</a>
+      <a class="nav" href="../simuladores/config-tarifas.html">Config. Tarifas y Overrides</a>
+    </div>
+  </aside>
+  <main class="wrap main">
     <section class="hero">
       <div class="panel">
         <div class="eyebrow">Gestión operativa</div>
@@ -144,6 +186,7 @@
       </div>
     </section>
   </main>
+  </div>
   <div class="toast" id="toast">Copiado</div>
 
   <script>
