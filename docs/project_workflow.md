@@ -136,6 +136,11 @@ No modificar:
 | Páginas públicas con seller | `public/<tipo>/<nombre>.html?seller_id=SPT-XXX` | |
 | Parser de overrides | siempre buscar fila con `seller_id`, no asumir índice fijo | |
 | Escritura al GAS | `fetch` con `no-cors` (sin acceso a la respuesta) | |
+| Tokens de color/tipografía | `assets/css/tokens.css` — nunca hardcodear hex, usar `var(--primary)`, `var(--text)`, etc. | |
+| Botones | clases canónicas `.button` (primario), `.button.secondary`, `.button.danger`, `.button.ghost` | `<button class="button secondary">Cancelar</button>` |
+| Error inline de campo | `.field-error` (definida en `internal-components.css`) | |
+| Tabla con muchas filas | patrón de paginación 25/50/100 con `currentPage`/`pageSize`/`_tableRows` (ver `backlog-sellers.html`) | |
+| Alcance del design system | `index.html` + `internal/` (excepto la maqueta del Seller Center) usan el design system estándar (claro, DM Sans/Mono, azul). `public/` mantiene el verde de Sporting — no tocar su paleta/tipografía. | ver `docs/decisions/2026-07-01-alineacion-design-system.md` |
 
 ---
 
@@ -154,3 +159,11 @@ El código en `integrations/apps-script/` es la fuente de verdad del repo, pero 
 ### 10.3 El parser de overrides tiene 2 filas antes del header
 
 La pestaña `overrides` tiene una fila de banner y una fila de instrucciones ANTES del header real. Todo parser debe buscar dinámicamente la fila que contiene `seller_id`, nunca asumir que la fila 0 o 1 es el header.
+
+### 10.4 `internal-components.css` fuerza `min-height:56px` en topbars vía `:where()`
+
+`:where(.btn-top, .tb-btn, .tbtn, .btn-sm)` y reglas similares en `internal-components.css` tienen especificidad cero, así que cualquier regla `.topbar{...}` de página gana en cascada — **excepto** si esa regla no declara `min-height` explícitamente, en cuyo caso el `min-height:56px` de `internal-components.css` se aplica igual (no hay nada que lo sobreescriba) y el topbar queda en 56px en vez de los 50px canónicos. Al fijar la altura del topbar en una página nueva, declarar siempre `height` **y** `min-height` juntos.
+
+### 10.5 Colores claros pensados para fondo oscuro quedan invisibles al migrar a tema claro
+
+Durante la migración al design system estándar (2026-07-01) aparecieron varios casos de texto en un tono claro (ej. `#f4b3b3`, `#d8ead0`) sobre un fondo también claro (heredado del mismo cambio), quedando prácticamente ilegible. Estos casos no los detecta un grep de "colores oscuros" porque el valor en sí no es sospechoso — solo se nota visualmente. Al tocar CSS de una página migrada, revisar con preview visual (no solo grep) los estados con acento de color: badges, pills, texto de error inline, celda "hoy" de un gantt, etc.

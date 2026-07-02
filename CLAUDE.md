@@ -15,6 +15,8 @@
 - **Logos solo en `assets/logos/`** — los fallbacks dinámicos construyen `assets/logos/{seller_id en minúsculas}.png`. La vieja carpeta `Logos/` de raíz fue eliminada.
 - **URLs públicas con `seller_id`**: las páginas de `public/` se comparten con sellers con `?seller_id=SPT-XXX`. Cualquier redirect debe preservar query string y hash.
 - **No hacer push** sin confirmación explícita del usuario.
+- **Identidad visual dual (desde 2026-07-01)**: `index.html` y todo `internal/` usan el design system estándar del ecosistema (tema claro, DM Sans/DM Mono, azul institucional `#1a3f6b`). **`public/` mantiene el verde de Sporting a propósito** — son las páginas que ve el seller externo y deben conservar la marca con la que ya lo reconoce. No alinear `public/` al azul interno. Ver `docs/decisions/2026-07-01-alineacion-design-system.md`.
+- **`internal/seller-center/maqueta-seller-center.html` está excluida** del design system del proyecto: simula intencionalmente la UI de una herramienta PIM genérica (paleta gris/azul propia, no la marca Sporting). No migrarla a los tokens del proyecto.
 
 ---
 
@@ -22,10 +24,12 @@
 
 - **Sin auth de sesión** — sitio estático puro, sin login
 - **Sin framework, sin build step** — HTML/CSS/JS inline por página; todo funciona como archivo estático en GitHub Pages
-- **Backend**: Google Apps Script (`integrations/apps-script/Apps_script_v5.js`) vía `fetch` con `no-cors` para escritura; Google Sheets publicados como CSV para lectura
+- **Backend**: Google Apps Script (`integrations/apps-script/Apps_script_v5.js`) vía `fetch` con `no-cors` para escritura; Google Sheets publicados como CSV para lectura. No hay capa JS compartida de `fetch` — cada página hace sus propias llamadas (evaluado y descartado centralizar, ver ADR).
 - **Configuración central**: `window.MP_CONFIG` en `assets/js/config.js` — URLs de Sheets, Apps Script, rutas, logos
-- **CSS**: `assets/css/tokens.css` (variables globales) + `assets/css/internal-components.css` (componentes compartidos) + `assets/css/pages/` (estilos por página)
+- **CSS**: `assets/css/tokens.css` (variables globales, paleta canónica del ecosistema) + `assets/css/internal-components.css` (componentes compartidos: `.button`/`.secondary`/`.danger`/`.ghost`, `.field-error`) + `assets/css/pages/` (estilos por página)
+- **Tipografía**: DM Sans (`--font`) + DM Mono (`--mono`) en `index.html`/`internal/` (excepto la maqueta). `public/` sigue con su tipografía/paleta propia — no tocar.
 - **Sin multi-store** — contexto único (Sporting Marketplace)
+- **Sin modo oscuro** — quedó fuera de alcance de la alineación al design system; se puede agregar a futuro como mejora incremental sobre los tokens ya migrados.
 
 ---
 
@@ -71,6 +75,7 @@ Pestañas publicadas como CSV:
 | Backend (formularios, guardado) | `integrations/apps-script/Apps_script_v5.js` (router `doPost` por `tipo_formulario`) |
 | Configuración de URLs y rutas | `assets/js/config.js` (`MP_CONFIG`) |
 | Historia del proyecto | `CHANGELOG.md`, `docs/roadmap.md` |
+| Tokens, colores, tipografía, componentes | `assets/css/tokens.css`, `assets/css/internal-components.css`, `docs/decisions/2026-07-01-alineacion-design-system.md` |
 
 ---
 

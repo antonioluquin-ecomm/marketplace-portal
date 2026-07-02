@@ -25,6 +25,27 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 7 (cierre): documentacion y checklist final
+
+Tipo de cambio: documentacion. Sin cambios de codigo.
+
+Estado: implementado.
+
+Resultado:
+- `CLAUDE.md`: agregada la regla de identidad visual dual (index.html + internal/ usan el design system estandar; public/ mantiene el verde de Sporting a proposito), la exclusion de la maqueta del Seller Center, y referencias a los nuevos tokens/componentes canonicos en la seccion Stack.
+- `docs/project_workflow.md §9`: agregadas las convenciones de tokens, botones canonicos, `.field-error` y el patron de paginacion de tablas.
+- `docs/project_workflow.md §10`: agregados dos aprendizajes nuevos — el `min-height:56px` que `internal-components.css` fuerza en topbars via `:where()` si la pagina no declara `min-height` explicito, y el patron de "texto claro sobre fondo claro" que aparece al migrar CSS pensado para tema oscuro (no detectable por grep, solo por verificacion visual).
+
+Validacion (checklist de `project_workflow.md §8`):
+- Hub Central carga y los 64 links unicos (internos + publicos) resuelven 200 OK (verificado programaticamente).
+- Paginas internas migradas sin errores de consola (barrido en index.html, config-tarifas.html).
+- Parser de tarifas confirmado funcionando (config-tarifas.html carga "Comisión base: 7" desde el CSV real).
+- Paginas publicas (`presentacion-seller.html`) y la maqueta del Seller Center confirmadas visualmente sin cambios — mantienen su identidad verde/gris original.
+
+## Resumen ejecutivo — Alineacion al design system estandar (Etapas 0-7, 2026-07-01)
+
+Marketplace Portal paso de un sistema visual propio (tema oscuro, verde `#6aa84f`, Barlow/Barlow Condensed) al design system estandar del ecosistema (tema claro, azul institucional `#1a3f6b`, DM Sans/DM Mono) en `index.html` y los 13 modulos de `internal/`. Se estandarizaron sidebar (224px), topbar (50px), botones (`.button`/`.secondary`/`.danger`/`.ghost`) y se agrego paginacion a la tabla de backlog. Quedan **excluidos permanentemente**: `public/` (mantiene el verde de Sporting, es la cara visible ante el seller externo) y `maqueta-seller-center.html` (prototipo que simula intencionalmente una herramienta ajena a la marca). No se implemento auth/RBAC (fuera del alcance de este proyecto) ni una capa JS compartida de `fetch` (evaluada y descartada por bajo beneficio frente al riesgo). Decisiones completas en `docs/decisions/2026-07-01-alineacion-design-system.md`.
+
 ## 2026-07-01 - Etapa 6 evaluada y descartada: capa JS compartida de fetch
 
 Tipo de cambio: decision de alcance. Sin cambios de codigo.
