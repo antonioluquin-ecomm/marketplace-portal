@@ -25,6 +25,16 @@ Validacion:
 - Preview server: `index.html` y `internal/backlog/gestion-sellers.html` cargan en claro sin errores de consola.
 - Mobile (375px): sin overflow horizontal en el hub.
 
+## 2026-07-01 - Etapa 6 evaluada y descartada: capa JS compartida de fetch
+
+Tipo de cambio: decision de alcance. Sin cambios de codigo.
+
+Estado: decidido (no ejecutar).
+
+Resultado:
+- Relevamiento: ~4 escrituras `fetch(...,{mode:'no-cors'})` y ~9 lecturas CSV en `backlog-sellers.html`, `gestion-sellers.html` y `config-tarifas.html` (las 3 herramientas de escritura de uso diario).
+- `no-cors` deja la respuesta opaca — un wrapper compartido no mejora el manejo de errores real, solo reduce duplicacion menor. El riesgo (un bug afectando los 3 flujos de escritura simultaneamente) no se justifica frente al beneficio. Decision del usuario: no ejecutar. Documentado en `docs/decisions/2026-07-01-alineacion-design-system.md` (punto 8).
+
 ## 2026-07-01 - Etapa 5 de alineacion al design system estandar: componentes (botones, forms, tablas)
 
 Tipo de cambio: CSS + JS (paginacion). Riesgo medio (tabla de backlog).
