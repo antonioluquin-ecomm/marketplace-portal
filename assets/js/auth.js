@@ -348,6 +348,13 @@ function renderUserManagementSection() {
       <div id="user-form-inline" hidden
            style="background:var(--sidebar-bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px">
         <div id="user-form-title" style="font-weight:700;margin-bottom:12px">Nuevo usuario</div>
+        <div style="margin-bottom:10px">
+          <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Tipo de cuenta</label>
+          <div style="display:flex;gap:6px">
+            <button type="button" id="uf-tipo-interno" class="cfg-tab active" onclick="_setTipoCuenta('interno')">Interno</button>
+            <button type="button" id="uf-tipo-seller" class="cfg-tab" onclick="_setTipoCuenta('seller')">Seller</button>
+          </div>
+        </div>
         <div style="display:flex;gap:12px;margin-bottom:10px">
           <div style="flex:1">
             <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Nombre *</label>
@@ -364,9 +371,14 @@ function renderUserManagementSection() {
             <input id="uf-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box">
             <div id="uf-pw-hint" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
           </div>
-          <div style="flex:1">
+          <div style="flex:1" id="uf-rol-wrap">
             <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Rol *</label>
             <select id="uf-rol" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box"></select>
+          </div>
+          <div style="flex:1" id="uf-sellerid-wrap" hidden>
+            <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Seller ID *</label>
+            <input id="uf-sellerid" placeholder="SPT-XXX" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box">
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Debe coincidir con el seller_id de la hoja sellers</div>
           </div>
         </div>
         <div id="uf-error" style="color:var(--danger);font-size:12px;margin-bottom:10px" hidden></div>
@@ -444,6 +456,17 @@ async function _loadRoles() {
 
 let _editingUserId = null;
 
+function _setTipoCuenta(tipo) {
+  const rolWrap  = document.getElementById('uf-rol-wrap');
+  const selWrap  = document.getElementById('uf-sellerid-wrap');
+  const btnInt   = document.getElementById('uf-tipo-interno');
+  const btnSel   = document.getElementById('uf-tipo-seller');
+  if (rolWrap) rolWrap.hidden = tipo === 'seller';
+  if (selWrap) selWrap.hidden = tipo !== 'seller';
+  if (btnInt)  btnInt.classList.toggle('active', tipo !== 'seller');
+  if (btnSel)  btnSel.classList.toggle('active', tipo === 'seller');
+}
+
 function _openUserForm(usuario) {
   _editingUserId = usuario ? Number(usuario.id) : null;
   const form   = document.getElementById('user-form-inline');
@@ -453,6 +476,10 @@ function _openUserForm(usuario) {
   const errEl  = document.getElementById('uf-error');
 
   if (errEl) errEl.hidden = true;
+
+  const esSeller = !!(usuario && usuario.seller_id);
+  _setTipoCuenta(esSeller ? 'seller' : 'interno');
+  document.getElementById('uf-sellerid').value = (usuario && usuario.seller_id) || '';
 
   if (usuario) {
     if (title)  title.textContent = 'Editar usuario';
@@ -487,11 +514,18 @@ async function _saveUser() {
   const nombre   = (document.getElementById('uf-nombre')   || {}).value || '';
   const email    = (document.getElementById('uf-email')    || {}).value || '';
   const password = (document.getElementById('uf-password') || {}).value || '';
-  const id_rol   = Number((document.getElementById('uf-rol') || {}).value || 1);
   const errEl    = document.getElementById('uf-error');
+
+  const esSeller = document.getElementById('uf-sellerid-wrap') && !document.getElementById('uf-sellerid-wrap').hidden;
+  const sellerId = esSeller ? (document.getElementById('uf-sellerid').value || '').trim() : '';
+  const id_rol   = esSeller ? 2 : Number((document.getElementById('uf-rol') || {}).value || 1);
 
   if (!nombre.trim() || !email.trim()) {
     if (errEl) { errEl.textContent = 'Nombre y email son requeridos.'; errEl.hidden = false; }
+    return;
+  }
+  if (esSeller && !sellerId) {
+    if (errEl) { errEl.textContent = 'El Seller ID es requerido para cuentas de tipo Seller.'; errEl.hidden = false; }
     return;
   }
   if (!_editingUserId && !password.trim()) {
@@ -505,13 +539,13 @@ async function _saveUser() {
 
   try {
     if (_editingUserId) {
-      const data = { nombre: nombre.trim(), email: email.toLowerCase().trim(), id_rol };
+      const data = { nombre: nombre.trim(), email: email.toLowerCase().trim(), id_rol, seller_id: sellerId };
       if (password) data.password_hash = await sha256(password);
       await _apiAuthPost({ action: 'updateUsuario', id: _editingUserId, data });
     } else {
       await _apiAuthPost({
         action: 'createUsuario',
-        data: { nombre: nombre.trim(), email: email.toLowerCase().trim(), password_hash: await sha256(password), id_rol },
+        data: { nombre: nombre.trim(), email: email.toLowerCase().trim(), password_hash: await sha256(password), id_rol, seller_id: sellerId },
       });
     }
     _closeUserForm();
@@ -556,7 +590,7 @@ async function _loadUsuarios() {
             return `<tr style="border-bottom:1px solid var(--line)">
               <td style="padding:7px 10px;color:var(--text)">${_escHtml(u.nombre || '—')}</td>
               <td style="padding:7px 10px;color:var(--muted);font-family:var(--mono);font-size:11px">${_escHtml(u.email || '—')}</td>
-              <td style="padding:7px 10px">${_escHtml(rolLabel)}</td>
+              <td style="padding:7px 10px">${_escHtml(rolLabel)}${u.seller_id ? ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : ''}</td>
               <td style="padding:7px 10px;text-align:center">${activo ? 'Activo' : 'Inactivo'}</td>
               <td style="padding:7px 10px;text-align:right;white-space:nowrap">
                 <button style="margin-right:4px;font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer"

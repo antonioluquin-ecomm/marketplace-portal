@@ -8,12 +8,12 @@
 ## Reglas activas — específicas de este proyecto
 
 - **Un solo centro de navegación**: `index.html` es el Hub Central. No crear HTML en la raíz; las páginas nuevas van en `internal/` (uso interno) o `public/` (compartido con sellers).
-- **Sin auth de usuario** — las páginas internas no tienen login. El acceso se controla por URL y por conocimiento del link.
+- **Auth por sesión (desde 2026-07-02)**: `internal/` requiere login de staff (`login.html`, `assets/js/auth.js`, RBAC por módulo) y `public/` requiere login de Seller (`public/login.html`, `assets/js/auth-seller.js`, una cuenta compartida por `seller_id`). Backend en `integrations/apps-script/Auth.gs`. Ver `CHANGELOG.md` para el detalle de cada etapa.
 - **Apps Script requiere redeploy manual**: el código en `integrations/apps-script/` es la fuente de verdad del repo, pero debe **pegarse en el editor de GAS y redeployarse** (nueva versión). Sin redeploy, los POST del frontend fallan en silencio (usan `no-cors`).
 - **No renombrar columnas ni pestañas del Sheet** sin revisar todos los parsers. Las URLs CSV publicadas usan `gid` numérico — si se cambia el nombre de una pestaña, el gid no cambia, pero el texto puede romper parsers que buscan por nombre.
 - **Pestaña `overrides`**: tiene una fila de banner y una fila de instrucciones ANTES del header real. Todo parser debe buscar la fila que contiene `seller_id`, nunca asumir que la fila 0 es el header.
 - **Logos solo en `assets/logos/`** — los fallbacks dinámicos construyen `assets/logos/{seller_id en minúsculas}.png`. La vieja carpeta `Logos/` de raíz fue eliminada.
-- **URLs públicas con `seller_id`**: las páginas de `public/` se comparten con sellers con `?seller_id=SPT-XXX`. Cualquier redirect debe preservar query string y hash.
+- **`seller_id` ya no se comparte por URL (desde Etapa 3)**: las 4 páginas de `public/` (formularios, presentación, simulador) leen el `seller_id` de la sesión autenticada (`SellerSESSION.sellerId`), no de `?seller_id=` en el link. El acceso se distribuye como credenciales (usuario/contraseña por seller), no como URL. `public/login.html` es el punto de entrada; `public/index.html` es el hub post-login del seller.
 - **No hacer push** sin confirmación explícita del usuario.
 - **Identidad visual dual (desde 2026-07-01)**: `index.html` y todo `internal/` usan el design system estándar del ecosistema (tema claro, DM Sans/DM Mono, azul institucional `#1a3f6b`). **`public/` mantiene el verde de Sporting a propósito** — son las páginas que ve el seller externo y deben conservar la marca con la que ya lo reconoce. No alinear `public/` al azul interno. Ver `docs/decisions/2026-07-01-alineacion-design-system.md`.
 - **`internal/seller-center/maqueta-seller-center.html` está excluida** del design system del proyecto: simula intencionalmente la UI de una herramienta PIM genérica (paleta gris/azul propia, no la marca Sporting). No migrarla a los tokens del proyecto.

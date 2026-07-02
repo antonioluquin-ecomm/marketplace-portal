@@ -1,5 +1,30 @@
 # Changelog
 
+## 2026-07-02 - Etapa 3: Login obligatorio para Sellers (public/)
+
+Tipo de cambio: feature (con corte de acceso operativo — ver abajo).
+
+Estado: implementado, pendiente de verificación en preview y del paso manual de Apps Script.
+
+Resultado:
+- Nuevo `public/login.html`: login separado para sellers, con la identidad verde de Sporting (nunca la plantilla azul interna). Sesión en `localStorage['mp_seller_session']` (clave distinta de `mp_session`, dominios de confianza separados).
+- Nuevo `assets/js/auth-seller.js`: `SellerSESSION`, `initSellerAuth()`, logout, cambio de contraseña.
+- Nuevo `public/index.html`: hub post-login del seller, lista sus recursos (`MP_CONFIG.RESOURCES` filtrado por `access === "Seller"`).
+- Las 4 páginas de `public/` (`formulario-calificacion`, `formulario-relevamiento`, `presentacion-seller`, `simulador-seller`) ahora exigen sesión de seller: el `seller_id` se lee de la sesión, no de `?seller_id=` en la URL.
+- `integrations/apps-script/Auth.gs`: columna `seller_id` en `USUARIOS` (migración no destructiva vía `_ensureColumn`), rol de sistema `Seller` (`id=2`, sembrado en `setupAuthSheets()`), `login()`/`validateSession()` devuelven `seller_id`, `createUsuario`/`updateUsuario` lo aceptan. Nueva `crearCuentasSellerDesdeHoja()` — migración masiva idempotente desde la hoja `sellers`.
+- `integrations/apps-script/Apps_script_v5.js`: `doPost` valida `session_token` + `seller_id` (vía `validarSesionSellerParaFormulario`) antes de `calificacion`, `relevamiento` y `relevamiento_profile_save` — evita que un seller envíe datos en nombre de otro. Los Administradores quedan exceptuados.
+- `internal/administracion/usuarios.html` (vía `assets/js/auth.js`): el formulario de usuario ahora tiene un toggle **Tipo de cuenta: Interno / Seller** — con "Seller" se pide un `seller_id` en vez de un rol (queda fijo en `id_rol=2`).
+- `CLAUDE.md` actualizado: ya no es cierto que "las páginas internas no tienen login" (obsoleto desde la Etapa 1), y la regla de `seller_id` por URL queda reemplazada por el modelo de login.
+
+**Corte de acceso operativo — acción requerida antes/inmediatamente después del deploy:**
+El login es obligatorio desde ya (no convive con el modelo anterior). Cualquier seller que hoy accede por link pierde el acceso hasta que tenga una cuenta. Correr `crearCuentasSellerDesdeHoja()` (ver setup abajo) y distribuir las contraseñas temporales generadas a cada seller activo.
+
+Setup manual requerido (una sola vez, sobre lo ya hecho en la Etapa 1):
+1. Pegar el `Auth.gs` y el `Apps_script_v5.js` actualizados en el editor de Apps Script.
+2. Ejecutar `setupAuthSheets()` — agrega la columna `seller_id` a `USUARIOS` y siembra el rol `Seller` sin tocar cuentas existentes.
+3. Ejecutar `crearCuentasSellerDesdeHoja()` desde el dropdown de funciones — crea una cuenta por cada `seller_id` de la hoja `sellers` que todavía no tenga una. Copiar las contraseñas temporales del log de ejecución (Ver → Registros) y distribuirlas.
+4. Redeploy (nueva versión) del Apps Script.
+
 ## 2026-07-02 - Etapa 2: RBAC por módulo (sidebar + acceso directo por URL)
 
 Tipo de cambio: feature.

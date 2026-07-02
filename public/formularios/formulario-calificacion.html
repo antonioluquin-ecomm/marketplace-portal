@@ -812,14 +812,17 @@
     <div class="toast" id="toast">Copiado</div>
 
     <script src="../../assets/js/config.js"></script>
+    <script src="../../assets/js/auth-seller.js"></script>
+    <script>initSellerAuth();</script>
     <script>
       const ENDPOINT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) ||
         "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
       const SELLERS_CSV_URL = (window.MP_CONFIG && window.MP_CONFIG.CSV && window.MP_CONFIG.CSV.SELLERS) ||
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv";
 
-      const params = new URLSearchParams(window.location.search);
-      const sellerId = (params.get("seller_id") || "").trim();
+      // Etapa 3: el seller_id ya no se lee de la URL — viene de la sesión
+      // autenticada (mp_seller_session), gateada por initSellerAuth() arriba.
+      const sellerId = SellerSESSION.sellerId;
       const PUBLIC_LINKS = {
         presentacion: "../presentaciones/presentacion-seller.html",
         simulador: "../simuladores/simulador-seller.html",
@@ -1218,6 +1221,7 @@
         const payload = {
           ...ev.data,
           seller_id: sellerId,
+          session_token: SellerSESSION.token,
           tipo_formulario: "calificacion",
           resultado_sugerido: ev.clasificacion,
           modelo_sugerido: ev.modelo,

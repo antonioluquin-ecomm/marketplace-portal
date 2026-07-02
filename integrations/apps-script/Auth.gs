@@ -13,14 +13,17 @@
  *
  * Hojas del sistema (ver project-standards/apps_script_standards.md §7.1):
  *   USUARIOS          id, nombre, email, password_hash, salt, id_rol, activo,
- *                      fecha_creacion, ultimo_acceso, creado_por
+ *                      fecha_creacion, ultimo_acceso, creado_por, seller_id
  *   ROLES             id, nombre, descripcion, activo, es_sistema
  *   PERMISOS_MODULOS  id_rol, modulo, puede_ver, puede_editar
  *   SESIONES          session_token, id_usuario, email, id_rol, expira_en,
  *                      fecha_creacion, activa
  *
- * Etapa 1: solo existe el rol de sistema Administrador (id=1). El modelo
- * queda listo para crear roles personalizados desde la UI en etapas futuras.
+ * Etapa 1: rol de sistema Administrador (id=1), solo staff interno.
+ * Etapa 3: rol de sistema Seller (id=2) — cuenta compartida por seller_id,
+ * usada para loguearse en public/ (ver public/login.html + auth-seller.js).
+ * La columna `seller_id` en USUARIOS queda vacía para cuentas de staff.
+ * Los roles de Sistema (Admin y Seller) no usan PERMISOS_MODULOS.
  */
 
 // ── ROUTER ────────────────────────────────────────────────────
@@ -99,21 +102,23 @@ function routeAuthAction(data) {
 function setupAuthSheets() {
   var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
-  _ensureSheetWithHeaders(ss, "USUARIOS", [
+  var usuariosSheet = _ensureSheetWithHeaders(ss, "USUARIOS", [
     "id", "nombre", "email", "password_hash", "salt", "id_rol", "activo",
-    "fecha_creacion", "ultimo_acceso", "creado_por",
+    "fecha_creacion", "ultimo_acceso", "creado_por", "seller_id",
   ]);
+  _ensureColumn(usuariosSheet, "seller_id"); // migración no destructiva para hojas ya existentes
 
   var rolesSheet = _ensureSheetWithHeaders(ss, "ROLES", [
     "id", "nombre", "descripcion", "activo", "es_sistema",
   ]);
   var rolesData = rolesSheet.getDataRange().getValues();
-  var yaExisteAdmin = false;
-  for (var i = 1; i < rolesData.length; i++) {
-    if (Number(rolesData[i][0]) === 1) { yaExisteAdmin = true; break; }
-  }
-  if (!yaExisteAdmin) {
+  var idsExistentes = {};
+  for (var i = 1; i < rolesData.length; i++) idsExistentes[Number(rolesData[i][0])] = true;
+  if (!idsExistentes[1]) {
     rolesSheet.appendRow([1, "Administrador", "Acceso total al sistema", "SI", "SI"]);
+  }
+  if (!idsExistentes[2]) {
+    rolesSheet.appendRow([2, "Seller", "Cuenta compartida de acceso a public/ para un seller", "SI", "SI"]);
   }
 
   _ensureSheetWithHeaders(ss, "PERMISOS_MODULOS", [
@@ -144,6 +149,17 @@ function _ensureSheetWithHeaders(ss, nombre, headers) {
 }
 
 /**
+ * Agrega `headerName` como última columna de `sheet` si todavía no existe.
+ * Idempotente y no destructivo — no reordena ni pisa columnas existentes.
+ */
+function _ensureColumn(sheet, headerName) {
+  var lastCol = Math.max(sheet.getLastColumn(), 1);
+  var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  if (headers.indexOf(headerName) !== -1) return;
+  sheet.getRange(1, lastCol + 1).setValue(headerName);
+}
+
+/**
  * Crear el primer usuario Administrador. Ejecutar UNA VEZ desde el editor de
  * Apps Script (después de setupAuthSheets()), usando una función wrapper:
  *
@@ -164,8 +180,76 @@ function crearPrimerAdmin(email, nombre, plainPassword) {
   var hash = hashPassword(salt, computeSha256Hex(plainPassword));
   var now  = new Date().toISOString();
 
-  sheet.appendRow([1, nombre, String(email).toLowerCase().trim(), hash, salt, 1, "SI", now, "", "setup"]);
+  sheet.appendRow([1, nombre, String(email).toLowerCase().trim(), hash, salt, 1, "SI", now, "", "setup", ""]);
   Logger.log("✓ Administrador creado: " + email);
+}
+
+/**
+ * Migración masiva: crea una cuenta Seller (id_rol=2) para cada seller_id de
+ * la hoja `sellers` que todavía no tenga cuenta en USUARIOS. Idempotente — no
+ * pisa cuentas ya creadas. Ejecutar UNA VEZ desde el editor de Apps Script
+ * (después de setupAuthSheets()), directamente desde el dropdown de funciones
+ * (no requiere argumentos).
+ *
+ * Las contraseñas temporales generadas quedan en el log de ejecución
+ * (Ver → Registros) — copiarlas y distribuirlas a cada seller antes de que
+ * pierdan acceso por link (el login pasa a ser obligatorio en public/).
+ */
+function crearCuentasSellerDesdeHoja() {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sellersSheet = ss.getSheetByName("sellers");
+  if (!sellersSheet) { Logger.log("ERROR: no se encontró la hoja 'sellers'."); return; }
+  var usuariosSheet = ss.getSheetByName("USUARIOS");
+  if (!usuariosSheet) { Logger.log("ERROR: corré setupAuthSheets() primero."); return; }
+
+  var sellersData    = sellersSheet.getDataRange().getValues();
+  var sellersHeaders = sellersData[0];
+  var idxSellerId = sellersHeaders.indexOf("seller_id");
+  var idxEmail    = sellersHeaders.indexOf("contacto_email");
+  var idxNombre   = sellersHeaders.indexOf("seller_nombre");
+  if (idxSellerId === -1) { Logger.log("ERROR: la hoja 'sellers' no tiene columna seller_id."); return; }
+
+  var usuariosHeaders = usuariosSheet.getRange(1, 1, 1, usuariosSheet.getLastColumn()).getValues()[0];
+  var uSelIdx = usuariosHeaders.indexOf("seller_id");
+  if (uSelIdx === -1) { Logger.log("ERROR: corré setupAuthSheets() primero (falta columna seller_id en USUARIOS)."); return; }
+
+  var usuariosData = usuariosSheet.getDataRange().getValues();
+  var existentes = {};
+  for (var i = 1; i < usuariosData.length; i++) {
+    var sidExistente = String(usuariosData[i][uSelIdx] || "").trim().toUpperCase();
+    if (sidExistente) existentes[sidExistente] = true;
+  }
+
+  var creados = [];
+  for (var r = 1; r < sellersData.length; r++) {
+    var sellerId = String(sellersData[r][idxSellerId] || "").trim();
+    if (!sellerId || existentes[sellerId.toUpperCase()]) continue;
+
+    var nombre = idxNombre !== -1 ? String(sellersData[r][idxNombre] || "").trim() : "";
+    if (!nombre) nombre = sellerId;
+
+    var email = idxEmail !== -1 ? String(sellersData[r][idxEmail] || "").trim().toLowerCase() : "";
+    if (!email) email = sellerId.toLowerCase() + "@sellers.sporting-marketplace.local";
+
+    var plainPassword = Utilities.getUuid().split("-")[0];
+    var salt = Utilities.getUuid();
+    var hash = hashPassword(salt, computeSha256Hex(plainPassword));
+    var now  = new Date().toISOString();
+    var nextId = _authNextId(usuariosSheet);
+
+    usuariosSheet.appendRow([nextId, nombre, email, hash, salt, 2, "SI", now, "", "migracion_seller", sellerId]);
+    existentes[sellerId.toUpperCase()] = true;
+    creados.push(sellerId + " | " + email + " | " + plainPassword);
+  }
+
+  if (!creados.length) {
+    Logger.log("crearCuentasSellerDesdeHoja: no había sellers pendientes de cuenta (todos ya la tenían).");
+    return;
+  }
+  Logger.log(
+    creados.length + " cuenta(s) Seller creada(s) — seller_id | email | contraseña temporal:\n" +
+    creados.join("\n")
+  );
 }
 
 // ── HASHING ───────────────────────────────────────────────────
@@ -313,6 +397,7 @@ function _validateSessionToken(session_token) {
 
       var idUsuario = data[i][uidIdx];
       var rolActual = Number(data[i][rolIdx]);
+      var sellerId  = "";
 
       var usSheet = ss.getSheetByName("USUARIOS");
       if (usSheet) {
@@ -321,10 +406,12 @@ function _validateSessionToken(session_token) {
         var uIdIdx  = usH.indexOf("id");
         var uRolIdx = usH.indexOf("id_rol");
         var uActIdx = usH.indexOf("activo");
+        var uSelIdx = usH.indexOf("seller_id");
         for (var j = 1; j < usData.length; j++) {
           if (String(usData[j][uIdIdx]) === String(idUsuario)) {
             if (usData[j][uActIdx] !== "SI") return { ok: false, error: "Usuario inactivo" };
             rolActual = Number(usData[j][uRolIdx]);
+            sellerId  = uSelIdx !== -1 ? String(usData[j][uSelIdx] || "").trim() : "";
             break;
           }
         }
@@ -332,7 +419,7 @@ function _validateSessionToken(session_token) {
 
       if (!_rolActivo(rolActual)) return { ok: false, error: "Rol desactivado" };
 
-      return { ok: true, id_usuario: idUsuario, email: String(data[i][emlIdx]), id_rol: rolActual };
+      return { ok: true, id_usuario: idUsuario, email: String(data[i][emlIdx]), id_rol: rolActual, seller_id: sellerId };
     }
   }
   return { ok: false, error: "Sesión no encontrada" };
@@ -368,6 +455,7 @@ function login(body) {
   var idxRol    = headers.indexOf("id_rol");
   var idxActivo = headers.indexOf("activo");
   var idxUltimo = headers.indexOf("ultimo_acceso");
+  var idxSeller = headers.indexOf("seller_id");
 
   var userRow = null, userRowNum = -1;
   for (var i = 1; i < data.length; i++) {
@@ -391,9 +479,10 @@ function login(body) {
     return { ok: false, error: "Email o contraseña incorrectos", code: 401 };
   }
 
-  var userId = userRow[idxId];
-  var idRol  = Number(userRow[idxRol]);
-  var nombre = String(userRow[idxNombre]);
+  var userId   = userRow[idxId];
+  var idRol    = Number(userRow[idxRol]);
+  var nombre   = String(userRow[idxNombre]);
+  var sellerId = idxSeller !== -1 ? String(userRow[idxSeller] || "").trim() : "";
 
   if (!_rolActivo(idRol)) {
     return { ok: false, error: "Tu rol está desactivado. Contactá al administrador.", code: 403 };
@@ -414,7 +503,7 @@ function login(body) {
   return {
     ok:            true,
     session_token: sessionToken,
-    usuario: { id: userId, nombre: nombre, email: email, id_rol: idRol, nombre_rol: getNombreRol(idRol) },
+    usuario: { id: userId, nombre: nombre, email: email, id_rol: idRol, nombre_rol: getNombreRol(idRol), seller_id: sellerId },
     permisos:      getPermisosForRol(idRol),
     expira_en:     expiraEn,
   };
@@ -448,7 +537,7 @@ function validateSession(body) {
   if (!res.ok) return { ok: false, error: res.error, code: 401 };
   return {
     ok:       true,
-    usuario:  { id: res.id_usuario, email: res.email, id_rol: res.id_rol, nombre_rol: getNombreRol(res.id_rol) },
+    usuario:  { id: res.id_usuario, email: res.email, id_rol: res.id_rol, nombre_rol: getNombreRol(res.id_rol), seller_id: res.seller_id },
     permisos: getPermisosForRol(res.id_rol),
   };
 }
@@ -538,8 +627,9 @@ function createUsuario(body) {
   var hash   = hashPassword(salt, password_hash);
   var now    = new Date().toISOString();
   var creadoPor = String(body._sesEmail || "");
+  var sellerId  = String(data.seller_id || "").trim();
 
-  sheet.appendRow([nextId, nombre, email, hash, salt, id_rol, "SI", now, "", creadoPor]);
+  sheet.appendRow([nextId, nombre, email, hash, salt, id_rol, "SI", now, "", creadoPor, sellerId]);
   return { ok: true, id: nextId };
 }
 
@@ -592,6 +682,9 @@ function updateUsuario(body) {
   if (data.nombre !== undefined) sheet.getRange(rowNum, headers.indexOf("nombre") + 1).setValue(String(data.nombre).trim());
   if (data.id_rol !== undefined) sheet.getRange(rowNum, headers.indexOf("id_rol") + 1).setValue(Number(data.id_rol));
   if (data.activo !== undefined) sheet.getRange(rowNum, headers.indexOf("activo") + 1).setValue(data.activo === "SI" ? "SI" : "NO");
+  if (data.seller_id !== undefined && headers.indexOf("seller_id") !== -1) {
+    sheet.getRange(rowNum, headers.indexOf("seller_id") + 1).setValue(String(data.seller_id).trim());
+  }
   if (data.password_hash && String(data.password_hash).trim()) {
     var newSalt = Utilities.getUuid();
     var newHash = hashPassword(newSalt, String(data.password_hash));

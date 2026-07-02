@@ -34,6 +34,7 @@ function doPost(e) {
     const tipoFormulario = normalizarTipoFormulario(data.tipo_formulario);
 
     if (tipoFormulario === "relevamiento_profile_save") {
+      validarSesionSellerParaFormulario(tipoFormulario, data, String(data.seller_id || "").trim());
       const resultadoPerfil = upsertPerfilRelevamiento(data);
       return jsonResponse({
         ok: true,
@@ -100,6 +101,8 @@ function doPost(e) {
     if (!sellerId) {
       throw new Error("Falta seller_id en el formulario");
     }
+
+    validarSesionSellerParaFormulario(tipoFormulario, data, sellerId);
 
     let resultado;
 
@@ -180,6 +183,28 @@ function validarWriteSecret(data) {
   if (!esperado) return;
   const recibido = String(data.write_secret || "").trim();
   if (recibido !== esperado) throw new Error("Clave de escritura inválida");
+}
+
+// Etapa 3 — anti-impersonación: los formularios de seller (calificación y
+// relevamiento) exigen sesión válida cuyo seller_id coincida con el del
+// formulario. Los Administradores (id_rol=1, ej. desde gestion-sellers.html)
+// quedan exceptuados. Depende de _validateSessionToken (Auth.gs, mismo proyecto).
+var TIPOS_FORMULARIO_SELLER = ["calificacion", "relevamiento", "relevamiento_profile_save"];
+
+function validarSesionSellerParaFormulario(tipoFormulario, data, sellerId) {
+  if (TIPOS_FORMULARIO_SELLER.indexOf(tipoFormulario) === -1) return;
+
+  const sesVal = _validateSessionToken(data.session_token);
+  if (!sesVal.ok) {
+    throw new Error("Sesión requerida para enviar este formulario. Iniciá sesión de nuevo.");
+  }
+
+  const esAdmin = sesVal.id_rol === 1;
+  if (!esAdmin) {
+    if (!sesVal.seller_id || sesVal.seller_id.toUpperCase() !== sellerId.toUpperCase()) {
+      throw new Error("No autorizado a enviar este formulario para este seller.");
+    }
+  }
 }
 
 function normalizarTipoFormulario(valor) {

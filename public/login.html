@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ingresar — Portal de Sellers | Marketplace Sporting</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --g:#5ea832;--g2:#4a8a26;
+    --g-dim:rgba(94,168,50,.12);--g-brd:rgba(94,168,50,.28);
+    --k:#09100a;--k3:#131b12;
+    --t1:#edf3e9;--t2:#c4d8bb;--t3:#8fab86;
+    --bdr:rgba(255,255,255,.08);
+    --danger:#e5484d;--danger-bg:rgba(229,72,77,.12);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:Barlow,system-ui,sans-serif;
+    background:var(--k);color:var(--t1);
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;padding:24px;-webkit-font-smoothing:antialiased;
+  }
+  .login-wrap{width:100%;max-width:380px}
+
+  .login-header{text-align:center;margin-bottom:24px}
+  .login-logo-icon{
+    width:48px;height:48px;
+    background:linear-gradient(135deg,var(--g),var(--g2));
+    border-radius:14px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-family:"Barlow Condensed",sans-serif;font-size:19px;font-weight:900;color:#fff;letter-spacing:.02em;
+    margin-bottom:14px;
+    box-shadow:0 4px 18px rgba(94,168,50,.28);
+  }
+  .login-app-name{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.02em;color:var(--t1)}
+  .login-app-sub{font-size:13px;color:var(--t3);margin-top:4px}
+
+  .login-card{
+    background:linear-gradient(160deg,rgba(25,33,24,.95),rgba(14,22,14,.98));
+    border:1px solid var(--bdr);
+    border-radius:16px;
+    box-shadow:0 24px 70px rgba(0,0,0,.4);
+    padding:28px;
+  }
+
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--t2);margin-bottom:6px}
+  .field input{
+    width:100%;padding:10px 12px;font-size:14px;font-family:inherit;
+    border:1px solid var(--bdr);border-radius:8px;
+    outline:none;transition:border-color .15s,box-shadow .15s;
+    color:var(--t1);background:rgba(255,255,255,.03);
+    box-sizing:border-box;
+  }
+  .field input::placeholder{color:var(--t3)}
+  .field input:focus{
+    border-color:var(--g);
+    box-shadow:0 0 0 3px var(--g-dim);
+  }
+
+  .btn-login{
+    width:100%;padding:11px;font-family:inherit;
+    font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;border:none;
+    background:var(--g);color:#fff;
+    border-radius:8px;cursor:pointer;transition:background .15s;margin-top:4px;
+  }
+  .btn-login:hover:not(:disabled){background:var(--g2)}
+  .btn-login:disabled{opacity:.6;cursor:default}
+
+  .alert-err{
+    margin-top:14px;padding:10px 14px;
+    background:var(--danger-bg);
+    border:1px solid rgba(229,72,77,.3);
+    border-radius:8px;
+    color:var(--danger);font-size:13px;
+  }
+
+  .login-footer{text-align:center;margin-top:20px;font-size:12px;color:var(--t3)}
+</style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-header">
+      <div class="login-logo-icon">SM</div>
+      <div class="login-app-name">Portal de Sellers</div>
+      <div class="login-app-sub">Marketplace Sporting</div>
+    </div>
+    <div class="login-card">
+      <form id="loginForm" autocomplete="on">
+        <div class="field">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email" name="email"
+                 placeholder="tu@empresa.com" autocomplete="email" autofocus />
+        </div>
+        <div class="field">
+          <label for="login-pwd">Contraseña</label>
+          <input type="password" id="login-pwd" name="password"
+                 placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn-login" id="btn-login">Ingresar</button>
+      </form>
+      <div class="alert-err" id="login-err" hidden></div>
+    </div>
+    <div class="login-footer">Acceso exclusivo para sellers de Sporting Marketplace</div>
+  </div>
+
+  <script src="../assets/js/config.js"></script>
+  <script>
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Redirigir si ya hay sesión válida
+    (function () {
+      try {
+        const d = JSON.parse(localStorage.getItem('mp_seller_session') || 'null');
+        if (d && d.expira_en && new Date(d.expira_en) > new Date()) {
+          window.location.href = 'index.html';
+        }
+      } catch (_) {}
+    })();
+
+    const form  = document.getElementById('loginForm');
+    const errEl = document.getElementById('login-err');
+    const btn   = document.getElementById('btn-login');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-pwd').value;
+      errEl.hidden = true;
+
+      if (!email || !password) {
+        errEl.textContent = 'Completá los dos campos.';
+        errEl.hidden = false;
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = 'Verificando…';
+
+      try {
+        const apiUrl = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
+        if (!apiUrl) throw new Error('No hay URL de API configurada.');
+        const password_hash = await sha256(password);
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          body:   JSON.stringify({ action: 'login', email, password_hash }),
+        });
+        if (!res.ok) throw new Error('Error de conexión (' + res.status + ').');
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'Credenciales incorrectas.');
+        if (!json.usuario || !json.usuario.seller_id) {
+          throw new Error('Esta cuenta no tiene acceso al Portal de Sellers.');
+        }
+
+        localStorage.setItem('mp_seller_session', JSON.stringify({
+          session_token: json.session_token,
+          usuario:       json.usuario,
+          expira_en:     json.expira_en,
+        }));
+        window.location.href = 'index.html';
+      } catch (err) {
+        errEl.textContent = err.message || 'Error al iniciar sesión. Verificá tu conexión.';
+        errEl.hidden = false;
+      } finally {
+        btn.disabled    = false;
+        btn.textContent = 'Ingresar';
+      }
+    });
+  </script>
+</body>
+</html>

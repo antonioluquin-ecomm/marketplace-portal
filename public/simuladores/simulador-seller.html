@@ -624,6 +624,9 @@
 
 <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
 
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth-seller.js"></script>
+<script>initSellerAuth();</script>
 <script>
 /* ═══════════════════════════════════
    CONFIG
@@ -668,7 +671,11 @@ let INPUT_MODE = "total";
 let _rtimer    = null;
 
 const params = new URLSearchParams(window.location.search);
-let CURRENT_SELLER_ID = (params.get("seller_id") || params.get("seller") || params.get("id") || "").trim();
+// Etapa 3: el seller_id de partida viene de la sesión autenticada
+// (mp_seller_session), gateada por initSellerAuth() arriba. El selector de
+// seller de esta página sigue permitiendo simular con otro seller_id (no es
+// una escritura, solo lectura de tarifas/overrides ya publicados).
+let CURRENT_SELLER_ID = SellerSESSION.sellerId || (params.get("seller_id") || params.get("seller") || params.get("id") || "").trim();
 const PUBLIC_LINKS = {
   presentacion: "../presentaciones/presentacion-seller.html",
   simulador: "./simulador-seller.html",

@@ -619,6 +619,9 @@
     <span style="color:var(--t4)">Documento preparado por el equipo de eCommerce · Uso comercial</span>
   </footer>
 
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth-seller.js"></script>
+  <script>initSellerAuth();</script>
   <script>
     // ── CONFIGURACIÓN CENTRAL ─────────────────────────────────────────────────
     const BASE_URL = (() => {
@@ -635,7 +638,9 @@
     };
 
     const params = new URLSearchParams(window.location.search);
-    const sellerId       = (params.get("seller_id") || "").trim();
+    // Etapa 3: el seller_id ya no se lee de la URL — viene de la sesión
+    // autenticada (mp_seller_session), gateada por initSellerAuth() arriba.
+    const sellerId       = SellerSESSION.sellerId;
     const sellerNameParam= (params.get("seller_name") || params.get("nombre") || "").trim();
     const logoParam      = (params.get("logo") || params.get("logo_url") || "").trim();
     const PUBLIC_LINKS = {

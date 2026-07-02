@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portal de Sellers | Marketplace Sporting</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --g:#5ea832;--g2:#4a8a26;
+    --g-dim:rgba(94,168,50,.12);--g-brd:rgba(94,168,50,.28);
+    --k:#09100a;--k2:#0e160e;--k3:#131b12;
+    --t1:#edf3e9;--t2:#c4d8bb;--t3:#8fab86;--t4:#5a7054;
+    --bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.05);
+    --tb:64px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Barlow,system-ui,sans-serif;background:var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--tb);display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(9,16,10,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(20px)}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;color:var(--t1)}
+  .logo span{color:var(--g)}
+  .crumb{border-left:1px solid var(--bdr);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}
+
+  .user-chip{display:flex;align-items:center;gap:12px}
+  .user-chip-name{font-size:12.5px;font-weight:700;color:var(--t2)}
+  .user-chip button{background:none;border:1px solid var(--bdr);color:var(--t3);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border-radius:7px;cursor:pointer;transition:.15s}
+  .user-chip button:hover{border-color:var(--g-brd);color:var(--t1)}
+
+  .main{max-width:1000px;margin:0 auto;padding:calc(var(--tb) + 56px) 32px 80px}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--g)}
+  .hero-eyebrow::before{content:"";width:24px;height:2px;background:var(--g)}
+  h1{font-family:"Barlow Condensed",sans-serif;font-size:clamp(32px,5vw,48px);font-weight:900;text-transform:uppercase;letter-spacing:.01em;margin-bottom:10px}
+  .lead{font-size:14px;line-height:1.6;color:var(--t3);max-width:600px;margin-bottom:40px}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .card{display:flex;flex-direction:column;min-height:130px;padding:20px;border-radius:14px;border:1px solid var(--bdr);background:linear-gradient(160deg,rgba(25,33,24,.95),rgba(14,22,14,.98));transition:.15s}
+  .card:hover{transform:translateY(-2px);border-color:var(--g-brd)}
+  .card .ico{font-size:22px;margin-bottom:10px}
+  .card strong{font-family:"Barlow Condensed",sans-serif;font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.01em;color:var(--t1);margin-bottom:6px}
+  .card small{font-size:12.5px;line-height:1.5;color:var(--t3)}
+  .card em{margin-top:auto;padding-top:12px;font-style:normal;color:var(--g);font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+
+  .empty{padding:32px;border:1px dashed var(--bdr);border-radius:14px;color:var(--t3);font-size:13px;text-align:center}
+
+  @media(max-width:720px){.grid{grid-template-columns:1fr}.main{padding:calc(var(--tb) + 40px) 20px 60px}}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">SPORTING <span>MARKETPLACE</span></span>
+      <div class="crumb">Portal de Sellers</div>
+    </div>
+    <div class="user-chip">
+      <span class="user-chip-name" id="user-chip-name"></span>
+      <button type="button" onclick="_showSellerChangePasswordModal()">Cambiar contraseña</button>
+      <button type="button" onclick="logoutSeller()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="hero-eyebrow">Bienvenido</div>
+    <h1 id="hero-title">Tu espacio en el Marketplace</h1>
+    <p class="lead">Desde acá accedés a la presentación, los formularios y las herramientas de tu proceso con Sporting Marketplace.</p>
+
+    <div class="grid" id="resources-grid"></div>
+    <div class="empty" id="empty-state" hidden>Todavía no hay recursos disponibles para tu cuenta.</div>
+  </main>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/auth-seller.js"></script>
+  <script>
+    const ICONS = {
+      formulario_calificacion: "📝",
+      formulario_relevamiento: "📋",
+      presentacion_seller:     "📣",
+      simulador_seller:        "🧮",
+    };
+
+    function renderGrid() {
+      const grid = document.getElementById('resources-grid');
+      const resources = (window.MP_CONFIG && window.MP_CONFIG.RESOURCES || [])
+        .filter(function (r) { return r.access === 'Seller'; });
+
+      if (!resources.length) {
+        document.getElementById('empty-state').hidden = false;
+        return;
+      }
+
+      grid.innerHTML = resources.map(function (r) {
+        const href = r.route.replace(/^\/public\//, '');
+        return '<a class="card" href="' + href + '">' +
+          '<span class="ico">' + (ICONS[r.key] || '🔗') + '</span>' +
+          '<strong>' + r.label + '</strong>' +
+          '<em>Abrir →</em>' +
+        '</a>';
+      }).join('');
+    }
+
+    initSellerAuth().then(function () {
+      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
+      document.getElementById('hero-title').textContent = 'Hola, ' + (SellerSESSION.nombre || SellerSESSION.sellerId);
+      renderGrid();
+    });
+  </script>
+</body>
+</html>
