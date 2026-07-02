@@ -343,6 +343,47 @@
   margin: 8px 16px 18px;
 }
 
+/* 2026-07-02 — sub-nav horizontal "En esta pagina". Reemplaza las anclas de
+   seccion que antes vivian en el sidebar (Contenido/Vista/Modulos), para que
+   el sidebar quede solo navegacion global identica. Se coloca como primer
+   hijo del contenido (.main), sticky bajo el topbar. */
+.page-subnav {
+  position: sticky;
+  top: var(--topbar-height, 50px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: -8px 0 20px;
+  padding: 8px 0;
+  background: var(--bg, #f0f2f7);
+  border-bottom: 1px solid var(--line, var(--bdr, #e5e7eb));
+}
+.page-subnav-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted, var(--t3, #64748b));
+  margin-right: 8px;
+  white-space: nowrap;
+}
+.page-subnav a {
+  padding: 5px 11px;
+  border-radius: var(--radius-pill, 999px);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted, var(--t3, #64748b));
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+.page-subnav a:hover,
+.page-subnav a.active {
+  background: var(--primary-soft, var(--g-dim, #e8eef6));
+  color: var(--primary, var(--g, #1a3f6b));
+}
+
 /* Etapa 27A: foundation visual enterprise. */
 :where(.sidebar) {
   box-shadow: none;
