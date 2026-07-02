@@ -1116,70 +1116,12 @@ html,body{height:100%;overflow:hidden}
   </div>
   <div class="sb-div"></div>
   <div class="sb-s">
-    <div class="sb-lbl">Buscar seller / tarea</div>
-    <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
+    <div class="sb-lbl">Para sellers</div>
+    <a class="nav" href="../../public/presentaciones/presentacion-seller.html">Presentación seller <span>↗</span></a>
+    <a class="nav" href="../../public/formularios/formulario-calificacion.html">Calificación <span>↗</span></a>
+    <a class="nav" href="../../public/formularios/formulario-relevamiento.html">Relevamiento <span>↗</span></a>
+    <a class="nav" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
   </div>
-
-  <div class="sb-s">
-    <div class="sb-lbl">Seller</div>
-    <select class="sel" id="seller-sel" onchange="setSellerFilter(this.value)">
-      <option value="todos">Todos</option>
-    </select>
-    <div class="filter-hint" id="seller-filter-hint">Todos los sellers</div>
-  </div>
-
-  <div class="sb-s">
-    <div class="sb-lbl">Período</div>
-    <select class="sel" id="period-sel" onchange="render()">
-      <option value="3">3 meses</option>
-      <option value="6" selected>6 meses</option>
-      <option value="9">9 meses</option>
-      <option value="12">12 meses</option>
-    </select>
-  </div>
-
-  <div class="sb-div"></div>
-
-  <!-- FILTRO RESPONSABLE — novedad -->
-  <div class="sb-s">
-    <div class="sb-lbl">Responsable</div>
-    <select class="sel" id="resp-sel" onchange="render()">
-      <option value="todos">Todos</option>
-    </select>
-  </div>
-
-  <div class="sb-s">
-    <div class="sb-lbl">Entorno</div>
-    <select class="sel" id="entorno-sel" onchange="setEntornoFilter(this.value)">
-      <option value="todos">Todos</option>
-      <option value="QA">QA</option>
-      <option value="Productivo">Productivo</option>
-    </select>
-  </div>
-
-  <div class="sb-s">
-    <div class="sb-lbl">Fase</div>
-    <button class="fb on" onclick="setF('fase','todos')"         id="ff-todos"><span class="fb-l"><span class="fase-dot" style="background:var(--t3)"></span>Todas</span><span class="fc" id="ffc-todos">0</span></button>
-    <button class="fb" onclick="setF('fase','Comercial')"        id="ff-comercial"><span class="fb-l"><span class="fase-dot" style="background:var(--f-com)"></span>Comercial</span><span class="fc" id="ffc-comercial">0</span></button>
-    <button class="fb" onclick="setF('fase','Técnica')"          id="ff-tecnica"><span class="fb-l"><span class="fase-dot" style="background:var(--f-tec)"></span>Técnica</span><span class="fc" id="ffc-tecnica">0</span></button>
-    <button class="fb" onclick="setF('fase','Operativa')"        id="ff-operativa"><span class="fb-l"><span class="fase-dot" style="background:var(--f-op)"></span>Operativa</span><span class="fc" id="ffc-operativa">0</span></button>
-    <button class="fb" onclick="setF('fase','QA / Validación')"  id="ff-qa_validacion"><span class="fb-l"><span class="fase-dot" style="background:var(--f-qa)"></span>QA / Valid.</span><span class="fc" id="ffc-qa_validacion">0</span></button>
-    <button class="fb" onclick="setF('fase','Go Live')"          id="ff-go_live"><span class="fb-l"><span class="fase-dot" style="background:var(--f-gl)"></span>Go Live</span><span class="fc" id="ffc-go_live">0</span></button>
-  </div>
-
-  <div class="sb-div"></div>
-
-  <div class="sb-s">
-    <div class="sb-lbl">Estado tarea</div>
-    <button class="fb on" onclick="setF('estado','todos')"      id="fe-todos"><span>Todos</span><span class="fc" id="fec-todos">0</span></button>
-    <button class="fb"    onclick="setF('estado','En curso')"   id="fe-en_curso"><span>En curso</span><span class="fc" id="fec-wip">0</span></button>
-    <button class="fb"    onclick="setF('estado','Bloqueado')"  id="fe-bloqueado"><span style="color:#f29a9a">⚠ Bloqueado</span><span class="fc" id="fec-blk">0</span></button>
-    <button class="fb"    onclick="setF('estado','Pendiente')"  id="fe-pendiente"><span>Pendiente</span><span class="fc" id="fec-pend">0</span></button>
-    <button class="fb"    onclick="setF('estado','Completado')" id="fe-completado"><span>Completado</span><span class="fc" id="fec-done">0</span></button>
-  </div>
-
-  <div class="sb-div"></div>
-  <div class="sb-s"><button class="button secondary" style="width:100%" onclick="clearFilters()">Limpiar filtros</button></div>
 
 </aside>
 
@@ -1198,6 +1140,67 @@ html,body{height:100%;overflow:hidden}
     <div class="kpi"><div class="kpi-val w" id="gkpi-late">—</div><div class="kpi-lbl">Atrasadas</div></div>
     <div class="kpi-sep"></div>
     <div class="kpi"><div class="kpi-val" id="gkpi-sellers">—</div><div class="kpi-lbl">Sellers</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label class="sb-lbl" for="search">Buscar</label>
+      <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
+    </div>
+    <div class="filter-group">
+      <label class="sb-lbl" for="seller-sel">Seller</label>
+      <select class="sel" id="seller-sel" onchange="setSellerFilter(this.value)">
+        <option value="todos">Todos</option>
+      </select>
+      <div class="filter-hint" id="seller-filter-hint">Todos los sellers</div>
+    </div>
+    <div class="filter-group">
+      <label class="sb-lbl" for="period-sel">Período</label>
+      <select class="sel" id="period-sel" onchange="render()">
+        <option value="3">3 meses</option>
+        <option value="6" selected>6 meses</option>
+        <option value="9">9 meses</option>
+        <option value="12">12 meses</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="sb-lbl" for="resp-sel">Responsable</label>
+      <select class="sel" id="resp-sel" onchange="render()">
+        <option value="todos">Todos</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="sb-lbl" for="entorno-sel">Entorno</label>
+      <select class="sel" id="entorno-sel" onchange="setEntornoFilter(this.value)">
+        <option value="todos">Todos</option>
+        <option value="QA">QA</option>
+        <option value="Productivo">Productivo</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-group-label">Fase</span>
+      <div class="fb-row">
+        <button class="fb on" onclick="setF('fase','todos')"         id="ff-todos"><span class="fb-l"><span class="fase-dot" style="background:var(--t3)"></span>Todas</span><span class="fc" id="ffc-todos">0</span></button>
+        <button class="fb" onclick="setF('fase','Comercial')"        id="ff-comercial"><span class="fb-l"><span class="fase-dot" style="background:var(--f-com)"></span>Comercial</span><span class="fc" id="ffc-comercial">0</span></button>
+        <button class="fb" onclick="setF('fase','Técnica')"          id="ff-tecnica"><span class="fb-l"><span class="fase-dot" style="background:var(--f-tec)"></span>Técnica</span><span class="fc" id="ffc-tecnica">0</span></button>
+        <button class="fb" onclick="setF('fase','Operativa')"        id="ff-operativa"><span class="fb-l"><span class="fase-dot" style="background:var(--f-op)"></span>Operativa</span><span class="fc" id="ffc-operativa">0</span></button>
+        <button class="fb" onclick="setF('fase','QA / Validación')"  id="ff-qa_validacion"><span class="fb-l"><span class="fase-dot" style="background:var(--f-qa)"></span>QA / Valid.</span><span class="fc" id="ffc-qa_validacion">0</span></button>
+        <button class="fb" onclick="setF('fase','Go Live')"          id="ff-go_live"><span class="fb-l"><span class="fase-dot" style="background:var(--f-gl)"></span>Go Live</span><span class="fc" id="ffc-go_live">0</span></button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-group-label">Estado tarea</span>
+      <div class="fb-row">
+        <button class="fb on" onclick="setF('estado','todos')"      id="fe-todos"><span>Todos</span><span class="fc" id="fec-todos">0</span></button>
+        <button class="fb"    onclick="setF('estado','En curso')"   id="fe-en_curso"><span>En curso</span><span class="fc" id="fec-wip">0</span></button>
+        <button class="fb"    onclick="setF('estado','Bloqueado')"  id="fe-bloqueado"><span style="color:#f29a9a">⚠ Bloqueado</span><span class="fc" id="fec-blk">0</span></button>
+        <button class="fb"    onclick="setF('estado','Pendiente')"  id="fe-pendiente"><span>Pendiente</span><span class="fc" id="fec-pend">0</span></button>
+        <button class="fb"    onclick="setF('estado','Completado')" id="fe-completado"><span>Completado</span><span class="fc" id="fec-done">0</span></button>
+      </div>
+    </div>
+    <div class="filter-bar-actions">
+      <button class="button secondary" onclick="clearFilters()">Limpiar filtros</button>
+    </div>
   </div>
 
   <section class="toolbar">
