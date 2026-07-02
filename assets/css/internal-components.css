@@ -333,6 +333,16 @@
   }
 }
 
+/* 2026-07-02 — divisor canonico del sidebar. Varias paginas no lo definian
+   o usaban .sb-div; se centraliza para que el bloque "Para sellers" del
+   sidebar canonico se separe igual en las 13 paginas. Las paginas que ya
+   definen .sb-divider inline lo sobreescriben por orden de carga. */
+.sb-divider {
+  height: 1px;
+  background: var(--line, var(--bdr, #e5e7eb));
+  margin: 8px 16px 18px;
+}
+
 /* Etapa 27A: foundation visual enterprise. */
 :where(.sidebar) {
   box-shadow: none;
