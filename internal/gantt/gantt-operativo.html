@@ -588,29 +588,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 }
 @media(max-width:860px){
   .shell{grid-template-columns:minmax(0,1fr)}
-  .sidebar{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
-    position:static;
-    height:auto;
-    max-height:none;
-    overflow:visible;
-    padding:12px;
-    border-right:0;
-    border-bottom:1px solid var(--bdr);
-  }
-  .sb-s,.sb-section{
-    margin:0;
-    padding:0;
-  }
-  .sb-div{
-    display:none;
-  }
-  .sb-note{
-    grid-column:1 / -1;
-    margin:0;
-  }
+  .sidebar{display:none}
   .fb{
     min-height:30px;
   }
@@ -1085,7 +1063,7 @@ html,body{height:100%;overflow:hidden}
 <div class="shell">
 
 <!-- ══ SIDEBAR ══ -->
-<aside class="sidebar" data-portal-nav>
+<aside class="sidebar portal-sidebar" data-portal-nav>
   <div class="sb-section">
     <a class="nav" href="../../index.html">Inicio</a>
   </div>

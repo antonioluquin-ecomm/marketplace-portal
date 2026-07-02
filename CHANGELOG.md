@@ -1,5 +1,88 @@
 # Changelog
 
+## 2026-07-02 - Etapa 6 QA final de sidebars internos
+
+Tipo de cambio: QA / documentacion.
+
+Estado: implementado.
+
+Resultado:
+- Se valido el patron de sidebar en Backlog, Gantt, Dashboard Seller Center, Modelo y Estrategia, Config. Tarifas y el menu embebido del Simulador Economico.
+- El alcance mantiene `maqueta-seller-center.html` fuera de la migracion por decision de proyecto.
+
+Validacion:
+- Preview local en 12 paginas internas: active state `rgb(232, 240, 251)`, links sin subrayado, labels 11px/700, secciones `0px 10px`, links `8px 14px` y drawer mobile oculto con boton visible.
+- 11 paginas usan `portal-sidebar` con ancho 224/226px; `simulador-economico.html` queda como excepcion de layout con menu embebido en `.col-inputs` (316px desktop) pero estilos de navegacion alineados.
+- Mobile 390px: los sidebars/menus quedan fuera de flujo (`display:none`). Persisten overflows de contenido no originados en sidebar en `gantt-seller-center.html` (403px), `modelo-economico.html` (584px), `governance.html` (571px) y `simulador-economico.html` (418px).
+- Sin errores de consola en el barrido completo. `node --check assets/js/internal-navigation.js` y `git diff --check` sin errores.
+## 2026-07-02 - Etapa 5 sidebar en Simuladores
+
+Tipo de cambio: CSS compartido / migracion opt-in / navegacion mobile.
+
+Estado: implementado.
+
+Resultado:
+- `internal/simuladores/config-tarifas.html`: el sidebar dedicado migra a `<aside class="nav-sidebar portal-sidebar" data-portal-nav>` y toma el patron compartido de labels, links, active state, padding y drawer mobile.
+- `internal/simuladores/simulador-economico.html`: el menu embebido en `.col-inputs` alinea espaciados, labels, links, divisor y active state con el patron del portal; ademas suma `data-portal-nav`, boton mobile y backdrop para comportarse como drawer en mobile sin cambiar el layout de tres columnas en desktop.
+- `assets/css/internal-components.css`: el patron `.portal-sidebar` aumenta especificidad en sus descendientes para imponerse tambien sobre reglas locales tipo `.nav-sidebar .nav`.
+
+Validacion:
+- Preview local en los 2 simuladores: labels 11px/700, secciones `0px 10px`, links `8px 14px`, sin subrayado y active state `rgb(232, 240, 251)`.
+- Mobile 390px: ambos menus con `display:none` y boton de navegacion visible; `config-tarifas.html` sin overflow de sidebar. `simulador-economico.html` conserva overflow horizontal de contenido (`418px`) no originado en el menu.
+- Sin errores de consola en las paginas validadas.
+## 2026-07-02 - Etapa 4 sidebar en Modelo y Estrategia
+
+Tipo de cambio: CSS compartido / migracion opt-in / robustez JS.
+
+Estado: implementado.
+
+Resultado:
+- `internal/estrategia/proyecto-marketplace.html`, `modelo-integracion.html`, `modelo-economico.html`, `governance.html` y `proceso-onboarding.html`: los sidebars migran a `<aside class="sidebar portal-sidebar" data-portal-nav>`.
+- `assets/js/internal-navigation.js`: el scroll-spy compartido ahora ignora links que no son anchors internos y resuelve secciones con `getElementById`, evitando errores cuando una pagina le pasa links globales del sidebar.
+
+Validacion:
+- Preview local en las 5 paginas de Estrategia: sidebar 224px, padding `16px 0px 40px`, secciones `0px 10px`, labels de 11px en flex, links sin subrayado y active state `rgb(232, 240, 251)`.
+- Mobile 390px: los sidebars quedan ocultos (`display:none`) y el boton de navegacion visible. `modelo-economico.html` y `governance.html` conservan overflow horizontal de contenido, no originado en el sidebar.
+- `node --check assets/js/internal-navigation.js` sin errores.
+## 2026-07-02 - Etapa 3 sidebar en paginas con CSS externo
+
+Tipo de cambio: CSS compartido / migracion opt-in.
+
+Estado: implementado.
+
+Resultado:
+- `internal/backlog/backlog-sellers.html`, `internal/backlog/gestion-sellers.html`, `internal/gantt/gantt-operativo.html`, `internal/gantt/gantt-seller-center.html` e `internal/seller-center/index.html`: los sidebars migran a `<aside class="sidebar portal-sidebar" data-portal-nav>`.
+- `assets/css/internal-components.css`: el patron compartido aumenta especificidad para imponerse sobre reglas locales de `.sidebar` sin cambiar contenido, orden ni links del menu.
+
+Validacion:
+- Preview local en las 5 paginas migradas: sidebar 224/226px, padding `16px 0px 40px`, secciones `0px 10px`, labels en flex, links sin subrayado y active state `rgb(232, 240, 251)`.
+- Mobile 390px: los sidebars quedan ocultos (`display:none`) y el boton de navegacion visible. `gantt-seller-center.html` conserva un overflow horizontal de contenido (`403px`) no originado en el sidebar.
+- Sin errores de consola en las paginas validadas.
+## 2026-07-02 - Etapa 2 sidebar canonico opt-in
+
+Tipo de cambio: CSS compartido / base de migracion.
+
+Estado: implementado.
+
+Resultado:
+- `assets/css/internal-components.css`: agregado el patron `.portal-sidebar` para centralizar ancho, fondo, padding, labels, links, active state, scrollbar y divisor del sidebar interno.
+- El patron es opt-in: se aplicara en etapas posteriores como `<aside class="sidebar portal-sidebar" data-portal-nav>`, sin afectar paginas existentes hasta migrarlas explicitamente.
+
+Validacion:
+- Revision estatica: ninguna pagina HTML usa todavia `.portal-sidebar`; el cambio queda pasivo hasta la migracion por familias.
+## 2026-07-02 - Etapa 1 sidebar Gantt
+
+Tipo de cambio: CSS / sidebar compartido.
+
+Estado: implementado.
+
+Resultado:
+- `assets/css/pages/gantt.css`: el sidebar de la familia Gantt alinea padding, labels, active state, scrollbar y decoracion de links con el patron usado en Backlog.
+- `internal/gantt/gantt-operativo.html`: se elimina el viejo sidebar mobile en grilla para que use el drawer compartido con `data-portal-nav`.
+
+Validacion:
+- Preview local en Gantt Operativo y Gantt Seller Center: links del sidebar sin subrayado, active state `rgb(232, 240, 251)`, padding de seccion `0px 10px`, sidebar 224/226px y sin errores de consola.
+- Mobile 390px: ambos sidebars quedan ocultos y el boton de navegacion visible. Gantt Operativo queda sin overflow horizontal; Gantt Seller Center conserva overflow de contenido de pagina (`403px`) no originado en el sidebar.
 ## 2026-07-02 - Backlog de Sellers: ajustes visuales
 
 Tipo de cambio: CSS / layout visual.

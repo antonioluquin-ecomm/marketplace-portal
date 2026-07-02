@@ -4,7 +4,7 @@
  *
  * Alcance:
  * - Solo clases de componentes informativos ya existentes.
- * - No define layout global, topbar, sidebar, responsive critico ni JS.
+ * - No define layout global por defecto; solo patrones opt-in como .portal-sidebar.
  * - Debe cargarse antes del CSS inline de la pagina piloto.
  */
 
@@ -288,6 +288,75 @@
   border: 1px solid var(--g-brd);
 }
 
+
+/* 2026-07-02 - sidebar canonico opt-in para paginas internas.
+   Usar en etapas de migracion como <aside class="sidebar portal-sidebar" data-portal-nav>.
+   La clase tiene mayor especificidad que las reglas locales .nav/.sb-label, pero no afecta
+   paginas existentes hasta que se agregue explicitamente. */
+.portal-sidebar.portal-sidebar {
+  position: sticky;
+  top: var(--topbar-height, var(--tb, 50px));
+  height: calc(100vh - var(--topbar-height, var(--tb, 50px)));
+  overflow-y: auto;
+  background: var(--sidebar-bg, var(--k2, #f1f5f9));
+  border-right: 1px solid var(--sidebar-line, var(--line, var(--bdr, #e5e7eb)));
+  padding: 16px 0 40px;
+}
+.portal-sidebar.portal-sidebar::-webkit-scrollbar { width: 3px; }
+.portal-sidebar.portal-sidebar::-webkit-scrollbar-thumb {
+  background: var(--line, var(--bdr, #e5e7eb));
+  border-radius: 99px;
+}
+.portal-sidebar.portal-sidebar .sb-section {
+  padding: 0 10px;
+  margin-bottom: 16px;
+}
+.portal-sidebar.portal-sidebar .sb-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  margin-bottom: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted, var(--t4, #9aa3b2));
+}
+.portal-sidebar.portal-sidebar .sb-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line, var(--bdr, #e5e7eb));
+}
+.portal-sidebar.portal-sidebar .nav {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 14px;
+  border-left: 3px solid transparent;
+  color: var(--muted, var(--t2, #6b7280));
+  font-size: 12.5px;
+  text-decoration: none;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.portal-sidebar.portal-sidebar .nav:hover,
+.portal-sidebar.portal-sidebar .nav.active {
+  background: color-mix(in srgb, var(--text, #111827) 4%, transparent);
+  color: var(--text, var(--t1, #111827));
+  border-left-color: var(--primary, var(--g, #1a3f6b));
+}
+.portal-sidebar.portal-sidebar .nav.active {
+  background: var(--primary-soft, var(--g-dim, #e8f0fb));
+  color: var(--primary, var(--g, #1a3f6b));
+  font-weight: 700;
+}
+.portal-sidebar.portal-sidebar .sb-divider {
+  height: 1px;
+  background: var(--line, var(--bdr, #e5e7eb));
+  margin: 8px 16px 18px;
+}
 /* 2026-07-02 — toggle de navegacion mobile. El sidebar/nav de cada pagina
    se oculta por completo bajo ~900-960px; sin esto no hay forma de moverse
    entre modulos desde el celular salvo volver al Hub. Generico via

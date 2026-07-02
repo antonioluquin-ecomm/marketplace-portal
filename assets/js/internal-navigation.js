@@ -11,14 +11,18 @@
     var linkSelector = opts.linkSelector || '.nav[href^="#"]';
     var activeClass = opts.activeClass || 'active';
     var offset = typeof opts.offset === 'number' ? opts.offset : 120;
-    var links = Array.prototype.slice.call(document.querySelectorAll(linkSelector));
+    var links = Array.prototype.slice.call(document.querySelectorAll(linkSelector))
+      .filter(function (link) {
+        var href = link.getAttribute('href') || '';
+        return href.charAt(0) === '#' && href.length > 1;
+      });
 
     if (!links.length) return;
 
     var sections = links
       .map(function (link) {
         var href = link.getAttribute('href');
-        return href ? document.querySelector(href) : null;
+        return href ? document.getElementById(href.slice(1)) : null;
       })
       .filter(Boolean);
 
