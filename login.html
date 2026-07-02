@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ingresar — Marketplace Portal</title>
+<script src="assets/js/theme.js"></script>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px;
+    background: var(--bg); color: var(--text);
+  }
+  .login-wrap { width: 100%; max-width: 380px; }
+
+  .login-header  { text-align: center; margin-bottom: 24px; }
+  .login-logo-icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    border-radius: var(--radius-lg);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -.5px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent);
+  }
+  .login-app-name { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -.3px; }
+  .login-app-sub  { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+  .login-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow);
+    padding: 28px;
+  }
+
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block; font-size: 13px; font-weight: 500;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%; padding: 9px 12px; font-size: 14px; font-family: inherit;
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    outline: none; transition: border-color .15s, box-shadow .15s;
+    color: var(--text); background: var(--bg);
+    box-sizing: border-box;
+  }
+  .field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+  }
+
+  .btn-login {
+    width: 100%; padding: 10px; font-family: inherit;
+    font-size: 14px; font-weight: 600; border: none;
+    background: var(--primary); color: #fff;
+    border-radius: var(--radius-sm); cursor: pointer; transition: background .15s; margin-top: 4px;
+  }
+  .btn-login:hover:not(:disabled) { background: var(--primary-hover); }
+  .btn-login:disabled { opacity: .6; cursor: default; }
+
+  .alert-err {
+    margin-top: 14px; padding: 10px 14px;
+    background: var(--danger-bg);
+    border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+    border-radius: var(--radius-sm);
+    color: var(--danger); font-size: 13px;
+  }
+
+  .login-footer {
+    text-align: center; margin-top: 20px;
+    font-size: 12px; color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-header">
+      <div class="login-logo-icon">MP</div>
+      <div class="login-app-name">Marketplace Portal</div>
+      <div class="login-app-sub">Sporting Marketplace · Uso interno</div>
+    </div>
+    <div class="login-card">
+      <form id="loginForm" autocomplete="on">
+        <div class="field">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email" name="email"
+                 placeholder="usuario@empresa.com" autocomplete="email" autofocus />
+        </div>
+        <div class="field">
+          <label for="login-pwd">Contraseña</label>
+          <input type="password" id="login-pwd" name="password"
+                 placeholder="••••••••" autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn-login" id="btn-login">Ingresar</button>
+      </form>
+      <div class="alert-err" id="login-err" hidden></div>
+    </div>
+    <div class="login-footer">Herramienta interna — acceso restringido</div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script>
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Redirigir si ya hay sesión válida
+    (function () {
+      try {
+        const d = JSON.parse(localStorage.getItem('mp_session') || 'null');
+        if (d && d.expira_en && new Date(d.expira_en) > new Date()) {
+          window.location.href = 'index.html';
+        }
+      } catch (_) {}
+    })();
+
+    const form  = document.getElementById('loginForm');
+    const errEl = document.getElementById('login-err');
+    const btn   = document.getElementById('btn-login');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email    = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-pwd').value;
+      errEl.hidden = true;
+
+      if (!email || !password) {
+        errEl.textContent = 'Completá los dos campos.';
+        errEl.hidden = false;
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = 'Verificando…';
+
+      try {
+        const apiUrl = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
+        if (!apiUrl) throw new Error('No hay URL de API configurada.');
+        const password_hash = await sha256(password);
+        const res = await fetch(apiUrl, {
+          method: 'POST',
+          body:   JSON.stringify({ action: 'login', email, password_hash }),
+        });
+        if (!res.ok) throw new Error('Error de conexión (' + res.status + ').');
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'Credenciales incorrectas.');
+
+        localStorage.setItem('mp_session', JSON.stringify({
+          session_token: json.session_token,
+          usuario:       json.usuario,
+          permisos:      json.permisos,
+          expira_en:     json.expira_en,
+        }));
+        window.location.href = 'index.html';
+      } catch (err) {
+        errEl.textContent = err.message || 'Error al iniciar sesión. Verificá tu conexión.';
+        errEl.hidden = false;
+      } finally {
+        btn.disabled    = false;
+        btn.textContent = 'Ingresar';
+      }
+    });
+  </script>
+</body>
+</html>

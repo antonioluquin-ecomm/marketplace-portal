@@ -26,6 +26,11 @@ function doPost(e) {
     const raw = e && e.postData ? e.postData.contents : "";
     const data = JSON.parse(raw || "{}");
 
+    // ── Rutas de autenticación (Auth.gs) — nuevas, no pisan tipo_formulario ──
+    if (data.action) {
+      return jsonResponse(routeAuthAction(data));
+    }
+
     const tipoFormulario = normalizarTipoFormulario(data.tipo_formulario);
 
     if (tipoFormulario === "relevamiento_profile_save") {

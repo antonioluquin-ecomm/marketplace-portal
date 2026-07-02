@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usuarios y roles | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/internal-components.css">
+  <script src="../../assets/js/theme.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font);font-size:15px;line-height:1.65;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    button{font-family:inherit}
+
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--topbar-height);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--primary-mid);backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{font-weight:900;text-transform:uppercase;letter-spacing:.04em;font-size:20px;color:var(--text)}
+    .logo span{color:var(--primary)}
+    .crumb{border-left:1px solid var(--line);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .top-actions{display:flex;align-items:center;gap:10px}
+
+    .shell{display:grid;grid-template-columns:var(--sidebar-w) 1fr;min-height:100vh;padding-top:var(--topbar-height)}
+    .main{padding:30px 34px 70px;max-width:900px}
+    .page-eyebrow{font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+    h1{font-size:28px;font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:8px}
+    .lead{max-width:640px;font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:26px}
+
+    .cfg-tab{padding:8px 14px;font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);color:var(--muted);cursor:pointer}
+    .cfg-tab.active{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-mid)}
+    .btn{padding:8px 14px;font-size:13px;font-weight:600;border:none;border-radius:var(--radius-sm);background:var(--primary);color:#fff;cursor:pointer}
+    .btn:hover{background:var(--primary-hover)}
+
+    @media(max-width:960px){.shell{grid-template-columns:1fr}.main{padding:24px 18px 60px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <a class="logo" href="../../index.html" title="Volver al Portal">SPORTING <span>MARKETPLACE</span></a>
+      <div class="crumb">ADMINISTRACIÓN</div>
+    </div>
+    <div class="top-actions">
+      <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
+      <a class="button secondary" href="../../index.html">← Hub</a>
+    </div>
+  </header>
+  <div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
+  <div class="shell">
+    <aside class="sidebar portal-sidebar" data-portal-nav>
+      <div class="sb-section">
+        <div class="sb-label">Administración</div>
+        <a class="nav active" href="usuarios.html">Usuarios y roles</a>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="page-eyebrow">Administración</div>
+      <h1>Usuarios y roles</h1>
+      <p class="lead">Gestión de acceso al equipo interno del Marketplace Portal. Solo visible para usuarios con rol Administrador.</p>
+      <div id="cfg-tabs-host"></div>
+      <div id="no-admin-msg" class="callout" hidden>No tenés permisos de Administrador para ver esta sección.</div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script>
+    initAuth().then(function () {
+      if (!SESSION.isAdmin()) {
+        document.getElementById('cfg-tabs-host').hidden = true;
+        document.getElementById('no-admin-msg').hidden = false;
+        return;
+      }
+      renderUserManagementSection();
+    });
+  </script>
+</body>
+</html>

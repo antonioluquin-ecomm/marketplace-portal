@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-07-02 - Etapa 1: Login y gestión de usuarios (RBAC) para internal/
+
+Tipo de cambio: feature.
+
+Estado: implementado (requiere setup manual en Apps Script antes de usarse).
+
+Resultado:
+- Nuevo `login.html` en la raíz, siguiendo el estándar del ecosistema (`project-standards/login_standard.md`).
+- Nuevo `assets/js/auth.js`: sesión en `localStorage` (`mp_session`, TTL 8h), `initAuth()` protege `index.html` y las 13 páginas de `internal/` (incluida `maqueta-seller-center.html`), chip de usuario + dropdown (cambiar contraseña, cerrar sesión) inyectado en el sidebar (`[data-portal-nav]`).
+- Nuevo `internal/administracion/usuarios.html`: gestión de usuarios y roles, visible solo para Administrador (`id_rol=1`), accesible desde el dropdown de usuario.
+- Nuevo `integrations/apps-script/Auth.gs`: login/logout/validación de sesión/cambio de contraseña, CRUD de usuarios/roles/permisos, hashing SHA-256 con salt. Hojas nuevas: `USUARIOS`, `ROLES`, `PERMISOS_MODULOS`, `SESIONES`.
+- `Apps_script_v5.js`: `doPost` delega a `routeAuthAction()` cuando el body trae `action` (en vez de `tipo_formulario`) — el router de negocio existente no cambia.
+- `public/` no se modifica: sigue sin login, acceso por `seller_id` en la URL.
+- Solo existe el rol de sistema Administrador por ahora; el modelo de roles personalizados queda listo en la UI para etapas futuras (usuarios Seller, portal filtrado por seller_id, etc.).
+
+Setup manual requerido (una sola vez):
+1. Pegar `Auth.gs` y el `Apps_script_v5.js` actualizado en el editor de Apps Script (archivos separados, mismo proyecto).
+2. Ejecutar `setupAuthSheets()` desde el editor — crea las 4 hojas.
+3. Crear el primer Administrador con una función wrapper, ej. `function _crearAdmin(){ crearPrimerAdmin('email@empresa.com','Nombre Apellido','contraseñaTemporal'); }`, y ejecutarla desde el dropdown de funciones.
+4. Redeploy (nueva versión) del Apps Script.
+
 ## 2026-07-02 - Etapa 6 QA final de sidebars internos
 
 Tipo de cambio: QA / documentacion.
