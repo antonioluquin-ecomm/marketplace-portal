@@ -75,46 +75,31 @@ function _hubPath() {
  *   módulo asociado (Hub, administración).
  */
 async function initAuth(pageModule) {
-  const apiUrl = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
-
-  // Verificar si el sistema de usuarios está configurado en el Sheet
-  try {
-    const res = await fetch(apiUrl, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'checkSetup' }),
-    });
-    if (res.ok) {
-      const json = await res.json();
-      if (!json.usuarios_configured) {
-        window.location.href = _loginPath();
-        return;
-      }
-    }
-  } catch (e) {
-    // Sin conexión: fail-closed → caer al login
-  }
-
-  if (SESSION.isLoggedIn()) {
-    try {
-      const fresh = await _apiAuthPost({ action: 'validateSession' });
-      if (fresh && fresh.permisos) {
-        const cur = SESSION.data;
-        if (cur) SESSION.data = Object.assign({}, cur, { permisos: fresh.permisos });
-      }
-    } catch (e) { /* sin conexión o sesión expirada: logoutUser() ya fue llamado */ }
-
-    if (!SESSION.isLoggedIn()) { window.location.href = _loginPath(); return; }
-
-    if (pageModule && !SESSION.isAdmin() && !SESSION.canView(pageModule)) {
-      window.location.href = _hubPath() + '?acceso_denegado=' + encodeURIComponent(pageModule);
-      return;
-    }
-
-    _applySession();
+  // Etapa 7 — un solo round-trip por carga de página. Antes se hacía
+  // checkSetup + validateSession secuenciales; checkSetup era redundante —
+  // sin sesión local se va al login igual (0 llamadas), y con sesión válida
+  // el sistema de usuarios está configurado por definición (1 llamada).
+  if (!SESSION.isLoggedIn()) {
+    window.location.href = _loginPath();
     return;
   }
 
-  window.location.href = _loginPath();
+  try {
+    const fresh = await _apiAuthPost({ action: 'validateSession' });
+    if (fresh && fresh.permisos) {
+      const cur = SESSION.data;
+      if (cur) SESSION.data = Object.assign({}, cur, { permisos: fresh.permisos });
+    }
+  } catch (e) { /* sin conexión o sesión expirada: logoutUser() ya fue llamado */ }
+
+  if (!SESSION.isLoggedIn()) { window.location.href = _loginPath(); return; }
+
+  if (pageModule && !SESSION.isAdmin() && !SESSION.canView(pageModule)) {
+    window.location.href = _hubPath() + '?acceso_denegado=' + encodeURIComponent(pageModule);
+    return;
+  }
+
+  _applySession();
 }
 
 function _applySession() {

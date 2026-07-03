@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-02 - Etapa 7: Deuda de escala (cierra el roadmap post-auditoría)
+
+Tipo de cambio: performance / mantenibilidad.
+
+Estado: implementado y verificado en preview. Requiere redeploy de Apps Script (cambios en Auth.gs y auth.js — auth.js es frontend, no necesita redeploy; Auth.gs sí).
+
+Resultado (2 deudas de escala detectadas en la auditoría):
+- **`SESIONES` crecía sin límite + escaneo O(n) por request**: cada login agregaba una fila y el logout solo la marcaba `activa=NO`; `_validateSessionToken` escanea la hoja completa en cada llamada autenticada, así que sin purga se degradaba con el tiempo. Nueva `limpiarSesionesVencidas()` (`Auth.gs`) reescribe la hoja conservando solo sesiones activas y no vencidas (con `LockService` para evitar corrupción concurrente, y solo reescribe si hay algo para eliminar). Se llama al inicio de `login()`; también sirve standalone para un trigger time-driven opcional.
+- **Doble round-trip por carga de página**: cada página interna bloqueaba el render con `checkSetup` + `validateSession` secuenciales. `initAuth()` (`auth.js`) ahora hace **un solo POST**: sin sesión local va directo al login (0 llamadas), con sesión válida solo revalida (1 llamada). `checkSetup` era redundante — una sesión válida implica que el sistema está configurado. El endpoint `checkSetup` se mantiene en el backend como health-check, pero ya no lo llama ningún frontend. `auth-seller.js` ya era de un solo round-trip; quedó consistente.
+
+Verificado en preview: logueado = 1 POST (`validateSession`), deslogueado = 0 POSTs + redirect inmediato al login. Sin regresiones en el gate.
+
+**Con esto se cierra todo el roadmap post-auditoría (Etapas 5, 6, 7).** El sistema de auth queda: correcto (Etapa 5), con aislamiento de datos real (Etapa 6), y sin la deuda de escala que degradaba con el tiempo (Etapa 7).
+
 ## 2026-07-02 - Etapa 6d: Aislamiento de datos real — dataset `relevamientos` (hallazgo post-6c)
 
 Tipo de cambio: hardening de seguridad (arquitectura).

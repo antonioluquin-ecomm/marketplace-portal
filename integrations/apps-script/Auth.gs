@@ -453,6 +453,54 @@ function _validateSessionToken(session_token) {
   return { ok: false, error: "Sesión no encontrada" };
 }
 
+/**
+ * Etapa 7 — purga de la hoja SESIONES para acotar su crecimiento. Cada login
+ * agrega una fila y el logout solo marca activa=NO; sin esto la hoja crece sin
+ * límite y _validateSessionToken la escanea completa en cada request.
+ * Conserva solo las sesiones activas y no vencidas. Se llama al inicio de
+ * login() (solo reescribe si hay algo para eliminar) y también sirve como
+ * función standalone para un trigger time-driven opcional.
+ * Devuelve la cantidad de filas eliminadas.
+ */
+function limpiarSesionesVencidas() {
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return 0; // oportunista: si otro proceso escribe, se salta
+  try {
+    var ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
+    var sheet = ss.getSheetByName("SESIONES");
+    if (!sheet) return 0;
+
+    var data = sheet.getDataRange().getValues();
+    if (data.length <= 1) return 0;
+
+    var h      = data[0];
+    var expIdx = h.indexOf("expira_en");
+    var actIdx = h.indexOf("activa");
+    var ahora  = new Date();
+
+    var conservar = [h];
+    for (var i = 1; i < data.length; i++) {
+      var activa  = data[i][actIdx] === "SI";
+      var vigente = expIdx !== -1 && data[i][expIdx] && new Date(data[i][expIdx]) >= ahora;
+      if (activa && vigente) conservar.push(data[i]);
+    }
+
+    var eliminadas = data.length - conservar.length;
+    if (eliminadas <= 0) return 0;
+
+    // Reescribe en el lugar las filas a conservar y limpia la cola sobrante,
+    // evitando una ventana con la hoja totalmente vacía.
+    var lastRowOld = sheet.getLastRow();
+    sheet.getRange(1, 1, conservar.length, h.length).setValues(conservar);
+    if (lastRowOld > conservar.length) {
+      sheet.getRange(conservar.length + 1, 1, lastRowOld - conservar.length, h.length).clearContent();
+    }
+    return eliminadas;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 // ── LOGIN ─────────────────────────────────────────────────────
 
 function login(body) {
@@ -521,6 +569,9 @@ function login(body) {
   var sessionToken = Utilities.getUuid();
   var expiraEn     = new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString();
   var ahoraIso     = new Date().toISOString();
+
+  // Purga sesiones vencidas/inactivas antes de crear la nueva (acota SESIONES).
+  limpiarSesionesVencidas();
 
   var sesSheet = ss.getSheetByName("SESIONES");
   if (sesSheet) {
