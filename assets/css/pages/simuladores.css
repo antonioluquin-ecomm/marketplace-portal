@@ -395,3 +395,178 @@
     min-width:0;
   }
 }
+
+/* Ajuste final simulador economico: parametros compactos fuera del sidebar. */
+.col-results,
+.col-inputs > .col-header,
+.col-inputs > .section {
+  max-width: none;
+}
+.col-results {
+  background:#f6f8fb;
+}
+.col-inputs > .col-header {
+  margin:16px 24px 0;
+  padding:0 0 8px;
+}
+.col-inputs > .section {
+  margin:8px 24px 0;
+  padding:14px 16px;
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 1px 2px rgba(17,24,39,.04);
+}
+.col-inputs > .col-header + .section {
+  grid-template-columns:220px 240px minmax(0, 1fr);
+  align-items:start;
+  min-height:0;
+}
+.col-inputs > .col-header + .section + .section {
+  grid-template-columns:repeat(5, minmax(135px, 1fr));
+  align-items:end;
+}
+.col-inputs > .col-header + .section + .section + .section {
+  margin-top:24px;
+}
+.col-inputs > .section .field-label {
+  min-height:28px;
+  align-items:flex-start;
+  gap:8px;
+  line-height:1.2;
+}
+.col-inputs > .col-header + .section .field-label {
+  min-height:0;
+}
+.col-inputs > .section .field-hint {
+  white-space:normal;
+  text-align:right;
+  line-height:1.15;
+}
+.col-inputs > .section .inp,
+.col-inputs > .section .sel {
+  height:38px;
+  min-height:38px;
+  padding:8px 12px;
+  border-radius:8px;
+  background:#f8fafc;
+  border-color:#dce3eb;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.col-inputs > .section .seller-select-wrap {
+  gap:7px;
+}
+.col-inputs > .section .seller-helper {
+  max-width:220px;
+  color:var(--warning);
+}
+.col-results .tab-bar {
+  margin:18px 24px 0;
+  border-radius:10px 10px 0 0;
+}
+.col-results .results-inner {
+  padding:18px 24px 24px;
+  gap:14px;
+}
+.results-header {
+  padding-bottom:10px;
+}
+.results-seller {
+  font-size:18px;
+}
+.kpi {
+  border-radius:10px;
+  padding:14px 16px;
+}
+.kpi.primary {
+  border-radius:10px;
+  min-height:104px;
+}
+.kpi.primary .kpi-lbl {
+  color:rgba(255,255,255,.76);
+}
+.kpi.primary .kpi-sub {
+  color:rgba(255,255,255,.68);
+}
+.comp-bar-wrap,
+.breakdown,
+.disclaimer {
+  border-radius:10px;
+}
+.col-inputs > .section .svc-list {
+  grid-template-columns:repeat(3, minmax(220px, 1fr));
+  gap:0 18px;
+}
+.col-inputs > .section .svc-row {
+  min-height:46px;
+  padding:7px 0;
+}
+
+@media(max-width:1280px) {
+  .col-inputs > .col-header + .section + .section {
+    grid-template-columns:repeat(3, minmax(180px, 1fr));
+  }
+  .col-inputs > .section .svc-list {
+    grid-template-columns:repeat(2, minmax(220px, 1fr));
+  }
+}
+@media(max-width:960px) {
+  .col-inputs > .col-header,
+  .col-inputs > .section,
+  .col-results .tab-bar {
+    margin-left:16px;
+    margin-right:16px;
+    max-width:calc(100% - 32px);
+  }
+  .col-inputs > .col-header + .section,
+  .col-inputs > .col-header + .section + .section,
+  .col-inputs > .col-header + .section + .section + .section,
+  .col-inputs > .section .svc-list {
+    grid-template-columns:minmax(0, 1fr);
+  }
+  .col-inputs > .section .seller-helper {
+    max-width:none;
+  }
+}
+/* Correccion de densidad final: evitar tarjetas con aire muerto. */
+.col-inputs > .col-header + .section {
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+}
+.col-inputs > .col-header + .section + .section {
+  grid-template-columns:repeat(5, minmax(128px, 1fr));
+}
+.col-inputs > .col-header + .section .field,
+.col-inputs > .col-header + .section .seller-helper {
+  max-width:none;
+}
+.col-inputs > .section .field-label {
+  min-width:0;
+}
+.col-inputs > .section .field-label > span:first-child,
+.col-inputs > .section .field-label {
+  overflow:hidden;
+}
+@media(max-width:1180px) {
+  .col-inputs > .col-header + .section + .section {
+    grid-template-columns:repeat(3, minmax(170px, 1fr));
+  }
+}
+@media(max-width:960px) {
+  .col-inputs > .col-header + .section,
+  .col-inputs > .col-header + .section + .section,
+  .col-inputs > .col-header + .section + .section + .section,
+  .col-inputs > .section .svc-list {
+    grid-template-columns:minmax(0, 1fr);
+  }
+  .col-inputs > .col-header,
+  .col-inputs > .section,
+  .col-results .tab-bar {
+    width:auto;
+    max-width:calc(100% - 32px);
+  }
+  .col-inputs > .section .inp,
+  .col-inputs > .section .sel {
+    width:100%;
+    min-width:0;
+  }
+}
