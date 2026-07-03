@@ -413,10 +413,7 @@ tbody tr:last-child td{border-bottom:none}
 <script>
 /* ── CONFIG ── */
 const CONFIG = {
-  SELLERS_URL:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
-  RELEVAMIENTOS_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=233624428&single=true&output=csv",
-  TARIFAS_URL:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
-  OVERRIDES_URL:     "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv",
+  // RELEVAMIENTOS: eliminado en la Etapa 6d — endpoint gateado por sesión getRelevamientos.
   CALIFICACIONES_URL: "", // completar con el CSV publicado de la hoja calificaciones si se quiere cruzar la tercera fuente
   PUBLIC_BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal",
   LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/logos/",
@@ -653,9 +650,8 @@ async function loadData(force=false){
   const dot=$("status-dot"), txt=$("status-txt");
   dot.className="tb-dot loading"; txt.textContent="Cargando…";
   try{
-    const res=await fetch(CONFIG.SELLERS_URL+"&_ts="+Date.now(),{cache:"no-store"});
-    if(!res.ok)throw new Error("HTTP "+res.status);
-    const rows=parseCSV(await res.text());
+    const sellersJson=await _apiAuthPost({action:"getSellers"});
+    const rows=sellersJson.data||[];
     ALL=transform(rows);
     await mergeRelevamientos();
     await mergeCalificaciones();
@@ -671,15 +667,25 @@ async function loadData(force=false){
 }
 
 async function mergeRelevamientos(){
-  if(!CONFIG.RELEVAMIENTOS_URL)return;
   try{
-    const res=await fetch(CONFIG.RELEVAMIENTOS_URL+"&_ts="+Date.now(),{cache:"no-store"});
-    if(!res.ok)return;
-    const latest=rowsToLatestBySeller(parseCSV(await res.text()));
+    // Etapa 6d: relevamientos ya no se lee de un CSV publicado — endpoint gateado por sesión.
+    const json = await _apiAuthPost({action:"getRelevamientos"});
+    const latest=latestBySellerFromObjects(json.data||[]);
     ALL.forEach(s=>{s._rel=latest[s.seller_id]||{has:false,fecha:""}; fillSellerFromExternal(s,s._rel,"relevamiento");});
   }catch(e){
     ALL.forEach(s=>{s._rel=s._rel||{has:false,fecha:""};});
   }
+}
+
+function latestBySellerFromObjects(rows){
+  const latest={};
+  rows.forEach(obj=>{
+    const id=String(obj.seller_id||"").trim();
+    if(!id)return;
+    const fecha=String(obj.fecha_envio||"").trim();
+    if(!latest[id] || fecha > latest[id].fecha) latest[id]={...obj, has:true, fecha};
+  });
+  return latest;
 }
 
 
@@ -728,49 +734,30 @@ const fmtComision = v => Number.isFinite(v) ? (v%1===0 ? v+"%" : v.toFixed(1).re
 
 async function mergeOverrides(){
   try{
-    const [tarifasRes, overridesRes] = await Promise.all([
-      CONFIG.TARIFAS_URL   ? fetch(CONFIG.TARIFAS_URL  +"&_ts="+Date.now(),{cache:"no-store"}) : Promise.resolve(null),
-      CONFIG.OVERRIDES_URL ? fetch(CONFIG.OVERRIDES_URL+"&_ts="+Date.now(),{cache:"no-store"}) : Promise.resolve(null)
+    // Etapa 6: tarifas/overrides ya no se leen de CSVs publicados — endpoints gateados por sesión.
+    const [tarifasJson, overridesJson] = await Promise.all([
+      _apiAuthPost({action:"getTarifas"}),
+      _apiAuthPost({action:"getOverrides"})
     ]);
 
-    // Comisión base desde tarifas (formato campo / Valor vigente)
+    // Comisión base desde tarifas (formato campo / valor)
     let comisionBase = null;
-    if(tarifasRes && tarifasRes.ok){
-      const rows = parseCSV(await tarifasRes.text());
-      const hi = rows.findIndex(r=>r.some(v=>["campo","parametro"].includes(norm(v))));
-      if(hi>=0){
-        const iC = rows[hi].findIndex(v=>["campo","parametro"].includes(norm(v)));
-        const iV = rows[hi].findIndex(v=>norm(v).includes("valor"));
-        rows.slice(hi+1).forEach(r=>{
-          const campo = norm(r[iC]||"");
-          if(["comision","comision_pct","comision_default","porcentaje_comision"].includes(campo)){
-            const val = parseFloat(String(r[iV]||"").replace(",","."));
-            if(Number.isFinite(val)) comisionBase = val;
-          }
-        });
+    (tarifasJson.data||[]).forEach(row=>{
+      const campo = norm(row.campo||"");
+      if(["comision","comision_pct","comision_default","porcentaje_comision"].includes(campo)){
+        const val = parseFloat(String(row.valor||"").replace(",","."));
+        if(Number.isFinite(val)) comisionBase = val;
       }
-    }
+    });
 
-    // Overrides por seller (formato una fila por seller, columnas por campo)
+    // Overrides por seller (comisión override, si tiene)
     const overrideMap = {};
-    if(overridesRes && overridesRes.ok){
-      const rows = parseCSV(await overridesRes.text());
-      const hi = rows.findIndex(r=>r.some(v=>norm(v).includes("seller_id")));
-      if(hi>=0){
-        const headers = rows[hi];
-        const iSeller = headers.findIndex(h=>norm(h).includes("seller_id"));
-        rows.slice(hi+1).forEach(r=>{
-          const sid = norm(r[iSeller]||"");
-          if(!sid) return;
-          headers.forEach((h,i)=>{
-            const nk = norm(h);
-            if(!nk.includes("comision")||nk.includes("bon")) return;
-            const val = parseFloat(String(r[i]||"").replace(",","."));
-            if(Number.isFinite(val)&&val>0) overrideMap[sid]=val;
-          });
-        });
-      }
-    }
+    (overridesJson.data||[]).forEach(row=>{
+      const sid = norm(row.seller_id||"");
+      if(!sid) return;
+      const val = parseFloat(String(row.comision_override||"").replace(",","."));
+      if(Number.isFinite(val)&&val>0) overrideMap[sid]=val;
+    });
 
     ALL.forEach(s=>{
       const sid = norm(s.seller_id);

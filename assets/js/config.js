@@ -23,17 +23,11 @@ window.MP_CONFIG = {
     CONFIG:
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1925619599&single=true&output=csv",
 
-    SELLERS:
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
-
-    TARIFAS:
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
-
-    OVERRIDES:
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv",
-
-    TIMELINE:
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1623881837&single=true&output=csv"
+    // SELLERS, TIMELINE, TARIFAS y OVERRIDES: eliminados en la Etapa 6
+    // (auditoría de seguridad) — la lectura ahora pasa por los endpoints
+    // gateados por sesión `getSellers`/`getGantt`/`getTarifas`/`getOverrides`
+    // (integrations/apps-script/Apps_script_v5.js). Todas las pestañas
+    // sensibles ya están despublicadas en Google Sheets.
   },
 
   ASSETS: {

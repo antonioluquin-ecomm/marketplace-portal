@@ -630,15 +630,10 @@
 <script>
 /* ═══════════════════════════════════
    CONFIG
+
+   Etapa 6: sellers/tarifas/overrides ya no se leen de CSVs publicados —
+   vienen de endpoints gateados por sesión (getSellers/getTarifas/getOverrides).
 ═══════════════════════════════════ */
-const CONFIG_URL = ""; // Opcional: pegar la URL CSV publicada de la hoja config.
-
-const DIRECT_CSV_URLS = {
-  csv_sellers:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
-  csv_tarifas:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
-  csv_overrides: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv"
-};
-
 const FALLBACK_RATES = {
   comision_pct: 7,
   c1_pct: 0,    c3_pct: 8,    c6_pct: 13,    c12_pct: 21,
@@ -715,66 +710,18 @@ const pick   = (obj,keys) => {
 const initials = name => String(name||"S").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"S";
 const sel    = id => $(id).checked;
 
-/* ── CSV ── */
-async function getConfigValue(key){
-  if(CONFIG_URL && !CONFIG_URL.includes("PEGAR") && !CONFIG_URL.includes("TU_URL")){
-    try{
-      const rows = await getCSV(CONFIG_URL);
-      const row = rows.find(r => norm(pick(r,["clave","key","campo","nombre"])) === norm(key));
-      const value = row ? pick(row,["valor","url","value","link"]) : "";
-      if(value) return value;
-    }catch(e){
-      console.warn("No se pudo leer CONFIG_URL. Se usan URLs directas.", e);
-    }
-  }
-  return DIRECT_CSV_URLS[key] || "";
-}
-
 async function loadCsvSources(){
-  const sellersUrl = await getConfigValue("csv_sellers");
-  const tarifasUrl = await getConfigValue("csv_tarifas");
-  const overridesUrl = await getConfigValue("csv_overrides");
+  // Etapa 6: sellers/tarifas/overrides ya no se leen de CSVs publicados —
+  // endpoints gateados por sesión. getSellers/getOverrides ya vienen
+  // filtrados a la propia fila para una sesión Seller.
   const [sellerRows, tarifaRows, overrideRows] = await Promise.all([
-    sellersUrl ? getCSV(sellersUrl).catch(()=>[]) : Promise.resolve([]),
-    tarifasUrl ? getCSV(tarifasUrl) : Promise.resolve([]),
-    // Overrides en crudo: la pestaña tiene banner + instrucciones antes de los headers,
-    // así que la detección de encabezados se hace en parseOverrides.
-    overridesUrl ? getCSVRaw(overridesUrl).catch(()=>[]) : Promise.resolve([])
+    _apiSellerPost({ action: "getSellers" }).then(j => j.data || []).catch(()=>[]),
+    _apiSellerPost({ action: "getTarifas" }).then(j => j.data || []).catch(()=>[]),
+    _apiSellerPost({ action: "getOverrides" }).then(j => j.data || []).catch(()=>[])
   ]);
   return {sellerRows, tarifaRows, overrideRows};
 }
 
-async function getCSV(url){
-  const sep = String(url).includes("?") ? "&" : "?";
-  const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
-  if(!res.ok) throw new Error("HTTP "+res.status);
-  return parseCSV(await res.text());
-}
-async function getCSVRaw(url){
-  const sep = String(url).includes("?") ? "&" : "?";
-  const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
-  if(!res.ok) throw new Error("HTTP "+res.status);
-  return parseCSVRaw(await res.text());
-}
-function parseCSVRaw(text){
-  const rows=[]; let row=[],cur="",q=false;
-  for(let i=0;i<text.length;i++){
-    const c=text[i],n=text[i+1];
-    if(c==='"'&&q&&n==='"'){cur+='"';i++;continue}
-    if(c==='"'){q=!q;continue}
-    if(c===","&&!q){row.push(cur);cur="";continue}
-    if((c==="\n"||c==="\r")&&!q){if(c==="\r"&&n==="\n")i++;row.push(cur);cur="";if(row.some(v=>String(v).trim()!==""))rows.push(row);row=[];continue}
-    cur+=c;
-  }
-  row.push(cur);if(row.some(v=>String(v).trim()!==""))rows.push(row);
-  return rows;
-}
-function parseCSV(text){
-  const rows=parseCSVRaw(text);
-  if(!rows.length)return[];
-  const headers=rows[0].map(h=>String(h).trim());
-  return rows.slice(1).map(r=>{const obj={};headers.forEach((h,i)=>obj[h]=(r[i]??"").trim());return obj;});
-}
 function canonicalRateKey(key){
   const raw = String(key || "").trim();
   const k = raw
@@ -856,70 +803,34 @@ const OV_BON_TO_RATE = {
   bon_soporte:       "t_soporte"
 };
 
-function overrideFieldFromHeader(h){
-  const nk = String(h||"").trim().toLowerCase()
-    .normalize("NFD").replace(/[̀-ͯ]/g,"")
-    .replace(/[%$]/g,"").replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
-  if(!nk) return null;
-  if(nk.includes("seller_id")) return "_sid";
-  if(nk.includes("comision") && nk.includes("override")) return "comision_override";
-  if(nk.includes("cuotas") && nk.includes("max")) return "cuotas_max";
-  if(nk.includes("bon")){
-    if(nk.includes("dir")) return "bon_logistica_dir";
-    if(nk.includes("inv")) return "bon_logistica_inv";
-    if(nk.includes("catalog")) return "bon_catalogacion";
-    if(nk.includes("fulfil")) return "bon_fulfillment";
-    if(nk.includes("devol")) return "bon_gest_devol";
-    if(nk.includes("soporte")) return "bon_soporte";
-  }
-  return null;
-}
-
-/* La pestaña overrides es "ancha": una fila por seller, una columna por condición.
-   Recibe filas crudas (con banner e instrucciones antes de los headers).
+/* Etapa 6: overrides ya no se lee de un CSV crudo — getOverridesAction ya
+   resuelve la fila de encabezados (banner + instrucciones) server-side y,
+   para una sesión Seller, devuelve solo la propia fila con nombres de campo
+   canónicos (comision_override, bon_logistica_dir, cuotas_max, etc.).
    - Comisión override %  → reemplaza comision_pct
-   - Bon. * %             → descuento sobre la tarifa base correspondiente
-   Mantiene compatibilidad con el formato largo (seller_id / campo / valor). */
+   - Bon. * %             → descuento sobre la tarifa base correspondiente */
 function parseOverrides(rows,sellerId){
   const out={};
   const id=norm(sellerId);
   if(!id||!Array.isArray(rows)||!rows.length)return out;
 
-  const hi=rows.findIndex(r=>Array.isArray(r)&&r.some(v=>overrideFieldFromHeader(v)==="_sid"));
-  if(hi<0)return out;
-  const headers=rows[hi];
-  const iSid=headers.findIndex(v=>overrideFieldFromHeader(v)==="_sid");
+  const row=rows.find(r=>norm(r.seller_id)===id);
+  if(!row)return out;
 
-  const lower=headers.map(h=>String(h||"").trim().toLowerCase());
-  const iCampo=lower.findIndex(h=>["campo","parametro","parámetro","key","clave","concepto"].includes(h));
-  const iValor=lower.findIndex(h=>h.includes("valor")||["value","importe","monto"].includes(h));
+  const comOv=num(row.comision_override);
+  if(row.comision_override!==undefined&&row.comision_override!==""&&Number.isFinite(comOv)) out.comision_pct=comOv;
 
-  rows.slice(hi+1).forEach(r=>{
-    if(norm(r[iSid])!==id)return;
+  const cuotasMax=num(row.cuotas_max);
+  if(row.cuotas_max!==undefined&&row.cuotas_max!==""&&Number.isFinite(cuotasMax)) out.cuotas_max_default=cuotasMax;
 
-    // Formato largo: una fila por (seller, campo, valor)
-    if(iCampo>=0&&iValor>=0){
-      const key=canonicalRateKey(r[iCampo]);
-      const rawVal=String(r[iValor]??"").trim();
-      const v=num(rawVal);
-      if(key&&rawVal!==""&&Number.isFinite(v))out[key]=v;
-      return;
-    }
-
-    // Formato ancho — celda vacía = sin override (usa tarifa base)
-    headers.forEach((h,i)=>{
-      const field=overrideFieldFromHeader(h);
-      if(!field||field==="_sid")return;
-      const raw=String(r[i]??"").trim();
-      if(raw==="")return;
-      const v=num(raw);
-      if(!Number.isFinite(v))return;
-      if(field==="comision_override"){out.comision_pct=v;return}
-      if(field==="cuotas_max"){out.cuotas_max_default=v;return}
-      const baseKey=OV_BON_TO_RATE[field];
-      const base=BASE_RATES[baseKey];
-      if(baseKey&&Number.isFinite(base))out[baseKey]=Math.round(base*(1-v/100)*100)/100;
-    });
+  Object.keys(OV_BON_TO_RATE).forEach(field=>{
+    const raw=row[field];
+    if(raw===undefined||raw==="")return;
+    const v=num(raw);
+    if(!Number.isFinite(v))return;
+    const baseKey=OV_BON_TO_RATE[field];
+    const base=BASE_RATES[baseKey];
+    if(baseKey&&Number.isFinite(base))out[baseKey]=Math.round(base*(1-v/100)*100)/100;
   });
   return out;
 }

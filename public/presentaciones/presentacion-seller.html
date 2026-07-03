@@ -630,10 +630,8 @@
       return '../..';
     })();
 
+    // Etapa 6: tarifas/overrides ya no se leen de CSVs publicados — endpoints gateados por sesión.
     const CONFIG = {
-      SELLERS_URL:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv",
-      TARIFAS_URL:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv",
-      OVERRIDES_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv",
       CLASSIFICATION_URL: BASE_URL + "/public/formularios/formulario-calificacion.html"
     };
 
@@ -668,34 +666,6 @@
       return String(v||"").trim().toLowerCase()
         .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
         .replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"");
-    }
-
-    function parseCSV(text) {
-      const rows=[]; let row=[],val="",inQ=false;
-      for(let i=0;i<text.length;i++){
-        const c=text[i],n=text[i+1];
-        if(c==='"'){if(inQ&&n==='"'){val+='"';i++;}else{inQ=!inQ;}}
-        else if(c===','&&!inQ){row.push(val);val="";}
-        else if((c==='\n'||c==='\r')&&!inQ){
-          if(c==='\r'&&n==='\n')i++;
-          row.push(val);
-          if(row.some(c=>c.trim()!==""))rows.push(row);
-          row=[];val="";
-        } else val+=c;
-      }
-      row.push(val);
-      if(row.some(c=>c.trim()!==""))rows.push(row);
-      return rows;
-    }
-
-    function rowsToObjects(rows) {
-      if(!rows.length) return [];
-      const headers=rows[0].map(normalizeKey);
-      return rows.slice(1).map(row=>{
-        const obj={};
-        headers.forEach((h,i)=>{obj[h]=String(row[i]||"").trim();});
-        return obj;
-      });
     }
 
     function pick(obj,aliases) {
@@ -752,12 +722,9 @@
     }
 
     async function loadSellerFromSheet() {
-      if(!sellerId||!CONFIG.SELLERS_URL) return null;
-      const res=await fetch(CONFIG.SELLERS_URL,{cache:"no-store"});
-      if(!res.ok) throw new Error("No se pudo leer la base de sellers");
-      const sellers=rowsToObjects(parseCSV(await res.text()));
-      const target=normalizeKey(sellerId);
-      return sellers.find(s=>normalizeKey(pick(s,["seller_id","id_unico_del_seller","id_unico"]))===target)||null;
+      if(!sellerId) return null;
+      const json = await _apiSellerPost({ action: "getSellers" });
+      return (json.data || [])[0] || null;
     }
 
     const num = v => {
@@ -766,23 +733,10 @@
     };
     const fmtPct = v => Number.isFinite(v) ? (v%1===0 ? v+"%" : v.toFixed(1).replace(".",",")+"%") : null;
 
-    async function fetchRawRows(url) {
-      if (!url) return [];
-      try {
-        const sep = url.includes("?") ? "&" : "?";
-        const res = await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"});
-        if (!res.ok) return [];
-        return parseCSV(await res.text());
-      } catch(e) { return []; }
-    }
-
-    function parseRateRows(rawRows) {
-      // Busca la fila de headers que contenga "campo" (soporta filas de título arriba)
-      const hi = rawRows.findIndex(r => r.some(v => ["campo","parametro","key","clave"].includes(normalizeKey(v))));
-      if (hi < 0) return {};
-      const iC = rawRows[hi].findIndex(v => ["campo","parametro","key","clave"].includes(normalizeKey(v)));
-      const iV = rawRows[hi].findIndex(v => normalizeKey(v).includes("valor"));
-      if (iC < 0 || iV < 0) return {};
+    // Etapa 6: tarifas/overrides ya no se leen de CSVs publicados — vienen
+    // de endpoints gateados por sesión (getTarifas/getOverrides), que ya
+    // resuelven la fila de encabezados server-side.
+    function parseRateRows(rows) {
       const ALIASES = {
         comision:"comision_pct", comision_default:"comision_pct", comision_pct:"comision_pct",
         porcentaje_comision:"comision_pct",
@@ -792,9 +746,9 @@
         c12:"c12_pct", c12_pct:"c12_pct", cuota_12:"c12_pct"
       };
       const out = {};
-      rawRows.slice(hi + 1).forEach(r => {
-        const campo = normalizeKey(r[iC] || "");
-        const valor = String(r[iV] || "").trim();
+      rows.forEach(r => {
+        const campo = normalizeKey(r.campo || "");
+        const valor = String(r.valor || "").trim();
         const key = ALIASES[campo] || campo;
         const v = num(valor);
         if (key && v !== null) out[key] = v;
@@ -802,23 +756,13 @@
       return out;
     }
 
-    function parseSellerOverridesForPresentation(rawRows, sellerId) {
+    function parseSellerOverridesForPresentation(rows, sellerId) {
       const sid = normalizeKey(sellerId);
-      // Busca la fila de headers que contenga "seller_id"
-      const hi = rawRows.findIndex(r => r.some(v => normalizeKey(v).includes("seller_id")));
-      if (hi < 0) return {};
-      const headers = rawRows[hi];
-      const iSid = headers.findIndex(h => normalizeKey(h).includes("seller_id"));
       const out = {};
-      rawRows.slice(hi + 1).forEach(r => {
-        if (normalizeKey(r[iSid] || "") !== sid) return;
-        headers.forEach((h, i) => {
-          const nk = normalizeKey(h);
-          if (!nk.includes("comision") || nk.includes("bon")) return;
-          const val = num(r[i] || "");
-          if (val !== null && val > 0) out.comision_pct = val;
-        });
-      });
+      const row = rows.find(r => normalizeKey(r.seller_id || "") === sid);
+      if (!row) return out;
+      const val = num(row.comision_override || "");
+      if (val !== null && val > 0) out.comision_pct = val;
       return out;
     }
 
@@ -858,13 +802,12 @@
 
       // Valores económicos (independiente — nunca se cancela por errores de identidad)
       try {
-        const tarifaRaw = await fetchRawRows(CONFIG.TARIFAS_URL);
-        const BASE = parseRateRows(tarifaRaw);
-        const overrides = {};
-        if (sellerId && CONFIG.OVERRIDES_URL) {
-          const overrideRaw = await fetchRawRows(CONFIG.OVERRIDES_URL);
-          Object.assign(overrides, parseSellerOverridesForPresentation(overrideRaw, sellerId));
-        }
+        const [tarifasJson, overridesJson] = await Promise.all([
+          _apiSellerPost({ action: "getTarifas" }),
+          sellerId ? _apiSellerPost({ action: "getOverrides" }) : Promise.resolve({ data: [] })
+        ]);
+        const BASE = parseRateRows(tarifasJson.data || []);
+        const overrides = sellerId ? parseSellerOverridesForPresentation(overridesJson.data || [], sellerId) : {};
         applyEconomicValues({...BASE, ...overrides});
       } catch(e) { console.warn("Valores económicos:", e); }
     }

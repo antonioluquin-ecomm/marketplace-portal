@@ -1,5 +1,66 @@
 # Changelog
 
+## 2026-07-02 - Etapa 6d: Aislamiento de datos real — dataset `relevamientos` (hallazgo post-6c)
+
+Tipo de cambio: hardening de seguridad (arquitectura).
+
+Estado: implementado y verificado en preview. Requiere el mismo redeploy de Apps Script + despublicar `relevamientos` en Google Sheets.
+
+Contexto: al revisar qué pestañas seguían públicas después de cerrar sellers/timeline/tarifas/overrides, encontramos que **`relevamientos` también estaba publicada y expuesta cross-seller** — se había quedado fuera del barrido inicial porque no era una de las 4 hojas ya conocidas del audit. Es, de hecho, **más sensible que `sellers`**: contiene CUIT, contactos por separado (comercial/técnico/operaciones/admin) con nombre/email/teléfono, stack tecnológico y prácticas de catálogo/stock/precios/logística de cada seller — y `internal/backlog/backlog-sellers.html` la leía directamente como CSV público.
+
+Resultado:
+- Nuevo endpoint `getRelevamientos` (`Auth.gs` + `getRelevamientosAction`): mismo patrón — seller ve solo sus propios envíos (puede haber más de uno histórico), staff ve todos.
+- Migrado el único lector: `backlog-sellers.html` (`mergeRelevamientos()`), con un adaptador `latestBySellerFromObjects()` que agrupa por seller y se queda con el envío más reciente (antes lo hacía `rowsToLatestBySeller` sobre una matriz CSV cruda; `calificaciones` sigue usando esa función sin tocar, ya que su CSV nunca estuvo configurado).
+- `MP_CONFIG` no tenía esta URL (vivía hardcodeada en el archivo), así que no hubo que tocar `config.js`.
+
+**También pendiente:** despublicar la pestaña `config` (gid=1925619599) — no la lee ningún código del repo, quedó pública sin necesidad. Sin datos sensibles, pero sin razón para dejarla expuesta.
+
+Con esto, los 5 datasets sensibles conocidos (`sellers`, `timeline`, `tarifas`, `overrides`, `relevamientos`) quedan detrás de sesión. `sc_roadmap` se mantiene pública a propósito (roadmap interno del Seller Center, no es dato de seller).
+
+## 2026-07-02 - Etapa 6c: Aislamiento de datos real — datasets `tarifas`/`overrides` (última sub-etapa)
+
+Tipo de cambio: hardening de seguridad (arquitectura).
+
+Estado: implementado y verificado en preview. Cierra el aislamiento de datos completo (Etapa 6a+6b+6c) — requiere el mismo redeploy de Apps Script + despublicar `tarifas` y `overrides` en Google Sheets.
+
+Resultado:
+- Nuevo endpoint `getTarifas` (`Auth.gs` + `getTarifasAction`): tabla global campo/valor, sin filtro por seller (cualquier sesión autenticada recibe los mismos datos — no es información por-seller).
+- Nuevo endpoint `getOverrides` (`Auth.gs` + `getOverridesAction`): mismo patrón que `getSellers`/`getGantt` — seller ve solo su propia fila de condiciones comerciales, staff ve todas. Reutiliza `normalizarHeaderOverride`/`campoOverrideDesdeHeader`, ya usados por `actualizarOverridesSeller` para escribir, así que lectura y escritura comparten el mismo mapeo de columnas.
+- Migrados los **5 lectores**: `config-tarifas.html` y `simulador-economico.html` (staff, ven todas las condiciones), `backlog-sellers.html` (staff, solo usa la comisión para el listado), `simulador-seller.html` y `presentacion-seller.html` (seller, solo su propia condición).
+- Efecto colateral positivo: en `simulador-seller.html`, un seller ya no puede leer las condiciones comerciales de otro seller ni siquiera manipulando la URL o el CSV — el filtro es server-side.
+- Se quitó `MP_CONFIG.CSV.TARIFAS`/`CSV.OVERRIDES` de `config.js` y una cantidad significativa de código muerto de parseo CSV (parsers de matriz cruda, detección de headers por contenido, `CONFIG_URL`/`DIRECT_CSV_URLS`/`getConfigValue` en `simulador-economico.html` y `simulador-seller.html` que ya no tenían ningún llamador).
+
+**Con esto, la Etapa 6 (aislamiento de datos real) queda completa.** Los 4 datasets sensibles (`sellers`, `timeline`, `tarifas`, `overrides`) pasaron de CSVs públicos a endpoints gateados por sesión. Pendiente el mismo paso manual de siempre: redeploy de Apps Script + despublicar `tarifas` y `overrides` en Google Sheets (Archivo → Compartir → Publicar en la web → Dejar de publicar).
+
+Sigue la Etapa 7 (deuda de escala: purga de `SESIONES`, reducir el doble round-trip por carga de página).
+
+## 2026-07-02 - Etapa 6b: Aislamiento de datos real — dataset `timeline` (Gantt)
+
+Tipo de cambio: hardening de seguridad (arquitectura).
+
+Estado: implementado y verificado en preview. Requiere el mismo redeploy de Apps Script + despublicar la hoja `timeline` en Google Sheets para cerrar el hueco.
+
+Resultado:
+- Nuevo endpoint `getGantt` (`Auth.gs` + `getGanttAction` en `Apps_script_v5.js`): mismo patrón que `getSellers` — seller ve solo sus tareas, staff ve todas. Los headers de la hoja `timeline` vienen con mayúsculas/espacios ("ID Tarea", "Seller / Marca", "Depende de"), a diferencia de `sellers` que ya eran snake_case, así que el endpoint normaliza los encabezados server-side (`_normHeaderKeyGantt`, misma regla que ya usaba el frontend) antes de devolver el JSON.
+- Migrados los únicos **2 lectores** del CSV de `timeline`: `internal/gantt/gantt-operativo.html` (vía `_apiAuthPost`) y `public/gantt/gantt-seller.html` (vía `_apiSellerPost`).
+- Se quitó `MP_CONFIG.CSV.TIMELINE` de `config.js` y el código muerto de parseo CSV (`parseCSV`/`csvToObjects`) en ambos archivos.
+
+## 2026-07-02 - Etapa 6a: Aislamiento de datos real — dataset `sellers`
+
+Tipo de cambio: hardening de seguridad (arquitectura).
+
+Estado: **completo — verificado contra producción.** Redeploy hecho, hoja `sellers` despublicada, confirmado que la URL vieja del CSV ya no sirve datos (pide login de Google).
+
+Contexto: la auditoría encontró que la seguridad de `public/` era cosmética — el login gateaba el HTML, pero los datos venían de CSVs publicados públicamente. Cualquier seller logueado podía abrir devtools, tomar la URL del CSV de `sellers` y leer los datos (incluidos contactos/emails) de TODOS los sellers. Esta es la primera de las 3 hojas migradas (sellers → timeline → tarifas/overrides), empezando por la más sensible.
+
+Resultado:
+- Nuevo endpoint `getSellers` (acción de sesión, `Auth.gs` + `getSellersAction` en `Apps_script_v5.js`): si la sesión es de un Seller, devuelve solo su propia fila; si es de staff, devuelve todas. El `seller_id` se deriva del token de sesión, nunca de un parámetro (evita spoofing).
+- Migrados los **10 lectores** del CSV de `sellers` a este endpoint: 5 páginas públicas (`formulario-calificacion`, `formulario-relevamiento`, `presentacion-seller`, `simulador-seller`, `public/index.html`) vía `_apiSellerPost`, y 5 internas (`gestion-sellers`, `backlog-sellers`, `gantt-operativo`, `simulador-economico`, `config-tarifas`) vía `_apiAuthPost`.
+- Efecto colateral positivo: en `simulador-seller.html`, el selector que antes dejaba elegir cualquier seller (y ver sus tarifas/overrides) ahora solo tiene la opción del seller de la sesión, porque el endpoint ya viene filtrado.
+- Se quitó `MP_CONFIG.CSV.SELLERS` de `config.js` y todo el código muerto de parseo CSV asociado (funciones `parseCSV`/`mapRows`/`normalizeKey` que ya no se usaban en cada archivo migrado).
+
+Siguiente sub-etapa: `tarifas`/`overrides` (última del aislamiento de datos).
+
 ## 2026-07-02 - Etapa 5: Hardening de corrección (post-auditoría)
 
 Tipo de cambio: fix / hardening de seguridad.

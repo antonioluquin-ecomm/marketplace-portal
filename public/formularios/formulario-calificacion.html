@@ -817,8 +817,6 @@
     <script>
       const ENDPOINT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) ||
         "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
-      const SELLERS_CSV_URL = (window.MP_CONFIG && window.MP_CONFIG.CSV && window.MP_CONFIG.CSV.SELLERS) ||
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv";
 
       // Etapa 3: el seller_id ya no se lee de la URL — viene de la sesión
       // autenticada (mp_seller_session), gateada por initSellerAuth() arriba.
@@ -895,52 +893,6 @@
           ? `../../assets/logos/${encodeURIComponent(sellerId.toLowerCase())}.png`
           : "";
       }
-      function parseCSV(text) {
-        const rows = [];
-        let row = [],
-          cell = "",
-          q = false;
-        for (let i = 0; i < text.length; i++) {
-          const c = text[i],
-            n = text[i + 1];
-          if (c === '"') {
-            if (q && n === '"') {
-              cell += '"';
-              i++;
-            } else q = !q;
-          } else if (c === "," && !q) {
-            row.push(cell);
-            cell = "";
-          } else if ((c === "\n" || c === "\r") && !q) {
-            if (c === "\r" && n === "\n") i++;
-            row.push(cell);
-            if (row.some((v) => String(v).trim())) rows.push(row);
-            row = [];
-            cell = "";
-          } else cell += c;
-        }
-        row.push(cell);
-        if (row.some((v) => String(v).trim())) rows.push(row);
-        return rows;
-      }
-      function mapRows(matrix) {
-        const valid = matrix.filter((r) =>
-          r.some((v) => String(v || "").trim()),
-        );
-        const hi = valid.findIndex((r) =>
-          r.some((v) => norm(v).includes("seller_id")),
-        );
-        if (hi === -1) return [];
-        const headers = valid[hi].map((h) => norm(h));
-        return valid
-          .slice(hi + 1)
-          .map((r) => {
-            const o = {};
-            headers.forEach((h, i) => (o[h] = String(r[i] || "").trim()));
-            return o;
-          })
-          .filter((o) => o.seller_id);
-      }
       function readSellerName(s) {
         return (
           s.seller_nombre ||
@@ -968,17 +920,8 @@
         sellerInput.value = sellerId;
         chip.textContent = "Validando seller " + sellerId + "…";
         try {
-          const res = await fetch(SELLERS_CSV_URL + "&_ts=" + Date.now(), {
-            cache: "no-store",
-          });
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          const rows = mapRows(parseCSV(await res.text()));
-          const seller = rows.find(
-            (r) =>
-              String(r.seller_id || "")
-                .trim()
-                .toUpperCase() === sellerId.toUpperCase(),
-          );
+          const json = await _apiSellerPost({ action: "getSellers" });
+          const seller = (json.data || [])[0];
           if (!seller) {
             chip.textContent = "No se encontró el seller " + sellerId;
             chip.classList.add("err");

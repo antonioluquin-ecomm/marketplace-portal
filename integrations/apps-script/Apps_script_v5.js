@@ -829,6 +829,156 @@ function buscarFilaPorSellerId(ws, sellerId) {
 // HOJAS / HEADERS
 // ───────────────────────────────────────────────
 
+// Etapa 6 — lectura de sellers gateada por sesión (reemplaza el CSV publicado
+// de la hoja sellers, que quedará despublicado). Sellers ven solo su propia
+// fila (data._sesSellerId, inyectado por routeAuthAction en Auth.gs); staff
+// (sin seller_id en la sesión) ve todas las filas.
+function getSellersAction(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = obtenerHojaSellersConHeaders(ss);
+  const headers = obtenerHeaders(ws);
+  const lastRow = ws.getLastRow();
+  const rows = lastRow > 1 ? ws.getRange(2, 1, lastRow - 1, headers.length).getValues() : [];
+  const todos = rows.map(r => rowToObject(headers, r)).filter(o => o.seller_id);
+
+  if (data._sesSellerId) {
+    const propio = todos.find(r => String(r.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
+    return { ok: true, data: propio ? [propio] : [] };
+  }
+  return { ok: true, data: todos };
+}
+
+// Misma normalización de encabezados que usa el frontend (gantt-operativo.html,
+// función norm()) — la hoja timeline tiene headers con mayúsculas/espacios
+// ("ID Tarea", "Seller / Marca", "Depende de"...), a diferencia de sellers
+// que ya son snake_case. Sin esto, rowToObject devolvería claves como
+// "ID Tarea" en vez de "id_tarea".
+function _normHeaderKeyGantt(s) {
+  return String(s || "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+// Etapa 6 — lectura de timeline (Gantt) gateada por sesión (reemplaza el CSV
+// publicado de la hoja timeline). Sellers ven solo sus propias tareas; staff
+// (sin seller_id en la sesión) ve todas.
+function getGanttAction(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE);
+  if (!ws) return { ok: true, data: [] };
+
+  const lastCol = ws.getLastColumn();
+  const lastRow = ws.getLastRow();
+  if (lastCol === 0 || lastRow < 2) return { ok: true, data: [] };
+
+  const headers = ws.getRange(1, 1, 1, lastCol).getValues()[0].map(_normHeaderKeyGantt);
+  const rows = ws.getRange(2, 1, lastRow - 1, lastCol).getValues();
+  let todos = rows
+    .map(r => rowToObject(headers, r))
+    .filter(o => o.seller_id || o.task_id || o.id_tarea);
+
+  if (data._sesSellerId) {
+    todos = todos.filter(o => String(o.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
+  }
+  return { ok: true, data: todos };
+}
+
+// Etapa 6 — lectura de tarifas gateada por sesión (reemplaza el CSV
+// publicado). Tabla global campo/valor, no es por-seller: cualquier sesión
+// autenticada (staff o seller) recibe los mismos datos.
+function getTarifasAction() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(HOJA_TARIFAS);
+  if (!sheet) return { ok: true, data: [] };
+
+  const allValues = sheet.getDataRange().getValues();
+  const hi = allValues.findIndex(r => r.some(v => String(v).trim().toLowerCase() === "campo"));
+  if (hi < 0) return { ok: true, data: [] };
+
+  const headers = allValues[hi].map(v => String(v).trim().toLowerCase());
+  const iCampo = headers.indexOf("campo");
+  const iValor = headers.findIndex(h => h.includes("valor"));
+  if (iCampo < 0 || iValor < 0) return { ok: true, data: [] };
+
+  const todos = [];
+  allValues.slice(hi + 1).forEach(row => {
+    const campo = String(row[iCampo] || "").trim();
+    if (!campo) return;
+    todos.push({ campo: campo.toLowerCase(), valor: row[iValor] });
+  });
+  return { ok: true, data: todos };
+}
+
+// Etapa 6 — lectura de overrides por seller gateada por sesión (reemplaza el
+// CSV publicado). Reutiliza normalizarHeaderOverride/campoOverrideDesdeHeader
+// (ya usados por actualizarOverridesSeller) para ubicar la fila de
+// encabezados real, que viene después de un banner + instrucciones.
+function getOverridesAction(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(HOJA_OVERRIDES);
+  if (!sheet) return { ok: true, data: [] };
+
+  const allValues = sheet.getDataRange().getValues();
+  const hi = allValues.findIndex(r => r.some(v => normalizarHeaderOverride(v) === "seller_id"));
+  if (hi < 0) return { ok: true, data: [] };
+
+  const headers = allValues[hi];
+  const colDe = {};
+  headers.forEach((h, i) => {
+    const campo = campoOverrideDesdeHeader(h);
+    if (campo && !(campo in colDe)) colDe[campo] = i;
+  });
+  if (!("_sid" in colDe)) return { ok: true, data: [] };
+
+  const NOMBRE_CAMPO = { _sid: "seller_id", _snombre: "seller_nombre" };
+  let todos = [];
+  for (let i = hi + 1; i < allValues.length; i++) {
+    const row = allValues[i];
+    const sid = String(row[colDe._sid] || "").trim();
+    if (!sid) continue;
+    const obj = {};
+    Object.keys(colDe).forEach(campo => {
+      const key = NOMBRE_CAMPO[campo] || campo;
+      obj[key] = String(row[colDe[campo]] || "").trim();
+    });
+    todos.push(obj);
+  }
+
+  if (data._sesSellerId) {
+    const propio = todos.find(r => String(r.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
+    return { ok: true, data: propio ? [propio] : [] };
+  }
+  return { ok: true, data: todos };
+}
+
+// Etapa 6d — lectura de relevamientos gateada por sesión (reemplaza el CSV
+// publicado, que contiene datos de contacto/negocio detallados por seller:
+// CUIT, contactos comercial/técnico/ops/admin, stack tecnológico, prácticas
+// de catálogo/stock/precios/logística). Sellers ven solo sus propios envíos
+// (puede haber más de uno histórico); staff ve todos. Headers ya son
+// snake_case (HEADERS_RELEVAMIENTO), sin necesidad de normalizar.
+function getRelevamientosAction(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_RELEVAMIENTO);
+  if (!ws) return { ok: true, data: [] };
+
+  const lastCol = ws.getLastColumn();
+  const lastRow = ws.getLastRow();
+  if (lastCol === 0 || lastRow < 2) return { ok: true, data: [] };
+
+  const headers = ws.getRange(1, 1, 1, lastCol).getValues()[0];
+  const rows = ws.getRange(2, 1, lastRow - 1, lastCol).getValues();
+  let todos = rows.map(r => rowToObject(headers, r)).filter(o => o.seller_id);
+
+  if (data._sesSellerId) {
+    todos = todos.filter(o => String(o.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
+  }
+  return { ok: true, data: todos };
+}
+
 function obtenerHojaSellersConHeaders(ss) {
   let ws = ss.getSheetByName(HOJA_SELLERS);
 

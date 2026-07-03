@@ -712,26 +712,12 @@ body {
 'use strict';
 
 /* ═══════════════════════════════════════════════
-   CONFIGURACIÓN — Google Sheets como fuente de datos
+   CONFIGURACIÓN
 
-   Esta versión prioriza la hoja CONFIG como fuente central.
-   - CONFIG_URL: URL CSV publicada de la hoja "config".
-   - Desde CONFIG se leen las claves: csv_sellers, csv_tarifas y csv_overrides.
-   - Si CONFIG_URL no está cargada, usa URLs directas de respaldo.
-   - Si falla la carga remota, usa FALLBACK_RATES para no romper el simulador.
+   Etapa 6: sellers/tarifas/overrides ya no se leen de CSVs publicados —
+   vienen de endpoints gateados por sesión (getSellers/getTarifas/getOverrides).
+   Si falla la carga remota, usa FALLBACK_RATES para no romper el simulador.
 ═══════════════════════════════════════════════ */
-
-/* URL CSV publicada de la hoja CONFIG.
-   Si todavía no está publicada, podés dejarla vacía: el HTML usará las URLs directas de respaldo. */
-const CONFIG_URL = '';
-
-/* URLs directas visibles en la hoja config actual.
-   Se usan como respaldo cuando CONFIG_URL no está informada. */
-const DIRECT_CSV_URLS = {
-  csv_sellers: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
-  csv_tarifas: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv',
-  csv_overrides: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv'
-};
 
 /* Tarifas de respaldo — se usan si falla la carga remota */
 const FALLBACK_RATES = {
@@ -756,7 +742,6 @@ let BASE_RATES = { ...FALLBACK_RATES };
 let RATES = { ...FALLBACK_RATES };
 let OVERRIDES = [];
 let SELLERS = [];
-let CONFIG_CACHE = null;
 let ratesLoaded = false;
 let activeOverrideSignature = '';
 let lastRatesSource = 'fallback';
@@ -768,27 +753,21 @@ async function loadRates() {
   setRatesStatus('loading');
 
   try {
-    const sellersUrl = await getConfigValue('csv_sellers');
-    const tarifasUrl = await getConfigValue('csv_tarifas');
-    const overridesUrl = await getConfigValue('csv_overrides');
+    // Etapa 6: tarifas/overrides ya no se leen de CSVs publicados — endpoints gateados por sesión.
+    const [tarifasJson, overridesJson] = await Promise.all([
+      _apiAuthPost({ action: 'getTarifas' }),
+      _apiAuthPost({ action: 'getOverrides' })
+    ]);
 
-    if (!tarifasUrl) {
-      throw new Error('No se encontró csv_tarifas en CONFIG ni en DIRECT_CSV_URLS.');
-    }
-
-    const tarifasRes = await fetch(tarifasUrl);
-    if (!tarifasRes.ok) throw new Error('No se pudo cargar tarifas. HTTP ' + tarifasRes.status);
-
-    const tarifasText = await tarifasRes.text();
-    const parsedRates = parseRatesCSV(tarifasText);
+    const parsedRates = ratesFromJson(tarifasJson.data || []);
 
     if (Object.keys(parsedRates).length < 5) {
       throw new Error('La hoja tarifas no tiene una estructura válida de campo/valor.');
     }
 
     BASE_RATES = { ...FALLBACK_RATES, ...parsedRates };
-    SELLERS = sellersUrl ? await loadSellers(sellersUrl) : [];
-    OVERRIDES = overridesUrl ? await loadOverrides(overridesUrl) : [];
+    SELLERS = await loadSellers();
+    OVERRIDES = overridesJson.data || [];
     renderSellerOptions(SELLERS);
 
     ratesLoaded = true;
@@ -810,55 +789,25 @@ async function loadRates() {
   }
 }
 
-async function getConfigValue(key) {
-  if (CONFIG_CACHE === null) {
-    CONFIG_CACHE = {};
-
-    if (CONFIG_URL && !CONFIG_URL.includes('PEGAR_ACA') && !CONFIG_URL.includes('TU_URL')) {
-      const res = await fetch(CONFIG_URL);
-      if (!res.ok) throw new Error('No se pudo cargar CONFIG. HTTP ' + res.status);
-
-      const text = await res.text();
-      const rows = parseCSVRows(text);
-
-      rows.forEach(row => {
-        const configKey = clean(row[0]);
-        const configValue = clean(row[1]);
-        if (configKey) CONFIG_CACHE[configKey] = configValue;
-      });
-    }
-  }
-
-  return CONFIG_CACHE[key] || DIRECT_CSV_URLS[key] || null;
-}
-
-function parseRatesCSV(text) {
-  const rows = parseCSVRows(text);
+function ratesFromJson(rows) {
   const out = {};
-
-  rows.slice(1).forEach(row => {
-    const rawKey = clean(row[0]);
+  rows.forEach(row => {
+    const rawKey = clean(row.campo);
     const key = normalizeRateField(rawKey) || rawKey;
-    const value = toNumber(row[1]);
+    const value = toNumber(row.valor);
     if (key && Number.isFinite(value)) out[key] = value;
   });
-
   return out;
 }
 
-async function loadSellers(url) {
+async function loadSellers() {
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    // Etapa 6: sellers ya no se lee de un CSV publicado — endpoint gateado
+    // por sesión de staff (getSellers), devuelve todas las filas.
+    const json = await _apiAuthPost({ action: 'getSellers' });
+    const rows = json.data || [];
 
-    const text = await res.text();
-    const rows = parseCSVRows(text);
-    if (rows.length < 2) return [];
-
-    const headers = rows[0].map(h => normalizeKey(h));
-
-    return rows.slice(1)
-      .map(row => rowToObject(headers, row))
+    return rows
       .map(o => {
         const id = pickFirst(o, ['seller_id', 'id_seller', 'id', 'codigo', 'cod_seller']);
         const name = pickFirst(o, ['nombre_seller', 'seller_nombre', 'seller', 'marca', 'nombre', 'empresa', 'razon_social']);
@@ -956,37 +905,6 @@ function escapeHtml(value) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-}
-
-async function loadOverrides(url) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-
-    const text = await res.text();
-    const rows = parseCSVRows(text);
-    if (rows.length < 2) return [];
-
-    // La pestaña overrides tiene banner + fila de instrucciones antes de los headers reales
-    const hi = rows.findIndex(r => r.some(v => normalizeKey(v).includes('seller_id')));
-    if (hi < 0 || hi >= rows.length - 1) return [];
-
-    const headers = rows[hi].map(h => normalizeKey(h));
-
-    return rows.slice(hi + 1)
-      .map(row => rowToObject(headers, row))
-      .filter(o => Object.values(o).some(v => String(v || '').trim() !== ''));
-  } catch (e) {
-    console.warn('No se pudieron cargar overrides. Se continúa sin acuerdos particulares.', e);
-    return [];
-  }
-}
-
-function rowToObject(headers, row) {
-  return headers.reduce((acc, h, i) => {
-    if (h) acc[h] = clean(row[i]);
-    return acc;
-  }, {});
 }
 
 function applyOverridesForCurrentSeller(forceRender = false) {
@@ -1136,45 +1054,6 @@ function normalizeRateField(field) {
   };
 
   return aliases[key] || (Object.prototype.hasOwnProperty.call(FALLBACK_RATES, key) ? key : null);
-}
-
-function parseCSVRows(text) {
-  const rows = [];
-  let row = [];
-  let cell = '';
-  let insideQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const next = text[i + 1];
-
-    if (char === '"' && next === '"') {
-      cell += '"';
-      i++;
-    } else if (char === '"') {
-      insideQuotes = !insideQuotes;
-    } else if (char === ',' && !insideQuotes) {
-      row.push(cell);
-      cell = '';
-    } else if ((char === '\n' || char === '\r') && !insideQuotes) {
-      if (cell || row.length) {
-        row.push(cell);
-        rows.push(row);
-        row = [];
-        cell = '';
-      }
-      if (char === '\r' && next === '\n') i++;
-    } else {
-      cell += char;
-    }
-  }
-
-  if (cell || row.length) {
-    row.push(cell);
-    rows.push(row);
-  }
-
-  return rows;
 }
 
 function clean(value) {

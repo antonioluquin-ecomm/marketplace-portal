@@ -123,36 +123,6 @@
       return 'Pendiente';
     }
 
-    function parseCSV(text) {
-      const rows = []; let row = []; let cell = ''; let q = false;
-      for (let i = 0; i < text.length; i++) {
-        const c = text[i], n = text[i + 1];
-        if (c === '"') { if (q && n === '"') { cell += '"'; i++; } else q = !q; }
-        else if (c === ',' && !q) { row.push(cell); cell = ''; }
-        else if ((c === '\n' || c === '\r') && !q) { if (c === '\r' && n === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
-        else cell += c;
-      }
-      row.push(cell); if (row.length > 1 || row[0] !== '') rows.push(row);
-      return rows;
-    }
-
-    function csvToObjects(text, keyTests) {
-      const matrix = parseCSV(text);
-      const valid = matrix.filter(r => r.some(v => String(v || '').trim()));
-      const hi = valid.findIndex(r => r.some(v => keyTests.some(t => norm(v).includes(t))));
-      if (hi === -1) throw new Error('No se encontró fila de encabezados.');
-      const headers = valid[hi].map(h => norm(h));
-      const out = [];
-      for (let i = hi + 1; i < valid.length; i++) {
-        const r = valid[i];
-        if (!r.some(v => String(v || '').trim())) continue;
-        const obj = {};
-        headers.forEach((h, idx) => obj[h] = String(r[idx] || '').trim());
-        out.push(obj);
-      }
-      return out;
-    }
-
     function normalizeTasks(rows, sellerId) {
       return rows.filter(r => {
         const id = r.task_id || r.id_tarea;
@@ -211,12 +181,10 @@
     async function loadGantt() {
       const content = document.getElementById('content');
       try {
-        const url = window.MP_CONFIG.CSV.TIMELINE + '&_ts=' + Date.now();
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const text = await res.text();
-        const rows = csvToObjects(text, ['task_id', 'id_tarea', 'id tarea', 'seller_id']);
-        const tasks = normalizeTasks(rows, SellerSESSION.sellerId);
+        // Etapa 6: timeline ya no se lee de un CSV publicado — endpoint
+        // gateado por sesión (getGantt), ya viene filtrado a la propia sesión.
+        const json = await _apiSellerPost({ action: 'getGantt' });
+        const tasks = normalizeTasks(json.data || [], SellerSESSION.sellerId);
         renderTasks(tasks);
       } catch (e) {
         content.innerHTML = '<div class="err">No se pudo cargar el Gantt. Intentá de nuevo más tarde.</div>';

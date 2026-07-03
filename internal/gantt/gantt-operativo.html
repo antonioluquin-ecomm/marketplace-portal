@@ -1452,19 +1452,10 @@ html,body{height:100%;overflow:hidden}
 /* ═══════════════════════════════════════════
    CONFIG
 ═══════════════════════════════════════════ */
-// ── CONFIGURACIÓN DE SHEETS ───────────────────────────────────────────────
-// Si el Gantt no muestra datos, verificar que ambas hojas estén publicadas:
-//   Google Sheets → Archivo → Compartir → Publicar en la web → hoja → CSV
-//   SELLERS_URL : hoja "sellers"   · gid=899415596
-//   TIMELINE_URL: hoja "timeline"  · gid=1623881837
-// Las columnas esperadas en "timeline":
-//   ID Tarea · seller_id · Seller / Marca · Fase · Hito · Tarea · Responsable
-//   Depende de · Entorno · Inicio · Fin · Estado · Comentario · Ver en Gantt
-// Legacy read-only tolerado: Inicio plan / Fin plan, Inicio real / Fin real.
-// ─────────────────────────────────────────────────────────────────────────
+// ── CONFIGURACIÓN ──────────────────────────────────────────────────────────
+// Etapa 6: sellers y timeline ya no se leen de CSVs publicados — vienen de
+// los endpoints gateados por sesión getSellers/getGantt (Auth.gs).
 const CONFIG = {
-  SELLERS_URL:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv',
-  TIMELINE_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1623881837&single=true&output=csv',
   APPS_SCRIPT_URL: (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || 'https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec',
 };
 
@@ -1567,37 +1558,6 @@ function parseDate(raw) {
 
   // Fallback
   const d=new Date(s); return isNaN(d.getTime())?null:d;
-}
-
-/* ── CSV PARSER ── */
-function parseCSV(text) {
-  const rows=[];let row=[];let cell='';let q=false;
-  for(let i=0;i<text.length;i++){
-    const c=text[i],n=text[i+1];
-    if(c==='"'){if(q&&n==='"'){cell+='"';i++;}else q=!q;}
-    else if(c===','&&!q){row.push(cell);cell='';}
-    else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&n==='\n')i++;row.push(cell);rows.push(row);row=[];cell='';}
-    else cell+=c;
-  }
-  row.push(cell); if(row.length>1||row[0]!=='')rows.push(row);
-  return rows;
-}
-
-function csvToObjects(text, keyTests) {
-  const matrix=parseCSV(text);
-  const valid=matrix.filter(r=>r.some(v=>String(v||'').trim()));
-  const hi=valid.findIndex(r=>r.some(v=>keyTests.some(t=>norm(v).includes(t))));
-  if(hi===-1) throw new Error('No se encontró fila de encabezados.');
-  const headers=valid[hi].map(h=>norm(h));
-  const out=[];
-  for(let i=hi+1;i<valid.length;i++){
-    const r=valid[i];
-    if(!r.some(v=>String(v||'').trim())) continue;
-    const obj={};
-    headers.forEach((h,idx)=>obj[h]=String(r[idx]||'').trim());
-    out.push(obj);
-  }
-  return out;
 }
 
 /* ── NORMALIZE ── */
@@ -1838,16 +1798,12 @@ async function loadData(manual=false){
   $('btn-refresh').disabled=true;
   setStatus('load',manual?'Actualizando…':'Cargando…');
   try{
-    const ts='&_ts='+Date.now();
-    const [rS,rT]=await Promise.all([
-      fetch(CONFIG.SELLERS_URL+ts,{cache:'no-store'}),
-      fetch(CONFIG.TIMELINE_URL+ts,{cache:'no-store'}),
+    const [sellersJson,ganttJson]=await Promise.all([
+      _apiAuthPost({action:'getSellers'}),
+      _apiAuthPost({action:'getGantt'}),
     ]);
-    if(!rS.ok) throw new Error('Sellers: HTTP '+rS.status);
-    if(!rT.ok) throw new Error('Timeline: HTTP '+rT.status);
-    const [tS,tT]=await Promise.all([rS.text(),rT.text()]);
-    SELLERS=normalizeSellers(csvToObjects(tS,['seller_id','id_unico']));
-    TASKS=normalizeTasks(csvToObjects(tT,['task_id','id_tarea','id tarea','seller_id']));
+    SELLERS=normalizeSellers(sellersJson.data||[]);
+    TASKS=normalizeTasks(ganttJson.data||[]);
     calcProgreso();
     populateSellers();
     populateResponsables();
@@ -1857,7 +1813,7 @@ async function loadData(manual=false){
   }catch(e){
     console.error(e);
     setStatus('err','Error al cargar');
-    $('content').innerHTML=`<div class="err-box"><div class="err-title">No se pudieron cargar los datos</div><div class="err-body">Verificá que las hojas estén publicadas como CSV.<br><br><strong>Detalle:</strong> ${esc(e.message)}</div><div class="err-url">${esc(CONFIG.SELLERS_URL)}<br>${esc(CONFIG.TIMELINE_URL)}</div></div>`;
+    $('content').innerHTML=`<div class="err-box"><div class="err-title">No se pudieron cargar los datos</div><div class="err-body">Verificá tu sesión y la conexión con Apps Script.<br><br><strong>Detalle:</strong> ${esc(e.message)}</div></div>`;
   }finally{
     $('btn-refresh').disabled=false;
   }

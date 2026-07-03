@@ -204,14 +204,12 @@
     const FALLBACK_CONFIG = {
       BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal",
       APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec",
-      CSV: { SELLERS: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv" },
       ASSETS: { LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/logos/" },
       ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html" }, INTERNAL:{ BACKLOG_SELLERS:"/internal/backlog/backlog-sellers.html" } },
       toAbsoluteUrl(path){ const base=this.BASE_URL.replace(/\/$/,""); return /^https?:\/\//i.test(path)?path:base+(String(path).startsWith("/")?path:"/"+path); }
     };
     const CFG = window.MP_CONFIG || FALLBACK_CONFIG;
     const APPS_SCRIPT_URL = CFG.APPS_SCRIPT_URL || FALLBACK_CONFIG.APPS_SCRIPT_URL;
-    const SELLERS_CSV_URL = (CFG.CSV && CFG.CSV.SELLERS) || FALLBACK_CONFIG.CSV.SELLERS;
     const LOGO_BASE_URL = ((CFG.ASSETS && CFG.ASSETS.LOGO_BASE_URL) || FALLBACK_CONFIG.ASSETS.LOGO_BASE_URL).replace(/\/$/,"/");
     const ROUTE_PUBLIC = (CFG.ROUTES && CFG.ROUTES.PUBLIC) || FALLBACK_CONFIG.ROUTES.PUBLIC;
     const ROUTES = {
@@ -260,9 +258,7 @@
     function clearAlert(){ $("alertBox").classList.remove("visible"); }
     function showSuccess(msg){ $("successBox").textContent=msg; $("successBox").classList.add("visible"); }
     function toAbsolute(path){ return (CFG.toAbsoluteUrl ? CFG.toAbsoluteUrl(path) : FALLBACK_CONFIG.toAbsoluteUrl(path)); }
-    async function getCSV(url){ const sep = url.includes("?") ? "&" : "?"; const res=await fetch(url + sep + "_ts=" + Date.now(), {cache:"no-store"}); if(!res.ok) throw new Error("HTTP "+res.status); return parseCSV(await res.text()); }
-    function parseCSV(text){ const rows=[]; let row=[],cur="",q=false; for(let i=0;i<text.length;i++){ const c=text[i],n=text[i+1]; if(c==='"'&&q&&n==='"'){cur+='"';i++;continue;} if(c==='"'){q=!q;continue;} if(c===","&&!q){row.push(cur);cur="";continue;} if((c==="\n"||c==="\r")&&!q){ if(c==="\r"&&n==="\n") i++; row.push(cur); cur=""; if(row.some(v=>clean(v)!=="")) rows.push(row); row=[]; continue;} cur+=c; } row.push(cur); if(row.some(v=>clean(v)!=="")) rows.push(row); if(!rows.length) return []; const headers=rows[0].map(h=>clean(h)); return rows.slice(1).map(r=>{ const o={}; headers.forEach((h,i)=>o[h]=clean(r[i]??"")); return o; }); }
-    async function loadSellers(){ try{ setStatus("loading","Cargando sellers…"); SELLERS = SELLERS_CSV_URL ? await getCSV(SELLERS_CSV_URL) : []; SELLERS_LOADED = true; buildExistingSelect(); setStatus("ok",`${SELLERS.length} sellers cargados`); }catch(e){ console.warn(e); SELLERS=[]; SELLERS_LOADED = false; buildExistingSelect(); setStatus("err","No se pudo cargar sellers"); showAlert("No se pudo leer la hoja de sellers. Para evitar IDs duplicados, no crees un seller nuevo hasta corregir la conexión CSV."); } }
+    async function loadSellers(){ try{ setStatus("loading","Cargando sellers…"); const json = await _apiAuthPost({action:"getSellers"}); SELLERS = json.data || []; SELLERS_LOADED = true; buildExistingSelect(); setStatus("ok",`${SELLERS.length} sellers cargados`); }catch(e){ console.warn(e); SELLERS=[]; SELLERS_LOADED = false; buildExistingSelect(); setStatus("err","No se pudo cargar sellers"); showAlert("No se pudo leer la hoja de sellers. Para evitar IDs duplicados, no crees un seller nuevo hasta corregir la conexión."); } }
     function buildExistingSelect(){ const s=$("existingSeller"); const sorted=[...SELLERS].sort((a,b)=>String(valueFromRow(a,"seller_nombre")).localeCompare(String(valueFromRow(b,"seller_nombre")),"es")); s.innerHTML='<option value="">Crear nuevo seller</option>'+sorted.map(row=>{const id=valueFromRow(row,"seller_id") || row.seller_id; const name=valueFromRow(row,"seller_nombre")||id||"Seller"; const group=valueFromRow(row,"empresa_grupo"); const label = group && norm(group)!==norm(name) ? `${name} · ${group}` : name; return `<option value="${escapeHtml(id)}">${escapeHtml(label)}${id?" · "+escapeHtml(id):""}</option>`}).join(""); }
     function loadSelectedSeller(){ const id=$("existingSeller").value; if(!id){ resetForm(false); return; } const row=SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id)); if(!row){ showAlert("No se encontró el seller seleccionado."); return; } EDITING_ORIGINAL_ID=id; SELLER_FIELDS.forEach(f=>{ if($(f)) $(f).value = valueFromRow(row,f); }); if(!$("activo").value) $("activo").value="SI"; updatePreview(); clearAlert(); showToast("Seller cargado para editar"); }
     function loadSellerById(idFromUrl){

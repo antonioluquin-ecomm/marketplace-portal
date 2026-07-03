@@ -35,6 +35,11 @@ var AUTH_SESSION_ACTIONS = [
   "logout",
   "getPermisos",
   "changePassword",
+  "getSellers",
+  "getGantt",
+  "getTarifas",
+  "getOverrides",
+  "getRelevamientos",
 ];
 
 var AUTH_ADMIN_ACTIONS = [
@@ -63,9 +68,10 @@ function routeAuthAction(data) {
   if (!sesVal.ok) {
     return { ok: false, error: sesVal.error, code: 401 };
   }
-  data._sesId    = sesVal.id_usuario;
-  data._sesEmail = sesVal.email;
-  data._sesRol   = sesVal.id_rol;
+  data._sesId       = sesVal.id_usuario;
+  data._sesEmail    = sesVal.email;
+  data._sesRol      = sesVal.id_rol;
+  data._sesSellerId = sesVal.seller_id || "";
 
   if (AUTH_ADMIN_ACTIONS.indexOf(action) !== -1 && sesVal.id_rol !== 1) {
     return { ok: false, error: "Requiere Administrador", code: 403 };
@@ -87,6 +93,11 @@ function routeAuthAction(data) {
     case "createRol":        return createRol(data);
     case "updateRol":        return updateRol(data);
     case "updatePermisos":   return updatePermisos(data);
+    case "getSellers":       return getSellersAction(data);
+    case "getGantt":         return getGanttAction(data);
+    case "getTarifas":       return getTarifasAction();
+    case "getOverrides":     return getOverridesAction(data);
+    case "getRelevamientos": return getRelevamientosAction(data);
   }
 
   return { ok: false, error: "Acción no implementada: " + action, code: 400 };

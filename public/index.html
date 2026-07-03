@@ -106,43 +106,12 @@
       gantt_seller:            "📊",
     };
 
-    function parseCSVSimple(text) {
-      const rows = []; let row = []; let cell = ''; let q = false;
-      for (let i = 0; i < text.length; i++) {
-        const c = text[i], n = text[i + 1];
-        if (c === '"') { if (q && n === '"') { cell += '"'; i++; } else q = !q; }
-        else if (c === ',' && !q) { row.push(cell); cell = ''; }
-        else if ((c === '\n' || c === '\r') && !q) { if (c === '\r' && n === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
-        else cell += c;
-      }
-      row.push(cell); if (row.length > 1 || row[0] !== '') rows.push(row);
-      return rows;
-    }
-
-    function normHeader(s) {
-      return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-    }
-
-    function csvFindRow(text, sellerId) {
-      const matrix = parseCSVSimple(text).filter(r => r.some(v => String(v || '').trim()));
-      const hi = matrix.findIndex(r => r.some(v => normHeader(v) === 'seller_id'));
-      if (hi === -1) return null;
-      const headers = matrix[hi].map(normHeader);
-      for (let i = hi + 1; i < matrix.length; i++) {
-        const obj = {};
-        headers.forEach((h, idx) => obj[h] = String(matrix[i][idx] || '').trim());
-        if ((obj.seller_id || '').toUpperCase() === sellerId.toUpperCase()) return obj;
-      }
-      return null;
-    }
-
     async function loadProgressSummary() {
       const sellerId = SellerSESSION.sellerId;
 
       try {
-        const res = await fetch(window.MP_CONFIG.CSV.SELLERS + '&_ts=' + Date.now(), { cache: 'no-store' });
-        const text = await res.text();
-        const row = csvFindRow(text, sellerId);
+        const json = await _apiSellerPost({ action: 'getSellers' });
+        const row = (json.data || [])[0];
         document.getElementById('stat-pipeline').textContent = (row && row.estado_pipeline) || 'Sin iniciar';
       } catch (e) {
         document.getElementById('stat-pipeline').textContent = 'Sin datos';
