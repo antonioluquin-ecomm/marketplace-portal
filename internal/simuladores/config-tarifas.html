@@ -45,10 +45,72 @@ body {
 }
 
 .main {
-  max-width:820px;
-  margin:40px auto;
-  padding:0 24px 80px;
+  max-width:1180px;
+  margin:0 auto;
+  padding:32px 28px 96px;
   min-width:0;
+}
+
+.page-hero {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) auto;
+  gap:18px;
+  align-items:end;
+  margin-bottom:18px;
+}
+.page-kicker {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--green);
+  margin-bottom:6px;
+}
+.page-title {
+  font-size:26px;
+  line-height:1.1;
+  letter-spacing:0;
+  color:var(--text-1);
+}
+.page-copy {
+  max-width:660px;
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.55;
+  color:var(--text-3);
+}
+.summary-grid {
+  display:grid;
+  grid-template-columns:repeat(4, minmax(120px, 1fr));
+  gap:10px;
+  margin-bottom:18px;
+}
+.summary-card {
+  min-height:78px;
+  padding:13px 14px;
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(17,24,39,.035);
+}
+.summary-label {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text-3);
+}
+.summary-value {
+  margin-top:8px;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:0;
+  color:var(--text-1);
+}
+.summary-note {
+  margin-top:2px;
+  font-size:10.5px;
+  color:var(--text-3);
 }
 
 /* 2026-07-01 — sidebar de navegación del portal. Nombre propio (nav-shell/nav-sidebar)
@@ -94,7 +156,14 @@ body {
 }
 .warn-icon { font-size:15px; flex-shrink:0; margin-top:1px }
 
-.section { margin-bottom:28px }
+.section {
+  margin-bottom:14px;
+  padding:18px 20px 20px;
+  background:var(--surface-1);
+  border:1px solid var(--border);
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(17,24,39,.035);
+}
 .section-title {
   font-family:var(--font);
   font-size:11px;
@@ -109,7 +178,7 @@ body {
 
 .fields-grid {
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+  grid-template-columns:repeat(4, minmax(0, 1fr));
   gap:12px;
 }
 .field { display:flex; flex-direction:column; gap:5px }
@@ -179,9 +248,15 @@ body {
   display:flex;
   align-items:center;
   gap:12px;
-  margin-top:8px;
-  padding-top:24px;
-  border-top:1px solid var(--border);
+  margin-top:18px;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 -8px 22px rgba(17,24,39,.06);
+  position:sticky;
+  bottom:14px;
+  z-index:20;
 }
 .btn-save {
   background:var(--green);
@@ -389,6 +464,112 @@ body {
 }
 .ov-empty { font-size:12px; color:var(--text-3); padding:10px 0; text-align:center }
 .ov-loading { font-size:12px; color:var(--text-3); padding:8px 0 }
+
+/* Ajuste visual 2026-07-03: herramienta de tarifas más operativa y escaneable. */
+.secret-panel {
+  background:#fff;
+  box-shadow:0 1px 2px rgba(17,24,39,.035);
+}
+.secret-panel > span:first-child {
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:var(--warn-dim);
+  color:var(--warn-txt);
+}
+.warn-banner {
+  margin-bottom:14px;
+}
+.field input[type=number],
+.field select,
+.secret-panel input[type=password],
+.ov-notes {
+  min-height:36px;
+  background:#fff;
+  border-color:#d7e0ea;
+}
+.field input.modified,
+.ov-notes.ov-active {
+  background:#f5faf3;
+  border-color:#93b889;
+}
+.mix-sum {
+  min-height:34px;
+  display:flex;
+  align-items:center;
+}
+.mix-sum.ok {
+  background:#f5faf3;
+  border:1px solid #d7e8d1;
+}
+.ov-intro {
+  background:#f8fafc;
+}
+#ovSummary {
+  overflow:auto;
+}
+.ov-table {
+  min-width:720px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:8px;
+  border-collapse:separate;
+  border-spacing:0;
+}
+.ov-table th {
+  background:#f8fafc;
+}
+.ov-table td,
+.ov-table th {
+  padding:10px 12px;
+}
+.ov-tag {
+  border-radius:999px;
+}
+#ovForm {
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fbfcfe;
+  margin-bottom:14px;
+}
+.section:has(#ovSellerSelect) > div[style] {
+  max-width:none !important;
+  width:min(420px, 100%);
+}
+.btn-save,
+.btn-reload,
+.btn-secret {
+  min-height:34px;
+}
+@media(max-width:1200px) {
+  .summary-grid,
+  .fields-grid {
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+}
+@media(max-width:900px) {
+  .main {
+    padding:22px 16px 86px;
+  }
+  .page-hero {
+    grid-template-columns:1fr;
+  }
+  .summary-grid,
+  .fields-grid {
+    grid-template-columns:1fr;
+  }
+  .actions {
+    flex-wrap:wrap;
+  }
+  .status-txt {
+    width:100%;
+    margin-left:0;
+    text-align:left;
+  }
+}
 </style>
 <script src="../../assets/js/theme.js"></script>
 <link rel="stylesheet" href="../../assets/css/theme.css">
@@ -448,6 +629,37 @@ body {
   </div>
 </aside>
 <main class="main">
+
+  <section class="page-hero">
+    <div>
+      <div class="page-kicker">Panel comercial</div>
+      <h1 class="page-title">Configuración de tarifas</h1>
+      <p class="page-copy">Editá valores base, costos financieros, mix histórico y condiciones especiales por seller. Los cambios impactan el simulador económico y las estimaciones internas.</p>
+    </div>
+  </section>
+
+  <div class="summary-grid" aria-label="Resumen de tarifas vigentes">
+    <div class="summary-card">
+      <div class="summary-label">Comisión base</div>
+      <div class="summary-value" id="sumComision">--</div>
+      <div class="summary-note">sobre GMV</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Financiación máx.</div>
+      <div class="summary-value" id="sumFinanciacion">--</div>
+      <div class="summary-note">12 cuotas</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Mix cuotas</div>
+      <div class="summary-value" id="sumMix">--</div>
+      <div class="summary-note">debe cerrar en 100%</div>
+    </div>
+    <div class="summary-card">
+      <div class="summary-label">Overrides activos</div>
+      <div class="summary-value" id="sumOverrides">--</div>
+      <div class="summary-note">sellers con excepción</div>
+    </div>
+  </div>
 
   <div class="warn-banner">
     <span class="warn-icon">⚠</span>
@@ -719,7 +931,6 @@ function refreshSecretStatus() {
   el.textContent = has ? "✓ Clave configurada" : "Sin clave";
   el.className = "secret-status " + (has ? "ok" : "no");
 }
-const TARIFAS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=42870561&single=true&output=csv";
 
 const FIELD_MAP = {
   comision_pct:      "f_comision_pct",
@@ -759,25 +970,6 @@ const MIX_KEYS = ["mix_c1","mix_c3","mix_c6","mix_c12"];
 let ORIGINAL_VALUES = {};
 let dataLoaded = false;
 
-// ── CSV ──────────────────────────────────────────────────────────
-function parseCSV(text) {
-  const rows = [];
-  for (const line of text.split(/\r?\n/)) {
-    if (!line.trim()) continue;
-    const cells = [];
-    let cur = "", inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') { inQ = !inQ; continue; }
-      if (c === ',' && !inQ) { cells.push(cur.trim()); cur = ""; continue; }
-      cur += c;
-    }
-    cells.push(cur.trim());
-    rows.push(cells);
-  }
-  return rows;
-}
-
 function normalizeKey(v) {
   return String(v || "")
     .toLowerCase()
@@ -788,9 +980,9 @@ function normalizeKey(v) {
 }
 
 async function fetchRawRows() {
-  const res = await fetch(TARIFAS_URL + "&_ts=" + Date.now(), { cache: "no-store" });
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  return parseCSV(await res.text());
+  // Etapa 6: tarifas ya no se lee de un CSV publicado — endpoint gateado por sesión.
+  const json = await _apiAuthPost({ action: "getTarifas" });
+  return json.data || [];
 }
 
 function parseSheetNum(s) {
@@ -802,19 +994,15 @@ function parseSheetNum(s) {
 
 // ── FORM ─────────────────────────────────────────────────────────
 function populateForm(rows) {
-  const hi = rows.findIndex(r => r.some(v => normalizeKey(v) === "campo"));
-  if (hi < 0) return false;
-  const iCampo = rows[hi].findIndex(v => normalizeKey(v) === "campo");
-  const iValor = rows[hi].findIndex(v => normalizeKey(v).includes("valor"));
-  if (iCampo < 0 || iValor < 0) return false;
+  if (!rows.length) return false;
 
-  rows.slice(hi + 1).forEach(row => {
-    const campo = normalizeKey(row[iCampo] || "");
+  rows.forEach(row => {
+    const campo = normalizeKey(row.campo || "");
     const inputId = FIELD_MAP[campo];
     if (!inputId) return;
     const el = document.getElementById(inputId);
     if (!el) return;
-    const val = parseSheetNum(row[iValor]);
+    const val = parseSheetNum(row.valor);
     if (Number.isFinite(val)) el.value = val;
   });
   return true;
@@ -850,6 +1038,7 @@ function attachListeners() {
       const origEl = document.getElementById("orig_" + campo);
       if (origEl) origEl.textContent = changed ? "Antes: " + orig : "";
       if (MIX_KEYS.includes(campo)) updateMixSum();
+      else updateSummaryCards();
     });
   });
 }
@@ -862,14 +1051,36 @@ function updateMixSum() {
   const el = document.getElementById("mixSum");
   const rounded = Math.round(sum * 100) / 100;
   if (Math.abs(sum - 100) < 0.11) {
-    el.textContent = "✓ Suma: " + rounded + "%";
+    el.textContent = "Suma: " + rounded + "%";
     el.className = "mix-sum ok";
   } else {
-    el.textContent = "⚠ Suma: " + rounded + "% — debe ser exactamente 100%";
+    el.textContent = "Suma: " + rounded + "% - debe ser exactamente 100%";
     el.className = "mix-sum err";
   }
+  updateSummaryCards();
 }
 
+function setSummaryValue(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function readField(campo) {
+  const el = document.getElementById(FIELD_MAP[campo]);
+  const value = parseFloat(el?.value);
+  return Number.isFinite(value) ? value : null;
+}
+
+function updateSummaryCards() {
+  const comision = readField("comision_pct");
+  const c12 = readField("c12_pct");
+  const mix = MIX_KEYS.reduce((acc, k) => acc + (readField(k) || 0), 0);
+  setSummaryValue("sumComision", comision === null ? "--" : comision + "%");
+  setSummaryValue("sumFinanciacion", c12 === null ? "--" : c12 + "%");
+  setSummaryValue("sumMix", Math.round(mix * 100) / 100 + "%");
+  const activeOverrides = Object.values(OV_DATA || {}).filter(d => Object.keys(d.campos || {}).length > 0).length;
+  setSummaryValue("sumOverrides", activeOverrides ? String(activeOverrides) : "0");
+}
 function collectForm() {
   const campos = {};
   Object.entries(FIELD_MAP).forEach(([campo, inputId]) => {
@@ -999,11 +1210,6 @@ async function init() {
 }
 
 // ── OVERRIDES POR SELLER ─────────────────────────────────────
-// Pestaña "overrides" (gid 649807159): la misma que consumen simuladores, presentación y backlog.
-const OVERRIDES_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=649807159&single=true&output=csv";
-// Pestaña "sellers" (gid 899415596): permite agregar overrides a sellers que aún no figuran en la pestaña overrides.
-const SELLERS_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=899415596&single=true&output=csv";
-
 const OVERRIDE_FIELD_MAP = {
   comision_override: { id:"ov_comision_override", label:"Comisión override",  unit:"% directo", type:"number" },
   bon_logistica_dir: { id:"ov_bon_logistica_dir", label:"Bon. logística dir.",unit:"% dto.",    type:"number" },
@@ -1015,26 +1221,6 @@ const OVERRIDE_FIELD_MAP = {
   cuotas_max:        { id:"ov_cuotas_max",        label:"Cuotas máx.",        unit:"cuotas",    type:"number" },
   notas:             { id:"ov_notas",             label:"Notas comerciales",  unit:"",          type:"text"   }
 };
-
-// Detección de columna por contenido del header — tolerante a renombres menores del sheet
-function ovFieldFromHeader(h) {
-  const nk = normalizeKey(h);
-  if (!nk) return null;
-  if (nk.includes("seller_id") || nk === "sellerid") return "_sid";
-  if (nk === "seller" || nk === "seller_nombre" || nk === "sellernombre" || nk === "nombre") return "_sname";
-  if (nk.includes("comision") && nk.includes("override")) return "comision_override";
-  if (nk.includes("cuotas") && nk.includes("max")) return "cuotas_max";
-  if (nk.includes("notas")) return "notas";
-  if (nk.includes("bon")) {
-    if (nk.includes("dir")) return "bon_logistica_dir";
-    if (nk.includes("inv")) return "bon_logistica_inv";
-    if (nk.includes("catalog")) return "bon_catalogacion";
-    if (nk.includes("fulfil")) return "bon_fulfillment";
-    if (nk.includes("devol")) return "bon_gest_devol";
-    if (nk.includes("soporte")) return "bon_soporte";
-  }
-  return null;
-}
 
 // Bonificación % → tarifa base sobre la que aplica (para mostrar el valor efectivo)
 const OV_BON_TO_BASE = {
@@ -1050,55 +1236,28 @@ let OV_DATA = {};
 let OV_SELLERS = [];
 let OV_CURRENT_SELLER = null;
 
+// Etapa 6: overrides ya no se lee de un CSV publicado — el endpoint
+// getOverrides ya resuelve la fila de encabezados (banner + instrucciones)
+// server-side y devuelve un array plano; acá solo se agrupa por seller_id
+// en la misma forma { seller_id, seller_nombre, campos } que ya esperaba
+// el resto del archivo.
 function parseOverrides(rows) {
-  // La pestaña tiene banner + fila de instrucciones antes de los headers reales
-  const hi = rows.findIndex(r => r.some(v => normalizeKey(v).includes("seller_id")));
-  if (hi < 0) return null;
-  const headers = rows[hi];
-  const colIdx = {};
-  let iSid = -1, iSname = -1;
-  headers.forEach((h, i) => {
-    const fk = ovFieldFromHeader(h);
-    if (fk === "_sid") { if (iSid < 0) iSid = i; }
-    else if (fk === "_sname") { if (iSname < 0) iSname = i; }
-    else if (fk) colIdx[i] = fk;
-  });
-  if (iSid < 0) return null;
-
+  if (!rows.length) return null;
   const result = {};
-  rows.slice(hi + 1).forEach(row => {
-    const sid = (row[iSid] || "").trim();
+  rows.forEach(row => {
+    const sid = String(row.seller_id || "").trim();
     if (!sid) return;
-    const sname = iSname >= 0 ? (row[iSname] || "").trim() : "";
     const campos = {};
-    Object.entries(colIdx).forEach(([ci, fk]) => {
-      const v = (row[ci] || "").trim();
+    Object.keys(OVERRIDE_FIELD_MAP).forEach(fk => {
+      const v = String(row[fk] || "").trim();
       if (v === "") return;
       const fm = OVERRIDE_FIELD_MAP[fk];
       if (fm?.type === "text") { campos[fk] = v; }
       else { const n = parseSheetNum(v); if (Number.isFinite(n)) campos[fk] = n; }
     });
-    result[sid] = { seller_id: sid, seller_nombre: sname, campos };
+    result[sid] = { seller_id: sid, seller_nombre: String(row.seller_nombre || "").trim(), campos };
   });
   return result;
-}
-
-function parseSellers(rows) {
-  const hi = rows.findIndex(r => r.some(v => normalizeKey(v).includes("seller_id")));
-  if (hi < 0) return [];
-  const headers = rows[hi];
-  const iSid = headers.findIndex(v => normalizeKey(v).includes("seller_id"));
-  const iName = headers.findIndex(v => {
-    const nk = normalizeKey(v);
-    return nk === "seller_nombre" || nk === "sellernombre" || nk === "nombre" || nk === "seller";
-  });
-  const out = [];
-  rows.slice(hi + 1).forEach(row => {
-    const id = (row[iSid] || "").trim();
-    if (!id) return;
-    out.push({ seller_id: id, seller_nombre: iName >= 0 ? (row[iName] || "").trim() : "" });
-  });
-  return out;
 }
 
 function populateSellerSelect() {
@@ -1300,6 +1459,7 @@ function renderOvSummary() {
   const withOv = Object.values(OV_DATA).filter(d => Object.keys(d.campos).length > 0);
   if (!withOv.length) {
     el.innerHTML = '<p class="ov-empty">Sin overrides activos — todos los sellers usan tarifas base.</p>';
+    updateSummaryCards();
     return;
   }
   let html = `<table class="ov-table">
@@ -1320,6 +1480,7 @@ function renderOvSummary() {
     });
   html += "</tbody></table>";
   el.innerHTML = html;
+  updateSummaryCards();
   el.querySelectorAll("tr.has-ov").forEach(tr => {
     tr.addEventListener("click", () => {
       const sid = tr.getAttribute("data-sid");
@@ -1330,28 +1491,25 @@ function renderOvSummary() {
   });
 }
 
-async function fetchCsvRows(url) {
-  const sep = url.includes("?") ? "&" : "?";
-  const res = await fetch(url + sep + "_ts=" + Date.now(), { cache: "no-store" });
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  return parseCSV(await res.text());
-}
-
 async function initOverrides() {
   const summaryEl = document.getElementById("ovSummary");
   summaryEl.innerHTML = '<p class="ov-loading">Cargando overrides…</p>';
   try {
-    const [ovRows, sellerRows] = await Promise.all([
-      fetchCsvRows(OVERRIDES_URL),
-      fetchCsvRows(SELLERS_URL).catch(() => null) // si falla, el selector usa solo la pestaña overrides
+    const [ovJson, sellersJson] = await Promise.all([
+      // Etapa 6: overrides ya no se lee de un CSV publicado — endpoint gateado por sesión.
+      _apiAuthPost({ action: "getOverrides" }),
+      _apiAuthPost({ action: "getSellers" }).catch(() => null) // si falla, el selector usa solo la pestaña overrides
     ]);
-    const data = parseOverrides(ovRows);
+    const data = parseOverrides(ovJson.data || []);
     if (!data) {
       summaryEl.innerHTML = '<p class="ov-empty">No se encontró la fila de encabezados (seller_id) en la hoja overrides.</p>';
       return;
     }
     OV_DATA = data;
-    OV_SELLERS = sellerRows ? parseSellers(sellerRows) : [];
+    OV_SELLERS = (sellersJson && sellersJson.data || []).map(o => ({
+      seller_id: (o.seller_id || "").trim(),
+      seller_nombre: (o.seller_nombre || "").trim(),
+    })).filter(o => o.seller_id);
     populateSellerSelect();
     renderOvSummary();
     if (OV_CURRENT_SELLER) loadSellerOverride(OV_CURRENT_SELLER);
