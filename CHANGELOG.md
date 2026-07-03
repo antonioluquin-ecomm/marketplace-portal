@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-07-03 - Etapa 8: Página "Configuración" alineada al estándar del ecosistema
+
+Tipo de cambio: UX / alineación de estándar (sin cambios de backend).
+
+Estado: implementado y verificado en preview. No requiere redeploy de Apps Script (solo frontend).
+
+Resultado:
+- `internal/administracion/usuarios.html` renombrada a **`internal/administracion/configuracion.html`**, con título/crumb/subtítulo alineados al estándar (`project-standards/application_shell.md §6.4`): "Gestión de usuarios, permisos y configuración del sistema".
+- Nuevo tercer tab **Integraciones** en el panel (`renderUserManagementSection()`, `assets/js/auth.js`), igual a la implementación real de Commerce Hub (3 tabs: Usuarios, Roles y permisos, Integraciones): muestra la URL del Apps Script con botón "Probar conexión" (`action:'checkSetup'`), el estado de publicación de cada hoja del Sheet (CSV público vs. endpoint gateado por sesión, documentando el resultado de la Etapa 6), y las 4 hojas del sistema de auth como referencia.
+- Nuevo bloque CSS `.cfg-section`/`.cfg-title`/`.cfg-row`/`.cfg-label`/`.cfg-val` en `assets/css/internal-components.css`, mismo criterio visual que los componentes `.sb-*` ya existentes.
+- El link del dropdown de usuario pasa de "Gestionar usuarios" a **"Configuración"**, apuntando al archivo renombrado.
+- Nuevo link "Configuración" en una sección "Sistema" al final del sidebar principal de `index.html` y las 12 páginas internas que comparten sidebar (se excluyen `maqueta-seller-center.html`, que no tiene ese sidebar, y `hub-operativo.html`, que es solo un redirect).
+- `applyPermissionsToSidebar()` (`auth.js`) se reestructura: el link `data-page="administracion"` se oculta explícitamente para cualquier no-admin, tratándolo como admin-only por diseño (no como un módulo más de `MP_RBAC_MODULOS` con niveles ver/editar).
+
+Fuera de alcance a propósito: badge de versión + popover de changelog (JS `CHANGELOG`/`VERSION` array — mejora futura), tab "Parámetros" (sin contenido genérico que poner ahí), reset de contraseña por el admin a otro usuario.
+
+Verificado en preview: los 3 tabs cambian correctamente y "Probar conexión" dispara `checkSetup`; con sesión Admin simulada el link "Configuración" es visible en el sidebar junto a otros módulos; con sesión no-admin simulada el link se oculta mientras los módulos con permiso propio siguen visibles; sin sesión válida, `configuracion.html` redirige al login (fail-closed). Sin errores de consola.
+
 ## 2026-07-02 - Etapa 7: Deuda de escala (cierra el roadmap post-auditoría)
 
 Tipo de cambio: performance / mantenibilidad.

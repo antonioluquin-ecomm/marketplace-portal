@@ -600,6 +600,38 @@
 }
 .sb-user-dropdown-item.danger { color: var(--danger, #991b1b); }
 
+/* ─── Configuración — panel de Integraciones ────────────────── */
+.cfg-section {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+  background: var(--card);
+}
+.cfg-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.cfg-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+}
+.cfg-row:last-child { border-bottom: none; }
+.cfg-label { color: var(--muted); }
+.cfg-val {
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-align: right;
+  word-break: break-all;
+}
+
 :where(input, select, textarea):focus {
   box-shadow: var(--focus-ring, 0 0 0 3px rgba(106, 168, 79, .14));
 }

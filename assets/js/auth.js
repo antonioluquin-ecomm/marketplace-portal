@@ -110,10 +110,15 @@ function _applySession() {
 /* ─── PERMISOS — SIDEBAR ─────────────────────────────────────── */
 
 function applyPermissionsToSidebar() {
-  if (SESSION.isAdmin()) return; // Admin ve todo, no hay nada que ocultar
+  const isAdmin = SESSION.isAdmin();
 
   document.querySelectorAll('[data-portal-nav] [data-page]').forEach(function (el) {
     const mod = el.getAttribute('data-page');
+    if (mod === 'administracion') {
+      el.style.display = isAdmin ? '' : 'none'; // Configuración: admin-only, no es un módulo RBAC
+      return;
+    }
+    if (isAdmin) return; // Admin ve el resto de los módulos sin restricción
     el.style.display = SESSION.canView(mod) ? '' : 'none';
   });
 }
@@ -290,7 +295,7 @@ function _renderUserIndicator() {
         '<div class="sb-user-dropdown-meta"><span class="sb-user-role-badge">' + escapeHtml(user.nombre_rol || '') + '</span></div>' +
       '</div>' +
       '<div class="sb-user-dropdown-sep"></div>' +
-      (SESSION.isAdmin() ? '<a class="sb-user-dropdown-item" href="internal/administracion/usuarios.html">Gestionar usuarios</a><div class="sb-user-dropdown-sep"></div>' : '') +
+      (SESSION.isAdmin() ? '<a class="sb-user-dropdown-item" href="internal/administracion/configuracion.html">Configuración</a><div class="sb-user-dropdown-sep"></div>' : '') +
       '<button class="sb-user-dropdown-item" type="button" onclick="_showChangePasswordModal()">Cambiar contraseña</button>' +
       '<div class="sb-user-dropdown-sep"></div>' +
       '<button class="sb-user-dropdown-item danger" type="button" onclick="logoutUser()">Cerrar sesión</button>';
@@ -321,6 +326,7 @@ function renderUserManagementSection() {
     <div class="cfg-tabs" style="display:flex;gap:8px;margin-bottom:14px">
       <button class="cfg-tab active" id="ctab-usuarios" onclick="_showCfgTab('usuarios')">Usuarios</button>
       <button class="cfg-tab" id="ctab-roles" onclick="_showCfgTab('roles')">Roles y permisos</button>
+      <button class="cfg-tab" id="ctab-integraciones" onclick="_showCfgTab('integraciones')">Integraciones</button>
     </div>
 
     <div id="ctab-content-usuarios">
@@ -398,14 +404,64 @@ function renderUserManagementSection() {
       <div id="roles-table-wrap"><div style="font-size:12px;color:var(--muted)">Cargando roles…</div></div>
       <div id="permisos-matrix-wrap" style="margin-top:18px"></div>
     </div>
+
+    <div id="ctab-content-integraciones" hidden>
+      <div class="cfg-section">
+        <div class="cfg-title">Conexión</div>
+        <div class="cfg-row">
+          <span class="cfg-label">Apps Script URL</span>
+          <span class="cfg-val" id="cfg-apps-script-url">—</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+          <button class="btn" onclick="_testConexionApi()">Probar conexión</button>
+          <span id="cfg-conexion-status" style="font-size:12px;color:var(--muted)"></span>
+        </div>
+      </div>
+
+      <div class="cfg-section">
+        <div class="cfg-title">Estado de las hojas</div>
+        <div class="cfg-row"><span class="cfg-label">config</span><span class="cfg-val">CSV público</span></div>
+        <div class="cfg-row"><span class="cfg-label">sc_roadmap</span><span class="cfg-val">CSV público</span></div>
+        <div class="cfg-row"><span class="cfg-label">sellers</span><span class="cfg-val">Endpoint con sesión (getSellers)</span></div>
+        <div class="cfg-row"><span class="cfg-label">timeline</span><span class="cfg-val">Endpoint con sesión (getGantt)</span></div>
+        <div class="cfg-row"><span class="cfg-label">tarifas</span><span class="cfg-val">Endpoint con sesión (getTarifas)</span></div>
+        <div class="cfg-row"><span class="cfg-label">overrides</span><span class="cfg-val">Endpoint con sesión (getOverrides)</span></div>
+        <div class="cfg-row"><span class="cfg-label">relevamientos</span><span class="cfg-val">Endpoint con sesión (getRelevamientos)</span></div>
+      </div>
+
+      <div class="cfg-section">
+        <div class="cfg-title">Hojas de auth</div>
+        <div class="cfg-row"><span class="cfg-label">USUARIOS</span><span class="cfg-val">Cuentas internas y de seller</span></div>
+        <div class="cfg-row"><span class="cfg-label">ROLES</span><span class="cfg-val">Roles del sistema</span></div>
+        <div class="cfg-row"><span class="cfg-label">PERMISOS_MODULOS</span><span class="cfg-val">Matriz de permisos por rol</span></div>
+        <div class="cfg-row"><span class="cfg-label">SESIONES</span><span class="cfg-val">Tokens de sesión activos</span></div>
+      </div>
+    </div>
   `;
 
   host.appendChild(section);
+  const urlEl = document.getElementById('cfg-apps-script-url');
+  if (urlEl) urlEl.textContent = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || '—';
   _loadRoles().then(_loadUsuarios);
 }
 
+async function _testConexionApi() {
+  const statusEl = document.getElementById('cfg-conexion-status');
+  if (statusEl) statusEl.textContent = 'Probando…';
+  try {
+    const url = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
+    if (!url) throw new Error('No hay URL de API configurada');
+    const res  = await fetch(url, { method: 'POST', body: JSON.stringify({ action: 'checkSetup' }) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    await res.json();
+    if (statusEl) statusEl.textContent = '✓ Conexión OK';
+  } catch (err) {
+    if (statusEl) statusEl.textContent = 'Error: ' + (err.message || 'No se pudo conectar');
+  }
+}
+
 function _showCfgTab(tab) {
-  ['usuarios', 'roles'].forEach(function (t) {
+  ['usuarios', 'roles', 'integraciones'].forEach(function (t) {
     const content = document.getElementById('ctab-content-' + t);
     const btn     = document.getElementById('ctab-' + t);
     if (content) content.hidden = (t !== tab);
