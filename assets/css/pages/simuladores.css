@@ -570,3 +570,227 @@
     min-width:0;
   }
 }
+
+/* Servicios adicionales: son supuestos del caso, deben quedar antes del resultado. */
+.col-results {
+  grid-row:6;
+}
+.col-inputs > .col-header + .section + .section + .section {
+  grid-row:5;
+  margin-top:8px;
+  padding-top:12px;
+  padding-bottom:10px;
+}
+.col-inputs > .col-header + .section + .section + .section .section-label {
+  margin-bottom:2px;
+}
+.col-inputs > .section .svc-list {
+  grid-template-columns:repeat(6, minmax(120px, 1fr));
+  gap:0 14px;
+}
+.col-inputs > .section .svc-row {
+  min-height:42px;
+  padding:5px 0;
+}
+.svc-name {
+  font-size:12px;
+  line-height:1.2;
+}
+.svc-rate {
+  font-size:10px;
+}
+.tog {
+  width:34px;
+  height:18px;
+}
+.tog-thumb {
+  width:12px;
+  height:12px;
+}
+.tog input:checked ~ .tog-thumb {
+  transform:translateX(16px);
+}
+@media(max-width:1500px) {
+  .col-inputs > .section .svc-list {
+    grid-template-columns:repeat(3, minmax(180px, 1fr));
+  }
+}
+@media(max-width:960px) {
+  .col-results,
+  .col-inputs > .col-header + .section + .section + .section {
+    grid-row:auto;
+  }
+  .col-inputs > .section .svc-list {
+    grid-template-columns:minmax(0, 1fr);
+  }
+}
+/* Pasada visual final: menos peso en parametros, mas foco en resultado y tarifas compactas. */
+.shell {
+  grid-template-columns:224px minmax(0, 1fr) 248px;
+}
+.col-rates {
+  background:#fff;
+  border-left-color:#d9e2ec;
+}
+.col-rates .col-header {
+  padding:14px 16px 12px;
+}
+.col-rates .col-title,
+.col-rates .section-label {
+  font-size:10px;
+  letter-spacing:.12em;
+}
+.col-rates .section {
+  padding:14px 16px;
+}
+.col-rates .rate-item {
+  padding:7px 0;
+  gap:10px;
+}
+.col-rates .rate-name {
+  font-size:11.5px;
+  line-height:1.25;
+}
+.col-rates .rate-val {
+  font-size:12px;
+  white-space:nowrap;
+}
+.col-rates .rate-unit {
+  font-size:9px;
+}
+.col-rates .rates-edit-note {
+  display:none;
+}
+.update-btn {
+  min-height:30px;
+  padding:4px 9px;
+  background:#fff;
+}
+.col-inputs > .col-header {
+  margin-top:14px;
+  border-bottom:0;
+}
+.col-inputs > .section {
+  border-color:#dfe6ee;
+  box-shadow:none;
+}
+.col-inputs > .col-header + .section,
+.col-inputs > .col-header + .section + .section,
+.col-inputs > .col-header + .section + .section + .section {
+  border-radius:8px;
+}
+.col-inputs > .section .section-label {
+  color:#536274;
+  letter-spacing:.1em;
+}
+.col-inputs > .section .field-label {
+  color:#0f1f35;
+  font-size:11px;
+  font-weight:700;
+}
+.col-inputs > .section .field-hint {
+  color:#7b8798;
+  font-size:9px;
+}
+.col-inputs > .section .inp,
+.col-inputs > .section .sel {
+  background:#fff;
+  border-color:#d6dee8;
+  color:#07172e;
+  box-shadow:inset 0 1px 0 rgba(17,24,39,.03);
+}
+.col-inputs > .section .inp:focus,
+.col-inputs > .section .sel:focus {
+  background:#fff;
+  border-color:var(--primary-mid);
+}
+.col-results {
+  background:#f7f9fc;
+}
+.col-results .tab-bar {
+  background:#fff;
+  border-color:#dfe6ee;
+  box-shadow:0 1px 2px rgba(17,24,39,.03);
+}
+.tab-btn {
+  min-height:46px;
+  padding:12px 18px;
+}
+.results-inner {
+  gap:16px;
+}
+.results-header {
+  display:flex;
+  align-items:center;
+  min-height:28px;
+  margin-bottom:0;
+}
+.results-seller {
+  color:#07172e;
+}
+.kpi-grid {
+  gap:12px;
+}
+.kpi.primary {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:118px;
+  background:linear-gradient(135deg, #183f6e 0%, #1f4f83 100%);
+  border-color:#183f6e;
+}
+.kpi.primary .kpi-val {
+  font-size:36px;
+  letter-spacing:0;
+}
+.kpi:not(.primary) {
+  background:#fff;
+}
+.kpi:not(.primary):not(.danger) {
+  background:#f8fbf7;
+  border-color:#e1eadf;
+}
+.kpi.danger {
+  background:#fff7f7;
+  border-color:#f3c8c8;
+}
+.comp-bar-wrap,
+.breakdown {
+  background:#fff;
+  border-color:#dfe6ee;
+}
+.comp-bar-wrap {
+  padding:14px 16px;
+}
+.bd-title {
+  background:#f7f9fc;
+}
+.bd-row.net {
+  background:#eaf2fb;
+  border-top-color:#c8d9ef;
+}
+.bd-row.net .bd-name,
+.bd-row.net .bd-amt {
+  color:#143f6b;
+}
+.disclaimer {
+  background:#fffaf0;
+  border-color:#efd7ad;
+}
+.col-inputs > .col-header + .section + .section + .section {
+  background:#fbfcfe;
+}
+.col-inputs > .section .svc-row {
+  border-bottom-color:#eef2f6;
+}
+.tog-track {
+  background:#dfe5ec;
+}
+.tog input:checked ~ .tog-track {
+  background:var(--primary);
+}
+@media(max-width:1100px) {
+  .shell {
+    grid-template-columns:224px minmax(0, 1fr);
+  }
+}
