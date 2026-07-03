@@ -600,15 +600,11 @@ function publicUrl(path, id){
 }
 
 function transform(rows){
-  const hi=rows.findIndex(r=>r.some(v=>norm(v).includes("seller_id")));
-  if(hi<0)return[];
-  const headers=rows[hi].map(mapHeader);
-  const col=k=>headers.indexOf(k);
-  const pick=(r,k)=>String(r[col(k)]||"").trim();
-
-  return rows.slice(hi+1).map(r=>{
+  // rows: array de objetos ya parseados por el endpoint getSellers (Etapa 6), no filas CSV crudas.
+  // Se remapean las claves con mapHeader para preservar los alias que antes resolvía la fila de headers del CSV.
+  return rows.map(r=>{
     const v={};
-    headers.forEach((h,i)=>{v[h]=String(r[i]||"").trim();});
+    Object.keys(r).forEach(h=>{v[mapHeader(h)]=String(r[h]==null?"":r[h]).trim();});
 
     const id=v.seller_id||"";
     if(!id||!/^SPT-/i.test(id))return null;
