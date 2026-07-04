@@ -261,6 +261,18 @@ function _renderUserIndicator() {
   const user = SESSION.data && SESSION.data.usuario;
   if (!user) return;
 
+  let footer = nav.querySelector('.sb-footer');
+  if (!footer) {
+    footer = document.createElement('div');
+    footer.className = 'sb-footer';
+
+    const adminLink = nav.querySelector('.nav[data-page="administracion"]');
+    const adminSection = adminLink && adminLink.closest ? adminLink.closest('.sb-section') : null;
+    if (adminSection) footer.appendChild(adminSection);
+
+    nav.appendChild(footer);
+  }
+
   const chip = document.createElement('div');
   chip.id = 'sb-user-chip';
   chip.className = 'sb-user-chip';
@@ -280,7 +292,7 @@ function _renderUserIndicator() {
     if (drop && drop.style.display !== 'none') _closeUserDropdown();
     else _openUserDropdown();
   });
-  nav.appendChild(chip);
+  footer.appendChild(chip);
 
   if (!document.getElementById('user-dropdown')) {
     const drop = document.createElement('div');

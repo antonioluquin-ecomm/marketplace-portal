@@ -172,3 +172,14 @@
   .filter-bar-actions{justify-self:start}
   .filter-bar .quick-btns{grid-template-columns:1fr}
 }
+
+/* 2026-07-03 - Backlog shell: impedir que filtros/tablas ensanchen la columna principal y desplacen el sidebar. */
+.shell > .content-wrap,
+.shell > .main,
+.content-wrap,
+.content-area {
+  min-width:0;
+}
+.shell > .sidebar {
+  min-width:0;
+}

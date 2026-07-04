@@ -65,3 +65,26 @@ h2{font-size:18px;font-weight:700;margin-bottom:12px}
   .top-actions{flex:1 1 100%;justify-content:flex-start;margin-left:0}
   .crumb{display:none}
 }
+
+/* 2026-07-03 - Gestion Sellers dentro del shell: evitar centrado que desplaza el contenido junto al sidebar. */
+.shell > .wrap.main {
+  width:100%;
+  max-width:none;
+  margin:0;
+  min-width:0;
+  padding:28px 28px 74px;
+}
+.shell > .sidebar {
+  min-width:0;
+}
+.shell > .main .hero,
+.shell > .main .grid-layout,
+.shell > .main .panel,
+.shell > .main .preview-card {
+  min-width:0;
+}
+@media(max-width:980px) {
+  .shell > .wrap.main {
+    padding:20px 16px 60px;
+  }
+}

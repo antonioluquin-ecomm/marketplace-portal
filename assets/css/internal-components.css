@@ -635,3 +635,80 @@
 :where(input, select, textarea):focus {
   box-shadow: var(--focus-ring, 0 0 0 3px rgba(106, 168, 79, .14));
 }
+
+/* 2026-07-03 - Sidebar footer canonico: Configuracion/Admin fijo abajo junto al usuario. */
+.portal-sidebar.portal-sidebar,
+[data-portal-nav].portal-sidebar,
+.col-nav[data-portal-nav] {
+  display:flex;
+  flex-direction:column;
+}
+.portal-sidebar.portal-sidebar .sb-section:has(.nav[data-page="administracion"]),
+[data-portal-nav].portal-sidebar .sb-section:has(.nav[data-page="administracion"]),
+.col-nav[data-portal-nav] .sb-section:has(.nav[data-page="administracion"]) {
+  margin-top:auto;
+  margin-bottom:0;
+  padding-top:12px;
+  border-top:1px solid var(--line, var(--bdr, #e5e7eb));
+}
+.portal-sidebar.portal-sidebar .sb-section:has(.nav[data-page="administracion"]) .sb-label,
+[data-portal-nav].portal-sidebar .sb-section:has(.nav[data-page="administracion"]) .sb-label,
+.col-nav[data-portal-nav] .sb-section:has(.nav[data-page="administracion"]) .sb-label {
+  display:none;
+}
+.portal-sidebar.portal-sidebar .nav[data-page="administracion"],
+[data-portal-nav].portal-sidebar .nav[data-page="administracion"],
+.col-nav[data-portal-nav] .nav[data-page="administracion"] {
+  border-left-color:transparent;
+}
+.portal-sidebar.portal-sidebar .nav[data-page="administracion"]::before,
+[data-portal-nav].portal-sidebar .nav[data-page="administracion"]::before,
+.col-nav[data-portal-nav] .nav[data-page="administracion"]::before {
+  content:"⚙";
+  width:16px;
+  flex:0 0 16px;
+  color:var(--muted, var(--t3, #64748b));
+  font-size:13px;
+  line-height:1;
+}
+.portal-sidebar.portal-sidebar .sb-user-chip,
+[data-portal-nav].portal-sidebar .sb-user-chip,
+.col-nav[data-portal-nav] .sb-user-chip {
+  margin-top:0;
+  border-top:1px solid var(--line, var(--bdr, #e5e7eb));
+}
+@media(max-width:960px) {
+  [data-portal-nav].mnav-open .sb-section:has(.nav[data-page="administracion"]) {
+    margin-top:16px;
+  }
+}
+
+/* 2026-07-03 - Footer real del sidebar: admin/config + usuario anclados abajo. */
+.portal-sidebar.portal-sidebar .sb-footer,
+[data-portal-nav].portal-sidebar .sb-footer,
+.col-nav[data-portal-nav] .sb-footer {
+  margin-top:auto;
+  padding-top:8px;
+  background:var(--sidebar-bg, var(--k2, #f1f5f9));
+  border-top:1px solid var(--line, var(--bdr, #e5e7eb));
+  position:sticky;
+  bottom:0;
+  z-index:2;
+}
+.portal-sidebar.portal-sidebar .sb-footer .sb-section,
+[data-portal-nav].portal-sidebar .sb-footer .sb-section,
+.col-nav[data-portal-nav] .sb-footer .sb-section {
+  margin-bottom:4px;
+  padding-top:0;
+  border-top:0;
+}
+.portal-sidebar.portal-sidebar .sb-footer .sb-label,
+[data-portal-nav].portal-sidebar .sb-footer .sb-label,
+.col-nav[data-portal-nav] .sb-footer .sb-label {
+  display:none;
+}
+.portal-sidebar.portal-sidebar .sb-footer .sb-user-chip,
+[data-portal-nav].portal-sidebar .sb-footer .sb-user-chip,
+.col-nav[data-portal-nav] .sb-footer .sb-user-chip {
+  border-top:1px solid var(--line, var(--bdr, #e5e7eb));
+}
