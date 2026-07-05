@@ -221,7 +221,7 @@
       if (btn) btn.disabled = true;
       try {
         await _apiSellerPost({
-          tipo_formulario: 'gantt_task_update',
+          action: 'updateGanttTask',
           task_id: id,
           updated_by: 'front@gantt-seller',
           fields: { estado: est.value, comentario: com.value },

@@ -40,6 +40,7 @@ var AUTH_SESSION_ACTIONS = [
   "getTarifas",
   "getOverrides",
   "getRelevamientos",
+  "getRelevamientoProfile",
 ];
 
 var AUTH_ADMIN_ACTIONS = [
@@ -98,6 +99,7 @@ function routeAuthAction(data) {
     case "getTarifas":       return getTarifasAction();
     case "getOverrides":     return getOverridesAction(data);
     case "getRelevamientos": return getRelevamientosAction(data);
+    case "getRelevamientoProfile": return getRelevamientoProfileAction(data);
   }
 
   return { ok: false, error: "Acción no implementada: " + action, code: 400 };

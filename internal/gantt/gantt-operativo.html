@@ -2586,7 +2586,7 @@ async function saveGanttTaskEdit(ev){
   if(!ok) return;
 
   const payload={
-    tipo_formulario:'gantt_task_update',
+    action:'updateGanttTask',
     task_id:t.task_id,
     updated_by:'front@gantt-operativo',
     session_token: SESSION.token,
@@ -2723,7 +2723,7 @@ async function saveGanttTaskCreate(ev){
   if(!ok) return;
 
   const payload={
-    tipo_formulario:'gantt_task_create',
+    action:'createGanttTask',
     created_by:'front@gantt-operativo',
     task:{
       seller_id: task.seller_id,
@@ -2804,7 +2804,7 @@ async function disableGanttTask(taskId){
   if(!ok) return;
 
   const payload={
-    tipo_formulario:'gantt_task_disable',
+    action:'disableGanttTask',
     task_id:t.task_id,
     updated_by:'front@gantt-operativo',
     mode:'cancel',

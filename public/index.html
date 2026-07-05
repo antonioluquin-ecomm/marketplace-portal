@@ -118,11 +118,8 @@
       }
 
       try {
-        const apiUrl = window.MP_CONFIG.APPS_SCRIPT_URL;
-        const url = apiUrl + '?action=relevamiento_profile_get&seller_id=' + encodeURIComponent(sellerId) +
-          '&session_token=' + encodeURIComponent(SellerSESSION.token) + '&_ts=' + Date.now();
-        const res = await fetch(url, { cache: 'no-store' });
-        const json = await res.json();
+        // Etapa 10B — lectura por POST action (antes doGet).
+        const json = await _apiSellerPost({ action: 'getRelevamientoProfile', seller_id: sellerId });
         if (json.ok && json.exists && json.metadata) {
           const pct = parseInt(json.metadata.completitud, 10) || 0;
           document.getElementById('stat-relevamiento').textContent = pct + '%';

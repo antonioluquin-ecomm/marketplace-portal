@@ -61,12 +61,9 @@ function getRelevamientosAction(data) {
 
   const headers = ws.getRange(1, 1, 1, lastCol).getValues()[0];
   const rows = ws.getRange(2, 1, lastRow - 1, lastCol).getValues();
-  let todos = rows.map(r => rowToObj(headers, r)).filter(o => o.seller_id);
+  const todos = rows.map(r => rowToObj(headers, r)).filter(o => o.seller_id);
 
-  if (data._sesSellerId) {
-    todos = todos.filter(o => String(o.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
-  }
-  return { ok: true, data: todos };
+  return { ok: true, data: _aplicarSellerScope(data, todos) };
 }
 
 // ───────────────────────────────────────────────
@@ -113,6 +110,15 @@ function obtenerPerfilRelevamiento(params) {
       payload_version: rowObj.payload_version || "",
     },
   };
+}
+
+// Etapa 10B — lectura del perfil de relevamiento vía POST `action`
+// (antes era un doGet). Resuelve el seller del alcance de sesión: un seller ve
+// solo el suyo; un staff puede pedir el del selector (target_seller_id/seller_id).
+function getRelevamientoProfileAction(data) {
+  const scope = _resolverSellerScope(data);
+  const sid = scope.locked ? scope.sellerId : (scope.target || String(data.seller_id || "").trim());
+  return obtenerPerfilRelevamiento({ seller_id: sid });
 }
 
 function upsertPerfilRelevamiento(data) {

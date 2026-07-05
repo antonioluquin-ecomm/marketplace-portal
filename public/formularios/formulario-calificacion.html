@@ -428,7 +428,7 @@
 
       <form id="sellerForm">
         <input type="hidden" name="seller_id" id="seller_id" />
-        <input type="hidden" name="tipo_formulario" value="calificacion" />
+        <input type="hidden" name="action" value="saveCalificacion" />
 
         <section class="section" data-section="1">
           <div class="section-title">
@@ -1165,7 +1165,7 @@
           ...ev.data,
           seller_id: sellerId,
           session_token: SellerSESSION.token,
-          tipo_formulario: "calificacion",
+          action: "saveCalificacion",
           resultado_sugerido: ev.clasificacion,
           modelo_sugerido: ev.modelo,
           riesgo_logistico: ev.alertas.some(

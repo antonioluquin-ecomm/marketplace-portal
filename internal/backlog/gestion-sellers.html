@@ -294,7 +294,7 @@
     function getSavedResponsable(){ return localStorage.getItem("mp_responsable_seller") || ""; }
     function saveResponsable(v){ const val=clean(v); if(val) localStorage.setItem("mp_responsable_seller", val); }
     function resetForm(resetSelect=true){ $("sellerForm").reset(); $("seller_id").value=nextSellerId(); $("estado_pipeline").value="identificados"; $("prioridad").value="Media"; $("sitio_objetivo").value="Sporting"; $("activo").value="SI"; $("responsable").value=getSavedResponsable(); EDITING_ORIGINAL_ID=""; if(resetSelect) $("existingSeller").value=""; clearAlert(); updatePreview(); }
-    function formToObject(){ const o={ tipo_formulario:"seller" }; SELLER_FIELDS.forEach(f=>{ if($(f)) o[f]=clean($(f).value); }); o.seller_id = normalizeSellerId(o.seller_id); o.seller_nombre = o.seller_nombre || o.marca_seller_operativo || o.empresa_grupo; if(!o.marca_seller_operativo) o.marca_seller_operativo = o.seller_nombre; if(!o.activo) o.activo="SI"; if(EDITING_ORIGINAL_ID) o.seller_id_original = EDITING_ORIGINAL_ID; return o; }
+    function formToObject(){ const o={ action:"saveSeller" }; SELLER_FIELDS.forEach(f=>{ if($(f)) o[f]=clean($(f).value); }); o.seller_id = normalizeSellerId(o.seller_id); o.seller_nombre = o.seller_nombre || o.marca_seller_operativo || o.empresa_grupo; if(!o.marca_seller_operativo) o.marca_seller_operativo = o.seller_nombre; if(!o.activo) o.activo="SI"; if(EDITING_ORIGINAL_ID) o.seller_id_original = EDITING_ORIGINAL_ID; return o; }
     function validatePayload(o){ if(!o.seller_id) return "No se pudo generar el ID del seller. Recargá la página e intentá nuevamente."; if(!/^SPT-\d{3,}$/i.test(o.seller_id)) return "El ID generado debe tener formato SPT-001, SPT-016, etc."; if(!o.seller_nombre) return "Completá el nombre visible del seller."; if(!o.marca_seller_operativo) return "Completá la marca o seller operativo."; if(!o.responsable) return "Completá quién crea o gestiona este seller."; if(o.contacto_email && !/^\S+@\S+\.\S+$/.test(o.contacto_email)) return "El email de contacto no tiene un formato válido."; if(!EDITING_ORIGINAL_ID && !SELLERS_LOADED) return "No se pudo validar la secuencia de IDs porque no cargó la hoja de sellers. Revisá la conexión CSV antes de crear un seller nuevo."; if(o.url_seller && !/^https?:\/\//i.test(o.url_seller)) return "La URL del seller debe comenzar con http:// o https://."; return ""; }
     function updateLogo(box, sellerId, name){ const candidates=logoCandidates(sellerId); let i=0; if(!candidates.length){ box.innerHTML=`<span class="logo-fallback">${escapeHtml(initials(name))}</span>`; return; } box.innerHTML=`<img src="${escapeHtml(candidates[0])}" alt="Logo">`; const img=box.querySelector("img"); img.onerror=()=>{ i++; if(i<candidates.length){ img.src=candidates[i]; } else { box.innerHTML=`<span class="logo-fallback">${escapeHtml(initials(name))}</span>`; } }; }
     function updatePreview(){ const o=formToObject(); const name=o.seller_nombre||"Nuevo seller"; $("seller_id").value=o.seller_id||""; $("pvName").textContent=name; $("pvMeta").textContent=`${o.sitio_objetivo||"Sporting"} Marketplace`; $("pvId").textContent=o.seller_id||"—"; $("pvGrupo").textContent=o.empresa_grupo||"—"; $("pvMarca").textContent=o.marca_seller_operativo||"—"; $("pvModelo").textContent=o.modelo_integracion_estimado||"A definir"; $("pvEstado").textContent=o.estado_pipeline||"identificados"; $("pvActivo").textContent=o.activo||"SI"; updateLogo($("logoPreview"), o.seller_id, name); $("messagePreview").textContent=buildFirstContactMessage(); }
@@ -327,18 +327,16 @@
         reader.readAsDataURL(file);
       });
 
-      const secret = localStorage.getItem("mp_write_secret") || "";
-
       await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({
-          tipo_formulario: "logo_upload",
+          action: "uploadLogo",
+          session_token: SESSION.token,
           seller_id: sellerId,
           file_name: fileName,
           file_base64: base64,
-          write_secret: secret,
         }),
       });
     }
@@ -348,7 +346,7 @@
     
     $("sellerForm").addEventListener("submit", async ev=>{ ev.preventDefault(); clearAlert(); const payload=formToObject(); const err=validatePayload(payload); if(err){ showAlert(err); return; } const btn=$("submitBtn"); btn.disabled=true; setStatus("loading","Guardando seller…");
       if(pendingLogoFile){ btn.textContent="Subiendo logo…"; try{ await uploadLogoToGitHub(payload.seller_id, pendingLogoFile); pendingLogoFile=null; $("logo_file_input").value=""; $("logoUploadStatus").textContent="Logo enviado — aparecerá en el repo en breve"; }catch(e){ showAlert("No se pudo enviar el logo: "+e.message+". Podés reintentarlo más tarde editando la ficha."); } }
-      btn.textContent="Guardando…"; try{ saveResponsable(payload.responsable); await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}); reserveSellerId(payload.seller_id); const idx=SELLERS.findIndex(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(payload.seller_id)); if(idx>=0) SELLERS[idx]=Object.assign({}, SELLERS[idx], payload); else SELLERS.push(payload); buildExistingSelect(); $("existingSeller").value=payload.seller_id; EDITING_ORIGINAL_ID=payload.seller_id; showSuccess("Solicitud enviada al Apps Script. El seller quedó marcado como enviado; validá la actualización en Google Sheet y luego refrescá el backlog."); setStatus("ok","Guardado enviado"); }catch(e){ console.error(e); showAlert("No se pudo enviar el alta. Revisá la conexión o la URL del Apps Script."); setStatus("err","Error al guardar"); } finally{ btn.disabled=false; btn.textContent="Guardar seller"; } });
+      btn.textContent="Guardando…"; try{ saveResponsable(payload.responsable); await fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({session_token:SESSION.token}, payload))}); reserveSellerId(payload.seller_id); const idx=SELLERS.findIndex(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(payload.seller_id)); if(idx>=0) SELLERS[idx]=Object.assign({}, SELLERS[idx], payload); else SELLERS.push(payload); buildExistingSelect(); $("existingSeller").value=payload.seller_id; EDITING_ORIGINAL_ID=payload.seller_id; showSuccess("Solicitud enviada al Apps Script. El seller quedó marcado como enviado; validá la actualización en Google Sheet y luego refrescá el backlog."); setStatus("ok","Guardado enviado"); }catch(e){ console.error(e); showAlert("No se pudo enviar el alta. Revisá la conexión o la URL del Apps Script."); setStatus("err","Error al guardar"); } finally{ btn.disabled=false; btn.textContent="Guardar seller"; } });
     loadSellers().then(()=>initFromUrl());
   </script>
 </body>

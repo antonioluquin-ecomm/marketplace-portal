@@ -1190,7 +1190,8 @@ async function saveQuickEdit(id){
   if(btn){btn.disabled=true;btn.textContent="Guardando…";}
 
   const payload={
-    tipo_formulario:"seller",
+    action:"saveSeller",
+    session_token: (typeof SESSION !== "undefined" ? SESSION.token : ""),
     seller_id:s.seller_id,
     seller_id_original:s.seller_id,
     seller_nombre:s.nombre,

@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-07-05 - Etapa 10: Alineación del backend GAS al estándar del ecosistema
+
+Tipo de cambio: refactor de arquitectura (backend) + contrato frontend.
+
+Estado: implementado y verificado estáticamente (inventario de funciones + node/browser syntax check). **Requiere pegar todos los archivos de `apps-script/` en el editor GAS y redeployar** + smoke test por flujo.
+
+Contexto: el backend GAS era correcto pero su estructura divergía de `commerce-hub` (la implementación de referencia del ecosistema, `../project-standards/apps_script_standards.md`). Se alineó en dos fases.
+
+**Fase A — reorganización estructural (backend-only, sin cambiar el contrato):**
+- `integrations/apps-script/` → **`apps-script/`** (como los proyectos hermanos).
+- El monolito `Apps_script_v5.js` se separó en `Code.gs` (solo router + `jsonResp`/`errorResp`) + un archivo por dominio: `Sellers.gs`, `Calificaciones.gs`, `Relevamientos.gs`, `DefinicionTecnica.gs`, `Tarifas.gs`, `Gantt.gs`, `Integraciones.gs`. `Auth.gs`→`Users.gs`, `Utils.gs`→`Helpers.gs`, `Config.gs`→`Schema.gs`. Nuevos `Setup.gs` (`setupAll()`) y `AuditLog.gs`.
+- Renombres: `jsonResponse`→`jsonResp`, `errorResponse`→`errorResp` (`{ok,error,code}`), `rowToObject`→`rowToObj`. Inventario de 157 funciones preservado, sin pérdidas.
+
+**Fase B — contrato único por `action` (toca frontend):**
+- Se eliminó el ruteo `tipo_formulario`. Todas las escrituras pasan a `action` verb-first: `saveSeller`, `saveCalificacion`, `saveRelevamiento`, `saveRelevamientoProfile`, `updateGanttTask`, `createGanttTask`, `disableGanttTask`, `updateTarifas`, `updateOverrides`, `uploadLogo`. El `doGet` quedó solo para health (`?action=health`); el perfil de relevamiento se lee por `action=getRelevamientoProfile` (POST).
+- **Gating de escrituras por sesión**: las internas se gatean por módulo RBAC (`ACTION_MODULE_MAP`: tarifas→`simuladores`, seller→`backlog`, gantt→`gantt`) — **reemplaza el `write_secret` opcional** por sesión real; las seller-scoped, por ownership. Se agregó `session_token` a los POST internos que no lo mandaban (config-tarifas, gestion-sellers, backlog-sellers).
+- Cada escritura registra en la hoja nueva `AUDIT_LOG` (best-effort, falla en silencio).
+- Frontend migrado en 8 páginas (`tipo_formulario`→`action`).
+
+Paso manual requerido: pegar los 13 archivos de `apps-script/` en el editor GAS y **redeployar** (nueva versión). Como los forms usan `no-cors`, sin redeploy las escrituras fallan en silencio.
+
 ## 2026-07-04 - Etapa 9: Portal con contexto de seller (staff "ve como seller")
 
 Tipo de cambio: feature + hardening de seguridad.

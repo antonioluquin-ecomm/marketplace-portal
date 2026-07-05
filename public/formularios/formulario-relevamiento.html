@@ -2791,17 +2791,9 @@
       async function loadPerfilRelevamiento() {
         if (!sellerId || !APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("PEGAR_URL")) return;
         try {
-          const url =
-            APPS_SCRIPT_URL +
-            "?action=relevamiento_profile_get&seller_id=" +
-            encodeURIComponent(sellerId) +
-            "&session_token=" +
-            encodeURIComponent(SellerSESSION.token) +
-            "&_ts=" +
-            Date.now();
-          const res = await fetch(url, { cache: "no-store" });
-          if (!res.ok) return;
-          const json = await res.json();
+          // Etapa 10B — lectura por POST action (antes doGet). _apiSellerPost
+          // inyecta session_token y, en modo staff, target_seller_id.
+          const json = await _apiSellerPost({ action: "getRelevamientoProfile", seller_id: sellerId });
           if (!json.exists || !json.profile) return;
 
           const profile = json.profile;
@@ -2875,7 +2867,7 @@
         return {
           seller_id: sellerId,
           session_token: SellerSESSION.token,
-          tipo_formulario: "relevamiento_profile_save",
+          action: "saveRelevamientoProfile",
           modo_guardado: "draft",
           payload_version: "relevamiento_profile_v1",
           actualizado_por: "public_form",
@@ -3071,7 +3063,7 @@
             const payload = {
               ...formToObject(ev.currentTarget),
               session_token: SellerSESSION.token,
-              tipo_formulario: "relevamiento",
+              action: "saveRelevamiento",
             };
 
             const res = await fetch(APPS_SCRIPT_URL, {
