@@ -26,7 +26,7 @@ window.MP_CONFIG = {
     // SELLERS, TIMELINE, TARIFAS y OVERRIDES: eliminados en la Etapa 6
     // (auditoría de seguridad) — la lectura ahora pasa por los endpoints
     // gateados por sesión `getSellers`/`getGantt`/`getTarifas`/`getOverrides`
-    // (integrations/apps-script/Apps_script_v5.js). Todas las pestañas
+    // (apps-script/). Todas las pestañas
     // sensibles ya están despublicadas en Google Sheets.
   },
 

@@ -874,3 +874,39 @@ function registrarAuditoriaGanttSiExiste(
 
   ws.appendRow(row);
 }
+
+
+// Misma normalización de encabezados que usa el frontend (gantt-operativo.html,
+// función norm()) — la hoja timeline tiene headers con mayúsculas/espacios
+// ("ID Tarea", "Seller / Marca", "Depende de"...), a diferencia de sellers
+// que ya son snake_case. Sin esto, rowToObj devolvería claves como
+// "ID Tarea" en vez de "id_tarea".
+function _normHeaderKeyGantt(s) {
+  return String(s || "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+// Etapa 6 — lectura de timeline (Gantt) gateada por sesión (reemplaza el CSV
+// publicado de la hoja timeline). Sellers ven solo sus propias tareas; staff
+// (sin seller_id en la sesión) ve todas.
+function getGanttAction(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE);
+  if (!ws) return { ok: true, data: [] };
+
+  const lastCol = ws.getLastColumn();
+  const lastRow = ws.getLastRow();
+  if (lastCol === 0 || lastRow < 2) return { ok: true, data: [] };
+
+  const headers = ws.getRange(1, 1, 1, lastCol).getValues()[0].map(_normHeaderKeyGantt);
+  const rows = ws.getRange(2, 1, lastRow - 1, lastCol).getValues();
+  const todos = rows
+    .map(r => rowToObj(headers, r))
+    .filter(o => o.seller_id || o.task_id || o.id_tarea);
+
+  return { ok: true, data: _aplicarSellerScope(data, todos) };
+}

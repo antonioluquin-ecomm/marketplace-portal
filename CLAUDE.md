@@ -8,8 +8,9 @@
 ## Reglas activas — específicas de este proyecto
 
 - **Un solo centro de navegación**: `index.html` es el Hub Central. No crear HTML en la raíz; las páginas nuevas van en `internal/` (uso interno) o `public/` (compartido con sellers).
-- **Auth por sesión (desde 2026-07-02)**: `internal/` requiere login de staff (`login.html`, `assets/js/auth.js`, RBAC por módulo) y `public/` requiere login de Seller (`public/login.html`, `assets/js/auth-seller.js`, una cuenta compartida por `seller_id`). Backend en `integrations/apps-script/Auth.gs`. Ver `CHANGELOG.md` para el detalle de cada etapa.
-- **Apps Script requiere redeploy manual**: el código en `integrations/apps-script/` es la fuente de verdad del repo, pero debe **pegarse en el editor de GAS y redeployarse** (nueva versión). Sin redeploy, los POST del frontend fallan en silencio (usan `no-cors`).
+- **Auth por sesión (desde 2026-07-02)**: `internal/` requiere login de staff (`login.html`, `assets/js/auth.js`, RBAC por módulo) y `public/` requiere login de Seller (`public/login.html`, `assets/js/auth-seller.js`, una cuenta compartida por `seller_id`). Backend en `apps-script/Users.gs`. Ver `CHANGELOG.md` para el detalle de cada etapa.
+- **Apps Script requiere redeploy manual**: el código en `apps-script/` es la fuente de verdad del repo, pero debe **pegarse en el editor de GAS y redeployarse** (nueva versión). Sin redeploy, los POST del frontend fallan en silencio (usan `no-cors`).
+- **Backend GAS alineado al estándar (desde Etapa 10)**: `apps-script/` sigue la estructura de `commerce-hub` (`../project-standards/apps_script_standards.md`): `Code.gs` (solo router `doPost`/`doGet` + `jsonResp`/`errorResp`), `Users.gs` (auth/RBAC), `Helpers.gs`, `Schema.gs`, `Setup.gs` (`setupAll`), `AuditLog.gs`, y un archivo por dominio (`Sellers`/`Calificaciones`/`Relevamientos`/`DefinicionTecnica`/`Tarifas`/`Gantt`/`Integraciones`).
 - **No renombrar columnas ni pestañas del Sheet** sin revisar todos los parsers. Las URLs CSV publicadas usan `gid` numérico — si se cambia el nombre de una pestaña, el gid no cambia, pero el texto puede romper parsers que buscan por nombre.
 - **Pestaña `overrides`**: tiene una fila de banner y una fila de instrucciones ANTES del header real. Todo parser debe buscar la fila que contiene `seller_id`, nunca asumir que la fila 0 es el header.
 - **Logos solo en `assets/logos/`** — los fallbacks dinámicos construyen `assets/logos/{seller_id en minúsculas}.png`. La vieja carpeta `Logos/` de raíz fue eliminada.
@@ -25,7 +26,7 @@
 
 - **Sin auth de sesión** — sitio estático puro, sin login
 - **Sin framework, sin build step** — HTML/CSS/JS inline por página; todo funciona como archivo estático en GitHub Pages
-- **Backend**: Google Apps Script (`integrations/apps-script/Apps_script_v5.js`) vía `fetch` con `no-cors` para escritura; Google Sheets publicados como CSV para lectura. No hay capa JS compartida de `fetch` — cada página hace sus propias llamadas (evaluado y descartado centralizar, ver ADR).
+- **Backend**: Google Apps Script (`apps-script/`, router en `Code.gs`) vía `fetch` con `no-cors` para escritura; Google Sheets publicados como CSV para lectura. No hay capa JS compartida de `fetch` — cada página hace sus propias llamadas (evaluado y descartado centralizar, ver ADR).
 - **Configuración central**: `window.MP_CONFIG` en `assets/js/config.js` — URLs de Sheets, Apps Script, rutas, logos
 - **CSS**: `assets/css/tokens.css` (variables globales, paleta canónica del ecosistema) + `assets/css/internal-components.css` (componentes compartidos: `.button`/`.secondary`/`.danger`/`.ghost`, `.field-error`) + `assets/css/pages/` (estilos por página)
 - **Tipografía**: DM Sans (`--font`) + DM Mono (`--mono`) en `index.html`/`internal/` (excepto la maqueta). `public/` sigue con su tipografía/paleta propia — no tocar.
@@ -50,7 +51,7 @@
 │  ├─ presentaciones/          presentacion-seller
 │  └─ simuladores/             simulador-seller
 ├─ assets/js/config.js         MP_CONFIG: URLs, rutas, config central
-├─ integrations/apps-script/   Fuente del backend GAS
+├─ apps-script/                Fuente del backend GAS (Code/Users/Helpers/Schema/dominios)
 └─ docs/                       Documentación viva
 ```
 
@@ -73,7 +74,7 @@ Pestañas publicadas como CSV:
 |-------|-------------|
 | Tarifas / overrides / simuladores | `internal/simuladores/config-tarifas.html` y los parsers en ambos simuladores |
 | Gantt / timeline | `docs/handoff-post-v1.md`, `docs/data-dictionary-timeline.md` |
-| Backend (formularios, guardado) | `integrations/apps-script/Apps_script_v5.js` (router `doPost` por `tipo_formulario`) |
+| Backend (formularios, guardado) | `apps-script/Code.gs` (router `doPost` por `action`) + el dominio correspondiente (`Sellers.gs`, `Calificaciones.gs`, etc.) |
 | Configuración de URLs y rutas | `assets/js/config.js` (`MP_CONFIG`) |
 | Historia del proyecto | `CHANGELOG.md`, `docs/roadmap.md` |
 | Tokens, colores, tipografía, componentes | `assets/css/tokens.css`, `assets/css/internal-components.css`, `docs/decisions/2026-07-01-alineacion-design-system.md` |
