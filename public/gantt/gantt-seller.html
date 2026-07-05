@@ -51,6 +51,16 @@
   .badge.completado{background:var(--g-dim);color:var(--g)}
   .badge.cancelado{background:rgba(255,255,255,.04);color:var(--t4);text-decoration:line-through}
 
+  .edit-toggle{flex-shrink:0;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--t2);border-radius:8px;padding:6px 11px;font-size:11px;font-weight:700;cursor:pointer;transition:.15s}
+  .edit-toggle:hover{border-color:var(--g-brd);color:var(--t1)}
+  .task-edit{margin:-2px 0 10px;padding:14px 16px;border:1px solid var(--g-brd);border-top:none;border-radius:0 0 12px 12px;background:rgba(94,168,50,.05)}
+  .task-edit label{display:block;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin:0 0 5px}
+  .task-edit select,.task-edit textarea{width:100%;background:rgba(9,16,10,.6);color:var(--t1);border:1px solid var(--bdr);border-radius:8px;padding:8px 10px;font-size:13px;font-family:inherit;margin-bottom:11px}
+  .task-edit textarea{min-height:60px;resize:vertical}
+  .task-edit .edit-actions{display:flex;align-items:center;gap:12px}
+  .btn-save{background:var(--g);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+  .btn-save:disabled{opacity:.6;cursor:default}
+  .edit-status{font-size:12px;color:var(--t3)}
   .empty{padding:32px;border:1px dashed var(--bdr);border-radius:14px;color:var(--t3);font-size:13px;text-align:center}
   .err{padding:16px;border:1px solid rgba(229,72,77,.3);background:rgba(229,72,77,.08);border-radius:10px;color:var(--danger);font-size:13px}
 
@@ -69,7 +79,7 @@
   <main class="main">
     <div class="hero-eyebrow">Seguimiento</div>
     <h1>Gantt de tu proyecto</h1>
-    <p class="lead">Estado y fechas de las tareas de tu proceso de integración con Sporting Marketplace. Vista de solo lectura.</p>
+    <p class="lead">Estado y fechas de las tareas de tu proceso de integración con Sporting Marketplace. Podés actualizar el <strong>estado</strong> y dejar un <strong>comentario</strong> en tus tareas.</p>
 
     <div id="content"><div class="empty">Cargando…</div></div>
   </main>
@@ -89,6 +99,8 @@
     }
 
     const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+
+    const ESTADOS = ['Pendiente', 'En curso', 'Bloqueado', 'Completado', 'Cancelado'];
 
     function parseDate(raw) {
       if (!raw || !String(raw).trim() || String(raw).trim() === '—') return null;
@@ -137,6 +149,7 @@
         inicio:      parseDate(r.inicio || r.fecha_inicio_plan || r.inicio_plan),
         fin:         parseDate(r.fin || r.fecha_fin_plan || r.fin_plan),
         estado:      estadoNorm(r.estado_tarea || r.estado),
+        comentario:  r.comentario || '',
         visible:     norm(r.ver_en_gantt || r.visible_gantt || r.visible || 'si') !== 'no',
       })).filter(t => t.visible);
     }
@@ -165,6 +178,10 @@
           '<div class="fase-title">' + fase + '</div>' +
           items.map(function (t) {
             const badgeClass = norm(t.estado).replace(/_/g, '-');
+            const id = t.task_id;
+            const estOpts = ESTADOS.map(function (e) {
+              return '<option' + (e === t.estado ? ' selected' : '') + '>' + e + '</option>';
+            }).join('');
             return '<div class="task-card">' +
               '<div class="task-main">' +
                 '<div class="task-name">' + escapeHtml(t.tarea || t.hito || t.task_id) + '</div>' +
@@ -172,10 +189,49 @@
               '</div>' +
               '<span class="badge ' + badgeClass + '">' + t.estado + '</span>' +
               '<div class="task-dates">' + fmtDate(t.inicio) + ' → ' + fmtDate(t.fin) + '</div>' +
+              '<button class="edit-toggle" onclick="toggleEdit(\'' + id + '\')">Editar</button>' +
+            '</div>' +
+            '<div class="task-edit" id="edit-' + id + '" hidden>' +
+              '<label>Estado</label>' +
+              '<select id="est-' + id + '">' + estOpts + '</select>' +
+              '<label>Comentario</label>' +
+              '<textarea id="com-' + id + '" placeholder="Dejá una nota sobre esta tarea…">' + escapeHtml(t.comentario) + '</textarea>' +
+              '<div class="edit-actions">' +
+                '<button class="btn-save" onclick="guardarTarea(\'' + id + '\')">Guardar</button>' +
+                '<span class="edit-status" id="status-' + id + '"></span>' +
+              '</div>' +
             '</div>';
           }).join('') +
         '</div>';
       }).join('');
+    }
+
+    function toggleEdit(id) {
+      const panel = document.getElementById('edit-' + id);
+      if (panel) panel.hidden = !panel.hidden;
+    }
+
+    async function guardarTarea(id) {
+      const est = document.getElementById('est-' + id);
+      const com = document.getElementById('com-' + id);
+      const statusEl = document.getElementById('status-' + id);
+      const btn = document.querySelector('#edit-' + id + ' .btn-save');
+      if (!est || !com) return;
+      if (statusEl) statusEl.textContent = 'Guardando…';
+      if (btn) btn.disabled = true;
+      try {
+        await _apiSellerPost({
+          tipo_formulario: 'gantt_task_update',
+          task_id: id,
+          updated_by: 'front@gantt-seller',
+          fields: { estado: est.value, comentario: com.value },
+        });
+        if (statusEl) statusEl.textContent = '✓ Guardado';
+        setTimeout(loadGantt, 700); // refresca badges y estado
+      } catch (e) {
+        if (btn) btn.disabled = false;
+        if (statusEl) statusEl.textContent = 'Error: ' + (e.message || 'no se pudo guardar');
+      }
     }
 
     async function loadGantt() {
@@ -191,7 +247,10 @@
       }
     }
 
-    initSellerAuth().then(loadGantt);
+    initPortalPage(loadGantt, function () {
+      document.getElementById('content').innerHTML =
+        '<div class="empty">Elegí un seller en la barra inferior para ver su Gantt.</div>';
+    });
   </script>
 </body>
 </html>

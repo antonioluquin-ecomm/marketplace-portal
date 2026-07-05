@@ -211,10 +211,22 @@ window.MP_CONFIG = {
  * del sidebar y con el módulo que se le pasa a initAuth() en cada página.
  * El Administrador (id_rol=1) siempre tiene acceso a todos los módulos.
  */
+// Etapa 9d — registro unificado de módulos con `tier`:
+//  · 'interno'  → páginas de internal/ (shell azul).
+//  · 'externo'  → páginas de public/ (shell verde) que el staff puede abrir en
+//    modo "ver como seller". El tier es una regla dura: un seller (id_rol=2)
+//    NUNCA alcanza un módulo interno (gateado en auth-seller.js/backend), aunque
+//    RBAC le habilitara algo por error. RBAC solo decide qué módulos dentro de
+//    un tier ve cada rol interno.
 window.MP_RBAC_MODULOS = [
-  { key: "backlog",       label: "Backlog de Sellers" },
-  { key: "gantt",         label: "Gantt (Operativo + Seller Center)" },
-  { key: "seller_center", label: "Seller Center" },
-  { key: "simuladores",   label: "Simuladores y Tarifas" },
-  { key: "estrategia",    label: "Modelo y Estrategia" }
+  { key: "backlog",          label: "Backlog de Sellers",              tier: "interno" },
+  { key: "gantt",            label: "Gantt (Operativo + Seller Center)", tier: "interno" },
+  { key: "seller_center",    label: "Seller Center",                   tier: "interno" },
+  { key: "simuladores",      label: "Simuladores y Tarifas",           tier: "interno" },
+  { key: "estrategia",       label: "Modelo y Estrategia",             tier: "interno" },
+  { key: "ext_presentacion", label: "Presentación seller",             tier: "externo" },
+  { key: "ext_calificacion", label: "Formulario calificación",         tier: "externo" },
+  { key: "ext_relevamiento", label: "Formulario relevamiento",         tier: "externo" },
+  { key: "ext_simulador",    label: "Simulador seller",                tier: "externo" },
+  { key: "ext_gantt",        label: "Gantt del seller",                tier: "externo" }
 ];

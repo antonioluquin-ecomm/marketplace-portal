@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-04 - Etapa 9: Portal con contexto de seller (staff "ve como seller")
+
+Tipo de cambio: feature + hardening de seguridad.
+
+Estado: implementado y verificado en preview (harness con stubs). **Requiere redeploy de Apps Script** (cambios en `Apps_script_v5.js` y `Gantt.gs`).
+
+Contexto: se replanteó el modelo de dos portales estancos a **un registro de módulos unificado gobernado por permisos**. El admin ve todos los módulos (internos y externos); al entrar a un módulo externo elige un seller y lo ve con sus datos. El seller sigue siendo un usuario más que solo ve los módulos externos, filtrados a lo suyo. Reemplaza el enfoque de impersonación (más limpio: el admin nunca deja de ser admin).
+
+Resultado (por sub-etapas):
+- **9a — Backend**: nuevo `_resolverSellerScope`/`_aplicarSellerScope` en los 5 endpoints de lectura (`getSellers`/`getGantt`/`getTarifas`/`getOverrides`/`getRelevamientos`): una sesión de seller queda acotada a lo suyo e **ignora** `target_seller_id`; una sesión interna puede pasar `target_seller_id` para ver un seller puntual, o ve todo sin él. `validarSesionSellerParaLectura` pasa de "solo admin" a "cualquier sesión interna". **Se cerró un hueco de seguridad**: `gantt_task_update` no validaba sesión ni pertenencia (cualquier POST editaba cualquier tarea) — ahora exige sesión y, para sesiones de seller, solo permite editar tareas propias y solo `estado`/`comentario` (`Gantt.gs`).
+- **9b — Sesión dual-mode**: `auth-seller.js` (`SellerSESSION`) resuelve staff-o-seller manteniendo la misma API. En modo staff, `sellerId` es el target elegido (persistido en `sessionStorage`) y `_apiSellerPost` lo inyecta como `target_seller_id`.
+- **9c — Selector en páginas externas**: `renderStaffSellerBar()` monta una barra inferior verde con el selector de sellers + "← Hub interno" (solo en modo staff), en las 6 páginas de `public/`. Elegir un seller persiste el target y recarga la página.
+- **9d — Navegación**: `MP_RBAC_MODULOS` gana `tier` (`interno`/`externo`) + 5 módulos externos; el sidebar interno estrena la sección "Vista de sellers" con links `data-page="ext_*"` gateados por RBAC (admin ve todo; no-admin según config). El tier es una regla dura: un seller nunca alcanza un módulo interno.
+- **9e — Gantt del seller editable**: `public/gantt/gantt-seller.html` deja de ser solo lectura — cada tarea permite actualizar `estado` y `comentario` (vía `gantt_task_update`, gateado por el guard de 9a). El staff edita las del seller elegido; el seller, las suyas.
+
+Paso manual requerido: pegar `Apps_script_v5.js` y `Gantt.gs` en el editor de GAS y **redeployar** (nueva versión). Sin redeploy, el selector de seller y la edición del Gantt fallan.
+
 ## 2026-07-03 - Etapa 8: Página "Configuración" alineada al estándar del ecosistema
 
 Tipo de cambio: UX / alineación de estándar (sin cambios de backend).

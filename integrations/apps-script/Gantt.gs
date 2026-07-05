@@ -117,6 +117,25 @@ function actualizarTareaGanttSinLock(d) {
 
   const rowNumber = coincidencias[0].rowNumber;
   const row = coincidencias[0].row;
+
+  // Etapa 9a — guard de ownership para sesiones de seller. Si la sesión trae
+  // seller_id (id_rol=2), solo puede editar SUS tareas y solo estado/comentario.
+  // Las sesiones internas (staff, sin seller_id — incluye el modo "ver como
+  // seller" del admin) mantienen acceso total, como el Gantt operativo interno.
+  const sesSellerId = String(d._sesSellerId || "").trim();
+  if (sesSellerId) {
+    const sellerCol = resolverIndiceHeaderGantt(headerMap, CAMPOS_GANTT_CREATE_ALIASES.seller_id);
+    const rowSeller = sellerCol === -1 ? "" : String(row[sellerCol] || "").trim();
+    if (rowSeller.toUpperCase() !== sesSellerId.toUpperCase()) {
+      throw new Error("No autorizado a editar esta tarea (pertenece a otro seller).");
+    }
+    const CAMPOS_SELLER = ["estado", "comentario"];
+    const noPermitidosSeller = nombresCampos.filter((c) => CAMPOS_SELLER.indexOf(c) === -1);
+    if (noPermitidosSeller.length) {
+      throw new Error("Los sellers solo pueden actualizar estado y comentario.");
+    }
+  }
+
   const updates = [];
   const before = {};
   const after = {};

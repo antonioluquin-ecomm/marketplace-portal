@@ -158,12 +158,19 @@
       }).join('');
     }
 
-    initSellerAuth().then(function () {
-      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
-      document.getElementById('hero-title').textContent = 'Hola, ' + (SellerSESSION.nombre || SellerSESSION.sellerId);
-      renderGrid();
-      loadProgressSummary();
-    });
+    renderGrid(); // los recursos de seller no dependen de la sesión puntual
+    initPortalPage(
+      function () { // modo seller, o al elegir un seller en modo staff
+        document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
+        document.getElementById('hero-title').textContent = 'Hola, ' + (SellerSESSION.nombre || SellerSESSION.sellerId);
+        document.getElementById('progress-section').style.display = '';
+        loadProgressSummary();
+      },
+      function () { // modo staff, sin seller elegido todavía
+        document.getElementById('hero-title').textContent = 'Elegí un seller para ver su portal';
+        document.getElementById('progress-section').style.display = 'none';
+      }
+    );
   </script>
 </body>
 </html>

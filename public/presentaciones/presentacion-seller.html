@@ -621,7 +621,7 @@
 
   <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/auth-seller.js"></script>
-  <script>initSellerAuth();</script>
+  <script>initSellerAuth().then(function () { renderStaffSellerBar(); });</script>
   <script>
     // ── CONFIGURACIÓN CENTRAL ─────────────────────────────────────────────────
     const BASE_URL = (() => {

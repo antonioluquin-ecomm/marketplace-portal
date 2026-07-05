@@ -51,6 +51,13 @@ function doPost(e) {
     }
 
     if (tipoFormulario === "gantt_task_update") {
+      // Etapa 9a — cierra el hueco: antes esta escritura no validaba sesión ni
+      // pertenencia (cualquier POST podía editar cualquier tarea). Ahora exige
+      // sesión válida e inyecta rol/seller para el guard de ownership en Gantt.gs.
+      const sesGantt = _validateSessionToken(data.session_token);
+      if (!sesGantt.ok) throw new Error("Sesión requerida para editar tareas del Gantt. Iniciá sesión de nuevo.");
+      data._sesRol = sesGantt.id_rol;
+      data._sesSellerId = sesGantt.seller_id || "";
       const resultadoGantt = actualizarTareaGantt(data);
       return jsonResponse({
         ok: true,
@@ -217,9 +224,13 @@ function validarSesionSellerParaLectura(data, sellerId) {
   if (!sesVal.ok) {
     throw new Error("Sesión requerida para consultar estos datos. Iniciá sesión de nuevo.");
   }
-  const esAdmin = sesVal.id_rol === 1;
-  if (!esAdmin) {
-    if (!sesVal.seller_id || sesVal.seller_id.toUpperCase() !== sellerId.toUpperCase()) {
+  // Etapa 9a — el exceptuado pasa de "solo admin" a "cualquier sesión interna"
+  // (sin seller_id): coherente con _aplicarSellerScope, permite al staff ver un
+  // seller puntual desde el selector. Un seller (con seller_id) sigue acotado
+  // a lo suyo.
+  const esInterno = !sesVal.seller_id;
+  if (!esInterno) {
+    if (sesVal.seller_id.toUpperCase() !== String(sellerId).toUpperCase()) {
       throw new Error("No autorizado a consultar los datos de este seller.");
     }
   }
@@ -829,10 +840,33 @@ function buscarFilaPorSellerId(ws, sellerId) {
 // HOJAS / HEADERS
 // ───────────────────────────────────────────────
 
+// Etapa 9a — resuelve el alcance de seller de una request de lectura/escritura.
+// - Sesión de seller (data._sesSellerId truthy, inyectado por routeAuthAction):
+//   queda "locked" a su propio seller_id e IGNORA cualquier target_seller_id
+//   del body (anti-spoofing: un seller no puede pedir datos de otro).
+// - Sesión de staff (sin seller_id): puede pasar target_seller_id opcional para
+//   ver un seller puntual (selector de "ver como seller"); sin target ve todo.
+function _resolverSellerScope(data) {
+  if (data._sesSellerId) {
+    return { locked: true, sellerId: String(data._sesSellerId).trim() };
+  }
+  return { locked: false, target: String(data.target_seller_id || "").trim() };
+}
+
+// Aplica el alcance resuelto a una lista de objetos con .seller_id.
+function _aplicarSellerScope(data, lista) {
+  const scope = _resolverSellerScope(data);
+  const filtro = scope.locked ? scope.sellerId : scope.target;
+  if (!filtro) return lista; // staff sin target: todo
+  const filtroUp = filtro.toUpperCase();
+  return lista.filter(o => String(o.seller_id || "").trim().toUpperCase() === filtroUp);
+}
+
 // Etapa 6 — lectura de sellers gateada por sesión (reemplaza el CSV publicado
 // de la hoja sellers, que quedará despublicado). Sellers ven solo su propia
 // fila (data._sesSellerId, inyectado por routeAuthAction en Auth.gs); staff
-// (sin seller_id en la sesión) ve todas las filas.
+// (sin seller_id en la sesión) ve todas las filas, o una si pasa
+// target_seller_id (Etapa 9a — selector de "ver como seller").
 function getSellersAction(data) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const ws = obtenerHojaSellersConHeaders(ss);
@@ -840,12 +874,7 @@ function getSellersAction(data) {
   const lastRow = ws.getLastRow();
   const rows = lastRow > 1 ? ws.getRange(2, 1, lastRow - 1, headers.length).getValues() : [];
   const todos = rows.map(r => rowToObject(headers, r)).filter(o => o.seller_id);
-
-  if (data._sesSellerId) {
-    const propio = todos.find(r => String(r.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
-    return { ok: true, data: propio ? [propio] : [] };
-  }
-  return { ok: true, data: todos };
+  return { ok: true, data: _aplicarSellerScope(data, todos) };
 }
 
 // Misma normalización de encabezados que usa el frontend (gantt-operativo.html,
@@ -876,14 +905,11 @@ function getGanttAction(data) {
 
   const headers = ws.getRange(1, 1, 1, lastCol).getValues()[0].map(_normHeaderKeyGantt);
   const rows = ws.getRange(2, 1, lastRow - 1, lastCol).getValues();
-  let todos = rows
+  const todos = rows
     .map(r => rowToObject(headers, r))
     .filter(o => o.seller_id || o.task_id || o.id_tarea);
 
-  if (data._sesSellerId) {
-    todos = todos.filter(o => String(o.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
-  }
-  return { ok: true, data: todos };
+  return { ok: true, data: _aplicarSellerScope(data, todos) };
 }
 
 // Etapa 6 — lectura de tarifas gateada por sesión (reemplaza el CSV
@@ -947,11 +973,7 @@ function getOverridesAction(data) {
     todos.push(obj);
   }
 
-  if (data._sesSellerId) {
-    const propio = todos.find(r => String(r.seller_id || "").trim().toUpperCase() === data._sesSellerId.toUpperCase());
-    return { ok: true, data: propio ? [propio] : [] };
-  }
-  return { ok: true, data: todos };
+  return { ok: true, data: _aplicarSellerScope(data, todos) };
 }
 
 // Etapa 6d — lectura de relevamientos gateada por sesión (reemplaza el CSV

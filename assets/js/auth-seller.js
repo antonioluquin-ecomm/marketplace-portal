@@ -8,20 +8,61 @@
    de public/ (excepto login.html, que tiene su propio script inline).
    ============================================================ */
 
+/*
+  Etapa 9b — sesión de portal dual-mode. Las 6 páginas de public/ pueden
+  cargarse con:
+    · una sesión de seller (mp_seller_session) → modo 'seller', fijo a su
+      propio seller_id (comportamiento histórico), o
+    · una sesión interna de staff (mp_session, la de auth.js) → modo 'staff':
+      el admin/staff "ve como seller" eligiendo uno con el selector. El
+      seller_id pasa a ser un target seleccionable (SellerSESSION.sellerId),
+      que _apiSellerPost inyecta como target_seller_id.
+  Se conserva la superficie de API (SellerSESSION, _apiSellerPost,
+  initSellerAuth) para no reescribir las páginas.
+*/
 const SellerSESSION = {
-  get data()  { return JSON.parse(localStorage.getItem('mp_seller_session') || 'null'); },
-  set data(v) { localStorage.setItem('mp_seller_session', JSON.stringify(v)); },
-  clear()     { localStorage.removeItem('mp_seller_session'); },
-
-  isLoggedIn() {
-    const d = this.data;
-    return !!d && !!d.expira_en && new Date(d.expira_en) > new Date();
+  // seller elegido en modo staff — persistido en sessionStorage (por pestaña)
+  // para que sobreviva el reload que dispara el selector y las páginas que
+  // capturan el seller_id al cargar lo tomen ya resuelto.
+  get _staffTarget()  { return sessionStorage.getItem('mp_staff_seller') || ''; },
+  set _staffTarget(v) {
+    if (v) sessionStorage.setItem('mp_staff_seller', String(v).trim());
+    else   sessionStorage.removeItem('mp_staff_seller');
   },
 
-  get sellerId() { return (this.isLoggedIn() && this.data.usuario.seller_id) || ''; },
-  get token()    { return (this.data && this.data.session_token) || ''; },
-  get nombre()   { return (this.isLoggedIn() && this.data.usuario.nombre) || ''; },
-  get email()    { return (this.isLoggedIn() && this.data.usuario.email) || ''; },
+  get _sellerData() { return JSON.parse(localStorage.getItem('mp_seller_session') || 'null'); },
+  get _staffData()  { return JSON.parse(localStorage.getItem('mp_session')        || 'null'); },
+  _valid(d)         { return !!d && !!d.expira_en && new Date(d.expira_en) > new Date(); },
+
+  get mode() {
+    if (this._valid(this._sellerData)) return 'seller';
+    if (this._valid(this._staffData))  return 'staff';
+    return null;
+  },
+  get isStaff() { return this.mode === 'staff'; },
+  isLoggedIn()  { return this.mode !== null; },
+
+  // Sesión activa según el modo (seller o staff).
+  get data() {
+    const m = this.mode;
+    if (m === 'seller') return this._sellerData;
+    if (m === 'staff')  return this._staffData;
+    return null;
+  },
+  set data(v) { localStorage.setItem('mp_seller_session', JSON.stringify(v)); }, // solo modo seller
+  clear()     { localStorage.removeItem('mp_seller_session'); },
+
+  // En modo seller: su propio seller_id (fijo). En modo staff: el target elegido.
+  get sellerId() {
+    if (this.mode === 'seller') return (this._sellerData.usuario && this._sellerData.usuario.seller_id) || '';
+    if (this.mode === 'staff')  return this._staffTarget || '';
+    return '';
+  },
+  set sellerId(v) { if (this.mode === 'staff') this._staffTarget = String(v || '').trim(); },
+
+  get token()  { const d = this.data; return (d && d.session_token) || ''; },
+  get nombre() { const d = this.data; return (d && d.usuario && d.usuario.nombre) || ''; },
+  get email()  { const d = this.data; return (d && d.usuario && d.usuario.email) || ''; },
 };
 
 /* ─── RUTAS (relativas a public/) ─────────────────────────── */
@@ -42,27 +83,116 @@ function _sellerHubPath() {
   return '../'.repeat(_sellerPublicDepth()) + 'index.html';
 }
 
+// Rutas al lado interno (repo root, un nivel por encima de public/) — usadas en
+// modo staff para volver al Hub o al login interno.
+function _internalLoginPath() {
+  return '../'.repeat(_sellerPublicDepth() + 1) + 'login.html';
+}
+
+function _internalHubPath() {
+  return '../'.repeat(_sellerPublicDepth() + 1) + 'index.html';
+}
+
 /* ─── INIT ────────────────────────────────────────────────── */
 
 async function initSellerAuth() {
-  if (!SellerSESSION.isLoggedIn()) {
+  const modo = SellerSESSION.mode;
+  if (!modo) {
     window.location.href = _sellerLoginPath();
     return;
   }
 
   try {
     const fresh = await _apiSellerPost({ action: 'validateSession' });
-    if (fresh && fresh.usuario) {
-      const cur = SellerSESSION.data;
-      if (cur) SellerSESSION.data = Object.assign({}, cur, { usuario: fresh.usuario });
+    if (fresh && fresh.usuario && SellerSESSION.mode === 'seller') {
+      // Solo refrescamos la sesión de seller; la interna la gestiona auth.js.
+      const cur = SellerSESSION._sellerData;
+      if (cur) localStorage.setItem('mp_seller_session', JSON.stringify(Object.assign({}, cur, { usuario: fresh.usuario })));
     }
   } catch (e) {
-    // Sesión inválida/expirada: logoutSeller() ya se disparó desde _apiSellerPost
+    // Sesión inválida/expirada: _apiSellerPost ya redirigió según el modo
   }
 
-  if (!SellerSESSION.isLoggedIn() || !SellerSESSION.sellerId) {
+  if (!SellerSESSION.isLoggedIn()) {
+    window.location.href = _sellerLoginPath();
+    return;
+  }
+
+  // Modo seller: exige tener seller_id propio. Modo staff: no exige target
+  // (el admin lo elige con el selector; la página arranca sin seller cargado).
+  if (SellerSESSION.mode === 'seller' && !SellerSESSION.sellerId) {
     window.location.href = _sellerLoginPath();
   }
+}
+
+/* ─── BARRA "VER COMO SELLER" (modo staff) ────────────────────── */
+
+// Etapa 9c — en modo staff monta una barra inferior verde con un <select> de
+// todos los sellers + link al Hub interno. Al elegir un seller, persiste el
+// target y recarga la página, de modo que TODA página (incluidas las que
+// capturan el seller_id al cargar) re-arranca con el seller elegido. En modo
+// seller es no-op y devuelve false. Devuelve true en modo staff.
+async function renderStaffSellerBar() {
+  if (!SellerSESSION.isStaff) return false;
+  if (document.getElementById('staff-seller-bar')) return true;
+
+  // Oculta el chrome de sesión de seller (chip/cambiar contraseña/logout) que
+  // no aplica en modo staff — se sale con "← Hub interno".
+  document.querySelectorAll('.user-chip').forEach(function (el) { el.style.display = 'none'; });
+
+  const bar = document.createElement('div');
+  bar.id = 'staff-seller-bar';
+  bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:9px 18px;background:#3f6b1f;color:#fff;font-family:Barlow,system-ui,sans-serif;font-size:13px;box-shadow:0 -2px 14px rgba(0,0,0,.3)';
+  bar.innerHTML =
+    '<strong style="font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:10.5px">Vista de administrador</strong>' +
+    '<span style="opacity:.85">Ver como seller:</span>' +
+    '<select id="staff-seller-select" style="min-width:230px;padding:6px 8px;border-radius:6px;border:none;font-size:13px;color:#111">' +
+      '<option value="">— Cargando sellers… —</option>' +
+    '</select>' +
+    '<span style="flex:1"></span>' +
+    '<a href="' + _internalHubPath() + '" style="color:#fff;text-decoration:underline;font-size:12px">← Hub interno</a>';
+  document.body.appendChild(bar);
+  document.body.style.paddingBottom = (bar.offsetHeight + 16) + 'px';
+
+  const sel = document.getElementById('staff-seller-select');
+  sel.addEventListener('change', function () {
+    SellerSESSION._staffTarget = sel.value; // persiste (o limpia)
+    window.location.reload();               // re-arranca la página con el nuevo seller
+  });
+
+  try {
+    // getSellers con target vacío devuelve todos (para poblar el selector).
+    const json = await _apiSellerPost({ action: 'getSellers', target_seller_id: '' });
+    const sellers = (json.data || []).slice().sort(function (a, b) {
+      return String(a.seller_nombre || a.seller_id).localeCompare(String(b.seller_nombre || b.seller_id), 'es');
+    });
+    const actual = SellerSESSION.sellerId;
+    sel.innerHTML = '<option value="">— Elegí un seller —</option>' +
+      sellers.map(function (s) {
+        const id  = s.seller_id;
+        const nom = s.seller_nombre || s.nombre || id;
+        const selAttr = String(id).toUpperCase() === String(actual).toUpperCase() ? ' selected' : '';
+        return '<option value="' + id + '"' + selAttr + '>' + nom + ' · ' + id + '</option>';
+      }).join('');
+  } catch (e) {
+    sel.innerHTML = '<option value="">Error al cargar sellers</option>';
+  }
+  return true;
+}
+
+// Etapa 9c — arranca una página externa: valida sesión y monta la barra en modo
+// staff. Ejecuta load() en modo seller, o en modo staff si ya hay un seller
+// elegido (target persistido). En modo staff sin seller elegido, llama
+// onStaffNoTarget() (para mostrar un placeholder) y no carga contenido.
+async function initPortalPage(load, onStaffNoTarget) {
+  await initSellerAuth();
+  if (!SellerSESSION.isLoggedIn()) return; // initSellerAuth ya redirigió
+  const staff = await renderStaffSellerBar();
+  if (staff && !SellerSESSION.sellerId) {
+    if (typeof onStaffNoTarget === 'function') onStaffNoTarget();
+    return;
+  }
+  load();
 }
 
 /* ─── LOGOUT ──────────────────────────────────────────────── */
@@ -187,15 +317,25 @@ async function _apiSellerPost(body) {
   const url = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
   if (!url) throw new Error('No hay URL de API configurada');
 
-  const res = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(Object.assign({ session_token: SellerSESSION.token }, body)),
-  });
+  const payload = Object.assign({ session_token: SellerSESSION.token }, body);
+  // Modo staff con un seller elegido: se pasa como target_seller_id. El backend
+  // solo lo respeta para sesiones internas; una sesión de seller lo ignora.
+  if (SellerSESSION.isStaff && SellerSESSION.sellerId && payload.target_seller_id === undefined) {
+    payload.target_seller_id = SellerSESSION.sellerId;
+  }
+
+  const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const json = await res.json();
   if (!json.ok) {
     if (json.code === 401) {
-      logoutSeller();
+      // Sesión vencida: redirige según el dominio de la sesión activa.
+      if (SellerSESSION.mode === 'staff') {
+        localStorage.removeItem('mp_session');
+        window.location.href = _internalLoginPath();
+      } else {
+        logoutSeller();
+      }
       throw new Error('Sesión expirada. Ingresá de nuevo.');
     }
     throw new Error(json.error || 'Error desconocido');
