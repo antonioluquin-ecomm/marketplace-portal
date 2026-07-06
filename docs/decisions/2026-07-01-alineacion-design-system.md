@@ -47,3 +47,11 @@ Alinear Marketplace Portal al design system estándar del ecosistema, en etapas 
 
 - Cada etapa del plan de estandarización se valida en preview server antes de commitear: sin errores de consola, links del hub funcionando, parsers de CSV intactos, `?seller_id` preservado en páginas públicas.
 - Checklist de smoke visual de `docs/project_workflow.md §8` al cierre de la migración completa.
+
+## Actualización 2026-07-06 — verde Sporting como único primary, revierte punto 7
+
+Decisión explícita del usuario: en vez de mantener dos identidades visuales (azul institucional en `internal/`, verde oscuro propio en `public/`), todo el portal adopta el **mismo** design system estándar del ecosistema (modo claro, DM Sans/DM Mono, mismos componentes), con un único cambio: el color primario pasa de azul institucional (`#1a3f6b`) a **verde Sporting (`#25b60c`)**.
+
+- **Punto 1 (dirección visual) queda actualizado**: `--primary`/`--primary-hover`/`--primary-soft`/`--primary-mid` en `tokens.css` ahora son verde Sporting en vez de azul. El resto de la paleta (`--success`, `--danger`, `--warning`, `--bg`, `--card`, `--line`) no cambia — `--success` (`#0a7040`) se mantiene igual aunque también sea verde: es el mismo patrón que ya usan otros proyectos del ecosistema (primary ≠ success, son roles distintos aunque compartan familia de color).
+- **Punto 7 (public/ excluido, tema oscuro) queda revertido**: las 7 páginas de `public/` migran a modo claro + `tokens.css`/`internal-components.css`, igual que `internal/`, en vez de mantener su paleta oscura propia (`#09100a` de fondo, verde `#5ea832`/`#6aa84f`). Se ejecuta en etapas separadas (ver plan de estandarización de esta iniciativa) por ser el código de mayor riesgo (lo usa el seller externo en producción vía `?seller_id=`/sesión de seller).
+- Motivo del cambio: evitar mantener dos sistemas visuales paralelos en el mismo proyecto: unificar sobre el estándar compartido del ecosistema y diferenciarse solo por color de marca, no por estructura ni componentes.

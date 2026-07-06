@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-06 - Rebrand: verde Sporting (`#25b60c`) como único color primario (Etapa 1 de 4)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Contexto: el proyecto tenía dos identidades visuales a propósito (ver `docs/decisions/2026-07-01-alineacion-design-system.md`) — azul institucional en `internal/`, verde oscuro propio en `public/`. Decisión explícita del usuario: revertir esa separación y unificar todo el portal sobre el mismo design system estándar, diferenciándose solo por color de marca (verde Sporting) en vez de por estructura o componentes.
+
+- **`assets/css/tokens.css`**: `--primary`/`--primary-hover`/`--primary-soft`/`--primary-mid` pasan de azul institucional (`#1a3f6b`) a verde Sporting (`#25b60c`). `--success` se mantiene igual a propósito (roles distintos, mismo patrón que otros proyectos del ecosistema).
+- Limpieza de ~20 literales hex azules que no dependían de `--primary` y no se hubieran actualizado solos: `assets/css/theme.css` (alias `--g`/`--info`), `assets/css/pages/gantt-operativo.css` (`--info`), `assets/css/pages/simuladores.css` (gradientes/estados de KPI), y 8 páginas de `internal/` que hardcodeaban `--info:#2563eb` en vez de `var(--primary)`.
+- Actualizado `docs/decisions/2026-07-01-alineacion-design-system.md` con una sección "Actualización 2026-07-06" que registra la reversión del punto 7 (public/ ya no queda excluido — pasa a modo claro en etapas siguientes).
+- Pendiente (Etapas 2-4, checkpoint por etapa): migrar las 7 páginas de `public/` de tema oscuro propio a modo claro + `tokens.css`/`internal-components.css`.
+
 ## 2026-07-06 - Etapa 12c: Unificación de topbar y sidebar en todo `internal/`
 
 Tipo de cambio: UX/UI (sin cambios de backend ni de datos).

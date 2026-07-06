@@ -18,7 +18,7 @@
   --bdr:     var(--line); --bdr-l:rgba(17,24,39,.05);
   --t1:      var(--text); --t2:var(--muted); --t3:#7c8698;
   --danger:  var(--danger); --dng-dim:var(--danger-bg); --dng-brd:rgba(153,27,27,.28);
-  --info:    #2563eb; --info-dim:#e8f0fb;
+  --info:    var(--primary); --info-dim:var(--primary-soft);
   --teal:    #0d9488; --teal-dim:rgba(13,148,136,.10);
   --warn:    var(--warning); --warn-dim:var(--warning-bg);
   --violet:  #7c3aed;
@@ -281,7 +281,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 
 /* ── FILTROS ACTIVOS ── */
 #filter-chips{display:none;align-items:center;gap:5px;padding:5px 16px;border-bottom:1px solid var(--bdr);background:rgba(106,168,79,.04);flex-wrap:wrap;flex-shrink:0}
-.filter-chip{display:inline-flex;align-items:center;padding:3px 9px;background:var(--primary-soft);border:1px solid rgba(26,63,107,.24);border-radius:999px;color:var(--primary-hover);font-size:10px;font-weight:700;font-family:var(--font);cursor:pointer;white-space:nowrap;transition:background .12s}
+.filter-chip{display:inline-flex;align-items:center;padding:3px 9px;background:var(--primary-soft);border:1px solid rgba(37,182,12,.24);border-radius:999px;color:var(--primary-hover);font-size:10px;font-weight:700;font-family:var(--font);cursor:pointer;white-space:nowrap;transition:background .12s}
 .filter-chip:hover{background:rgba(106,168,79,.22);border-color:rgba(106,168,79,.45)}
 
 /* ── KANBAN VIEW ── */

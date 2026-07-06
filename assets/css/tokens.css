@@ -29,11 +29,11 @@
   /* Líneas */
   --line: #e5e7eb;
 
-  /* Primary — azul institucional */
-  --primary:       #1a3f6b;
-  --primary-hover: #14325a;
-  --primary-soft:  #e8f0fb;
-  --primary-mid:   #bfd4f5;
+  /* Primary — verde Sporting */
+  --primary:       #25b60c;
+  --primary-hover: #1e9209;
+  --primary-soft:  #eaf8e6;
+  --primary-mid:   #b8ecad;
 
   /* Success */
   --success:    #0a7040;

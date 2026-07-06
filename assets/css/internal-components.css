@@ -345,11 +345,11 @@
 .portal-sidebar.portal-sidebar .nav.active {
   background: color-mix(in srgb, var(--text, #111827) 4%, transparent);
   color: var(--text, var(--t1, #111827));
-  border-left-color: var(--primary, var(--g, #1a3f6b));
+  border-left-color: var(--primary, var(--g, #25b60c));
 }
 .portal-sidebar.portal-sidebar .nav.active {
-  background: var(--primary-soft, var(--g-dim, #e8f0fb));
-  color: var(--primary, var(--g, #1a3f6b));
+  background: var(--primary-soft, var(--g-dim, #eaf8e6));
+  color: var(--primary, var(--g, #25b60c));
   font-weight: 700;
 }
 .portal-sidebar.portal-sidebar .sb-divider {
@@ -405,7 +405,7 @@
 }
 .portal-topbar.portal-topbar .logo span,
 .portal-topbar.portal-topbar .tb-logo span {
-  color: var(--primary, var(--g, #1a3f6b));
+  color: var(--primary, var(--g, #25b60c));
 }
 .portal-topbar.portal-topbar .crumb,
 .portal-topbar.portal-topbar .tb-crumb,
@@ -444,12 +444,12 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--primary, var(--g, #1a3f6b));
+  background: var(--primary, var(--g, #25b60c));
   flex-shrink: 0;
 }
 .portal-topbar.portal-topbar .dot.live,
 .portal-topbar.portal-topbar .live-dot {
-  box-shadow: 0 0 0 3px var(--primary-mid, var(--g-brd, rgba(26, 63, 107, .18)));
+  box-shadow: 0 0 0 3px var(--primary-mid, var(--g-brd, rgba(37, 182, 12, .18)));
   animation: portalTopbarPulse 2s infinite;
 }
 .portal-topbar.portal-topbar .dot.err,
@@ -561,7 +561,7 @@
 .page-subnav a:hover,
 .page-subnav a.active {
   background: var(--primary-soft, var(--g-dim, #e8eef6));
-  color: var(--primary, var(--g, #1a3f6b));
+  color: var(--primary, var(--g, #25b60c));
 }
 
 /* 2026-07-02 — barra de filtros horizontal. Reemplaza los filtros que antes
@@ -682,8 +682,8 @@
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--radius-pill, 999px);
-  background: var(--primary-soft, var(--g-dim, #e8f0fb));
-  color: var(--primary, var(--g, #1a3f6b));
+  background: var(--primary-soft, var(--g-dim, #eaf8e6));
+  color: var(--primary, var(--g, #25b60c));
   font-size: 10px;
   font-weight: 700;
 }

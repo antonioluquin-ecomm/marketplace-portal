@@ -76,28 +76,28 @@ html[data-theme="light"] {
   --line2:     rgba(0,0,0,.06);
   --line-soft: rgba(0,0,0,.06);
 
-  /* Azul institucional — reemplaza el verde propio del proyecto */
-  --g:         #1a3f6b;
-  --g2:        #14325a;
-  --green:     #1a3f6b;
-  --green-dark:#14325a;
-  --gb:        #e8f0fb;
-  --gb2:       #bfd4f5;
-  --gd:        #e8f0fb;
-  --g-dim:     #e8f0fb;
-  --green-dim: #e8f0fb;
-  --g-brd:     #bfd4f5;
-  --g-brd2:    rgba(26,63,107,.34);
-  --green-brd: #bfd4f5;
-  --accent:        #1a3f6b;
-  --accent-soft:   #e8f0fb;
-  --accent-border: #bfd4f5;
-  --focus-ring:    0 0 0 3px rgba(26,63,107,.18);
+  /* Verde Sporting — reemplaza el azul institucional */
+  --g:         #25b60c;
+  --g2:        #1e9209;
+  --green:     #25b60c;
+  --green-dark:#1e9209;
+  --gb:        #eaf8e6;
+  --gb2:       #b8ecad;
+  --gd:        #eaf8e6;
+  --g-dim:     #eaf8e6;
+  --green-dim: #eaf8e6;
+  --g-brd:     #b8ecad;
+  --g-brd2:    rgba(37,182,12,.34);
+  --green-brd: #b8ecad;
+  --accent:        #25b60c;
+  --accent-soft:   #eaf8e6;
+  --accent-border: #b8ecad;
+  --focus-ring:    0 0 0 3px rgba(37,182,12,.18);
 
   /* Semánticos */
   --warn:   #92400e;   --wa:  #92400e;   --amber: #92400e;   --amber-dim: #fffbeb;
   --warn-dim: #fffbeb;  --wad: #fffbeb;  --warn-brd: rgba(146,64,14,.26); --wab: rgba(146,64,14,.26);
-  --info:   #1a3f6b;   --in:  #1a3f6b;  --ind: #e8f0fb;  --inb: #bfd4f5;
+  --info:   #25b60c;   --in:  #25b60c;  --ind: #eaf8e6;  --inb: #b8ecad;
   --danger: #991b1b;   --da:  #991b1b;  --dad: #fef2f2;
   --red:    #991b1b;   --red-dim: #fef2f2; --red-brd: rgba(153,27,27,.22);
   --teal:   #0d9488;   --te:  #0d9488;  --ted: rgba(13,148,136,.10);
@@ -109,7 +109,7 @@ html[data-theme="light"] {
   --shadow-panel:  0 12px 36px rgba(17,24,39,.10);
 
   /* Glows de páginas públicas → tinte azul institucional */
-  --g-glow:    rgba(26,63,107,.10);
+  --g-glow:    rgba(37,182,12,.10);
   color-scheme: light;
 }
 
