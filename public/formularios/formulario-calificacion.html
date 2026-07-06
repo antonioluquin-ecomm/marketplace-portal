@@ -333,7 +333,15 @@
         --muted: #b7c1b3;
         --muted2: #7f8a7b;
       }
-      body{font-size:15px;line-height:1.65;background:#101311}
+      body{font-size:15px;line-height:1.65;background:#101311;padding-top:92px}
+      /* Topbar fijo compartido — idéntico al de presentación/simulador/gantt del seller. */
+      .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(9,16,10,.96);border-bottom:1px solid rgba(94,168,50,.28);backdrop-filter:blur(20px)}
+      .topbar .brand{display:flex;align-items:center;gap:14px}
+      .topbar .logo{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;color:#edf3e9}
+      .topbar .logo span{color:#5ea832}
+      .topbar .crumb{border-left:1px solid rgba(255,255,255,.08);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8fab86;white-space:nowrap}
+      @media(max-width:760px){.topbar .public-flow-nav{display:none}}
+      @media(max-width:720px){body{padding-top:64px}}
       .hero,.section,.intro-note,.seller-identity,.progress-box{background:var(--panel);border-color:var(--line);box-shadow:none}
       .brand,.section-label,.section-tag,.badge,.btn{text-transform:none;letter-spacing:.015em}
       h1{font-size:34px;line-height:1.05}
@@ -363,20 +371,23 @@
         text-transform:uppercase;
       }
     </style>
-      <script src="../../assets/js/theme.js"></script>
-    <link rel="stylesheet" href="../../assets/css/theme.css">
   </head>
   <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">SPORTING <span>MARKETPLACE</span></span>
+        <div class="crumb">FORMULARIO DE CALIFICACIÓN</div>
+      </div>
+      <nav class="public-flow-nav" aria-label="Navegación pública seller">
+        <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+        <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+        <a class="active" data-public-link="calificacion" href="./formulario-calificacion.html">Calificación</a>
+        <a data-public-link="relevamiento" href="./formulario-relevamiento.html">Relevamiento</a>
+        <a data-public-link="gantt" href="../gantt/gantt-seller.html">Gantt</a>
+      </nav>
+    </header>
     <div class="wrap">
       <header class="hero">
-        <div class="brand">SPORTING <span>MARKETPLACE</span></div>
-        <div class="portal-section-label">FORMULARIO DE CALIFICACIÓN</div>
-        <nav class="public-flow-nav" aria-label="Navegación pública seller">
-          <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
-          <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
-          <a class="active" data-public-link="calificacion" href="./formulario-calificacion.html">Calificación</a>
-          <a data-public-link="relevamiento" href="./formulario-relevamiento.html">Relevamiento</a>
-        </nav>
         <a class="public-next-cta" data-public-link="relevamiento" href="./formulario-relevamiento.html">Ir a relevamiento →</a>
         <h1>Calificación Inicial de Seller</h1>
         <p>

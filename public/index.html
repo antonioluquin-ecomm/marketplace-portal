@@ -113,6 +113,12 @@
         const json = await _apiSellerPost({ action: 'getSellers' });
         const row = (json.data || [])[0];
         document.getElementById('stat-pipeline').textContent = (row && row.estado_pipeline) || 'Sin iniciar';
+        // El saludo debe usar el nombre de marca del seller (seller_nombre), no el
+        // nombre de la cuenta de login (que puede venir vacío) ni el seller_id.
+        const nombreSeller = row && row.seller_nombre;
+        if (nombreSeller) {
+          document.getElementById('hero-title').textContent = 'Hola, ' + nombreSeller;
+        }
       } catch (e) {
         document.getElementById('stat-pipeline').textContent = 'Sin datos';
       }
