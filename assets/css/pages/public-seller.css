@@ -1,21 +1,21 @@
 :root {
-  --g: #5ea832;
-  --g2: #4a8a26;
-  --g-glow: rgba(94, 168, 50, 0.18);
-  --panel: #141a13;
-  --panel2: #192018;
-  --panel3: #1e261d;
-  --line: rgba(255, 255, 255, 0.09);
-  --line2: rgba(255, 255, 255, 0.05);
-  --text: #e8ede4;
-  --muted: #9dac94;
-  --muted2: #687662;
-  --warn: #ffb74d;
-  --danger: #d94040;
-  --info: #64b5f6;
-  --teal: #4db6ac;
-  --violet: #ce93d8;
-  --shadow: 0 14px 42px rgba(0, 0, 0, 0.24);
+  --g: var(--primary, #25b60c);
+  --g2: var(--primary-hover, #1e9209);
+  --g-glow: rgba(37, 182, 12, 0.14);
+  --panel: var(--card, #ffffff);
+  --panel2: var(--bg, #f0f2f7);
+  --panel3: #e9eee6;
+  --line: var(--line, #e5e7eb);
+  --line2: rgba(17, 24, 39, 0.06);
+  --text: var(--text, #111827);
+  --muted: var(--muted, #6b7280);
+  --muted2: #9aa3b2;
+  --warn: var(--warning, #92400e);
+  --danger: var(--danger, #991b1b);
+  --info: var(--primary, #25b60c);
+  --teal: #0d9488;
+  --violet: #7c3aed;
+  --shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05));
   --radius-control: 8px;
   --radius-card: 12px;
   --radius-panel: 14px;
@@ -29,8 +29,8 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  font-family: Barlow, system-ui, sans-serif;
-  background: linear-gradient(180deg, #0b0f0b, #111711);
+  font-family: var(--font, 'DM Sans', system-ui, sans-serif);
+  background: var(--bg, #f0f2f7);
   color: var(--text);
   min-height: 100vh;
   padding: 28px 16px;
@@ -50,7 +50,7 @@ body {
   box-shadow: var(--shadow);
 }
 .brand {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--font);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -61,7 +61,7 @@ body {
   color: var(--g);
 }
 h1 {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--font);
   font-size: 36px;
   line-height: 1;
   text-transform: uppercase;
@@ -77,7 +77,7 @@ p {
   gap: 8px;
   margin-top: 16px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(17, 24, 39, 0.035);
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
 }
@@ -101,28 +101,28 @@ p {
   font-weight: 700;
 }
 .badge.time {
-  background: rgba(94, 168, 50, 0.1);
-  border: 1px solid rgba(94, 168, 50, 0.25);
-  color: #b7e69d;
+  background: rgba(37, 182, 12, 0.1);
+  border: 1px solid rgba(37, 182, 12, 0.25);
+  color: var(--primary-hover, #1e9209);
 }
 .badge.sections {
   background: rgba(100, 181, 246, 0.1);
   border: 1px solid rgba(100, 181, 246, 0.25);
-  color: #a8d4fb;
+  color: #1d4ed8;
 }
 .badge.required {
   background: rgba(255, 183, 77, 0.1);
   border: 1px solid rgba(255, 183, 77, 0.25);
-  color: #ffd48a;
+  color: var(--warning, #92400e);
 }
 .seller-chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-top: 14px;
-  background: rgba(94, 168, 50, 0.12);
-  border: 1px solid rgba(94, 168, 50, 0.28);
-  color: #b7e69d;
+  background: rgba(37, 182, 12, 0.12);
+  border: 1px solid rgba(37, 182, 12, 0.28);
+  color: var(--primary-hover, #1e9209);
   border-radius: 999px;
   padding: 8px 12px;
   font-size: 13px;
@@ -134,7 +134,7 @@ p {
   gap: 14px;
   margin-top: 16px;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(17, 24, 39, 0.035);
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
 }
@@ -143,7 +143,7 @@ p {
   height: 54px;
   border-radius: var(--radius-card);
   object-fit: contain;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(17, 24, 39, 0.05);
   border: 1px solid var(--line);
   padding: 6px;
   flex-shrink: 0;
@@ -152,13 +152,13 @@ p {
   width: 54px;
   height: 54px;
   border-radius: var(--radius-card);
-  background: rgba(94, 168, 50, 0.14);
-  border: 1px solid rgba(94, 168, 50, 0.3);
+  background: rgba(37, 182, 12, 0.14);
+  border: 1px solid rgba(37, 182, 12, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #b7e69d;
-  font-family: "Barlow Condensed", sans-serif;
+  color: var(--primary-hover, #1e9209);
+  font-family: var(--font);
   font-size: 24px;
   font-weight: 900;
   flex-shrink: 0;
@@ -172,7 +172,7 @@ p {
   margin-bottom: 2px;
 }
 .seller-name {
-  font-family: "Barlow Condensed", sans-serif;
+  font-family: var(--font);
   font-size: 24px;
   font-weight: 900;
   line-height: 1;
@@ -197,7 +197,7 @@ p {
 }
 .section-title {
   padding: 15px 18px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(17, 24, 39, 0.03);
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -214,7 +214,7 @@ p {
   height: 26px;
   border-radius: 8px;
   background: var(--g-glow);
-  border: 1px solid rgba(94, 168, 50, 0.3);
+  border: 1px solid rgba(37, 182, 12, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -242,7 +242,7 @@ p {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.5;
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(17, 24, 39, 0.015);
   border-bottom: 1px solid var(--line2);
 }
 .grid {
@@ -290,7 +290,7 @@ small {
   letter-spacing: 0.08em;
   padding: 13px 22px;
   cursor: pointer;
-  font-family: Barlow, sans-serif;
+  font-family: var(--font);
   font-size: 12.5px;
   transition:
     background 0.15s,
@@ -300,12 +300,12 @@ small {
   background: var(--g2);
 }
 .btn.secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(17, 24, 39, 0.045);
   border: 1px solid var(--line);
   color: var(--muted);
 }
 .btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(17, 24, 39, 0.08);
   color: var(--text);
 }
 .toast {
@@ -314,8 +314,8 @@ small {
   left: 50%;
   transform: translateX(-50%) translateY(8px);
   background: var(--panel2);
-  border: 1px solid rgba(94, 168, 50, 0.3);
-  color: #b7e69d;
+  border: 1px solid rgba(37, 182, 12, 0.3);
+  color: var(--primary-hover, #1e9209);
   padding: 10px 18px;
   border-radius: 999px;
   font-size: 13px;
@@ -351,22 +351,7 @@ small {
 }
 
 /* Etapa 27A: UI foundation enterprise para paginas seller-facing. */
-:root {
-  --g: #6aa84f;
-  --g2: #54873d;
-  --g-glow: rgba(106, 168, 79, 0.12);
-  --panel: #191d19;
-  --panel2: #1f241f;
-  --panel3: #252b25;
-  --line: rgba(255, 255, 255, 0.10);
-  --line2: rgba(255, 255, 255, 0.065);
-  --text: #f1f4ef;
-  --muted: #b7c1b3;
-  --muted2: #7f8a7b;
-  --shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
-}
 body {
-  background: var(--bg, #101311);
   font-size: 15px;
   line-height: 1.65;
 }
@@ -398,9 +383,6 @@ small {
   font-weight: 800;
   background: var(--g);
 }
-.btn.secondary {
-  background: rgba(255, 255, 255, 0.045);
-}
 .toast {
   box-shadow: 0 10px 26px rgba(0, 0, 0, .22);
 }
@@ -421,7 +403,7 @@ small {
 
 .topbar .logo,
 .brand {
-  font-family: Barlow, system-ui, sans-serif;
+  font-family: var(--font);
   font-size: 17px;
   font-weight: 900;
   letter-spacing: .015em;
@@ -450,7 +432,7 @@ small {
 .hero .portal-section-label {
   display: inline-flex;
   margin: 2px 0 12px;
-  border-left-color: rgba(255,255,255,.14);
+  border-left-color: rgba(17,24,39,.12);
 }
 
 .public-flow-nav {
@@ -469,7 +451,7 @@ small {
   border: 1px solid var(--line);
   border-radius: var(--radius-control);
   color: var(--muted);
-  background: rgba(255, 255, 255, .028);
+  background: var(--card, #fff);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: .015em;
@@ -480,9 +462,9 @@ small {
 
 .public-flow-nav a:hover,
 .public-flow-nav a.active {
-  border-color: rgba(106, 168, 79, .28);
-  background: rgba(106, 168, 79, .09);
-  color: #d8ead0;
+  border-color: rgba(37, 182, 12, .28);
+  background: rgba(37, 182, 12, .09);
+  color: var(--primary-hover, #1e9209);
 }
 
 .hero .public-flow-nav {

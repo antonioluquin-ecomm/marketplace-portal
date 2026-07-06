@@ -7,15 +7,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="../../assets/css/tokens.css" />
     <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
     <style>
       .seller-chip.err {
         background: rgba(217, 64, 64, 0.12);
         border-color: rgba(217, 64, 64, 0.32);
-        color: #f2a0a0;
+        color: var(--danger, #991b1b);
       }
       .seller-chip.hidden {
         display: none;
@@ -34,7 +35,7 @@
         top: 0;
         z-index: 20;
         margin-bottom: 16px;
-        background: rgba(13, 17, 13, 0.93);
+        background: rgba(17, 24, 39, 0.93);
         backdrop-filter: blur(10px);
         border: 1px solid var(--line);
         border-radius: 14px;
@@ -61,7 +62,7 @@
       }
       .bar {
         height: 6px;
-        background: rgba(255, 255, 255, 0.07);
+        background: rgba(17, 24, 39, 0.07);
         border-radius: 999px;
         overflow: hidden;
       }
@@ -83,7 +84,7 @@
       input,
       select,
       textarea {
-        font-family: Barlow, sans-serif;
+        font-family:var(--font);
         width: 100%;
         background: var(--panel2);
         border: 1px solid var(--line);
@@ -100,7 +101,7 @@
       select:focus,
       textarea:focus {
         border-color: var(--g);
-        box-shadow: 0 0 0 3px rgba(94, 168, 50, 0.13);
+        box-shadow: 0 0 0 3px rgba(37, 182, 12, 0.13);
       }
       input::placeholder,
       textarea::placeholder {
@@ -112,7 +113,7 @@
         resize: vertical;
       }
       select option {
-        background: #111711;
+        background: var(--card, #ffffff);
       }
       .check-group,
       .radio-group {
@@ -147,8 +148,8 @@
       .check-group label:has(input:checked),
       .radio-group label:has(input:checked) {
         background: var(--g-glow);
-        border-color: rgba(94, 168, 50, 0.4);
-        color: #b7e69d;
+        border-color: rgba(37, 182, 12, 0.4);
+        color: var(--primary-hover, #1e9209);
       }
       .conditional.hidden {
         display: none !important;
@@ -162,7 +163,7 @@
       .result-head {
         padding: 16px 18px;
         border-bottom: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(17, 24, 39, 0.03);
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
@@ -205,7 +206,7 @@
         margin-bottom: 6px;
       }
       .result-value {
-        font-family: "Barlow Condensed", sans-serif;
+        font-family: var(--font);
         font-size: 24px;
         font-weight: 900;
         text-transform: uppercase;
@@ -233,29 +234,29 @@
         margin: 3px 4px 3px 0;
       }
       .pill.ok {
-        background: rgba(94, 168, 50, 0.1);
-        border-color: rgba(94, 168, 50, 0.25);
-        color: #b7e69d;
+        background: rgba(37, 182, 12, 0.1);
+        border-color: rgba(37, 182, 12, 0.25);
+        color: var(--primary-hover, #1e9209);
       }
       .pill.warn {
         background: rgba(255, 183, 77, 0.1);
         border-color: rgba(255, 183, 77, 0.25);
-        color: #ffd48a;
+        color: var(--warning, #92400e);
       }
       .pill.danger {
         background: rgba(217, 64, 64, 0.1);
         border-color: rgba(217, 64, 64, 0.28);
-        color: #f2a0a0;
+        color: var(--danger, #991b1b);
       }
       .pill.info {
         background: rgba(100, 181, 246, 0.1);
         border-color: rgba(100, 181, 246, 0.25);
-        color: #a8d4fb;
+        color: #1d4ed8;
       }
       .pill.teal {
-        background: rgba(77, 182, 172, 0.1);
-        border-color: rgba(77, 182, 172, 0.25);
-        color: #9de0d9;
+        background: rgba(13, 148, 136, 0.1);
+        border-color: rgba(13, 148, 136, 0.25);
+        color: #0d9488;
       }
       .actions {
         display: flex;
@@ -278,16 +279,16 @@
         line-height: 1.4;
       }
       .status.ok {
-        color: #b7e69d;
-        background: rgba(94,168,50,.10);
-        border: 1px solid rgba(94,168,50,.25);
+        color: var(--primary-hover, #1e9209);
+        background: rgba(37, 182, 12,.10);
+        border: 1px solid rgba(37, 182, 12,.25);
         border-radius: 8px;
         padding: 12px 14px;
         font-size: 14px;
         line-height: 1.5;
       }
       .status.err {
-        color: #f2a0a0;
+        color: var(--danger, #991b1b);
         background: rgba(217,64,64,.08);
         border: 1px solid rgba(217,64,64,.22);
         border-radius: 8px;
@@ -321,27 +322,27 @@
       }
       /* Etapa 27A: UI foundation enterprise seller-facing. */
       :root {
-        --g: #6aa84f;
-        --g2: #54873d;
-        --g-glow: rgba(106, 168, 79, 0.12);
-        --panel: #191d19;
-        --panel2: #1f241f;
-        --panel3: #252b25;
-        --line: rgba(255,255,255,.10);
-        --line2: rgba(255,255,255,.065);
-        --text: #f1f4ef;
-        --muted: #b7c1b3;
-        --muted2: #7f8a7b;
+        --g: var(--primary, #25b60c);
+        --g2: var(--primary-hover, #1e9209);
+        --g-glow: rgba(37, 182, 12, 0.12);
+        --panel: var(--card, #ffffff);
+        --panel2: var(--bg, #f0f2f7);
+        --panel3: #e9eee6;
+        --line: var(--line, #e5e7eb);
+        --line2: rgba(17, 24, 39,.065);
+        --text: var(--text, #111827);
+        --muted: var(--muted, #6b7280);
+        --muted2: #9aa3b2;
       }
-      body{font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(94,168,50,.16),transparent 36%),#09100a;padding-top:92px}
+      body{font-family:var(--font);font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(37, 182, 12,.08),transparent 36%),var(--bg, #f0f2f7);padding-top:92px}
       /* Etapa 12 — mismo ancho full-bleed que presentación/simulador/gantt (antes 1040px en card). */
       .wrap{max-width:1200px}
       /* Topbar fijo compartido — idéntico al de presentación/simulador/gantt del seller. */
-      .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(9,16,10,.96);border-bottom:1px solid rgba(94,168,50,.28);backdrop-filter:blur(20px)}
+      .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line, #e5e7eb);backdrop-filter:blur(20px)}
       .topbar .brand{display:flex;align-items:center;gap:14px}
-      .topbar .logo{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;color:#edf3e9}
-      .topbar .logo span{color:#5ea832}
-      .topbar .crumb{border-left:1px solid rgba(255,255,255,.08);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8fab86;white-space:nowrap}
+      .topbar .logo{font-family:var(--font);font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;color:var(--text, #111827)}
+      .topbar .logo span{color:var(--primary, #25b60c)}
+      .topbar .crumb{border-left:1px solid rgba(17, 24, 39,.08);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted, #6b7280);white-space:nowrap}
       @media(max-width:760px){.topbar .public-flow-nav{display:none}}
       @media(max-width:720px){body{padding-top:64px}}
       /* .hero es el contenedor general de la página, ya no una card — sin fondo/borde propio,
@@ -355,13 +356,13 @@
       label{font-size:12.5px}
       /* Etapa 12 — botones al spec canónico de presentación/simulador (uppercase, padding/radio mayores). */
       .btn{background:var(--g);padding:15px 28px;border-radius:8px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
-      .btn.secondary{background:rgba(255,255,255,.045)}
+      .btn.secondary{background:rgba(17, 24, 39,.045)}
       /* Etapa 27B: header visual seller-facing. */
       .hero .brand{
         display:inline-flex;
         align-items:center;
         gap:5px;
-        font-family:Barlow,system-ui,sans-serif;
+        font-family:var(--font);
         font-size:17px;
         font-weight:900;
         letter-spacing:.015em;

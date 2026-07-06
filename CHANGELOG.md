@@ -1,5 +1,41 @@
 # Changelog
 
+## 2026-07-06 - Rebrand: presentación y simulador de seller a modo claro (Etapa 4 de 4 — cierre)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Cierra el rebrand iniciado en la Etapa 1: `public/presentaciones/presentacion-seller.html` (landing comercial, 818 líneas) y `public/simuladores/simulador-seller.html` (1386 líneas) migran de tema oscuro/Barlow a modo claro + verde Sporting. Con esto, las 7 páginas de `public/` y todo `internal/` comparten el mismo design system (modo claro, DM Sans/DM Mono, mismos componentes), diferenciándose solo por color (`--primary` verde vs. azul según corresponda ya no aplica — todo el portal es verde Sporting).
+
+- Ambas páginas traían **dos `:root` duplicados** (uno al inicio, otro bajo comentario "Etapa 27A") que redefinían las mismas variables con la paleta oscura vieja — el segundo ganaba por orden de cascada y pisaba cualquier fix hecho solo en el primero. Se corrigieron ambos en las dos páginas (mismo patrón ya visto en la Etapa 3).
+- `presentacion-seller.html`: la sección `#audiencia` (que ya usaba colores claros como excepción intencional dentro de la página oscura — ver ADR) ahora usa los tokens compartidos (`var(--k2)`/`var(--t1)`/`var(--t3)`) en vez de hex propios; deja de ser una excepción ya que toda la página es clara. Tarjetas con "glass oscuro" (`.seller-card`, `.panel`) pasan a fondo sólido claro (`var(--k3)`). Texto/acento azul claro (`#38bdf8`, pensado para fondo oscuro) se oscurece a `#1d4ed8` para legibilidad sobre blanco.
+- `simulador-seller.html`: mismo tratamiento — KPIs de estado (viabilidad buena/mala, tickets en $0) pasan de colores pastel (pensados para fondo oscuro) a `var(--danger)`/`var(--warning)`/verde oscuro legibles sobre blanco. Colores de marca de terceros (verde de WhatsApp `#25d366`) quedan sin tocar a propósito.
+- Verificado con fragmentos de markup aislados que cargan el CSS real (las páginas completas requieren sesión de seller válida contra Apps Script, igual que en etapas anteriores).
+- Barrido final de cierre (`grep` de hex viejos en `internal/`, `public/`, `assets/css`): sin restos, salvo excepciones ya documentadas — `maqueta-seller-center.html` (excluida a propósito del design system, ver `CLAUDE.md`) y los acentos categóricos decorativos no ligados a `--primary` (`--f-com`/`--task-info`, azul de fase "Comercial"/badge "en curso", ya documentados en la Etapa 2).
+
+## 2026-07-06 - Rebrand: formularios de seller a modo claro (Etapa 3 de 4)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Continúa el rebrand de las Etapas 1-2. `formulario-calificacion.html` y `formulario-relevamiento.html` (las 2 páginas más grandes de `public/`, ~1250 y ~3130 líneas) migran de tema oscuro/Barlow a modo claro + verde Sporting, junto con la hoja compartida `assets/css/pages/public-seller.css` que usan ambas.
+
+- `assets/css/pages/public-seller.css`: `:root` pasa de paleta oscura (`--panel:#141a13`, `--text:#e8ede4`, etc) a alias de `tokens.css` (`--panel:var(--card)`, `--text:var(--text)`, `--g:var(--primary)`...). Se elimina un segundo `:root` duplicado ("Etapa 27A") que redefinía las mismas variables con los valores oscuros viejos y ganaba por orden de cascada — quedaba pisando al primero. Reemplazados ~25 literales `rgba(255,255,255,X)` (overlays pensados para fondo oscuro) por `rgba(17,24,39,X)` (equivalente correcto sobre fondo claro), y los textos pastel (`#b7e69d`, `#a8d4fb`) por colores oscuros legibles sobre blanco.
+- Ambas páginas: se agrega `tokens.css`, se cambia la fuente Barlow/Barlow Condensed por DM Sans/DM Mono, y se corrige el mismo patrón de `:root` duplicado que cada página traía en su propio `<style>` inline (una copia más de la paleta oscura "Etapa 27A").
+- El tooltip de ayuda (`.tip:hover::after` en `formulario-relevamiento.html`) mantiene fondo oscuro con texto claro a propósito — es un patrón de UI que funciona igual en cualquier tema (tooltip oscuro sobre página clara), no forma parte del rebrand de color base.
+- Verificado con una página de prueba aislada que carga `public-seller.css` real (los formularios en sí requieren sesión de seller válida contra Apps Script, igual que en etapas anteriores) — badges, botones y tipografía coinciden con el resto del portal.
+- Pendiente (Etapa 4): `public/presentaciones/presentacion-seller.html`, `public/simuladores/simulador-seller.html`.
+
+## 2026-07-06 - Rebrand: `public/index.html`, `login.html`, `gantt-seller.html` a modo claro (Etapa 2 de 4)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Continúa el rebrand iniciado en la Etapa 1. Estas 3 páginas de `public/` (paleta "Grupo A": `--g:#5ea832`) dejan su tema oscuro propio y pasan a `tokens.css`/`internal-components.css` — mismo modo claro y componentes que `internal/`, con verde Sporting como color primario.
+
+- `public/index.html`, `public/login.html`, `public/gantt/gantt-seller.html`: se quita el `:root` inline con paleta oscura y tipografía Barlow; pasan a linkear `../assets/css/tokens.css` + `../assets/css/internal-components.css`, tipografía DM Sans/DM Mono.
+- Botones de topbar (`Cambiar contraseña`/`Cerrar sesión`) migran a `.button.secondary`/`.button.ghost`; topbar adopta `.portal-topbar` (mismo patrón que `internal/`, Etapa 12c).
+- `gantt-seller.html` mantiene su layout de tarjetas por tarea (no tabla) — se evaluó y se decidió no forzarlo a `.data-table`, ya que el paradigma de card list ya es apropiado para esta vista simplificada de seller. El badge "En curso" usa un azul informativo fijo (no ligado a `--primary`) para diferenciarse visualmente de "Completado" (verde), evitando que ambos estados se vean idénticos.
+- `assets/js/auth-seller.js`: la barra inferior de "vista de administrador" (modo staff) y el modal de cambio de contraseña de seller dejan de tener colores/tipografía hardcodeados (verde oscuro, Barlow) y pasan a los tokens compartidos — afecta a las 7 páginas de `public/` por igual.
+- Pendiente (Etapas 3-4): `public/formularios/*`, `public/presentaciones/presentacion-seller.html`, `public/simuladores/simulador-seller.html` (comparten `assets/css/pages/public-seller.css`).
+
 ## 2026-07-06 - Rebrand: verde Sporting (`#25b60c`) como único color primario (Etapa 1 de 4)
 
 Tipo de cambio: UX/UI (sin cambios de backend ni de datos).

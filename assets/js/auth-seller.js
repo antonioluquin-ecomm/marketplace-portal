@@ -142,7 +142,7 @@ async function renderStaffSellerBar() {
 
   const bar = document.createElement('div');
   bar.id = 'staff-seller-bar';
-  bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:9px 18px;background:#3f6b1f;color:#fff;font-family:Barlow,system-ui,sans-serif;font-size:13px;box-shadow:0 -2px 14px rgba(0,0,0,.3)';
+  bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;display:flex;align-items:center;gap:12px;padding:9px 18px;background:var(--primary-hover, #1e9209);color:#fff;font-family:var(--font, system-ui, sans-serif);font-size:13px;box-shadow:0 -2px 14px rgba(17,24,39,.3)';
   bar.innerHTML =
     '<strong style="font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:10.5px">Vista de administrador</strong>' +
     '<span style="opacity:.85">Ver como seller:</span>' +
@@ -219,31 +219,31 @@ function _showSellerChangePasswordModal() {
 
   const overlay = document.createElement('div');
   overlay.id = 'sellerchpw-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9998;font-family:Barlow,system-ui,sans-serif';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(17,24,39,.55);display:flex;align-items:center;justify-content:center;z-index:9998;font-family:var(--font, system-ui, sans-serif)';
   overlay.innerHTML = `
-    <div style="width:340px;background:#131b12;border:1px solid rgba(255,255,255,.08);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);padding:20px;color:#edf3e9">
-      <div style="font-size:15px;font-weight:900;margin-bottom:14px">Cambiar contraseña</div>
-      <div id="sellerchpw-error" style="color:#e5484d;font-size:12px;margin-bottom:10px" hidden></div>
+    <div style="width:340px;background:var(--card, #fff);border:1px solid var(--line, #e5e7eb);border-radius:var(--radius, 14px);box-shadow:var(--shadow-lg, 0 24px 70px rgba(17,24,39,.2));padding:20px">
+      <div style="font-size:15px;font-weight:700;color:var(--text, #111827);margin-bottom:14px">Cambiar contraseña</div>
+      <div id="sellerchpw-error" style="color:var(--danger, #991b1b);font-size:12px;margin-bottom:10px" hidden></div>
       <div style="margin-bottom:10px">
-        <label style="display:block;font-size:12px;font-weight:700;color:#c4d8bb;margin-bottom:5px">Contraseña actual</label>
+        <label style="display:block;font-size:12px;font-weight:500;color:var(--text, #111827);margin-bottom:5px">Contraseña actual</label>
         <input id="sellerchpw-actual" type="password" autocomplete="current-password"
-               style="width:100%;padding:9px 10px;font-size:13px;background:rgba(255,255,255,.03);color:#edf3e9;border:1px solid rgba(255,255,255,.08);border-radius:8px;box-sizing:border-box">
+               style="width:100%;padding:8px 10px;font-size:13px;color:var(--text, #111827);border:1px solid var(--line, #e5e7eb);border-radius:var(--radius-sm, 8px);box-sizing:border-box">
       </div>
       <div style="margin-bottom:10px">
-        <label style="display:block;font-size:12px;font-weight:700;color:#c4d8bb;margin-bottom:5px">Nueva contraseña</label>
+        <label style="display:block;font-size:12px;font-weight:500;color:var(--text, #111827);margin-bottom:5px">Nueva contraseña</label>
         <input id="sellerchpw-nueva" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"
-               style="width:100%;padding:9px 10px;font-size:13px;background:rgba(255,255,255,.03);color:#edf3e9;border:1px solid rgba(255,255,255,.08);border-radius:8px;box-sizing:border-box">
+               style="width:100%;padding:8px 10px;font-size:13px;color:var(--text, #111827);border:1px solid var(--line, #e5e7eb);border-radius:var(--radius-sm, 8px);box-sizing:border-box">
       </div>
       <div style="margin-bottom:14px">
-        <label style="display:block;font-size:12px;font-weight:700;color:#c4d8bb;margin-bottom:5px">Confirmar nueva contraseña</label>
+        <label style="display:block;font-size:12px;font-weight:500;color:var(--text, #111827);margin-bottom:5px">Confirmar nueva contraseña</label>
         <input id="sellerchpw-confirmar" type="password" autocomplete="new-password"
-               style="width:100%;padding:9px 10px;font-size:13px;background:rgba(255,255,255,.03);color:#edf3e9;border:1px solid rgba(255,255,255,.08);border-radius:8px;box-sizing:border-box">
+               style="width:100%;padding:8px 10px;font-size:13px;color:var(--text, #111827);border:1px solid var(--line, #e5e7eb);border-radius:var(--radius-sm, 8px);box-sizing:border-box">
       </div>
       <div style="display:flex;gap:8px">
         <button id="sellerchpw-submit" onclick="_submitSellerChangePassword()"
-                style="flex:1;padding:9px;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:8px;background:#5ea832;color:#fff;cursor:pointer">Guardar</button>
+                style="flex:1;padding:8px;font-size:13px;font-weight:600;border:none;border-radius:var(--radius-sm, 8px);background:var(--primary, #25b60c);color:#fff;cursor:pointer">Guardar</button>
         <button onclick="_closeSellerChangePasswordModal()"
-                style="padding:9px 14px;font-size:12px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:transparent;color:#c4d8bb;cursor:pointer">Cancelar</button>
+                style="padding:8px 14px;font-size:13px;border:1px solid var(--line, #e5e7eb);border-radius:var(--radius-sm, 8px);background:var(--card, #fff);color:var(--text, #111827);cursor:pointer">Cancelar</button>
       </div>
     </div>
   `;
