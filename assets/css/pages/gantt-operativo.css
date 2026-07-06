@@ -43,13 +43,26 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 /* ── MAIN ── */
 .main{background:var(--k3);overflow:hidden;display:flex;flex-direction:column;min-width:0}
 
-/* ── KPI BAR ── */
-.kpi-bar{display:flex;gap:12px;padding:14px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap;align-items:center}
-.kpi{display:flex;flex-direction:column;gap:2px;min-width:70px}
-.kpi-val{font-family:var(--font);font-size:26px;font-weight:900;line-height:1;color:var(--t1)}
+/* ── CONTEXTO DE PÁGINA ── título + bajada, mismo patrón que gestion-sellers.html.
+   Los KPIs bajan de jerarquía: comparten fila con el texto, más chicos que
+   antes (eran lo primero que se veía, sin ningún título ni explicación). */
+.ops-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.ops-hero-text{min-width:0;max-width:640px}
+.ops-eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
+.ops-title{font-family:var(--font);font-size:20px;font-weight:800;color:var(--t1);letter-spacing:.01em;margin-bottom:4px}
+.ops-lead{font-size:12.5px;color:var(--t2);line-height:1.5}
+
+.kpi-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex-shrink:0}
+.kpi{display:flex;flex-direction:column;gap:1px;min-width:56px}
+.kpi-val{font-family:var(--font);font-size:18px;font-weight:800;line-height:1;color:var(--t1)}
 .kpi-val.g{color:var(--g)}.kpi-val.w{color:var(--warn)}.kpi-val.d{color:var(--danger)}.kpi-val.i{color:var(--info)}
-.kpi-lbl{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
-.kpi-sep{width:1px;background:var(--bdr);align-self:stretch}
+.kpi-lbl{font-size:8px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)}
+.kpi-sep{width:1px;height:26px;background:var(--bdr);align-self:center}
+
+@media(max-width:980px){
+  .ops-hero{flex-direction:column;align-items:flex-start}
+  .kpi-bar{width:100%}
+}
 
 /* ── TOOLBAR ── */
 .toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
@@ -57,7 +70,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .tl-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .vtog{display:flex;gap:2px;background:rgba(17,24,39,.04);border-radius:7px;padding:3px}
 .vbtn{padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:none;background:transparent;color:var(--t3);border-radius:5px;cursor:pointer;font-family:var(--font);transition:all .15s}
-.vbtn.on{background:var(--g);color:var(--w)}
+.vbtn.on{background:var(--g);color:#fff}
 /* escala mes/semana */
 .scale-tog{display:flex;gap:2px;background:rgba(17,24,39,.04);border-radius:7px;padding:3px}
 .sbtn{padding:5px 11px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;background:transparent;color:var(--t3);border-radius:5px;cursor:pointer;font-family:var(--font);transition:all .15s}
@@ -243,7 +256,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 /* Nota legacy (campo "comentario" de una línea) fijada arriba del hilo —
    se distingue con un badge, no es un comentario más del hilo. */
 .comentario-nota{background:var(--g-dim);border-color:var(--g-brd)}
-.comentario-nota-badge{display:inline-flex;align-items:center;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--g);color:var(--w)}
+.comentario-nota-badge{display:inline-flex;align-items:center;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--g);color:#fff}
 .comentario-add{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .comentario-add textarea{width:100%}
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-06 - Etapa 12b: Renombre a "Seguimiento Operativo" + contexto de página + contraste
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Contexto: revisión crítica de la Etapa 12. El módulo dejó de ser solo un Gantt (ahora tiene Lista/Kanban/Roadmap además de Gantt), así que el nombre "Gantt Operativo" quedaba corto; la página además arrancaba directo en los KPIs sin ningún título ni explicación (inconsistente con `gestion-sellers.html`); y los tabs de vista (Gantt/Lista/Kanban/Roadmap) activos usaban texto casi negro sobre fondo azul institucional — contraste roto.
+
+- **Renombre a "Seguimiento Operativo"** en todas las superficies visibles: `<title>`, breadcrumb del topbar, sidebar (las 14 páginas que enlazan a este módulo), Hub Central (`index.html`: nav, hero, tarjeta, tag, snap-row, mapa de rutas, buscador de recursos), nombre de hoja/archivo exportado a Excel, y textos por defecto de "Dar de baja". **No se tocó** la URL (`gantt-operativo.html`), el `data-page="gantt"` (clave RBAC) ni el `key:'gantt_operativo'` del buscador del Hub — son identificadores internos, no texto visible.
+- **Contexto de página**: nueva sección `.ops-hero` (eyebrow + título + bajada) antes de los KPIs, mismo patrón que `gestion-sellers.html`.
+- **KPIs bajan de jerarquía**: comparten fila con el texto de contexto en vez de ser lo primero que se ve, con números más chicos (18px vs 26px).
+- **Contraste corregido**: `.vbtn.on` (tabs de vista activos) y `.comentario-nota-badge` usaban `color:var(--w)` (que resuelve a `--text`, casi negro) sobre fondo `var(--g)` (azul institucional). Pasan a `color:#fff`, igual que el resto de los botones primarios del ecosistema (`.button`).
+
 ## 2026-07-06 - Etapa 12: Rediseño de Gantt Operativo (tipo "Tareas")
 
 Tipo de cambio: feature + cambio de modelo de datos (frontend + backend).

@@ -482,7 +482,7 @@ h1 em { color:var(--g); font-style:normal; }
     <div class="sb-label">Flujo de incorporación</div>
     <a class="nav" data-page="backlog" href="internal/backlog/gestion-sellers.html">Gestión de Sellers</a>
     <a class="nav" data-page="backlog" href="internal/backlog/backlog-sellers.html">Backlog de Sellers</a>
-    <a class="nav" data-page="gantt" href="internal/gantt/gantt-operativo.html">Gantt Operativo</a>
+    <a class="nav" data-page="gantt" href="internal/gantt/gantt-operativo.html">Seguimiento Operativo</a>
   </div>
 
   <div class="sb-section">
@@ -540,7 +540,7 @@ h1 em { color:var(--g); font-style:normal; }
       <div class="hero-btns">
         <a class="button" href="internal/backlog/gestion-sellers.html">Crear / gestionar seller</a>
         <a class="button secondary" href="internal/backlog/backlog-sellers.html">Ver backlog</a>
-        <a class="button secondary" href="internal/gantt/gantt-operativo.html">Ver Gantt operativo</a>
+        <a class="button secondary" href="internal/gantt/gantt-operativo.html">Ver seguimiento operativo</a>
       </div>
     </div>
 
@@ -548,7 +548,7 @@ h1 em { color:var(--g); font-style:normal; }
       <div class="snap-eyebrow">Qué usar según la situación</div>
       <div class="snap-row"><span class="snap-key">Alta o edición de seller</span><span class="snap-val">Gestión de Sellers</span></div>
       <div class="snap-row"><span class="snap-key">Estado del pipeline</span><span class="snap-val">Backlog de Sellers</span></div>
-      <div class="snap-row"><span class="snap-key">Seguimiento operativo</span><span class="snap-val">Gantt Operativo</span></div>
+      <div class="snap-row"><span class="snap-key">Tareas, responsables y bloqueos</span><span class="snap-val">Seguimiento Operativo</span></div>
       <div class="snap-row"><span class="snap-key">Compartir con el seller</span><span class="snap-val">Sección Pública</span></div>
       <div class="snap-row"><span class="snap-key">Evaluar rentabilidad</span><span class="snap-val">Simulador Económico</span></div>
     </aside>
@@ -598,7 +598,7 @@ h1 em { color:var(--g); font-style:normal; }
         <div class="fs-num">06</div>
         <div class="fs-title">Onboarding</div>
         <div class="fs-desc">Planificar tareas, responsables y seguimiento.</div>
-        <span class="fs-tag">Gantt Operativo</span>
+        <span class="fs-tag">Seguimiento Operativo</span>
       </a>
     </div>
   </section>
@@ -629,7 +629,7 @@ h1 em { color:var(--g); font-style:normal; }
       </a>
       <a class="card accent-teal" href="internal/gantt/gantt-operativo.html">
         <div class="card-top"><div class="card-icon">▣</div><span class="card-badge">Interno</span></div>
-        <div class="card-title">Gantt Operativo</div>
+        <div class="card-title">Seguimiento Operativo</div>
         <div class="card-desc">Seguimiento de tareas por seller: responsables, fechas, bloqueos y próximos hitos.</div>
         <div class="card-path">/internal/gantt/gantt-operativo.html</div>
         <div class="card-go">Abrir →</div>
@@ -812,7 +812,7 @@ h1 em { color:var(--g); font-style:normal; }
     <div class="route-table" style="margin-bottom:20px">
       <div class="rt-row"><div class="rt-key">Inicio</div><div class="rt-val"><a href="index.html">/index.html</a> → Hub Central (esta página)</div></div>
       <div class="rt-row"><div class="rt-key">Internal</div><div class="rt-val"><a href="internal/backlog/gestion-sellers.html">/internal/backlog/</a>       → Gestión de Sellers, Backlog
-<a href="internal/gantt/gantt-operativo.html">/internal/gantt/</a>         → Gantt Operativo, Gantt SC
+<a href="internal/gantt/gantt-operativo.html">/internal/gantt/</a>         → Seguimiento Operativo, Gantt SC
 <a href="internal/seller-center/index.html">/internal/seller-center/</a> → Dashboard, Maqueta
 <a href="internal/estrategia/proyecto-marketplace.html">/internal/estrategia/</a>    → Marco, Governance, Onboarding
 <a href="internal/simuladores/simulador-economico.html">/internal/simuladores/</a>   → Simulador Económico, Config Tarifas</div></div>
@@ -840,7 +840,7 @@ h1 em { color:var(--g); font-style:normal; }
 const RESOURCES = [
   { key:'gestion_sellers',        label:'Gestión de Sellers',      access:'Interno', icon:'➕', accent:'var(--g)',    route:'/internal/backlog/gestion-sellers.html',          desc:'Alta o edición de sellers y marcas. Generación de links y mensajes de primer contacto.' },
   { key:'backlog_sellers',        label:'Backlog de Sellers',       access:'Interno', icon:'▦', accent:'var(--info)', route:'/internal/backlog/backlog-sellers.html',           desc:'Pipeline comercial: estado, prioridad, bloqueos, readiness y seguimiento por seller.' },
-  { key:'gantt_operativo',        label:'Gantt Operativo',          access:'Interno', icon:'▣', accent:'var(--teal)', route:'/internal/gantt/gantt-operativo.html',             desc:'Seguimiento de tareas: responsables, fechas, bloqueos y próximos hitos.' },
+  { key:'gantt_operativo',        label:'Seguimiento Operativo',          access:'Interno', icon:'▣', accent:'var(--teal)', route:'/internal/gantt/gantt-operativo.html',             desc:'Seguimiento de tareas: responsables, fechas, bloqueos y próximos hitos.' },
   { key:'dashboard_seller_center',label:'Dashboard Seller Center',  access:'Interno', icon:'◉', accent:'var(--g)',    route:'/internal/seller-center/index.html',               desc:'Panel institucional y operativo del Seller Center.' },
   { key:'maqueta_seller_center',  label:'Maqueta Seller Center',    access:'Interno', icon:'▧', accent:'var(--warn)', route:'/internal/seller-center/maqueta-seller-center.html',desc:'Prototipo tipo PIM para validar pantallas y experiencia del Seller Center.' },
   { key:'gantt_seller_center',    label:'Gantt Seller Center',      access:'Interno', icon:'▤', accent:'var(--vio)',  route:'/internal/gantt/gantt-seller-center.html',         desc:'Roadmap de módulos y tareas de desarrollo de la plataforma.' },

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Gantt Operativo | Marketplace Sporting</title>
+<title>Seguimiento Operativo | Marketplace Sporting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
 <header class="topbar">
   <div class="brand">
     <a class="logo" href="../../index.html" title="Volver al Portal">SPORTING <span>MARKETPLACE</span></a>
-    <div class="crumb">GANTT OPERATIVO</div>
+    <div class="crumb">SEGUIMIENTO OPERATIVO</div>
   </div>
   <div class="tb-right">
     <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
@@ -44,7 +44,7 @@
     <div class="sb-label">Flujo de incorporación</div>
     <a class="nav" data-page="backlog" href="../backlog/gestion-sellers.html">Gestión de Sellers</a>
     <a class="nav" data-page="backlog" href="../backlog/backlog-sellers.html">Backlog de Sellers</a>
-    <a class="nav active" data-page="gantt" href="./gantt-operativo.html">Gantt Operativo</a>
+    <a class="nav active" data-page="gantt" href="./gantt-operativo.html">Seguimiento Operativo</a>
   </div>
   <div class="sb-section">
     <div class="sb-label">Seller Center</div>
@@ -85,17 +85,24 @@
 <!-- ══ MAIN ══ -->
 <main class="main" id="main-area">
 
-  <div class="kpi-bar" id="gantt-kpi-bar">
-    <div class="kpi"><div class="kpi-val" id="gkpi-total">—</div><div class="kpi-lbl">Tareas</div></div>
-    <div class="kpi-sep"></div>
-    <div class="kpi"><div class="kpi-val g" id="gkpi-done">—</div><div class="kpi-lbl">Completadas</div></div>
-    <div class="kpi"><div class="kpi-val i" id="gkpi-wip">—</div><div class="kpi-lbl">En curso</div></div>
-    <div class="kpi"><div class="kpi-val d" id="gkpi-blk">—</div><div class="kpi-lbl">Bloqueadas</div></div>
-    <div class="kpi-sep"></div>
-    <div class="kpi"><div class="kpi-val w" id="gkpi-late">—</div><div class="kpi-lbl">Atrasadas</div></div>
-    <div class="kpi-sep"></div>
-    <div class="kpi"><div class="kpi-val" id="gkpi-sellers">—</div><div class="kpi-lbl">Sellers</div></div>
-  </div>
+  <section class="ops-hero">
+    <div class="ops-hero-text">
+      <div class="ops-eyebrow">Flujo de incorporación</div>
+      <h1 class="ops-title">Seguimiento Operativo</h1>
+      <p class="ops-lead">Tareas de onboarding por seller: responsables, fechas, checklist, comentarios y bloqueos. Cambios de estado quedan auditados; agrupá por seller en Lista o mirá el avance por hito en Roadmap.</p>
+    </div>
+    <div class="kpi-bar" id="gantt-kpi-bar">
+      <div class="kpi"><div class="kpi-val" id="gkpi-total">—</div><div class="kpi-lbl">Tareas</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi"><div class="kpi-val g" id="gkpi-done">—</div><div class="kpi-lbl">Completadas</div></div>
+      <div class="kpi"><div class="kpi-val i" id="gkpi-wip">—</div><div class="kpi-lbl">En curso</div></div>
+      <div class="kpi"><div class="kpi-val d" id="gkpi-blk">—</div><div class="kpi-lbl">Bloqueadas</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi"><div class="kpi-val w" id="gkpi-late">—</div><div class="kpi-lbl">Atrasadas</div></div>
+      <div class="kpi-sep"></div>
+      <div class="kpi"><div class="kpi-val" id="gkpi-sellers">—</div><div class="kpi-lbl">Sellers</div></div>
+    </div>
+  </section>
 
   <div class="filter-bar">
     <div class="filter-group">
@@ -338,7 +345,7 @@
 <div class="modal-ov" id="create-ov" onclick="closeCreateModal(event)">
   <div class="modal edit-modal">
     <div class="modal-hd">
-      <div><div class="mhd-task">Nueva tarea</div><div class="mhd-sub">Alta controlada en Gantt Operativo</div></div>
+      <div><div class="mhd-task">Nueva tarea</div><div class="mhd-sub">Alta controlada en Seguimiento Operativo</div></div>
       <button class="modal-close" onclick="closeCreateModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -1221,8 +1228,8 @@ async function exportExcel(){
   ws['!rows']=[{hpt:22}];
 
   const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,'Gantt Operativo');
-  XLSX.writeFile(wb,`gantt-operativo-${new Date().toISOString().slice(0,10)}.xlsx`,{cellStyles:true});
+  XLSX.utils.book_append_sheet(wb,ws,'Seguimiento Operativo');
+  XLSX.writeFile(wb,`seguimiento-operativo-${new Date().toISOString().slice(0,10)}.xlsx`,{cellStyles:true});
 }
 
 /* ── SORT LISTA ── */
@@ -1968,9 +1975,9 @@ async function disableGanttTask(taskId){
     return;
   }
 
-  const rawReason=window.prompt('Motivo breve de baja logica:', t.comentario||'Baja logica desde Gantt Operativo');
+  const rawReason=window.prompt('Motivo breve de baja logica:', t.comentario||'Baja logica desde Seguimiento Operativo');
   if(rawReason===null) return;
-  const reason=(rawReason||'Baja logica desde Gantt Operativo').trim();
+  const reason=(rawReason||'Baja logica desde Seguimiento Operativo').trim();
   if(reason.length>1000){
     lastDisableFeedback={task_id:t.task_id,type:'err',message:'El motivo supera 1000 caracteres.'};
     openModal(t.task_id);
