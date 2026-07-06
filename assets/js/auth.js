@@ -261,12 +261,23 @@ function _renderUserIndicator() {
   const user = SESSION.data && SESSION.data.usuario;
   if (!user) return;
 
+  // El nav (secciones + links) scrollea en su propio wrapper; el footer
+  // (Configuración + usuario) queda como hermano flex fijo, nunca solapado
+  // por contenido largo (páginas con muchas secciones, ej. Gantt Operativo).
+  let scroll = nav.querySelector('.sb-scroll');
+  if (!scroll) {
+    scroll = document.createElement('div');
+    scroll.className = 'sb-scroll';
+    while (nav.firstChild) scroll.appendChild(nav.firstChild);
+    nav.appendChild(scroll);
+  }
+
   let footer = nav.querySelector('.sb-footer');
   if (!footer) {
     footer = document.createElement('div');
     footer.className = 'sb-footer';
 
-    const adminLink = nav.querySelector('.nav[data-page="administracion"]');
+    const adminLink = scroll.querySelector('.nav[data-page="administracion"]');
     const adminSection = adminLink && adminLink.closest ? adminLink.closest('.sb-section') : null;
     if (adminSection) footer.appendChild(adminSection);
 

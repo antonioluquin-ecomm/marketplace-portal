@@ -292,8 +292,27 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 /* ── VIEWPORT: scrollbar del gantt siempre visible ── */
 html,body{height:100%;overflow:hidden}
 .shell{height:calc(100vh - 50px);min-height:0;overflow:hidden}
-.sidebar{overflow-y:auto}
 #content{min-height:0}
+
+/* ── SIDEBAR: footer de usuario fijo, nunca tapado por secciones largas ──
+   Esta página tiene una sección extra ("Vista de sellers") que hace que el
+   nav sea más alto que el viewport; el footer (Configuración + usuario)
+   dejaba de verse o quedaba solapado con el último ítem del scroll cuando
+   ambos vivían en el mismo contenedor con overflow-y:auto. Se separa en dos
+   hijos flex: .sb-scroll (todas las secciones, scrollea) y .sb-footer (fijo,
+   nunca scrollea) — mismo patrón que el panel de usuario de PCC.
+   .sb-scroll lo arma auth.js (_renderUserIndicator) envolviendo los hijos
+   existentes del nav la primera vez que se pinta el chip de usuario. */
+/* Especificidad igualada a propósito: internal-components.css define
+   .portal-sidebar.portal-sidebar{overflow-y:auto} y
+   .portal-sidebar...  .sb-footer{position:sticky} con ese mismo peso (0,2,0 /
+   0,3,0) — sin igualar la especificidad acá, esas reglas ganan por cascada
+   aunque este archivo cargue después. */
+.sidebar.portal-sidebar{overflow:hidden;display:flex;flex-direction:column}
+.sidebar.portal-sidebar .sb-scroll{flex:1;min-height:0;overflow-y:auto}
+.sidebar.portal-sidebar .sb-scroll::-webkit-scrollbar{width:3px}
+.sidebar.portal-sidebar .sb-scroll::-webkit-scrollbar-thumb{background:var(--bdr-m, var(--bdr));border-radius:99px}
+.sidebar.portal-sidebar .sb-footer{flex-shrink:0;position:static;margin-top:0}
 
 /* ── Sticky columnas fijas sobre scroll horizontal (vista Gantt / Roadmap) ── */
 .gm-fixed,.sh-fixed,.tr-fixed{position:sticky;left:0;isolation:isolate}
