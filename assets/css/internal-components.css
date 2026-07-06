@@ -84,8 +84,8 @@
 }
 
 :where(.topbar) {
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .025);
-  background: rgba(16, 19, 17, .96);
+  box-shadow: 0 1px 0 rgba(17, 24, 39, .025);
+  background: rgba(255, 255, 255, .96);
 }
 
 /* Etapa 27B: patron comun de headers/topbars. */
@@ -356,6 +356,117 @@
   height: 1px;
   background: var(--line, var(--bdr, #e5e7eb));
   margin: 8px 16px 18px;
+}
+
+/* 2026-07-06 — topbar canonico opt-in, mismo patron que .portal-sidebar de
+   arriba: cada pagina interna venia con su propia copia pegada a mano de
+   .topbar/.brand/.logo/.crumb (o directamente sin ninguna, cayendo al
+   :where() de mas arriba — Barlow 17px, una tipografia que ni se carga).
+   Agregar class="topbar portal-topbar" al <header> para adoptarlo; gana por
+   especificidad sobre cualquier regla local .topbar/.brand/.logo/.crumb ya
+   existente, sin tener que borrarla pagina por pagina. */
+.portal-topbar.portal-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  min-height: var(--topbar-height, var(--tb, 50px));
+  height: var(--topbar-height, var(--tb, 50px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 24px;
+  background: rgba(255, 255, 255, .96);
+  border-bottom: 1px solid var(--line, var(--bdr, #e5e7eb));
+  backdrop-filter: blur(18px);
+}
+.portal-topbar.portal-topbar .brand,
+.portal-topbar.portal-topbar .tb-brand,
+.portal-topbar.portal-topbar .tb-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.portal-topbar.portal-topbar .logo,
+.portal-topbar.portal-topbar .tb-logo {
+  font-family: var(--font);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: 20px;
+  color: var(--text, var(--t1, #111827));
+  white-space: nowrap;
+  text-decoration: none;
+}
+.portal-topbar.portal-topbar .logo:hover,
+.portal-topbar.portal-topbar .tb-logo:hover {
+  color: var(--text, var(--t1, #111827));
+}
+.portal-topbar.portal-topbar .logo span,
+.portal-topbar.portal-topbar .tb-logo span {
+  color: var(--primary, var(--g, #1a3f6b));
+}
+.portal-topbar.portal-topbar .crumb,
+.portal-topbar.portal-topbar .tb-crumb,
+.portal-topbar.portal-topbar .tb-module {
+  border-left: 1px solid var(--line, var(--bdr, #e5e7eb));
+  padding-left: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted, var(--t3, #6b7280));
+  white-space: nowrap;
+}
+.portal-topbar.portal-topbar .tb-right,
+.portal-topbar.portal-topbar .top-actions,
+.portal-topbar.portal-topbar .topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+.portal-topbar.portal-topbar .status,
+.portal-topbar.portal-topbar .status-row,
+.portal-topbar.portal-topbar .tb-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted, var(--t2, #6b7280));
+}
+.portal-topbar.portal-topbar .dot,
+.portal-topbar.portal-topbar .live-dot,
+.portal-topbar.portal-topbar .tb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary, var(--g, #1a3f6b));
+  flex-shrink: 0;
+}
+.portal-topbar.portal-topbar .dot.live,
+.portal-topbar.portal-topbar .live-dot {
+  box-shadow: 0 0 0 3px var(--primary-mid, var(--g-brd, rgba(26, 63, 107, .18)));
+  animation: portalTopbarPulse 2s infinite;
+}
+.portal-topbar.portal-topbar .dot.err,
+.portal-topbar.portal-topbar .tb-dot.error { background: var(--danger, #991b1b); animation: none; }
+.portal-topbar.portal-topbar .dot.load,
+.portal-topbar.portal-topbar .tb-dot.loading { background: var(--warning, #92400e); animation: portalTopbarPulse 1s infinite; }
+@keyframes portalTopbarPulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.portal-topbar.portal-topbar .tb-date { font-size: 11px; color: var(--muted, var(--t3, #6b7280)); white-space: nowrap; }
+@media (max-width: 860px) {
+  .portal-topbar.portal-topbar {
+    height: auto;
+    min-height: var(--topbar-height, var(--tb, 50px));
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 8px;
+  }
 }
 /* 2026-07-02 — toggle de navegacion mobile. El sidebar/nav de cada pagina
    se oculta por completo bajo ~900-960px; sin esto no hay forma de moverse

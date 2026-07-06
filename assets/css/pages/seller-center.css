@@ -13,7 +13,7 @@
 .topbar-right{display:flex;align-items:center;gap:8px}
 .load-badge,.live-badge{white-space:nowrap}
 
-.shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
+.shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh}
 .sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow-y:auto;background:var(--sidebar-bg, var(--k2));border-right:1px solid var(--sidebar-line, var(--bdr));padding:16px 0 34px}
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:99px}

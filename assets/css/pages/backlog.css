@@ -37,7 +37,7 @@
 .view-btn.active{background:var(--g);color:#fff}
 
 /* Layout and sidebar */
-.shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
+.shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh}
 .sidebar{
   position:sticky;
   top:var(--tb);

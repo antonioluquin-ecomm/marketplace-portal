@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-06 - Etapa 12c: Unificación de topbar y sidebar en todo `internal/`
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Contexto: comparando capturas de dos páginas distintas se notaba que el logo "SPORTING MARKETPLACE" y la barra superior no se veían igual entre módulos. La causa real: cada página interna traía su propia copia pegada a mano del CSS de topbar (algunas ni eso, cayendo a un *fallback* compartido roto — logo en **Barlow 17px**, una tipografía que no se carga en el sitio, sobre un topbar con fondo casi negro, resabio de un tema oscuro viejo). El sidebar ya tenía un sistema de unificación "opt-in" (`.portal-sidebar.portal-sidebar`, Etapa previa) pero el topbar nunca tuvo su equivalente.
+
+- **Nuevo sistema canónico de topbar** (`assets/css/internal-components.css`): `.portal-topbar.portal-topbar` — mismo patrón de especificidad elevada que ya usaba `.portal-sidebar.portal-sidebar`, cubre `.brand`/`.logo`/`.crumb`/`.tb-right`/`.top-actions`/`.topbar-right`/`.status`/`.status-row`/`.tb-status`/`.dot`/`.tb-dot`/`.live-dot` con todas las variantes de nombre que ya convivían en el código. Gana por especificidad sobre cualquier CSS local de página sin tener que borrarlo archivo por archivo.
+- **`class="topbar portal-topbar"`** agregado al `<header>` de las 14 páginas internas + Hub Central (excluidas a propósito: `maqueta-seller-center.html`, que simula otra herramienta, y `public/`, que mantiene su propia identidad verde).
+- **`class="sidebar portal-sidebar"`** agregado también al Hub Central (`index.html`), que le faltaba.
+- Corrige de paso el fallback de `:where(.topbar)` (fondo casi negro → blanco), ya no relevante en la práctica pero deja de ser una trampa para páginas futuras.
+- **Ajuste de layout**: el topbar canónico usa `position:sticky` (como ya usaban Gantt/Seguimiento Operativo y Gestión de Sellers). Las páginas que antes usaban `position:fixed` + `padding-top` compensatorio en `.shell` (Governance, Modelo Económico, Modelo de Integración, Proceso de Onboarding, Proyecto Marketplace, Configuración, Backlog de Sellers, Dashboard Seller Center) tenían ese `padding-top` removido porque ya no hace falta — un topbar sticky ocupa su propio espacio en el flujo del documento. Verificado sin huecos ni superposición en 3 variantes estructurales distintas (fixed→sticky, ya-sticky, y grid-integrado de `internal/simuladores/`).
+
 ## 2026-07-06 - Etapa 12b: Renombre a "Seguimiento Operativo" + contexto de página + contraste
 
 Tipo de cambio: UX/UI (sin cambios de backend ni de datos).

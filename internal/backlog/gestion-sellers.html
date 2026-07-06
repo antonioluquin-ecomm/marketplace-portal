@@ -28,7 +28,7 @@
     }
     *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-size:15px;line-height:1.65}a{text-decoration:none;color:inherit}button,input,select,textarea{font-family:inherit}
     /* 2026-07-01 — sidebar de navegación del portal (patrón canónico compartido, ver governance.html) */
-    .shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh;padding-top:var(--tb)}
+    .shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh}
     .sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow:auto;background:var(--sidebar-bg);border-right:1px solid var(--bdr);padding:18px 0}
     .sb-section{margin-bottom:18px}
     .sb-label{display:flex;align-items:center;gap:8px;padding:0 16px;margin-bottom:7px;font-size:9px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}
@@ -49,7 +49,7 @@
 <link rel="stylesheet" href="../../assets/css/theme.css">
 </head>
 <body>
-  <header class="topbar">
+  <header class="topbar portal-topbar">
     <div class="brand"><a class="logo" href="../../index.html" title="Volver al Portal">SPORTING <span>MARKETPLACE</span></a><div class="crumb">GESTIÓN DE SELLERS</div></div>
     <div class="top-actions"><button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button><div class="status"><span class="dot" id="statusDot"></span><span id="statusText">Cargando…</span></div><a class="button secondary" href="../../index.html">← Hub</a><a class="button secondary" href="../backlog/backlog-sellers.html">← Backlog</a></div>
   </header>
