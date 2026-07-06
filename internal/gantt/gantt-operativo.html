@@ -2030,7 +2030,6 @@ function openModal(taskId){
     ${row('Fin',fmtDfull(t.fin))}
     ${row('Semana','S'+( t.inicio?isoWeek(t.inicio):'—'))}
     ${row('Atraso',atr>0?`<span style="color:${atr<=3?'var(--warn)':'var(--danger)'};font-weight:700">+${atr} días</span>`:(t.estado==='Completado'?'<span style="color:var(--g)">A tiempo ✓</span>':'—'))}
-    ${t.comentario?`<div style="margin-top:13px" class="msec-t">Comentario</div><div class="m-comment">${esc(t.comentario)}</div>`:''}
     <div style="margin-top:13px" class="msec-t">Checklist</div>
     <div id="modal-checklist-body">${modalSectionLoadingHtml()}</div>
     <div style="margin-top:13px" class="msec-t">Comentarios</div>
@@ -2048,11 +2047,14 @@ function modalSectionLoadingHtml(){
   return `<div style="font-size:11px;color:var(--t3)">Cargando…</div>`;
 }
 async function loadModalDetalle(taskId){
-  modalDetalle={task_id:taskId,checklist:[],comentarios:[],loading:true};
+  const tarea=TASKS.find(x=>x.task_id===taskId);
+  modalDetalle={task_id:taskId,nota:(tarea&&tarea.comentario)||'',checklist:[],comentarios:[],loading:true};
   try{
     const res=await callGanttWriteAction('getGanttDetalle',{task_id:taskId});
     if(modalDetalle.task_id!==taskId) return;
-    modalDetalle={task_id:taskId,checklist:(res.data&&res.data.checklist)||[],comentarios:(res.data&&res.data.comentarios)||[],loading:false};
+    modalDetalle.checklist=(res.data&&res.data.checklist)||[];
+    modalDetalle.comentarios=(res.data&&res.data.comentarios)||[];
+    modalDetalle.loading=false;
     renderModalChecklist();
     renderModalComentarios();
   }catch(err){
@@ -2085,13 +2087,23 @@ function renderModalComentarios(){
   const el=$('modal-comentarios-body');
   if(!el) return;
   const items=[...(modalDetalle.comentarios||[])].reverse();
+  // La nota legacy (campo "comentario" de una línea, el que también usa
+  // "Dar de baja" y el único que puede tocar un seller) queda fijada arriba
+  // del hilo con un badge "Nota" — no es un comentario más, es el mismo
+  // campo de siempre mostrado en un solo lugar en vez de duplicado.
+  const notaHTML=modalDetalle.nota?`
+    <div class="comentario-item comentario-nota">
+      <div class="comentario-meta"><span class="comentario-nota-badge">Nota</span></div>
+      <div class="comentario-texto">${esc(modalDetalle.nota)}</div>
+    </div>`:'';
   el.innerHTML=`
     <div class="comentarios-list">
+      ${notaHTML}
       ${items.length?items.map(c=>`
         <div class="comentario-item">
           <div class="comentario-meta"><strong>${esc(c.autor_nombre||c.autor_email||'Usuario')}</strong> · ${esc(c.created_at||'')}</div>
           <div class="comentario-texto">${esc(c.texto)}</div>
-        </div>`).join(''):'<div style="font-size:11px;color:var(--t3)">Sin comentarios todavía.</div>'}
+        </div>`).join(''):(notaHTML?'':'<div style="font-size:11px;color:var(--t3)">Sin comentarios todavía.</div>')}
     </div>
     <form class="comentario-add" onsubmit="return addComentarioUI(event)">
       <textarea id="comentario-new-text" class="edit-textarea" style="min-height:64px" maxlength="1000" placeholder="Agregar comentario…"></textarea>

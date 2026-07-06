@@ -240,6 +240,10 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .comentario-item{padding:8px 10px;background:rgba(17,24,39,.03);border:1px solid var(--bdr);border-radius:7px}
 .comentario-meta{font-size:10px;color:var(--t3);margin-bottom:3px}
 .comentario-texto{font-size:12px;color:var(--t1);line-height:1.45;white-space:pre-wrap}
+/* Nota legacy (campo "comentario" de una línea) fijada arriba del hilo —
+   se distingue con un badge, no es un comentario más del hilo. */
+.comentario-nota{background:var(--g-dim);border-color:var(--g-brd)}
+.comentario-nota-badge{display:inline-flex;align-items:center;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--g);color:var(--w)}
 .comentario-add{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .comentario-add textarea{width:100%}
 
