@@ -4,10 +4,14 @@
  * Logica exclusiva de endpoints Gantt Operativo.
  */
 
+// Etapa 12 — "responsable" (header físico sin cambios en la hoja timeline) pasa
+// a interpretarse como ÁREA responsable (equipo/rol). La persona individual
+// asignada vive en la columna nueva "responsable_persona" (id de USUARIOS).
 const CAMPOS_GANTT_EDITABLES_QA = {
   estado: ["estado_tarea", "estado"],
   hito: ["hito", "Hito"],
-  responsable: ["responsable"],
+  area_responsable: ["area_responsable", "responsable"],
+  responsable_persona: ["responsable_persona", "id_responsable"],
   entorno: ["Entorno", "entorno"],
   inicio: ["Inicio", "inicio", "Inicio plan", "inicio_plan", "fecha_inicio_plan"],
   fin: ["Fin", "fin", "Fin plan", "fin_plan", "fecha_fin_plan"],
@@ -28,6 +32,18 @@ const ENTORNOS_GANTT_PERMITIDOS = {
   productivo: "Productivo",
 };
 
+const AREAS_GANTT_PERMITIDAS = {
+  ecommerce: "eCommerce",
+  infracommerce: "InfraCommerce",
+  agente_pim: "Agente PIM",
+  administracion: "Administración",
+  seller: "Seller",
+  comercial: "Comercial",
+  operaciones: "Operaciones",
+  qa: "QA",
+  it: "IT",
+};
+
 const GANTT_TASK_ID_HEADER_ALIASES = [
   "task_id",
   "id_tarea",
@@ -46,7 +62,8 @@ const CAMPOS_GANTT_CREATE_ALIASES = {
   fase: ["fase"],
   hito: ["hito"],
   tarea: ["tarea", "actividad"],
-  responsable: ["responsable"],
+  area_responsable: ["area_responsable", "responsable"],
+  responsable_persona: ["responsable_persona", "id_responsable"],
   depende_de: ["Depende de", "depende_de", "dependencia"],
   entorno: ["Entorno", "entorno"],
   inicio: ["Inicio", "inicio", "Inicio plan", "inicio_plan", "fecha_inicio_plan"],
@@ -200,10 +217,11 @@ function crearTareaGanttSinLock(d) {
   const fase = validarTextoObligatorioGantt(task.fase, "fase", 120);
   const hito = validarTextoObligatorioGantt(task.hito, "hito", 160);
   const tarea = validarTextoObligatorioGantt(task.tarea, "tarea", 220);
-  const responsable = validarTextoObligatorioGantt(
-    task.responsable,
-    "responsable",
-    120,
+  const areaResponsable = normalizarAreaResponsableGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.area_responsable),
+  );
+  const responsablePersona = validarResponsablePersonaGantt(
+    obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.responsable_persona),
   );
   const entorno = normalizarEntornoGantt(
     obtenerValorPayloadGantt(task, CAMPOS_GANTT_CREATE_ALIASES.entorno),
@@ -274,7 +292,8 @@ function crearTareaGanttSinLock(d) {
     fase,
     hito,
     tarea,
-    responsable,
+    area_responsable: areaResponsable,
+    ...(responsablePersona ? { responsable_persona: responsablePersona } : {}),
     depende_de: dependeDe,
     entorno,
     inicio,
@@ -552,7 +571,7 @@ function validarColumnasCreateGantt(headerMap) {
     "fase",
     "hito",
     "tarea",
-    "responsable",
+    "area_responsable",
     "entorno",
     "inicio",
     "fin",
@@ -620,7 +639,8 @@ function normalizarValorGantt(campo, valor) {
     return validarFechaGantt(valor, campo);
   }
   if (campo === "hito") return validarTextoObligatorioGantt(valor, campo, 160);
-  if (campo === "responsable") return validarTextoGantt(valor, campo, 120);
+  if (campo === "area_responsable") return normalizarAreaResponsableGantt(valor);
+  if (campo === "responsable_persona") return validarResponsablePersonaGantt(valor);
   if (campo === "comentario") return validarTextoGantt(valor, campo, 1000);
   if (campo === "depende_de") return validarTextoGantt(valor, campo, 120);
   return limpiarValor(valor);
@@ -644,6 +664,44 @@ function normalizarEntornoGantt(valor) {
     throw new Error("entorno invalido: " + raw);
   }
   return ENTORNOS_GANTT_PERMITIDOS[key];
+}
+
+function normalizarAreaResponsableGantt(valor) {
+  const raw = limpiarValor(valor);
+  if (!raw) throw new Error("area_responsable no puede estar vacio");
+  const key = normalizarHeaderGantt(raw);
+  if (!AREAS_GANTT_PERMITIDAS[key]) {
+    throw new Error("area_responsable invalida: " + raw);
+  }
+  return AREAS_GANTT_PERMITIDAS[key];
+}
+
+// responsable_persona es opcional (tareas históricas quedan "Sin asignar") pero
+// si se manda un id, debe existir y estar activo en USUARIOS (evita ids huérfanos).
+function validarResponsablePersonaGantt(valor) {
+  const raw = limpiarValor(valor);
+  if (!raw) return "";
+  if (!_usuarioGanttActivoExiste(raw)) {
+    throw new Error("responsable_persona invalido: usuario no encontrado o inactivo: " + raw);
+  }
+  return raw;
+}
+
+function _usuarioGanttActivoExiste(id) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName("USUARIOS");
+  if (!sheet) return false;
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0];
+  const idIdx = headers.indexOf("id");
+  const activoIdx = headers.indexOf("activo");
+  const idNorm = String(id).trim();
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][idIdx]).trim() === idNorm) {
+      return String(values[i][activoIdx]) === "SI";
+    }
+  }
+  return false;
 }
 
 function validarFechaGantt(valor, campo) {
@@ -908,5 +966,360 @@ function getGanttAction(data) {
     .map(r => rowToObj(headers, r))
     .filter(o => o.seller_id || o.task_id || o.id_tarea);
 
+  const conteos = _contarChecklistYComentariosGantt(ss);
+  todos.forEach((t) => {
+    const taskId = normalizarIdGantt(t.task_id || t.id_tarea);
+    const c = conteos[taskId] || { total: 0, hechos: 0, comentarios: 0 };
+    t.checklist_count = c.total;
+    t.checklist_done_count = c.hechos;
+    t.comentarios_count = c.comentarios;
+  });
+
   return { ok: true, data: _aplicarSellerScope(data, todos) };
+}
+
+// Conteos agregados por task_id, para pintar badges "3/5" y "N comentarios" en
+// la lista sin pagar el costo de un round-trip por tarea (ver plan Sección B.3).
+function _contarChecklistYComentariosGantt(ss) {
+  const conteos = {};
+  const wsCl = ss.getSheetByName(HOJA_TIMELINE_CHECKLIST);
+  if (wsCl) {
+    const values = wsCl.getDataRange().getValues();
+    if (values.length > 1) {
+      const headers = values[0].map(_normHeaderKeyGantt);
+      const taskIdx = headers.indexOf("task_id");
+      const hechoIdx = headers.indexOf("hecho");
+      for (let i = 1; i < values.length; i++) {
+        const taskId = normalizarIdGantt(values[i][taskIdx]);
+        if (!taskId) continue;
+        if (!conteos[taskId]) conteos[taskId] = { total: 0, hechos: 0, comentarios: 0 };
+        conteos[taskId].total++;
+        if (String(values[i][hechoIdx]) === "Si") conteos[taskId].hechos++;
+      }
+    }
+  }
+  const wsCm = ss.getSheetByName(HOJA_TIMELINE_COMENTARIOS);
+  if (wsCm) {
+    const values = wsCm.getDataRange().getValues();
+    if (values.length > 1) {
+      const headers = values[0].map(_normHeaderKeyGantt);
+      const taskIdx = headers.indexOf("task_id");
+      for (let i = 1; i < values.length; i++) {
+        const taskId = normalizarIdGantt(values[i][taskIdx]);
+        if (!taskId) continue;
+        if (!conteos[taskId]) conteos[taskId] = { total: 0, hechos: 0, comentarios: 0 };
+        conteos[taskId].comentarios++;
+      }
+    }
+  }
+  return conteos;
+}
+
+// ── DETALLE DE TAREA: checklist + comentarios ──────────────────
+
+function _buscarTareaGanttPorId(taskId) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE);
+  if (!ws) return null;
+  const timelineHeaders = obtenerHeadersTimelineGantt(ws);
+  const headerMap = timelineHeaders.headerMap;
+  const taskCol = resolverIndiceHeaderGantt(headerMap, GANTT_TASK_ID_HEADER_ALIASES);
+  if (taskCol === -1) return null;
+  const values = ws.getDataRange().getValues();
+  const coincidencias = buscarCoincidenciasTaskGantt(
+    values,
+    taskCol,
+    timelineHeaders.dataStartRowNumber,
+    taskId,
+  );
+  if (!coincidencias.length) return null;
+  const sellerCol = resolverIndiceHeaderGantt(headerMap, CAMPOS_GANTT_CREATE_ALIASES.seller_id);
+  const sellerId = sellerCol === -1 ? "" : String(coincidencias[0].row[sellerCol] || "").trim();
+  return { sellerId };
+}
+
+// Sesiones de seller solo pueden operar checklist/comentarios de sus propias
+// tareas (mismo criterio que actualizarTareaGanttSinLock). Staff sin restricción.
+function _verificarOwnershipTareaGantt(d, taskId) {
+  const sesSellerId = String(d._sesSellerId || "").trim();
+  if (!sesSellerId) return;
+  const tarea = _buscarTareaGanttPorId(taskId);
+  if (!tarea) throw new Error("task_id no existe: " + taskId);
+  if (tarea.sellerId.toUpperCase() !== sesSellerId.toUpperCase()) {
+    throw new Error("No autorizado (la tarea pertenece a otro seller).");
+  }
+}
+
+function normalizarBooleanoSiNoGantt(valor) {
+  if (valor === true || valor === "true") return "Si";
+  if (valor === false || valor === "false") return "No";
+  const raw = limpiarValor(valor);
+  const key = normalizarHeaderGantt(raw);
+  if (["si", "s", "1"].indexOf(key) !== -1) return "Si";
+  if (["no", "n", "0"].indexOf(key) !== -1) return "No";
+  throw new Error("valor booleano invalido: " + raw);
+}
+
+function _resolverNombreUsuarioGantt(id) {
+  if (!id) return "";
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName("USUARIOS");
+  if (!sheet) return "";
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0];
+  const idIdx = headers.indexOf("id");
+  const nombreIdx = headers.indexOf("nombre");
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][idIdx]).trim() === String(id).trim()) {
+      return String(values[i][nombreIdx] || "");
+    }
+  }
+  return "";
+}
+
+function getGanttDetalleAction(data) {
+  const taskId = limpiarValor(data.task_id);
+  if (!taskId) return { ok: false, error: "Falta task_id", code: 400 };
+  const tarea = _buscarTareaGanttPorId(taskId);
+  if (!tarea) return { ok: false, error: "task_id no existe: " + taskId, code: 404 };
+
+  try {
+    _verificarOwnershipTareaGantt(data, taskId);
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e), code: 403 };
+  }
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  return {
+    ok: true,
+    data: {
+      checklist: _leerChecklistGantt(ss, taskId),
+      comentarios: _leerComentariosGantt(ss, taskId),
+    },
+  };
+}
+
+function _leerChecklistGantt(ss, taskId) {
+  const ws = ss.getSheetByName(HOJA_TIMELINE_CHECKLIST);
+  if (!ws) return [];
+  const values = ws.getDataRange().getValues();
+  if (values.length < 2) return [];
+  const headers = values[0].map(_normHeaderKeyGantt);
+  return values
+    .slice(1)
+    .map((r) => rowToObj(headers, r))
+    .filter((o) => o.item_id && normalizarIdGantt(o.task_id) === normalizarIdGantt(taskId))
+    .sort((a, b) => (Number(a.orden) || 0) - (Number(b.orden) || 0));
+}
+
+function _leerComentariosGantt(ss, taskId) {
+  const ws = ss.getSheetByName(HOJA_TIMELINE_COMENTARIOS);
+  if (!ws) return [];
+  const values = ws.getDataRange().getValues();
+  if (values.length < 2) return [];
+  const headers = values[0].map(_normHeaderKeyGantt);
+  return values
+    .slice(1)
+    .map((r) => rowToObj(headers, r))
+    .filter((o) => o.comentario_id && normalizarIdGantt(o.task_id) === normalizarIdGantt(taskId))
+    .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+}
+
+// ── CHECKLIST — escrituras ──────────────────────────────────────
+
+function agregarItemChecklistGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_checklist_add", () =>
+    agregarItemChecklistGanttSinLock(d),
+  );
+}
+
+function agregarItemChecklistGanttSinLock(d) {
+  const taskId = limpiarValor(d.task_id);
+  if (!taskId) throw new Error("Falta task_id");
+  if (!_buscarTareaGanttPorId(taskId)) throw new Error("task_id no existe: " + taskId);
+  _verificarOwnershipTareaGantt(d, taskId);
+  const texto = validarTextoObligatorioGantt(d.texto, "texto", 300);
+  const actor = normalizarActorDeclaradoGantt(
+    d.created_by || d._sesEmail,
+    "gantt_checklist_sin_actor",
+  );
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE_CHECKLIST);
+  if (!ws) throw new Error('No existe la hoja "timeline_checklist"');
+
+  const values = ws.getDataRange().getValues();
+  const headers = values[0] || [];
+  const headerMap = construirMapaHeadersNormalizados(headers);
+  const itemIdCol = headerMap["item_id"];
+  const taskCol = headerMap["task_id"];
+  const ordenCol = headerMap["orden"];
+
+  let maxOrden = 0;
+  let maxN = 0;
+  const prefix = normalizarIdGantt(taskId) + "-CL-";
+  for (let i = 1; i < values.length; i++) {
+    if (normalizarIdGantt(values[i][taskCol]) === normalizarIdGantt(taskId)) {
+      const orden = Number(values[i][ordenCol]) || 0;
+      if (orden > maxOrden) maxOrden = orden;
+      const m = String(values[i][itemIdCol]).match(/-CL-(\d+)$/);
+      if (m) maxN = Math.max(maxN, Number(m[1]));
+    }
+  }
+  const itemId = prefix + String(maxN + 1).padStart(2, "0");
+  const now = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
+
+  const row = headers.map((h) => {
+    const key = normalizarHeaderGantt(h);
+    if (key === "item_id") return itemId;
+    if (key === "task_id") return taskId;
+    if (key === "texto") return texto;
+    if (key === "hecho") return "No";
+    if (key === "orden") return maxOrden + 1;
+    if (key === "created_at" || key === "updated_at") return now;
+    if (key === "created_by" || key === "updated_by") return actor;
+    return "";
+  });
+  ws.appendRow(row);
+
+  return { item_id: itemId, task_id: taskId, texto, hecho: "No", orden: maxOrden + 1 };
+}
+
+function toggleItemChecklistGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_checklist_toggle", () =>
+    toggleItemChecklistGanttSinLock(d),
+  );
+}
+
+function toggleItemChecklistGanttSinLock(d) {
+  const itemId = limpiarValor(d.item_id);
+  if (!itemId) throw new Error("Falta item_id");
+  const hecho = normalizarBooleanoSiNoGantt(d.hecho);
+  const actor = normalizarActorDeclaradoGantt(
+    d.updated_by || d._sesEmail,
+    "gantt_checklist_sin_actor",
+  );
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE_CHECKLIST);
+  if (!ws) throw new Error('No existe la hoja "timeline_checklist"');
+
+  const values = ws.getDataRange().getValues();
+  const headers = values[0] || [];
+  const headerMap = construirMapaHeadersNormalizados(headers);
+  const itemIdCol = headerMap["item_id"];
+  const taskCol = headerMap["task_id"];
+  const hechoCol = headerMap["hecho"];
+  const updatedAtCol = headerMap["updated_at"];
+  const updatedByCol = headerMap["updated_by"];
+
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][itemIdCol]).trim() === itemId) {
+      const taskId = String(values[i][taskCol]).trim();
+      _verificarOwnershipTareaGantt(d, taskId);
+      const rowNumber = i + 1;
+      ws.getRange(rowNumber, hechoCol + 1).setValue(hecho);
+      if (updatedAtCol !== undefined) {
+        ws
+          .getRange(rowNumber, updatedAtCol + 1)
+          .setValue(Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss"));
+      }
+      if (updatedByCol !== undefined) {
+        ws.getRange(rowNumber, updatedByCol + 1).setValue(actor);
+      }
+      return { item_id: itemId, task_id: taskId, hecho: hecho };
+    }
+  }
+  throw new Error("item_id no existe: " + itemId);
+}
+
+function eliminarItemChecklistGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_checklist_delete", () =>
+    eliminarItemChecklistGanttSinLock(d),
+  );
+}
+
+function eliminarItemChecklistGanttSinLock(d) {
+  const itemId = limpiarValor(d.item_id);
+  if (!itemId) throw new Error("Falta item_id");
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE_CHECKLIST);
+  if (!ws) throw new Error('No existe la hoja "timeline_checklist"');
+
+  const values = ws.getDataRange().getValues();
+  const headers = values[0] || [];
+  const headerMap = construirMapaHeadersNormalizados(headers);
+  const itemIdCol = headerMap["item_id"];
+  const taskCol = headerMap["task_id"];
+
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][itemIdCol]).trim() === itemId) {
+      const taskId = String(values[i][taskCol]).trim();
+      _verificarOwnershipTareaGantt(d, taskId);
+      ws.deleteRow(i + 1);
+      return { item_id: itemId, task_id: taskId };
+    }
+  }
+  throw new Error("item_id no existe: " + itemId);
+}
+
+// ── COMENTARIOS — append-only ────────────────────────────────────
+
+function agregarComentarioGantt(d) {
+  return ejecutarOperacionGanttConLock("gantt_comentario_add", () =>
+    agregarComentarioGanttSinLock(d),
+  );
+}
+
+function agregarComentarioGanttSinLock(d) {
+  const taskId = limpiarValor(d.task_id);
+  if (!taskId) throw new Error("Falta task_id");
+  if (!_buscarTareaGanttPorId(taskId)) throw new Error("task_id no existe: " + taskId);
+  _verificarOwnershipTareaGantt(d, taskId);
+  const texto = validarTextoObligatorioGantt(d.texto, "texto", 1000);
+
+  const autorEmail = limpiarValor(d._sesEmail);
+  const autorNombre = _resolverNombreUsuarioGantt(d._sesId) || autorEmail || "Usuario";
+
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_TIMELINE_COMENTARIOS);
+  if (!ws) throw new Error('No existe la hoja "timeline_comentarios"');
+
+  const values = ws.getDataRange().getValues();
+  const headers = values[0] || [];
+  const headerMap = construirMapaHeadersNormalizados(headers);
+  const idCol = headerMap["comentario_id"];
+  const taskCol = headerMap["task_id"];
+
+  let maxN = 0;
+  const prefix = normalizarIdGantt(taskId) + "-CM-";
+  for (let i = 1; i < values.length; i++) {
+    if (normalizarIdGantt(values[i][taskCol]) === normalizarIdGantt(taskId)) {
+      const m = String(values[i][idCol]).match(/-CM-(\d+)$/);
+      if (m) maxN = Math.max(maxN, Number(m[1]));
+    }
+  }
+  const comentarioId = prefix + String(maxN + 1).padStart(2, "0");
+  const now = Utilities.formatDate(new Date(), TIMEZONE, "yyyy-MM-dd HH:mm:ss");
+
+  const row = headers.map((h) => {
+    const key = normalizarHeaderGantt(h);
+    if (key === "comentario_id") return comentarioId;
+    if (key === "task_id") return taskId;
+    if (key === "autor_email") return autorEmail;
+    if (key === "autor_nombre") return autorNombre;
+    if (key === "texto") return texto;
+    if (key === "created_at") return now;
+    return "";
+  });
+  ws.appendRow(row);
+
+  return {
+    comentario_id: comentarioId,
+    task_id: taskId,
+    autor_nombre: autorNombre,
+    texto,
+    created_at: now,
+  };
 }

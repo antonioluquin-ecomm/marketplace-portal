@@ -14,6 +14,8 @@ const HOJA_CALIFICACIONES = "calificaciones";
 const HOJA_RELEVAMIENTO = "relevamientos";
 const HOJA_DEFINICION_TECNICA = "definicion_tecnica";
 const HOJA_TIMELINE = "timeline";
+const HOJA_TIMELINE_CHECKLIST = "timeline_checklist";
+const HOJA_TIMELINE_COMENTARIOS = "timeline_comentarios";
 const HOJA_TARIFAS = "tarifas";
 const HOJA_OVERRIDES = "overrides";
 

@@ -90,7 +90,33 @@ function migrarPerfilesDryRun() {
  */
 function setupAll() {
   setupAuthSheets();
+  setupGanttSheets();
   Logger.log("setupAll: OK");
+}
+
+/**
+ * Idempotente — crea las hojas hijas de Gantt (checklist y comentarios por
+ * tarea) si no existen. La hoja `timeline` misma no se toca acá: la columna
+ * nueva `responsable_persona` se agrega vía _ensureColumn cuando exista.
+ */
+function setupGanttSheets() {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+
+  _ensureSheetWithHeaders(ss, HOJA_TIMELINE_CHECKLIST, [
+    "item_id", "task_id", "texto", "hecho", "orden",
+    "created_at", "created_by", "updated_at", "updated_by",
+  ]);
+
+  _ensureSheetWithHeaders(ss, HOJA_TIMELINE_COMENTARIOS, [
+    "comentario_id", "task_id", "autor_email", "autor_nombre", "texto", "created_at",
+  ]);
+
+  var timelineSheet = ss.getSheetByName(HOJA_TIMELINE);
+  if (timelineSheet) {
+    _ensureColumn(timelineSheet, "responsable_persona");
+  }
+
+  Logger.log("setupGanttSheets: OK — hojas timeline_checklist/timeline_comentarios listas.");
 }
 // ── SETUP (ejecutar una vez desde el editor de Apps Script) ───
 

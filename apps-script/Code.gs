@@ -26,10 +26,16 @@ function doPost(e) {
 var WRITE_ACTIONS = [
   "saveSeller", "saveCalificacion", "saveRelevamiento", "saveRelevamientoProfile",
   "updateGanttTask", "createGanttTask", "disableGanttTask",
+  "addChecklistItem", "toggleChecklistItem", "deleteChecklistItem", "addComentarioGantt",
   "updateTarifas", "updateOverrides", "uploadLogo",
 ];
 
 // Escrituras internas (staff) → el rol debe poder editar alguno de estos módulos.
+// updateGanttTask/addChecklistItem/toggleChecklistItem/deleteChecklistItem/
+// addComentarioGantt quedan fuera de este mapa a propósito: son compartidas con
+// sellers (checklist/comentarios visibles y editables por el seller en sus
+// propias tareas, Etapa 12), y el ownership se resuelve en Gantt.gs
+// (_verificarOwnershipTareaGantt), no acá.
 var ACTION_MODULE_MAP = {
   saveSeller:       ["backlog"],
   createGanttTask:  ["gantt"],
@@ -70,6 +76,10 @@ function routeAction(data, action) {
     case "updateGanttTask":         return _handleUpdateGanttTask(data);
     case "createGanttTask":         return _handleCreateGanttTask(data);
     case "disableGanttTask":        return _handleDisableGanttTask(data);
+    case "addChecklistItem":        return _handleAddChecklistItem(data);
+    case "toggleChecklistItem":     return _handleToggleChecklistItem(data);
+    case "deleteChecklistItem":     return _handleDeleteChecklistItem(data);
+    case "addComentarioGantt":      return _handleAddComentarioGantt(data);
     case "updateTarifas":           return _handleUpdateTarifas(data);
     case "updateOverrides":         return _handleUpdateOverrides(data);
     case "uploadLogo":              return _handleUploadLogo(data);
@@ -166,6 +176,30 @@ function _handleDisableGanttTask(data) {
   var r = darDeBajaTareaGantt(data);
   writeAuditLog("disableGanttTask", "timeline", r.task_id, "", data._sesEmail);
   return { ok: true, task_id: r.task_id, disabled_fields: r.disabled_fields, row_number: r.row_number, message: "Tarea Gantt dada de baja logicamente" };
+}
+
+function _handleAddChecklistItem(data) {
+  var r = agregarItemChecklistGantt(data);
+  writeAuditLog("addChecklistItem", "timeline_checklist", r.task_id, r.item_id, data._sesEmail);
+  return { ok: true, item_id: r.item_id, task_id: r.task_id, texto: r.texto, hecho: r.hecho, orden: r.orden };
+}
+
+function _handleToggleChecklistItem(data) {
+  var r = toggleItemChecklistGantt(data);
+  writeAuditLog("toggleChecklistItem", "timeline_checklist", r.task_id, r.item_id + ":" + r.hecho, data._sesEmail);
+  return { ok: true, item_id: r.item_id, task_id: r.task_id, hecho: r.hecho };
+}
+
+function _handleDeleteChecklistItem(data) {
+  var r = eliminarItemChecklistGantt(data);
+  writeAuditLog("deleteChecklistItem", "timeline_checklist", r.task_id, r.item_id, data._sesEmail);
+  return { ok: true, item_id: r.item_id, task_id: r.task_id };
+}
+
+function _handleAddComentarioGantt(data) {
+  var r = agregarComentarioGantt(data);
+  writeAuditLog("addComentarioGantt", "timeline_comentarios", r.task_id, r.comentario_id, data._sesEmail);
+  return { ok: true, comentario_id: r.comentario_id, task_id: r.task_id, autor_nombre: r.autor_nombre, texto: r.texto, created_at: r.created_at };
 }
 
 function _handleUpdateTarifas(data) {

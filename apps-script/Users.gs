@@ -37,6 +37,8 @@ var AUTH_SESSION_ACTIONS = [
   "changePassword",
   "getSellers",
   "getGantt",
+  "getGanttDetalle",
+  "getUsuariosGantt",
   "getTarifas",
   "getOverrides",
   "getRelevamientos",
@@ -96,6 +98,8 @@ function routeAuthAction(data) {
     case "updatePermisos":   return updatePermisos(data);
     case "getSellers":       return getSellersAction(data);
     case "getGantt":         return getGanttAction(data);
+    case "getGanttDetalle":  return getGanttDetalleAction(data);
+    case "getUsuariosGantt": return getUsuariosGanttAction(data);
     case "getTarifas":       return getTarifasAction();
     case "getOverrides":     return getOverridesAction(data);
     case "getRelevamientos": return getRelevamientosAction(data);
@@ -500,6 +504,35 @@ function getUsuarios() {
       delete obj.salt;
       return obj;
     });
+  return { ok: true, data: usuarios };
+}
+
+// Lightweight, no admin-only: cualquier sesión de staff interna (no seller)
+// necesita poblar el dropdown "Responsable" del Gantt con personas reales,
+// sin exponer los campos sensibles que sí devuelve getUsuarios() (admin-only).
+function getUsuariosGanttAction(data) {
+  if (data && data._sesSellerId) {
+    return { ok: false, error: "Forbidden", code: 403 };
+  }
+  var ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName("USUARIOS");
+  if (!sheet) return { ok: true, data: [] };
+  var values  = sheet.getDataRange().getValues();
+  var headers = values[0];
+  var idIdx     = headers.indexOf("id");
+  var nombreIdx = headers.indexOf("nombre");
+  var activoIdx = headers.indexOf("activo");
+  var sellerIdx = headers.indexOf("seller_id");
+
+  var usuarios = values.slice(1)
+    .filter(function (r) {
+      return r[idIdx] !== "" &&
+        String(r[activoIdx]) === "SI" &&
+        String(r[sellerIdx] || "").trim() === "";
+    })
+    .map(function (r) { return { id: r[idIdx], nombre: String(r[nombreIdx] || "") }; })
+    .sort(function (a, b) { return a.nombre.localeCompare(b.nombre); });
+
   return { ok: true, data: usuarios };
 }
 

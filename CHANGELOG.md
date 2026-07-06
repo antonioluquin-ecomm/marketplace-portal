@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-07-06 - Etapa 12: Rediseño de Gantt Operativo (tipo "Tareas")
+
+Tipo de cambio: feature + cambio de modelo de datos (frontend + backend).
+
+Estado: implementado y verificado estáticamente (sintaxis JS/GAS, CSS sin 404). **Requiere pegar `apps-script/` en el editor GAS y redeployar** + correr `setupAll()` (crea `timeline_checklist`/`timeline_comentarios` y la columna `responsable_persona` en `timeline`) antes de usarlo en producción.
+
+Contexto: se convirtió `internal/gantt/gantt-operativo.html` en un módulo de gestión de tareas más parecido a un tracker tipo PCC, manteniendo Lista como vista principal.
+
+- **Filtros**: Fase y Estado pasan de pill-buttons a `<select>`; se agregan Área responsable, Responsable (persona) y el toggle "Mis tareas". Se consolidó toda la mutación de filtros en `setFilter(key, value)`.
+- **Modelo de datos**: el campo `responsable` (header físico sin cambios en `timeline`) pasa a interpretarse como **Área responsable** (el enum de equipos de siempre). Se agrega una columna nueva `responsable_persona` con el `id` de `USUARIOS` — la persona asignada, no texto libre. Nueva acción liviana `getUsuariosGantt` (sesión de staff, no admin-only) expone `{id, nombre}` para poblar el selector.
+- **Lista colapsable por seller**: cada grupo de seller es un `<details>`/`<summary>` (recuerda estado abierto/cerrado). Estado y Responsable son ahora `<select>` inline en la fila (llaman a `updateGanttTask` con UI optimista + rollback); columna Acciones con Editar/Cancelar directo en la fila.
+- **Checklist y comentarios por tarea**: nuevas hojas `timeline_checklist` y `timeline_comentarios`, y acciones `addChecklistItem`/`toggleChecklistItem`/`deleteChecklistItem`/`addComentarioGantt` + `getGanttDetalle` (lazy, se cargan al abrir el detalle de la tarea). Compartido con el seller (ownership por `seller_id`, igual que `estado`/`comentario` hoy).
+- **Vista Roadmap**: nueva 4ª vista — swimlane horizontal agrupado por Hito dentro de cada Fase (nivel más agregado que el Gantt por tarea).
+- **Alert strip eliminado** (banner de alertas en rojo arriba de la vista).
+- **Estilos**: se extrajo el `<style>` inline (que había quedado como fuente de verdad tras varias "Etapa N" sueltas) a `assets/css/pages/gantt-operativo.css` — exclusivo de esta página (no confundir con `assets/css/pages/gantt.css`, que sigue siendo la capa compartida de topbar/sidebar/inputs de filtro con `gantt-seller-center.html`). De paso se eliminaron ~150 líneas de CSS muerto (`.exec-*`, sin markup asociado desde hace varias etapas).
+
+Paso manual requerido: pegar los archivos de `apps-script/` en el editor de GAS, redeployar, y ejecutar `setupAll()` una vez desde el editor para crear las hojas/columna nuevas. Las tareas históricas quedan con `responsable_persona` vacío ("Sin asignar") hasta asignarlas manualmente.
+
 ## 2026-07-05 - Etapa 10: Alineación del backend GAS al estándar del ecosistema
 
 Tipo de cambio: refactor de arquitectura (backend) + contrato frontend.
