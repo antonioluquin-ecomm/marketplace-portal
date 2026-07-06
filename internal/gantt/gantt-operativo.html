@@ -194,7 +194,7 @@
       </div>
     </div>
     <div class="tl-r">
-      <span class="ri" id="range-info">Rango: —</span>
+      <span class="ri" id="range-info" style="display:none">Rango: —</span>
       <span class="ri" id="ri-info">—</span>
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
@@ -921,6 +921,10 @@ function setView(v){
   if(eb) eb.style.display=v==='lista'?'':'none';
   const ea=$('btn-expand-all');
   if(ea) ea.style.display=v==='lista'?'':'none';
+  // "Rango" es un concepto de eje temporal (Gantt/Roadmap) — en Lista/Kanban
+  // no aplica y quedaba con el texto stale de la última vista con escala.
+  const ri=$('range-info');
+  if(ri) ri.style.display=(v==='gantt'||v==='roadmap')?'':'none';
   render();
 }
 function toggleAllSellerGroups(){
@@ -1073,8 +1077,11 @@ function render(){
 }
 
 /* ── COUNTS ── */
+function pluralizar(n,singular,plural){
+  return `${n} ${n===1?singular:plural}`;
+}
 function updateCounts(tasks,nSel){
-  $('ri-info').textContent=`${tasks.length} tareas · ${nSel} sellers`;
+  $('ri-info').textContent=`${pluralizar(tasks.length,'tarea','tareas')} · ${pluralizar(nSel,'seller','sellers')}`;
 }
 
 /* ── KPI BAR ── */
