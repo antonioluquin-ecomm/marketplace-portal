@@ -439,7 +439,9 @@
         --muted: #b7c1b3;
         --muted2: #7f8a7b;
       }
-      body{font-size:15px;line-height:1.65;background:#101311;padding-top:92px}
+      body{font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(94,168,50,.16),transparent 36%),#09100a;padding-top:92px}
+      /* Etapa 12 — mismo ancho full-bleed que presentación/simulador/gantt (antes 1040px en card). */
+      .wrap{max-width:1200px}
       /* Topbar fijo compartido — idéntico al de presentación/simulador/gantt del seller. */
       .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(9,16,10,.96);border-bottom:1px solid rgba(94,168,50,.28);backdrop-filter:blur(20px)}
       .topbar .brand{display:flex;align-items:center;gap:14px}
@@ -448,12 +450,17 @@
       .topbar .crumb{border-left:1px solid rgba(255,255,255,.08);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#8fab86;white-space:nowrap}
       @media(max-width:760px){.topbar .public-flow-nav{display:none}}
       @media(max-width:720px){body{padding-top:64px}}
-      .hero,.section,.intro-note,.seller-identity,.progress-box,.section-nav{background:var(--panel);border-color:var(--line);box-shadow:none}
-      .brand,.section-label,.section-tag,.field-group-title,.badge,.btn{text-transform:none;letter-spacing:.015em}
+      /* .hero es el contenedor general de la página, ya no una card — sin fondo/borde propio,
+         igual que .hero-copy en presentación y .main en gantt. Los paneles reales
+         (.section,.intro-note,.seller-identity,.progress-box,.section-nav) sí mantienen su fondo de card. */
+      .hero{background:none;border:none;box-shadow:none;padding:0}
+      .section,.intro-note,.seller-identity,.progress-box,.section-nav{background:var(--panel);border-color:var(--line);box-shadow:none}
+      .section-label,.section-tag,.field-group-title,.badge{letter-spacing:.015em}
       h1{font-size:34px;line-height:1.05}
       p,.section-help,small{line-height:1.6}
       label{font-size:12.5px}
-      .btn{background:var(--g);border-radius:9px}
+      /* Etapa 12 — botones al spec canónico de presentación/simulador (uppercase, padding/radio mayores). */
+      .btn{background:var(--g);padding:15px 28px;border-radius:8px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
       .btn.secondary{background:rgba(255,255,255,.045)}
       /* Etapa 27B: header visual seller-facing. */
       .hero .brand{
