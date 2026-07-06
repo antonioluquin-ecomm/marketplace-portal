@@ -1237,9 +1237,9 @@ function setListSort(col){
   if(listSort.col===col) listSort.dir*=-1; else listSort={col,dir:1};
   render();
 }
-function sortArrow(col){
-  if(listSort.col!==col) return '<span style="opacity:.25;font-size:9px">⇅</span>';
-  return listSort.dir===1?'<span style="color:var(--g);font-size:9px">▲</span>':'<span style="color:var(--g);font-size:9px">▼</span>';
+function sortClass(col){
+  if(listSort.col!==col) return '';
+  return listSort.dir===1?'sort-asc':'sort-desc';
 }
 
 /* ══════════════════════════════════════════
@@ -1475,18 +1475,18 @@ function renderLista(tasks,sellerIds,today){
             <span class="lsh-pn">${pct}%</span>
           </div>
         </summary>
-        <table class="lista-table">
+        <table class="data-table">
           <thead><tr>
-            <th class="sortable" onclick="setListSort('tarea')">Tarea ${sortArrow('tarea')}</th>
-            <th class="sortable" onclick="setListSort('hito')">Hito ${sortArrow('hito')}</th>
-            <th class="sortable" onclick="setListSort('fase')">Fase ${sortArrow('fase')}</th>
-            <th class="sortable" onclick="setListSort('estado')">Estado ${sortArrow('estado')}</th>
-            <th class="sortable" onclick="setListSort('area_responsable')">Área ${sortArrow('area_responsable')}</th>
-            <th class="sortable" onclick="setListSort('responsable_persona_nombre')">Responsable ${sortArrow('responsable_persona_nombre')}</th>
+            <th data-sortable data-key="tarea" class="${sortClass('tarea')}" onclick="setListSort('tarea')">Tarea</th>
+            <th data-sortable data-key="hito" class="${sortClass('hito')}" onclick="setListSort('hito')">Hito</th>
+            <th data-sortable data-key="fase" class="${sortClass('fase')}" onclick="setListSort('fase')">Fase</th>
+            <th data-sortable data-key="estado" class="${sortClass('estado')}" onclick="setListSort('estado')">Estado</th>
+            <th data-sortable data-key="area_responsable" class="${sortClass('area_responsable')}" onclick="setListSort('area_responsable')">Área</th>
+            <th data-sortable data-key="responsable_persona_nombre" class="${sortClass('responsable_persona_nombre')}" onclick="setListSort('responsable_persona_nombre')">Responsable</th>
             <th>Entorno</th>
-            <th class="sortable" onclick="setListSort('inicio')">Inicio ${sortArrow('inicio')}</th>
-            <th class="sortable" onclick="setListSort('fin')">Fin ${sortArrow('fin')}</th>
-            <th class="sortable" onclick="setListSort('atraso_calc')">Atraso ${sortArrow('atraso_calc')}</th>
+            <th data-sortable data-key="inicio" class="${sortClass('inicio')}" onclick="setListSort('inicio')">Inicio</th>
+            <th data-sortable data-key="fin" class="${sortClass('fin')}" onclick="setListSort('fin')">Fin</th>
+            <th data-sortable data-key="atraso_calc" class="${sortClass('atraso_calc')}" onclick="setListSort('atraso_calc')">Atraso</th>
             <th>Comentario</th>
             <th>Acciones</th>
           </tr></thead>
@@ -1505,7 +1505,7 @@ function renderLista(tasks,sellerIds,today){
               const comentBadge=t.comentarios_count?`<span class="mini-badge" title="Comentarios">💬 ${t.comentarios_count}</span>`:'';
               return`<tr class="${rowCls}" onclick="openModal('${esc(t.task_id)}')">
                 <td class="td-tarea">${esc(t.tarea)}</td>
-                <td style="font-size:11px;color:var(--t3);max-width:140px">${esc(t.hito||'—')}</td>
+                <td style="font-size:11px;color:var(--t3);max-width:140px;white-space:normal">${esc(t.hito||'—')}</td>
                 <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
                 <td onclick="event.stopPropagation()"><select class="inline-select" onchange="updateEstadoInline('${esc(t.task_id)}',this)">${estadoOptionsHtml(t.estado)}</select></td>
                 <td class="td-resp">${esc(t.area_responsable||'—')}</td>

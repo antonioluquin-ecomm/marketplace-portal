@@ -106,21 +106,26 @@ input,select{font-family:inherit}
 .prog-bar{height:3px;background:var(--bg);border-radius:99px;overflow:hidden;margin-top:8px}
 .prog-fill{height:100%;border-radius:99px;background:var(--g);transition:width .4s}
 
-/* ── TABLE ── */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-thead th{padding:8px 12px;border-bottom:1px solid var(--b);background:var(--k3);font-size:8.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);white-space:nowrap;text-align:left;position:sticky;top:0;z-index:1}
-tbody td{padding:9px 12px;border-bottom:1px solid var(--b2);vertical-align:middle;color:var(--t2)}
-tbody tr{cursor:pointer;transition:background .1s}
-tbody tr:hover td{background:var(--bg)}
-tbody tr:last-child td{border-bottom:none}
+/* ── TABLE ──
+   El CSS de tabla estandar (.table-wrap/.data-table) vive en
+   internal-components.css (style_guide.md §6). Esta tabla tiene 11 columnas
+   con el nombre del seller en 3ra posicion (no en la 4ta que asume
+   .data-table) — la 4ta/5ta reales son "Grupo"/"Marca operativa", texto
+   plano, sin necesidad del tratamiento especial de nombre/descripcion. */
+#content-area .data-table { min-width: 1080px; }
+#content-area .data-table td:nth-child(4),
+#content-area .data-table td:nth-child(5) {
+  font-family: var(--mono); font-weight: 400; white-space: nowrap;
+  color: inherit; max-width: none; overflow: visible; text-overflow: clip;
+}
+tbody tr{cursor:pointer}
 .td-blk{width:3px;padding:0;border:none}
 .td-blk-bar{width:3px;height:100%;min-height:36px}
 .td-id{font-family:var(--font);font-size:12px;font-weight:700;color:var(--t4);white-space:nowrap}
 .td-seller{display:flex;align-items:center;gap:8px}
 .td-name{font-weight:700;color:var(--t1);white-space:nowrap}
 .td-cat{font-size:11px;color:var(--t4)}
-.td-next{max-width:220px}
+.td-next{max-width:220px;white-space:normal}
 .td-next-text{font-size:12px;color:var(--t2);line-height:1.4}
 .td-next-resp{font-size:10px;color:var(--t4);margin-top:2px}
 
@@ -895,8 +900,8 @@ function applyTableSort(sellers){
   });
 }
 function thSort(col,label){
-  const arr=tableSort.col===col?(tableSort.dir===1?" ↑":" ↓"):"";
-  return `<th onclick="setSortCol('${col}')" style="cursor:pointer;user-select:none">${label}${arr}</th>`;
+  const cls=tableSort.col===col?(tableSort.dir===1?"sort-asc":"sort-desc"):"";
+  return `<th data-sortable data-key="${col}" class="${cls}" onclick="setSortCol('${col}')">${label}</th>`;
 }
 
 /* ── RENDER ── */
@@ -1005,7 +1010,7 @@ function renderTabla(filtered){
     </tr>`;
   }).join("");
 
-  setHTML("content-area",`<div class="table-wrap"><table>
+  setHTML("content-area",`<div class="table-wrap"><table class="data-table">
     <thead><tr>
       <th class="td-blk"></th>
       ${thSort("seller_id","ID")}${thSort("nombre","Seller")}<th>Grupo</th>${thSort("marca_seller_operativo","Marca operativa")}${thSort("pipeline_estado","Pipeline")}<th>Modelo</th><th>Comisión</th>
@@ -1013,8 +1018,8 @@ function renderTabla(filtered){
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>
-  <div class="pagination" style="display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap">
-    <span style="font-size:12.5px;color:var(--t3);flex:1">${total<=pageSize?`${total} filas`:`${start+1}–${Math.min(start+pageSize,total)} de ${total}`}</span>
+  <div class="pagination">
+    <span class="pagination-info">${total<=pageSize?`${total} filas`:`${start+1}–${Math.min(start+pageSize,total)} de ${total}`}</span>
     <select class="fi-select" style="width:auto;margin:0" onchange="setPageSize(this.value)">
       <option value="25" ${pageSize===25?"selected":""}>25 por página</option>
       <option value="50" ${pageSize===50?"selected":""}>50 por página</option>

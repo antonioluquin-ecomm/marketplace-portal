@@ -431,25 +431,13 @@ body {
   border-top:1px solid var(--border);
 }
 
-.ov-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:16px }
-.ov-table th {
-  text-align:left;
-  padding:5px 8px;
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:var(--text-3);
-  border-bottom:1px solid var(--border);
-}
-.ov-table td {
-  padding:8px 8px;
-  border-bottom:1px solid var(--border);
-  color:var(--text-2);
-  vertical-align:middle;
-}
-.ov-table td:first-child { color:var(--text-1); font-weight:600; font-size:13px }
-.ov-table tr.has-ov:hover td { background:var(--surface-2); cursor:pointer }
+/* El CSS de tabla estandar (.table-wrap/.data-table) vive en
+   internal-components.css (style_guide.md §6). Tabla de 3 columnas sin
+   sorting ni paginacion — no necesita override de posicion 4/5 (no existen). */
+#ovSummary .data-table { min-width: 720px; }
+#ovSummary td:first-child { font-family:var(--font); color:var(--text-1); font-weight:600; font-size:13px; white-space:normal }
+#ovSummary td:last-child { font-family:var(--font); white-space:normal }
+#ovSummary tr.has-ov:hover td { background:var(--surface-2); cursor:pointer }
 .ov-tag {
   display:inline-block;
   padding:2px 6px;
@@ -506,24 +494,6 @@ body {
 }
 .ov-intro {
   background:#f8fafc;
-}
-#ovSummary {
-  overflow:auto;
-}
-.ov-table {
-  min-width:720px;
-  overflow:hidden;
-  border:1px solid var(--border);
-  border-radius:8px;
-  border-collapse:separate;
-  border-spacing:0;
-}
-.ov-table th {
-  background:#f8fafc;
-}
-.ov-table td,
-.ov-table th {
-  padding:10px 12px;
 }
 .ov-tag {
   border-radius:999px;
@@ -900,7 +870,7 @@ body {
       </div>
     </div>
 
-    <div id="ovSummary"><p class="ov-loading">Cargando overrides…</p></div>
+    <div id="ovSummary" class="table-wrap"><p class="ov-loading">Cargando overrides…</p></div>
   </div>
 
   <div class="actions">
@@ -1468,7 +1438,7 @@ function renderOvSummary() {
     updateSummaryCards();
     return;
   }
-  let html = `<table class="ov-table">
+  let html = `<table class="data-table">
     <thead><tr><th>Seller</th><th>ID</th><th>Condiciones activas</th></tr></thead><tbody>`;
   withOv
     .sort((a, b) => (a.seller_nombre || a.seller_id).localeCompare(b.seller_nombre || b.seller_id, "es"))

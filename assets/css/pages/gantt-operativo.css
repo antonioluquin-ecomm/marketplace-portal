@@ -167,17 +167,26 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .lsh-pbar{width:80px;height:4px;background:rgba(17,24,39,.08);border-radius:2px;overflow:hidden}
 .lsh-pfill{height:100%;border-radius:2px}
 .lsh-pn{font-size:10px;font-weight:700;color:var(--t2);white-space:nowrap}
-.lista-table{width:100%;border-collapse:collapse;font-size:12px}
-.lista-table th{padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.04em;font-weight:700;text-transform:uppercase;color:var(--t3);background:rgba(17,24,39,.02);border-bottom:1px solid var(--bdr)}
-.lista-table td{padding:9px 12px;border-bottom:1px solid var(--bdr-l);color:var(--t2);vertical-align:middle;font-size:12px}
-.lista-table tr:hover td{background:rgba(106,168,79,.045);cursor:pointer}
-.lista-table tr:last-child td{border-bottom:none}
-.td-tarea{color:var(--t1);font-size:12px;max-width:260px}
+/* El CSS de tabla estandar (.table-wrap/.data-table) vive en
+   internal-components.css (style_guide.md §6). Esta tabla se repite una vez
+   por cada <details> de seller dentro del mismo contenedor con scroll
+   (#content) — el sticky header pensado para una sola tabla por contenedor
+   se desactiva aca para que no se pisen entre si al scrollear. Columnas
+   reales: 4=Estado(select), 5=Area — ninguna es nombre/descripcion, se
+   neutraliza el tratamiento especial que asume .data-table. */
+#content .data-table th { position: static; }
+#content .data-table { min-width: 980px; }
+#content .data-table td:nth-child(4),
+#content .data-table td:nth-child(5) {
+  font-family: var(--mono); font-weight: 400; white-space: nowrap;
+  color: inherit; max-width: none; overflow: visible; text-overflow: clip;
+}
+.td-tarea{color:var(--t1);font-size:12px;max-width:260px;white-space:normal}
 .td-resp{white-space:nowrap;font-size:11px}
 .td-dates{font-size:11px;white-space:nowrap}
 .td-atraso{font-size:11px;font-weight:700;white-space:nowrap}
 .atraso-ok{color:var(--g)} .atraso-warn{color:var(--warn)} .atraso-bad{color:var(--danger)}
-.td-comment{font-size:11px;color:var(--t3);max-width:180px}
+.td-comment{font-size:11px;color:var(--t3);max-width:180px;white-space:normal}
 .td-acciones{white-space:nowrap;display:flex;gap:5px}
 
 /* dropdowns embebidos en la tabla — mismo look que .sel/.edit-select,
@@ -191,14 +200,11 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .btn-sm{padding:4px 9px;font-size:11px;min-height:0}
 
 /* ── RESALTADO POR ESTADO EN LISTA ── */
-.lista-table tr.row-blk td{background:rgba(217,64,64,.055)}
-.lista-table tr.row-blk:hover td{background:rgba(217,64,64,.10)}
-.lista-table tr.row-done td{background:rgba(78,167,106,.04)}
-.lista-table tr.row-done:hover td{background:rgba(78,167,106,.08)}
-
-/* ── SORT HEADERS ── */
-.lista-table th.sortable{cursor:pointer;user-select:none}
-.lista-table th.sortable:hover{color:var(--t1)}
+#content .data-table tbody tr{cursor:pointer}
+#content .data-table tr.row-blk td{background:rgba(217,64,64,.055)}
+#content .data-table tr.row-blk:hover td{background:rgba(217,64,64,.10)}
+#content .data-table tr.row-done td{background:rgba(78,167,106,.04)}
+#content .data-table tr.row-done:hover td{background:rgba(78,167,106,.08)}
 
 /* ── MODAL ── */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
