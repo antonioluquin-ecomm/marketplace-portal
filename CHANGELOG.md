@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-07 - Corrige topbar roto de `presentacion-seller.html`
+
+Tipo de cambio: fix crítico de UI (sin cambios de backend ni de datos).
+
+Reportado por el usuario: el topbar de `presentacion-seller.html` se veía con texto superpuesto ("PRESENTACIÓN SELLER" pisando "El canal", el chip del seller pisando "Audiencia/Propuesta") y el nav de navegación entre páginas partido en 2 líneas.
+
+**Causa raíz**: esta página tenía **dos navs simultáneos** en el mismo topbar de una sola fila — `.topnav` (anclas internas: El canal/Audiencia/Propuesta/Proceso/Condiciones) y `.public-flow-nav` (navegación entre páginas: Presentación/Simulador/Calificación/...), además de `.brand` (logo+crumb+chip del seller) y el botón CTA. Con `display:flex` sin wrap, en anchos de escritorio normales (probado hasta 1366px) el contenido total no entraba en una sola fila; al no tener `overflow:hidden`, el texto de `.brand` se derramaba visualmente sobre `.topnav`. Este era un problema estructural preexistente (la doble navegación ya estaba así antes de esta semana) que la verificación anterior no detectó porque probé fragmentos aislados del topbar, no los 4 grupos completos juntos — error de proceso a tener en cuenta para la próxima.
+
+- Se quita `.topnav` del topbar (decisión del usuario): las 5 anclas internas ya son alcanzables scrolleando la página; esta página queda consistente con las otras 3 de `public/`, que solo tienen `.public-flow-nav` en el topbar.
+- Con eso resuelto, medí el layout real hasta encontrar que esta página (a diferencia de sus 3 hermanas) también suma chip de seller + botón CTA al topbar, lo que sigue sin entrar en una sola fila entre ~960-1360px. Se agregaron 2 breakpoints propios de esta página (no tocan el resto de `public/`): ocultar el chip decorativo bajo 1360px, y adelantar a 1200px (en vez del 960px general) el paso del nav de topbar al nav alternativo del hero (`.hero-public-nav`, patrón ya existente).
+- Verificado midiendo `getBoundingClientRect()` de los grupos del topbar en 1024/1150/1200/1250/1310/1365/1400/1440px — sin superposición ni wrap suelto en ningún punto del rango.
+
 ## 2026-07-06 - Tablas informativas de `internal/estrategia/` a `.data-table` (Etapa 4 de 4 — cierre)
 
 Tipo de cambio: UX/UI (sin cambios de backend ni de datos).

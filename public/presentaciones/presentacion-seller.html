@@ -28,9 +28,6 @@
     .seller-id-chip.show{display:flex}
     .seller-id-chip img{width:28px;height:28px;border-radius:6px;object-fit:contain;background:rgba(17, 24, 39,.07);border:1px solid var(--bdr);padding:3px}
     .seller-id-chip strong{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
-    .topnav{display:flex;align-items:center;gap:28px}
-    .topnav a{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);transition:.15s}
-    .topnav a:hover{color:var(--g)}
     .topbar .button.cta{padding:10px 20px;font-size:11px}
     .topbar .button.cta:hover{transform:translateY(-1px)}
     .top-cta-arr{transition:transform .15s}
@@ -191,8 +188,21 @@
     footer strong{color:var(--t3)}
 
     /* ── RESPONSIVE ── */
+    /* Esta página suma chip de seller + CTA al topbar además de brand+nav
+       (a diferencia del resto de public/, que solo tiene brand+nav) — con
+       los 3 grupos completos el nav de 5 links empieza a envolver a dos
+       líneas bastante antes del quiebre general de 960px que usa el resto
+       de las páginas. Se ocultan chip (decorativo) y nav de topbar antes,
+       en dos pasos, para no dejar una franja de ancho donde el topbar
+       queda mal (nav en 2 líneas contenido en una barra de 1 línea). */
+    @media(max-width:1360px){
+      #topSeller{display:none}
+    }
+    @media(max-width:1200px){
+      .topbar .public-flow-nav{display:none}
+      .hero-public-nav{display:inline-flex}
+    }
     @media(max-width:960px){
-      .topnav{display:none}
       .hero-inner,.valor-split,.eco-grid,.criterios-grid{grid-template-columns:1fr;gap:36px}
       .nums-grid,.audience-grid,.modelos-grid,.proceso-steps{grid-template-columns:1fr}
       .step{border-right:none;border-bottom:1px solid var(--bdr)}
@@ -218,7 +228,6 @@
     p,.lead,.section-copy,.card p{line-height:1.65}
     .card,.seller-card,.metric,.step,.note{box-shadow:none;border-color:var(--bdr)}
     /* Etapa 27B: header/topbar unificado — .portal-topbar (internal-components.css) define tamaño/color. */
-    .topnav{margin-left:auto}
   </style>
 </head>
 <body>
@@ -233,13 +242,6 @@
         <strong id="topSellerName"></strong>
       </div>
     </div>
-    <nav class="topnav">
-      <a href="#numeros">El canal</a>
-      <a href="#audiencia">Audiencia</a>
-      <a href="#valor">Propuesta</a>
-      <a href="#proceso">Proceso</a>
-      <a href="#economia">Condiciones</a>
-    </nav>
     <nav class="public-flow-nav compact" aria-label="Navegación pública seller">
       <a class="active" data-public-link="presentacion" href="./presentacion-seller.html">Presentación</a>
       <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
