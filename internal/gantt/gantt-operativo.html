@@ -1507,13 +1507,13 @@ function renderLista(tasks,sellerIds,today){
                 <td class="td-tarea">${esc(t.tarea)}</td>
                 <td style="font-size:11px;color:var(--t3);max-width:140px;white-space:normal">${esc(t.hito||'—')}</td>
                 <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
-                <td onclick="event.stopPropagation()"><select class="inline-select" onchange="updateEstadoInline('${esc(t.task_id)}',this)">${estadoOptionsHtml(t.estado)}</select></td>
+                <td onclick="event.stopPropagation()"><select class="inline-select ${estadoClass(t.estado)}" onchange="updateEstadoInline('${esc(t.task_id)}',this)">${estadoOptionsHtml(t.estado)}</select></td>
                 <td class="td-resp">${esc(t.area_responsable||'—')}</td>
                 <td onclick="event.stopPropagation()"><select class="inline-select" onchange="updateResponsablePersonaInline('${esc(t.task_id)}',this)">${userOptionsHtml(t.responsable_persona_id)}</select></td>
                 <td class="td-resp">${entornoBadge(t.entorno)}</td>
                 <td class="td-dates">${fmtDfull(t.inicio)}</td>
                 <td class="td-dates">${fmtDfull(t.fin)}</td>
-                <td class="td-atraso ${ac}">${atr>0?'+'+atr+'d':t.estado==='Completado'?'✓':'—'}</td>
+                <td class="td-atraso">${atr>0?`<span class="atraso-pill ${ac}">+${atr}d</span>`:t.estado==='Completado'?`<span class="atraso-pill ${ac}">✓ Ok</span>`:'—'}</td>
                 <td class="td-comment">${esc((t.comentario||'').substring(0,70))}${t.comentario&&t.comentario.length>70?'…':''} ${checklistBadge} ${comentBadge}</td>
                 <td class="td-acciones" onclick="event.stopPropagation()">
                   <button class="button secondary btn-sm" onclick="openEditTask('${esc(t.task_id)}')">Editar</button>

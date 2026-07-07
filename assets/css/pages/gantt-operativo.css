@@ -49,7 +49,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .ops-hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
 .ops-hero-text{min-width:0;max-width:640px}
 .ops-eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
-.ops-title{font-family:var(--font);font-size:20px;font-weight:800;color:var(--t1);letter-spacing:.01em;margin-bottom:4px}
+.ops-title{font-family:var(--font);font-size:26px;font-weight:700;color:var(--t1);letter-spacing:-.02em;margin-bottom:4px}
 .ops-lead{font-size:12.5px;color:var(--t2);line-height:1.5}
 
 .kpi-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex-shrink:0}
@@ -123,13 +123,24 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .tr-resp-cell{padding:6px 10px;border-right:1px solid var(--bdr);display:flex;align-items:center;font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ── BADGES (estado / entorno) — convención única: pill, borde sutil,
-   background/color emparejados semánticamente ── */
+   background/color emparejados semánticamente. Los tonos pastel claros
+   (#a5d6a7/#9ed0fb/#f29a9a) eran resabio del tema oscuro viejo — bajo
+   contraste sobre fondo claro. Se reemplazan por los tokens semánticos
+   ya usados en el resto del proyecto (--primary/--danger/--warning). */
 .estado-badge{font-size:10px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:3px;white-space:nowrap;border:1px solid transparent}
-.st-done{background:rgba(78,167,106,.18);color:#a5d6a7;border-color:rgba(78,167,106,.28)}
-.st-wip{background:var(--info-dim);color:var(--info);border-color:rgba(100,181,246,.28)}
-.st-pend{background:rgba(17,24,39,.07);color:var(--t3);border-color:rgba(17,24,39,.10)}
-.st-blk{background:var(--dng-dim);color:#f29a9a;border-color:rgba(217,64,64,.34)}
-.st-can{background:rgba(17,24,39,.04);color:var(--t3);text-decoration:line-through}
+.st-done{background:var(--g-dim);color:var(--g2);border-color:var(--g-brd)}
+.st-wip{background:rgba(37,99,235,.1);color:#1d4ed8;border-color:rgba(37,99,235,.25)}
+.st-pend{background:rgba(17,24,39,.06);color:var(--t3);border-color:rgba(17,24,39,.10)}
+.st-blk{background:var(--dng-dim);color:var(--danger, #991b1b);border-color:rgba(217,64,64,.34)}
+.st-can{background:rgba(17,24,39,.04);color:var(--t4);text-decoration:line-through}
+
+/* Select de estado inline coloreado por valor (misma paleta que .estado-badge),
+   para que la fila lea el estado de un vistazo en vez de un select gris neutro. */
+.inline-select.st-done{background:var(--g-dim);color:var(--g2);border-color:var(--g-brd)}
+.inline-select.st-wip{background:rgba(37,99,235,.1);color:#1d4ed8;border-color:rgba(37,99,235,.25)}
+.inline-select.st-pend{background:rgba(17,24,39,.05);color:var(--t2);border-color:var(--bdr)}
+.inline-select.st-blk{background:var(--dng-dim);color:var(--danger, #991b1b);border-color:rgba(217,64,64,.34)}
+.inline-select.st-can{background:rgba(17,24,39,.04);color:var(--t4);border-color:var(--bdr)}
 .entorno-badge{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:2px 7px;border-radius:999px;font-size:9px;font-weight:800;letter-spacing:.04em;white-space:nowrap;text-transform:uppercase;filter:saturate(1.05)}
 .env-qa{background:rgba(33,150,243,.14);border:1px solid rgba(100,181,246,.34);color:#9ed0fb}
 .env-prod{background:rgba(106,168,79,.13);border:1px solid rgba(142,208,106,.34);color:#bde5a8}
@@ -184,8 +195,11 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .td-tarea{color:var(--t1);font-size:12px;max-width:260px;white-space:normal}
 .td-resp{white-space:nowrap;font-size:11px}
 .td-dates{font-size:11px;white-space:nowrap}
-.td-atraso{font-size:11px;font-weight:700;white-space:nowrap}
-.atraso-ok{color:var(--g)} .atraso-warn{color:var(--warn)} .atraso-bad{color:var(--danger)}
+.td-atraso{white-space:nowrap}
+.td-atraso .atraso-pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.atraso-ok{background:var(--g-dim);color:var(--g2)}
+.atraso-warn{background:var(--wad, rgba(146,64,14,.1));color:var(--warn)}
+.atraso-bad{background:var(--dng-dim);color:var(--danger, #991b1b)}
 .td-comment{font-size:11px;color:var(--t3);max-width:180px;white-space:normal}
 .td-acciones{white-space:nowrap;display:flex;gap:5px}
 
