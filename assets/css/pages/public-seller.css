@@ -327,9 +327,6 @@ small {
   .btn-row {
     justify-content: stretch;
   }
-  .btn {
-    width: 100%;
-  }
   .seller-identity {
     align-items: flex-start;
   }
@@ -359,14 +356,8 @@ small {
 .badge,
 .seller-chip,
 .section-label,
-.section-tag,
-.btn {
+.section-tag {
   letter-spacing: .015em;
-}
-.btn {
-  text-transform: none;
-  font-weight: 800;
-  background: var(--g);
 }
 .toast {
   box-shadow: 0 10px 26px rgba(0, 0, 0, .22);

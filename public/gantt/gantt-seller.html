@@ -31,6 +31,7 @@
   .task-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
   .task-meta{font-size:11.5px;color:var(--muted)}
   .task-dates{font-size:11.5px;color:var(--muted);white-space:nowrap;text-align:right}
+  .task-card .button{flex-shrink:0}
   .badge{flex-shrink:0;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
   .badge.pendiente{background:var(--bg);color:var(--muted)}
   .badge.en-curso{background:var(--task-info-dim);color:var(--task-info)}
@@ -38,16 +39,11 @@
   .badge.completado{background:var(--primary-soft);color:var(--primary)}
   .badge.cancelado{background:var(--bg);color:var(--muted);text-decoration:line-through}
 
-  .edit-toggle{flex-shrink:0;background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:var(--radius-sm);padding:6px 11px;font-size:11px;font-weight:600;cursor:pointer;transition:.15s}
-  .edit-toggle:hover{border-color:var(--primary-mid);color:var(--text)}
   .task-edit{margin:-2px 0 10px;padding:14px 16px;border:1px solid var(--primary-mid);border-top:none;border-radius:0 0 var(--radius) var(--radius);background:var(--primary-soft)}
   .task-edit label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 5px}
   .task-edit select,.task-edit textarea{width:100%;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px 10px;font-size:13px;font-family:inherit;margin-bottom:11px}
   .task-edit textarea{min-height:60px;resize:vertical}
   .task-edit .edit-actions{display:flex;align-items:center;gap:12px}
-  .btn-save{background:var(--primary);color:#fff;border:none;border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;font-weight:600;letter-spacing:.01em;cursor:pointer}
-  .btn-save:hover{background:var(--primary-hover)}
-  .btn-save:disabled{opacity:.6;cursor:default}
   .edit-status{font-size:12px;color:var(--muted)}
   .empty{padding:32px;border:1px dashed var(--line);border-radius:var(--radius);color:var(--muted);font-size:13px;text-align:center}
   .err{padding:16px;border:1px solid color-mix(in srgb, var(--danger) 30%, transparent);background:var(--danger-bg);border-radius:var(--radius-sm);color:var(--danger);font-size:13px}
@@ -189,7 +185,7 @@
               '</div>' +
               '<span class="badge ' + badgeClass + '">' + t.estado + '</span>' +
               '<div class="task-dates">' + fmtDate(t.inicio) + ' → ' + fmtDate(t.fin) + '</div>' +
-              '<button class="edit-toggle" onclick="toggleEdit(\'' + id + '\')">Editar</button>' +
+              '<button class="button secondary btn-sm" onclick="toggleEdit(\'' + id + '\')">Editar</button>' +
             '</div>' +
             '<div class="task-edit" id="edit-' + id + '" hidden>' +
               '<label>Estado</label>' +
@@ -197,7 +193,7 @@
               '<label>Comentario</label>' +
               '<textarea id="com-' + id + '" placeholder="Dejá una nota sobre esta tarea…">' + escapeHtml(t.comentario) + '</textarea>' +
               '<div class="edit-actions">' +
-                '<button class="btn-save" onclick="guardarTarea(\'' + id + '\')">Guardar</button>' +
+                '<button class="button btn-sm" onclick="guardarTarea(\'' + id + '\')">Guardar</button>' +
                 '<span class="edit-status" id="status-' + id + '"></span>' +
               '</div>' +
             '</div>';
@@ -215,7 +211,7 @@
       const est = document.getElementById('est-' + id);
       const com = document.getElementById('com-' + id);
       const statusEl = document.getElementById('status-' + id);
-      const btn = document.querySelector('#edit-' + id + ' .btn-save');
+      const btn = document.querySelector('#edit-' + id + ' .button');
       if (!est || !com) return;
       if (statusEl) statusEl.textContent = 'Guardando…';
       if (btn) btn.disabled = true;

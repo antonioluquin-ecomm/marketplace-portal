@@ -269,7 +269,7 @@
 
 <header class="topbar portal-topbar">
   <div class="brand">
-    <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+    <span class="logo">SPORTING <span>MARKETPLACE</span></span>
     <div class="crumb">SIMULADOR SELLER</div>
   </div>
   <div class="tb-right">
@@ -620,10 +620,6 @@
 
 <script src="../../assets/js/config.js"></script>
 <script src="../../assets/js/auth-seller.js"></script>
-<script>initSellerAuth().then(function () {
-  renderStaffSellerBar();
-  document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
-});</script>
 <script>
 /* ═══════════════════════════════════
    CONFIG
@@ -1377,7 +1373,13 @@ async function init(){
   onSvcChange();
   render();
 }
-init();
+
+initPortalPage(function () {
+  document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
+  init();
+}, function () {
+  setStatus("err", "Elegí un seller en la barra inferior");
+});
 </script>
 </body>
 </html>

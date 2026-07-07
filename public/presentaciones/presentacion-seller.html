@@ -238,7 +238,7 @@
   <!-- TOPBAR -->
   <header class="topbar portal-topbar">
     <div class="brand">
-      <div class="logo">SPORTING <span>MARKETPLACE</span></div>
+      <span class="logo">SPORTING <span>MARKETPLACE</span></span>
       <div class="crumb">PRESENTACIÓN SELLER</div>
       <div id="topSeller" class="seller-id-chip">
         <img id="topSellerLogo" alt=""/>
@@ -622,10 +622,6 @@
 
   <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/auth-seller.js"></script>
-  <script>initSellerAuth().then(function () {
-    renderStaffSellerBar();
-    document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
-  });</script>
   <script>
     // ── CONFIGURACIÓN CENTRAL ─────────────────────────────────────────────────
     const BASE_URL = (() => {
@@ -816,7 +812,14 @@
       } catch(e) { console.warn("Valores económicos:", e); }
     }
 
-    init();
+    initPortalPage(function () {
+      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
+      init();
+    }, function () {
+      // Staff sin seller elegido todavía: se deja la presentación con los
+      // placeholders genéricos del HTML (identidad/CTA sin resolver) hasta
+      // que elija uno en la barra inferior.
+    });
   </script>
 </body>
 </html>
