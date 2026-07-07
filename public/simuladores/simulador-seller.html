@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../assets/css/tokens.css" />
+    <link rel="stylesheet" href="../../assets/css/internal-components.css" />
   <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
   <style>
     :root{
@@ -22,11 +23,6 @@
     a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
 
     /* ── TOPBAR ── */
-    .topbar{position:sticky;top:0;z-index:50;height:62px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 28px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--bdr);backdrop-filter:blur(18px);min-width:0}
-    .brand{display:flex;align-items:center;gap:14px;min-width:0;overflow:hidden}
-    .logo{font-family:var(--font);font-size:21px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .logo span{color:var(--g)}
-    .crumb{border-left:1px solid var(--bdr);padding-left:14px;font-size:10px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
     .tb-right{display:flex;align-items:center;gap:10px;min-width:0;flex-shrink:0}
     .tb-cta{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;background:var(--g);color:#fff;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:background .15s;white-space:nowrap}
     .tb-cta:hover{background:var(--g2)}
@@ -70,7 +66,7 @@
 
     /* ── SIM GRID ── */
     .sim-grid{display:grid;grid-template-columns:minmax(300px,360px) minmax(0,1fr);gap:18px;min-width:0}
-    .sim-grid > aside{position:sticky;top:82px;align-self:start}
+    .sim-grid > aside{position:sticky;top:calc(var(--topbar-height, 50px) + 20px);align-self:start}
     .sim-grid > main{min-width:0}
 
     /* ── FORM ── */
@@ -180,10 +176,7 @@
 
     /* ── ACTIONS ── */
     .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-    .btn{border:0;border-radius:8px;background:var(--g);color:white;padding:15px 28px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:filter .15s,transform .1s;display:inline-flex;align-items:center;gap:7px}
-    .btn.secondary{background:rgba(17, 24, 39,.06);border:1px solid var(--bdr);color:var(--t2)}
-    .btn:hover{filter:brightness(1.1)}
-    .btn:active{transform:scale(.97)}
+    .actions .button.cta{padding:15px 28px;font-size:12px}
 
     /* ── EMPTY STATE ── */
     .empty-state{display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:56px 24px;text-align:center;color:var(--t4);border-radius:16px;border:1px dashed var(--bdr)}
@@ -216,10 +209,8 @@
     .cta-panel-title{font-size:16px;font-weight:800;color:var(--t1);line-height:1.25;margin-bottom:5px}
     .cta-panel-sub{font-size:12px;color:var(--t3);line-height:1.5;max-width:480px}
     .cta-panel-btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid rgba(37, 182, 12,.15)}
-    .cta-primary{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:9px;background:var(--g);color:#fff;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:background .15s;font-family:inherit}
-    .cta-primary:hover{background:var(--g2)}
-    .cta-secondary{display:inline-flex;align-items:center;gap:7px;padding:11px 18px;border-radius:9px;background:transparent;color:var(--t2);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid rgba(17,24,39,.14);cursor:pointer;transition:all .15s;font-family:inherit}
-    .cta-secondary:hover{background:rgba(17, 24, 39,.06);border-color:rgba(17,24,39,.2);color:var(--t1)}
+    .cta-panel-btns .button.cta{padding:11px 22px;font-size:12.5px}
+    .cta-panel-btns .button.secondary.cta{padding:11px 18px;font-size:12px}
     .cta-whatsapp{display:inline-flex;align-items:center;gap:7px;padding:11px 18px;border-radius:9px;background:rgba(37,211,102,.12);color:#25d366;font-size:12px;font-weight:700;border:1px solid rgba(37,211,102,.25);cursor:pointer;text-decoration:none;transition:all .15s;font-family:inherit;letter-spacing:.04em}
     .cta-whatsapp:hover{background:rgba(37,211,102,.2)}
     .cta-panel-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
@@ -244,7 +235,6 @@
       .hero,.sim-grid{grid-template-columns:1fr}
       .sim-grid > aside{position:relative;top:auto}
       .kpi-grid,.cond-grid{grid-template-columns:1fr}
-      .topbar{padding:0 16px}
       .crumb,.tb-chip{display:none}
       .wrap{padding:22px 14px 50px}
       .mini-scenarios{grid-template-columns:1fr}
@@ -258,28 +248,23 @@
     h1{font-size:clamp(36px,5.4vw,60px);line-height:.98}
     p,.lead,.helper,.note{line-height:1.62}
     .panel,.card,.seller-box,.result-card,.kpi,.scenario-card,.disclaimer{border-radius:12px;box-shadow:none}
-    .btn,.badge,.pill,.chip{letter-spacing:.07em}
+    .button.cta,.badge,.pill,.chip{letter-spacing:.07em}
     @media(max-width:720px){h1{font-size:32px}.wrap{padding:22px 14px 54px}}
     /* Etapa 27A: UI foundation enterprise seller-facing. */
     :root{--bg:var(--k, #f0f2f7);--panel:var(--k3, #ffffff);--panel2:var(--k4, #f1f4ef);--line:var(--bdr, rgba(17,24,39,.08));--line2:var(--bdr2, rgba(17,24,39,.05));--text:var(--t1, #111827);--muted:var(--t3, #6b7280);--muted2:var(--t4, #9ca3af)}
     body{font-size:15px;line-height:1.65}
-    .topbar{box-shadow:none;border-bottom-color:var(--line)}
-    .logo{font-family:var(--font);text-transform:none;letter-spacing:.01em}
-    .crumb,.status,.tb-chip,.btn,.badge,.pill,.chip{text-transform:none;letter-spacing:.015em}
+    .crumb,.status,.tb-chip,.button.cta,.badge,.pill,.chip{text-transform:none;letter-spacing:.015em}
     h1{font-size:clamp(34px,5vw,54px);line-height:1}
     p,.lead,.helper,.note{line-height:1.65}
     .panel,.card,.seller-box,.result-card,.kpi,.scenario-card,.disclaimer{background:var(--panel);border-color:var(--line)}
-    .btn,.tb-cta{background:var(--g);border-color:var(--g)}
-    /* Etapa 27B: header/topbar unificado. */
-    .topbar{height:56px;min-height:56px;padding:0 clamp(18px,2.4vw,28px)}
-    .brand{gap:14px}.logo{font-size:17px;font-weight:900;text-transform:uppercase;letter-spacing:.015em}.logo span{color:var(--g)}
-    .crumb{border-left:1px solid var(--line);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--muted2);text-transform:uppercase;white-space:nowrap}
+    .tb-cta{background:var(--g);border-color:var(--g)}
+    /* Etapa 27B: header/topbar unificado — .portal-topbar (internal-components.css) define tamaño/color. */
     .tb-right{margin-left:auto}
   </style>
 </head>
 <body>
 
-<header class="topbar">
+<header class="topbar portal-topbar">
   <div class="brand">
     <div class="logo">SPORTING <span>MARKETPLACE</span></div>
     <div class="crumb">SIMULADOR SELLER</div>
@@ -577,8 +562,8 @@
             </div>
           </div>
           <div class="actions">
-            <button class="btn" type="button" onclick="copySummary()">📋 Copiar resumen</button>
-            <button class="btn secondary" type="button" onclick="window.print()">Imprimir / PDF</button>
+            <button class="button cta" type="button" onclick="copySummary()">📋 Copiar resumen</button>
+            <button class="button secondary cta" type="button" onclick="window.print()">Imprimir / PDF</button>
           </div>
         </div>
 
@@ -606,10 +591,10 @@
             <div class="cta-step"><div class="cta-step-num">03</div><div class="cta-step-txt">Recibís una propuesta comercial personalizada</div></div>
           </div>
           <div class="cta-panel-btns">
-            <a class="cta-primary" id="ctaFormLink" href="#">Completar calificación →</a>
-            <button class="cta-secondary" type="button" onclick="copySummary()">📋 Copiar simulación</button>
+            <a class="button cta" id="ctaFormLink" href="#">Completar calificación →</a>
+            <button class="button secondary cta" type="button" onclick="copySummary()">📋 Copiar simulación</button>
             <a class="cta-whatsapp" id="ctaWhatsapp" href="#" target="_blank" rel="noopener">WhatsApp →</a>
-            <button class="cta-secondary" type="button" onclick="window.print()">Imprimir / PDF</button>
+            <button class="button secondary cta" type="button" onclick="window.print()">Imprimir / PDF</button>
           </div>
         </div>
 

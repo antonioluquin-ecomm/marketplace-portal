@@ -247,24 +247,6 @@
   border-left:2px solid var(--green-brd);
   margin-top:2px;
 }
-.update-btn {
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:.02em;
-  background:transparent;
-  border:1px solid var(--border, var(--line));
-  color:var(--text-3);
-  padding:5px 10px;
-  border-radius:var(--radius-sm,8px);
-  cursor:pointer;
-  transition:all .15s;
-  margin-top:8px;
-}
-.update-btn:hover { border-color:var(--green-brd); color:var(--green) }
-
 .tab-bar {
   display:flex;
   border-bottom:1px solid var(--border, var(--line));
@@ -635,6 +617,9 @@
 .col-rates .col-header {
   padding:14px 16px 12px;
 }
+.col-rates .col-header .button {
+  margin-top:8px;
+}
 .col-rates .col-title,
 .col-rates .section-label {
   font-size:10px;
@@ -661,10 +646,9 @@
 .col-rates .rates-edit-note {
   display:none;
 }
-.update-btn {
+.col-rates .col-header .button {
   min-height:30px;
   padding:4px 9px;
-  background:#fff;
 }
 .col-inputs > .col-header {
   margin-top:14px;

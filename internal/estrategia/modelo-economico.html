@@ -286,32 +286,17 @@
     }
     .ico{font-size:24px;margin-bottom:10px}
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      background:var(--k3);
-      border:1px solid var(--bdr);
-      border-radius:12px;
-      overflow:hidden;
+    /* El CSS de tabla estandar (.table-wrap/.data-table) vive en
+       internal-components.css (style_guide.md §6). Estas 3 tablas son
+       puramente informativas (prosa en todas las columnas, sin IDs/datos
+       compactos) — se neutraliza el default mono/nowrap/min-width de
+       .data-table, pensado para grillas de datos densas. */
+    .data-table { min-width: 0; }
+    .data-table td {
+      font-family: var(--font); font-weight: 400; white-space: normal;
+      color: var(--t2); max-width: none; overflow: visible; text-overflow: clip;
     }
-    th,td{
-      text-align:left;
-      padding:12px 13px;
-      border-bottom:1px solid var(--bdr2);
-      font-size:12.5px;
-      vertical-align:top;
-    }
-    th{
-      background:var(--k4);
-      color:var(--t3);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-    td{color:var(--t2)}
-    tr:last-child td{border-bottom:none}
-    td strong{color:var(--t1)}
+    .data-table td strong{color:var(--t1)}
 
     .pill{
       display:inline-flex;
@@ -698,7 +683,8 @@
           <p class="section-desc">Ejemplo simple para entender cómo debe leerse una operación antes de cerrar condiciones con un seller.</p>
         </div>
 
-        <table>
+        <div class="table-wrap">
+        <table class="data-table">
           <thead>
             <tr><th>Concepto</th><th>Ejemplo</th><th>Lectura</th></tr>
           </thead>
@@ -710,6 +696,7 @@
             <tr><td><strong>Neto a liquidar</strong></td><td>Variable</td><td>Resultado luego de aplicar deducciones acordadas.</td></tr>
           </tbody>
         </table>
+        </div>
 
         <div class="callout">
           <h3>Uso correcto del ejemplo</h3>
@@ -749,7 +736,8 @@
           <p class="section-desc">La documentación interna y las herramientas compartibles deben mantenerse separadas.</p>
         </div>
 
-        <table>
+        <div class="table-wrap">
+        <table class="data-table">
           <thead><tr><th>Herramienta</th><th>Ruta</th><th>Uso</th><th>Acceso</th></tr></thead>
           <tbody>
             <tr><td><strong>Modelo Económico</strong></td><td>/internal/estrategia/modelo-economico.html</td><td>Marco institucional de reglas y criterios.</td><td><span class="pill high">Interno</span></td></tr>
@@ -757,6 +745,7 @@
             <tr><td><strong>Simulador Seller</strong></td><td>/public/simuladores/simulador-seller.html</td><td>Versión simplificada para uso comercial externo.</td><td><span class="pill mid">Futuro</span></td></tr>
           </tbody>
         </table>
+        </div>
 
         <div class="callout warn">
           <h3>Regla de confidencialidad</h3>
@@ -773,7 +762,8 @@
           <p class="section-desc">Antes de priorizar un seller, el acuerdo económico debe pasar estos controles mínimos.</p>
         </div>
 
-        <table>
+        <div class="table-wrap">
+        <table class="data-table">
           <thead><tr><th>Criterio</th><th>Qué se valida</th><th>Resultado esperado</th></tr></thead>
           <tbody>
             <tr><td><strong>Rentabilidad</strong></td><td>La comisión y costos permiten una operación viable para Sporting.</td><td><span class="pill high">Viable</span></td></tr>
@@ -783,6 +773,7 @@
               <tr><td><strong>Excepciones</strong></td><td>Los desvíos fueron aprobados por gobernanza antes de avanzar.</td><td><span class="pill mid">Controlado</span></td></tr>
           </tbody>
         </table>
+        </div>
 
         <div class="callout">
           <h3>Conclusión institucional</h3>

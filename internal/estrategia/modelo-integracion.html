@@ -24,12 +24,27 @@
     .section{margin:30px 0}.section-desc{max-width:590px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid.two{grid-template-columns:repeat(2,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}
     .card{background:var(--k3);border:1px solid var(--bdr);border-radius:12px;padding:16px;border-left:3px solid transparent;min-height:154px}.card.priority{border-left-color:var(--g)}.card.target{border-left-color:var(--info)}.card.transitional{border-left-color:var(--warn)}.card.exception{border-left-color:var(--danger)}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(17,24,39,.06);border:1px solid var(--bdr);color:var(--t2);font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}.tag.green{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.tag.info{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.tag.warn{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.tag.danger{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
     .decision{display:grid;grid-template-columns:1fr 1fr;gap:14px}.decision-box{background:var(--k3);border:1px solid var(--bdr);border-radius:14px;padding:18px}.decision-box select{width:100%;margin-top:10px;padding:10px 12px;border-radius:8px;border:1px solid var(--bdr);background:var(--k2);color:var(--t1);font-size:13px;outline:none}.decision-box select:focus{border-color:var(--g)}.result{border:1px solid var(--g-brd);background:var(--g-dim);border-radius:14px;padding:18px}.result-title{font-family:var(--font);font-size:28px;font-weight:900;text-transform:uppercase;color:var(--g);line-height:1}.result-desc{font-size:13px;color:var(--t2);margin-top:7px;line-height:1.55}.result.meta{border-color:var(--info);background:rgba(37,182,12,.08)}
-    .matrix{width:100%;border-collapse:collapse;background:var(--k3);border:1px solid var(--bdr);border-radius:12px;overflow:hidden}.matrix th,.matrix td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--bdr);font-size:12.5px;color:var(--t2);vertical-align:top}.matrix th{background:rgba(17,24,39,.035);font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--t3)}.matrix tr:last-child td{border-bottom:0}.matrix strong{color:var(--t1)}.ok{color:var(--g);font-weight:800}.mid{color:var(--warn);font-weight:800}.bad{color:var(--danger);font-weight:800}.pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;background:rgba(17,24,39,.06);color:var(--t2);border:1px solid var(--bdr)}.pill.g{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.pill.b{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.pill.w{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.pill.r{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
+    /* El CSS de tabla estandar (.table-wrap/.data-table) vive en
+       internal-components.css (style_guide.md §6). Esta tabla es informativa
+       (prosa en la columna 2, pills de estado en 4/5) — se neutraliza el
+       default mono/nowrap/min-width de .data-table y las reglas posicionales
+       de nombre/descripcion en 4ta/5ta (acá son pills de estado, no texto). */
+    .data-table { min-width: 0; }
+    .data-table td {
+      font-family: var(--font); font-weight: 400; white-space: normal;
+      color: var(--t2); max-width: none; overflow: visible; text-overflow: clip;
+    }
+    .data-table td:nth-child(4),
+    .data-table td:nth-child(5) {
+      color: var(--t2); max-width: none; overflow: visible; text-overflow: clip;
+    }
+    .data-table td strong{color:var(--t1)}
+    .ok{color:var(--g);font-weight:800}.mid{color:var(--warn);font-weight:800}.bad{color:var(--danger);font-weight:800}.pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;background:rgba(17,24,39,.06);color:var(--t2);border:1px solid var(--bdr)}.pill.g{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.pill.b{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.pill.w{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.pill.r{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
     .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;border:1px solid var(--bdr);border-radius:12px;overflow:hidden;background:var(--bdr)}.flow-step{background:var(--k3);padding:14px 12px;min-height:108px;display:flex;flex-direction:column;justify-content:space-between}.flow-step strong{font-size:12px;color:var(--t1)}.flow-step small{font-size:10px;color:var(--t3);line-height:1.35}.flow-num{font-size:9px;font-weight:900;color:var(--g);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
     .rules{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.rule{display:flex;gap:10px;align-items:flex-start;background:var(--k3);border:1px solid var(--bdr);border-radius:10px;padding:13px}.rule-num{width:24px;height:24px;border-radius:8px;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;flex-shrink:0}.rule strong{display:block;font-size:13px;margin-bottom:3px}.rule span{font-size:12px;color:var(--t3);line-height:1.45}
     .links{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.link-card{padding:14px;border:1px solid var(--bdr);background:var(--k3);border-radius:11px;transition:.15s}.link-card:hover{border-color:var(--g-brd);background:var(--k4);transform:translateY(-1px)}.link-card strong{display:block;font-size:13px;margin-bottom:4px}.link-card span{font-size:11.5px;color:var(--t3);line-height:1.4}
     .footer{margin-top:36px;color:var(--t4);font-size:11px;border-top:1px solid var(--bdr);padding-top:16px}.hidden{display:none!important}
-    @media(max-width:1050px){.shell{grid-template-columns:1fr}.sidebar{display:none}.hero,.decision,.grid.two{grid-template-columns:1fr}.kpis,.grid,.grid.four,.links{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr 1fr}.rules{grid-template-columns:1fr}.main{padding:24px 18px 60px}.top-actions{display:none}}@media(max-width:650px){.kpis,.grid,.grid.four,.links,.flow{grid-template-columns:1fr}h1{font-size:34px}.topbar{padding:0 14px}.crumb{display:none}.matrix{display:block;overflow:auto}}
+    @media(max-width:1050px){.shell{grid-template-columns:1fr}.sidebar{display:none}.hero,.decision,.grid.two{grid-template-columns:1fr}.kpis,.grid,.grid.four,.links{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr 1fr}.rules{grid-template-columns:1fr}.main{padding:24px 18px 60px}.top-actions{display:none}}@media(max-width:650px){.kpis,.grid,.grid.four,.links,.flow{grid-template-columns:1fr}h1{font-size:34px}.topbar{padding:0 14px}.crumb{display:none}}
     body{font-size:15px;line-height:1.65}
     .topbar{min-height:var(--tb)}
     .sidebar{background:var(--sidebar-bg)}
@@ -167,7 +182,8 @@
 
       <section id="matriz" class="section">
         <div class="section-head"><div class="section-title"><span>📊</span><h2>Matriz de decisión</h2></div><p class="section-desc">Comparación operativa para elegir modelo según escenario, complejidad, control y prioridad.</p></div>
-        <table class="matrix">
+        <div class="table-wrap">
+        <table class="data-table">
           <thead><tr><th>Modelo</th><th>Cuándo usar</th><th>Complejidad</th><th>Control PIM</th><th>Prioridad</th></tr></thead>
           <tbody>
             <tr><td><strong>VTEX ↔ VTEX</strong></td><td>Seller ya opera en VTEX y puede integrarse con baja fricción.</td><td><span class="ok">Baja</span></td><td><span class="pill w">Parcial</span></td><td><span class="pill g">Alta</span></td></tr>
@@ -176,6 +192,7 @@
             <tr><td><strong>Externo → VTEX</strong></td><td>Solo caso especial con valor comercial alto y sin alternativa viable.</td><td><span class="bad">Alta</span></td><td><span class="pill r">Bajo</span></td><td><span class="pill r">Baja / Excepción</span></td></tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       <section id="modelos" class="section">

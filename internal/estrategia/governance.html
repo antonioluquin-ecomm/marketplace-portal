@@ -240,31 +240,16 @@
     .card h3{font-size:14px;color:var(--t1);margin-bottom:8px}
     .card p{font-size:12.5px;color:var(--t3);line-height:1.5}
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      background:var(--k3);
-      border:1px solid var(--bdr);
-      border-radius:12px;
-      overflow:hidden;
+    /* El CSS de tabla estandar (.table-wrap/.data-table) vive en
+       internal-components.css (style_guide.md §6). Estas 4 tablas son
+       puramente informativas (prosa en todas las columnas, sin IDs/datos
+       compactos) — se neutraliza el default mono/nowrap/min-width de
+       .data-table, pensado para grillas de datos densas. */
+    .data-table { min-width: 0; }
+    .data-table td {
+      font-family: var(--font); font-weight: 400; white-space: normal;
+      color: var(--t2); max-width: none; overflow: visible; text-overflow: clip;
     }
-    th,td{
-      text-align:left;
-      padding:12px 13px;
-      border-bottom:1px solid var(--bdr2);
-      font-size:12.5px;
-      vertical-align:top;
-    }
-    th{
-      background:var(--k4);
-      color:var(--t3);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-    td{color:var(--t2)}
-    tr:last-child td{border-bottom:none}
     td strong{color:var(--t1)}
 
     .pill{
@@ -539,7 +524,8 @@
           <p class="section-desc">Lectura práctica para definir qué hacer con un seller según su estado actual.</p>
         </div>
 
-        <table>
+        <div class="table-wrap">
+        <table class="data-table">
           <thead><tr><th>Situación del seller</th><th>Decisión de gobernanza</th><th>Acción siguiente</th><th>Herramienta</th></tr></thead>
           <tbody>
             <tr><td><strong>Interés comercial, datos mínimos incompletos</strong></td><td>Mantener en captación</td><td>Completar calificación inicial</td><td><span class="pill info">Formulario</span></td></tr>
@@ -550,6 +536,7 @@
             <tr><td><strong>Testing completo y operación validada</strong></td><td>Aprobar Go Live</td><td>Activar seller y monitorear</td><td><span class="pill mid">Go Live</span></td></tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       <section id="principios" class="section">
@@ -574,7 +561,8 @@
           <p class="section-desc">Matriz RACI simplificada para evitar zonas grises en decisiones críticas.</p>
         </div>
 
-        <table>
+        <div class="table-wrap">
+        <table class="data-table">
           <thead><tr><th>Rol</th><th>Responsabilidad principal</th><th>Decide / Aprueba</th><th>Entregable mínimo</th></tr></thead>
           <tbody>
             <tr><td><strong>Comercial / Marketplace</strong></td><td>Captación, oportunidad comercial, negociación y prioridad de negocio.</td><td>Potencial comercial, surtido, continuidad de negociación.</td><td><span class="pill info">Calificación / Pipeline</span></td></tr>
@@ -585,6 +573,7 @@
             <tr><td><strong>Seller</strong></td><td>Entrega de información, operación de stock/precio/catálogo, facturación y despacho.</td><td>Compromiso operativo y disponibilidad de datos.</td><td><span class="pill info">Datos / Pruebas</span></td></tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       <section id="gates" class="section">
@@ -620,7 +609,8 @@
           <div class="rule-item danger"><div class="rule-mark">×</div><div class="rule-text"><strong>Descartar o dejar en espera</strong><span>Cuando el seller no cumple condiciones mínimas, no responde, no asegura stock/precio o el costo supera el beneficio.</span></div></div>
         </div>
 
-        <table style="margin-top:16px">
+        <div class="table-wrap" style="margin-top:16px">
+        <table class="data-table">
           <thead><tr><th>Criterio</th><th>Bajo riesgo</th><th>Riesgo medio</th><th>Riesgo alto</th></tr></thead>
           <tbody>
             <tr><td><strong>Modelo técnico</strong></td><td>VTEX ↔ VTEX o Seller Center estándar</td><td>API documentada</td><td>Externo → VTEX custom</td></tr>
@@ -630,6 +620,7 @@
             <tr><td><strong>Prioridad comercial</strong></td><td>Alto valor estratégico</td><td>Valor moderado</td><td>Bajo valor o sin urgencia</td></tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       <section id="excepciones" class="section">
@@ -638,7 +629,8 @@
           <p class="section-desc">Las excepciones son válidas solo si están justificadas, registradas y tienen plan de salida.</p>
         </div>
 
-        <table>
+        <div class="table-wrap">
+        <table class="data-table">
           <thead><tr><th>Excepción</th><th>Riesgo</th><th>Condición para aprobar</th><th>Plan de salida</th></tr></thead>
           <tbody>
             <tr><td><strong>Externo → VTEX directo</strong></td><td>Menor control desde PIM, dependencia externa y baja escalabilidad.</td><td>Justificación comercial fuerte, alcance limitado y responsable técnico.</td><td>Migrar a Seller Center/API-first cuando esté disponible.</td></tr>
@@ -647,6 +639,7 @@
             <tr><td><strong>Operación manual temporal</strong></td><td>Dependencia operativa y riesgo de errores.</td><td>Volumen controlado y fecha límite definida.</td><td>Automatizar o migrar a Seller Center.</td></tr>
           </tbody>
         </table>
+        </div>
 
         <div class="callout danger">
           <h3>Regla de excepción</h3>

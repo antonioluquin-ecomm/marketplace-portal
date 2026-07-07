@@ -70,8 +70,6 @@
 .qbtn.active{border-color:var(--gb);color:var(--g);background:var(--gd)}
 .qbtn-count{font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--t4)}
 .qbtn.active .qbtn-count{color:var(--g)}
-.clear-btn{width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line, var(--b));background:transparent;color:var(--t4);font-size:12px;font-weight:600;transition:.15s;margin-top:6px}
-.clear-btn:hover{border-color:var(--wa);color:var(--wa)}
 
 /* 2026-07-02 - controles dentro de la barra de filtros horizontal (.filter-bar
    vive en internal-components.css). Overridean el layout vertical del sidebar. */
@@ -99,7 +97,6 @@
 .filter-bar .quick-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .filter-bar .qbtn{width:100%;gap:8px;min-width:0;justify-content:center;white-space:nowrap}
 .filter-bar .qbtn span:first-child{overflow:hidden;text-overflow:ellipsis}
-.filter-bar .clear-btn{width:auto;margin:0;min-height:34px;white-space:nowrap}
 .filter-bar-actions{grid-column:9;grid-row:1;justify-self:end;margin-left:0}
 
 /* Static KPI strip and content frame */

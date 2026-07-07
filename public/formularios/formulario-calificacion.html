@@ -11,6 +11,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="../../assets/css/tokens.css" />
+    <link rel="stylesheet" href="../../assets/css/internal-components.css" />
     <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
     <style>
       .seller-chip.err {
@@ -32,7 +33,7 @@
       }
       .progress-box {
         position: sticky;
-        top: 0;
+        top: var(--topbar-height, 50px);
         z-index: 20;
         margin-bottom: 16px;
         background: rgba(17, 24, 39, 0.93);
@@ -316,7 +317,7 @@
           align-items: stretch;
         }
         .progress-box {
-          top: 0;
+          top: var(--topbar-height, 50px);
           border-radius: 12px;
         }
       }
@@ -334,17 +335,11 @@
         --muted: var(--muted, #6b7280);
         --muted2: #9aa3b2;
       }
-      body{font-family:var(--font);font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(37, 182, 12,.08),transparent 36%),var(--bg, #f0f2f7);padding-top:92px}
+      body{font-family:var(--font);font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(37, 182, 12,.08),transparent 36%),var(--bg, #f0f2f7);padding-top:28px}
       /* Etapa 12 — mismo ancho full-bleed que presentación/simulador/gantt (antes 1040px en card). */
       .wrap{max-width:1200px}
-      /* Topbar fijo compartido — idéntico al de presentación/simulador/gantt del seller. */
-      .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line, #e5e7eb);backdrop-filter:blur(20px)}
-      .topbar .brand{display:flex;align-items:center;gap:14px}
-      .topbar .logo{font-family:var(--font);font-size:20px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;color:var(--text, #111827)}
-      .topbar .logo span{color:var(--primary, #25b60c)}
-      .topbar .crumb{border-left:1px solid rgba(17, 24, 39,.08);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted, #6b7280);white-space:nowrap}
       @media(max-width:760px){.topbar .public-flow-nav{display:none}}
-      @media(max-width:720px){body{padding-top:64px}}
+      @media(max-width:720px){body{padding-top:0}}
       /* .hero es el contenedor general de la página, ya no una card — sin fondo/borde propio,
          igual que .hero-copy en presentación y .main en gantt. Los paneles reales
          (.section,.intro-note,.seller-identity,.progress-box) sí mantienen su fondo de card. */
@@ -381,7 +376,7 @@
     </style>
   </head>
   <body>
-    <header class="topbar">
+    <header class="topbar portal-topbar">
       <div class="brand">
         <span class="logo">SPORTING <span>MARKETPLACE</span></span>
         <div class="crumb">FORMULARIO DE CALIFICACIÓN</div>
@@ -818,10 +813,10 @@
             indicado arriba.
           </div>
           <div class="btn-row">
-            <button type="button" class="btn secondary" onclick="copySummary()">
+            <button type="button" class="button secondary cta" onclick="copySummary()">
               Copiar resumen</button
-            ><button type="reset" class="btn secondary">Limpiar</button
-            ><button type="submit" class="btn" id="submitBtn">
+            ><button type="reset" class="button secondary cta">Limpiar</button
+            ><button type="submit" class="button cta" id="submitBtn">
               Enviar calificación
             </button>
           </div>

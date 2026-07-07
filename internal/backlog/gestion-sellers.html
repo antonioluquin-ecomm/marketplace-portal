@@ -136,7 +136,7 @@
           <div class="link-row"><b>Formulario relevamiento</b><button onclick="copyLink('relevamiento')">Copiar</button></div>
           <div class="link-row"><b>Simulador seller</b><button onclick="copyLink('simulador')">Copiar</button></div>
         </div>
-        <div class="msg-box"><div class="msg-title">Mensaje sugerido de primer contacto</div><div class="msg-preview" id="messagePreview"></div><div class="actions"><button class="btn secondary" onclick="copyFirstContactMessage()" type="button">Copiar mensaje</button></div></div>
+        <div class="msg-box"><div class="msg-title">Mensaje sugerido de primer contacto</div><div class="msg-preview" id="messagePreview"></div><div class="actions"><button class="button secondary" onclick="copyFirstContactMessage()" type="button">Copiar mensaje</button></div></div>
       </aside>
 
       <div class="panel">
@@ -155,7 +155,7 @@
                 <label>Logo de la marca <small>opcional</small></label>
                 <input type="file" id="logo_file_input" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display:none" onchange="onLogoFileSelected(this)">
                 <div class="logo-upload-wrap">
-                  <button type="button" class="btn secondary" onclick="document.getElementById('logo_file_input').click()">Elegir imagen</button>
+                  <button type="button" class="button secondary" onclick="document.getElementById('logo_file_input').click()">Elegir imagen</button>
                   <span id="logoUploadStatus"></span>
                 </div>
                 <div class="help">PNG, JPG, WEBP o SVG. Se sube al repo al guardar el seller. Si no tenés el logo ahora, podés subirlo más adelante editando la ficha.</div>
@@ -195,8 +195,8 @@
           </div>
 
           <div class="actions">
-            <button class="btn" id="submitBtn" type="submit">Guardar seller</button>
-            <button class="btn secondary" onclick="resetForm()" type="button">Limpiar</button>
+            <button class="button" id="submitBtn" type="submit">Guardar seller</button>
+            <button class="button secondary" onclick="resetForm()" type="button">Limpiar</button>
             
           </div>
         </form>

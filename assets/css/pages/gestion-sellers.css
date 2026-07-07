@@ -30,12 +30,6 @@
 .dot.err{background:var(--danger);box-shadow:0 0 0 4px rgba(153,27,27,.15)}
 @keyframes gestionPulse{0%,100%{opacity:1}50%{opacity:.45}}
 
-.btn{border:0;border-radius:var(--radius-sm,8px);background:var(--g);color:#fff;padding:12px 18px;font-size:13.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:filter .15s,transform .1s}
-.btn:hover{filter:brightness(1.06)}
-.btn:active{transform:scale(.98)}
-.btn.secondary{background:var(--bg);border:1px solid var(--ln, var(--line));color:var(--t2)}
-.btn:disabled{opacity:.55;cursor:progress}
-
 .wrap{max-width:1180px;margin:0 auto;padding:34px 26px 74px}
 .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin-bottom:20px}
 .panel{background:var(--card);border:1px solid var(--ln, var(--line));border-radius:var(--radius,14px);padding:22px;box-shadow:var(--shadow-sm)}

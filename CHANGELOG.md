@@ -1,5 +1,54 @@
 # Changelog
 
+## 2026-07-06 - Tablas informativas de `internal/estrategia/` a `.data-table` (Etapa 4 de 4 — cierre)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Cierra el esfuerzo de alineación al estándar iniciado en la Etapa 1 (botones). Las 8 tablas puramente informativas de `internal/estrategia/` (`governance.html` ×4, `modelo-economico.html` ×3, `modelo-integracion.html` ×1) migran a `.table-wrap`/`.data-table` (`style_guide.md` §6), el mismo componente ya usado en `backlog-sellers.html`/`gantt-operativo.html`/`config-tarifas.html`.
+
+- `governance.html` y `modelo-economico.html`: tenían un `table{...}`/`th,td{...}` global sin clase (reimplementación completa del chrome de tabla) — se reemplaza por `.table-wrap`/`class="data-table"` en cada `<table>`.
+- `modelo-integracion.html`: la tabla usaba `class="matrix"` con su propio CSS de th/td/hover — migra a `.data-table`, pero se mantienen `.pill`/`.ok`/`.mid`/`.bad` (contenido de celda, no chrome de tabla), igual que se hizo con `.td-tarea`/`.fase-pip` en el Gantt.
+- **Diferencia clave con las tablas de datos ya migradas**: estas 8 son puramente informativas (prosa en todas las columnas, sin IDs ni datos compactos) — el default de `.data-table` (mono, `nowrap`, `min-width:1400px`, pensado para grillas densas) no encaja. Se agregó un override por página que neutraliza esas 3 reglas a texto normal con wrap, en vez de forzar el layout de datos compactos a contenido de prosa.
+- Verificado con una página de prueba (`governance.html`, auth deshabilitada localmente para el chequeo): las tablas migradas usan DM Sans con wrap normal, header/hover/bordes iguales al resto del proyecto.
+- Con esto, el punch list completo de alineación queda cerrado: botones (`.button`), CTAs de `public/`, `.portal-topbar` y tablas informativas. Quedan fuera de alcance, con justificación documentada en la Etapa 1: chips de filtro/tabs con estado activo (`.qbtn`, `.qf-btn`, `.tab-btn`, `.mode-btn`, `.view-btn`) y `maqueta-seller-center.html` (excluida a propósito del design system).
+
+## 2026-07-06 - `.portal-topbar` en las 4 páginas grandes de `public/` (Etapa 3 de 4)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+`formulario-calificacion.html`, `formulario-relevamiento.html`, `presentacion-seller.html` y `simulador-seller.html` tenían su propio `<header class="topbar">` con CSS inline (algunas con `position:fixed` + `padding-top` compensatorio en el body, otra ya con `position:sticky` propio) — pasan a `.portal-topbar`, el mismo componente adoptado en el resto del proyecto desde la Etapa 12c.
+
+- Se borraron las reglas locales `.topbar`/`.brand`/`.logo`/`.crumb` de las 4 páginas (`.portal-topbar` de `internal-components.css` las reemplaza con mayor especificidad). El topbar baja de 64px/62px a 50px (`--topbar-height` de `tokens.css`), consistente con todo el proyecto.
+- **Riesgo principal mitigado**: al pasar de `position:fixed` a `sticky`, el topbar pasa a ocupar espacio real en el flujo del documento — se quitó el `padding-top`/`calc(var(--tb) + Npx)` que antes compensaba el fixed (hubiera duplicado el espacio). En `formulario-calificacion.html`/`formulario-relevamiento.html` además había un `.progress-box` con `position:sticky;top:0` que iba a quedar tapado detrás del topbar (ambos con `top:0`) — se corrigió a `top:var(--topbar-height, 50px)`. Mismo ajuste en `.valor-sticky` de `presentacion-seller.html` y `.sim-grid > aside` de `simulador-seller.html`.
+- Efecto secundario esperado: el logo/crumb del topbar en estas 4 páginas pasa a verse igual que en el resto del proyecto (uppercase parejo) — antes cada página tenía pequeños ajustes propios (`text-transform:none` en algunos casos) que quedaban pisados por la nueva regla canónica de mayor especificidad.
+- Verificado con una página de prueba aislada (topbar + sticky sidebar con el CSS real): el sticky queda pegado justo debajo del topbar, sin superposición ni huecos.
+- Pendiente: Etapa 4 (tablas informativas de `internal/estrategia/`).
+
+## 2026-07-06 - Alinear botones/CTA de `public/` a `.button` canónico (Etapa 2 de 4)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Continúa la Etapa 1: los botones de las 4 páginas grandes de `public/` (que hasta ahora no linkeaban `internal-components.css`, solo `tokens.css` + su propio `public-seller.css`) migran a `.button`/`.button.secondary`/`.button.ghost`. Se agregó el link a `internal-components.css` en las 4 páginas para que reciban el `.button` real (color/hover/disabled ligados a `--primary`), en vez de reimplementarlo.
+
+- **Nuevo modificador `.button.cta`** en `assets/css/pages/public-seller.css`: los CTA de `public/` son intencionalmente más grandes/uppercase que el `.button` compacto de uso interno (mejor touch target en formularios y landing) — en vez de una clase paralela, `.cta` solo ajusta `padding`/`font-size`/`text-transform` sobre la base de `.button` (mismo color, mismo hover, mismo radio).
+- `public/formularios/formulario-calificacion.html` y `formulario-relevamiento.html`: `.btn`/`.btn.secondary` → `.button.cta`/`.button.secondary.cta`.
+- `public/presentaciones/presentacion-seller.html`: `.top-cta`, `.btn.btn-primary.btn-lg`, `.btn.btn-ghost.btn-lg` → `.button.cta`, `.button.cta.btn-lg`, `.button.ghost.cta.btn-lg` (con overrides scoped para preservar el tamaño exacto del CTA de topbar vs. los de hero/cierre). De paso se corrigieron 2 selectores muertos (`.btn.primary`, `.cta-primary` sin uso real) y 2 reglas que apagaban el `uppercase` para estos CTA — quedaban con la especificidad justa para ganarle a la regla vieja por orden de cascada; se ajustaron a `.button.cta` para seguir ganando con la especificidad correcta tras el rename.
+- `public/simuladores/simulador-seller.html`: `.btn`/`.btn.secondary` y `.cta-primary`/`.cta-secondary` → `.button.cta`/`.button.secondary.cta`. **`.cta-whatsapp` se deja igual** — el verde `#25d366` es el color de marca de WhatsApp, no del proyecto.
+- Verificado con fragmentos de markup aislados que cargan el CSS real: los 3 estilos de CTA (formulario, hero de presentación, panel de simulador) mantienen tamaño/color/uppercase idénticos a antes.
+- Pendiente: Etapa 3 (`.portal-topbar` en las 4 páginas), Etapa 4 (tablas informativas de `internal/estrategia/`).
+
+## 2026-07-06 - Alinear botones legacy a `.button` canónico (Etapa 1 de 4)
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Primera etapa de un nuevo esfuerzo de alineación (post-rebrand): migrar botones que reimplementaban `.button`/`.button.secondary` (`style_guide.md` §8) con su propia clase, en vez de usar la canónica. Se excluyeron a propósito los botones que en realidad son chips de filtro/tabs con estado activo (`.qbtn`, `.qf-btn`, `.tab-btn`, `.mode-btn`) — `.button` no modela estado activo y varios tienen `querySelectorAll` acoplado a la clase; forzar el rename ahí perdería semántica y arriesga romper el toggle.
+
+- `internal/backlog/gestion-sellers.html`: `.btn`/`.btn.secondary` → `.button`/`.button.secondary`. Se borra el `.btn` duplicado en `assets/css/pages/gestion-sellers.css` (tenía padding `12px 18px`, distinto del canónico `7px 12px`).
+- `internal/backlog/backlog-sellers.html`: `.clear-btn` → `.button.secondary`; `.medit-save`/`.medit-cancel` (botones del modal de edición rápida) → `.button`/`.button.secondary`. Se borran las 3 reglas CSS locales correspondientes (incluida `.filter-bar .clear-btn`, que quedaba huérfana).
+- `internal/simuladores/simulador-economico.html`: `.update-btn` → `.button.secondary`. Se preserva el tamaño compacto que tenía en la columna de tarifas (`min-height:30px`, `padding:4px 9px`, `margin-top:8px`) con un override scoped por selector (`.col-rates .col-header .button`), mismo patrón que el override posicional de `.data-table` — se borran las 2 reglas `.update-btn` viejas en `assets/css/pages/simuladores.css`.
+- Verificado con fragmentos de markup aislados que cargan el CSS real: los 3 botones migrados conservan tamaño/posición/color idénticos a antes.
+- Pendiente: Etapa 2 (botones/CTA de `public/`), Etapa 3 (`.portal-topbar` en 4 páginas de `public/`), Etapa 4 (tablas informativas de `internal/estrategia/`).
+
 ## 2026-07-06 - Rebrand: presentación y simulador de seller a modo claro (Etapa 4 de 4 — cierre)
 
 Tipo de cambio: UX/UI (sin cambios de backend ni de datos).

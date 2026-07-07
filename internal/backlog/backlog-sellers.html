@@ -189,11 +189,6 @@ tbody tr{cursor:pointer}
 .medit-sel option{background:var(--k2)}
 .medit-ta{min-height:72px;resize:vertical}
 .medit-btns{display:flex;gap:7px;padding-top:8px;border-top:1px solid var(--b2)}
-.medit-save{padding:8px 16px;border-radius:7px;font-size:11px;font-weight:800;letter-spacing:.07em;background:var(--g);border:1px solid var(--g);color:#fff;cursor:pointer;font-family:inherit;transition:.15s}
-.medit-save:hover{background:var(--g2)}
-.medit-save:disabled{opacity:.5;cursor:not-allowed}
-.medit-cancel{padding:8px 14px;border-radius:7px;font-size:11px;font-weight:800;letter-spacing:.07em;background:transparent;border:1px solid var(--b);color:var(--t3);cursor:pointer;font-family:inherit;transition:.15s}
-.medit-cancel:hover{border-color:rgba(248,113,113,.35);color:var(--da)}
 
 /* ── PROG BAR (table) ── */
 .prog-wrap{display:flex;align-items:center;gap:6px}
@@ -377,7 +372,7 @@ tbody tr{cursor:pointer}
         </select>
       </div>
       <div class="filter-bar-actions">
-        <button class="clear-btn" onclick="clearFilters()">✕ Limpiar</button>
+        <button class="button secondary" onclick="clearFilters()">✕ Limpiar</button>
       </div>
     </div>
     <div class="c-toolbar">
@@ -1175,8 +1170,8 @@ function enterEditMode(id){
       </div>
     </div>
     <div class="medit-btns">
-      <button class="medit-save" id="me-save-btn" onclick="saveQuickEdit('${esc(id)}')">Guardar cambios</button>
-      <button class="medit-cancel" onclick="openModal('${esc(id)}')">Cancelar</button>
+      <button class="button" id="me-save-btn" onclick="saveQuickEdit('${esc(id)}')">Guardar cambios</button>
+      <button class="button secondary" onclick="openModal('${esc(id)}')">Cancelar</button>
     </div>
   `);
 }

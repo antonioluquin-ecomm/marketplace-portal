@@ -280,33 +280,18 @@ small {
   flex-wrap: wrap;
   justify-content: flex-end;
 }
-.btn {
-  border: none;
+/* Variante de tamaño "CTA" para .button en páginas seller-facing — más
+   grande/uppercase que el .button compacto de uso interno, a propósito
+   (mejor touch target, más peso visual en un formulario/landing). No es un
+   componente paralelo: reusa color/hover/disabled de .button, solo ajusta
+   tamaño y tipografía. */
+.button.cta {
   border-radius: var(--radius-control);
-  background: var(--g);
-  color: white;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   padding: 13px 22px;
-  cursor: pointer;
-  font-family: var(--font);
   font-size: 12.5px;
-  transition:
-    background 0.15s,
-    opacity 0.15s;
-}
-.btn:hover {
-  background: var(--g2);
-}
-.btn.secondary {
-  background: rgba(17, 24, 39, 0.045);
-  border: 1px solid var(--line);
-  color: var(--muted);
-}
-.btn.secondary:hover {
-  background: rgba(17, 24, 39, 0.08);
-  color: var(--text);
 }
 .toast {
   position: fixed;
