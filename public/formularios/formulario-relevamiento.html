@@ -427,20 +427,9 @@
           border-radius: 12px;
         }
       }
-      /* Etapa 27A: UI foundation enterprise seller-facing. */
-      :root {
-        --g: var(--primary, #25b60c);
-        --g2: var(--primary-hover, #1e9209);
-        --g-glow: rgba(37, 182, 12, 0.12);
-        --panel: var(--card, #ffffff);
-        --panel2: var(--bg, #f0f2f7);
-        --panel3: #e9eee6;
-        --line: var(--line, #e5e7eb);
-        --line2: rgba(17, 24, 39,.065);
-        --text: var(--text, #111827);
-        --muted: var(--muted, #6b7280);
-        --muted2: #9aa3b2;
-      }
+      /* Variables de color: definidas una sola vez en public-seller.css (ya
+         enlazado arriba) — no redeclarar acá para no divergir de las demás
+         páginas del flujo público. */
       body{font-family:var(--font);font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(37, 182, 12,.08),transparent 36%),var(--bg, #f0f2f7);padding-top:28px}
       /* Etapa 12 — mismo ancho full-bleed que presentación/simulador/gantt (antes 1040px en card). */
       .wrap{max-width:1200px}
@@ -494,6 +483,12 @@
         <a class="active" data-public-link="relevamiento" href="./formulario-relevamiento.html">Relevamiento</a>
         <a data-public-link="gantt" href="../gantt/gantt-seller.html">Gantt</a>
       </nav>
+      <div class="user-chip">
+        <span class="user-chip-name" id="user-chip-name"></span>
+        <a class="button ghost btn-sm" href="../index.html">← Portal</a>
+        <button type="button" class="button secondary btn-sm" onclick="_showSellerChangePasswordModal()">Cambiar contraseña</button>
+        <button type="button" class="button ghost btn-sm" onclick="logoutSeller()">Cerrar sesión</button>
+      </div>
     </header>
     <div class="wrap">
       <header class="hero">
@@ -2552,7 +2547,10 @@
 
     <script src="../../assets/js/config.js"></script>
     <script src="../../assets/js/auth-seller.js"></script>
-    <script>initSellerAuth().then(function () { renderStaffSellerBar(); });</script>
+    <script>initSellerAuth().then(function () {
+      renderStaffSellerBar();
+      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
+    });</script>
     <script>
       const APPS_SCRIPT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) ||
         "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";

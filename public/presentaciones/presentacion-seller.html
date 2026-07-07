@@ -12,12 +12,15 @@
   <link rel="stylesheet" href="../../assets/css/pages/public-seller.css"/>
   <style>
     :root{
-      --g:#25b60c;--g2:#1e9209;--g3:#187007;
+      /* Alias 1:1 (mismo valor) a los tokens canónicos de tokens.css — la
+         fuente de verdad del color pasa a ser tokens.css aunque el resto del
+         archivo siga usando los nombres --g/--k/--t. */
+      --g:var(--primary, #25b60c);--g2:var(--primary-hover, #1e9209);--g3:#187007;
       --g-dim:rgba(37,182,12,.12);--g-brd:rgba(37,182,12,.28);--g-glow:rgba(37,182,12,.06);
-      --k:#f0f2f7;--k2:#e8ebf2;--k3:#ffffff;--k4:#f1f4ef;
-      --t1:#111827;--t2:#374151;--t3:#6b7280;--t4:#9ca3af;
+      --k:var(--bg, #f0f2f7);--k2:#e8ebf2;--k3:var(--card, #ffffff);--k4:#f1f4ef;
+      --t1:var(--text, #111827);--t2:#374151;--t3:var(--muted, #6b7280);--t4:#9ca3af;
       --bdr:rgba(17,24,39,.08);--bdr2:rgba(17,24,39,.05);
-      --warn:#92400e;
+      --warn:var(--warning, #92400e);
       --r:10px;--rl:16px;
     }
     body{font-family:var(--font);background:var(--k);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -249,9 +252,17 @@
       <a data-public-link="relevamiento" href="../formularios/formulario-relevamiento.html">Relevamiento</a>
         <a data-public-link="gantt" href="../gantt/gantt-seller.html">Gantt</a>
 </nav>
-    <a id="topCta" class="button cta" href="#" target="_blank" rel="noopener">
-      Completar calificación <span class="top-cta-arr">→</span>
-    </a>
+    <div class="tb-right">
+      <a id="topCta" class="button cta" href="#" target="_blank" rel="noopener">
+        Completar calificación <span class="top-cta-arr">→</span>
+      </a>
+      <div class="user-chip">
+        <span class="user-chip-name" id="user-chip-name"></span>
+        <a class="button ghost btn-sm" href="../index.html">← Portal</a>
+        <button type="button" class="button secondary btn-sm" onclick="_showSellerChangePasswordModal()">Cambiar contraseña</button>
+        <button type="button" class="button ghost btn-sm" onclick="logoutSeller()">Cerrar sesión</button>
+      </div>
+    </div>
   </header>
 
   <!-- HERO -->
@@ -611,7 +622,10 @@
 
   <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/auth-seller.js"></script>
-  <script>initSellerAuth().then(function () { renderStaffSellerBar(); });</script>
+  <script>initSellerAuth().then(function () {
+    renderStaffSellerBar();
+    document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
+  });</script>
   <script>
     // ── CONFIGURACIÓN CENTRAL ─────────────────────────────────────────────────
     const BASE_URL = (() => {
