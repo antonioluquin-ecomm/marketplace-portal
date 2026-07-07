@@ -304,6 +304,31 @@ async function _submitSellerChangePassword() {
   }
 }
 
+/* ─── LOGO DE SELLER: DETECCIÓN DE PLACEHOLDER EN BLANCO ─────── */
+
+// Los archivos en assets/logos/{seller_id}.png para sellers que todavía no
+// subieron su logo real son PNGs válidos (200 OK) pero en blanco — un <img
+// onerror> no los detecta porque la carga no falla, solo no tiene contenido
+// visible. Se verifica el contenido real vía canvas y se trata como "sin
+// logo" si prácticamente no hay píxeles con color/opacidad.
+function isBlankLogoImage(img) {
+  try {
+    const c = document.createElement('canvas');
+    const w = (c.width = 24), h = (c.height = 24);
+    const ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    const data = ctx.getImageData(0, 0, w, h).data;
+    let visible = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const a = data[i + 3];
+      if (a > 10 && (data[i] < 245 || data[i + 1] < 245 || data[i + 2] < 245)) visible++;
+    }
+    return visible < 4;
+  } catch (e) {
+    return false; // no se pudo inspeccionar (imagen cross-origin, etc.) — no bloquear el logo
+  }
+}
+
 /* ─── SHA-256 ─────────────────────────────────────────────── */
 
 async function sha256(str) {

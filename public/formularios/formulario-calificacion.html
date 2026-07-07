@@ -940,6 +940,10 @@
         if (logoUrl) {
           sellerLogo.src = logoUrl;
           sellerLogo.onload = () => {
+            if (isBlankLogoImage(sellerLogo)) {
+              sellerLogo.onerror();
+              return;
+            }
             sellerLogo.classList.remove("hidden");
             sellerInitials.classList.add("hidden");
           };

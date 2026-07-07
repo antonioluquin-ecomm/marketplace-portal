@@ -715,9 +715,15 @@
       if(sellerLogo){
         logo.onerror=hideLogo;
         topLogo.onerror=()=>{topLogo.style.display="none";};
+        logo.onload=()=>{
+          if(isBlankLogoImage(logo)){hideLogo();return;}
+          logo.classList.remove("hidden");fallback.classList.add("hidden");
+        };
+        topLogo.onload=()=>{
+          if(isBlankLogoImage(topLogo)){topLogo.style.display="none";return;}
+          topLogo.style.display="block";
+        };
         logo.src=sellerLogo;topLogo.src=sellerLogo;
-        topLogo.style.display="block";
-        logo.classList.remove("hidden");fallback.classList.add("hidden");
       } else hideLogo();
     }
 

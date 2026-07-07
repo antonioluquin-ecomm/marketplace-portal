@@ -912,10 +912,9 @@ function applySellerInfo(shouldPrefill = true){
   const logoEl = $("sellerLogo");
   const fallbackEl = $("sellerFallback");
   if(logo){
-    logoEl.src = logo;
-    logoEl.classList.remove("hidden");
-    fallbackEl.classList.add("hidden");
     logoEl.onerror = () => { logoEl.removeAttribute("src"); logoEl.classList.add("hidden"); fallbackEl.classList.remove("hidden"); };
+    logoEl.onload = () => { if (isBlankLogoImage(logoEl)) { logoEl.onerror(); return; } logoEl.classList.remove("hidden"); fallbackEl.classList.add("hidden"); };
+    logoEl.src = logo;
   }else{
     logoEl.removeAttribute("src");
     logoEl.classList.add("hidden");
