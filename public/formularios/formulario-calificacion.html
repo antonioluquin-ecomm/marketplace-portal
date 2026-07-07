@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../../assets/css/tokens.css" />
     <link rel="stylesheet" href="../../assets/css/internal-components.css" />
     <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
+    <link rel="stylesheet" href="../../assets/css/pages/public-seller-form.css" />
     <style>
       .seller-chip.err {
         background: rgba(217, 64, 64, 0.12);
@@ -270,10 +271,6 @@
         padding: 18px;
         margin-top: 2px;
       }
-      .btn:disabled {
-        opacity: 0.55;
-        cursor: not-allowed;
-      }
       .status {
         font-size: 13px;
         color: var(--muted);
@@ -321,45 +318,9 @@
           border-radius: 12px;
         }
       }
-      /* Variables de color: definidas una sola vez en public-seller.css (ya
-         enlazado arriba) — no redeclarar acá para no divergir de las demás
-         páginas del flujo público. */
-      body{font-family:var(--font);font-size:15px;line-height:1.65;background:radial-gradient(circle at 80% 8%,rgba(37, 182, 12,.08),transparent 36%),var(--bg, #f0f2f7);padding-top:28px}
-      /* Etapa 12 — mismo ancho full-bleed que presentación/simulador/gantt (antes 1040px en card). */
-      .wrap{max-width:1200px}
-      @media(max-width:760px){.topbar .public-flow-nav{display:none}}
-      @media(max-width:720px){body{padding-top:0}}
-      /* .hero es el contenedor general de la página, ya no una card — sin fondo/borde propio,
-         igual que .hero-copy en presentación y .main en gantt. Los paneles reales
-         (.section,.intro-note,.seller-identity,.progress-box) sí mantienen su fondo de card. */
-      .hero{background:none;border:none;box-shadow:none;padding:0}
-      .section,.intro-note,.seller-identity,.progress-box{background:var(--panel);border-color:var(--line);box-shadow:none}
-      .section-label,.section-tag,.badge{letter-spacing:.015em}
-      h1{font-size:34px;line-height:1.05}
-      p,.section-help,small{line-height:1.6}
-      label{font-size:12.5px}
-      /* Etapa 12 — botones al spec canónico de presentación/simulador (uppercase, padding/radio mayores). */
-      /* Etapa 27B: header visual seller-facing. */
-      .hero .brand{
-        display:inline-flex;
-        align-items:center;
-        gap:5px;
-        font-family:var(--font);
-        font-size:17px;
-        font-weight:900;
-        letter-spacing:.015em;
-        text-transform:uppercase;
-      }
-      .hero .portal-section-label{
-        display:inline-flex;
-        border-left:1px solid var(--line);
-        padding-left:14px;
-        font-size:10px;
-        font-weight:800;
-        letter-spacing:.08em;
-        color:var(--muted2);
-        text-transform:uppercase;
-      }
+      /* Variables de color y el patrón hero/section/brand: compartidos con
+         formulario-relevamiento.html vía public-seller-form.css (ya
+         enlazado arriba) — no redeclarar acá. */
     </style>
   </head>
   <body>
@@ -384,6 +345,13 @@
     </header>
     <div class="wrap">
       <header class="hero">
+        <nav class="public-flow-nav hero-public-nav" aria-label="Navegación pública seller">
+          <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+          <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+          <a class="active" data-public-link="calificacion" href="./formulario-calificacion.html">Calificación</a>
+          <a data-public-link="relevamiento" href="./formulario-relevamiento.html">Relevamiento</a>
+          <a data-public-link="gantt" href="../gantt/gantt-seller.html">Gantt</a>
+        </nav>
         <a class="public-next-cta" data-public-link="relevamiento" href="./formulario-relevamiento.html">Ir a relevamiento →</a>
         <h1>Calificación Inicial de Seller</h1>
         <p>
