@@ -81,9 +81,14 @@ Pestañas publicadas como CSV:
 
 ---
 
-## Versionado
+## Versionado — dos changelogs, no uno
 
-Este proyecto usa `CHANGELOG.md` en la raíz. No hay versionado embebido en `config.js`. Actualizar el changelog al hacer cambios funcionales visibles.
+Este proyecto tiene **dos changelogs reales y separados**. Al hacer un cambio funcional visible hay que actualizar **los dos**, no solo uno:
+
+1. **`CHANGELOG.md`** (raíz) — historial completo del proyecto, una entrada nueva arriba de todo por cambio, con fecha y detalle.
+2. **`assets/js/config.js`** (desde el badge de versión en el topbar interno, `internal/` + `index.html`) — tiene su **propio** array `CHANGELOG` en JS + el objeto `VERSION`, que alimenta el badge/popover que ve el usuario en el topbar. Sumar una entrada nueva al **inicio** del array (más reciente primero, una oración corta) y subir `VERSION.number`/`VERSION.date`.
+
+Se descubrió (2026-07-14) que este segundo changelog quedó congelado en su entrada de creación durante varios cambios reales — quedó desactualizado porque solo se mantenía el `.md`. No asumir que actualizar `CHANGELOG.md` alcanza: revisar si el cambio también amerita entrada en `config.js`.
 
 ---
 
