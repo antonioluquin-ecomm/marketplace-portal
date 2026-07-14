@@ -99,8 +99,8 @@ entrar al detalle fase por fase — de acá sale también la versión que ve el 
 La conexión la **inicia Luquin** desde su VTEX. El alta del seller VTEX↔VTEX se hace en
 **Marketplace › Sellers › Gestión › botón "+ Agregar seller"**.
 
-> Existe además un módulo **"Invitación de sellers"** en el mismo menú — es **distinto** del
-> alta directa. Falta confirmar cuándo se usa uno u otro (ver "A completar" abajo).
+> Existe además un módulo **"Invitación de sellers"** en el mismo menú, pero **no se usa en
+> este proceso** — el alta siempre se hace por **"Agregar seller"** (confirmado).
 
 **Dos vistas de la misma UI** (confirmado con capturas reales de una cuenta de prueba
 `sportingioqa`): la **creación** ("+ Agregar seller") es **un formulario largo, de una sola
@@ -133,15 +133,15 @@ descripción) es opcional al crear.
 Dentro de **Acuerdos comerciales** además: **Comisión de productos\*** y **Comisión de
 envío\*** (%), con opción de comisiones por categoría; y **Participación en carritos con
 GiftCards** — checkbox, **desactivado por defecto**. Confirma la regla de la Fase 3 (no
-GiftCards para productos seller) — pero es un **toggle configurable por seller**, no un
-límite duro del sistema.
+GiftCards para productos seller) — pero es un **toggle que Ecomm configura por seller** (el
+seller no toca esta pantalla), no un límite duro del sistema.
 
 Dentro de **Integración** — datos técnicos que arman la URL de fulfillment:
 - **Cuenta de seller VTEX\*** — account name del VTEX del seller.
-- **ID de afiliado** — código corto (ejemplo real visto: `SPG`, en una cuenta de prueba de
-  la propia Sporting). ⚠️ Sigue sin confirmar si sigue una convención fija o varía por seller
-  (ver "A completar" — el ejemplo anterior de Customer PO usaba `LQN`, distinto de `SPG`;
-  falta verificar cuál es la convención real en producción).
+- **ID de afiliado** — código corto que identifica al seller, **derivado de su propio nombre**
+  (confirmado: ej. Topper → `TOP`). El `SPG` visto en la cuenta de prueba correspondía a esa
+  cuenta de test (Sporting probando consigo misma), no a una convención fija de Luquin.
+  Prefija el Customer PO del seller (Fase 5).
 - **Política comercial** — acá es un **ID numérico** (ejemplo real: `4`) que identifica cuál
   política de Ecomm (la del punto 1 de arriba) usar en la URL de fulfillment. **Mismo campo
   conceptual** que "Políticas comerciales del marketplace" de Acuerdos comerciales, mostrado
@@ -178,54 +178,45 @@ está listo.
 > (`public/integracion/integracion-seller.html`). Template reutilizable:
 > [`docs/plantilla-mail-kickoff-integracion.md`](./plantilla-mail-kickoff-integracion.md).
 
-> ⚠️ **A completar más adelante** *(no bloqueante — el alta ya está documentada):*
-> - El proceso completo de la **"invitación"**: si además del alta hay un paso de
->   invitación/aceptación del lado del seller, y cómo se relaciona el módulo **"Invitación de
->   sellers"** con **"Agregar seller"**.
+> ⚠️ **A completar más adelante** *(no bloqueante):*
 > - Qué **credenciales/permisos** se intercambian para que la integración por API quede activa.
-> - **Semántica del ID de afiliado**: ¿sigue una convención fija (ej. siempre identifica a
->   Luquin/Sporting) o se define libremente por seller? El ejemplo de prueba (`SPG`) no
->   coincide con el ejemplo de Customer PO documentado en Fase 5 (`LQN`) — confirmar cuál es
->   la convención real en un seller de producción.
 > - **Toggle "Inventario omnicanal (MOI) de varios niveles"**: qué hace y cuándo conviene
->   activarlo.
+>   activarlo. Para Topper: dejarlo **desactivado** (default) hasta documentarlo.
 
 ### Política comercial
 
-La política comercial es lo que permite **diferenciar los productos** dentro del sitio.
-**Cada parte crea la suya, en su propio VTEX** — son dos objetos independientes (ver el
-recuadro de arriba): la de **Ecomm** habilita el alta del seller en el VTEX de Sporting; la
-del **Seller** es lo que él usa, en su propio VTEX, para marcar qué productos manda al
-Marketplace. **No hace falta esperar una para tramitar la otra.**
+La política comercial permite **diferenciar los productos** dentro del sitio (ver el
+recuadro de arriba para la distinción Ecomm/Seller — no se repite acá).
 
 **Ventajas de una política comercial diferenciada:**
 1. **Catálogo** — optimiza la disponibilidad de productos estableciendo restricciones.
 2. **Promociones** — define con claridad qué productos participan, vinculándolas a políticas específicas.
 3. **Pagos** — ajusta condiciones de pago según la política comercial.
 
-Cuando el seller asigna **su propia** política comercial a un producto (en su VTEX), ese
-producto **viaja al VTEX del Marketplace** y cae en una **bandeja de aprobación**. Esto es
-independiente de que Ecomm ya haya completado el alta del seller.
+Cuando el seller asigna **su propia** política a un producto, ese producto **viaja al VTEX
+del Marketplace** y cae en la bandeja de aprobación. **Esa asignación es la tarea 2.9**
+(Fase 2 — Catálogo), no una tarea de esta fase: acá se documenta el objeto (quién la crea,
+para qué sirve), no su uso recurrente sobre el catálogo completo.
+
+> **Prueba de conexión (smoke test):** para confirmar que el alta funcionó, alcanza con que
+> el seller asigne su política a **un solo producto** de prueba y se verifique que llega a la
+> bandeja de aprobación (roadmap paso 7, Validación en QA). No hace falta asignarla a todo el
+> catálogo todavía — eso ya es trabajo de la Fase 2.
 
 #### Tareas — Fase 1
 
 | # | Ítem | Descripción | Tarea Seller | Tarea Ecomm | Estado |
 |---|---|---|---|---|---|
-| 1.0 | Alta del seller | Ecomm crea el seller en **Gestión › Agregar seller** (tipo *Seller VTEX*). **No depende** de que el seller ya tenga su política comercial (ver 1.1) — solo de su cuenta VTEX y de la política de Ecomm (ya creada). | Compartir su **cuenta de seller VTEX** y, si tiene, su **cuenta de QA** (para probar QA↔QA antes de ir a producción). | Crear **su propia** política comercial para este seller (prerrequisito); completar el formulario de alta; decidir QA vs. producción; activar cuando esté listo. | ⚠️ parcial |
-| 1.1 | Solicitar política comercial | **Cada parte crea la suya, en su propio VTEX** — son independientes entre sí y de la tarea 1.0 (ver recuadro arriba). No bloquea ni es bloqueada por el alta. | Solicitar una nueva política comercial a su agencia (para poder hacer la tarea 1.2 más adelante). | Crear su propia política comercial (nueva, específica de este seller) — es un prerrequisito de la tarea 1.0, no de la 1.1 del seller. | ✅ |
-| 1.2 | Asignar política a productos | Marca qué productos se envían al Marketplace. | Asignar la política comercial a cada producto (uno a uno o masivo). | — | ✅ |
-| 1.3 | Configurar sobre la política | Todo se configura sobre esa política. | — | Los productos aprobados se crean con esa política; todas las configuraciones se hacen sobre ella. | ✅ |
+| 1.0 | Alta del seller | Ecomm crea el seller en **Gestión › Agregar seller** (tipo *Seller VTEX*). | Compartir su **cuenta de seller VTEX** y, si tiene, su **cuenta de QA**. | Crear su propia política comercial (prerrequisito); completar el alta; decidir QA vs. producción; activar cuando esté listo. | ✅ |
+| 1.1 | Solicitar política comercial (seller) | Necesaria para la tarea **2.9** (Fase 2) — no bloquea el alta (ver recuadro arriba). | Solicitar una nueva política comercial a su agencia. | — | ✅ |
 
 #### Reglas / Decisiones — Fase 1
 
 - **Costo:** la política comercial cuesta **USD 40**. Cada parte se hace cargo de la suya.
-- **No bloqueante:** la política comercial del seller **no es un requisito para el alta** ni
-  para la conexión VTEX↔VTEX (Ecomm puede completarla con solo la cuenta VTEX del seller y
-  su propia política, ya creada). Es necesaria recién para la tarea 1.2 (que el seller
-  empiece a mandar productos) — pedirla puede correr en paralelo, sin frenar nada.
-- La asignación de la política comercial **del seller** a un producto es el mecanismo de
-  **envío de productos** al Marketplace: al asignarla, el producto llega a la bandeja de
-  aprobación del VTEX del Marketplace.
+- **No bloqueante:** la política del seller no es requisito del alta (ver recuadro arriba) —
+  hace falta recién para la tarea 2.9.
+- **Todo se configura sobre la política de Ecomm:** los productos aprobados se crean con
+  ella; las configuraciones de comisión, promoción y pago (Fase 3) se aplican sobre esa base.
 
 ---
 
@@ -247,7 +238,7 @@ usar **VCC** (módulo de aprobación de productos) para automatizar lo que se pu
 | 2.6 | Talles | Llega desde el VTEX del seller. El mapeo unifica al estándar del Marketplace (ej.: `2XL = XXL`). | Compartir Excel con todos los talles creados en su VTEX. | Con el archivo, hacer el mapeo correspondiente. | ✅ |
 | 2.7 | Score | Posicionamiento del producto en el catálogo. Ya automatizado: siempre arranca en **80**. | — | — | ✅ |
 | 2.8 | Imágenes | Llegan desde el VTEX del seller. | — | Usar **VCC** para automatizar el orden de las imágenes y alinearlas al estándar del sitio. | ⚠️ falta |
-| 2.9 | Aprobación de productos | Al asignar la política, el producto viaja al Marketplace y un agente lo revisa. | Asignar política comercial a los productos a vender. | Revisar y aprobar los productos en la bandeja. | ✅ |
+| 2.9 | Aprobación de productos | Al asignar **su** política (Fase 1.1), el producto viaja al Marketplace y un agente lo revisa. | Asignar su política comercial a los productos a vender. | Revisar y aprobar los productos en la bandeja. | ✅ |
 | 2.10 | Rechazo de productos | El agente puede rechazar y dejar motivo; el seller corrige y reenvía. | Revisar bandeja de rechazados y corregir según el motivo. | Rechazar dejando un motivo claro. | 🧪 QA |
 | 2.11 | Productos aprobados | Aprobado + con precio y stock → visible en el sitio del Marketplace. | ⚠️ definir | ⚠️ definir | ⚠️ falta |
 
@@ -358,9 +349,10 @@ son 3, todas del **Agente PIM**, y son **setup previo al go-live**.
 
 #### Flujo automático (comportamiento del sistema — sin dueño)
 
-- **Customer PO** — el número que le llega al seller es el **ID de afiliado (3 consonantes)
-  + el número del Marketplace**. Ej.: `1385074194464-01` (Marketplace) → `LQN-1385074194464-01`
-  (Seller). El ID de afiliado se define en el **alta del seller** (Fase 1.0).
+- **Customer PO** — el número que le llega al seller es el **ID de afiliado + el número del
+  Marketplace**. El ID de afiliado se deriva del nombre del propio seller (confirmado, ej.
+  Topper → `TOP`) y se define en el **alta del seller** (Fase 1.0). Ej.: `1385074194464-01`
+  (Marketplace) → `TOP-1385074194464-01` (Topper).
 - **Creación en VTEX** — al finalizar la compra, el pedido se genera en VTEX y es visible
   **tanto en el VTEX del Seller como en el del Marketplace**.
 - **Creación en PIM** — una vez configurados tienda + depósito + asociación (tareas 5.1-5.3),
@@ -629,9 +621,8 @@ Al confirmar, el botón dispara **de una sola vez**:
 
 | Ítem | Qué falta | Bloqueante |
 |---|---|---|
-| 1.0-a | Completar el flujo de **"invitación"**: relación entre el módulo "Invitación de sellers" y "Agregar seller", y si hay aceptación del lado del seller. | No (el alta ya está documentada) |
-| 1.0-b | Confirmar la **convención real del "ID de afiliado"** en un seller de producción (el ejemplo de prueba usó `SPG`, distinto del `LQN` documentado en Fase 5) y qué credenciales/permisos activan la integración por API. | No |
-| 1.0-c | Documentar qué hace el toggle **"Inventario omnicanal (MOI) de varios niveles"** y cuándo conviene activarlo. | No |
+| 1.0-c | Documentar qué hace el toggle **"Inventario omnicanal (MOI) de varios niveles"** y cuándo conviene activarlo. Para Topper: dejarlo desactivado (default). | No |
+| 1.0-d | Confirmar qué **credenciales/permisos** se intercambian para que la integración por API quede activa. | No |
 | 2.8 | Confirmar alcance de la automatización de orden de imágenes en VCC. | No |
 | 2.10 | **Lista de motivos de rechazo** (referida en la redacción como "[Hacer lista]"). | No |
 | 2.10 | Probar flujo de rechazo/reenvío en QA. | No |

@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-14 - Auditoría de Fase 1: elimina redundancias, cierra 2 pendientes
+
+Tipo de cambio: limpieza de contenido en las 3 superficies (sin cambios de backend ni de datos).
+
+Auditoría pedida por el usuario sobre Fase 1 tras la corrección de la política comercial: revisar que no falte nada, no sobre nada, no queden dudas resolubles y no haya redundancias.
+
+- **Redundancia eliminada**: la explicación de "no bloqueante" (política del seller vs. alta) estaba repetida 4 veces entre el callout, dos tareas y una regla — queda dicha una sola vez.
+- **Duplicación real detectada y corregida**: la tarea 1.2 "Asignar política a productos" duplicaba, palabra por palabra, la tarea 2.9 de Fase 2. Se retira de Fase 1 (queda solo en 2.9) tras confirmar con el usuario que es mecánica de Catálogo, no de Conexión. En Fase 1 queda una nota de "smoke test" (un producto de prueba, para validar la conexión) en vez de la tarea general.
+- **Tarea 1.3 reclasificada**: "Configurar sobre la política" no tenía acción real de ningún rol — pasa de fila de tabla a regla.
+- **Wording corregido**: el toggle de GiftCards decía "configurable por seller", que se leía como que el seller lo activa — en realidad lo configura Ecomm, el seller no ve esa pantalla.
+- **2 pendientes cerrados** con confirmación directa del usuario: 1.0-a (el alta es siempre por "Agregar seller", no se usa "Invitación de sellers") y 1.0-b (el ID de afiliado se deriva del nombre del seller — confirmado con el ejemplo Topper → `TOP`; se actualiza también el ejemplo de Customer PO en Fase 5, que usaba `LQN`). El registro pasa de 16 a 15 ítems (se cerraron 2, se formalizó 1 que ya estaba mencionada sin trackear).
+- Fase 1 queda con **2 tareas** (antes 4) en la fuente y la vista interna. La guía del seller mueve el ítem de asignar política de la tarjeta "Conexión" a "Catálogo", con la nota del producto de prueba.
+- Verificado sirviendo en local: ambas vistas HTML sin errores de consola ni overflow horizontal; KPI de pendientes y conteo real de filas coinciden en 15 (se corrigió un error aritmético propio antes de confirmar el número final).
+
 ## 2026-07-14 - Corrige la confusión entre las dos "política comercial"
 
 Tipo de cambio: corrección de documentación y de contenido en las 3 superficies (sin cambios de backend ni de datos).

@@ -132,7 +132,7 @@
           <div class="kpi"><div class="num">8</div><div class="lbl">Fases del proceso</div></div>
           <div class="kpi info"><div class="num">6</div><div class="lbl">Roles involucrados</div></div>
           <div class="kpi teal"><div class="num">7</div><div class="lbl">SLAs / plazos</div></div>
-          <div class="kpi warn"><div class="num">16</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi warn"><div class="num">15</div><div class="lbl">Pendientes por cerrar</div></div>
         </div>
       </section>
 
@@ -186,34 +186,32 @@
         <div class="section-head"><div class="section-title"><span>🔌</span><h2>Fase 1 — Conexión / Política comercial</h2></div><p class="section-desc">La conexión la inicia Luquin desde su VTEX. Alta del seller + política comercial para diferenciar los productos que participan.</p></div>
         <div class="panel soft">
           <h3 style="margin-top:0">Alta del seller — <code>Marketplace › Sellers › Gestión › + Agregar seller</code></h3>
-          <p style="margin:0 0 10px"><strong>Dos vistas de la misma UI:</strong> la <strong>creación</strong> es un formulario largo de una sola página (Tipo de integración → Integración → Info. básica → Acuerdos comerciales → Comisiones → Info. adicional opcional); la <strong>edición</strong> reorganiza los mismos campos en 4 pestañas (Datos del seller, Acuerdos comerciales, Integración, Información operativa — esta última no existe en la creación). Confirmado con capturas reales (<code>sportingioqa</code>).</p>
+          <p style="margin:0 0 10px"><strong>Dos vistas de la misma UI:</strong> la <strong>creación</strong> es un formulario largo de una sola página (Tipo de integración → Integración → Info. básica → Acuerdos comerciales → Comisiones → Info. adicional opcional); la <strong>edición</strong> reorganiza los mismos campos en 4 pestañas (Datos del seller, Acuerdos comerciales, Integración, Información operativa — esta última no existe en la creación). Confirmado con capturas reales (<code>sportingioqa</code>). El alta siempre es por <strong>"Agregar seller"</strong> — el módulo "Invitación de sellers" no se usa en este proceso (confirmado).</p>
           <p style="margin:0 0 10px"><strong>Obligatorios para crear</strong> (únicos con *): Cuenta de seller VTEX, Nombre del seller, ID de seller, Políticas comerciales del marketplace, Comisión de productos, Comisión de envío.</p>
-          <div class="callout danger"><strong>Corrección — hay DOS "política comercial" distintas:</strong> (1) la de <strong>Ecomm</strong>, campo obligatorio "Políticas comerciales del marketplace", vive en el VTEX de Sporting, la crea Ecomm, <strong>nueva por cada seller</strong> (confirmado, no se reutiliza), y se crea <strong>antes</strong> de llegar a este formulario. (2) la del <strong>Seller</strong> (tarea 1.1), vive en <strong>su propio</strong> VTEX. Son objetos desacoplados: la del Seller <strong>no aparece en este formulario y no bloquea el alta</strong> — hace falta recién en la tarea 1.2 (asignarla a productos), y puede tramitarse en paralelo sin frenar nada de este lado.</div>
+          <div class="callout danger"><strong>Hay DOS "política comercial" distintas:</strong> (1) la de <strong>Ecomm</strong>, campo obligatorio "Políticas comerciales del marketplace", vive en el VTEX de Sporting, nueva por cada seller (confirmado, no se reutiliza), se crea <strong>antes</strong> de llegar a este formulario. (2) la del <strong>Seller</strong> (tarea 1.1), vive en <strong>su propio</strong> VTEX. Son objetos desacoplados: la del Seller <strong>no aparece en este formulario y no bloquea el alta</strong> — hace falta recién para la tarea <strong>2.9</strong> (Fase 2, asignarla a productos), y puede tramitarse en paralelo sin frenar nada de este lado.</div>
           <ol class="autolist">
-            <li><strong>Acuerdos comerciales:</strong> selector "políticas comerciales del marketplace" (la de Ecomm, ver arriba) + <em>comisión de productos/envío</em> (%) + toggle <strong>GiftCards</strong> (desactivado por defecto — confirma la regla de Fase 3, pero es configurable por seller).</li>
-            <li><strong>Integración:</strong> <em>Cuenta de seller VTEX</em> + <em>ID de afiliado</em> (ejemplo real: <code>SPG</code>) + <em>Política comercial</em> (mismo campo de arriba, acá como ID numérico, ej. <code>4</code>) + toggle <strong>MOI</strong> (inventario omnicanal multi-nivel, sin documentar). Arman la URL de fulfillment: <code>…/fulfillment?an={cuenta}&amp;affiliateId={ID afiliado}&amp;sc={política comercial}</code>.</li>
+            <li><strong>Acuerdos comerciales:</strong> selector "políticas comerciales del marketplace" (la de Ecomm, ver arriba) + <em>comisión de productos/envío</em> (%) + toggle <strong>GiftCards</strong> (desactivado por defecto — confirma la regla de Fase 3; lo tildea <strong>Ecomm</strong> por seller, el seller no toca esta pantalla).</li>
+            <li><strong>Integración:</strong> <em>Cuenta de seller VTEX</em> + <em>ID de afiliado</em> (derivado del nombre del seller, confirmado — ej. Topper → <code>TOP</code>; el <code>SPG</code> visto era de la cuenta de prueba) + <em>Política comercial</em> (mismo campo de arriba, acá como ID numérico, ej. <code>4</code>) + toggle <strong>MOI</strong> (inventario omnicanal multi-nivel, sin documentar). Arman la URL de fulfillment: <code>…/fulfillment?an={cuenta}&amp;affiliateId={ID afiliado}&amp;sc={política comercial}</code>.</li>
             <li><strong>Información operativa</strong> (solo en edición): 3 campos de texto libre — <em>Política de envío</em>, <em>Cambios y devoluciones</em>, <em>Política de privacidad y seguridad</em> — ubicación nativa para las reglas de Fase 4.6-4.8 y Fase 8.</li>
             <li><strong>Pausar el seller después de registrarlo</strong> (activado por defecto): "En pausa" hasta terminar de configurar; "Activo" cuando está listo.</li>
           </ol>
           <div class="callout warn"><strong>QA antes de producción:</strong> preguntarle al seller si tiene cuenta VTEX de QA propia, para conectar QA↔QA. Sin eso, se prueba directo sobre producción (evaluar riesgo). Priorizar siempre QA↔QA cuando sea posible.</div>
           <div class="callout"><strong>Contacto de integración:</strong> Gabriel Luna — <code>gabriel.luna@luquin.com.ar</code> (distinto del contacto operativo de Fase 7b). <strong>Kickoff:</strong> Gabriel manda el primer mail con link + usuario y contraseña del portal ya creados; el seller entra y consulta la guía desde ahí.</div>
-          <div class="callout warn">Falta afinar el flujo de <strong>“invitación”</strong>, la convención real del ID de afiliado (<code>SPG</code> de prueba vs. <code>LQN</code> documentado en Fase 5) y qué hace el toggle MOI (pendientes 1.0-a / 1.0-b / 1.0-c).</div>
+          <div class="callout warn">Pendiente (no bloqueante): credenciales/permisos que activan la API, y qué hace el toggle MOI — para Topper, dejarlo desactivado (pendientes 1.0-c / 1.0-d).</div>
         </div>
         <h3>Tareas</h3>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Estado</th></tr></thead>
           <tbody>
-            <tr><td>1.0</td><td><strong>Alta del seller</strong> — Ecomm lo crea. No depende de que el seller ya tenga su política (ver 1.1), solo de su cuenta VTEX y de la política de Ecomm.</td><td>Compartir su <strong>cuenta de seller VTEX</strong> y, si tiene, su <strong>cuenta de QA</strong>.</td><td>Crear <strong>su propia</strong> política comercial (prerrequisito); completar el alta; decidir QA vs. producción; activar cuando esté listo.</td><td><span class="pill w">Parcial</span></td></tr>
-            <tr><td>1.1</td><td><strong>Solicitar política comercial</strong> — cada parte crea la suya, en su propio VTEX. Independientes entre sí y de la tarea 1.0.</td><td>Solicitar una nueva política comercial a su agencia (para la tarea 1.2).</td><td>Crear su propia política comercial (prerrequisito de 1.0, no de esta fila).</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>1.2</td><td><strong>Asignar política a productos</strong> — marca qué productos van al MP.</td><td>Asignar <strong>su</strong> política a cada producto (uno a uno o masivo).</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>1.3</td><td><strong>Configurar sobre la política</strong>.</td><td>—</td><td>Los productos aprobados se crean con esa política; todo se configura sobre ella.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.0</td><td><strong>Alta del seller</strong> — Ecomm lo crea.</td><td>Compartir su <strong>cuenta de seller VTEX</strong> y, si tiene, su <strong>cuenta de QA</strong>.</td><td>Crear su propia política comercial (prerrequisito); completar el alta; decidir QA vs. producción; activar cuando esté listo.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.1</td><td><strong>Solicitar política comercial (seller)</strong> — necesaria para la tarea 2.9, no bloquea el alta.</td><td>Solicitar una nueva política comercial a su agencia.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
         <ul>
           <li><strong>Costo:</strong> la política comercial cuesta <strong>USD 40</strong>. Cada parte paga la suya.</li>
-          <li><strong>No bloqueante:</strong> la política del seller no es requisito del alta ni de la conexión VTEX↔VTEX — Ecomm completa esa parte solo con la cuenta VTEX y su propia política. Hace falta recién para la tarea 1.2.</li>
-          <li>Asignar <strong>la política del seller</strong> es el mecanismo de <strong>envío de productos</strong>: el producto cae en la bandeja de aprobación del VTEX del Marketplace.</li>
+          <li><strong>No bloqueante:</strong> la política del seller no es requisito del alta (ver callout arriba) — hace falta recién para la tarea 2.9.</li>
+          <li><strong>Todo se configura sobre la política de Ecomm:</strong> los productos aprobados se crean con ella; las configuraciones de comisión, promoción y pago (Fase 3) se aplican sobre esa base.</li>
         </ul>
       </section>
 
@@ -231,7 +229,7 @@
             <tr><td>2.6</td><td><strong>Talles</strong> — unifica al estándar (ej.: <code>2XL = XXL</code>).</td><td>Compartir Excel con todos los talles de su VTEX.</td><td>Hacer el mapeo correspondiente.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>2.7</td><td><strong>Score</strong> — automatizado, arranca en 80.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>2.8</td><td><strong>Imágenes</strong></td><td>—</td><td>VCC automatiza el orden de las imágenes.</td><td><span class="pill w">Falta</span></td></tr>
-            <tr><td>2.9</td><td><strong>Aprobación</strong> — el producto viaja al MP y un agente lo revisa.</td><td>Asignar política comercial a los productos a vender.</td><td>Revisar y aprobar en la bandeja.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.9</td><td><strong>Aprobación</strong> — al asignar <strong>su</strong> política (Fase 1.1), el producto viaja al MP y un agente lo revisa.</td><td>Asignar su política comercial a los productos a vender.</td><td>Revisar y aprobar en la bandeja.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>2.10</td><td><strong>Rechazo</strong> — el agente rechaza y deja motivo; el seller corrige.</td><td>Revisar rechazados y corregir según el motivo.</td><td>Rechazar con motivo claro.</td><td><span class="pill b">QA</span></td></tr>
             <tr><td>2.11</td><td><strong>Productos aprobados</strong> — visibles si tienen precio y stock.</td><td>—</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
           </tbody>
@@ -303,7 +301,7 @@
         <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 5 — Pedido</h2></div><p class="section-desc">El pedido viaja solo entre VTEX y PIM. Solo hay 3 tareas de setup, todas del Agente PIM y previas al go-live.</p></div>
         <h3>Flujo automático</h3>
         <ul class="autolist">
-          <li><strong>Customer PO</strong> — el número del seller es el ID de afiliado (3 consonantes) + el del MP. Ej.: <code>1385074194464-01</code> → <code>LQN-1385074194464-01</code>.</li>
+          <li><strong>Customer PO</strong> — el número del seller es el ID de afiliado (derivado de su nombre, ej. Topper → <code>TOP</code>) + el del MP. Ej.: <code>1385074194464-01</code> → <code>TOP-1385074194464-01</code>.</li>
           <li><strong>Creación en VTEX</strong> — al finalizar la compra, el pedido es visible en ambos VTEX.</li>
           <li><strong>Creación en PIM</strong> — con tienda + depósito + asociación listos, el pedido ingresa automáticamente en estado “Activo”.</li>
         </ul>
@@ -471,13 +469,12 @@
       </section>
 
       <section id="agujeros" class="section">
-        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 16 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 15 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
           <tbody>
-            <tr><td>1.0-a</td><td>Completar el flujo de “invitación”: relación entre “Invitación de sellers” y “Agregar seller”, y si hay aceptación del lado del seller.</td></tr>
-            <tr><td>1.0-b</td><td>Convención real del “ID de afiliado” en un seller de producción (la prueba usó <code>SPG</code>, distinto del <code>LQN</code> de Fase 5) y credenciales que activan la API.</td></tr>
-            <tr><td>1.0-c</td><td>Documentar qué hace el toggle “Inventario omnicanal (MOI) de varios niveles” y cuándo conviene activarlo.</td></tr>
+            <tr><td>1.0-c</td><td>Documentar qué hace el toggle “Inventario omnicanal (MOI) de varios niveles”. Para Topper: dejarlo desactivado.</td></tr>
+            <tr><td>1.0-d</td><td>Confirmar qué credenciales/permisos activan la integración por API.</td></tr>
             <tr><td>2.8</td><td>Alcance de la automatización de orden de imágenes en VCC.</td></tr>
             <tr><td>2.10</td><td>Lista de motivos de rechazo.</td></tr>
             <tr><td>2.10</td><td>Probar flujo de rechazo/reenvío en QA.</td></tr>
