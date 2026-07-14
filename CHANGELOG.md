@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-14 - Título, KPIs y filtros del Backlog de Sellers
+
+Tipo de cambio: UX/UI + fix de layout (sin cambios de backend ni de datos).
+
+A pedido del usuario: faltaba el título de página que sí tiene Gestión de Sellers, los filtros dejaban espacios vacíos y de tamaños dispares, y sobraban KPIs poco accionables.
+
+- **Título de página**: se agrega el bloque eyebrow + `h1` + lead ("Backlog de Sellers"), mismo lenguaje visual que `gestion-sellers.html`, sin el panel lateral "cómo usar" que no aplica a una pantalla de datos.
+- **KPIs recortados de 8 a 6**: se sacan "Grupos" y "Marcas" (conteos de contexto, poco accionables; Marcas casi redundante con el total de Sellers). Quedan Sellers, Live, En integración, En evaluación, Bloqueados, Alta prioridad.
+- **Filter-bar reescrito**: la causa real del hueco vacío era que el CSS posicionaba cada filtro con `nth-child` fijo asumiendo 8 filtros exactos (incluidos "Atajos" y "Ordenar", ya sacados en sesiones anteriores) — al quedar 7, sobraban columnas vacías en el grid. Se reemplaza por flexbox con ancho uniforme por filtro (180px, Buscar más ancho a propósito), independiente de cuántos filtros haya. Se iteró dos veces más: los ítems se estiraban distinto según la fila, y el botón "Limpiar" se pegaba al borde derecho por un `margin-left:auto` heredado de `internal-components.css` — ambos corregidos.
+- Se limpia CSS/JS huérfano de limpiezas anteriores (`.qbtn`/`.quick-btns`, los `setText` de grupos/marcas).
+- Verificado sirviendo en local con datos mock (10 y 60 sellers): filtros consistentes en 1265px/1085px, KPIs y título correctos, sin errores de consola. El overflow horizontal en mobile (375px) es preexistente (topbar `.crumb`/`.tb-version`, no tocado hoy) — confirmado idéntico antes/después del cambio.
+
 ## 2026-07-14 - Termina de alinear governance.html y proyecto-marketplace.html a los 3 modelos vigentes
 
 Tipo de cambio: contenido/copy (sin cambios de backend ni de datos).
