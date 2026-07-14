@@ -536,6 +536,74 @@ function getUsuariosGanttAction(data) {
   return { ok: true, data: usuarios };
 }
 
+
+var SELLER_INITIAL_PASSWORD = "Admin123";
+
+function prevalidarUsuarioSellerDesdeAlta(data) {
+  var sellerId = String(data.seller_id || "").trim();
+  var email = String(data.contacto_email || "").toLowerCase().trim();
+  var nombre = String(data.contacto_nombre || data.seller_nombre || data.marca_seller_operativo || sellerId).trim();
+
+  if (!sellerId) return { ok: false, error: "Falta seller_id para crear la cuenta Seller", code: 400 };
+  if (!email) return { ok: false, error: "Para crear un seller nuevo, cargá el email del contacto principal. Ese email se usa como usuario inicial.", code: 400 };
+  if (!emailValido(email)) return { ok: false, error: "El email del contacto principal no tiene un formato válido", code: 400 };
+  if (!nombre) nombre = sellerId;
+
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName("USUARIOS");
+  if (!sheet) return { ok: false, error: "Tabla de usuarios no disponible", code: 500 };
+
+  var existing = sheet.getDataRange().getValues();
+  if (!existing.length) return { ok: false, error: "Tabla de usuarios sin encabezados", code: 500 };
+
+  var headers = existing[0];
+  var eEmailIdx = headers.indexOf("email");
+  var eSelIdx = headers.indexOf("seller_id");
+  var eIdIdx = headers.indexOf("id");
+  if (eEmailIdx === -1 || eSelIdx === -1) {
+    return { ok: false, error: "La tabla USUARIOS no tiene columnas email/seller_id", code: 500 };
+  }
+
+  var sellerUpper = sellerId.toUpperCase();
+  for (var i = 1; i < existing.length; i++) {
+    var rowSellerId = String(existing[i][eSelIdx] || "").trim().toUpperCase();
+    var rowEmail = String(existing[i][eEmailIdx] || "").toLowerCase().trim();
+    if (rowSellerId && rowSellerId === sellerUpper) {
+      return { ok: true, exists: true, id: eIdIdx !== -1 ? existing[i][eIdIdx] : "", seller_id: sellerId, email: rowEmail };
+    }
+    if (rowEmail && rowEmail === email) {
+      return { ok: false, error: "El email " + email + " ya está en uso en USUARIOS", code: 409 };
+    }
+  }
+
+  return { ok: true, exists: false, seller_id: sellerId, email: email, nombre: nombre };
+}
+
+function crearUsuarioSellerDesdeAlta(data) {
+  var pre = prevalidarUsuarioSellerDesdeAlta(data);
+  if (!pre.ok || pre.exists) return pre;
+
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName("USUARIOS");
+  if (!sheet) return { ok: false, error: "Tabla de usuarios no disponible", code: 500 };
+
+  var nextId = _authNextId(sheet);
+  var salt = Utilities.getUuid();
+  var hash = hashPassword(salt, computeSha256Hex(SELLER_INITIAL_PASSWORD));
+  var now = new Date().toISOString();
+  var creadoPor = String(data._sesEmail || "saveSeller");
+
+  sheet.appendRow([nextId, pre.nombre, pre.email, hash, salt, 2, "SI", now, "", creadoPor, pre.seller_id]);
+
+  return {
+    ok: true,
+    created: true,
+    id: nextId,
+    seller_id: pre.seller_id,
+    email: pre.email,
+  };
+}
+
 function createUsuario(body) {
   var data          = body.data || {};
   var nombre        = String(data.nombre        || "").trim();

@@ -100,13 +100,38 @@ function _guardSellerOwnership(data, sellerId) {
 function _handleSaveSeller(data) {
   var sellerId = String(data.seller_id || "").trim();
   if (!sellerId) throw new Error("Falta seller_id");
+
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var ws = obtenerHojaSellersConHeaders(ss);
+  var esAltaNueva = !buscarFilaPorSellerId(ws, sellerId);
+  var usuarioSeller = null;
+
+  if (esAltaNueva) {
+    var preUsuario = prevalidarUsuarioSellerDesdeAlta(data);
+    if (!preUsuario.ok) return preUsuario;
+  }
+
   var resultado = upsertSeller(sellerId, data, { modo: "gestion" });
+
+  if (resultado.accion === "creado") {
+    usuarioSeller = crearUsuarioSellerDesdeAlta(data);
+    if (!usuarioSeller.ok) return usuarioSeller;
+    if (usuarioSeller.created) {
+      writeAuditLog("createSellerUser", "usuarios", sellerId, usuarioSeller.email || "", data._sesEmail);
+    }
+  }
+
   writeAuditLog("saveSeller", "sellers", sellerId, resultado.accion || "", data._sesEmail);
   return {
     ok: true, seller_id: sellerId,
     fecha_envio: resultado.fecha_envio, estado: resultado.estado,
     completitud: resultado.completitud, hoja: resultado.hoja,
     accion: resultado.accion || null, fila: resultado.fila || null,
+    usuario_seller: usuarioSeller ? {
+      created: usuarioSeller.created === true,
+      exists: usuarioSeller.exists === true,
+      email: usuarioSeller.email || "",
+    } : null,
   };
 }
 

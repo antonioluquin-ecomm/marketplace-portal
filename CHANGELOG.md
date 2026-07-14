@@ -6,6 +6,12 @@ Tipo de cambio: mejora de UX en el shell interno (sin cambios de backend ni de d
 
 Se agrega el mismo patrón de Project Control Center / VTEX Control Center: `VERSION`/`CHANGELOG` en `assets/js/config.js` y `initVersionBadge()`, que inyecta un badge (`v1.0.0`) junto al logo del topbar y abre un popover con el historial de cambios al hacer click. Al cargar `config.js` en las 15 páginas internas + el Hub ya existentes, no hizo falta editar HTML — se auto-excluye en `public/` por path para no interferir con la identidad verde de esas páginas. Arranca en 1.0.0 (decisión del usuario: versionado limpio desde hoy, `CHANGELOG.md` sigue siendo la fuente histórica completa por fecha).
 
+## 2026-07-14 - Crea usuario Seller al dar de alta un seller
+
+Tipo de cambio: mejora funcional de backend y frontend (requiere redeploy de Apps Script).
+
+Al crear un seller nuevo desde Gestión de Sellers, el backend valida el email del contacto principal y crea automáticamente una cuenta Seller asociada al `seller_id` con contraseña inicial `Admin123`. El mensaje sugerido de primer contacto ahora incluye el login del portal, el usuario, la contraseña inicial y la indicación de cambiarla luego de ingresar.
+
 ## 2026-07-14 - Ajusta tabla de Backlog de Sellers
 
 Tipo de cambio: mejora visual y de usabilidad (sin cambios de backend ni de datos).
