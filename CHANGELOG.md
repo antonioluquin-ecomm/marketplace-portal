@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-14 - Quita seller_id de links públicos sugeridos
+
+Tipo de cambio: corrección de frontend (sin cambios de backend ni de datos).
+
+Gestión de Sellers, Backlog de Sellers y los CTAs entre páginas públicas ya no arman links públicos con `?seller_id=...`; el seller se resuelve por la sesión de login o por el selector interno de "ver como seller".
 ## 2026-07-14 - Badge de versión con historial en el topbar interno
 
 Tipo de cambio: mejora de UX en el shell interno (sin cambios de backend ni de datos).

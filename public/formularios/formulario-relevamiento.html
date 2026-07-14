@@ -2630,7 +2630,7 @@
 
       function publicLink(key) {
         const base = PUBLIC_LINKS[key] || key;
-        return sellerId ? base + "?seller_id=" + encodeURIComponent(sellerId) : base;
+        return base;
       }
 
       function wirePublicLinks() {

@@ -681,7 +681,7 @@ function publicSellerId(){
 function publicLink(key){
   const base = PUBLIC_LINKS[key] || key;
   const sid = publicSellerId();
-  return sid ? base + "?seller_id=" + encodeURIComponent(sid) : base;
+  return base;
 }
 function wirePublicLinks(){
   document.querySelectorAll("[data-public-link]").forEach(el => {

@@ -263,14 +263,11 @@ window.MP_CONFIG = {
   },
 
   /**
-   * Devuelve la URL pública con seller_id.
-   * Ejemplo:
-   * MP_CONFIG.withSellerId(MP_CONFIG.ROUTES.PUBLIC.FORMULARIO_CALIFICACION, "puma")
+   * Compatibilidad: las páginas públicas resuelven el seller por sesión.
+   * No agrega seller_id a la URL.
    */
   withSellerId(path, sellerId) {
-    const url = new URL(this.toAbsoluteUrl(path));
-    if (sellerId) url.searchParams.set("seller_id", sellerId);
-    return url.toString();
+    return this.toAbsoluteUrl(path);
   }
 };
 

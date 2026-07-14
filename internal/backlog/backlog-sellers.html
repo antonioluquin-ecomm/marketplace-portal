@@ -593,12 +593,15 @@ function handleLogoError(img, initials, fallbackCls, sizeStyle){
   img.outerHTML=`<div class="${fallbackCls}" ${sizeStyle?`style="${sizeStyle}"`:""}>${initials}</div>`;
 }
 
-function publicUrl(path, id){
+function publicUrl(path){
   const base=String(CONFIG.PUBLIC_BASE_URL||"").replace(/\/$/,"");
   const p=String(path||"").startsWith("/")?path:"/"+path;
-  const url=new URL(base+p);
-  if(id)url.searchParams.set("seller_id",id);
-  return url.href;
+  return new URL(base+p).href;
+}
+
+function openGestionSeller(id){
+  localStorage.setItem("mp_gestion_seller_edit", id);
+  window.open(publicUrl("/internal/backlog/gestion-sellers.html") + "?modo=editar", "_blank");
 }
 
 function transform(rows){
@@ -1127,7 +1130,7 @@ function openModal(id){
     </div>
     <div class="modal-actions">
       <button class="button" onclick="enterEditMode('${sid}')">Editar</button>
-      <button class="button secondary" onclick="window.open(publicUrl('/internal/backlog/gestion-sellers.html', '${sid}') + '&modo=editar','_blank')">Editar ficha completa</button>
+      <button class="button secondary" onclick="openGestionSeller('${sid}')">Editar ficha completa</button>
       ${s.url_seller?`<button class="button secondary" onclick="window.open('${esc(s.url_seller)}','_blank')">Web seller</button>`:""}
     </div>
   `);
