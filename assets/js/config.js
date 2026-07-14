@@ -18,12 +18,22 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.0.0',
+  number: '1.1.0',
   date:   '2026-07-14',
-  notes:  'Versionado en el front — badge con historial en el topbar interno',
+  notes:  'Reconstrucción del historial: el array no se venía actualizando desde su creación pese a varios cambios visibles ya registrados en CHANGELOG.md',
 };
 
 const CHANGELOG = [
+  { v: '1.1.0', date: '2026-07-14', desc: 'Se reconstruye este historial: no se venía actualizando desde la v1.0.0 pese a 9 cambios visibles posteriores, ya documentados en CHANGELOG.md pero nunca reflejados acá.' },
+  { v: '1.0.9', date: '2026-07-14', desc: 'Se termina de alinear governance.html y proyecto-marketplace.html a los 3 modelos de integración vigentes (quedaba vocabulario viejo sin migrar).' },
+  { v: '1.0.8', date: '2026-07-14', desc: 'Se unifica el campo "Método de integración preferido" del Relevamiento a los 3 modelos vigentes (tenía 5 opciones con otra redacción).' },
+  { v: '1.0.7', date: '2026-07-14', desc: 'Se renombra el modelo "Seller Center" a "Gestión asistida" para no confundirlo con el producto/herramienta del mismo nombre.' },
+  { v: '1.0.6', date: '2026-07-14', desc: 'Se sacan accesos de navegación duplicados de los topbars internos (← Hub, ← Backlog, + Seller, Ver Gantt) que ya existían en el sidebar.' },
+  { v: '1.0.5', date: '2026-07-14', desc: 'Se saca el filtro "Ordenar" del Backlog de Sellers (redundante con el sort por columna) y se agrega "Pausado" al filtro de Estado.' },
+  { v: '1.0.4', date: '2026-07-14', desc: 'Limpieza visual del Backlog de Sellers: se sacan los accesos rápidos y la categoría de la grilla de Lista/Kanban.' },
+  { v: '1.0.3', date: '2026-07-14', desc: 'El formulario de Relevamiento oculta las secciones de Catálogo y Stock/Precios para sellers VTEX ↔ VTEX, que sincronizan eso automáticamente.' },
+  { v: '1.0.2', date: '2026-07-14', desc: 'Se unifica "Modelo de integración estimado" a 3 valores en toda la app (antes había 4 vocabularios distintos y desalineados).' },
+  { v: '1.0.1', date: '2026-07-14', desc: 'Gestión y Backlog de Sellers ya no arman links públicos con seller_id en la URL; se resuelve por sesión o por el selector de "ver como seller".' },
   { v: '1.0.0', date: '2026-07-14', desc: 'Se agrega el badge de versión con historial en el topbar interno (index.html + internal/), replicando el patrón de Project Control Center / VTEX Control Center.' },
 ];
 

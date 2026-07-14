@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-14 - Reconstruye el historial del badge de versión del topbar
+
+Tipo de cambio: fix de contenido en frontend (sin cambios de backend ni de datos).
+
+El usuario notó que el modal de versión/historial del topbar interno no se actualizaba. Causa: `assets/js/config.js` tiene su **propio** array `CHANGELOG` en JavaScript (separado de este archivo `.md`), que alimenta el badge y el popover — y no se venía tocando desde que se creó (v1.0.0, entrada única describiendo la creación del propio badge), pese a que el propio comentario del archivo indica actualizarlo en cada cambio visible.
+
+- Se reconstruyen 9 entradas correspondientes a cambios reales ya documentados en este `CHANGELOG.md` mismo pero nunca reflejados en el array JS: quitar seller_id de links públicos, unificar terminología de modelo de integración (2 pasadas), relevamiento condicional VTEX↔VTEX, limpieza visual y de filtros del Backlog (2 entradas), limpieza de topbars duplicados, rename "Seller Center"→"Gestión asistida", y el cierre de esa unificación en governance/proyecto-marketplace.
+- Se agrega una décima entrada para esta misma reconstrucción (v1.1.0) y se sube `VERSION.number` de 1.0.0 a 1.1.0.
+- Verificado sirviendo en local: el badge del topbar muestra "v1.1.0" y el popover lista las 11 entradas en el orden correcto, sin errores de consola.
+- **Pendiente de hábito, no de código**: de acá en más, cualquier commit con cambio visible debería sumar entrada tanto acá (`CHANGELOG.md`) como en el array `CHANGELOG` de `config.js` — son dos changelogs reales, no uno solo.
+
 ## 2026-07-14 - Título, KPIs y filtros del Backlog de Sellers
 
 Tipo de cambio: UX/UI + fix de layout (sin cambios de backend ni de datos).
