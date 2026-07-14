@@ -1017,21 +1017,21 @@
         const altoVol =
           skus.includes("mas de 2000") || skus.includes("mas_de_2000");
         let clasificacion = "Apto con relevamiento técnico",
-          modelo = "A definir en relevamiento",
+          modelo = "A definir",
           complejidad = 2,
           desc =
             "Requiere reunión guiada para confirmar alcance técnico y operativo.";
         const alertas = [];
         if (usaVtex && carrierIntegrado && !multi && !noPais) {
           clasificacion = "Apto rápido";
-          modelo = "VTEX → VTEX";
+          modelo = "VTEX ↔ VTEX";
           complejidad = 1;
           desc =
             "Tiene condiciones iniciales favorables para avanzar con baja fricción.";
         } else if (usaVtex) {
-          modelo = "VTEX → VTEX";
+          modelo = "VTEX ↔ VTEX";
         } else if (plataforma.includes("no tengo")) {
-          modelo = "Manual / carga asistida";
+          modelo = "Seller Center";
         } else if (
           plataforma.includes("shopify") ||
           plataforma.includes("woocommerce") ||
@@ -1039,7 +1039,7 @@
           plataforma.includes("salesforce") ||
           plataforma.includes("magento")
         ) {
-          modelo = "API / integración a evaluar";
+          modelo = "Sistemas propios";
         }
         if (altoVol) {
           complejidad++;
@@ -1068,7 +1068,7 @@
         document.getElementById("clasificacionDesc").textContent = desc;
         document.getElementById("modeloView").textContent = modelo;
         document.getElementById("modeloDesc").textContent = usaVtex
-          ? "Puede evaluarse conexión VTEX → VTEX."
+          ? "Puede evaluarse conexión VTEX ↔ VTEX."
           : "El modelo debe confirmarse con el relevamiento técnico.";
         const av = document.getElementById("alertasView");
         av.innerHTML = (

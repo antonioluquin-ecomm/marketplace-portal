@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-14 - Unifica terminología de Modelo de integración a 3 valores
+
+Tipo de cambio: unificación de datos y frontend (requiere redeploy de Apps Script; sin cambio de esquema de columnas).
+
+El campo "Modelo de integración estimado" tenía 4 vocabularios distintos y desalineados entre sí: el select de alta en Gestión de Sellers (5 opciones), el cálculo automático de `calcularModeloSugerido()` en `apps-script/DefinicionTecnica.gs`, la normalización `normInteg()` de Backlog de Sellers y la página conceptual `internal/estrategia/modelo-integracion.html` (4 escenarios). Se unifica todo a los 3 modelos vigentes: **VTEX ↔ VTEX**, **Seller Center** y **Sistemas propios**. Los sellers con valores históricos "Híbrido / Transitorio", "Externo → PIM → VTEX" o "API Seller Center" se muestran automáticamente como "Sistemas propios" en Backlog (vía `normInteg()`, sin migración de datos en el Sheet). La página `modelo-integracion.html` pasa de 4 escenarios/modelos (con "Externo → VTEX" como excepción) a los 3 modelos soportados, sin camino custom. Esta etapa solo unifica terminología; el relevamiento, la sección de integraciones y la vista pública del seller todavía no bifurcan contenido según el modelo elegido (queda para una etapa siguiente).
+
 ## 2026-07-14 - Quita seller_id de links públicos sugeridos
 
 Tipo de cambio: corrección de frontend (sin cambios de backend ni de datos).

@@ -225,7 +225,7 @@ function calcularModeloSugerido(d) {
   const metodo = normalizarTexto(d.metodo_integracion);
 
   if (plataforma.includes("vtex")) {
-    return "VTEX → VTEX";
+    return "VTEX ↔ VTEX";
   }
 
   if (
@@ -241,7 +241,7 @@ function calcularModeloSugerido(d) {
     erp.includes("si") ||
     erp.includes("sí")
   ) {
-    return "API / Integración a evaluar";
+    return "Sistemas propios";
   }
 
   if (
@@ -249,10 +249,10 @@ function calcularModeloSugerido(d) {
     plataforma.includes("no tiene") ||
     plataforma.includes("ninguna")
   ) {
-    return "Manual / Carga asistida";
+    return "Seller Center";
   }
 
-  return "A definir en relevamiento";
+  return "A definir";
 }
 
 function calcularRiesgoLogistico(d) {
@@ -462,14 +462,14 @@ function sugerirDesarrollosNecesarios(d, modelo) {
   const desarrollos = [];
 
   if (m.includes("vtex")) {
-    desarrollos.push("Configuración y validación de integración VTEX → VTEX.");
-  } else if (m.includes("api")) {
+    desarrollos.push("Configuración y validación de integración VTEX ↔ VTEX.");
+  } else if (m.includes("sistemas propios") || m.includes("sistemas_propios")) {
     desarrollos.push(
       "Evaluar desarrollo de integración API para catálogo, stock/precio y operación.",
     );
-  } else if (m.includes("manual")) {
+  } else if (m.includes("seller center") || m.includes("seller_center")) {
     desarrollos.push(
-      "Preparar carga asistida/manual y validaciones operativas.",
+      "Preparar carga asistida/manual en Seller Center y validaciones operativas.",
     );
   } else {
     desarrollos.push("Definir desarrollos luego del análisis técnico.");
@@ -485,7 +485,7 @@ function sugerirIntegracionesNecesarias(d, modelo) {
   if (m.includes("vtex")) {
     integraciones.push("VTEX seller ↔ VTEX Marketplace.");
   }
-  if (m.includes("api")) {
+  if (m.includes("sistemas propios") || m.includes("sistemas_propios")) {
     integraciones.push("APIs / middleware a definir.");
   }
   if (

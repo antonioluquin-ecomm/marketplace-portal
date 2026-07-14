@@ -333,11 +333,9 @@ tbody tr{cursor:pointer}
         <label class="fi-label" for="sel-modelo">Modelo</label>
         <select class="fi-select" id="sel-modelo" onchange="renderContent()">
           <option value="">Todos</option>
-          <option>VTEX → VTEX</option>
-          <option>Externo → Seller Center</option>
-          <option>Externo → PIM → VTEX</option>
-          <option>Híbrido / Transitorio</option>
-          <option>Sistemas actuales</option>
+          <option>VTEX ↔ VTEX</option>
+          <option>Seller Center</option>
+          <option>Sistemas propios</option>
           <option>A definir</option>
         </select>
       </div>
@@ -527,14 +525,10 @@ function normalizePipeline(v){
 
 function normInteg(v){
   const n=norm(v||"");
-  if(!n)return "A definir";
-  if(n.includes("vtex") && !n.includes("pim"))return"VTEX → VTEX";
-  if(n.includes("seller_center")||n.includes("seller center")||n.includes("center"))return"Externo → Seller Center";
-  if(n.includes("pim")||n.includes("externo"))return"Externo → PIM → VTEX";
-  if(n.includes("hibrido")||n.includes("transitorio"))return"Híbrido / Transitorio";
-  if(n.includes("sistemas")||n.includes("actuales"))return"Sistemas actuales";
-  if(n.includes("definir")||n.includes("a_definir"))return"A definir";
-  return v||"A definir";
+  if(!n||n.includes("definir"))return "A definir";
+  if(n.includes("vtex") && !n.includes("pim") && !n.includes("seller") && !n.includes("api"))return"VTEX ↔ VTEX";
+  if((n.includes("seller_center")||n.includes("seller center")) && !n.includes("api") && !n.includes("pim"))return"Seller Center";
+  return "Sistemas propios";
 }
 
 function progressFromPipeline(stage){
