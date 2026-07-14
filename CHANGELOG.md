@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-14 - Fix: carga de sellers en Gestión de Sellers
+
+Tipo de cambio: corrección de frontend (sin cambios de backend ni de datos).
+
+La pantalla quedaba en "Cargando sellers..." porque el script local redeclaraba `escapeHtml` como `const`, chocando con el helper global de `auth.js` y cortando la ejecución antes de `loadSellers()`. Se renombra el helper local a `escapeSellerHtml`.
+
 ## 2026-07-14 - Opcion para ocultar el sidebar interno
 
 Tipo de cambio: mejora de UX en el shell interno (sin cambios de backend ni de datos).
