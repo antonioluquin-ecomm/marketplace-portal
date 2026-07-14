@@ -9,6 +9,73 @@
  * /assets/js/config.js
  */
 
+/* ─── VERSIÓN ──────────────────────────────────────────────────────────
+   Badge de versión con historial en el topbar interno — mismo patrón que
+   Project Control Center y VTEX Control Center (ver config.js de esos
+   repos). Solo aplica al shell azul (index.html + internal/); public/
+   mantiene su identidad verde y se auto-excluye por path en
+   initVersionBadge() más abajo.
+   Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
+   de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
+const VERSION = {
+  number: '1.0.0',
+  date:   '2026-07-14',
+  notes:  'Versionado en el front — badge con historial en el topbar interno',
+};
+
+const CHANGELOG = [
+  { v: '1.0.0', date: '2026-07-14', desc: 'Se agrega el badge de versión con historial en el topbar interno (index.html + internal/), replicando el patrón de Project Control Center / VTEX Control Center.' },
+];
+
+function initVersionBadge() {
+  if (location.pathname.indexOf('/public/') !== -1) return;
+  const brand = document.querySelector('.brand');
+  if (!brand || document.getElementById('tbVersionBtn') || !CHANGELOG.length) return;
+
+  const VERSION_BADGE_HISTORY_LIMIT = 15;
+  const recentChangelog = CHANGELOG.slice(0, VERSION_BADGE_HISTORY_LIMIT);
+  const esc = typeof escapeHtml === 'function' ? escapeHtml : String;
+
+  const btn = document.createElement('div');
+  btn.className = 'tb-version';
+  btn.id = 'tbVersionBtn';
+  btn.title = 'Ver historial de cambios';
+  btn.textContent = 'v' + VERSION.number;
+  brand.appendChild(btn);
+
+  const popover = document.createElement('div');
+  popover.className = 'tb-version-popover';
+  popover.id = 'tbVersionPopover';
+  popover.style.display = 'none';
+  popover.innerHTML =
+    '<div class="tb-version-popover-title">Historial de cambios</div>'
+    + recentChangelog.map(function (c) {
+        return '<div class="tb-version-entry">'
+          + '<span class="tb-version-entry-v">v' + esc(c.v) + '</span>'
+          + '<span class="tb-version-entry-date">' + esc(c.date) + '</span>'
+          + '<div class="tb-version-entry-desc">' + esc(c.desc) + '</div>'
+          + '</div>';
+      }).join('');
+  document.body.appendChild(popover);
+
+  function positionPopover() {
+    const rect = btn.getBoundingClientRect();
+    popover.style.top  = (rect.bottom + 6) + 'px';
+    popover.style.left = rect.left + 'px';
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const show = popover.style.display === 'none';
+    if (show) positionPopover();
+    popover.style.display = show ? 'block' : 'none';
+  });
+  document.addEventListener('click', function () { popover.style.display = 'none'; });
+}
+
+document.addEventListener('DOMContentLoaded', initVersionBadge);
+
 window.MP_CONFIG = {
   PROJECT_NAME: "Sporting Marketplace",
 
