@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-14 - Alinea el link de Configuración al patrón de VTEX Control Center / Project Control Center
+
+Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).
+
+`assets/js/auth.js` (`_renderUserIndicator`) duplicaba el link "Configuración" dentro del dropdown de usuario, además de tenerlo ya fijo en el footer del sidebar (arriba del chip de usuario, patrón ya alineado a VCC/PCC vía `internal-components.css`). El link del dropdown además estaba hardcodeado como `internal/administracion/configuracion.html`, una ruta relativa a la raíz que rompía en cualquier página que no fuera `index.html` (ej. `internal/backlog/gestion-sellers.html` resolvía a `internal/backlog/internal/administracion/configuracion.html`, inexistente). Se elimina la entrada del dropdown: al igual que en `vtex-control-center/sidebar.js` y `project-control-center/auth.js`, "Configuración" aparece una sola vez, como link fijo admin-only en el footer del sidebar.
+
 ## 2026-07-14 - Completa las 3 listas de páginas restantes (Hub + modales de links)
 
 Tipo de cambio: fix de datos en frontend (sin cambios de backend ni de datos).
