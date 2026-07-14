@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-14 - Hoja de ruta también en la vista interna
+
+Tipo de cambio: contenido nuevo en la vista interna (sin cambios de backend ni de datos).
+
+Se agrega la misma hoja de ruta de 11 pasos a `internal/estrategia/integracion-vtex-vtex.html`, entre "Leyenda" y "Fase 1", con su anchor en el subnav de la página (`#roadmap`). A diferencia de la vista seller (línea de tiempo visual), acá se usa `.data-table` — el mismo componente que ya usan todas las fases de esta página — con una columna extra de referencia a la Fase correspondiente, más útil para el uso interno. Linkea a la sección equivalente de la guía del seller.
+
+- Verificado sirviendo en local: 11 filas renderizadas, anchor del subnav en el orden correcto, sin errores de consola ni overflow horizontal.
+
 ## 2026-07-14 - Hoja de ruta de la integración (guía + fuente) y mail de kickoff final
 
 Tipo de cambio: documentación + contenido nuevo en la vista seller (sin cambios de backend ni de datos).

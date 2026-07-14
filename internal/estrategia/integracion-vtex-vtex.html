@@ -95,6 +95,7 @@
         <span class="page-subnav-label">En esta página</span>
         <a href="#inicio">Inicio</a>
         <a href="#leyenda">Leyenda</a>
+        <a href="#roadmap">Hoja de ruta</a>
         <a href="#f1">1 · Conexión</a>
         <a href="#f2">2 · Catálogo</a>
         <a href="#f3">3 · Precio/Pagos</a>
@@ -157,6 +158,28 @@
           <span class="rolechip"><span class="pill w">Falta / parcial</span> hueco por resolver</span>
           <span class="rolechip"><span class="pill b">QA</span> pendiente de prueba</span>
         </div>
+      </section>
+
+      <section id="roadmap" class="section">
+        <div class="section-head"><div class="section-title"><span>🗺️</span><h2>Hoja de ruta de la integración</h2></div><p class="section-desc">Orden real de ejecución, punta a punta. Es el mapa antes de entrar al detalle fase por fase — la misma hoja de ruta se ve en la <a href="../../public/integracion/integracion-seller.html#roadmap" style="color:var(--g);font-weight:700">guía del seller</a>, traducida a su lenguaje.</p></div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Paso</th><th>Fase(s)</th><th>Quién actúa</th><th>Nota</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td><strong>Kickoff</strong></td><td>—</td><td>Ecomm (contacto de integración)</td><td>Mail inicial + reunión con contactos de ambos lados ya definidos.</td></tr>
+            <tr><td>1</td><td><strong>Conexión QA</strong></td><td>1</td><td>Seller + Ecomm</td><td>Alta del seller + política comercial, sobre cuenta de QA si el seller tiene una.</td></tr>
+            <tr><td>2</td><td><strong>Catálogo</strong></td><td>2</td><td>Seller + Ecomm</td><td>Mapeo de marcas, categorías, talles, especificaciones.</td></tr>
+            <tr><td>3</td><td><strong>Precio, Stock y Pagos</strong></td><td>3</td><td>Seller + Ecomm</td><td>Fuente de precio/stock, condición comercial, medios de pago.</td></tr>
+            <tr><td>4</td><td><strong>Envíos</strong></td><td>4 (parte seller)</td><td>Seller</td><td>Costos, plazos, destinos excluidos.</td></tr>
+            <tr><td>5</td><td><strong>Devoluciones</strong></td><td>8</td><td>Seller + Agente PIM</td><td>Logística inversa y condiciones de devolución.</td></tr>
+            <tr><td>6</td><td><strong>Configuración en PIM</strong></td><td>5</td><td>Agente PIM</td><td>Tienda + depósito + asociación VTEX↔PIM. Puede correr en paralelo a 2-5, pero <strong>bloquea</strong> el paso 7.</td></tr>
+            <tr><td>7</td><td><strong>Validación en QA</strong></td><td>—</td><td>Seller + Ecomm</td><td>Flujo completo: catálogo → aprobación → pedido → despacho → devolución.</td></tr>
+            <tr><td>8</td><td><strong>Conexión y réplica en Producción</strong></td><td>1 (repetida)</td><td>Seller + Ecomm</td><td>Se repite la configuración validada en QA, ahora en producción.</td></tr>
+            <tr><td>9</td><td><strong>Prueba piloto en Producción</strong></td><td>—</td><td>Seller + Ecomm</td><td>Validar con un set acotado de productos antes de abrir todo el catálogo.</td></tr>
+            <tr><td>10</td><td><strong>Go Live</strong></td><td>2 (2.11)</td><td>—</td><td>Seller "Activo"; catálogo visible con precio y stock.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout"><strong>Por qué el paso 6 es fácil de omitir:</strong> no tiene tarea del lado del Seller, pero es la única precondición dura documentada (Fase 5) para que un pedido funcione. <strong>Por qué hay dos "pruebas" (7 y 9):</strong> validan cosas distintas — la 7 valida que el flujo funciona (QA); la 9 valida que funciona con datos reales de producción, acotado, antes de abrir todo el catálogo.</div>
+        <div class="callout warn">Este roadmap <strong>no</strong> se enumera en el mail de kickoff (ver <code>docs/plantilla-mail-kickoff-integracion.md</code>) — el mail linkea directo a esta sección para no sobrecargar el primer contacto.</div>
       </section>
 
       <section id="f1" class="section">
