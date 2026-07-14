@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-14 - Termina de alinear governance.html y proyecto-marketplace.html a los 3 modelos vigentes
+
+Tipo de cambio: contenido/copy (sin cambios de backend ni de datos).
+
+Auditoría de todo el repo tras el rename de "Seller Center" a "Gestión asistida": quedaban dos páginas estratégicas con vocabulario viejo que no se había tocado en el rename anterior.
+
+- `internal/estrategia/governance.html`: el Gate 03 y la matriz de riesgo listaban "Seller Center" y "API" como si fueran nombres de modelo (en vez de "Gestión asistida" y "Sistemas propios"); la tabla de excepciones también decía "migrar a Seller Center" en dos filas. Se corrigen los 4 puntos para usar los nombres canónicos.
+- `internal/estrategia/proyecto-marketplace.html`: el roadmap (etapa Q2) y la descripción del módulo "Modelos de integración" usaban una cuarta nomenclatura pre-unificación ("Manual/Interfaz", "API→SC") que nunca se había migrado. Se actualiza a "Gestión asistida" y "Sistemas propios". Las menciones a "Seller Center madurando" en las etapas Q3/Q4 se dejan intactas porque ahí sí refieren al producto, no al modelo.
+
+Resto del repo (backlog, gestión de sellers, Apps Script, formularios públicos, presentación) ya estaba alineado desde el rename anterior — confirmado por auditoría completa.
+
 ## 2026-07-14 - Unifica el campo "Método de integración preferido" del Relevamiento a 3 valores
 
 Tipo de cambio: unificación de datos y frontend (requiere redeploy de Apps Script; sin cambio de esquema de columnas).
