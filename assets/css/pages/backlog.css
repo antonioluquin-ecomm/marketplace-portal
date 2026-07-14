@@ -180,3 +180,26 @@
 .shell > .sidebar {
   min-width:0;
 }
+
+/* 2026-07-14 - Lista: scroll horizontal superior y grupo compacto. */
+.table-scroll-top {
+  overflow-x:auto;
+  overflow-y:hidden;
+  height:14px;
+  border:1px solid var(--line);
+  border-bottom:0;
+  border-radius:var(--radius) var(--radius) 0 0;
+  background:var(--card);
+}
+.table-scroll-top > div { height:1px; }
+#content-area .table-scroll-top + .table-wrap {
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+}
+#content-area .data-table td.td-group {
+  width:220px;
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}

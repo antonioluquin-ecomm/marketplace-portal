@@ -108,7 +108,7 @@ input,select{font-family:inherit}
 
 /* ── TABLE ──
    El CSS de tabla estandar (.table-wrap/.data-table) vive en
-   internal-components.css (style_guide.md §6). Esta tabla tiene 11 columnas
+   internal-components.css (style_guide.md §6). Esta tabla tiene 10 columnas
    con el nombre del seller en 3ra posicion (no en la 4ta que asume
    .data-table) — la 4ta/5ta reales son "Grupo"/"Marca operativa", texto
    plano, sin necesidad del tratamiento especial de nombre/descripcion. */
@@ -977,6 +977,26 @@ function renderKanban(filtered){
 /* ── TABLE ── */
 function setPageSize(v){ pageSize=Number(v); currentPage=1; renderTabla(_tableRows); }
 function changePage(delta){ currentPage+=delta; renderTabla(_tableRows); }
+let _syncingTableScroll = false;
+function initTableScrollTop(){
+  const top = document.getElementById("tableScrollTop");
+  const inner = document.getElementById("tableScrollTopInner");
+  const body = document.getElementById("sellerTableWrap");
+  const table = body ? body.querySelector("table") : null;
+  if(!top || !inner || !body || !table) return;
+  inner.style.width = table.scrollWidth + "px";
+  top.scrollLeft = body.scrollLeft;
+}
+function syncTableScroll(source){
+  if(_syncingTableScroll) return;
+  const top = document.getElementById("tableScrollTop");
+  const body = document.getElementById("sellerTableWrap");
+  if(!top || !body) return;
+  _syncingTableScroll = true;
+  if(source === "top") body.scrollLeft = top.scrollLeft;
+  else top.scrollLeft = body.scrollLeft;
+  _syncingTableScroll = false;
+}
 function renderTabla(filtered){
   _tableRows=filtered;
   const total=filtered.length;
@@ -994,7 +1014,7 @@ function renderTabla(filtered){
       <td class="td-blk"><div class="td-blk-bar" style="background:${blkColor}"></div></td>
       <td class="td-id">${esc(s.seller_id)}</td>
       <td><div class="td-seller">${logo}<div><div class="td-name">${esc(s.nombre)}</div><div class="td-cat">${esc(s.categoria||"")}</div></div></div></td>
-      <td>${esc(s.empresa_grupo||"—")}</td>
+      <td class="td-group" title="${esc(s.empresa_grupo||"—")}">${esc(s.empresa_grupo||"—")}</td>
       <td>${esc(s.marca_seller_operativo||"—")}</td>
       <td><span class="status-pill ${pipelineClass(s.pipeline_estado)}">${esc(s.pipeline_estado)}</span></td>
       <td>${s.modelo_integracion&&s.modelo_integracion!=="—"?`<span class="chip i">${esc(s.modelo_integracion)}</span>`:`<span style="color:var(--t4)">—</span>`}</td>
@@ -1002,15 +1022,14 @@ function renderTabla(filtered){
       <td class="${priCls}">${esc(s.prioridad)}</td>
       <td>${prog}</td>
       <td class="td-next"><div class="td-next-text">${esc(s.proximo_paso||"—")}</div>${s.proximo_paso_resp&&s.proximo_paso_resp!=="—"?`<div class="td-next-resp">${esc(s.proximo_paso_resp)}</div>`:""}</td>
-      <td style="color:var(--t4);white-space:nowrap;font-size:12px">${esc(s.responsable)}</td>
     </tr>`;
   }).join("");
 
-  setHTML("content-area",`<div class="table-wrap"><table class="data-table">
+  setHTML("content-area",`<div class="table-scroll-top" id="tableScrollTop" onscroll="syncTableScroll('top')"><div id="tableScrollTopInner"></div></div><div class="table-wrap" id="sellerTableWrap" onscroll="syncTableScroll('body')"><table class="data-table">
     <thead><tr>
       <th class="td-blk"></th>
       ${thSort("seller_id","ID")}${thSort("nombre","Seller")}<th>Grupo</th>${thSort("marca_seller_operativo","Marca operativa")}${thSort("pipeline_estado","Pipeline")}<th>Modelo</th><th>Comisión</th>
-      ${thSort("prioridad","Prioridad")}${thSort("progreso_pct","Avance")}<th>Próximo paso</th>${thSort("responsable","Responsable")}
+      ${thSort("prioridad","Prioridad")}${thSort("progreso_pct","Avance")}<th>Próximo paso</th>
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>
@@ -1024,6 +1043,7 @@ function renderTabla(filtered){
     <button type="button" class="button secondary" ${currentPage<=1?"disabled":""} onclick="changePage(-1)">← Anterior</button>
     <button type="button" class="button secondary" ${currentPage>=pageCount?"disabled":""} onclick="changePage(1)">Siguiente →</button>
   </div>`);
+  initTableScrollTop();
 }
 
 /* ── MODAL ── */

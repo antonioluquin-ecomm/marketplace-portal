@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-07-14 - Ajusta tabla de Backlog de Sellers
+
+Tipo de cambio: mejora visual y de usabilidad (sin cambios de backend ni de datos).
+
+La vista Lista quita la columna Responsable, compacta la columna Grupo con ellipsis y agrega una barra de scroll horizontal superior sincronizada con la tabla para reducir el desplazamiento lateral.
+
+## 2026-07-14 - Fix: contraste de logos en Gestión de Sellers
+
+Tipo de cambio: corrección visual (sin cambios de backend ni de datos).
+
+Los logos cargados en `assets/logos/` son PNG blancos con transparencia; sobre el fondo claro del preview quedaban casi invisibles. El preview aplica un fondo oscuro solo cuando muestra una imagen de logo.
+
+## 2026-07-14 - Fix: tarjeta de ayuda en Gestión de Sellers
+
+Tipo de cambio: corrección visual (sin cambios de backend ni de datos).
+
+La tarjeta "Cómo usar esta pantalla" usaba la variante `.panel.soft` con fondo `--bg`, por eso se veía gris y se confundía con el fondo general. Se alinea a `--card` para mantener la consistencia del módulo.
+
 ## 2026-07-14 - Fix: carga de sellers en Gestión de Sellers
 
 Tipo de cambio: corrección de frontend (sin cambios de backend ni de datos).
