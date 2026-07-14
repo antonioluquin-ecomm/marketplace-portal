@@ -308,15 +308,6 @@ tbody tr{cursor:pointer}
         <input class="search-input" id="search-input" type="text" placeholder="Seller, ID, grupo o marca…" oninput="renderContent()">
       </div>
       <div class="filter-group">
-        <span class="filter-group-label">Atajos</span>
-        <div class="quick-btns" id="quick-btns">
-          <button class="qbtn" onclick="toggleQuick('bloqueados')"><span>🔴 Bloqueados</span><span class="qbtn-count" id="qc-bloqueados">0</span></button>
-          <button class="qbtn" onclick="toggleQuick('alta')"><span>⚡ Prioridad alta</span><span class="qbtn-count" id="qc-alta">0</span></button>
-          <button class="qbtn" onclick="toggleQuick('listos')"><span>✓ Listos para integrar</span><span class="qbtn-count" id="qc-listos">0</span></button>
-          <button class="qbtn" onclick="toggleQuick('sin_relevamiento')"><span>📝 Sin relevamiento</span><span class="qbtn-count" id="qc-sin_relevamiento">0</span></button>
-        </div>
-      </div>
-      <div class="filter-group">
         <label class="fi-label" for="sel-pipeline">Estado</label>
         <select class="fi-select" id="sel-pipeline" onchange="renderContent()">
           <option value="">Todos</option>
@@ -931,7 +922,7 @@ function cardHTML(s){
         ${logo}
         <div>
           <div class="scard-name">${esc(s.nombre)}</div>
-          <div class="scard-id">${esc(s.seller_id)} ${s.categoria?`· ${esc(s.categoria)}`:""}</div>
+          <div class="scard-id">${esc(s.seller_id)}</div>
         </div>
       </div>
       <span class="status-pill ${pipelineClass(s.pipeline_estado)}">${esc(s.pipeline_estado)}</span>
@@ -1010,7 +1001,7 @@ function renderTabla(filtered){
     return `<tr onclick="openModal('${esc(s.seller_id)}')">
       <td class="td-blk"><div class="td-blk-bar" style="background:${blkColor}"></div></td>
       <td class="td-id">${esc(s.seller_id)}</td>
-      <td><div class="td-seller">${logo}<div><div class="td-name">${esc(s.nombre)}</div><div class="td-cat">${esc(s.categoria||"")}</div></div></div></td>
+      <td><div class="td-seller">${logo}<div><div class="td-name">${esc(s.nombre)}</div></div></div></td>
       <td class="td-group" title="${esc(s.empresa_grupo||"—")}">${esc(s.empresa_grupo||"—")}</td>
       <td>${esc(s.marca_seller_operativo||"—")}</td>
       <td><span class="status-pill ${pipelineClass(s.pipeline_estado)}">${esc(s.pipeline_estado)}</span></td>

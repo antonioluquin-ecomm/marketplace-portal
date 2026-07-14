@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-14 - Limpieza visual del Backlog de Sellers
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+A pedido del usuario, se saca ruido visual de `internal/backlog/backlog-sellers.html` para dejarlo más limpio.
+
+- Se quita la fila de **"Atajos"** (Bloqueados / Prioridad alta / Listos para integrar / Sin relevamiento) del filter-bar. El JS que alimentaba sus contadores (`toggleQuick`, `qc-*`) queda sin uso pero inofensivo — `setText()` ya valida que el elemento exista antes de escribir.
+- Se quita la **categoría** (ej. "Calzado · Indumentaria · Accesorios") de debajo del nombre en la vista Lista y de al lado del ID en la card de Kanban. Se mantiene en el modal de detalle del seller, donde sí corresponde como dato de ficha.
+- Verificado sirviendo en local con datos mock (stub de `getSellers`): ambas vistas renderizan sin la categoría ni los atajos, sin errores de consola ni overflow horizontal.
+
 ## 2026-07-14 - Relevamiento condicional para sellers VTEX ↔ VTEX
 
 Tipo de cambio: mejora funcional de frontend (sin cambios de backend ni de datos).
