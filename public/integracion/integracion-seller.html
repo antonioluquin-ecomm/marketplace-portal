@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marketplace Sporting · Guía de integración para sellers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../assets/css/tokens.css"/>
+  <link rel="stylesheet" href="../../assets/css/internal-components.css"/>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css"/>
+  <style>
+    :root{
+      --g:var(--primary, #25b60c);--g2:var(--primary-hover, #1e9209);--g3:#187007;
+      --g-dim:rgba(37,182,12,.12);--g-brd:rgba(37,182,12,.28);
+      --k:var(--bg, #f0f2f7);--k2:#e8ebf2;--k3:var(--card, #ffffff);--k4:#f1f4ef;
+      --t1:var(--text, #111827);--t2:#374151;--t3:var(--muted, #6b7280);--t4:#9ca3af;
+      --bdr:rgba(17,24,39,.08);--bdr2:rgba(17,24,39,.05);
+      --warn:var(--warning, #92400e);
+      --r:10px;--rl:16px;
+    }
+    body{font-family:var(--font);background:var(--k);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+
+    .seller-id-chip{display:none;align-items:center;gap:8px;padding-left:16px;border-left:1px solid var(--bdr)}
+    .seller-id-chip.show{display:flex}
+    .seller-id-chip strong{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+
+    /* HERO */
+    #hero{position:relative;padding:52px 36px 40px;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 75% 20%,rgba(37,182,12,.13),transparent 55%),var(--k);z-index:0}
+    .hero-bg-line{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent)}
+    .hero-inner{position:relative;z-index:2;width:100%;max-width:1080px;margin:0 auto}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;font-size:10px;font-weight:900;letter-spacing:.24em;text-transform:uppercase;color:var(--g)}
+    .hero-eyebrow::before{content:"";width:28px;height:2px;background:var(--g)}
+    h1{font-family:var(--font);font-size:clamp(38px,6vw,68px);font-weight:900;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin-bottom:20px}
+    h1 em{color:transparent;-webkit-text-stroke:2px var(--g);font-style:normal}
+    .hero-lead{font-size:16px;line-height:1.7;color:var(--t3);max-width:680px;margin-bottom:8px}
+    .hero-lead strong{color:var(--t1)}
+
+    /* SECTION BASE */
+    .section{padding:64px 36px;border-bottom:1px solid var(--bdr2)}
+    .inner{width:100%;max-width:1080px;margin:0 auto}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--g)}
+    .eyebrow::before{content:"";width:24px;height:2px;background:var(--g)}
+    h2{font-family:var(--font);font-size:clamp(30px,4vw,46px);font-weight:900;text-transform:uppercase;letter-spacing:.01em;line-height:1.02;margin-bottom:12px}
+    h3{font-family:var(--font);font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
+    .section-lead{font-size:14.5px;line-height:1.7;color:var(--t3);max-width:640px;margin-bottom:38px}
+
+    /* PREPARAR — tarjetas por área con checklist */
+    #preparar{background:linear-gradient(180deg,var(--k2),var(--k))}
+    .area-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .area{background:var(--k3);border:1px solid var(--bdr);border-radius:var(--rl);padding:24px;transition:.2s;position:relative;overflow:hidden}
+    .area::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--g);transform:scaleX(0);transform-origin:left;transition:.25s}
+    .area:hover{border-color:var(--g-brd);box-shadow:0 14px 44px rgba(24,36,20,.10)}
+    .area:hover::before{transform:scaleX(1)}
+    .area-ico{font-size:26px;margin-bottom:12px}
+    .area h3{color:var(--t1)}
+    .area-sub{font-size:12px;color:var(--t4);margin-bottom:14px}
+    .checks{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+    .checks li{position:relative;padding-left:28px;font-size:13.5px;line-height:1.55;color:var(--t2)}
+    .checks li::before{content:"✓";position:absolute;left:0;top:0;width:19px;height:19px;border-radius:6px;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
+    .checks li strong{color:var(--t1);font-weight:700}
+
+    /* OPERAR — pasos numerados */
+    #operar{background:var(--k)}
+    .steps{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+    .step{display:grid;grid-template-columns:46px 1fr;gap:16px;align-items:flex-start;padding:18px 20px;border:1px solid var(--bdr);border-radius:var(--r);background:rgba(17,24,39,.02);transition:.2s}
+    .step:hover{border-color:var(--g-brd);background:var(--g-dim)}
+    .step-num{width:38px;height:38px;border-radius:9px;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:18px;font-weight:900}
+    .step-t{font-size:14.5px;font-weight:700;color:var(--t1);margin-bottom:3px}
+    .step-d{font-size:13px;color:var(--t3);line-height:1.6}
+
+    /* REGLAS — grid de tarjetas */
+    #reglas{background:var(--k2)}
+    .rules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .rule{background:var(--k3);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;border-left:3px solid var(--g)}
+    .rule.warn{border-left-color:var(--warn)}
+    .rule-t{font-size:13.5px;font-weight:800;color:var(--t1);margin-bottom:5px}
+    .rule-d{font-size:12.5px;color:var(--t3);line-height:1.55}
+
+    /* PLAZOS */
+    #plazos{background:var(--k)}
+    .sla-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .sla{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid var(--bdr);border-radius:var(--r);background:var(--k3)}
+    .sla-val{font-family:var(--font);font-size:30px;font-weight:900;color:var(--g);line-height:1;min-width:96px}
+    .sla-txt{font-size:13px;color:var(--t2);line-height:1.5}
+    .sla-txt strong{color:var(--t1)}
+    .sla.client{opacity:.85}.sla.client .sla-val{color:var(--t3)}
+    .plazos-note{font-size:12.5px;color:var(--t4);margin-top:16px}
+
+    /* CONTACTO */
+    #contacto{background:linear-gradient(180deg,var(--k),var(--k2));text-align:center}
+    .contact-box{max-width:640px;margin:0 auto}
+    .contact-mail{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:15px;font-weight:600;color:var(--g);border:1px solid var(--g-brd);background:var(--g-dim);border-radius:999px;padding:10px 22px}
+
+    footer{padding:30px 36px;text-align:center;color:var(--t4);font-size:12px;border-top:1px solid var(--bdr)}
+
+    @media(max-width:820px){
+      .area-grid,.rules-grid,.sla-grid{grid-template-columns:1fr}
+      .section{padding:48px 20px}
+      #hero{padding:40px 20px 32px}
+    }
+    /* En pantallas chicas el logo + crumb no entran en una fila; el crumb y el
+       chip de seller son contexto decorativo → se ocultan (evita overflow). */
+    @media(max-width:600px){
+      .portal-topbar .crumb{display:none}
+      #topSeller{display:none !important}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar portal-topbar">
+    <div class="brand">
+      <span class="logo">SPORTING <span>MARKETPLACE</span></span>
+      <div class="crumb">GUÍA DE INTEGRACIÓN</div>
+      <div id="topSeller" class="seller-id-chip">
+        <strong id="topSellerName"></strong>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div class="user-chip">
+        <span class="user-chip-name" id="user-chip-name"></span>
+        <a class="button ghost btn-sm" href="../index.html">← Portal</a>
+        <button type="button" class="button secondary btn-sm" onclick="_showSellerChangePasswordModal()">Cambiar contraseña</button>
+        <button type="button" class="button ghost btn-sm" onclick="logoutSeller()">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"><div class="hero-bg-line"></div></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Integración VTEX ↔ VTEX</div>
+      <nav class="public-flow-nav hero-public-nav" aria-label="Navegación pública seller">
+        <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
+        <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>
+        <a data-public-link="calificacion" href="../formularios/formulario-calificacion.html">Calificación</a>
+        <a data-public-link="relevamiento" href="../formularios/formulario-relevamiento.html">Relevamiento</a>
+        <a data-public-link="gantt" href="../gantt/gantt-seller.html">Gantt</a>
+        <a class="active" href="./integracion-seller.html">Integración</a>
+      </nav>
+      <h1>Tu integración<br><em>paso a paso.</em></h1>
+      <p class="hero-lead"><strong id="heroSellerName">Tu marca</strong> se conecta al Marketplace vía <strong>VTEX ↔ VTEX</strong>: tu catálogo, precios, stock y pedidos viajan automáticamente entre tu VTEX y el nuestro. Esta guía resume <strong>lo que preparás vos</strong>, cómo operás cada pedido y las reglas del canal.</p>
+    </div>
+  </section>
+
+  <!-- PREPARAR -->
+  <section id="preparar" class="section">
+    <div class="inner">
+      <div class="eyebrow">Antes de salir a la venta</div>
+      <h2>Lo que tenés que preparar</h2>
+      <p class="section-lead">Una vez por marca. La mayoría es compartirnos información de tu VTEX para que hagamos el mapeo; con eso tus publicaciones llegan completas y alineadas al sitio.</p>
+      <div class="area-grid">
+
+        <div class="area">
+          <div class="area-ico">🔌</div>
+          <h3>Conexión</h3>
+          <div class="area-sub">Vincular tu VTEX con el Marketplace</div>
+          <ul class="checks">
+            <li>Solicitá a tu agencia la creación de una <strong>política comercial</strong> (tiene un costo de <strong>USD 40</strong>).</li>
+            <li>Compartinos tu <strong>cuenta de seller VTEX</strong> para darte de alta.</li>
+            <li>Asigná esa política comercial a los productos que querés vender en el Marketplace — así viajan a nuestra bandeja de aprobación.</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">📦</div>
+          <h3>Catálogo</h3>
+          <div class="area-sub">Para mapear tus productos a nuestro estándar</div>
+          <ul class="checks">
+            <li>Si tenés varias <strong>marcas</strong>, pasanos el listado.</li>
+            <li>Compartinos en Excel tu <strong>árbol de categorías</strong>.</li>
+            <li>Compartinos tus <strong>talles</strong> y tus <strong>especificaciones y valores</strong> (color, género, material…).</li>
+            <li>El título, la descripción y las imágenes se toman directo de tu VTEX.</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">💳</div>
+          <h3>Precio y stock</h3>
+          <div class="area-sub">Automáticos por API — vos definís la fuente</div>
+          <ul class="checks">
+            <li>Elegí cómo enviás el <strong>precio</strong>: tu lista actual o una lista nueva para el Marketplace.</li>
+            <li>Definí el <strong>stock</strong>: un almacén dedicado (stock diferenciado) o el que ya usás.</li>
+            <li>Acordá con el equipo comercial los <strong>medios de pago y cuotas</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">🚚</div>
+          <h3>Envíos</h3>
+          <div class="area-sub">Vos definís costos y plazos</div>
+          <ul class="checks">
+            <li>Cargá en tu VTEX tu <strong>planilla de costos de envío</strong> (por código postal o polígono).</li>
+            <li>Cargá tu <strong>promesa de entrega</strong> en VTEX › estrategias de envío.</li>
+            <li>Indicanos si hay <strong>destinos a los que no despachás</strong> (los sumamos a los T&amp;C).</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">↩️</div>
+          <h3>Devoluciones</h3>
+          <div class="area-sub">Reglas y logística inversa</div>
+          <ul class="checks">
+            <li>Definí si la <strong>logística</strong> (ida y vuelta) la hacés vos o el Marketplace.</li>
+            <li>Indicanos tus <strong>condiciones de devolución</strong>: plazos y categorías no habilitadas.</li>
+            <li>Si gestionás los retiros, compartinos tu <strong>Carrier</strong> y sus credenciales.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OPERAR -->
+  <section id="operar" class="section">
+    <div class="inner">
+      <div class="eyebrow">Día a día</div>
+      <h2>Cómo operás cada pedido</h2>
+      <p class="section-lead">Cuando un cliente compra, el pedido aparece en tu VTEX (con un número que empieza con nuestro identificador). Desde ahí, el flujo es tuyo.</p>
+      <ol class="steps">
+        <li class="step"><div class="step-num">1</div><div><div class="step-t">Recibís y preparás</div><div class="step-d">El pedido llega a tu VTEX. Hacés la búsqueda, la preparación y la <strong>facturación</strong>.</div></div></li>
+        <li class="step"><div class="step-num">2</div><div><div class="step-t">Cargás la factura</div><div class="step-d">Subí la factura a tu VTEX (campo <code>invoiceUrl</code>). Nosotros nos encargamos de que le llegue al cliente.</div></div></li>
+        <li class="step"><div class="step-num">3</div><div><div class="step-t">Despachás</div><div class="step-d">Entregás a la logística y cargás en tu VTEX el <strong>courier, número y URL de seguimiento</strong> — con eso sale el aviso de despacho al cliente.</div></div></li>
+        <li class="step"><div class="step-num">4</div><div><div class="step-t">Si no tenés stock, cancelás</div><div class="step-d">Cancelás el pedido <strong>completo</strong> desde tu VTEX (las cancelaciones son siempre por stock; no hay parciales).</div></div></li>
+        <li class="step"><div class="step-num">5</div><div><div class="step-t">Ante incidencias de entrega</div><div class="step-d">Si el carrier necesita más datos, te los acercamos: respondé dentro del plazo. Ante una pérdida en tránsito, nos reportás para gestionar el reembolso.</div></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- REGLAS -->
+  <section id="reglas" class="section">
+    <div class="inner">
+      <div class="eyebrow">Del canal</div>
+      <h2>Reglas y políticas</h2>
+      <p class="section-lead">Condiciones del Marketplace que conviene tener claras desde el arranque. El detalle completo vive en los Términos y Condiciones.</p>
+      <div class="rules-grid">
+        <div class="rule"><div class="rule-t">Vos fijás tus precios</div><div class="rule-d">El Marketplace no interviene en la determinación de precios de tus productos.</div></div>
+        <div class="rule"><div class="rule-t">Envío gratis del sitio</div><div class="rule-d">Aplica a tus productos según el umbral del sitio (hoy $149.990). Es la única promoción que se mantiene para todos los sellers.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin carrito compartido</div><div class="rule-d">Un carrito no combina productos de distintos sellers: cada compra es de un solo vendedor.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin cupones</div><div class="rule-d">No se aceptan cupones de descuento sobre productos de sellers.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin GiftCards</div><div class="rule-d">Las giftcards no se pueden usar en productos de sellers.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin factura A</div><div class="rule-d">No se aceptan facturas de tipo A para productos de sellers.</div></div>
+        <div class="rule"><div class="rule-t">Mail del cliente enmascarado</div><div class="rule-d">Recibís el correo del cliente enmascarado. Funciona igual (si le escribís, le llega) y dura 60 días.</div></div>
+        <div class="rule"><div class="rule-t">Devoluciones por el portal</div><div class="rule-d">Toda devolución se gestiona por el Portal de Cambios y Devoluciones, con tus condiciones específicas.</div></div>
+        <div class="rule"><div class="rule-t">Tus condiciones en los T&amp;C</div><div class="rule-d">Tus plazos, destinos excluidos y categorías no habilitadas quedan publicados en los Términos y Condiciones.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAZOS -->
+  <section id="plazos" class="section">
+    <div class="inner">
+      <div class="eyebrow">Compromisos</div>
+      <h2>Plazos que cumplís</h2>
+      <p class="section-lead">Los tiempos de respuesta que dependen de vos como seller.</p>
+      <div class="sla-grid">
+        <div class="sla"><div class="sla-val">5 días</div><div class="sla-txt"><strong>Cancelar un pedido</strong> por falta de stock.</div></div>
+        <div class="sla"><div class="sla-val">4-5 días</div><div class="sla-txt"><strong>Responder al carrier</strong> ante una dirección incorrecta, antes de que el paquete vuelva al depósito.</div></div>
+        <div class="sla client"><div class="sla-val">30 días</div><div class="sla-txt">Plazo del <strong>cliente</strong> para pedir la cancelación por arrepentimiento.</div></div>
+        <div class="sla client"><div class="sla-val">60 / 180</div><div class="sla-txt">Plazo del <strong>cliente</strong> para Devolución (60 días) y Garantía (180 días) por el portal.</div></div>
+      </div>
+      <p class="plazos-note">Los dos primeros son tu responsabilidad; los otros dos son plazos del cliente, para tu referencia.</p>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="section">
+    <div class="inner contact-box">
+      <div class="eyebrow" style="justify-content:center">¿Dudas?</div>
+      <h2>Estamos para ayudarte</h2>
+      <p class="section-lead" style="margin:0 auto">Escribinos ante cualquier duda sobre tu integración, un pedido o una devolución.</p>
+      <a class="contact-mail" href="mailto:sellers-soporte@sporting.com.ar">sellers-soporte@sporting.com.ar</a>
+    </div>
+  </section>
+
+  <footer>Marketplace Sporting · Guía de integración para sellers</footer>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth-seller.js"></script>
+  <script>
+    initSellerAuth().then(function () {
+      if (!SellerSESSION.isLoggedIn()) return;      // ya redirigió al login
+      renderStaffSellerBar();                       // modo staff: barra "ver como seller"
+
+      var nombre = SellerSESSION.nombre || SellerSESSION.email || '';
+      var chip = document.getElementById('user-chip-name');
+      if (chip) chip.textContent = nombre;
+
+      var sid = SellerSESSION.sellerId;
+      var topSeller = document.getElementById('topSeller');
+      var topName = document.getElementById('topSellerName');
+      var heroName = document.getElementById('heroSellerName');
+      if (sid) {
+        if (topName) topName.textContent = sid;
+        if (topSeller) topSeller.classList.add('show');
+        if (heroName && nombre) heroName.textContent = nombre;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -164,6 +164,12 @@ window.MP_CONFIG = {
       label: "Gantt de tu proyecto",
       access: "Seller",
       route: "/public/gantt/gantt-seller.html"
+    },
+    {
+      key: "integracion_seller",
+      label: "Guía de integración",
+      access: "Seller",
+      route: "/public/integracion/integracion-seller.html"
     }
   ],
 

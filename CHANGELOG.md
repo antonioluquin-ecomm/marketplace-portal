@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-07-13 - Vista seller de la guía de integración (`public/`)
+
+Tipo de cambio: nueva página pública + cableado de navegación (sin cambios de backend ni de datos).
+
+Segunda vista del playbook de integración VTEX ↔ VTEX, esta vez para el seller: un subconjunto filtrado a lo que le toca (sus tareas + reglas que lo afectan), en la marca verde de `public/`, generado desde la misma fuente (`docs/integracion-vtex-vtex.md`).
+
+- **Nueva página**: `public/integracion/integracion-seller.html` — guía en 4 bloques (Lo que tenés que preparar / Cómo operás cada pedido / Reglas y políticas / Plazos que cumplís) + contacto. Contenido genérico (el proceso es igual para todo seller VTEX↔VTEX) con chrome personalizado (nombre del seller desde `SellerSESSION`). Sin jerga interna (PIM/Infra/VCC) ni tareas de otros roles. Gateada por `initSellerAuth()`, dual-mode (seller / staff "ver como seller").
+- **Decisión de diseño**: la navegación entre páginas va en el hero (`hero-public-nav`), no en el topbar, para no repetir el problema de topbar sobrecargado documentado el 2026-07-07.
+- **Navegación**: se agregó "Integración" al nav de las 5 páginas de `public/` (topbar + hero, 2 por página) y un recurso nuevo (`integracion_seller`) en `MP_CONFIG.RESOURCES` (`config.js`) + su ícono en el hub del seller (`public/index.html`), que arma sus cards desde ahí.
+- Verificado sirviendo en local: render sin errores de consola, marca verde + DM Sans, estructura completa. **Se corrigió un overflow horizontal en mobile** (375px): el logo + crumb del topbar no entraban en una fila → se oculta el crumb y el chip de seller bajo 600px.
+
+## 2026-07-13 - Playbook de integración VTEX ↔ VTEX (fuente + vista interna)
+
+Tipo de cambio: documentación + nueva página interna (sin cambios de backend ni de datos).
+
+Se documenta el proceso end-to-end de integración tipo **VTEX ↔ VTEX** (deep-dive de la etapa "Integración" del onboarding para ese modelo). El contenido se estructuró como fuente de verdad única en Markdown y se generó una vista interna a partir de ella; la vista del seller (verde) queda pendiente.
+
+- **Fuente de verdad**: `docs/integracion-vtex-vtex.md` — 8 fases (Conexión/Política comercial, Catálogo, Precio/Stock/Pagos, Front, Pedido, Cancelaciones, Fulfillment 7a/7b, Logística inversa). Cada fase separa 4 tipos de contenido (tareas de setup, responsabilidades operativas, reglas/decisiones, flujo automático) con 6 roles canónicos (Seller, Ecomm, Agente PIM, Infracommerce, Diseño, CS). Incluye tabla consolidada de SLAs y un registro de agujeros (15 ítems, ninguno bloqueante).
+- **Vista interna**: `internal/estrategia/integracion-vtex-vtex.html` — renderiza el playbook con el pipeline de tokens/componentes estándar (mismo patrón que `modelo-integracion.html`), gateada por RBAC del módulo `estrategia`.
+- **Navegación**: se agregó el link en la sección "Modelo y estrategia" del sidebar de las 14 páginas que lo comparten (`index.html` + `internal/**`), y una link-card desde `modelo-integracion.html` (entrada natural del modelo VTEX ↔ VTEX). Inserción hecha por script para respetar los 3 formatos de href por profundidad e indentación.
+- Verificado sirviendo el repo en local: la página carga sin errores de consola, con estructura completa (13 secciones, 11 tablas, KPIs, SLAs, registro), nav activa correcta y sin overflow horizontal.
+
 ## 2026-07-07 - Corrige topbar roto de `presentacion-seller.html`
 
 Tipo de cambio: fix crítico de UI (sin cambios de backend ni de datos).

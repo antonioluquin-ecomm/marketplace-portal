@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integración VTEX ↔ VTEX | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/internal-components.css">
+  <style>
+    /* Alias locales de nombres históricos apuntando a tokens.css (mismo patrón
+       que modelo-integracion.html — ver docs/decisions/2026-07-01). */
+    :root{--g:var(--primary);--g2:var(--primary-hover);--g-dim:var(--primary-soft);--g-brd:var(--primary-mid);--k:var(--bg);--k2:var(--sidebar-bg);--k3:var(--card);--k4:var(--card);--k5:var(--card);--w:var(--text);--t1:var(--text);--t2:var(--muted);--t3:#7c8698;--t4:#9aa3b2;--bdr:var(--line);--bdr2:rgba(17,24,39,.05);--warn:var(--warning);--info:var(--primary);--teal:#0d9488;--violet:#7c3aed;--danger:var(--danger);--shadow:var(--shadow-lg);--tb:var(--topbar-height);--sb:var(--sidebar-w)}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:radial-gradient(circle at 20% 0%,rgba(37,182,12,.09),transparent 36%),var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--tb);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:14px}.logo{font-family:var(--font);font-weight:900;text-transform:uppercase;letter-spacing:.04em;font-size:20px;color:var(--w)}.logo span{color:var(--g)}.crumb{border-left:1px solid var(--bdr);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}.top-actions{display:flex;align-items:center;gap:10px}.status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t2)}.dot{width:8px;height:8px;border-radius:50%;background:var(--g);box-shadow:0 0 0 4px rgba(37,182,12,.18);animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}    .shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh}.sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow:auto;background:var(--sidebar-bg);border-right:1px solid var(--bdr);padding:18px 0}.sb-section{margin-bottom:18px}.sb-label{display:flex;align-items:center;gap:8px;padding:0 16px;margin-bottom:7px;font-size:9px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}.sb-label:after{content:"";height:1px;background:var(--bdr);flex:1}.nav{display:flex;align-items:center;gap:9px;width:100%;padding:8px 16px;border-left:3px solid transparent;font-size:12.5px;color:var(--t2);transition:.15s}.nav:hover,.nav.active{background:rgba(17,24,39,.04);color:var(--t1);border-left-color:var(--g)}.nav.active{color:var(--g);background:var(--g-dim);font-weight:700}.nav small{margin-left:auto;color:var(--t4);font-size:9px;font-weight:800;text-transform:uppercase}
+    .main{padding:30px 34px 70px;max-width:1180px;width:100%;box-sizing:border-box}.page-eyebrow{font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--g);margin-bottom:8px}h1{font-family:var(--font);font-size:32px;font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:8px}.lead{max-width:900px;font-size:14px;line-height:1.65;color:var(--t2);margin-bottom:24px}h2{font-size:18px;margin-bottom:12px}h3{font-size:14px;margin:18px 0 7px;color:var(--t1)}p,li{font-size:13px;line-height:1.62;color:var(--t2)}ul{padding-left:18px;margin-top:8px}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:24px}.callout{margin-top:14px}.callout.danger{border-left-color:var(--danger);background:rgba(153,27,27,.08)}.callout.warn{border-left-color:var(--warn);background:rgba(146,64,14,.08)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 26px}.kpi{background:var(--k3);border:1px solid var(--bdr);border-radius:12px;padding:16px}.kpi .num{font-family:var(--font);font-size:32px;font-weight:900;line-height:1;color:var(--g)}.kpi .lbl{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-top:5px}.kpi.info .num{color:var(--info)}.kpi.warn .num{color:var(--warn)}.kpi.teal .num{color:var(--teal)}.kpi.danger .num{color:var(--danger)}
+    .section{margin:34px 0}.section-desc{max-width:640px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid.two{grid-template-columns:repeat(2,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}
+    .card{background:var(--k3);border:1px solid var(--bdr);border-radius:12px;padding:16px;border-left:3px solid transparent}.card.priority{border-left-color:var(--g)}.card.target{border-left-color:var(--info)}.card.transitional{border-left-color:var(--warn)}.card.exception{border-left-color:var(--danger)}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(17,24,39,.06);border:1px solid var(--bdr);color:var(--t2);font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}.tag.green{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.tag.info{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.tag.warn{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.tag.danger{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
+    .decision{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}.decision-box{background:var(--k3);border:1px solid var(--bdr);border-radius:14px;padding:18px;border-left:3px solid var(--info)}.decision-box.b{border-left-color:var(--warn)}.decision-box h3{margin:0 0 6px}.decision-box .tag{margin-bottom:8px}
+    .data-table { min-width: 0; }
+    .data-table td { font-family: var(--font); font-weight: 400; white-space: normal; color: var(--t2); max-width: none; overflow: visible; text-overflow: clip; vertical-align: top; }
+    .data-table td:nth-child(4),.data-table td:nth-child(5),.data-table td:nth-child(6){ color: var(--t2); max-width: none; overflow: visible; text-overflow: clip; }
+    .data-table td strong{color:var(--t1)}.data-table th{white-space:nowrap}.data-table code{font-family:var(--mono);font-size:11px;background:rgba(17,24,39,.05);border:1px solid var(--bdr);border-radius:5px;padding:1px 5px;color:var(--t1)}
+    .pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;background:rgba(17,24,39,.06);color:var(--t2);border:1px solid var(--bdr);white-space:nowrap}.pill.g{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.pill.b{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.pill.w{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.pill.r{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
+    .rolechips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.rolechip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:var(--k3);border:1px solid var(--bdr);font-size:11.5px;color:var(--t2)}.rolechip b{color:var(--t1);font-weight:700}
+    .autolist{list-style:none;padding:0;counter-reset:st}.autolist li{position:relative;padding:9px 0 9px 34px;border-bottom:1px solid var(--bdr2);font-size:12.5px;color:var(--t2)}.autolist li:last-child{border-bottom:0}.autolist li:before{counter-increment:st;content:counter(st);position:absolute;left:0;top:8px;width:22px;height:22px;border-radius:7px;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px}
+    .footer{margin-top:40px;color:var(--t4);font-size:11px;border-top:1px solid var(--bdr);padding-top:16px}.hidden{display:none!important}
+    @media(max-width:1050px){.shell{grid-template-columns:1fr}.sidebar{display:none}.hero,.decision,.grid.two{grid-template-columns:1fr}.kpis,.grid,.grid.four{grid-template-columns:repeat(2,1fr)}.main{padding:24px 18px 60px}.top-actions{display:none}}@media(max-width:650px){.kpis,.grid,.grid.four{grid-template-columns:1fr}h1{font-size:30px}.topbar{padding:0 14px}.crumb{display:none}.main,.main>*{min-width:0;max-width:100%}.main{overflow-x:clip}}
+    body{font-size:15px;line-height:1.65}.topbar{min-height:var(--tb)}.sidebar{background:var(--sidebar-bg)}.panel,.card,.kpi,.decision-box{background:var(--k3);border-color:var(--bdr)}
+  </style>
+<script src="../../assets/js/theme.js"></script>
+<link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body>
+  <header class="topbar portal-topbar">
+    <div class="brand"><a class="logo" href="../../index.html" title="Volver al Portal">SPORTING <span>MARKETPLACE</span></a><div class="crumb">INTEGRACIÓN VTEX ↔ VTEX</div></div>
+    <div class="top-actions"><button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button><div class="status"><span class="dot"></span>Playbook operativo</div><a class="button secondary" href="../../index.html">← Hub</a></div>
+  </header>
+  <div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
+
+  <div class="shell">
+    <aside class="sidebar portal-sidebar" data-portal-nav>
+      <div class="sb-section">
+        <a class="nav" href="../../index.html">Inicio</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Flujo de incorporación</div>
+        <a class="nav" data-page="backlog" href="../backlog/gestion-sellers.html">Gestión de Sellers</a>
+        <a class="nav" data-page="backlog" href="../backlog/backlog-sellers.html">Backlog de Sellers</a>
+        <a class="nav" data-page="gantt" href="../gantt/gantt-operativo.html">Seguimiento Operativo</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Seller Center</div>
+        <a class="nav" data-page="seller_center" href="../seller-center/index.html">Dashboard Seller Center</a>
+        <a class="nav" data-page="seller_center" href="../seller-center/maqueta-seller-center.html">Maqueta Seller Center</a>
+        <a class="nav" data-page="gantt" href="../gantt/gantt-seller-center.html">Gantt Seller Center</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Modelo y estrategia</div>
+        <a class="nav" data-page="estrategia" href="./proyecto-marketplace.html">Proyecto Marketplace</a>
+        <a class="nav" data-page="estrategia" href="./modelo-integracion.html">Modelo de Integración</a>
+        <a class="nav active" data-page="estrategia" href="./integracion-vtex-vtex.html">Integración VTEX ↔ VTEX</a>
+        <a class="nav" data-page="estrategia" href="./modelo-economico.html">Modelo Económico</a>
+        <a class="nav" data-page="estrategia" href="./governance.html">Governance</a>
+        <a class="nav" data-page="estrategia" href="./proceso-onboarding.html">Proceso de Onboarding</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Simuladores</div>
+        <a class="nav" data-page="simuladores" href="../simuladores/simulador-economico.html">Simulador Económico</a>
+        <a class="nav" data-page="simuladores" href="../simuladores/config-tarifas.html">Config. Tarifas y Overrides</a>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-section">
+        <div class="sb-label">Vista de sellers</div>
+        <a class="nav" data-page="ext_presentacion" href="../../public/presentaciones/presentacion-seller.html">Presentación seller <span>↗</span></a>
+        <a class="nav" data-page="ext_calificacion" href="../../public/formularios/formulario-calificacion.html">Calificación <span>↗</span></a>
+        <a class="nav" data-page="ext_relevamiento" href="../../public/formularios/formulario-relevamiento.html">Relevamiento <span>↗</span></a>
+        <a class="nav" data-page="ext_simulador" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
+      <a class="nav" data-page="ext_gantt" href="../../public/gantt/gantt-seller.html">Gantt del seller <span>↗</span></a>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Sistema</div>
+        <a class="nav" data-page="administracion" href="../administracion/configuracion.html">Configuración</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <nav class="page-subnav" aria-label="En esta página">
+        <span class="page-subnav-label">En esta página</span>
+        <a href="#inicio">Inicio</a>
+        <a href="#leyenda">Leyenda</a>
+        <a href="#f1">1 · Conexión</a>
+        <a href="#f2">2 · Catálogo</a>
+        <a href="#f3">3 · Precio/Pagos</a>
+        <a href="#f4">4 · Front</a>
+        <a href="#f5">5 · Pedido</a>
+        <a href="#f6">6 · Cancelaciones</a>
+        <a href="#f7a">7a · Fulfillment</a>
+        <a href="#f7b">7b · No entregados</a>
+        <a href="#f8">8 · Inversa</a>
+        <a href="#slas">SLAs</a>
+        <a href="#agujeros">Pendientes</a>
+      </nav>
+
+      <section id="inicio">
+        <div class="page-eyebrow">Playbook operativo · Marketplace Sporting</div>
+        <h1>Integración VTEX ↔ VTEX</h1>
+        <p class="lead">Proceso end-to-end para incorporar y operar un seller que ya usa VTEX (integración tipo <strong>Seller VTEX</strong>). Es la vista interna: cubre las tareas de todos los roles, las reglas del negocio, los automatismos del sistema y los SLAs. La vista del seller es un subconjunto de esto. Fuente: <code>docs/integracion-vtex-vtex.md</code>.</p>
+        <div class="hero">
+          <div class="panel">
+            <h2>Qué resuelve esta página</h2>
+            <p>Ordena todo el proceso para poder crear y asignar tareas por rol, y sirve de referencia operativa durante el onboarding y la operación de cada seller.</p>
+            <div class="callout">El playbook es el deep-dive de la etapa <strong>Integración</strong> del <a href="./proceso-onboarding.html" style="color:var(--g);font-weight:700">Onboarding</a>, para el modelo <strong>VTEX ↔ VTEX</strong> del <a href="./modelo-integracion.html" style="color:var(--g);font-weight:700">Modelo de Integración</a>.</div>
+          </div>
+          <div class="panel soft">
+            <h2>Cómo se usa</h2>
+            <ul>
+              <li>Onboarding: checklist de tareas de setup por seller (Fases 1-5).</li>
+              <li>Operación: runbook de responsabilidades por pedido (Fases 6-8).</li>
+              <li>Términos y Condiciones: reglas y políticas que ve el seller.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><div class="num">8</div><div class="lbl">Fases del proceso</div></div>
+          <div class="kpi info"><div class="num">6</div><div class="lbl">Roles involucrados</div></div>
+          <div class="kpi teal"><div class="num">7</div><div class="lbl">SLAs / plazos</div></div>
+          <div class="kpi warn"><div class="num">15</div><div class="lbl">Pendientes por cerrar</div></div>
+        </div>
+      </section>
+
+      <section id="leyenda" class="section">
+        <div class="section-head"><div class="section-title"><span>🧭</span><h2>Cómo leer el proceso</h2></div><p class="section-desc">Cada fase mezcla hasta cuatro tipos de contenido. Solo el primero alimenta el checklist de alta del seller.</p></div>
+        <div class="grid four">
+          <div class="card priority"><span class="tag green">Tarea (setup)</span><p>Una vez por seller en el onboarding. <strong>Va al tablero de tareas.</strong> Domina Fases 1-5.</p></div>
+          <div class="card target"><span class="tag info">Responsabilidad operativa</span><p>Recurrente por pedido (runtime). Va a un <strong>RACI / runbook</strong>, no al alta. Domina Fases 6-8.</p></div>
+          <div class="card transitional"><span class="tag warn">Regla / decisión</span><p>Política fija del negocio. No se asigna a nadie: va a <strong>T&amp;C</strong>.</p></div>
+          <div class="card"><span class="tag">Flujo automático</span><p>Lo que hace el sistema solo (VTEX↔PIM, mails, reembolsos). Sin dueño.</p></div>
+        </div>
+        <h3>Roles canónicos</h3>
+        <div class="rolechips">
+          <span class="rolechip"><b>Seller</b> vendedor externo (su VTEX)</span>
+          <span class="rolechip"><b>Ecomm</b> e-commerce del MP (VTEX, mapeos, VCC)</span>
+          <span class="rolechip"><b>Agente PIM</b> tienda, depósito, logística, devoluciones</span>
+          <span class="rolechip"><b>Infracommerce</b> ajustes de front/checkout (ticket)</span>
+          <span class="rolechip"><b>Diseño</b> grillas, banners, headers</span>
+          <span class="rolechip"><b>CS</b> atención al cliente del MP</span>
+        </div>
+        <div class="rolechips" style="margin-top:12px">
+          <span class="rolechip"><span class="pill g">Listo</span> info suficiente</span>
+          <span class="rolechip"><span class="pill w">Falta / parcial</span> hueco por resolver</span>
+          <span class="rolechip"><span class="pill b">QA</span> pendiente de prueba</span>
+        </div>
+      </section>
+
+      <section id="f1" class="section">
+        <div class="section-head"><div class="section-title"><span>🔌</span><h2>Fase 1 — Conexión / Política comercial</h2></div><p class="section-desc">La conexión la inicia Luquin desde su VTEX. Alta del seller + política comercial para diferenciar los productos que participan.</p></div>
+        <div class="panel soft">
+          <h3 style="margin-top:0">Alta del seller — <code>Marketplace › Sellers › Gestión › + Agregar seller</code></h3>
+          <ol class="autolist">
+            <li><strong>Tipo de integración:</strong> elegir <strong>“Seller VTEX”</strong> (no “Seller externo”, que es otro modelo).</li>
+            <li><strong>Integración:</strong> <em>Cuenta de seller VTEX</em> (requerido) + <em>ID de afiliado</em> (prefijo del Customer PO, p. ej. <code>LQN</code>).</li>
+            <li><strong>Información básica:</strong> <em>Nombre del seller</em> (storefront) + <em>ID de seller</em> (identificación en el MP) + grupo opcional.</li>
+            <li><strong>Pausar el seller después de registrarlo</strong> (por defecto activado): queda “En pausa” hasta terminar de configurar; se pasa a “Activo” cuando está listo.</li>
+          </ol>
+          <div class="callout warn">Falta afinar el flujo de <strong>“invitación”</strong> propiamente dicho y la semántica exacta del ID de afiliado (pendientes 1.0-a / 1.0-b).</div>
+        </div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>1.0</td><td><strong>Alta del seller</strong> — Luquin lo da de alta (tipo Seller VTEX).</td><td>Compartir su <strong>cuenta de seller VTEX</strong>.</td><td>Dar de alta (cuenta VTEX, ID de afiliado, ID/nombre) y activarlo cuando esté listo.</td><td><span class="pill w">Parcial</span></td></tr>
+            <tr><td>1.1</td><td><strong>Solicitar política comercial</strong> — cada parte la pide a su agencia.</td><td>Solicitar una nueva política comercial a su agencia.</td><td>Crear una nueva política comercial para diferenciar los productos.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.2</td><td><strong>Asignar política a productos</strong> — marca qué productos van al MP.</td><td>Asignar la política a cada producto (uno a uno o masivo).</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.3</td><td><strong>Configurar sobre la política</strong>.</td><td>—</td><td>Los productos aprobados se crean con esa política; todo se configura sobre ella.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Costo:</strong> la política comercial cuesta <strong>USD 40</strong>. Cada parte paga la suya.</li>
+          <li>Asignar la política es el mecanismo de <strong>envío de productos</strong>: el producto cae en la bandeja de aprobación del VTEX del Marketplace.</li>
+        </ul>
+      </section>
+
+      <section id="f2" class="section">
+        <div class="section-head"><div class="section-title"><span>📦</span><h2>Fase 2 — Catálogo</h2></div><p class="section-desc">Todos los atributos llegan desde el VTEX del seller. Ecomm <strong>mapea</strong> al estándar del MP y usa <strong>VCC</strong> para automatizar lo que se pueda.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>2.1</td><td><strong>Título</strong></td><td>—</td><td>VCC automatiza el armado (ej.: agregar la marca si falta).</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.2</td><td><strong>Marca</strong></td><td>Si tiene varias, enviar listado para mapear.</td><td>Crear la marca si no existe y mapear; sumar al menú si corresponde.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.3</td><td><strong>Categorías</strong> — el mapeo autocompleta la categoría del MP al aprobar.</td><td>Compartir en Excel su árbol de categorías.</td><td>Mapear en VTEX; crear categoría nueva solo si no existe; sumar al menú si corresponde.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.4</td><td><strong>Descripción</strong> — se usa tal cual llega.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.5</td><td><strong>Especificaciones</strong> (color, sabor, género…).</td><td>Enviar todas las especificaciones y valores de su VTEX.</td><td>Mapear campos y valores (ej.: <code>Género = Gender</code>); crear valores nuevos si es necesario.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.6</td><td><strong>Talles</strong> — unifica al estándar (ej.: <code>2XL = XXL</code>).</td><td>Compartir Excel con todos los talles de su VTEX.</td><td>Hacer el mapeo correspondiente.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.7</td><td><strong>Score</strong> — automatizado, arranca en 80.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.8</td><td><strong>Imágenes</strong></td><td>—</td><td>VCC automatiza el orden de las imágenes.</td><td><span class="pill w">Falta</span></td></tr>
+            <tr><td>2.9</td><td><strong>Aprobación</strong> — el producto viaja al MP y un agente lo revisa.</td><td>Asignar política comercial a los productos a vender.</td><td>Revisar y aprobar en la bandeja.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.10</td><td><strong>Rechazo</strong> — el agente rechaza y deja motivo; el seller corrige.</td><td>Revisar rechazados y corregir según el motivo.</td><td>Rechazar con motivo claro.</td><td><span class="pill b">QA</span></td></tr>
+            <tr><td>2.11</td><td><strong>Productos aprobados</strong> — visibles si tienen precio y stock.</td><td>—</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Score:</strong> automatizado en 80 para todos.</li>
+          <li><strong>Imágenes con fondo gris:</strong> todavía sin automatización de cambio de fondo; se aprueban con fondo gris. Tema a acordar con el seller.</li>
+          <li><strong>Objetivo del mapeo:</strong> conservar la info del seller en la publicación del MP → publicaciones más completas y menos carga manual.</li>
+          <li><strong>Visibilidad:</strong> un producto aprobado solo se muestra con <strong>precio y stock</strong>.</li>
+        </ul>
+      </section>
+
+      <section id="f3" class="section">
+        <div class="section-head"><div class="section-title"><span>💳</span><h2>Fase 3 — Precio / Stock / Pagos</h2></div><p class="section-desc">Precio y stock llegan por API; el MP no los toca. El trabajo de Ecomm es configurar condiciones de pago y promociones.</p></div>
+        <div class="callout warn"><strong>Precondición:</strong> los medios de pago y cuotas salen del <strong>acuerdo comercial</strong> (input externo). Sin él, la config de pagos no arranca.</div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>3.1</td><td><strong>Precio</strong> — automático por API.</td><td>Elegir: usar su lista actual o crear una lista nueva para el MP.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.2</td><td><strong>Stock</strong> — automático por API.</td><td>Crear un almacén nuevo para el stock del MP, o usar uno existente (según si quiere stock diferenciado).</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.3</td><td><strong>Condición comercial</strong> — condiciones de pago por seller.</td><td>—</td><td>Crear la condición comercial del seller y automatizar su carga en VCC.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.4</td><td><strong>Configuración de pagos</strong> — medios y cuotas.</td><td>Definir con el comercial del MP qué medios y cuotas usará.</td><td>Configurar en VTEX aplicando la condición comercial.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.5</td><td><strong>Promoción de envío gratis</strong>.</td><td>—</td><td>Configurar en VTEX que la promo de envío gratis afecte a los productos del seller.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Precios:</strong> el seller es el único responsable; el MP no interviene.</li>
+          <li><strong>Stock diferenciado:</strong> decisión del seller (almacén nuevo vs. único).</li>
+          <li><strong>Envío gratis:</strong> sujeto al umbral del sitio, hoy <strong>$149.990</strong> (parámetro global).</li>
+          <li><strong>Cupones:</strong> no se aceptan para productos seller; la única promo que permanece es envío gratis.</li>
+          <li><strong>GiftCards:</strong> no se aceptan para productos seller (ni una giftcard originada en una devolución del MP).</li>
+        </ul>
+      </section>
+
+      <section id="f4" class="section">
+        <div class="section-head"><div class="section-title"><span>🖥️</span><h2>Fase 4 — Front</h2></div><p class="section-desc">Todo lo que ve el cliente. Mayoría de tareas de Ecomm, con dependencias de Diseño (grillas) e Infracommerce (checkout, vía ticket).</p></div>
+        <div class="callout"><strong>Una config alimenta tres features:</strong> el valor de especificación <strong>“Seller”</strong> del filtrado (4.1) es el mismo dato de la cucarda (4.2) y de la leyenda de PDP/checkout (4.5).</div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Infra</th><th>Diseño</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>4.1</td><td><strong>Filtrado</strong> — filtro “Vendido por” en la PLP.</td><td>—</td><td>Crear el valor de especificación <strong>“Seller”</strong> en VTEX y automatizar su carga en VCC.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.2</td><td><strong>Cucarda</strong> — “Tienda xxx” en card y PDP.</td><td>—</td><td>Configurar cucardas en VTEX usando la especificación.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.3</td><td><strong>Grilla personalizada</strong> — header + banner x8.</td><td>—</td><td>Pedir gráficas a Diseño; crear la URL; cargar gráficas y contenido.</td><td>—</td><td>Hacer las gráficas y entregarlas.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.4</td><td><strong>Restricción de carrito compartido</strong>.</td><td>—</td><td>Ticket a Infra para incluir al seller en la lógica.</td><td>Configurar la restricción.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.5</td><td><strong>Info diferencial</strong> en PDP / mini-cart / checkout.</td><td>—</td><td>Ticket a Infra para los ajustes.</td><td>Realizar los ajustes.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.6</td><td><strong>Exclusión de destinos</strong>.</td><td>Configurar en su VTEX los destinos e informarlos.</td><td>Sumar la restricción a T&amp;C.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.7</td><td><strong>Costo de envío</strong>.</td><td>Cargar su planilla de envío (costos/plazos por CP o polígono).</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.8</td><td><strong>Promesa de entrega</strong>.</td><td>Cargar su política en VTEX › estrategias de envío.</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones — no hay carritos mixtos</h3>
+        <p>Un carrito no puede combinar productos de distintos sellers. Motivos:</p>
+        <ul>
+          <li><strong>Conciliación</strong> más simple con productos separados.</li>
+          <li><strong>Liquidación:</strong> cada seller tiene un número de comercio distinto.</li>
+          <li><strong>Logística inversa:</strong> políticas de cambio/devolución distintas por seller.</li>
+          <li><strong>Envío gratis:</strong> sumar entre sellers para llegar al umbral no conviene (cada seller pagaría el envío).</li>
+          <li><strong>Medios de pago:</strong> combinados se mostrarían todos, aunque un seller no acepte alguno.</li>
+          <li><strong>Técnico:</strong> VTEX aún no permite dos carritos en simultáneo.</li>
+        </ul>
+        <div class="callout warn"><strong>Dependencias externas (lead time):</strong> 4.3 depende de Diseño; 4.4 y 4.5 de Infracommerce (ticket). Evaluar unificar ambos tickets en uno.</div>
+      </section>
+
+      <section id="f5" class="section">
+        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 5 — Pedido</h2></div><p class="section-desc">El pedido viaja solo entre VTEX y PIM. Solo hay 3 tareas de setup, todas del Agente PIM y previas al go-live.</p></div>
+        <h3>Flujo automático</h3>
+        <ul class="autolist">
+          <li><strong>Customer PO</strong> — el número del seller es el ID de afiliado (3 consonantes) + el del MP. Ej.: <code>1385074194464-01</code> → <code>LQN-1385074194464-01</code>.</li>
+          <li><strong>Creación en VTEX</strong> — al finalizar la compra, el pedido es visible en ambos VTEX.</li>
+          <li><strong>Creación en PIM</strong> — con tienda + depósito + asociación listos, el pedido ingresa automáticamente en estado “Activo”.</li>
+        </ul>
+        <h3>Tareas de setup <span class="pill" style="font-weight:800">Secuenciales · pre go-live</span></h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Agente PIM</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>5.1</td><td><strong>Crear tienda en PIM</strong> (una por seller).</td><td>Crear la tienda en PIM.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.2</td><td><strong>Crear depósito en PIM</strong> (uno por seller).</td><td>Crear el depósito en PIM.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.3</td><td><strong>Asociación VTEX–PIM</strong> — con el ID del seller.</td><td>Configurar la asociación tienda/depósito.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn">Sin las tres (5.1→5.2→5.3), el pedido se crea en VTEX pero <strong>no ingresa bien a PIM</strong>. Deben quedar listas antes del go-live.</div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Mail del cliente:</strong> visible solo en el VTEX del MP; enmascarado para el seller (funcional, vigencia 60 días).</li>
+          <li><strong>Valores:</strong> el MP puede ajustar el valor final; el seller no (función que no se usaría).</li>
+          <li><strong>Baja de pedidos:</strong> los pedidos activos de seller no se dan de baja desde PIM; las cancelaciones solo las hace el seller desde su VTEX.</li>
+        </ul>
+      </section>
+
+      <section id="f6" class="section">
+        <div class="section-head"><div class="section-title"><span>🚫</span><h2>Fase 6 — Cancelaciones (por el seller)</h2></div><p class="section-desc">Cancelación por falta de stock. Flujo mayormente automático; el único punto humano es la decisión del MP en la ventana de 24 h.</p></div>
+        <div class="callout">La cancelación iniciada por el <strong>cliente</strong> (arrepentimiento) no está acá — se maneja en la Fase 7b.</div>
+        <h3>Flujo automático (estados VTEX)</h3>
+        <ul class="autolist">
+          <li>El seller cancela desde su VTEX (por stock).</li>
+          <li>El pedido pasa a <strong>“Esperando Cambio de Seller”</strong>.</li>
+          <li>El MP tiene 24 h para actuar.</li>
+          <li>Al pasar a <strong>“Cancelado”</strong>: correo de cancelación + reembolso, ambos automáticos.</li>
+        </ul>
+        <h3>Responsabilidades operativas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Actor</th><th>Acción</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Seller</strong></td><td>Cancelar desde su VTEX cuando no tiene stock (sin aviso previo).</td></tr>
+            <tr><td><strong>MP — Ecomm / Operaciones</strong></td><td>Dentro de 24 h: (a) elegir nuevo seller; (b) dejar vencer → cancela solo; (c) cancelar de inmediato.</td></tr>
+            <tr><td><em>Sistema (VTEX)</em></td><td>Reembolso y correo de cancelación automáticos.</td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li>Sin cancelaciones parciales: si falta un producto, se cancela el pedido completo.</li>
+          <li>Motivo único: siempre por stock. <strong>SLA seller:</strong> 5 días. <strong>SLA MP:</strong> 24 h.</li>
+        </ul>
+      </section>
+
+      <section id="f7a" class="section">
+        <div class="section-head"><div class="section-title"><span>🚚</span><h2>Fase 7a — Fulfillment (camino feliz)</h2></div><p class="section-desc">Desde que el seller recibe el pedido hasta la entrega sin incidentes.</p></div>
+        <div class="decision">
+          <div class="decision-box"><span class="tag info">Modo A</span><h3>Logística directa (seller)</h3><p>El seller gestiona el despacho y <strong>carga la info logística en su VTEX</strong>. Aplica la tarea 7a.1.</p></div>
+          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Logística por Marketplace</h3><p>El despacho dispara la <strong>solicitud de retiro</strong> a nuestros carriers. Aplica 7a.2. No hace falta crear ni mapear logística.</p></div>
+        </div>
+        <h3>Flujo automático (VTEX ↔ PIM)</h3>
+        <ul class="autolist">
+          <li><strong>Factura</strong> → estado “facturado” dispara el mail con la URL de la factura (desde VTEX).</li>
+          <li><strong>Despacho</strong> → la info logística del seller dispara el mail de “despachado” <strong>desde PIM</strong> (no desde VTEX).</li>
+          <li><strong>Entrega</strong> → <code>Delivered: True</code> impacta en el VTEX del MP y luego en PIM (facturado).</li>
+        </ul>
+        <h3>Campos VTEX de referencia — <code>packageAttachment › packages › …</code></h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Campo</th><th>Para qué</th></tr></thead>
+          <tbody>
+            <tr><td><code>invoiceUrl</code></td><td>URL de la factura → dispara el mail de facturado.</td></tr>
+            <tr><td><code>Courier</code></td><td>Carrier / logística que envía.</td></tr>
+            <tr><td><code>trackingNumber</code></td><td>Número de seguimiento.</td></tr>
+            <tr><td><code>trackingUrl</code></td><td>URL de seguimiento.</td></tr>
+            <tr><td><code>courierStatus</code></td><td>Estado logístico del carrier → PIM lo consume.</td></tr>
+          </tbody>
+        </table></div>
+        <h3>Tareas de setup</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Aplica a</th><th>Seller</th><th>Ecomm</th><th>PIM</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>7a.1</td><td><strong>Estados logísticos — logística nueva</strong></td><td>Modo A, carrier no configurado</td><td>Informar qué logística usa y pasar los estados.</td><td>Mapear los estados al estándar y pasarlos a PIM.</td><td>Crear la logística en PIM; consumir <code>courierStatus</code> y <code>Courier</code>; cargar el mapeo.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>7a.2</td><td><strong>Config. de retiro por MP</strong></td><td>Modo B</td><td>—</td><td>Configurar que el despacho envíe la solicitud de retiro a nuestros carriers.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>7a.3</td><td><strong>Integración de factura (fallback)</strong></td><td>Si el seller no carga la factura</td><td>—</td><td>Gestionar una integración para recibir la <code>invoiceUrl</code>.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Facturación:</strong> el seller factura; el <strong>envío de la factura al cliente es del MP</strong> (automático por mail).</li>
+          <li><strong>Factura A:</strong> no se aceptan para productos seller.</li>
+          <li><strong>Mail de despacho:</strong> se envía desde PIM, no desde VTEX.</li>
+          <li><strong>Estados logísticos:</strong> no llegan solos a VTEX; el seller los carga en <code>courierStatus</code>. En modo B no hace falta crear ni mapear logística.</li>
+        </ul>
+      </section>
+
+      <section id="f7b" class="section">
+        <div class="section-head"><div class="section-title"><span>📭</span><h2>Fase 7b — Pedidos no entregados</h2></div><p class="section-desc">Casos en que la entrega no se concreta y hay que reembolsar. Flujo 100 % operativo, liderado por CS del Marketplace (Luquin).</p></div>
+        <h3>7b.1 · Arrepentimiento de compra (cancelación del cliente)</h3>
+        <p>Entrada: el cliente contacta al MP (<code>sellers-soporte@sporting.com.ar</code>). CS MP verifica el estado en PIM y contacta a CS del seller.</p>
+        <div class="decision">
+          <div class="decision-box"><span class="tag info">A · Cancelación posible</span><p><strong>A1</strong> · No despachado (VTEX: Pago aprobado) → el seller cancela desde su VTEX → reembolso automático.<br><strong>A2</strong> · Despachado y el seller lo retiene → reembolso.</p></div>
+          <div class="decision-box b"><span class="tag warn">B · Cancelación imposible</span><p>El seller informa que no es factible → CS MP ofrece: <strong>B1</strong> rechazar el paquete, o <strong>B2</strong> recibir y devolver por el portal de cambios (Fase 8).</p></div>
+        </div>
+        <p style="margin-top:10px"><strong>SLA:</strong> el cliente tiene 30 días para solicitar la cancelación. Sin cancelaciones parciales.</p>
+        <h3>7b.2 · Falta de información / dirección incorrecta</h3>
+        <ul class="autolist">
+          <li>El carrier no puede entregar → el seller pide info adicional al MP.</li>
+          <li>CS MP contacta al cliente para recabar los datos.</li>
+          <li>El seller responde al carrier. <strong>SLA: 4-5 días</strong> o el producto vuelve al CD.</li>
+          <li>Si vuelve al CD sin respuesta: el seller envía un informe → CS Luquin reembolsa.</li>
+        </ul>
+        <h3>7b.3 · Paquete perdido (Lost in Transit)</h3>
+        <ul class="autolist">
+          <li>Se detecta la pérdida (carrier informa / vence el tránsito) → seller/carrier lo reporta al MP.</li>
+          <li><strong>CS Luquin</strong> ejecuta el reembolso al cliente (manual).</li>
+          <li><strong>Costo:</strong> se reclama al carrier; el reclamo lo presenta quien lo contrató (seller en A, MP en B).</li>
+        </ul>
+        <h3>Reglas / SLA</h3>
+        <ul>
+          <li><strong>Reembolsos, dos vías:</strong> automático (VTEX, al cancelar en el VTEX del seller) o manual (CS Luquin, tras el informe).</li>
+          <li>SLAs: arrepentimiento 30 días · dirección incorrecta 4-5 días.</li>
+        </ul>
+      </section>
+
+      <section id="f8" class="section">
+        <div class="section-head"><div class="section-title"><span>↩️</span><h2>Fase 8 — Logística inversa / devoluciones</h2></div><p class="section-desc">Todo pasa por el Portal de Cambios y Devoluciones (self-service). Vuelven las tareas de setup + el botón que dispara tres acciones.</p></div>
+        <div class="decision">
+          <div class="decision-box"><span class="tag info">Modo A</span><h3>Inversa por el seller</h3><p>El seller indica su Carrier (tareas 8.2 / 8.3 / 8.4).</p></div>
+          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Inversa por el Marketplace</h3><p>Ecomm consigue un contrato de retiro (tarea 8.5).</p></div>
+        </div>
+        <h3>Flujo del portal (self-service del cliente)</h3>
+        <ul class="autolist">
+          <li>El cliente accede al Portal de Cambios y Devoluciones (hasta <strong>180 días</strong>).</li>
+          <li>Ingresa DNI + N.º de pedido/orden.</li>
+          <li>El N.º de orden determina si es del seller o del MP → aplica las políticas del seller (T&amp;C).</li>
+          <li><strong>Devolución</strong> (dentro de 60 días): producto → motivo → verificar datos. <strong>Garantía</strong> (hasta 180 días): producto → verificar datos (sin motivo).</li>
+        </ul>
+        <div class="callout"><strong>El botón “crear devolución” dispara 3 acciones atómicas:</strong> devolución en PIM · devolución en el VTEX del seller · orden de retiro para el Carrier.</div>
+        <h3>Tareas de setup</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Aplica a</th><th>Seller</th><th>Ecomm</th><th>PIM</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>8.1</td><td><strong>Condiciones de devolución</strong></td><td>Siempre</td><td>Indicar plazos, categorías no habilitadas, etc.</td><td>Redactar las condiciones en T&amp;C.</td><td>Configurar el portal con esas condiciones.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.2</td><td><strong>Carrier de inversa — configurado</strong></td><td>Modo A, carrier conocido</td><td>Compartir usuario y credenciales del Carrier.</td><td>—</td><td>Configurar el portal para crear órdenes de retiro.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.3</td><td><strong>Carrier de inversa — nuevo</strong></td><td>Modo A, carrier nuevo</td><td>Indicar el Carrier nuevo.</td><td>—</td><td>Crear la config para órdenes de retiro con esa logística.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.4</td><td><strong>Estados logísticos de inversa</strong></td><td>Modo A</td><td>Enviar los estados de inversa.</td><td>Mapear al estándar de inversa y pasar a PIM.</td><td>Cargar el mapeo.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.5</td><td><strong>Contrato de retiro (inversa por MP)</strong></td><td>Modo B</td><td>—</td><td>Solicitar un contrato de retiro al carrier.</td><td>Configurar el portal con ese contrato.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Canal único:</strong> las devoluciones se hacen sí o sí por el portal.</li>
+          <li><strong>Plazos:</strong> portal 180 días · Devolución 60 días · Garantía 180 días.</li>
+          <li><strong>Políticas por seller</strong> (plazos, categorías no habilitadas) → deben estar en T&amp;C.</li>
+        </ul>
+      </section>
+
+      <section id="slas" class="section">
+        <div class="section-head"><div class="section-title"><span>⏱️</span><h2>Plazos y SLAs (consolidado)</h2></div><p class="section-desc">Estaban dispersos por todo el proceso; los sellers los piden juntos.</p></div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Plazo</th><th>Aplica a</th><th>Quién debe cumplirlo</th><th>Fase</th></tr></thead>
+          <tbody>
+            <tr><td><strong>24 h</strong></td><td>Elegir un nuevo seller ante cancelación por stock, antes de la cancelación automática.</td><td>Marketplace</td><td>6</td></tr>
+            <tr><td><strong>5 días</strong></td><td>Cancelar un pedido por falta de stock.</td><td>Seller</td><td>6</td></tr>
+            <tr><td><strong>4-5 días</strong></td><td>Responder al carrier ante dirección incorrecta, antes de que vuelva al CD.</td><td>Seller</td><td>7b</td></tr>
+            <tr><td><strong>30 días</strong></td><td>Solicitar la cancelación por arrepentimiento.</td><td>Cliente</td><td>7b</td></tr>
+            <tr><td><strong>60 días</strong></td><td>Vigencia del mail enmascarado del cliente.</td><td><em>sistema</em></td><td>5</td></tr>
+            <tr><td><strong>60 días</strong></td><td>Iniciar una Devolución en el portal.</td><td>Cliente</td><td>8</td></tr>
+            <tr><td><strong>180 días</strong></td><td>Vigencia del portal / Devolución por Garantía.</td><td>Cliente</td><td>8</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="agujeros" class="section">
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 15 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
+          <tbody>
+            <tr><td>1.0-a</td><td>Completar el flujo de “invitación”: relación entre “Invitación de sellers” y “Agregar seller”, y si hay aceptación del lado del seller.</td></tr>
+            <tr><td>1.0-b</td><td>Semántica del “ID de afiliado” (¿siempre <code>LQN</code>? ¿por seller?) y credenciales que activan la API.</td></tr>
+            <tr><td>2.8</td><td>Alcance de la automatización de orden de imágenes en VCC.</td></tr>
+            <tr><td>2.10</td><td>Lista de motivos de rechazo.</td></tr>
+            <tr><td>2.10</td><td>Probar flujo de rechazo/reenvío en QA.</td></tr>
+            <tr><td>2.11</td><td>Definir tareas de “productos aprobados”.</td></tr>
+            <tr><td>Imágenes</td><td>Decidir con el seller qué se hace con fondos grises.</td></tr>
+            <tr><td>4.2</td><td>Texto exacto de la cucarda (“Tienda xxx” es placeholder).</td></tr>
+            <tr><td>4.4 / 4.5</td><td>Evaluar unificar los dos tickets a Infracommerce en uno.</td></tr>
+            <tr><td>7a.3</td><td>Definir la integración para recibir la <code>invoiceUrl</code> cuando el seller no factura por VTEX.</td></tr>
+            <tr><td>7b.1</td><td>Confirmar el árbol de arrepentimiento definitivo (dos descripciones distintas en la fuente).</td></tr>
+            <tr><td>7b.2</td><td>“Adidas” hardcodeado como ejemplo de seller — generalizar.</td></tr>
+            <tr><td>7b</td><td>Definir quién en CS Luquin ejecuta el reembolso manual y con qué herramienta.</td></tr>
+            <tr><td>8.4</td><td>Confirmar si los estados de inversa comparten catálogo con los de forward (7a).</td></tr>
+            <tr><td>8</td><td>Diferencia operativa entre Devolución (60 d) y Garantía (180 d) más allá del plazo.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <div class="footer">Marketplace Sporting · Integración VTEX ↔ VTEX · Playbook interno. Fuente de verdad: <code>docs/integracion-vtex-vtex.md</code>.</div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script>initAuth('estrategia');</script>
+</body>
+</html>
