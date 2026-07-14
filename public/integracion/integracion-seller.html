@@ -48,6 +48,17 @@
     h3{font-family:var(--font);font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
     .section-lead{font-size:14.5px;line-height:1.7;color:var(--t3);max-width:640px;margin-bottom:38px}
 
+    /* ROADMAP — línea de tiempo del proceso completo */
+    #roadmap{background:var(--k)}
+    .roadmap-list{list-style:none;padding:0;margin:0;position:relative;max-width:720px}
+    .roadmap-list::before{content:"";position:absolute;left:18px;top:6px;bottom:6px;width:2px;background:var(--g-brd)}
+    .roadmap-list li{position:relative;display:grid;grid-template-columns:38px 1fr;gap:16px;padding:13px 0;align-items:flex-start}
+    .rm-num{position:relative;z-index:1;width:38px;height:38px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font);font-size:15px;font-weight:900;flex-shrink:0}
+    .rm-num.rm-internal{background:var(--k3);border:2px solid var(--g-brd);color:var(--g)}
+    .roadmap-list li strong{display:block;font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px}
+    .roadmap-list li span{font-size:12.5px;color:var(--t3);line-height:1.5}
+    .rm-tag{display:inline-block;margin-left:8px;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--g);vertical-align:middle}
+
     /* PREPARAR — tarjetas por área con checklist */
     #preparar{background:linear-gradient(180deg,var(--k2),var(--k))}
     .area-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
@@ -146,6 +157,28 @@
       </nav>
       <h1>Tu integración<br><em>paso a paso.</em></h1>
       <p class="hero-lead"><strong id="heroSellerName">Tu marca</strong> se conecta al Marketplace vía <strong>VTEX ↔ VTEX</strong>: tu catálogo, precios, stock y pedidos viajan automáticamente entre tu VTEX y el nuestro. Esta guía resume <strong>lo que preparás vos</strong>, cómo operás cada pedido y las reglas del canal.</p>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap" class="section">
+    <div class="inner">
+      <div class="eyebrow">El camino completo</div>
+      <h2>Hoja de ruta de tu integración</h2>
+      <p class="section-lead">Así se ve el proceso de punta a punta, desde la conexión inicial hasta que tus productos estén a la venta. Los pasos marcados <span class="rm-tag">Nosotros</span> los hacemos de este lado — te los mostramos igual para que tengas la foto completa.</p>
+      <ol class="roadmap-list">
+        <li><span class="rm-num">0</span><div><strong>Kickoff</strong><span>Reunión inicial, con los contactos de ambos lados ya definidos.</span></div></li>
+        <li><span class="rm-num">1</span><div><strong>Conexión QA</strong><span>Te damos de alta como seller y solicitás tu política comercial — sobre tu cuenta de QA si tenés una.</span></div></li>
+        <li><span class="rm-num">2</span><div><strong>Catálogo</strong><span>Mapeo de marcas, categorías, talles y especificaciones.</span></div></li>
+        <li><span class="rm-num">3</span><div><strong>Precio, stock y pagos</strong><span>Definís tu fuente de precio y stock; acordamos condición comercial y medios de pago.</span></div></li>
+        <li><span class="rm-num">4</span><div><strong>Envíos</strong><span>Cargás tus costos, plazos y destinos excluidos.</span></div></li>
+        <li><span class="rm-num">5</span><div><strong>Devoluciones</strong><span>Definimos la logística inversa y tus condiciones de devolución.</span></div></li>
+        <li><span class="rm-num rm-internal">6</span><div><strong>Configuración interna<span class="rm-tag">Nosotros</span></strong><span>Alta de tu tienda y depósito, y la asociación de pedidos en nuestro sistema (PIM).</span></div></li>
+        <li><span class="rm-num">7</span><div><strong>Validación en QA</strong><span>Probamos juntos el flujo completo: catálogo, pedido, despacho y devolución.</span></div></li>
+        <li><span class="rm-num">8</span><div><strong>Conexión en Producción</strong><span>Replicamos sobre tu cuenta de producción todo lo ya validado en QA.</span></div></li>
+        <li><span class="rm-num">9</span><div><strong>Prueba piloto</strong><span>Validamos en producción con un grupo acotado de productos antes de abrir todo el catálogo.</span></div></li>
+        <li><span class="rm-num">10</span><div><strong>Go Live</strong><span>Tus productos, visibles y a la venta en el Marketplace.</span></div></li>
+      </ol>
     </div>
   </section>
 

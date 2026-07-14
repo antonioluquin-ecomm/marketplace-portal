@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-14 - Hoja de ruta de la integración (guía + fuente) y mail de kickoff final
+
+Tipo de cambio: documentación + contenido nuevo en la vista seller (sin cambios de backend ni de datos).
+
+Se agrega una **hoja de ruta de 11 pasos** (0 a 10, de Kickoff a Go Live) que faltaba: el proceso hasta ahora se leía fase por fase, sin una vista de conjunto ordenada temporalmente para el seller ni para Ecomm.
+
+- **Vista seller** (`public/integracion/integracion-seller.html`): nueva sección "Hoja de ruta de tu integración" (línea de tiempo, `#roadmap`) entre el hero y "Lo que tenés que preparar" — da el orden real antes del detalle por área. El paso 6 (configuración en PIM) queda marcado explícitamente como "Nosotros" para que el seller vea la foto completa sin que se lea como una tarea suya.
+- **Fuente** (`docs/integracion-vtex-vtex.md`): misma hoja de ruta como tabla, con columna de a qué Fase corresponde cada paso. Corrige un hueco real detectado al revisar un primer borrador de roadmap: faltaba el paso de configuración en PIM (Fase 5) — es la única precondición dura documentada para que un pedido funcione, y no tiene tarea del lado del seller, por eso es fácil de omitir. También separa dos "pruebas" que antes se confundían en una sola (validación en QA vs. prueba piloto ya en producción).
+- **Plantilla de mail** (`docs/plantilla-mail-kickoff-integracion.md`): se agrega el link directo a la hoja de ruta (`...integracion-seller.html#roadmap`) y el pedido de un contacto del lado del seller para coordinar la reunión inicial. Decisión deliberada: el mail **no** enumera los 11 pasos — solo linkea a la guía, para no repetir la sobrecarga de información que ya se evitó separando tareas de reglas en el resto del documento.
+- Verificado sirviendo en local: 11 ítems de la hoja de ruta renderizan en la vista seller, sin errores de consola y sin overflow horizontal en desktop (1265px) ni mobile (375px).
+
 ## 2026-07-14 - Detalle real del alta de seller (Fase 1) + contacto de integración
 
 Tipo de cambio: documentación (sin cambios de backend ni de datos).

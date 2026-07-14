@@ -56,6 +56,42 @@ Usar **siempre** estos nombres (la redacción original mezclaba "Ecomm / Ecom / 
 
 ---
 
+## Hoja de ruta de la integración
+
+Orden real de ejecución de un seller nuevo, punta a punta. Es el mapa que falta antes de
+entrar al detalle fase por fase — de acá sale también la versión que ve el seller
+(`public/integracion/integracion-seller.html`, sección "Hoja de ruta").
+
+| # | Paso | Fase(s) | Quién actúa | Nota |
+|---|---|---|---|---|
+| 0 | **Kickoff** | — | Ecomm (contacto de integración) | Mail inicial + reunión con contactos de ambos lados ya definidos. |
+| 1 | **Conexión QA** | Fase 1 | Seller + Ecomm | Alta del seller + política comercial, sobre cuenta de **QA** si el seller tiene una (ver decisión QA↔QA de la Fase 1). |
+| 2 | **Catálogo** | Fase 2 | Seller + Ecomm | Mapeo de marcas, categorías, talles, especificaciones. |
+| 3 | **Precio, Stock y Pagos** | Fase 3 | Seller + Ecomm | Fuente de precio/stock, condición comercial, medios de pago. |
+| 4 | **Envíos** | Fase 4 (parte seller) | Seller | Costos, plazos, destinos excluidos. |
+| 5 | **Devoluciones** | Fase 8 | Seller + Agente PIM | Logística inversa y condiciones de devolución. |
+| 6 | **Configuración en PIM** | Fase 5 | Agente PIM | Tienda + depósito + asociación VTEX↔PIM. **Puede correr en paralelo a los pasos 2-5**, pero **bloquea** el paso 7 (sin esto el pedido no ingresa bien a PIM). |
+| 7 | **Validación en QA** | — | Seller + Ecomm | Flujo completo end-to-end: catálogo → aprobación → pedido → despacho → devolución, sobre el ambiente de prueba. |
+| 8 | **Conexión y réplica en Producción** | Fase 1 (repetida) | Seller + Ecomm | Se repite la configuración ya validada en QA, ahora sobre la cuenta de producción. |
+| 9 | **Prueba piloto en Producción** | — | Seller + Ecomm | Validar con un set acotado de productos antes de abrir todo el catálogo. |
+| 10 | **Go Live** | Fase 2 (2.11) | — | El seller queda **"Activo"**; el catálogo es visible en el sitio (regla: solo con precio y stock). |
+
+> **Por qué el paso 6 no estaba en la redacción original:** es fácil de omitir porque no
+> tiene tarea del lado del **Seller** — pero es la única precondición **dura** documentada
+> (Fase 5) para que un pedido funcione. Conviene arrancarlo en paralelo a 2-5, no dejarlo
+> para el final.
+>
+> **Por qué hay dos "pruebas" (7 y 9) y no una sola:** son ambientes y objetivos distintos —
+> la 7 valida que el flujo *funciona* (QA); la 9 valida que el flujo funciona *con datos
+> reales de producción*, acotado, antes de exponer todo el catálogo.
+>
+> **Este roadmap no va en el mail de kickoff completo** (ver
+> `plantilla-mail-kickoff-integracion.md`) — mandar los 11 pasos de entrada genera la misma
+> sobrecarga que ya evitamos separando tareas de reglas. El mail linkea a la guía; la hoja de
+> ruta completa vive ahí.
+
+---
+
 ## Fase 1 — Conexión / Política comercial
 
 ### 1.0 · Conexión entre VTEX (alta del seller)
