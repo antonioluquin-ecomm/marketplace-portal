@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-14 - Corrige la confusión entre las dos "política comercial"
+
+Tipo de cambio: corrección de documentación y de contenido en las 3 superficies (sin cambios de backend ni de datos).
+
+A partir de una captura del formulario real de "Agregar seller", se detecta que la Fase 1 tenía mezclados **dos objetos distintos** bajo el mismo nombre: la política comercial que crea **Ecomm** (en el VTEX de Sporting, nueva por cada seller, requisito del formulario de alta) y la que crea el **Seller** (en su propio VTEX, para marcar qué productos manda al Marketplace). La redacción daba a entender que ambas eran necesarias para "la conexión", cuando en realidad solo la de Ecomm bloquea el alta — la del seller se necesita recién para que sus productos empiecen a viajar (tarea 1.2), y puede tramitarse en paralelo.
+
+- **Fuente**: recuadro explícito separando los dos objetos, tabla de tareas y reglas de Fase 1 reescritas, fila 1 del roadmap ajustada. También se corrige la descripción del alta: es un formulario de una sola página al crear (no 4 pestañas — esas son de la edición posterior).
+- **Vista interna**: mismas correcciones, con un callout de advertencia visible.
+- **Vista seller**: se reordena el checklist de "Conexión" — la cuenta VTEX (lo que sí bloquea) pasa primero; la política comercial queda como "en paralelo, sin que te frene".
+- **Plantilla de mail**: se quita la frase que decía que la política del seller "es necesaria para esa conexión".
+- Verificado sirviendo en local: ambas vistas HTML cargan sin errores de consola ni overflow horizontal; el orden del checklist y los textos de "en paralelo" confirmados en el DOM.
+
 ## 2026-07-14 - Hoja de ruta también en la vista interna
 
 Tipo de cambio: contenido nuevo en la vista interna (sin cambios de backend ni de datos).

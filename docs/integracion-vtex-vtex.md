@@ -65,7 +65,7 @@ entrar al detalle fase por fase — de acá sale también la versión que ve el 
 | # | Paso | Fase(s) | Quién actúa | Nota |
 |---|---|---|---|---|
 | 0 | **Kickoff** | — | Ecomm (contacto de integración) | Mail inicial + reunión con contactos de ambos lados ya definidos. |
-| 1 | **Conexión QA** | Fase 1 | Seller + Ecomm | Alta del seller + política comercial, sobre cuenta de **QA** si el seller tiene una (ver decisión QA↔QA de la Fase 1). |
+| 1 | **Conexión QA** | Fase 1 | Ecomm (bloqueante) + Seller (en paralelo) | Ecomm da de alta al seller con su cuenta VTEX (sobre **QA** si tiene una) y su propia política comercial. **En paralelo**, sin bloquear, el seller tramita la suya con su agencia — la necesita recién para la tarea 1.2, no para esta conexión. |
 | 2 | **Catálogo** | Fase 2 | Seller + Ecomm | Mapeo de marcas, categorías, talles, especificaciones. |
 | 3 | **Precio, Stock y Pagos** | Fase 3 | Seller + Ecomm | Fuente de precio/stock, condición comercial, medios de pago. |
 | 4 | **Envíos** | Fase 4 (parte seller) | Seller | Costos, plazos, destinos excluidos. |
@@ -102,45 +102,64 @@ La conexión la **inicia Luquin** desde su VTEX. El alta del seller VTEX↔VTEX 
 > Existe además un módulo **"Invitación de sellers"** en el mismo menú — es **distinto** del
 > alta directa. Falta confirmar cuándo se usa uno u otro (ver "A completar" abajo).
 
-**Alta del seller — 4 pestañas** (confirmado con capturas reales de una cuenta de prueba
-`sportingioqa`, seller "Sporting PDR"):
+**Dos vistas de la misma UI** (confirmado con capturas reales de una cuenta de prueba
+`sportingioqa`): la **creación** ("+ Agregar seller") es **un formulario largo, de una sola
+página**, con las secciones en este orden: Tipo de integración → Integración → Información
+básica → Acuerdos comerciales → Comisiones → Información adicional (opcional). La
+**edición** de un seller ya creado reorganiza los mismos campos en **4 pestañas**: Datos del
+seller, Acuerdos comerciales, Integración, Información operativa (esta última **no existe en
+la creación** — se completa después, editando).
 
-1. **Datos del seller** — identificación básica: *Nombre del seller\** (se muestra en el
-   storefront), *Email*, *Nro. de registro de persona jurídica*, *Descripción*, *Grupo de
-   sellers* (opcional). El **ID de seller** y el **ID de cuenta VTEX** se fijan al crear y
-   quedan de referencia arriba del formulario (no editables después). El ID de seller es el
-   que después usan la asociación VTEX↔PIM (Fase 5.3) y el filtrado/cucarda (Fase 4).
-2. **Acuerdos comerciales** — define la relación comercial con el seller:
-   - **Políticas comerciales del marketplace\*** — selector (multi) de qué políticas
-     comerciales puede usar este seller. ⚠️ **Ojo:** es un campo **distinto** del campo
-     "Política comercial" de la pestaña Integración (punto 3) — mismo nombre, dos usos.
-   - **Comisión de productos\*** y **Comisión de envío\*** (%), con opción de comisiones
-     por categoría.
-   - **Participación en carritos con GiftCards** — checkbox, **desactivado por defecto**.
-     Confirma la regla de la Fase 3 (no GiftCards para productos seller) — pero es un
-     **toggle configurable por seller**, no un límite duro del sistema: se podría activar
-     caso por caso si el negocio lo definiera.
-3. **Integración** — datos técnicos que arman la URL de fulfillment:
-   - **Cuenta de seller VTEX\*** — account name del VTEX del seller.
-   - **ID de afiliado** — código corto (ejemplo real visto: `SPG`, en una cuenta de prueba
-     de la propia Sporting). ⚠️ Sigue sin confirmar si sigue una convención fija o varía por
-     seller (ver "A completar" — el ejemplo anterior de Customer PO usaba `LQN`, distinto de
-     `SPG`; falta verificar cuál es la convención real en producción).
-   - **Política comercial** — un **ID numérico** (ejemplo real: `4`) que identifica la
-     política a usar en esta integración. Ver nota del punto 2: no es el mismo campo que
-     "Políticas comerciales del marketplace".
-   - Toggle **"Inventario omnicanal (MOI) de varios niveles"** — visto en la UI, **sin
-     documentar todavía** qué implica activarlo (ver "A completar").
-   - Estos 3 datos arman automáticamente la **URL de fulfillment**:
-     `.../api/fulfillment?an={cuenta}&affiliateId={ID de afiliado}&sc={política comercial}`.
-4. **Información operativa** — 3 campos de texto libre asociados al seller **dentro de
-   VTEX**: *Política de envío*, *Cambios y devoluciones*, *Política de privacidad y
-   seguridad*. Es la ubicación nativa para cargar lo que ya documentamos como reglas en la
-   Fase 4 (4.6-4.8, exclusión de destinos/costos/promesa de entrega) y la Fase 8
-   (condiciones de devolución) — en vez de redactarlo solo aparte, en los T&C del sitio.
-5. **Pausar el seller después de registrarlo** — checkbox (por defecto **activado**): el
-   seller queda en status **"En pausa"** hasta terminar de configurarlo; se pasa a
-   **"Activo"** cuando está listo.
+**Campos obligatorios para crear el seller** (los únicos con `*`): *Cuenta de seller VTEX*,
+*Nombre del seller*, *ID de seller*, **Políticas comerciales del marketplace**, *Comisión de
+productos*, *Comisión de envío*. Todo lo demás (ID de afiliado, MOI, grupo, email, registro,
+descripción) es opcional al crear.
+
+> ⚠️ **Corrección importante — hay DOS "política comercial" distintas, no una:**
+> 1. **La de Ecomm** (campo **"Políticas comerciales del marketplace"**, obligatorio) — vive
+>    en el **VTEX de Sporting**, la crea **Ecomm** y es **nueva por cada seller** (confirmado:
+>    no se reutiliza una existente entre varios sellers). Se crea **antes** de llegar a este
+>    formulario, porque el selector la necesita ya existente para poder elegirla.
+> 2. **La del Seller** (Fase 1.1 más abajo) — vive en **su propio VTEX**, la pide él a su
+>    agencia, y sirve para que **él mismo** marque qué productos manda al Marketplace.
+>
+> **Son objetos distintos y desacoplados.** La del Seller **no aparece en ningún campo de
+> este formulario** y **no bloquea** la creación del seller ni la conexión VTEX↔VTEX — Ecomm
+> puede completar el alta con solo la cuenta VTEX del seller y su propia política ya creada.
+> La del Seller recién hace falta en el paso **1.2** (asignarla a productos), para que esos
+> productos empiecen a viajar a la bandeja de aprobación. **Puede pedirse en paralelo, sin
+> bloquear nada del lado de Ecomm.**
+
+Dentro de **Acuerdos comerciales** además: **Comisión de productos\*** y **Comisión de
+envío\*** (%), con opción de comisiones por categoría; y **Participación en carritos con
+GiftCards** — checkbox, **desactivado por defecto**. Confirma la regla de la Fase 3 (no
+GiftCards para productos seller) — pero es un **toggle configurable por seller**, no un
+límite duro del sistema.
+
+Dentro de **Integración** — datos técnicos que arman la URL de fulfillment:
+- **Cuenta de seller VTEX\*** — account name del VTEX del seller.
+- **ID de afiliado** — código corto (ejemplo real visto: `SPG`, en una cuenta de prueba de
+  la propia Sporting). ⚠️ Sigue sin confirmar si sigue una convención fija o varía por seller
+  (ver "A completar" — el ejemplo anterior de Customer PO usaba `LQN`, distinto de `SPG`;
+  falta verificar cuál es la convención real en producción).
+- **Política comercial** — acá es un **ID numérico** (ejemplo real: `4`) que identifica cuál
+  política de Ecomm (la del punto 1 de arriba) usar en la URL de fulfillment. **Mismo campo
+  conceptual** que "Políticas comerciales del marketplace" de Acuerdos comerciales, mostrado
+  distinto (selector vs. ID) según la pantalla.
+- Toggle **"Inventario omnicanal (MOI) de varios niveles"** — visto en la UI, **sin
+  documentar todavía** qué implica activarlo (ver "A completar").
+- Estos 3 datos arman automáticamente la **URL de fulfillment**:
+  `.../api/fulfillment?an={cuenta}&affiliateId={ID de afiliado}&sc={política comercial}`.
+
+**Información operativa** (solo en edición, no en la creación) — 3 campos de texto libre
+asociados al seller **dentro de VTEX**: *Política de envío*, *Cambios y devoluciones*,
+*Política de privacidad y seguridad*. Es la ubicación nativa para cargar lo que ya
+documentamos como reglas en la Fase 4 (4.6-4.8) y la Fase 8 (condiciones de devolución) — en
+vez de redactarlo solo aparte, en los T&C del sitio.
+
+**Pausar el seller después de registrarlo** — checkbox (por defecto **activado**): el seller
+queda en status **"En pausa"** hasta terminar de configurarlo; se pasa a **"Activo"** cuando
+está listo.
 
 > **Ambiente de prueba (QA) antes de ir a producción:** preguntarle al seller si tiene una
 > cuenta **VTEX de QA** propia, para conectar **QA↔QA** y probar el flujo completo sin tocar
@@ -174,30 +193,39 @@ La conexión la **inicia Luquin** desde su VTEX. El alta del seller VTEX↔VTEX 
 ### Política comercial
 
 La política comercial es lo que permite **diferenciar los productos** dentro del sitio.
-Ambas partes deben solicitar su creación a la agencia a cargo de su VTEX.
+**Cada parte crea la suya, en su propio VTEX** — son dos objetos independientes (ver el
+recuadro de arriba): la de **Ecomm** habilita el alta del seller en el VTEX de Sporting; la
+del **Seller** es lo que él usa, en su propio VTEX, para marcar qué productos manda al
+Marketplace. **No hace falta esperar una para tramitar la otra.**
 
 **Ventajas de una política comercial diferenciada:**
 1. **Catálogo** — optimiza la disponibilidad de productos estableciendo restricciones.
 2. **Promociones** — define con claridad qué productos participan, vinculándolas a políticas específicas.
 3. **Pagos** — ajusta condiciones de pago según la política comercial.
 
-Cuando el seller asigna la política comercial a un producto, ese producto **viaja al VTEX
-del Marketplace** y cae en una **bandeja de aprobación**.
+Cuando el seller asigna **su propia** política comercial a un producto (en su VTEX), ese
+producto **viaja al VTEX del Marketplace** y cae en una **bandeja de aprobación**. Esto es
+independiente de que Ecomm ya haya completado el alta del seller.
 
 #### Tareas — Fase 1
 
 | # | Ítem | Descripción | Tarea Seller | Tarea Ecomm | Estado |
 |---|---|---|---|---|---|
-| 1.0 | Alta del seller | Luquin da de alta al seller en **Gestión › Agregar seller** (tipo *Seller VTEX*), completando 4 pestañas: Datos del seller, Acuerdos comerciales, Integración, Información operativa. Ver detalle arriba. | Compartir su **cuenta de seller VTEX** y, si tiene, su **cuenta de QA** (para probar QA↔QA antes de ir a producción). | Completar las 4 pestañas (datos, comisiones, cuenta/ID de afiliado/política comercial, políticas operativas); decidir QA vs. producción; activar cuando esté listo. | ⚠️ parcial |
-| 1.1 | Solicitar política comercial | Cada parte la pide a su agencia. | Solicitar una nueva política comercial a su agencia. | Crear una nueva política comercial para diferenciar los productos en el sitio. | ✅ |
+| 1.0 | Alta del seller | Ecomm crea el seller en **Gestión › Agregar seller** (tipo *Seller VTEX*). **No depende** de que el seller ya tenga su política comercial (ver 1.1) — solo de su cuenta VTEX y de la política de Ecomm (ya creada). | Compartir su **cuenta de seller VTEX** y, si tiene, su **cuenta de QA** (para probar QA↔QA antes de ir a producción). | Crear **su propia** política comercial para este seller (prerrequisito); completar el formulario de alta; decidir QA vs. producción; activar cuando esté listo. | ⚠️ parcial |
+| 1.1 | Solicitar política comercial | **Cada parte crea la suya, en su propio VTEX** — son independientes entre sí y de la tarea 1.0 (ver recuadro arriba). No bloquea ni es bloqueada por el alta. | Solicitar una nueva política comercial a su agencia (para poder hacer la tarea 1.2 más adelante). | Crear su propia política comercial (nueva, específica de este seller) — es un prerrequisito de la tarea 1.0, no de la 1.1 del seller. | ✅ |
 | 1.2 | Asignar política a productos | Marca qué productos se envían al Marketplace. | Asignar la política comercial a cada producto (uno a uno o masivo). | — | ✅ |
 | 1.3 | Configurar sobre la política | Todo se configura sobre esa política. | — | Los productos aprobados se crean con esa política; todas las configuraciones se hacen sobre ella. | ✅ |
 
 #### Reglas / Decisiones — Fase 1
 
 - **Costo:** la política comercial cuesta **USD 40**. Cada parte se hace cargo de la suya.
-- La asignación de la política comercial es el mecanismo de **envío de productos** al
-  Marketplace: al asignarla, el producto llega a la bandeja de aprobación del VTEX del Marketplace.
+- **No bloqueante:** la política comercial del seller **no es un requisito para el alta** ni
+  para la conexión VTEX↔VTEX (Ecomm puede completarla con solo la cuenta VTEX del seller y
+  su propia política, ya creada). Es necesaria recién para la tarea 1.2 (que el seller
+  empiece a mandar productos) — pedirla puede correr en paralelo, sin frenar nada.
+- La asignación de la política comercial **del seller** a un producto es el mecanismo de
+  **envío de productos** al Marketplace: al asignarla, el producto llega a la bandeja de
+  aprobación del VTEX del Marketplace.
 
 ---
 

@@ -33,9 +33,11 @@ entres (el portal te lo va a pedir desde el menú de tu usuario, arriba a la der
 
 El primer paso de nuestro lado es la **conexión entre ambos VTEX**: necesitamos que
 nos compartas la **cuenta de tu seller VTEX** y, si tenés, una **cuenta de QA** —
-preferimos siempre probar la integración ahí antes de tocar producción. En paralelo,
-te pedimos que solicites a tu agencia la creación de la **política comercial** de tu
-lado, que es necesaria para esa conexión.
+preferimos siempre probar la integración ahí antes de tocar producción.
+
+En paralelo, sin que eso frene la conexión, te pedimos que solicites a tu agencia la
+creación de tu **política comercial** — la vas a necesitar en el siguiente paso, para
+indicarnos qué productos querés vender en el Marketplace.
 
 Por último, pasanos quién estaría a cargo de la integración de tu lado, así
 coordinamos una **reunión inicial** y arrancamos.
