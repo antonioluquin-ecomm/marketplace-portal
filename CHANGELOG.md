@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-14 - Relevamiento condicional para sellers VTEX ↔ VTEX
+
+Tipo de cambio: mejora funcional de frontend (sin cambios de backend ni de datos).
+
+`public/formularios/formulario-relevamiento.html` ahora lee el `modelo_integracion_estimado` del seller (ya viene en la respuesta de `getSellers`) y, si es "VTEX ↔ VTEX", oculta las secciones 4 (Catálogo) y 5 (Stock y precios) completas —porque ese modelo sincroniza catálogo/stock/precios automáticamente por el protocolo de integración de VTEX— y los campos técnicos de la sección 3 que no aplican (ERP, API, equipo técnico, informes de estado/tracking, frecuencia de actualización). El seller ve un aviso corto explicando por qué el formulario es más corto, la navegación entre secciones (contador, botones Anterior/Siguiente, pills de progreso) se renumera dinámicamente para no saltar huecos, y el cálculo de avance ya ignoraba automáticamente los campos ocultos (reutiliza el mecanismo existente `.hidden`). Seller Center y Sistemas propios no tienen recorte todavía — queda para una próxima etapa.
+
 ## 2026-07-14 - Unifica terminología de Modelo de integración a 3 valores
 
 Tipo de cambio: unificación de datos y frontend (requiere redeploy de Apps Script; sin cambio de esquema de columnas).

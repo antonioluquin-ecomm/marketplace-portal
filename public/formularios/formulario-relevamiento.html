@@ -502,8 +502,8 @@
           </p>
         </div>
         <div class="intro-badges">
-          <span class="badge time">⏱ Tiempo estimado: 15–20 min</span>
-          <span class="badge sections">📂 9 secciones</span>
+          <span class="badge time" id="badgeTiempo">⏱ Tiempo estimado: 15–20 min</span>
+          <span class="badge sections" id="badgeSecciones">📂 9 secciones</span>
           <span class="badge required">* Campos obligatorios marcados</span>
         </div>
         <div id="sellerIdentity" class="seller-identity">
@@ -518,6 +518,7 @@
             <div id="sellerNameView" class="seller-name">Validando seller…</div>
             <div id="sellerMetaView" class="seller-meta"></div>
             <div id="sellerIdView" class="seller-id-small"></div>
+            <div id="sellerModeloNote" class="seller-id-small hidden"></div>
           </div>
         </div>
         <div id="sellerChip" class="seller-chip">
@@ -2729,7 +2730,103 @@
           webInput.value = seller.seller_url;
         if (plataformaInput && !plataformaInput.value && seller.plataforma)
           plataformaInput.value = seller.plataforma;
+        applyModeloRelevamiento(seller.modelo_integracion_estimado || "");
         updateProgress();
+      }
+
+      // ── AJUSTE DEL RELEVAMIENTO SEGÚN MODELO DE INTEGRACIÓN ──
+      // Oculta secciones/campos que no aportan para el modelo del seller.
+      // Por ahora solo VTEX ↔ VTEX tiene recorte definido; Seller Center y
+      // Sistemas propios ven el relevamiento completo.
+      const HIDDEN_SECTIONS_BY_MODELO = {
+        "VTEX ↔ VTEX": [4, 5],
+      };
+      const HIDDEN_FIELDS_BY_MODELO = {
+        "VTEX ↔ VTEX": [
+          "erp",
+          "api",
+          "equipo_tec",
+          "recibe_pedidos_ext",
+          "informa_estados",
+          "informa_tracking",
+          "frec_actualizacion",
+        ],
+      };
+      const MODELO_NOTE = {
+        "VTEX ↔ VTEX":
+          "Como tu operación es VTEX ↔ VTEX, catálogo, stock y precios se sincronizan automáticamente por el protocolo de integración de VTEX: achicamos el relevamiento a lo que sí necesitamos de vos.",
+      };
+
+      function applyModeloRelevamiento(modelo) {
+        const hiddenSections = HIDDEN_SECTIONS_BY_MODELO[modelo] || [];
+        const hiddenFields = HIDDEN_FIELDS_BY_MODELO[modelo] || [];
+        const note = MODELO_NOTE[modelo] || "";
+
+        hiddenSections.forEach((n) => {
+          const sec = document.querySelector('.section[data-section="' + n + '"]');
+          if (sec) sec.classList.add("hidden");
+          const dot = document.getElementById("dot-sec-" + n);
+          if (dot) dot.remove();
+        });
+
+        hiddenFields.forEach((name) => {
+          const wrap = document.getElementById(name + "_wrap");
+          if (wrap) {
+            wrap.classList.add("hidden");
+            return;
+          }
+          const input = document.querySelector('[name="' + name + '"]');
+          const field = input && input.closest(".field");
+          if (field) field.classList.add("hidden");
+        });
+
+        renumberVisibleSections();
+
+        const noteEl = document.getElementById("sellerModeloNote");
+        if (noteEl) {
+          if (note) {
+            noteEl.textContent = note;
+            noteEl.classList.remove("hidden");
+          } else {
+            noteEl.classList.add("hidden");
+          }
+        }
+      }
+
+      function renumberVisibleSections() {
+        const visible = Array.from(
+          document.querySelectorAll(".section[data-section]"),
+        ).filter((s) => !s.classList.contains("hidden"));
+        const total = visible.length;
+        const badge = document.getElementById("badgeSecciones");
+        if (badge) badge.textContent = "📂 " + total + " secciones";
+        visible.forEach((sec, idx) => {
+          const pos = idx + 1;
+          const center = sec.querySelector(".section-nav-center");
+          if (center) center.textContent = pos + " / " + total;
+          const prevBtn = sec.querySelector(".section-nav-btn.prev");
+          const nextBtn = sec.querySelector(".section-nav-btn.next");
+          const prevSec = visible[idx - 1];
+          const nextSec = visible[idx + 1];
+          if (prevBtn) {
+            if (prevSec) {
+              prevBtn.style.display = "";
+              prevBtn.onclick = () =>
+                navToSection(Number(prevSec.dataset.section));
+            } else {
+              prevBtn.style.display = "none";
+            }
+          }
+          if (nextBtn) {
+            if (nextSec) {
+              nextBtn.style.display = "";
+              nextBtn.onclick = () =>
+                navToSection(Number(nextSec.dataset.section));
+            } else {
+              nextBtn.style.display = "none";
+            }
+          }
+        });
       }
 
       async function loadSellerIdentity() {
