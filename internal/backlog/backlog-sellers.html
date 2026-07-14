@@ -408,6 +408,8 @@ const CONFIG = {
   CALIFICACION_PATH: "/public/formularios/formulario-calificacion.html",
   RELEVAMIENTO_PATH: "/public/formularios/formulario-relevamiento.html",
   SIMULADOR_SELLER_PATH: "/public/simuladores/simulador-seller.html",
+  GANTT_SELLER_PATH: "/public/gantt/gantt-seller.html",
+  INTEGRACION_SELLER_PATH: "/public/integracion/integracion-seller.html",
 };
 const APPS_SCRIPT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
 
@@ -1055,6 +1057,8 @@ function openModal(id){
     {title:"Formulario de calificación", desc:"Evaluación inicial del seller",        path:CONFIG.CALIFICACION_PATH},
     {title:"Formulario de relevamiento", desc:"Relevamiento técnico y operativo",     path:CONFIG.RELEVAMIENTO_PATH},
     {title:"Simulador de costos", desc:"Calculadora económica del seller", path:CONFIG.SIMULADOR_SELLER_PATH},
+    {title:"Gantt del proyecto", desc:"Seguimiento de integración, visible para el seller", path:CONFIG.GANTT_SELLER_PATH},
+    {title:"Guía de integración", desc:"Hoja de ruta y checklist VTEX ↔ VTEX", path:CONFIG.INTEGRACION_SELLER_PATH},
   ];
   const shareHTML=links.map(l=>{
     const url=publicUrl(l.path,s.seller_id);

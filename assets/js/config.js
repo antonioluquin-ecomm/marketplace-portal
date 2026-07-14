@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.2.0',
+  number: '1.3.0',
   date:   '2026-07-14',
-  notes:  'ROUTES.PUBLIC y RESOURCES completados — les faltaban 9 entradas entre ambos',
+  notes:  'Se cierran las 5 listas de páginas desincronizadas encontradas en la sesión (config.js x2, index.html, 2 modales de links)',
 };
 
 const CHANGELOG = [
+  { v: '1.3.0', date: '2026-07-14', desc: 'Se agregan Gantt del seller y Guía de integración a la grilla del Hub (index.html) y a los modales de links de Gestión/Backlog de Sellers — mismo hueco que se venía de cerrar en config.js.' },
   { v: '1.2.0', date: '2026-07-14', desc: 'Se completan ROUTES.PUBLIC (faltaban GANTT_SELLER e INTEGRACION_SELLER) y RESOURCES (faltaban 7 páginas internas, entre ellas la guía de Integración VTEX ↔ VTEX) — mismo patrón de lista desactualizada que el changelog.' },
   { v: '1.1.0', date: '2026-07-14', desc: 'Se reconstruye este historial: no se venía actualizando desde la v1.0.0 pese a 9 cambios visibles posteriores, ya documentados en CHANGELOG.md pero nunca reflejados acá.' },
   { v: '1.0.9', date: '2026-07-14', desc: 'Se termina de alinear governance.html y proyecto-marketplace.html a los 3 modelos de integración vigentes (quedaba vocabulario viejo sin migrar).' },

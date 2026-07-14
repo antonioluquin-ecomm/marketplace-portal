@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-14 - Completa las 3 listas de páginas restantes (Hub + modales de links)
+
+Tipo de cambio: fix de datos en frontend (sin cambios de backend ni de datos).
+
+Cierra la auditoría de listas desincronizadas: `index.html` (grilla "todos los recursos" del Hub) y los modales de "links para compartir" de `gestion-sellers.html`/`backlog-sellers.html` tenían el mismo problema que `config.js` — cada uno con su propia copia de "qué páginas públicas existen", sin las 2 más nuevas (Gantt del seller, Guía de integración VTEX↔VTEX).
+
+- **`index.html`**: se agregan 3 tarjetas a `RESOURCES` local — Integración VTEX ↔ VTEX (Interno), Gantt de tu proyecto y Guía de integración (Seller). Pasa de 18 a 21.
+- **`gestion-sellers.html`**: se agregan 2 filas "Copiar" (Gantt del proyecto, Guía de integración) al panel de links del seller, con sus rutas en `FALLBACK_CONFIG.ROUTES.PUBLIC` y el objeto `ROUTES` que arma `buildPublicLink()`.
+- **`backlog-sellers.html`**: se agregan las mismas 2 filas al modal "Links para compartir" de cada seller (botones Copiar/Abrir), con sus paths en el objeto `CONFIG` del archivo.
+- Verificado con datos mock en los tres: la grilla del Hub muestra 21 tarjetas y el buscador filtra bien; `gestion-sellers.html` arma las URLs absolutas correctas vía `buildPublicLink('gantt'|'integracion')`; el modal de `backlog-sellers.html` muestra 6 links con sus acciones. Sin errores de consola.
+- Con esto, las 5 listas de páginas encontradas desincronizadas en la sesión (`config.js` ×2, `index.html`, y los 2 modales) quedan consistentes entre sí.
+
 ## 2026-07-14 - Completa ROUTES.PUBLIC y RESOURCES de config.js
 
 Tipo de cambio: fix de datos en frontend (sin cambios visuales ni de backend).

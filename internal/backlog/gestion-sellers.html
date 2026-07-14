@@ -136,6 +136,8 @@
           <div class="link-row"><b>Formulario calificación</b><button onclick="copyLink('calificacion')">Copiar</button></div>
           <div class="link-row"><b>Formulario relevamiento</b><button onclick="copyLink('relevamiento')">Copiar</button></div>
           <div class="link-row"><b>Simulador seller</b><button onclick="copyLink('simulador')">Copiar</button></div>
+          <div class="link-row"><b>Gantt del proyecto</b><button onclick="copyLink('gantt')">Copiar</button></div>
+          <div class="link-row"><b>Guía de integración</b><button onclick="copyLink('integracion')">Copiar</button></div>
         </div>
         <div class="msg-box"><div class="msg-title">Mensaje sugerido de primer contacto</div><div class="msg-preview" id="messagePreview"></div><div class="actions"><button class="button secondary" onclick="copyFirstContactMessage()" type="button">Copiar mensaje</button></div></div>
       </aside>
@@ -212,7 +214,7 @@
       BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal",
       APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec",
       ASSETS: { LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/logos/" },
-      ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html" }, INTERNAL:{ BACKLOG_SELLERS:"/internal/backlog/backlog-sellers.html" } },
+      ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html", GANTT_SELLER:"/public/gantt/gantt-seller.html", INTEGRACION_SELLER:"/public/integracion/integracion-seller.html" }, INTERNAL:{ BACKLOG_SELLERS:"/internal/backlog/backlog-sellers.html" } },
       toAbsoluteUrl(path){ const base=this.BASE_URL.replace(/\/$/,""); return /^https?:\/\//i.test(path)?path:base+(String(path).startsWith("/")?path:"/"+path); }
     };
     const CFG = window.MP_CONFIG || FALLBACK_CONFIG;
@@ -223,7 +225,9 @@
       presentacion: ROUTE_PUBLIC.PRESENTACION_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.PRESENTACION_SELLER,
       calificacion: ROUTE_PUBLIC.FORMULARIO_CALIFICACION || FALLBACK_CONFIG.ROUTES.PUBLIC.FORMULARIO_CALIFICACION,
       relevamiento: ROUTE_PUBLIC.FORMULARIO_RELEVAMIENTO || FALLBACK_CONFIG.ROUTES.PUBLIC.FORMULARIO_RELEVAMIENTO,
-      simulador: ROUTE_PUBLIC.SIMULADOR_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.SIMULADOR_SELLER
+      simulador: ROUTE_PUBLIC.SIMULADOR_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.SIMULADOR_SELLER,
+      gantt: ROUTE_PUBLIC.GANTT_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.GANTT_SELLER,
+      integracion: ROUTE_PUBLIC.INTEGRACION_SELLER || FALLBACK_CONFIG.ROUTES.PUBLIC.INTEGRACION_SELLER
     };
     const SELLER_FIELDS = ["seller_id","seller_nombre","empresa_grupo","marca_seller_operativo","url_seller","categoria_estimada","plataforma_estimada","modelo_integracion_estimado","estado_pipeline","prioridad","sitio_objetivo","responsable","contacto_nombre","contacto_email","contacto_tel","proximo_paso","observaciones","activo"];
     const OPTIONAL_ALIASES = {
