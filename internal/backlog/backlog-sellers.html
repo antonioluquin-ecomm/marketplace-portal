@@ -288,18 +288,18 @@ tbody tr{cursor:pointer}
   </aside>
 
   <div class="content-wrap">
+    <div class="page-title">
+      <div class="eyebrow">Flujo de incorporación</div>
+      <h1>Backlog de <span>Sellers</span></h1>
+      <p class="lead">Pipeline completo de sellers en proceso de incorporación: estado, prioridad, modelo de integración y próximo paso de cada uno.</p>
+    </div>
     <div class="kpi-bar">
       <div class="kpi"><div class="kpi-val" id="kpi-total">—</div><div class="kpi-lbl">Sellers</div></div>
-      <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val g" id="kpi-live">—</div><div class="kpi-lbl">Live</div></div>
       <div class="kpi"><div class="kpi-val i" id="kpi-int">—</div><div class="kpi-lbl">En integración</div></div>
       <div class="kpi"><div class="kpi-val w" id="kpi-eval">—</div><div class="kpi-lbl">En evaluación</div></div>
-      <div class="kpi-sep"></div>
       <div class="kpi"><div class="kpi-val d" id="kpi-blk">—</div><div class="kpi-lbl">Bloqueados</div></div>
       <div class="kpi"><div class="kpi-val w" id="kpi-alta">—</div><div class="kpi-lbl">Alta prioridad</div></div>
-      <div class="kpi-sep"></div>
-      <div class="kpi"><div class="kpi-val i" id="kpi-grupos">—</div><div class="kpi-lbl">Grupos</div></div>
-      <div class="kpi"><div class="kpi-val g" id="kpi-marcas">—</div><div class="kpi-lbl">Marcas</div></div>
     </div>
     <div class="filter-bar">
       <div class="filter-group">
@@ -776,8 +776,6 @@ function updateKPIs(){
   setText("kpi-eval",bp("En evaluación"));
   setText("kpi-blk",ALL.filter(s=>s.bloqueo_flag).length);
   setText("kpi-alta",ALL.filter(s=>norm(s.prioridad)==="alta").length);
-  setText("kpi-grupos",new Set(ALL.map(s=>s.empresa_grupo).filter(v=>v&&v!=="Sin grupo asignado")).size);
-  setText("kpi-marcas",new Set(ALL.map(s=>s.marca_seller_operativo).filter(v=>v&&v!=="Sin marca asignada")).size);
   // Quick filter counts
   const qc={
     bloqueados:   ALL.filter(s=>s.bloqueo_flag).length,
