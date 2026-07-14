@@ -131,7 +131,7 @@
           <div class="kpi"><div class="num">8</div><div class="lbl">Fases del proceso</div></div>
           <div class="kpi info"><div class="num">6</div><div class="lbl">Roles involucrados</div></div>
           <div class="kpi teal"><div class="num">7</div><div class="lbl">SLAs / plazos</div></div>
-          <div class="kpi warn"><div class="num">15</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi warn"><div class="num">16</div><div class="lbl">Pendientes por cerrar</div></div>
         </div>
       </section>
 
@@ -162,20 +162,24 @@
       <section id="f1" class="section">
         <div class="section-head"><div class="section-title"><span>🔌</span><h2>Fase 1 — Conexión / Política comercial</h2></div><p class="section-desc">La conexión la inicia Luquin desde su VTEX. Alta del seller + política comercial para diferenciar los productos que participan.</p></div>
         <div class="panel soft">
-          <h3 style="margin-top:0">Alta del seller — <code>Marketplace › Sellers › Gestión › + Agregar seller</code></h3>
+          <h3 style="margin-top:0">Alta del seller — <code>Marketplace › Sellers › Gestión › + Agregar seller</code> · 4 pestañas</h3>
+          <p style="margin:0 0 10px">Confirmado con capturas reales de una cuenta de prueba (<code>sportingioqa</code>, seller "Sporting PDR").</p>
           <ol class="autolist">
-            <li><strong>Tipo de integración:</strong> elegir <strong>“Seller VTEX”</strong> (no “Seller externo”, que es otro modelo).</li>
-            <li><strong>Integración:</strong> <em>Cuenta de seller VTEX</em> (requerido) + <em>ID de afiliado</em> (prefijo del Customer PO, p. ej. <code>LQN</code>).</li>
-            <li><strong>Información básica:</strong> <em>Nombre del seller</em> (storefront) + <em>ID de seller</em> (identificación en el MP) + grupo opcional.</li>
-            <li><strong>Pausar el seller después de registrarlo</strong> (por defecto activado): queda “En pausa” hasta terminar de configurar; se pasa a “Activo” cuando está listo.</li>
+            <li><strong>Datos del seller:</strong> <em>Nombre</em> (storefront), <em>Email</em>, <em>Nro. de registro de persona jurídica</em>, <em>Descripción</em>, <em>Grupo</em>. El <strong>ID de seller</strong> y el <strong>ID de cuenta VTEX</strong> quedan fijos al crear.</li>
+            <li><strong>Acuerdos comerciales:</strong> selector de <em>políticas comerciales del marketplace</em> (⚠️ distinto del campo "Política comercial" del punto 3 — mismo nombre, dos usos) + <em>comisión de productos/envío</em> (%) + toggle <strong>GiftCards</strong> (desactivado por defecto — confirma la regla de Fase 3, pero es configurable por seller).</li>
+            <li><strong>Integración:</strong> <em>Cuenta de seller VTEX</em> + <em>ID de afiliado</em> (ejemplo real: <code>SPG</code>) + <em>Política comercial</em> (ID numérico, ej. <code>4</code>) + toggle <strong>MOI</strong> (inventario omnicanal multi-nivel, sin documentar). Arman la URL de fulfillment: <code>…/fulfillment?an={cuenta}&amp;affiliateId={ID afiliado}&amp;sc={política comercial}</code>.</li>
+            <li><strong>Información operativa:</strong> 3 campos de texto libre — <em>Política de envío</em>, <em>Cambios y devoluciones</em>, <em>Política de privacidad y seguridad</em> — ubicación nativa para las reglas de Fase 4.6-4.8 y Fase 8.</li>
+            <li><strong>Pausar el seller después de registrarlo</strong> (activado por defecto): "En pausa" hasta terminar de configurar; "Activo" cuando está listo.</li>
           </ol>
-          <div class="callout warn">Falta afinar el flujo de <strong>“invitación”</strong> propiamente dicho y la semántica exacta del ID de afiliado (pendientes 1.0-a / 1.0-b).</div>
+          <div class="callout warn"><strong>QA antes de producción:</strong> preguntarle al seller si tiene cuenta VTEX de QA propia, para conectar QA↔QA. Sin eso, se prueba directo sobre producción (evaluar riesgo). Priorizar siempre QA↔QA cuando sea posible.</div>
+          <div class="callout"><strong>Contacto de integración:</strong> Gabriel Luna — <code>gabriel.luna@luquin.com.ar</code> (distinto del contacto operativo de Fase 7b). <strong>Kickoff:</strong> Gabriel manda el primer mail con link + usuario y contraseña del portal ya creados; el seller entra y consulta la guía desde ahí.</div>
+          <div class="callout warn">Falta afinar el flujo de <strong>“invitación”</strong>, la convención real del ID de afiliado (<code>SPG</code> de prueba vs. <code>LQN</code> documentado en Fase 5) y qué hace el toggle MOI (pendientes 1.0-a / 1.0-b / 1.0-c).</div>
         </div>
         <h3>Tareas</h3>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Estado</th></tr></thead>
           <tbody>
-            <tr><td>1.0</td><td><strong>Alta del seller</strong> — Luquin lo da de alta (tipo Seller VTEX).</td><td>Compartir su <strong>cuenta de seller VTEX</strong>.</td><td>Dar de alta (cuenta VTEX, ID de afiliado, ID/nombre) y activarlo cuando esté listo.</td><td><span class="pill w">Parcial</span></td></tr>
+            <tr><td>1.0</td><td><strong>Alta del seller</strong> — Luquin lo da de alta (tipo Seller VTEX, 4 pestañas).</td><td>Compartir su <strong>cuenta de seller VTEX</strong> y, si tiene, su <strong>cuenta de QA</strong>.</td><td>Completar las 4 pestañas (datos, comisiones, cuenta/ID afiliado/política comercial, políticas operativas); decidir QA vs. producción; activar cuando esté listo.</td><td><span class="pill w">Parcial</span></td></tr>
             <tr><td>1.1</td><td><strong>Solicitar política comercial</strong> — cada parte la pide a su agencia.</td><td>Solicitar una nueva política comercial a su agencia.</td><td>Crear una nueva política comercial para diferenciar los productos.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>1.2</td><td><strong>Asignar política a productos</strong> — marca qué productos van al MP.</td><td>Asignar la política a cada producto (uno a uno o masivo).</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>1.3</td><td><strong>Configurar sobre la política</strong>.</td><td>—</td><td>Los productos aprobados se crean con esa política; todo se configura sobre ella.</td><td><span class="pill g">Listo</span></td></tr>
@@ -442,12 +446,13 @@
       </section>
 
       <section id="agujeros" class="section">
-        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 15 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 16 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
           <tbody>
             <tr><td>1.0-a</td><td>Completar el flujo de “invitación”: relación entre “Invitación de sellers” y “Agregar seller”, y si hay aceptación del lado del seller.</td></tr>
-            <tr><td>1.0-b</td><td>Semántica del “ID de afiliado” (¿siempre <code>LQN</code>? ¿por seller?) y credenciales que activan la API.</td></tr>
+            <tr><td>1.0-b</td><td>Convención real del “ID de afiliado” en un seller de producción (la prueba usó <code>SPG</code>, distinto del <code>LQN</code> de Fase 5) y credenciales que activan la API.</td></tr>
+            <tr><td>1.0-c</td><td>Documentar qué hace el toggle “Inventario omnicanal (MOI) de varios niveles” y cuándo conviene activarlo.</td></tr>
             <tr><td>2.8</td><td>Alcance de la automatización de orden de imágenes en VCC.</td></tr>
             <tr><td>2.10</td><td>Lista de motivos de rechazo.</td></tr>
             <tr><td>2.10</td><td>Probar flujo de rechazo/reenvío en QA.</td></tr>

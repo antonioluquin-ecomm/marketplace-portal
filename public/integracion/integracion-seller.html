@@ -162,7 +162,7 @@
           <h3>Conexión</h3>
           <div class="area-sub">Vincular tu VTEX con el Marketplace</div>
           <ul class="checks">
-            <li>Solicitá a tu agencia la creación de una <strong>política comercial</strong> (tiene un costo de <strong>USD 40</strong>).</li>
+            <li>Solicitá a tu agencia la creación de una <strong>política comercial</strong>.</li>
             <li>Compartinos tu <strong>cuenta de seller VTEX</strong> para darte de alta.</li>
             <li>Asigná esa política comercial a los productos que querés vender en el Marketplace — así viajan a nuestra bandeja de aprobación.</li>
           </ul>
@@ -272,10 +272,10 @@
   <!-- CONTACTO -->
   <section id="contacto" class="section">
     <div class="inner contact-box">
-      <div class="eyebrow" style="justify-content:center">¿Dudas?</div>
+      <div class="eyebrow" style="justify-content:center">¿Dudas sobre tu integración?</div>
       <h2>Estamos para ayudarte</h2>
-      <p class="section-lead" style="margin:0 auto">Escribinos ante cualquier duda sobre tu integración, un pedido o una devolución.</p>
-      <a class="contact-mail" href="mailto:sellers-soporte@sporting.com.ar">sellers-soporte@sporting.com.ar</a>
+      <p class="section-lead" style="margin:0 auto">Escribinos ante cualquier duda sobre la conexión, el catálogo o cualquier paso de esta guía.</p>
+      <a class="contact-mail" href="mailto:gabriel.luna@luquin.com.ar">gabriel.luna@luquin.com.ar</a>
     </div>
   </section>
 
@@ -288,19 +288,32 @@
       if (!SellerSESSION.isLoggedIn()) return;      // ya redirigió al login
       renderStaffSellerBar();                       // modo staff: barra "ver como seller"
 
-      var nombre = SellerSESSION.nombre || SellerSESSION.email || '';
       var chip = document.getElementById('user-chip-name');
-      if (chip) chip.textContent = nombre;
+      if (chip) chip.textContent = SellerSESSION.nombre || SellerSESSION.email || '';
 
       var sid = SellerSESSION.sellerId;
       var topSeller = document.getElementById('topSeller');
       var topName = document.getElementById('topSellerName');
       var heroName = document.getElementById('heroSellerName');
-      if (sid) {
+      if (!sid) return;
+
+      if (topSeller) topSeller.classList.add('show');
+
+      // El nombre de marca (seller_nombre, hoja "sellers") es la fuente canónica —
+      // no depende de la cuenta de login, que puede tener el "nombre" vacío o ser
+      // un contacto genérico (mismo patrón que public/index.html).
+      _apiSellerPost({ action: 'getSellers' }).then(function (json) {
+        var row = (json.data || [])[0];
+        var marca = row && row.seller_nombre;
+        if (marca) {
+          if (topName) topName.textContent = marca;
+          if (heroName) heroName.textContent = marca;
+        } else {
+          if (topName) topName.textContent = sid;
+        }
+      }).catch(function () {
         if (topName) topName.textContent = sid;
-        if (topSeller) topSeller.classList.add('show');
-        if (heroName && nombre) heroName.textContent = nombre;
-      }
+      });
     });
   </script>
 </body>

@@ -66,35 +66,74 @@ La conexión la **inicia Luquin** desde su VTEX. El alta del seller VTEX↔VTEX 
 > Existe además un módulo **"Invitación de sellers"** en el mismo menú — es **distinto** del
 > alta directa. Falta confirmar cuándo se usa uno u otro (ver "A completar" abajo).
 
-**Formulario "Agregar seller" — secciones:**
+**Alta del seller — 4 pestañas** (confirmado con capturas reales de una cuenta de prueba
+`sportingioqa`, seller "Sporting PDR"):
 
-1. **Tipo de integración:** elegir **"Seller VTEX"** (el seller usa la plataforma VTEX). La
-   otra opción, **"Seller externo"**, corresponde a otro modelo de integración (no este —
-   ver `modelo-integracion.html`). En la grilla de Gestión, esto se ve como **"Seller VTEX"**
-   vs **"Externa"**.
-2. **Integración** (datos del seller en VTEX para generar automáticamente la URL de fulfillment):
-   - **Cuenta de seller VTEX*** *(requerido)* — el account name del VTEX del seller.
-   - **ID de afiliado** — probablemente el código de **3 consonantes** que prefija el Customer
-     PO (p. ej. `LQN`). ⚠️ Confirmar semántica exacta (ver "A completar").
-3. **Información básica** (cómo identificar al seller en el marketplace):
-   - **Nombre del seller*** — se muestra en el storefront.
-   - **ID de seller*** — identificación del seller en el marketplace (p. ej. Sporting = `1`).
-   - **Grupo de sellers** *(opcional)*.
-4. **Pausar el seller después de registrarlo** — checkbox (por defecto **activado**): el
-   seller queda en status **"En pausa"** hasta terminar de configurarlo; se pasa a **"Activo"**
-   cuando está listo.
+1. **Datos del seller** — identificación básica: *Nombre del seller\** (se muestra en el
+   storefront), *Email*, *Nro. de registro de persona jurídica*, *Descripción*, *Grupo de
+   sellers* (opcional). El **ID de seller** y el **ID de cuenta VTEX** se fijan al crear y
+   quedan de referencia arriba del formulario (no editables después). El ID de seller es el
+   que después usan la asociación VTEX↔PIM (Fase 5.3) y el filtrado/cucarda (Fase 4).
+2. **Acuerdos comerciales** — define la relación comercial con el seller:
+   - **Políticas comerciales del marketplace\*** — selector (multi) de qué políticas
+     comerciales puede usar este seller. ⚠️ **Ojo:** es un campo **distinto** del campo
+     "Política comercial" de la pestaña Integración (punto 3) — mismo nombre, dos usos.
+   - **Comisión de productos\*** y **Comisión de envío\*** (%), con opción de comisiones
+     por categoría.
+   - **Participación en carritos con GiftCards** — checkbox, **desactivado por defecto**.
+     Confirma la regla de la Fase 3 (no GiftCards para productos seller) — pero es un
+     **toggle configurable por seller**, no un límite duro del sistema: se podría activar
+     caso por caso si el negocio lo definiera.
+3. **Integración** — datos técnicos que arman la URL de fulfillment:
+   - **Cuenta de seller VTEX\*** — account name del VTEX del seller.
+   - **ID de afiliado** — código corto (ejemplo real visto: `SPG`, en una cuenta de prueba
+     de la propia Sporting). ⚠️ Sigue sin confirmar si sigue una convención fija o varía por
+     seller (ver "A completar" — el ejemplo anterior de Customer PO usaba `LQN`, distinto de
+     `SPG`; falta verificar cuál es la convención real en producción).
+   - **Política comercial** — un **ID numérico** (ejemplo real: `4`) que identifica la
+     política a usar en esta integración. Ver nota del punto 2: no es el mismo campo que
+     "Políticas comerciales del marketplace".
+   - Toggle **"Inventario omnicanal (MOI) de varios niveles"** — visto en la UI, **sin
+     documentar todavía** qué implica activarlo (ver "A completar").
+   - Estos 3 datos arman automáticamente la **URL de fulfillment**:
+     `.../api/fulfillment?an={cuenta}&affiliateId={ID de afiliado}&sc={política comercial}`.
+4. **Información operativa** — 3 campos de texto libre asociados al seller **dentro de
+   VTEX**: *Política de envío*, *Cambios y devoluciones*, *Política de privacidad y
+   seguridad*. Es la ubicación nativa para cargar lo que ya documentamos como reglas en la
+   Fase 4 (4.6-4.8, exclusión de destinos/costos/promesa de entrega) y la Fase 8
+   (condiciones de devolución) — en vez de redactarlo solo aparte, en los T&C del sitio.
+5. **Pausar el seller después de registrarlo** — checkbox (por defecto **activado**): el
+   seller queda en status **"En pausa"** hasta terminar de configurarlo; se pasa a
+   **"Activo"** cuando está listo.
 
-> **Conexión con el resto del proceso:** el **ID de seller** de este alta es el que usa la
-> asociación VTEX↔PIM (Fase 5.3) y el filtrado/cucarda (Fase 4). El **ID de afiliado** es el
-> que prefija el Customer PO del seller (Fase 5).
+> **Ambiente de prueba (QA) antes de ir a producción:** preguntarle al seller si tiene una
+> cuenta **VTEX de QA** propia, para conectar **QA↔QA** y probar el flujo completo sin tocar
+> producción. Si no tiene, se hace la integración de prueba directamente sobre su cuenta de
+> **producción** (menos ideal — evaluar el riesgo caso por caso). **Se recomienda priorizar
+> siempre QA↔QA cuando sea posible.**
+
+> **Contacto de integración:** Gabriel Luna — `gabriel.luna@luquin.com.ar`. Es un contacto
+> **distinto** del operativo de la Fase 7b (`sellers-soporte@sporting.com.ar`), que es para
+> incidencias de pedidos ya en marcha, no para arrancar una integración.
+
+> **Kickoff:** el primer contacto con el seller lo hace Gabriel por mail, con el **link de
+> acceso al portal + usuario y contraseña** ya creados (cuenta tipo Seller, ver
+> `Users.gs`/`configuracion.html`). El mail le indica **ingresar y cambiar la contraseña**
+> por una propia. El seller entra con esas credenciales y desde ahí puede consultar la guía
+> (`public/integracion/integracion-seller.html`). Template reutilizable:
+> [`docs/plantilla-mail-kickoff-integracion.md`](./plantilla-mail-kickoff-integracion.md).
 
 > ⚠️ **A completar más adelante** *(no bloqueante — el alta ya está documentada):*
 > - El proceso completo de la **"invitación"**: si además del alta hay un paso de
 >   invitación/aceptación del lado del seller, y cómo se relaciona el módulo **"Invitación de
 >   sellers"** con **"Agregar seller"**.
 > - Qué **credenciales/permisos** se intercambian para que la integración por API quede activa.
-> - **Semántica del ID de afiliado**: ¿es siempre `LQN` (identifica a Luquin)? ¿se configura
->   por seller? ¿del lado del seller o del marketplace?
+> - **Semántica del ID de afiliado**: ¿sigue una convención fija (ej. siempre identifica a
+>   Luquin/Sporting) o se define libremente por seller? El ejemplo de prueba (`SPG`) no
+>   coincide con el ejemplo de Customer PO documentado en Fase 5 (`LQN`) — confirmar cuál es
+>   la convención real en un seller de producción.
+> - **Toggle "Inventario omnicanal (MOI) de varios niveles"**: qué hace y cuándo conviene
+>   activarlo.
 
 ### Política comercial
 
@@ -113,7 +152,7 @@ del Marketplace** y cae en una **bandeja de aprobación**.
 
 | # | Ítem | Descripción | Tarea Seller | Tarea Ecomm | Estado |
 |---|---|---|---|---|---|
-| 1.0 | Alta del seller | Luquin da de alta al seller en **Gestión › Agregar seller** (tipo *Seller VTEX*). Ver detalle arriba. | Compartir su **cuenta de seller VTEX** (datos de integración). | Dar de alta al seller (cuenta VTEX, ID de afiliado, ID/nombre); activarlo cuando esté listo. | ⚠️ parcial |
+| 1.0 | Alta del seller | Luquin da de alta al seller en **Gestión › Agregar seller** (tipo *Seller VTEX*), completando 4 pestañas: Datos del seller, Acuerdos comerciales, Integración, Información operativa. Ver detalle arriba. | Compartir su **cuenta de seller VTEX** y, si tiene, su **cuenta de QA** (para probar QA↔QA antes de ir a producción). | Completar las 4 pestañas (datos, comisiones, cuenta/ID de afiliado/política comercial, políticas operativas); decidir QA vs. producción; activar cuando esté listo. | ⚠️ parcial |
 | 1.1 | Solicitar política comercial | Cada parte la pide a su agencia. | Solicitar una nueva política comercial a su agencia. | Crear una nueva política comercial para diferenciar los productos en el sitio. | ✅ |
 | 1.2 | Asignar política a productos | Marca qué productos se envían al Marketplace. | Asignar la política comercial a cada producto (uno a uno o masivo). | — | ✅ |
 | 1.3 | Configurar sobre la política | Todo se configura sobre esa política. | — | Los productos aprobados se crean con esa política; todas las configuraciones se hacen sobre ella. | ✅ |
@@ -527,7 +566,8 @@ Al confirmar, el botón dispara **de una sola vez**:
 | Ítem | Qué falta | Bloqueante |
 |---|---|---|
 | 1.0-a | Completar el flujo de **"invitación"**: relación entre el módulo "Invitación de sellers" y "Agregar seller", y si hay aceptación del lado del seller. | No (el alta ya está documentada) |
-| 1.0-b | Confirmar la **semántica del "ID de afiliado"** (¿siempre `LQN`? ¿por seller? ¿qué lado lo configura?) y qué credenciales/permisos activan la integración por API. | No |
+| 1.0-b | Confirmar la **convención real del "ID de afiliado"** en un seller de producción (el ejemplo de prueba usó `SPG`, distinto del `LQN` documentado en Fase 5) y qué credenciales/permisos activan la integración por API. | No |
+| 1.0-c | Documentar qué hace el toggle **"Inventario omnicanal (MOI) de varios niveles"** y cuándo conviene activarlo. | No |
 | 2.8 | Confirmar alcance de la automatización de orden de imágenes en VCC. | No |
 | 2.10 | **Lista de motivos de rechazo** (referida en la redacción como "[Hacer lista]"). | No |
 | 2.10 | Probar flujo de rechazo/reenvío en QA. | No |

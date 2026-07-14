@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-14 - Detalle real del alta de seller (Fase 1) + contacto de integración
+
+Tipo de cambio: documentación (sin cambios de backend ni de datos).
+
+A partir de capturas reales de una cuenta de prueba VTEX (`sportingioqa`, seller "Sporting PDR"), se corrige y amplía la Fase 1 del playbook de integración VTEX ↔ VTEX: el alta de seller tiene **4 pestañas** (Datos del seller, Acuerdos comerciales, Integración, Información operativa), no las 3 secciones genéricas documentadas antes.
+
+- **Fuente** (`docs/integracion-vtex-vtex.md`): reescribe la sección 1.0 con el detalle de las 4 pestañas, la construcción de la URL de fulfillment (`an` + `affiliateId` + `sc`), y aclara que **"Política comercial"** aparece dos veces con significados distintos (selector en Acuerdos comerciales vs. ID numérico en Integración). Suma la decisión **QA↔QA antes de producción** y fija el **contacto de integración** (Gabriel Luna, distinto del contacto operativo de Fase 7b). Agrega pendiente 1.0-c (toggle "Inventario omnicanal MOI", sin documentar) y refina 1.0-b (el ID de afiliado de prueba fue `SPG`, no coincide con el `LQN` ya documentado en Fase 5 — a confirmar en un seller real).
+- **Vista interna**: mismo detalle de las 4 pestañas, QA↔QA y contacto; KPI de pendientes actualizado de 15 a 16.
+- **Vista seller**: se reemplaza el contacto de la sección "¿Dudas?" — tenía el mail operativo de soporte (`sellers-soporte@...`, para pedidos/devoluciones), que no correspondía a esta página. Ahora apunta al contacto real de integración.
+- Verificado sirviendo en local: ambas páginas cargan sin errores de consola; el KPI y la tabla de pendientes de la vista interna coinciden en 16; el mail viejo ya no aparece en la vista seller.
+- **Fix de nombre de marca en la vista seller**: el chip del topbar mostraba el código interno (`SPT-003`) y el saludo del hero caía al email de login cuando la cuenta no tenía `nombre` cargado. Se corrige para leer `seller_nombre` desde `getSellers` (misma fuente canónica que ya usa `public/index.html`), en vez de depender del código de seller o del nombre de la cuenta de login. Verificado con un mock de `getSellers`: ambos campos muestran el nombre de marca correcto.
+- **Se retira la mención de "USD 40"** (costo de la política comercial) de los artefactos que ve/recibe el seller — la guía (`public/integracion/integracion-seller.html`) y la plantilla de mail —, quedando solo en la documentación interna (fuente + vista staff), donde sigue siendo información operativa de Ecomm.
+- **Nueva plantilla**: `docs/plantilla-mail-kickoff-integracion.md` — mail reutilizable de kickoff (link + usuario + contraseña provisoria, con instrucción de cambiarla al ingresar), referenciada desde la Fase 1 de la fuente.
+
 ## 2026-07-13 - Vista seller de la guía de integración (`public/`)
 
 Tipo de cambio: nueva página pública + cableado de navegación (sin cambios de backend ni de datos).
