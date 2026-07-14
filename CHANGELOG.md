@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-14 - Unifica el campo "Método de integración preferido" del Relevamiento a 3 valores
+
+Tipo de cambio: unificación de datos y frontend (requiere redeploy de Apps Script; sin cambio de esquema de columnas).
+
+El campo `metodo_integracion` de `public/formularios/formulario-relevamiento.html` tenía 5 opciones con otra redacción ("VTEX a VTEX", "Excel / planilla", "API", "Seller Center (panel web)", "A definir") que no se habían alineado cuando se unificó `modelo_integracion_estimado` a 3 valores. Se reduce a los mismos 3 modelos + "A definir" (**VTEX ↔ VTEX**, **Sistemas propios**, **Gestión asistida**), con tooltip y texto introductorio reescritos para explicar cada uno según la definición vigente (autogestión con sistema propio vía API vs. gestión asistida sin sistema propio). En `apps-script/DefinicionTecnica.gs`, `calcularModeloSugerido()` ahora también reconoce los valores nuevos exactos del campo (`metodo.includes("sistemas propios")`, `metodo.includes("gestion asistida")`), manteniendo el chequeo legado `metodo.includes("api")` para respuestas ya guardadas con el valor anterior. Los campos `gestion_catalogo`/`gestion_stock`/`gestion_precios` (cómo administra hoy su operación, no el modelo de integración) no se tocaron — son un dato distinto.
+
+## 2026-07-14 - Renombra el modelo "Seller Center" a "Gestión asistida"
+
+Tipo de cambio: corrección conceptual + unificación de datos y frontend (requiere redeploy de Apps Script; sin cambio de esquema de columnas).
+
+Revisión de la definición de los 3 modelos de integración: el eje real que distingue el modelo 2 del modelo 3 no es "quién tiene sistemas propios" sino **quién opera el día a día** (autogestión del seller vs. gestión asistida por Sporting). Bajo ese criterio:
+
+- **Sistemas propios**: el seller tiene un sistema propio distinto de VTEX (ERP/e-commerce) y se conecta vía API — mantiene el nombre, la descripción ya era correcta.
+- **"Seller Center" → "Gestión asistida"**: el seller no tiene ningún sistema propio, y usa la herramienta Seller Center que le da Sporting para cargar su catálogo/stock/pedidos. El nombre anterior generaba una ambigüedad real: "Seller Center" nombra a la vez este modelo *y* el producto/herramienta en sí (dashboard, maqueta, Gantt), lo que hacía confuso, por ejemplo, el paso 5 del flujo operativo. Se renombra solo la etiqueta del **modelo**; el nombre del producto/herramienta Seller Center no cambia.
+
+Archivos actualizados: `internal/estrategia/modelo-integracion.html` (KPIs, tarjetas, matriz, reglas, selector interactivo), `internal/backlog/gestion-sellers.html` (select de alta/edición, con normalización de sellers existentes guardados con el valor legado "Seller Center"), `internal/backlog/backlog-sellers.html` (filtro de Estado y `normInteg()`, que sigue reconociendo el valor legado), `apps-script/DefinicionTecnica.gs` (`calcularModeloSugerido` y `sugerirDesarrollosNecesarios`), `public/formularios/formulario-calificacion.html` (scoring). No se migran los valores ya guardados en el Sheet — los parsers normalizan el texto legado "Seller Center" a "Gestión asistida" al mostrarlo, pero un seller existente con ese valor solo va a quedar con el texto nuevo en el Sheet cuando se lo vuelva a guardar desde Gestión de Sellers.
+
 ## 2026-07-14 - Saca el filtro "Ordenar" y corrige el filtro de Estado en Backlog de Sellers
 
 Tipo de cambio: UX/UI + fix funcional (sin cambios de backend ni de datos).

@@ -232,6 +232,7 @@ function calcularModeloSugerido(d) {
     api.includes("si") ||
     api.includes("sí") ||
     metodo.includes("api") ||
+    metodo.includes("sistemas propios") ||
     plataforma.includes("shopify") ||
     plataforma.includes("woocommerce") ||
     plataforma.includes("tiendanube") ||
@@ -245,11 +246,12 @@ function calcularModeloSugerido(d) {
   }
 
   if (
+    metodo.includes("gestion asistida") ||
     plataforma.includes("no tengo") ||
     plataforma.includes("no tiene") ||
     plataforma.includes("ninguna")
   ) {
-    return "Seller Center";
+    return "Gestión asistida";
   }
 
   return "A definir";
@@ -467,7 +469,11 @@ function sugerirDesarrollosNecesarios(d, modelo) {
     desarrollos.push(
       "Evaluar desarrollo de integración API para catálogo, stock/precio y operación.",
     );
-  } else if (m.includes("seller center") || m.includes("seller_center")) {
+  } else if (
+    m.includes("gestion asistida") ||
+    m.includes("seller center") ||
+    m.includes("seller_center")
+  ) {
     desarrollos.push(
       "Preparar carga asistida/manual en Seller Center y validaciones operativas.",
     );

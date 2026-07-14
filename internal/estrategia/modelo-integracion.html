@@ -143,7 +143,7 @@
         </div>
         <div class="kpis">
           <div class="kpi"><div class="num">1</div><div class="lbl">Prioridad rápida: VTEX ↔ VTEX</div></div>
-          <div class="kpi info"><div class="num">2</div><div class="lbl">Sin infraestructura propia: Seller Center</div></div>
+          <div class="kpi info"><div class="num">2</div><div class="lbl">Sin infraestructura propia: Gestión asistida</div></div>
           <div class="kpi warn"><div class="num">3</div><div class="lbl">Madurez técnica: Sistemas propios</div></div>
         </div>
       </section>
@@ -172,7 +172,7 @@
         <div class="section-head"><div class="section-title"><span>🎯</span><h2>Estrategia Sporting</h2></div><p class="section-desc">Criterio recomendado para ordenar esfuerzos, evitar excepciones innecesarias y sostener una arquitectura escalable.</p></div>
         <div class="grid">
           <div class="card priority"><span class="tag green">Prioridad 1</span><h3>VTEX ↔ VTEX</h3><p>Camino recomendado para acelerar primeras integraciones cuando el seller ya tiene VTEX.</p></div>
-          <div class="card target"><span class="tag info">Sin infraestructura propia</span><h3>Seller Center</h3><p>Modelo para sellers sin plataforma marketplace madura. Cargan y operan desde el Seller Center de Sporting, bajo gobierno de PIM.</p></div>
+          <div class="card target"><span class="tag info">Sin infraestructura propia</span><h3>Gestión asistida</h3><p>Modelo para sellers sin plataforma marketplace madura. Cargan y operan desde el Seller Center de Sporting, bajo gobierno de PIM.</p></div>
           <div class="card transitional"><span class="tag warn">Madurez alta</span><h3>Sistemas propios</h3><p>Camino para sellers con sistemas propios y capacidad técnica que se conectan por API al Seller Center.</p></div>
         </div>
       </section>
@@ -184,7 +184,7 @@
           <thead><tr><th>Modelo</th><th>Cuándo usar</th><th>Complejidad</th><th>Control PIM</th><th>Prioridad</th></tr></thead>
           <tbody>
             <tr><td><strong>VTEX ↔ VTEX</strong></td><td>Seller ya opera en VTEX y puede integrarse con baja fricción.</td><td><span class="ok">Baja</span></td><td><span class="pill w">Parcial</span></td><td><span class="pill g">Alta</span></td></tr>
-            <tr><td><strong>Seller Center</strong></td><td>Seller sin plataforma marketplace madura, carga manual o masiva.</td><td><span class="mid">Media</span></td><td><span class="pill g">Alto</span></td><td><span class="pill g">Alta</span></td></tr>
+            <tr><td><strong>Gestión asistida</strong></td><td>Seller sin plataforma marketplace madura, carga manual o masiva.</td><td><span class="mid">Media</span></td><td><span class="pill g">Alto</span></td><td><span class="pill g">Alta</span></td></tr>
             <tr><td><strong>Sistemas propios</strong></td><td>Seller grande con sistema propio y capacidad técnica API.</td><td><span class="mid">Media / Alta</span></td><td><span class="pill g">Alto</span></td><td><span class="pill b">Media</span></td></tr>
           </tbody>
         </table>
@@ -195,7 +195,7 @@
         <div class="section-head"><div class="section-title"><span>🧩</span><h2>Modelos disponibles</h2></div><p class="section-desc">Cada modelo representa un camino distinto de integración, operación y gobierno. Son los 3 únicos caminos soportados.</p></div>
         <div class="grid two">
           <div class="card priority"><span class="tag green">Rápido</span><h3>VTEX ↔ VTEX</h3><p>El seller mantiene su operación en VTEX y Sporting integra la oferta al Marketplace. Ideal para primeras incorporaciones por menor complejidad técnica.</p><ul><li>Menor time to market.</li><li>Menor desarrollo inicial.</li><li>Control parcial desde PIM.</li></ul></div>
-          <div class="card target"><span class="tag info">Sin infraestructura propia</span><h3>Seller Center</h3><p>El seller utiliza herramientas provistas por Sporting para cargar información y operar bajo gobierno de PIM.</p><ul><li>Mayor control interno.</li><li>Modelo reutilizable.</li><li>Base para escalar sellers no VTEX.</li></ul></div>
+          <div class="card target"><span class="tag info">Sin infraestructura propia</span><h3>Gestión asistida</h3><p>El seller utiliza herramientas provistas por Sporting para cargar información y operar bajo gobierno de PIM.</p><ul><li>Mayor control interno.</li><li>Modelo reutilizable.</li><li>Base para escalar sellers no VTEX.</li></ul></div>
           <div class="card transitional"><span class="tag warn">API</span><h3>Sistemas propios</h3><p>El seller conecta su sistema propio mediante APIs hacia el Seller Center, manteniendo control y trazabilidad desde PIM.</p><ul><li>Requiere madurez técnica.</li><li>Escalable a largo plazo.</li><li>Ideal para sellers grandes.</li></ul></div>
         </div>
       </section>
@@ -204,9 +204,9 @@
         <div class="section-head"><div class="section-title"><span>✅</span><h2>Reglas de decisión</h2></div><p class="section-desc">Criterios mínimos para evitar decisiones ambiguas y sostener el orden operativo.</p></div>
         <div class="rules">
           <div class="rule"><div class="rule-num">1</div><div><strong>Si el seller usa VTEX</strong><span>Priorizar VTEX ↔ VTEX, salvo que el alcance requiera gobierno completo desde PIM.</span></div></div>
-          <div class="rule"><div class="rule-num">2</div><div><strong>Si el seller no tiene integración madura</strong><span>Priorizar Seller Center con carga manual o masiva.</span></div></div>
+          <div class="rule"><div class="rule-num">2</div><div><strong>Si el seller no tiene integración madura</strong><span>Priorizar Gestión asistida con carga manual o masiva.</span></div></div>
           <div class="rule"><div class="rule-num">3</div><div><strong>Si el seller tiene capacidad API</strong><span>Evaluar Sistemas propios, siempre que el esfuerzo sea reutilizable.</span></div></div>
-          <div class="rule"><div class="rule-num">4</div><div><strong>Solo 3 modelos soportados</strong><span>Todo seller debe encuadrarse en VTEX ↔ VTEX, Seller Center o Sistemas propios; no se admiten caminos custom fuera de estos tres.</span></div></div>
+          <div class="rule"><div class="rule-num">4</div><div><strong>Solo 3 modelos soportados</strong><span>Todo seller debe encuadrarse en VTEX ↔ VTEX, Gestión asistida o Sistemas propios; no se admiten caminos custom fuera de estos tres.</span></div></div>
           <div class="rule"><div class="rule-num">5</div><div><strong>Sin modelo definido no pasa a Gantt</strong><span>El Gantt debe planificar ejecución, no resolver la decisión técnica.</span></div></div>
           <div class="rule"><div class="rule-num">6</div><div><strong>El modelo define esfuerzo</strong><span>Complejidad, tiempos y responsables dependen del camino seleccionado.</span></div></div>
         </div>
@@ -239,7 +239,7 @@
   <script>
     const scenarios = {
       vtex: { tag:'Recomendado', cls:'green', title:'VTEX ↔ VTEX', desc:'Modelo prioritario para sellers que ya operan sobre VTEX. Permite avanzar con menor fricción y acelerar el time to market.' },
-      simple: { tag:'Sin infraestructura propia', cls:'info', title:'Seller Center', desc:'Modelo recomendado para sellers sin integración marketplace madura. Permite operar con carga manual o masiva bajo gobierno de PIM.' },
+      simple: { tag:'Sin infraestructura propia', cls:'info', title:'Gestión asistida', desc:'Modelo recomendado para sellers sin integración marketplace madura. Permite operar con carga manual o masiva bajo gobierno de PIM.' },
       api: { tag:'Madurez técnica', cls:'warn', title:'Sistemas propios', desc:'Modelo recomendado para sellers grandes con sistemas propios y capacidad técnica API, manteniendo control y trazabilidad desde PIM.' }
     };
     const sel = document.getElementById('scenarioSelect');

@@ -868,9 +868,9 @@
           </div>
           <div class="section-help">
             Esta sección nos permite definir cómo vamos a conectar tu operación
-            con Sporting Marketplace: si será vía API, planillas, VTEX a VTEX, o
-            Seller Center. No se requieren conocimientos técnicos para
-            completarla.
+            con Sporting Marketplace: si será VTEX ↔ VTEX, con tus propios
+            sistemas vía API, o con gestión asistida desde el Seller Center de
+            Sporting. No se requieren conocimientos técnicos para completarla.
           </div>
           <div class="grid">
             <div class="field">
@@ -979,16 +979,15 @@
                 <span
                   class="tip"
                   tabindex="0"
-                  data-tip="VTEX a VTEX: conexión directa si usás VTEX. API: integración automatizada. Excel: carga manual por planilla. Seller Center: panel web de Sporting para cargar productos manualmente. A definir: lo evaluamos juntos."
+                  data-tip="VTEX ↔ VTEX: conexión directa si ya operás en VTEX. Sistemas propios: tenés tu propio sistema (ERP/e-commerce) y te conectás por API. Gestión asistida: no tenés sistema propio y usás el Seller Center de Sporting para cargar tu catálogo. A definir: lo evaluamos juntos."
                   >?</span
                 ></label
               >
               <select name="metodo_integracion">
                 <option value="">Seleccionar</option>
-                <option>VTEX a VTEX</option>
-                <option>Excel / planilla</option>
-                <option>API</option>
-                <option>Seller Center (panel web)</option>
+                <option>VTEX ↔ VTEX</option>
+                <option>Sistemas propios</option>
+                <option>Gestión asistida</option>
                 <option>A definir</option>
               </select>
             </div>
@@ -2736,7 +2735,7 @@
 
       // ── AJUSTE DEL RELEVAMIENTO SEGÚN MODELO DE INTEGRACIÓN ──
       // Oculta secciones/campos que no aportan para el modelo del seller.
-      // Por ahora solo VTEX ↔ VTEX tiene recorte definido; Seller Center y
+      // Por ahora solo VTEX ↔ VTEX tiene recorte definido; Gestión asistida y
       // Sistemas propios ven el relevamiento completo.
       const HIDDEN_SECTIONS_BY_MODELO = {
         "VTEX ↔ VTEX": [4, 5],
