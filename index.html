@@ -436,7 +436,6 @@ h1 em { color:var(--g); font-style:normal; }
 @media (max-width:720px) {
   .topbar { padding:0 14px; gap:8px; }
   .tb-right { gap:6px; }
-  .tb-right .button.secondary:not(.portal-link) { display:none; }
   .button { padding:7px 10px; }
   .crumb, .pill { display:none; }
   .hero { padding:28px 20px; }
@@ -463,9 +462,6 @@ h1 em { color:var(--g); font-style:normal; }
   <div class="tb-right">
     <button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button>
     <div class="pill"><span class="dot"></span>Operativo</div>
-    <a class="button secondary" href="internal/backlog/backlog-sellers.html">Backlog</a>
-    <a class="button secondary" href="internal/gantt/gantt-operativo.html">Gantt</a>
-    <a class="button" href="internal/backlog/gestion-sellers.html">+ Seller</a>
   </div>
 </header>
 <div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>

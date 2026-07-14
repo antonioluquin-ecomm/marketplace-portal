@@ -27,6 +27,11 @@ Revisión de la definición de los 3 modelos de integración: el eje real que di
 - **"Seller Center" → "Gestión asistida"**: el seller no tiene ningún sistema propio, y usa la herramienta Seller Center que le da Sporting para cargar su catálogo/stock/pedidos. El nombre anterior generaba una ambigüedad real: "Seller Center" nombra a la vez este modelo *y* el producto/herramienta en sí (dashboard, maqueta, Gantt), lo que hacía confuso, por ejemplo, el paso 5 del flujo operativo. Se renombra solo la etiqueta del **modelo**; el nombre del producto/herramienta Seller Center no cambia.
 
 Archivos actualizados: `internal/estrategia/modelo-integracion.html` (KPIs, tarjetas, matriz, reglas, selector interactivo), `internal/backlog/gestion-sellers.html` (select de alta/edición, con normalización de sellers existentes guardados con el valor legado "Seller Center"), `internal/backlog/backlog-sellers.html` (filtro de Estado y `normInteg()`, que sigue reconociendo el valor legado), `apps-script/DefinicionTecnica.gs` (`calcularModeloSugerido` y `sugerirDesarrollosNecesarios`), `public/formularios/formulario-calificacion.html` (scoring). No se migran los valores ya guardados en el Sheet — los parsers normalizan el texto legado "Seller Center" a "Gestión asistida" al mostrarlo, pero un seller existente con ese valor solo va a quedar con el texto nuevo en el Sheet cuando se lo vuelva a guardar desde Gestión de Sellers.
+## 2026-07-14 - Limpia acciones duplicadas de topbars internos
+
+Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
+
+Se retiran accesos de navegación duplicados de los topbars del Hub y páginas internas (`← Hub`, `← Backlog`, `+ Seller`, `Ver Gantt` y enlaces equivalentes), porque ya existen en el sidebar o en secciones contextuales. Los topbars quedan como marca + estado/contexto + acciones propias de cada herramienta.
 
 ## 2026-07-14 - Saca el filtro "Ordenar" y corrige el filtro de Estado en Backlog de Sellers
 
