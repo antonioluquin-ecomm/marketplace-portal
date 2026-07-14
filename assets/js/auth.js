@@ -105,10 +105,59 @@ async function initAuth(pageModule) {
 function _applySession() {
   _renderUserIndicator();
   applyPermissionsToSidebar();
+  initSidebarCollapse();
 }
 
 /* ─── PERMISOS — SIDEBAR ─────────────────────────────────────── */
 
+/* --- SIDEBAR COLLAPSE ------------------------------------- */
+
+function initSidebarCollapse() {
+  const nav = document.querySelector('[data-portal-nav]');
+  if (!nav) return;
+
+  const topbarActions = document.querySelector(
+    '.portal-topbar .tb-right, .portal-topbar .top-actions, .portal-topbar .topbar-right, .topbar .tb-right, .topbar .top-actions, .topbar .topbar-right'
+  );
+  if (!topbarActions) return;
+
+  let btn = document.getElementById('sidebarCollapseBtn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'sidebarCollapseBtn';
+    btn.className = 'sidebar-collapse-toggle';
+    btn.type = 'button';
+    topbarActions.insertBefore(btn, topbarActions.firstChild);
+  }
+
+  function sync() {
+    const navHidden = window.getComputedStyle(nav).display === 'none';
+    btn.hidden = navHidden;
+    const collapsed = document.documentElement.getAttribute('data-sidebar') === 'collapsed';
+    btn.setAttribute('aria-label', collapsed ? 'Mostrar menu lateral' : 'Ocultar menu lateral');
+    btn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+    btn.setAttribute('title', collapsed ? 'Mostrar menu lateral' : 'Ocultar menu lateral');
+    btn.textContent = collapsed ? '>>' : '<<';
+  }
+
+  if (!btn.dataset.bound) {
+    btn.addEventListener('click', function () {
+      const collapsed = document.documentElement.getAttribute('data-sidebar') === 'collapsed';
+      if (collapsed) {
+        document.documentElement.removeAttribute('data-sidebar');
+        localStorage.removeItem('mp_sidebar');
+      } else {
+        document.documentElement.setAttribute('data-sidebar', 'collapsed');
+        localStorage.setItem('mp_sidebar', 'collapsed');
+      }
+      sync();
+    });
+    window.addEventListener('resize', sync);
+    btn.dataset.bound = '1';
+  }
+
+  sync();
+}
 function applyPermissionsToSidebar() {
   const isAdmin = SESSION.isAdmin();
 

@@ -14,6 +14,9 @@
 
   // Set pre-paint. Único tema soportado por ahora.
   document.documentElement.setAttribute("data-theme", "light");
+  if (localStorage.getItem("mp_sidebar") === "collapsed") {
+    document.documentElement.setAttribute("data-sidebar", "collapsed");
+  }
 
   // ---- API pública (compatibilidad) ----
   window.MP_THEME = {

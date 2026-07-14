@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-14 - Opcion para ocultar el sidebar interno
+
+Tipo de cambio: mejora de UX en el shell interno (sin cambios de backend ni de datos).
+
+Se agrega el mismo patron de Project Control Center para ocultar el sidebar en desktop: boton en la topbar, estado persistido en `localStorage` con clave `mp_sidebar`, anti-flash en `theme.js` y reglas desktop-only para no interferir con el drawer mobile.
+
 ## 2026-07-14 - Auditoría de Fase 1: elimina redundancias, cierra 2 pendientes
 
 Tipo de cambio: limpieza de contenido en las 3 superficies (sin cambios de backend ni de datos).

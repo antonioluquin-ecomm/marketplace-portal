@@ -869,3 +869,52 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
 .data-table { min-width: 1400px; }
 .data-table td:nth-child(4) { font-family: var(--font); font-weight: 500; white-space: normal; min-width: 140px; }
 .data-table td:nth-child(5) { color: var(--muted); max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+
+/* 2026-07-14 - Colapso desktop del sidebar interno. */
+.sidebar-collapse-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--line, #e5e7eb);
+  background: var(--card, #fff);
+  color: var(--muted, #6b7280);
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.sidebar-collapse-toggle:hover,
+.sidebar-collapse-toggle[aria-pressed="true"] {
+  color: var(--primary, #1a3f6b);
+  border-color: var(--primary-mid, #bfd4f5);
+  background: var(--primary-soft, #e8f0fb);
+}
+
+@media (min-width: 961px) {
+  .sidebar-collapse-toggle { display: inline-flex; }
+
+  [data-portal-nav] {
+    transition: transform .2s ease, opacity .2s ease;
+  }
+
+  html[data-sidebar="collapsed"] .shell:has(> [data-portal-nav]),
+  html[data-sidebar="collapsed"] .nav-shell:has(> [data-portal-nav]) {
+    grid-template-columns: 0 minmax(0, 1fr) !important;
+  }
+
+  html[data-sidebar="collapsed"] .shell > [data-portal-nav],
+  html[data-sidebar="collapsed"] .nav-shell > [data-portal-nav] {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  html[data-sidebar="collapsed"] .col-nav[data-portal-nav] {
+    display: none;
+  }
+}
