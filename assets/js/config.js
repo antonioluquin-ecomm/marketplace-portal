@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.1.0',
+  number: '1.2.0',
   date:   '2026-07-14',
-  notes:  'Reconstrucción del historial: el array no se venía actualizando desde su creación pese a varios cambios visibles ya registrados en CHANGELOG.md',
+  notes:  'ROUTES.PUBLIC y RESOURCES completados — les faltaban 9 entradas entre ambos',
 };
 
 const CHANGELOG = [
+  { v: '1.2.0', date: '2026-07-14', desc: 'Se completan ROUTES.PUBLIC (faltaban GANTT_SELLER e INTEGRACION_SELLER) y RESOURCES (faltaban 7 páginas internas, entre ellas la guía de Integración VTEX ↔ VTEX) — mismo patrón de lista desactualizada que el changelog.' },
   { v: '1.1.0', date: '2026-07-14', desc: 'Se reconstruye este historial: no se venía actualizando desde la v1.0.0 pese a 9 cambios visibles posteriores, ya documentados en CHANGELOG.md pero nunca reflejados acá.' },
   { v: '1.0.9', date: '2026-07-14', desc: 'Se termina de alinear governance.html y proyecto-marketplace.html a los 3 modelos de integración vigentes (quedaba vocabulario viejo sin migrar).' },
   { v: '1.0.8', date: '2026-07-14', desc: 'Se unifica el campo "Método de integración preferido" del Relevamiento a los 3 modelos vigentes (tenía 5 opciones con otra redacción).' },
@@ -155,7 +156,13 @@ window.MP_CONFIG = {
         "/public/presentaciones/presentacion-seller.html",
 
       SIMULADOR_SELLER:
-        "/public/simuladores/simulador-seller.html"
+        "/public/simuladores/simulador-seller.html",
+
+      GANTT_SELLER:
+        "/public/gantt/gantt-seller.html",
+
+      INTEGRACION_SELLER:
+        "/public/integracion/integracion-seller.html"
     }
   },
 
@@ -211,6 +218,48 @@ window.MP_CONFIG = {
       label: "Simulador Económico",
       access: "Interno",
       route: "/internal/simuladores/simulador-economico.html"
+    },
+    {
+      key: "config_tarifas",
+      label: "Config. Tarifas y Overrides",
+      access: "Interno",
+      route: "/internal/simuladores/config-tarifas.html"
+    },
+    {
+      key: "proyecto_marketplace",
+      label: "Proyecto Marketplace",
+      access: "Interno",
+      route: "/internal/estrategia/proyecto-marketplace.html"
+    },
+    {
+      key: "modelo_integracion",
+      label: "Modelo de Integración",
+      access: "Interno",
+      route: "/internal/estrategia/modelo-integracion.html"
+    },
+    {
+      key: "integracion_vtex_vtex",
+      label: "Integración VTEX ↔ VTEX",
+      access: "Interno",
+      route: "/internal/estrategia/integracion-vtex-vtex.html"
+    },
+    {
+      key: "modelo_economico",
+      label: "Modelo Económico",
+      access: "Interno",
+      route: "/internal/estrategia/modelo-economico.html"
+    },
+    {
+      key: "governance",
+      label: "Governance",
+      access: "Interno",
+      route: "/internal/estrategia/governance.html"
+    },
+    {
+      key: "onboarding",
+      label: "Proceso de Onboarding",
+      access: "Interno",
+      route: "/internal/estrategia/proceso-onboarding.html"
     },
     {
       key: "formulario_calificacion",

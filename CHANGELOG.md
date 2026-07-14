@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-14 - Completa ROUTES.PUBLIC y RESOURCES de config.js
+
+Tipo de cambio: fix de datos en frontend (sin cambios visuales ni de backend).
+
+Auditoría pedida por el usuario tras el fix del changelog: revisar si a `config.js` le faltaba algo más. Se encontró que sus dos catálogos internos (`ROUTES.PUBLIC` y `RESOURCES`) estaban incompletos y, de paso, desincronizados entre sí — mismo patrón de "lista que nadie actualiza" que el changelog JS.
+
+- **`ROUTES.PUBLIC`**: agrega `GANTT_SELLER` e `INTEGRACION_SELLER` — ya estaban en `RESOURCES` pero no acá.
+- **`RESOURCES`**: agrega 7 páginas internas ausentes — `config_tarifas`, `proyecto_marketplace`, `modelo_integracion`, `integracion_vtex_vtex`, `modelo_economico`, `governance`, `onboarding`. Pasa de 13 a 20 entradas.
+- Verificado: `node --check` sobre sintaxis, y que el hub del seller (`public/index.html`, único consumidor real de `RESOURCES`) sigue mostrando exactamente las 6 cards de acceso "Seller" sin verse afectado por los 7 ítems "Interno" agregados.
+- **Fuera de alcance a propósito** (decisión del usuario): `index.html` (grilla del Hub) y los modales de "links para compartir" de `backlog-sellers.html`/`gestion-sellers.html` tienen sus propias listas de páginas, también desincronizadas (les faltan Gantt del seller / Guía de integración) — quedan sin tocar por ahora.
+
 ## 2026-07-14 - Reconstruye el historial del badge de versión del topbar
 
 Tipo de cambio: fix de contenido en frontend (sin cambios de backend ni de datos).
