@@ -124,7 +124,6 @@ tbody tr{cursor:pointer}
 .td-id{font-family:var(--font);font-size:12px;font-weight:700;color:var(--t4);white-space:nowrap}
 .td-seller{display:flex;align-items:center;gap:8px}
 .td-name{font-weight:700;color:var(--t1);white-space:nowrap}
-.td-cat{font-size:11px;color:var(--t4)}
 .td-next{max-width:220px;white-space:normal}
 .td-next-text{font-size:12px;color:var(--t2);line-height:1.4}
 .td-next-resp{font-size:10px;color:var(--t4);margin-top:2px}
@@ -318,6 +317,7 @@ tbody tr{cursor:pointer}
           <option>Listos para integrar</option>
           <option>En integración</option>
           <option>Live</option>
+          <option>Pausado</option>
         </select>
       </div>
       <div class="filter-group">
@@ -350,16 +350,6 @@ tbody tr{cursor:pointer}
       <div class="filter-group">
         <label class="fi-label" for="sel-responsable">Responsable</label>
         <select class="fi-select" id="sel-responsable" onchange="renderContent()"></select>
-      </div>
-      <div class="filter-group">
-        <label class="fi-label" for="sel-orden">Ordenar</label>
-        <select class="fi-select" id="sel-orden" onchange="renderContent()">
-          <option value="prioridad">Prioridad alta primero</option>
-          <option value="bloqueados">Bloqueados primero</option>
-          <option value="avance_asc">Menor avance primero</option>
-          <option value="avance_desc">Mayor avance primero</option>
-          <option value="nombre">Nombre A → Z</option>
-        </select>
       </div>
       <div class="filter-bar-actions">
         <button class="button secondary" onclick="clearFilters()">✕ Limpiar</button>
@@ -856,16 +846,12 @@ function applyFilters(sellers){
   });
 }
 
+// Orden base (antes de que el usuario clickee una columna, ver applyTableSort):
+// prioridad alta primero. El sorting explícito es solo por columna — patrón
+// canónico de style_guide.md §6.4, sin selector de "Ordenar" aparte.
 function applySort(sellers){
-  const orden=($("sel-orden")||{}).value||"prioridad";
   const priOrder={"Alta":0,"Media":1,"Baja":2};
-  const copy=[...sellers];
-  if(orden==="prioridad") copy.sort((a,b)=>(priOrder[a.prioridad]??2)-(priOrder[b.prioridad]??2));
-  else if(orden==="bloqueados") copy.sort((a,b)=>(b.bloqueo_flag?1:0)-(a.bloqueo_flag?1:0));
-  else if(orden==="avance_asc") copy.sort((a,b)=>a.progreso_pct-b.progreso_pct);
-  else if(orden==="avance_desc") copy.sort((a,b)=>b.progreso_pct-a.progreso_pct);
-  else if(orden==="nombre") copy.sort((a,b)=>a.nombre.localeCompare(b.nombre,"es"));
-  return copy;
+  return [...sellers].sort((a,b)=>(priOrder[a.prioridad]??2)-(priOrder[b.prioridad]??2));
 }
 
 /* ── TABLE SORT ── */

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-14 - Saca el filtro "Ordenar" y corrige el filtro de Estado en Backlog de Sellers
+
+Tipo de cambio: UX/UI + fix funcional (sin cambios de backend ni de datos).
+
+Auditoría del filter-bar de `internal/backlog/backlog-sellers.html`: había dos sistemas de orden compitiendo (el dropdown "Ordenar" y el sort por clic en columnas), y el filtro de Estado no dejaba filtrar por un estado real del pipeline.
+
+- **Se quita el filtro "Ordenar"**: el estándar del proyecto (`style_guide.md §6.4`) define el sorting solo por clic en columnas (`data-sortable`/`data-key` + `sort-asc`/`sort-desc`), sin selector aparte. Con el dropdown presente, apenas el usuario clickeaba una columna, `applyTableSort` pisaba en silencio el orden elegido en el dropdown — quedaba mostrando una opción que ya no hacía nada.
+- **Se agrega "Pausado" al filtro de Estado**: es un estado real del pipeline (usado en `STAGES`, `normalizePipeline`, la vista Kanban) que faltaba en las opciones del `<select>`.
+- `applySort()` se simplifica: ya no lee un elemento que no existe, queda como orden base fijo (prioridad alta primero) antes de que el usuario clickee una columna.
+- Se limpia `.td-cat`, una regla CSS huérfana de la limpieza de categorías de la sesión anterior.
+- Verificado sirviendo en local con datos mock: el sort por columna funciona y marca la flecha visualmente (`sort-asc`), el filtro de Estado lista las 8 opciones incluyendo "Pausado", sin errores de consola.
+
 ## 2026-07-14 - Limpieza visual del Backlog de Sellers
 
 Tipo de cambio: UX/UI (sin cambios de backend ni de datos).
