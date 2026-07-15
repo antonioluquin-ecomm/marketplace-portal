@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.0',
+  number: '1.4.1',
   date:   '2026-07-15',
-  notes:  'Se corrige un bug real: el selector de Estado de Gestión de Sellers no coincidía con las etapas canónicas del Backlog',
+  notes:  'Se integra la nueva identidad visual del Marketplace en el logo principal y favicon',
 };
 
 const CHANGELOG = [
+  { v: '1.4.1', date: '2026-07-15', desc: 'Se integra la nueva identidad visual del Marketplace: logo principal como SVG versionado y favicon institucional.' },
   { v: '1.4.0', date: '2026-07-15', desc: 'Se corrige el selector de Estado de Gestión de Sellers: "Aprobado para integrar" no matcheaba ninguna etapa canónica del Backlog y quedaba invisible en el Kanban. Ahora usa las 8 etapas exactas, con compatibilidad para sellers ya guardados con el valor viejo.' },
   { v: '1.3.1', date: '2026-07-14', desc: 'Se elimina "Configuración" del dropdown de usuario en auth.js: duplicaba el link ya fijo en el footer del sidebar y, además, estaba hardcodeado a una ruta rota fuera de index.html. Ahora aparece una sola vez, igual que en VTEX Control Center y Project Control Center.' },
   { v: '1.3.0', date: '2026-07-14', desc: 'Se agregan Gantt del seller y Guía de integración a la grilla del Hub (index.html) y a los modales de links de Gestión/Backlog de Sellers — mismo hueco que se venía de cerrar en config.js.' },
@@ -41,6 +42,25 @@ const CHANGELOG = [
   { v: '1.0.0', date: '2026-07-14', desc: 'Se agrega el badge de versión con historial en el topbar interno (index.html + internal/), replicando el patrón de Project Control Center / VTEX Control Center.' },
 ];
 
+
+function initBrandFavicon() {
+  const script = document.currentScript;
+  const src = script ? script.getAttribute('src') || '' : '';
+  const base = src.indexOf('assets/js/config.js') !== -1
+    ? src.replace(/assets\/js\/config\.js(?:\?.*)?$/, '')
+    : '';
+  const href = base + 'assets/brand/favicon.svg';
+  let icon = document.querySelector('link[rel="icon"]');
+  if (!icon) {
+    icon = document.createElement('link');
+    icon.rel = 'icon';
+    document.head.appendChild(icon);
+  }
+  icon.type = 'image/svg+xml';
+  icon.href = href;
+}
+
+initBrandFavicon();
 function initVersionBadge() {
   if (location.pathname.indexOf('/public/') !== -1) return;
   const brand = document.querySelector('.brand');

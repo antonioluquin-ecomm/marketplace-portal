@@ -388,42 +388,35 @@
   gap: 14px;
   min-width: 0;
 }
-/* 2026-07-07 — wordmark rediseñado: la version anterior (900/uppercase/
-   tracking .04em) se sentía pesada y distinta a la tipografia de los
-   titulos (h1 usa 700, tracking -.02em, sin uppercase). Se alinea el logo
-   a esa misma familia tipografica — mas ajustado, con jerarquia de peso
-   entre las dos palabras y una marca geometrica chica en vez de solo texto. */
+/* 2026-07-15 — wordmark institucional como asset SVG. El texto queda en el
+   DOM como fallback/accesibilidad, pero visualmente se reemplaza por el logo
+   versionado en assets/brand/. */
 .portal-topbar.portal-topbar .logo,
 .portal-topbar.portal-topbar .tb-logo {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-family: var(--font);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -.01em;
-  font-size: 21px;
-  color: var(--text, var(--t1, #111827));
+  width: 142px;
+  height: 35px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
   white-space: nowrap;
   text-decoration: none;
+  background: url("../brand/marketplace-logo.svg") left center / contain no-repeat;
 }
 .portal-topbar.portal-topbar .logo::before,
 .portal-topbar.portal-topbar .tb-logo::before {
-  content: "";
-  width: 9px;
-  height: 9px;
-  border-radius: 3px;
-  background: var(--primary, var(--g, #25b60c));
-  flex-shrink: 0;
+  content: none;
 }
 .portal-topbar.portal-topbar .logo:hover,
 .portal-topbar.portal-topbar .tb-logo:hover {
-  color: var(--text, var(--t1, #111827));
+  color: transparent;
 }
 .portal-topbar.portal-topbar .logo span,
 .portal-topbar.portal-topbar .tb-logo span {
-  font-weight: 600;
-  color: var(--primary, var(--g, #25b60c));
+  display: none;
 }
 .portal-topbar.portal-topbar .crumb,
 .portal-topbar.portal-topbar .tb-crumb,
