@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-15 - Saca la opción "Descartado" del modal de edición rápida del Backlog de Sellers
+
+Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).
+
+Auditoría pedida por el usuario sobre `backlog-sellers.html`. El modal de edición rápida (`enterEditMode()`) ofrecía 9 opciones de "Estado en el pipeline", pero tanto el filtro de Estado de esta misma página como `STAGES`/`normalizePipeline()` (la referencia canónica) y el `<select>` ya alineado de `gestion-sellers.html` solo reconocen 8 etapas — sin "Descartado".
+
+- Al elegir "Descartado" se guardaba ese texto literal, pero `normalizePipeline()` ya lo reinterpretaba como "Pausado" en el siguiente refresh (vía el bucket `n.includes("descartado")`) — una etapa que el usuario elegía desaparecía silenciosamente.
+- Se saca la opción del modal para que las 3 superficies (filtro, `STAGES`, edición rápida) queden consistentes en 8 valores.
+- Verificado sirviendo en local con datos mock: el `<select id="me-estado">` del modal ahora expone exactamente las 8 opciones canónicas. Sin errores de consola.
+
 ## 2026-07-15 - Corrige el selector de Estado de Gestión de Sellers (bug real de datos)
 
 Tipo de cambio: fix de datos en frontend (sin cambios de backend).

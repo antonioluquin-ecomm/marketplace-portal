@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.1',
+  number: '1.4.2',
   date:   '2026-07-15',
-  notes:  'Se integra la nueva identidad visual del Marketplace en el logo principal y favicon',
+  notes:  'Se saca "Descartado" del modal de edición rápida del Backlog de Sellers',
 };
 
 const CHANGELOG = [
+  { v: '1.4.2', date: '2026-07-15', desc: 'Se saca "Descartado" de las opciones de Estado del modal de edición rápida del Backlog de Sellers: no era una de las 8 etapas canónicas y desaparecía silenciosamente (se reinterpretaba como "Pausado") en el siguiente refresh.' },
   { v: '1.4.1', date: '2026-07-15', desc: 'Se integra la nueva identidad visual del Marketplace: logo principal como SVG versionado y favicon institucional.' },
   { v: '1.4.0', date: '2026-07-15', desc: 'Se corrige el selector de Estado de Gestión de Sellers: "Aprobado para integrar" no matcheaba ninguna etapa canónica del Backlog y quedaba invisible en el Kanban. Ahora usa las 8 etapas exactas, con compatibilidad para sellers ya guardados con el valor viejo.' },
   { v: '1.3.1', date: '2026-07-14', desc: 'Se elimina "Configuración" del dropdown de usuario en auth.js: duplicaba el link ya fijo en el footer del sidebar y, además, estaba hardcodeado a una ruta rota fuera de index.html. Ahora aparece una sola vez, igual que en VTEX Control Center y Project Control Center.' },

@@ -1136,7 +1136,6 @@ function enterEditMode(id){
     ["en integración","En integración"],
     ["live","Live"],
     ["pausado","Pausado"],
-    ["descartado","Descartado"],
   ].map(([v,l])=>`<option value="${esc(v)}"${norm(s.pipeline_estado)===norm(v)?" selected":""}>${l}</option>`).join("");
 
   const prioOpts=["Alta","Media","Baja"].map(v=>`<option${norm(s.prioridad)===norm(v)?" selected":""}>${v}</option>`).join("");
