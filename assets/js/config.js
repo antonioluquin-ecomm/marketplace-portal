@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.7',
+  number: '1.4.8',
   date:   '2026-07-15',
-  notes:  'Se migra el Gantt Seller Center a lectura gateada por sesion',
+  notes:  'Limpieza de codigo muerto en el Gantt Seller Center',
 };
 
 const CHANGELOG = [
+  { v: '1.4.8', date: '2026-07-15', desc: 'Se saca una linea no-op en qfClick() y la clase CSS .dep-line sin uso del Gantt Seller Center: ninguna reproducia un bug, era codigo muerto.' },
   { v: '1.4.7', date: '2026-07-15', desc: 'Se migra el Gantt Seller Center de un CSV publicado a la web (sin login) a la accion gateada getScRoadmap: cerraba una exposicion real de datos del roadmap interno.' },
   { v: '1.4.6', date: '2026-07-15', desc: 'Se mejora la presentacion visual del login interno y del login de sellers: logo mas integrado, jerarquia de acceso mas clara, tarjeta mas sobria, inputs blancos y estados de foco/hover mas pulidos.' },
   { v: '1.4.5', date: '2026-07-15', desc: 'Se corrige el sidebar interno: todos los links mantienen el mismo peso tipografico regular entre paginas; el activo solo se diferencia por color, fondo y borde activo.' },

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-15 - Limpieza de código muerto en el Gantt Seller Center
+
+Tipo de cambio: limpieza de frontend (sin cambios de comportamiento).
+
+Cierre de la auditoría de `gantt-seller-center.html`: dos restos de código sin uso, ninguno reproducía un bug.
+
+- `qfClick()` tenía una línea no-op (`if(key==='modalidad'||key==='prioridad'){const sel=key==='modalidad'?null:null;}`) que declaraba una variable siempre `null` y nunca se usaba — resto de un refactor anterior.
+- La clase CSS `.dep-line` (línea SVG punteada para conectar tareas dependientes) no la dibujaba ninguna función JS — las dependencias se muestran solo como lista en el drawer. Se saca junto con la línea anterior.
+- Verificado en local con datos mock: los filtros rápidos de Modalidad/Prioridad siguen funcionando igual. Sin errores de consola.
+
 ## 2026-07-15 - Migra el Gantt Seller Center a lectura gateada por sesión (cierra exposición de datos)
 
 Tipo de cambio: fix de seguridad/arquitectura — backend nuevo (requiere redeploy manual en GAS) + frontend.
