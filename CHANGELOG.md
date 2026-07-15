@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-15 - Agrega la columna "Cancelado" al Kanban de Seguimiento Operativo
+
+Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).
+
+Auditoría pedida por el usuario sobre `gantt-operativo.html`. `renderKanban()` solo definía 4 columnas (Pendiente, En curso, Bloqueado, Completado) para los 5 estados reales de una tarea — el 5º, "Cancelado" (el que asigna `disableGanttTask()` al dar de baja una tarea), no tenía columna. Una tarea cancelada simplemente desaparecía de la vista Kanban sin dejar rastro.
+
+- Reproducible: filtrar por Estado = Cancelado y pasar a vista Kanban mostraba las 4 columnas vacías pese a haber tareas que matcheaban el filtro.
+- Se agrega la 5ª columna `{key:'Cancelado', label:'Cancelado', accent:'var(--t4)', border:'rgba(17,24,39,.14)'}`, con el estilo mudo/tachado ya usado en `st-can`/`.g-bar.can` para mantener consistencia con Lista y el badge de estado.
+- Verificado sirviendo en local con datos mock (1 tarea Pendiente + 1 Cancelada): las 5 columnas se renderizan y la tarea cancelada aparece en su columna. Sin errores de consola.
+
 ## 2026-07-15 - Agrega el módulo RBAC ext_integracion y su link en el sidebar de "Vista de sellers"
 
 Tipo de cambio: fix de frontend + configuración RBAC (sin cambios de backend ni de datos).
