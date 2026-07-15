@@ -25,6 +25,7 @@ const VERSION = {
 
 const CHANGELOG = [
   { v: '1.4.0', date: '2026-07-15', desc: 'Se corrige el selector de Estado de Gestión de Sellers: "Aprobado para integrar" no matcheaba ninguna etapa canónica del Backlog y quedaba invisible en el Kanban. Ahora usa las 8 etapas exactas, con compatibilidad para sellers ya guardados con el valor viejo.' },
+  { v: '1.3.1', date: '2026-07-14', desc: 'Se elimina "Configuración" del dropdown de usuario en auth.js: duplicaba el link ya fijo en el footer del sidebar y, además, estaba hardcodeado a una ruta rota fuera de index.html. Ahora aparece una sola vez, igual que en VTEX Control Center y Project Control Center.' },
   { v: '1.3.0', date: '2026-07-14', desc: 'Se agregan Gantt del seller y Guía de integración a la grilla del Hub (index.html) y a los modales de links de Gestión/Backlog de Sellers — mismo hueco que se venía de cerrar en config.js.' },
   { v: '1.2.0', date: '2026-07-14', desc: 'Se completan ROUTES.PUBLIC (faltaban GANTT_SELLER e INTEGRACION_SELLER) y RESOURCES (faltaban 7 páginas internas, entre ellas la guía de Integración VTEX ↔ VTEX) — mismo patrón de lista desactualizada que el changelog.' },
   { v: '1.1.0', date: '2026-07-14', desc: 'Se reconstruye este historial: no se venía actualizando desde la v1.0.0 pese a 9 cambios visibles posteriores, ya documentados en CHANGELOG.md pero nunca reflejados acá.' },

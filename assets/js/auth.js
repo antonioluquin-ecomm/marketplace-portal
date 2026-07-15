@@ -367,7 +367,6 @@ function _renderUserIndicator() {
         '<div class="sb-user-dropdown-meta"><span class="sb-user-role-badge">' + escapeHtml(user.nombre_rol || '') + '</span></div>' +
       '</div>' +
       '<div class="sb-user-dropdown-sep"></div>' +
-      (SESSION.isAdmin() ? '<a class="sb-user-dropdown-item" href="internal/administracion/configuracion.html">Configuración</a><div class="sb-user-dropdown-sep"></div>' : '') +
       '<button class="sb-user-dropdown-item" type="button" onclick="_showChangePasswordModal()">Cambiar contraseña</button>' +
       '<div class="sb-user-dropdown-sep"></div>' +
       '<button class="sb-user-dropdown-item danger" type="button" onclick="logoutUser()">Cerrar sesión</button>';
