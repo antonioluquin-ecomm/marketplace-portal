@@ -13,66 +13,148 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
+    min-height: 100vh;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-family: var(--font);
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; padding: 24px;
-    background: var(--bg); color: var(--text);
+    color: var(--text);
+    background:
+      linear-gradient(180deg, rgba(37, 182, 12, .045) 0, rgba(37, 182, 12, 0) 210px),
+      var(--bg);
+    -webkit-font-smoothing: antialiased;
   }
-  .login-wrap { width: 100%; max-width: 380px; }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: 4px;
+    background: var(--primary);
+    pointer-events: none;
+  }
+  .login-wrap {
+    width: 100%;
+    max-width: 392px;
+    transform: translateY(-2vh);
+  }
 
-  .login-header  { text-align: center; margin-bottom: 24px; }
+  .login-header {
+    text-align: center;
+    margin-bottom: 18px;
+  }
   .login-logo {
     display: block;
-    width: 220px;
+    width: 188px;
     height: auto;
-    margin: 0 auto 12px;
+    margin: 0 auto 16px;
   }
-  .login-app-name { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -.3px; }
-  .login-app-sub  { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .login-kicker {
+    margin-bottom: 5px;
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .login-app-name {
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+  .login-app-sub {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.45;
+  }
 
   .login-card {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: var(--radius-lg); box-shadow: var(--shadow);
-    padding: 28px;
+    padding: 30px;
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+    border-radius: 8px;
+    box-shadow: 0 18px 46px rgba(17, 24, 39, .10);
   }
 
   .field { margin-bottom: 16px; }
   .field label {
-    display: block; font-size: 13px; font-weight: 500;
-    color: var(--text); margin-bottom: 6px;
+    display: block;
+    margin-bottom: 7px;
+    color: var(--text);
+    font-size: 12.5px;
+    font-weight: 500;
   }
   .field input {
-    width: 100%; padding: 9px 12px; font-size: 14px; font-family: inherit;
-    border: 1px solid var(--line); border-radius: var(--radius-sm);
-    outline: none; transition: border-color .15s, box-shadow .15s;
-    color: var(--text); background: var(--bg);
-    box-sizing: border-box;
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border-color .15s, box-shadow .15s, background .15s;
   }
+  .field input::placeholder { color: color-mix(in srgb, var(--muted) 72%, white); }
   .field input:focus {
+    background: #fff;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 14%, transparent);
   }
 
   .btn-login {
-    width: 100%; padding: 10px; font-family: inherit;
-    font-size: 14px; font-weight: 600; border: none;
-    background: var(--primary); color: #fff;
-    border-radius: var(--radius-sm); cursor: pointer; transition: background .15s; margin-top: 4px;
+    width: 100%;
+    height: 42px;
+    margin-top: 6px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background .15s, transform .15s, box-shadow .15s;
   }
-  .btn-login:hover:not(:disabled) { background: var(--primary-hover); }
-  .btn-login:disabled { opacity: .6; cursor: default; }
+  .btn-login:hover:not(:disabled) {
+    background: var(--primary-hover);
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--primary) 22%, transparent);
+    transform: translateY(-1px);
+  }
+  .btn-login:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    outline-offset: 2px;
+  }
+  .btn-login:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
 
   .alert-err {
-    margin-top: 14px; padding: 10px 14px;
+    margin-top: 14px;
+    padding: 10px 12px;
     background: var(--danger-bg);
     border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
-    border-radius: var(--radius-sm);
-    color: var(--danger); font-size: 13px;
+    border-radius: 8px;
+    color: var(--danger);
+    font-size: 13px;
+    line-height: 1.45;
   }
 
   .login-footer {
-    text-align: center; margin-top: 20px;
-    font-size: 12px; color: var(--muted);
+    margin-top: 16px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11.5px;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 18px; align-items: flex-start; padding-top: 64px; }
+    .login-wrap { transform: none; max-width: 100%; }
+    .login-logo { width: 174px; }
+    .login-card { padding: 22px; }
   }
 </style>
 </head>
@@ -80,8 +162,9 @@
   <div class="login-wrap">
     <div class="login-header">
       <img class="login-logo" src="assets/brand/marketplace-logo.svg" alt="Sporting Marketplace" />
+      <div class="login-kicker">Acceso interno</div>
       <div class="login-app-name">Marketplace Portal</div>
-      <div class="login-app-sub">Sporting Marketplace · Uso interno</div>
+      <div class="login-app-sub">Sporting Marketplace</div>
     </div>
     <div class="login-card">
       <form id="loginForm" autocomplete="on">
