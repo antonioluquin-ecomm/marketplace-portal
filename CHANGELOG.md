@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-15 - Agrega el módulo RBAC ext_integracion y su link en el sidebar de "Vista de sellers"
+
+Tipo de cambio: fix de frontend + configuración RBAC (sin cambios de backend ni de datos).
+
+Segundo hallazgo de la auditoría de `backlog-sellers.html`: `assets/js/config.js` define `MP_RBAC_MODULOS` con `ext_presentacion`, `ext_calificacion`, `ext_relevamiento`, `ext_simulador` y `ext_gantt`, pero le faltaba `ext_integracion` — la Guía de integración VTEX ↔ VTEX (`public/integracion/integracion-seller.html`, agregada en una sesión anterior) nunca tuvo módulo RBAC propio ni aparecía en el sidebar "Vista de sellers" de ninguna página interna. Solo era alcanzable desde el modal de detalle de seller o el Hub.
+
+- Se agrega `{ key: "ext_integracion", label: "Guía de integración", tier: "externo" }` a `MP_RBAC_MODULOS`.
+- Se agrega el link "Guía de integración ↗" (`data-page="ext_integracion"`) a la sección "Vista de sellers" del sidebar en las 14 páginas internas que la tienen: `index.html`, `internal/backlog/{backlog-sellers,gestion-sellers}.html`, `internal/gantt/{gantt-operativo,gantt-seller-center}.html`, `internal/seller-center/index.html`, `internal/simuladores/{simulador-economico,config-tarifas}.html`, `internal/estrategia/{proyecto-marketplace,modelo-integracion,integracion-vtex-vtex,modelo-economico,governance,proceso-onboarding}.html`.
+- Verificado sirviendo en local con sesión mock: el link aparece en el sidebar del Hub con `data-page="ext_integracion"` y `display:flex` (no queda oculto por `applyPermissionsToSidebar()`), apuntando a `public/integracion/integracion-seller.html`.
+
 ## 2026-07-15 - Saca la opción "Descartado" del modal de edición rápida del Backlog de Sellers
 
 Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).

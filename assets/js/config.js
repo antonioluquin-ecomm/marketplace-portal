@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.2',
+  number: '1.4.3',
   date:   '2026-07-15',
-  notes:  'Se saca "Descartado" del modal de edición rápida del Backlog de Sellers',
+  notes:  'Se agrega el módulo ext_integracion y su link en el sidebar de "Vista de sellers"',
 };
 
 const CHANGELOG = [
+  { v: '1.4.3', date: '2026-07-15', desc: 'Se agrega el módulo RBAC ext_integracion (faltaba junto a ext_presentacion/ext_calificacion/ext_relevamiento/ext_simulador/ext_gantt) y su link "Guía de integración" al sidebar de "Vista de sellers" en las 14 páginas internas que lo tienen.' },
   { v: '1.4.2', date: '2026-07-15', desc: 'Se saca "Descartado" de las opciones de Estado del modal de edición rápida del Backlog de Sellers: no era una de las 8 etapas canónicas y desaparecía silenciosamente (se reinterpretaba como "Pausado") en el siguiente refresh.' },
   { v: '1.4.1', date: '2026-07-15', desc: 'Se integra la nueva identidad visual del Marketplace: logo principal como SVG versionado y favicon institucional.' },
   { v: '1.4.0', date: '2026-07-15', desc: 'Se corrige el selector de Estado de Gestión de Sellers: "Aprobado para integrar" no matcheaba ninguna etapa canónica del Backlog y quedaba invisible en el Kanban. Ahora usa las 8 etapas exactas, con compatibilidad para sellers ya guardados con el valor viejo.' },
@@ -381,5 +382,6 @@ window.MP_RBAC_MODULOS = [
   { key: "ext_calificacion", label: "Formulario calificación",         tier: "externo" },
   { key: "ext_relevamiento", label: "Formulario relevamiento",         tier: "externo" },
   { key: "ext_simulador",    label: "Simulador seller",                tier: "externo" },
-  { key: "ext_gantt",        label: "Gantt del seller",                tier: "externo" }
+  { key: "ext_gantt",        label: "Gantt del seller",                tier: "externo" },
+  { key: "ext_integracion",  label: "Guía de integración",             tier: "externo" }
 ];

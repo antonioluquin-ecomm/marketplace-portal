@@ -115,14 +115,23 @@ body {
 
 /* 2026-07-01 — sidebar de navegación del portal. Nombre propio (nav-shell/nav-sidebar)
    para no chocar con .shell/.col-* de simuladores.css (layout de 3 columnas del simulador). */
-.nav-shell { display:grid; grid-template-columns:224px 1fr; align-items:start }
+.nav-shell {
+  display:grid;
+  grid-template-columns:224px 1fr;
+  align-items:stretch;
+  min-height:calc(100vh - var(--topbar-height, 50px));
+}
 .nav-sidebar {
-  position:sticky; top:0;
-  height:100vh;
+  position:sticky;
+  top:var(--topbar-height, 50px);
+  height:calc(100vh - var(--topbar-height, 50px));
   overflow:auto;
   background:var(--sidebar-bg, var(--surface-1));
   border-right:1px solid var(--border, var(--line));
-  padding:18px 0;
+  padding:18px 0 0;
+}
+.nav-sidebar.portal-sidebar {
+  padding:18px 0 0;
 }
 .nav-sidebar .sb-section { margin-bottom:18px }
 .nav-sidebar .sb-label {
@@ -598,6 +607,7 @@ body {
     <a class="nav" data-page="ext_relevamiento" href="../../public/formularios/formulario-relevamiento.html">Relevamiento <span>↗</span></a>
     <a class="nav" data-page="ext_simulador" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
       <a class="nav" data-page="ext_gantt" href="../../public/gantt/gantt-seller.html">Gantt del seller <span>↗</span></a>
+      <a class="nav" data-page="ext_integracion" href="../../public/integracion/integracion-seller.html">Guía de integración <span>↗</span></a>
   </div>
 
   <div class="sb-section">
