@@ -338,6 +338,7 @@
   border-left: 3px solid transparent;
   color: var(--muted, var(--t2, #6b7280));
   font-size: 12.5px;
+  font-weight: 400;
   text-decoration: none;
   transition: background .15s, border-color .15s, color .15s;
 }
@@ -350,7 +351,7 @@
 .portal-sidebar.portal-sidebar .nav.active {
   background: var(--primary-soft, var(--g-dim, #eaf8e6));
   color: var(--primary, var(--g, #25b60c));
-  font-weight: 700;
+  font-weight: 400;
 }
 .portal-sidebar.portal-sidebar .sb-divider {
   height: 1px;
@@ -358,6 +359,15 @@
   margin: 8px 16px 18px;
 }
 
+/* 2026-07-15 - Sidebar canonico: los links mantienen peso regular en todas las paginas. */
+.portal-sidebar.portal-sidebar .nav,
+[data-portal-nav].portal-sidebar .nav,
+.col-nav[data-portal-nav] .nav,
+.portal-sidebar.portal-sidebar .nav.active,
+[data-portal-nav].portal-sidebar .nav.active,
+.col-nav[data-portal-nav] .nav.active {
+  font-weight: 400;
+}
 /* 2026-07-06 — topbar canonico opt-in, mismo patron que .portal-sidebar de
    arriba: cada pagina interna venia con su propia copia pegada a mano de
    .topbar/.brand/.logo/.crumb (o directamente sin ninguna, cayendo al

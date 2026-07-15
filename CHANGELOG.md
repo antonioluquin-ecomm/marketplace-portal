@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-15 - Unifica el peso tipografico del sidebar
+
+Tipo de cambio: fix visual de frontend (sin cambios de backend ni de datos).
+
+Ajuste pedido por el usuario al comparar `proyecto-marketplace.html` y `modelo-integracion.html`: en Proyecto Marketplace todos los links del sidebar se veian mas pesados porque esa pagina tenia una regla local `.nav { font-weight: 500 }`, mientras otros modulos quedaban en peso regular.
+
+- `proyecto-marketplace.html` baja su regla local `.nav` de `500` a `400`, que era lo que hacia que todos los links se vieran mas pesados que en el resto de modulos.
+- `assets/css/internal-components.css` deja el peso de los links del sidebar en `400`, tambien para `.nav.active`.
+- Se agrega un override canonico de mayor especificidad para cubrir sidebars con `portal-sidebar`, `data-portal-nav` y el menu embebido `.col-nav` del simulador economico.
+- El activo mantiene color, fondo y borde izquierdo, pero ningun link del sidebar queda mas grueso por pagina o por estado.
+
 ## 2026-07-15 - Agrega la columna "Cancelado" al Kanban de Seguimiento Operativo
 
 Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).

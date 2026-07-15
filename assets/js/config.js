@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.4',
+  number: '1.4.5',
   date:   '2026-07-15',
-  notes:  'Se agrega la columna "Cancelado" al Kanban de Seguimiento Operativo',
+  notes:  'Se unifica el peso regular de todos los links del sidebar',
 };
 
 const CHANGELOG = [
+  { v: '1.4.5', date: '2026-07-15', desc: 'Se corrige el sidebar interno: todos los links mantienen el mismo peso tipografico regular entre paginas; el activo solo se diferencia por color, fondo y borde activo.' },
   { v: '1.4.4', date: '2026-07-15', desc: 'Se agrega la columna "Cancelado" al Kanban de Seguimiento Operativo: faltaba para el 5º estado real de una tarea y las canceladas desaparecían de esa vista sin dejar rastro.' },
   { v: '1.4.3', date: '2026-07-15', desc: 'Se agrega el módulo RBAC ext_integracion (faltaba junto a ext_presentacion/ext_calificacion/ext_relevamiento/ext_simulador/ext_gantt) y su link "Guía de integración" al sidebar de "Vista de sellers" en las 14 páginas internas que lo tienen.' },
   { v: '1.4.2', date: '2026-07-15', desc: 'Se saca "Descartado" de las opciones de Estado del modal de edición rápida del Backlog de Sellers: no era una de las 8 etapas canónicas y desaparecía silenciosamente (se reinterpretaba como "Pausado") en el siguiente refresh.' },
