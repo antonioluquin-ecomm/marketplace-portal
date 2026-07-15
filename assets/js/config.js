@@ -18,12 +18,14 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.5',
+  number: '1.4.7',
   date:   '2026-07-15',
-  notes:  'Se unifica el peso regular de todos los links del sidebar',
+  notes:  'Se migra el Gantt Seller Center a lectura gateada por sesion',
 };
 
 const CHANGELOG = [
+  { v: '1.4.7', date: '2026-07-15', desc: 'Se migra el Gantt Seller Center de un CSV publicado a la web (sin login) a la accion gateada getScRoadmap: cerraba una exposicion real de datos del roadmap interno.' },
+  { v: '1.4.6', date: '2026-07-15', desc: 'Se mejora la presentacion visual del login interno y del login de sellers: logo mas integrado, jerarquia de acceso mas clara, tarjeta mas sobria, inputs blancos y estados de foco/hover mas pulidos.' },
   { v: '1.4.5', date: '2026-07-15', desc: 'Se corrige el sidebar interno: todos los links mantienen el mismo peso tipografico regular entre paginas; el activo solo se diferencia por color, fondo y borde activo.' },
   { v: '1.4.4', date: '2026-07-15', desc: 'Se agrega la columna "Cancelado" al Kanban de Seguimiento Operativo: faltaba para el 5º estado real de una tarea y las canceladas desaparecían de esa vista sin dejar rastro.' },
   { v: '1.4.3', date: '2026-07-15', desc: 'Se agrega el módulo RBAC ext_integracion (faltaba junto a ext_presentacion/ext_calificacion/ext_relevamiento/ext_simulador/ext_gantt) y su link "Guía de integración" al sidebar de "Vista de sellers" en las 14 páginas internas que lo tienen.' },

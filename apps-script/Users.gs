@@ -39,6 +39,7 @@ var AUTH_SESSION_ACTIONS = [
   "getGantt",
   "getGanttDetalle",
   "getUsuariosGantt",
+  "getScRoadmap",
   "getTarifas",
   "getOverrides",
   "getRelevamientos",
@@ -100,6 +101,7 @@ function routeAuthAction(data) {
     case "getGantt":         return getGanttAction(data);
     case "getGanttDetalle":  return getGanttDetalleAction(data);
     case "getUsuariosGantt": return getUsuariosGanttAction(data);
+    case "getScRoadmap":     return getScRoadmapAction(data);
     case "getTarifas":       return getTarifasAction();
     case "getOverrides":     return getOverridesAction(data);
     case "getRelevamientos": return getRelevamientosAction(data);

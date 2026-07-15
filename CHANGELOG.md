@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-07-15 - Migra el Gantt Seller Center a lectura gateada por sesión (cierra exposición de datos)
+
+Tipo de cambio: fix de seguridad/arquitectura — backend nuevo (requiere redeploy manual en GAS) + frontend.
+
+Auditoría pedida por el usuario sobre `gantt-seller-center.html`. La página cargaba los datos del roadmap (hoja `sc_roadmap`) directamente desde una URL de Google Sheets "publicada a la web" en formato CSV, expuesta en el código fuente. Esto rompía el patrón del resto de la app (desde la Etapa 6, todo se lee vía `_apiAuthPost` con `session_token` — las únicas 3 pestañas que siguen publicadas como CSV son `tarifas`/`overrides`/`sellers`, documentado en `CLAUDE.md`). Cualquiera con esa URL podía leer todo el roadmap (tareas, responsables, observaciones, links a Jira/GitLab) sin loguearse al Portal — el `initAuth('gantt')` de la página solo gateaba la vista, no el dato real, y además el fetch al CSV se disparaba antes de que `auth.js` siquiera se cargara.
+
+- **Backend**: nueva acción `getScRoadmap` (`apps-script/Gantt.gs`), gateada por sesión igual que `getGantt`/`getSellers`. Lee la pestaña `sc_roadmap` del mismo Sheet principal (`SPREADSHEET_ID`), buscando la fila de headers reales por si hay banners antes (mismo patrón que `overrides`). Sin scope de seller: no es data de sellers, cualquier staff autenticado ve todo. Registrada en `AUTH_SESSION_ACTIONS` y el router de `Users.gs`.
+- **Frontend**: se saca la URL del CSV publicado; `init()` ahora llama `_apiAuthPost({action:'getScRoadmap'})`. Se reordenan los `<script>` de auth para que carguen antes del script principal (mismo orden que `gantt-operativo.html`). `mapRows()` se adapta para consumir los objetos que devuelve el backend (headers ya normalizados) en vez de parsear CSV crudo — se elimina el parser CSV manual, que quedó redundante.
+- **Pendiente de acción manual**: como toda escritura en `apps-script/`, esto no tiene efecto hasta pegar `Gantt.gs`/`Schema.gs`/`Users.gs` en el editor de GAS y redeployar una nueva versión.
+- Verificado sirviendo en local con sesión y datos mock (2 tareas): KPIs, filtros, lista de módulos y drawer de detalle funcionan igual que antes. Sin errores de consola.
+
+## 2026-07-15 - Mejora visual de logins
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Se ajusta la composicion del login interno y del login de sellers para que se sientan mas institucionales y menos genericos.
+
+- Logo mas integrado al bloque de acceso, con menor tamano y mejor espaciado.
+- Jerarquia de texto mas clara: kicker de tipo de acceso, titulo del portal y marca como subtitulo.
+- Tarjeta mas sobria: radio de 8px, sombra mas controlada, borde sutil e inputs blancos.
+- Estados de foco y hover mas pulidos, manteniendo accesibilidad visible.
+
 ## 2026-07-15 - Unifica el peso tipografico del sidebar
 
 Tipo de cambio: fix visual de frontend (sin cambios de backend ni de datos).

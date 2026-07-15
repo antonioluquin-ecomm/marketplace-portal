@@ -575,20 +575,16 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
 
 <div class="toast" id="toast"></div>
 
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth.js"></script>
+<script>initAuth('gantt');</script>
 <script>
 /* ═══════════════════════════════════════
    CONFIG
 ═══════════════════════════════════════ */
-// ── CONFIGURACIÓN DEL SHEET ───────────────────────────────────────────────
-// Esta URL apunta a la hoja sc_roadmap del Google Sheet de Marketplace Sporting.
-// Si el Gantt no carga datos:
-//   1. Abrí el Google Sheet
-//   2. Archivo → Compartir → Publicar en la web
-//   3. Seleccioná la hoja "sc_roadmap" → formato CSV → Publicar
-//   4. Copiá la URL y reemplazá CSV_URL acá abajo
-//   5. El gid=1440698993 debe coincidir con el id de la hoja sc_roadmap
-// ─────────────────────────────────────────────────────────────────────────
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTwd-qIMhoH1poJpaTZqN-7O5IGAfPDTxslBAX8LCPogTkwheW2vWsq59JkvvYakM8ndCKgUQualQyi/pub?gid=1440698993&single=true&output=csv';
+// Datos del roadmap (hoja sc_roadmap) vía acción gateada por sesión
+// getScRoadmap (apps-script/Gantt.gs) — antes se leía de un CSV publicado
+// a la web sin autenticación; ver CHANGELOG.md.
 
 const MODULE_META = {
   'Artículos Seller':          { icon:'🏷️' },
@@ -684,39 +680,25 @@ function showToast(msg, ms=2200) {
 }
 
 /* ═══════════════════════════════════════
-   CSV
+   MAPEO DE FILAS
+   getScRoadmap ya devuelve objetos con headers normalizados (mismo
+   normalizador que usa el backend: minúsculas, sin acentos, espacios/
+   símbolos → "_"). COL sigue sirviendo para tolerar alias de nombre.
 ═══════════════════════════════════════ */
-function parseCSV(text) {
-  const rows=[]; let row=[],cell='',q=false;
-  for (let i=0;i<text.length;i++) {
-    const c=text[i],nx=text[i+1];
-    if(c==='"'&&q&&nx==='"'){cell+='"';i++;continue}
-    if(c==='"'){q=!q;continue}
-    if(c===','&&!q){row.push(cell);cell='';continue}
-    if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&nx==='\n')i++;row.push(cell);cell='';if(row.some(v=>v.trim()))rows.push(row);row=[];continue}
-    cell+=c;
-  }
-  row.push(cell); if(row.some(v=>v.trim()))rows.push(row); return rows;
-}
-function findCol(hdrs, aliases) {
-  for(const a of aliases){const i=hdrs.findIndex(h=>norm(h)===a);if(i>=0)return i;}
-  return -1;
+function findAlias(row, aliases) {
+  for (const a of aliases) { const key = a.replace(/\s+/g,'_'); if (row[key] !== undefined) return row[key]; }
+  return '';
 }
 function mapRows(rows) {
-  const hi = rows.findIndex(r=>r.some(v=>norm(v)==='id'||norm(v)==='modulo'||norm(v)==='módulo'));
-  if(hi<0) throw new Error('No se encontró fila de encabezados. Columna "ID" requerida en sc_roadmap.');
-  const hdrs = rows[hi].map(v=>v.trim());
-  const idx={};
-  for(const [k,al] of Object.entries(COL)) idx[k]=findCol(hdrs,al);
-  const get=(row,k)=>idx[k]>=0?String(row[idx[k]]??'').trim():'';
+  if (!rows.length) throw new Error('No se encontraron filas en sc_roadmap.');
+  const get=(row,k)=>String(findAlias(row,COL[k]) ?? '').trim();
 
   const result=[];
-  for(let i=hi+1;i<rows.length;i++){
-    const row=rows[i];
+  rows.forEach(row=>{
     const id=get(row,'id');
-    if(!id||id.startsWith('ℹ')||id.startsWith('—')||id.startsWith('TIMELINE')) continue;
+    if(!id||id.startsWith('ℹ')||id.startsWith('—')||id.startsWith('TIMELINE')) return;
     const inicio=toDate(get(row,'inicio')), fin=toDate(get(row,'fin'));
-    if(!inicio||!fin) continue;
+    if(!inicio||!fin) return;
     const estadoRaw=get(row,'estado')||'No iniciado';
     const avRaw=parseAvance(get(row,'avance'));
     const avFallback = norm(estadoRaw).includes('completado')?100:norm(estadoRaw).includes('curso')?40:norm(estadoRaw).includes('bloqueado')?20:0;
@@ -730,7 +712,7 @@ function mapRows(rows) {
       hito:get(row,'hito'), linkJira:get(row,'linkJira'), linkGitlab:get(row,'linkGitlab'),
       fechaUpd:toDate(get(row,'fechaUpd')),
     });
-  }
+  });
   if(!result.length) throw new Error('No hay tareas válidas en sc_roadmap. Verificar columnas ID, Fecha Inicio, Fecha Fin.');
   return result;
 }
@@ -1146,11 +1128,8 @@ function copyUrl(){
 ═══════════════════════════════════════ */
 async function init(){
   try{
-    const res=await fetch(CSV_URL+'&_t='+Date.now(),{cache:'no-store'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const text=await res.text();
-    const rows=parseCSV(text);
-    const data=mapRows(rows);
+    const json=await _apiAuthPost({action:'getScRoadmap'});
+    const data=mapRows(json.data||[]);
     S.data=data;
     S.filtered=[...data];
     data.forEach(t=>{S.byId[t.id]=t;});
@@ -1166,7 +1145,6 @@ async function init(){
       <strong>No se pudo cargar el Gantt</strong>
       <div>${esc(err.message)}</div>
       <div><strong>Columnas requeridas (sc_roadmap):</strong><br>ID · Modulo · Tarea · Descripcion · Modalidad · Responsable · Tipo · Subtipo · Estado · Prioridad · Fecha Inicio · Fecha Fin · Dependencia · Observaciones · % Avance · Hito · Link Jira · Link GitLab · Fecha Ultima Actualizacion</div>
-      <div class="error-code">${esc(CSV_URL)}</div>
     </div>`;
     $('liveStatus').textContent='Error al cargar';
     $('lastBadge').textContent='Error';
@@ -1174,8 +1152,5 @@ async function init(){
 }
 init();
 </script>
-<script src="../../assets/js/config.js"></script>
-<script src="../../assets/js/auth.js"></script>
-<script>initAuth('gantt');</script>
 </body>
 </html>

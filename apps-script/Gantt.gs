@@ -1015,6 +1015,33 @@ function _contarChecklistYComentariosGantt(ss) {
   return conteos;
 }
 
+// Lectura del roadmap de desarrollo del Seller Center (hoja sc_roadmap),
+// gateada por sesión — reemplaza el CSV publicado a la web que usaba
+// gantt-seller-center.html (cualquiera con esa URL podía leer el roadmap
+// sin login). No tiene seller_id (no es data de sellers), así que no pasa
+// por _aplicarSellerScope: cualquier staff autenticado ve todo.
+function getScRoadmapAction(data) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const ws = ss.getSheetByName(HOJA_SC_ROADMAP);
+  if (!ws) return { ok: true, data: [] };
+
+  const lastCol = ws.getLastColumn();
+  const lastRow = ws.getLastRow();
+  if (lastCol === 0 || lastRow < 1) return { ok: true, data: [] };
+
+  const allValues = ws.getRange(1, 1, lastRow, lastCol).getValues();
+  // Busca la fila de encabezados reales (por si hay filas de banner antes,
+  // mismo patrón que la pestaña "overrides" — ver CLAUDE.md).
+  const headerRowIdx = allValues.findIndex((r) => r.some((v) => _normHeaderKeyGantt(v) === "id"));
+  if (headerRowIdx === -1) return { ok: true, data: [] };
+
+  const headers = allValues[headerRowIdx].map(_normHeaderKeyGantt);
+  const rows = allValues.slice(headerRowIdx + 1);
+  const todos = rows.map((r) => rowToObj(headers, r)).filter((o) => o.id);
+
+  return { ok: true, data: todos };
+}
+
 // ── DETALLE DE TAREA: checklist + comentarios ──────────────────
 
 function _buscarTareaGanttPorId(taskId) {

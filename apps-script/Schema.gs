@@ -18,6 +18,7 @@ const HOJA_TIMELINE_CHECKLIST = "timeline_checklist";
 const HOJA_TIMELINE_COMENTARIOS = "timeline_comentarios";
 const HOJA_TARIFAS = "tarifas";
 const HOJA_OVERRIDES = "overrides";
+const HOJA_SC_ROADMAP = "sc_roadmap";
 
 // Clave de escritura para operaciones sensibles (tarifas_update, override_update, logo_upload).
 // Configurar en: Proyecto → Configuración del proyecto → Propiedades de secuencia de comandos
