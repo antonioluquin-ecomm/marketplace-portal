@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-15 - Corrige el selector de Estado de Gestión de Sellers (bug real de datos)
+
+Tipo de cambio: fix de datos en frontend (sin cambios de backend).
+
+Auditoría pedida por el usuario sobre `gestion-sellers.html`. Se encontró un bug real, no solo código desactualizado: el `<select>` de "Estado en el pipeline" tenía 9 opciones que no coincidían con las 8 etapas canónicas (`STAGES`) que reconoce `normalizePipeline()` en `backlog-sellers.html`.
+
+- **"Aprobado para integrar"** no matcheaba ninguna palabra clave del normalizador (ni "listo"/"ready" ni "integracion" —la palabra real era "integrar"—) y quedaba como texto suelto, invisible para el Kanban y los filtros de Estado del Backlog.
+- Faltaba directamente la opción **"En definición técnica"**, una etapa canónica real.
+- **"En relevamiento"** colisionaba con "Evaluación" (ambas caían en el mismo bucket de `normalizePipeline`), ofreciendo dos opciones para el mismo resultado.
+- Se reemplazan las 9 opciones por las 8 etapas exactas de `STAGES`, usadas como value literal (sin depender del matching por palabra clave).
+- **Compatibilidad con sellers ya guardados**: se agrega `normalizeEstadoPipeline()`, aplicado al editar un seller existente. "En relevamiento" se preserva como "En evaluación" (así lo clasifica hoy el Backlog, no se reinterpreta); "Aprobado para integrar" se corrige a "Listos para integrar" (arregla el bug real) al reeditar y guardar.
+- Limpieza de paso: se saca `copyPayload()` (función sin botón que la llamara) y `ROUTES.INTERNAL.BACKLOG_SELLERS` (clave nunca leída) de `FALLBACK_CONFIG`.
+- Verificado sirviendo en local con datos mock: el `<select>` muestra las 8 opciones canónicas; 3 sellers con valores legacy ("en relevamiento", "aprobado para integrar", "descartado") se remapean correctamente al cargar para editar. Sin errores de consola.
+
 ## 2026-07-14 - Completa las 3 listas de páginas restantes (Hub + modales de links)
 
 Tipo de cambio: fix de datos en frontend (sin cambios de backend ni de datos).

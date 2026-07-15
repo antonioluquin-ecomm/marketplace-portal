@@ -179,7 +179,7 @@
           <div class="section">
             <div class="section-title">3. Gestión operativa</div>
             <div class="form-grid">
-              <div class="field"><label>Estado en el pipeline</label><select id="estado_pipeline" name="estado_pipeline" class="sel"><option value="identificados">Identificado</option><option value="contactos">Contactado</option><option value="evaluación">En evaluación</option><option value="en relevamiento">En relevamiento</option><option value="aprobado para integrar">Aprobado para integrar</option><option value="en integración">En integración</option><option value="live">Live</option><option value="pausado">Pausado</option><option value="descartado">Descartado</option></select></div>
+              <div class="field"><label>Estado en el pipeline</label><select id="estado_pipeline" name="estado_pipeline" class="sel"><option value="Identificados">Identificados</option><option value="Contactados">Contactados</option><option value="En evaluación">En evaluación</option><option value="En definición técnica">En definición técnica</option><option value="Listos para integrar">Listos para integrar</option><option value="En integración">En integración</option><option value="Live">Live</option><option value="Pausado">Pausado</option></select><div class="help">Mismas 8 etapas que reconoce el Backlog — no escribir texto libre acá.</div></div>
               <div class="field"><label>Prioridad</label><select id="prioridad" name="prioridad" class="sel"><option>Media</option><option>Alta</option><option>Baja</option></select></div>
               <div class="field"><label class="req">Responsable interno</label><input id="responsable" name="responsable" class="inp" placeholder="Ej.: Gabriel Luna" /><div class="help">Ingresar la persona responsable de crear o gestionar esta ficha.</div></div>
               <div class="field"><label>¿Sigue activo?</label><select id="activo" name="activo" class="sel"><option>SI</option><option>NO</option></select></div>
@@ -200,7 +200,6 @@
           <div class="actions">
             <button class="button" id="submitBtn" type="submit">Guardar seller</button>
             <button class="button secondary" onclick="resetForm()" type="button">Limpiar</button>
-            
           </div>
         </form>
       </div>
@@ -214,7 +213,7 @@
       BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal",
       APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec",
       ASSETS: { LOGO_BASE_URL: "https://antonioluquin-ecomm.github.io/marketplace-portal/assets/logos/" },
-      ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html", GANTT_SELLER:"/public/gantt/gantt-seller.html", INTEGRACION_SELLER:"/public/integracion/integracion-seller.html" }, INTERNAL:{ BACKLOG_SELLERS:"/internal/backlog/backlog-sellers.html" } },
+      ROUTES: { PUBLIC: { PRESENTACION_SELLER:"/public/presentaciones/presentacion-seller.html", FORMULARIO_CALIFICACION:"/public/formularios/formulario-calificacion.html", FORMULARIO_RELEVAMIENTO:"/public/formularios/formulario-relevamiento.html", SIMULADOR_SELLER:"/public/simuladores/simulador-seller.html", GANTT_SELLER:"/public/gantt/gantt-seller.html", INTEGRACION_SELLER:"/public/integracion/integracion-seller.html" } },
       toAbsoluteUrl(path){ const base=this.BASE_URL.replace(/\/$/,""); return /^https?:\/\//i.test(path)?path:base+(String(path).startsWith("/")?path:"/"+path); }
     };
     const CFG = window.MP_CONFIG || FALLBACK_CONFIG;
@@ -245,6 +244,29 @@
     const $ = id => document.getElementById(id);
     const norm = v => String(v??"").trim().toLowerCase();
     const clean = v => String(v??"").trim();
+    // Compatibilidad: normaliza valores viejos de estado_pipeline (guardados
+    // antes de alinear el <select> a las 8 etapas canónicas de Backlog,
+    // ver STAGES en backlog-sellers.html) al editar un seller existente.
+    // "en relevamiento" se preserva como "En evaluación" — así lo clasifica
+    // hoy el propio normalizePipeline() del Backlog, no se reinterpreta.
+    // "aprobado para integrar" sí se corrige a "Listos para integrar": ese
+    // valor no matcheaba ninguna etapa canónica (bug real, quedaba como
+    // texto suelto en el Kanban) — al reeditar el seller se corrige solo.
+    function normalizeEstadoPipeline(v){
+      const n = norm(v);
+      const legacyMap = {
+        "identificados":"Identificados", "identificado":"Identificados",
+        "contactos":"Contactados", "contactado":"Contactados",
+        "evaluación":"En evaluación", "evaluacion":"En evaluación",
+        "en relevamiento":"En evaluación", "relevamiento":"En evaluación",
+        "en definición técnica":"En definición técnica", "en definicion tecnica":"En definición técnica",
+        "aprobado para integrar":"Listos para integrar", "listos para integrar":"Listos para integrar",
+        "en integración":"En integración", "en integracion":"En integración",
+        "live":"Live",
+        "pausado":"Pausado", "descartado":"Pausado"
+      };
+      return legacyMap[n] || v;
+    }
     const pick = (obj, keys) => { for(const k of keys){ if(obj && obj[k]!==undefined && obj[k]!==null && clean(obj[k])!=="") return clean(obj[k]); } return ""; };
     const valueFromRow = (row, field) => pick(row, OPTIONAL_ALIASES[field] || [field]);
     function getQuerySellerId(){
@@ -271,7 +293,7 @@
     function toAbsolute(path){ return (CFG.toAbsoluteUrl ? CFG.toAbsoluteUrl(path) : FALLBACK_CONFIG.toAbsoluteUrl(path)); }
     async function loadSellers(){ try{ setStatus("loading","Cargando sellers…"); const json = await _apiAuthPost({action:"getSellers"}); SELLERS = json.data || []; SELLERS_LOADED = true; buildExistingSelect(); setStatus("ok",`${SELLERS.length} sellers cargados`); }catch(e){ console.warn(e); SELLERS=[]; SELLERS_LOADED = false; buildExistingSelect(); setStatus("err","No se pudo cargar sellers"); showAlert("No se pudo leer la hoja de sellers. Para evitar IDs duplicados, no crees un seller nuevo hasta corregir la conexión."); } }
     function buildExistingSelect(){ const s=$("existingSeller"); const sorted=[...SELLERS].sort((a,b)=>String(valueFromRow(a,"seller_nombre")).localeCompare(String(valueFromRow(b,"seller_nombre")),"es")); s.innerHTML='<option value="">Crear nuevo seller</option>'+sorted.map(row=>{const id=valueFromRow(row,"seller_id") || row.seller_id; const name=valueFromRow(row,"seller_nombre")||id||"Seller"; const group=valueFromRow(row,"empresa_grupo"); const label = group && norm(group)!==norm(name) ? `${name} · ${group}` : name; return `<option value="${escapeSellerHtml(id)}">${escapeSellerHtml(label)}${id?" · "+escapeSellerHtml(id):""}</option>`}).join(""); }
-    function loadSelectedSeller(){ const id=$("existingSeller").value; if(!id){ resetForm(false); return; } const row=SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id)); if(!row){ showAlert("No se encontró el seller seleccionado."); return; } EDITING_ORIGINAL_ID=id; SELLER_FIELDS.forEach(f=>{ if($(f)){ let v=valueFromRow(row,f); if(f==="modelo_integracion_estimado" && norm(v)==="seller center") v="Gestión asistida"; $(f).value = v; } }); if(!$("activo").value) $("activo").value="SI"; updatePreview(); clearAlert(); showToast("Seller cargado para editar"); }
+    function loadSelectedSeller(){ const id=$("existingSeller").value; if(!id){ resetForm(false); return; } const row=SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id)); if(!row){ showAlert("No se encontró el seller seleccionado."); return; } EDITING_ORIGINAL_ID=id; SELLER_FIELDS.forEach(f=>{ if($(f)){ let v=valueFromRow(row,f); if(f==="modelo_integracion_estimado" && norm(v)==="seller center") v="Gestión asistida"; if(f==="estado_pipeline") v=normalizeEstadoPipeline(v); $(f).value = v; } }); if(!$("activo").value) $("activo").value="SI"; updatePreview(); clearAlert(); showToast("Seller cargado para editar"); }
     function loadSellerById(idFromUrl){
       const id = normalizeSellerId(idFromUrl);
       if(!id) return false;
@@ -309,7 +331,6 @@
     function buildFirstContactMessage(){ const o=formToObject(); const marca=o.marca_seller_operativo || o.seller_nombre || "tu marca"; const email=o.contacto_email || "[email del contacto]"; const login=toAbsolute("/public/login.html"); const presentacion=buildPublicLink("presentacion"); const calificacion=buildPublicLink("calificacion"); return `Hola, ¿cómo estás?\n\nTe contactamos desde Sporting Marketplace porque nos gustaría evaluar la posibilidad de incorporar ${marca} a nuestro ecosistema de sellers.\n\nPara avanzar, ingresá al portal de sellers con estas credenciales iniciales:\n${login}\n\nUsuario: ${email}\nContraseña inicial: Admin123\n\nPor seguridad, luego de ingresar cambiá la contraseña desde tu perfil.\n\nTe compartimos una presentación breve del modelo:\n${presentacion}\n\nComo primer paso, necesitamos completar una calificación inicial para entender mejor la operación, plataforma, catálogo y alcance comercial:\n${calificacion}\n\nLa información es de uso interno y nos ayuda a definir si el modelo es viable y cuál sería el mejor camino de integración.\n\nQuedamos atentos.\nSaludos.`; }
     function copyLink(type){ const link=buildPublicLink(type); navigator.clipboard.writeText(link).then(()=>showToast("Link copiado")); }
     function copyFirstContactMessage(){ navigator.clipboard.writeText(buildFirstContactMessage()).then(()=>showToast("Mensaje copiado")); }
-    function copyPayload(){ const o=formToObject(); navigator.clipboard.writeText(JSON.stringify(o,null,2)).then(()=>showToast("Datos copiados")); }
     // ── Logo upload ──────────────────────────────────────────
     let pendingLogoFile = null;
 
