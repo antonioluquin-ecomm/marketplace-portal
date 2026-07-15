@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-15 - Refina topbar interno y control del sidebar
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Se ajusta la cabecera interna para que lea mas como producto institucional y menos como logo insertado sobre una placa verde.
+
+- La marca del topbar deja de usar el wordmark completo con fondo verde y pasa a simbolo + texto, con verde solo como acento.
+- El badge de version queda mas silencioso visualmente, manteniendo su ubicacion junto al modulo.
+- El boton de ocultar sidebar se posiciona sobre el borde del panel lateral, que es donde su accion tiene contexto.
+- El topbar se mantiene blanco/neutro; el verde queda reservado para marca, estados y acentos.
+
 ## 2026-07-15 - Limpieza de código muerto en el Gantt Seller Center
 
 Tipo de cambio: limpieza de frontend (sin cambios de comportamiento).

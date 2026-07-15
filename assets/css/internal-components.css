@@ -398,35 +398,43 @@
   gap: 14px;
   min-width: 0;
 }
-/* 2026-07-15 — wordmark institucional como asset SVG. El texto queda en el
-   DOM como fallback/accesibilidad, pero visualmente se reemplaza por el logo
-   versionado en assets/brand/. */
+/* 2026-07-15 - Marca en topbar sin placa: simbolo + texto, con verde solo como acento. */
 .portal-topbar.portal-topbar .logo,
 .portal-topbar.portal-topbar .tb-logo {
   display: inline-flex;
   align-items: center;
-  width: 142px;
-  height: 35px;
+  gap: 8px;
+  height: 32px;
   flex: 0 0 auto;
-  overflow: hidden;
-  color: transparent;
-  font-size: 0;
-  line-height: 0;
+  overflow: visible;
+  color: var(--text, #111827);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .01em;
   white-space: nowrap;
   text-decoration: none;
-  background: url("../brand/marketplace-logo.svg") left center / contain no-repeat;
+  background: none;
 }
 .portal-topbar.portal-topbar .logo::before,
 .portal-topbar.portal-topbar .tb-logo::before {
-  content: none;
+  content: "";
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-radius: 7px;
+  background: url("../brand/marketplace-symbol.svg") center / contain no-repeat;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary, #25b60c) 16%, transparent);
 }
 .portal-topbar.portal-topbar .logo:hover,
 .portal-topbar.portal-topbar .tb-logo:hover {
-  color: transparent;
+  color: var(--text, #111827);
 }
 .portal-topbar.portal-topbar .logo span,
 .portal-topbar.portal-topbar .tb-logo span {
-  display: none;
+  display: inline;
+  color: var(--primary, #25b60c);
+  font-weight: inherit;
 }
 .portal-topbar.portal-topbar .crumb,
 .portal-topbar.portal-topbar .tb-crumb,
@@ -878,23 +886,24 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
   display: none;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-sm, 8px);
   border: 1px solid var(--line, #e5e7eb);
-  background: var(--card, #fff);
+  background: rgba(255, 255, 255, .96);
   color: var(--muted, #6b7280);
+  box-shadow: 0 8px 20px rgba(17, 24, 39, .08);
   font-family: var(--mono, monospace);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   flex-shrink: 0;
 }
 .sidebar-collapse-toggle:hover,
 .sidebar-collapse-toggle[aria-pressed="true"] {
-  color: var(--primary, #1a3f6b);
-  border-color: var(--primary-mid, #bfd4f5);
-  background: var(--primary-soft, #e8f0fb);
+  color: var(--text, #111827);
+  border-color: var(--line, #e5e7eb);
+  background: #fff;
 }
 
 /* 2026-07-14 - Badge de versión en el topbar interno, mismo patrón que
@@ -905,23 +914,23 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
 .tb-version {
   display: inline-flex;
   align-items: center;
-  margin-left: 4px;
-  padding: 2px 8px;
+  margin-left: 0;
+  padding: 2px 7px;
   border-radius: var(--radius-pill, 999px);
   border: 1px solid var(--line, #e5e7eb);
-  background: var(--card, #fff);
-  color: var(--muted, #6b7280);
+  background: color-mix(in srgb, var(--bg, #f3f6fb) 74%, #fff);
+  color: color-mix(in srgb, var(--muted, #6b7280) 86%, white);
   font-family: var(--mono, monospace);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   cursor: pointer;
   user-select: none;
   transition: color .15s, border-color .15s, background .15s;
 }
 .tb-version:hover {
-  color: var(--primary, #1a3f6b);
-  border-color: var(--primary-mid, #bfd4f5);
-  background: var(--primary-soft, #e8f0fb);
+  color: var(--text, #111827);
+  border-color: var(--line, #e5e7eb);
+  background: #fff;
 }
 
 .tb-version-popover {
@@ -971,7 +980,16 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
 }
 
 @media (min-width: 961px) {
-  .sidebar-collapse-toggle { display: inline-flex; }
+  .sidebar-collapse-toggle {
+    position: fixed;
+    top: calc((var(--topbar-height, var(--tb, 50px)) - 32px) / 2);
+    left: calc(var(--sidebar-w, var(--sb, 224px)) - 16px);
+    z-index: 360;
+    display: inline-flex;
+  }
+  html[data-sidebar="collapsed"] .sidebar-collapse-toggle {
+    left: 12px;
+  }
 
   [data-portal-nav] {
     transition: transform .2s ease, opacity .2s ease;
