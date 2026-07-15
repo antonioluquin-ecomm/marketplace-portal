@@ -982,13 +982,14 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
 @media (min-width: 961px) {
   .sidebar-collapse-toggle {
     position: fixed;
-    top: calc((var(--topbar-height, var(--tb, 50px)) - 32px) / 2);
+    top: calc(var(--topbar-height, var(--tb, 50px)) + 12px);
     left: calc(var(--sidebar-w, var(--sb, 224px)) - 16px);
     z-index: 360;
     display: inline-flex;
   }
   html[data-sidebar="collapsed"] .sidebar-collapse-toggle {
     left: 12px;
+    top: calc(var(--topbar-height, var(--tb, 50px)) + 12px);
   }
 
   [data-portal-nav] {
