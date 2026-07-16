@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-07-16 - Unifica headers de paginas publicas de sellers
+
+Tipo de cambio: mejora estructural y visual de frontend (sin cambios de backend ni de datos).
+
+- Las seis paginas publicas usan el contrato marca, navegacion centrada y acciones a la derecha.
+- Simulador mueve el nav fuera de su bloque de metricas; Calificacion, Relevamiento y Gantt normalizan la zona de sesion.
+- El header conserva altura, padding y responsive comunes; debajo de 1200 px el nav pasa al contenido de cada pagina.
+
+## 2026-07-16 - Completa contraste de logos en Simulador Seller
+
+Tipo de cambio: correccion visual de frontend (sin cambios de backend ni de datos).
+
+- El Simulador Seller reemplaza su fondo gris claro local por el fondo grafito usado por el componente compartido.
+- Presentacion, Simulador, Calificacion y Relevamiento quedan alineados para mostrar correctamente los logos blancos.
+
 ## 2026-07-16 - Mejora contraste de logos blancos de sellers
 
 Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).

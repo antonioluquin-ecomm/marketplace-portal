@@ -18,12 +18,14 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.26',
+  number: '1.4.28',
   date:   '2026-07-16',
-  notes:  'Mejora el contraste de logos blancos de sellers',
+  notes:  'Unifica el header de las paginas publicas de sellers',
 };
 
 const CHANGELOG = [
+  { v: '1.4.28', date: '2026-07-16', desc: 'Las seis paginas publicas adoptan el mismo header de tres zonas: marca, navegacion centrada y acciones alineadas a la derecha.' },
+  { v: '1.4.27', date: '2026-07-16', desc: 'El Simulador Seller elimina su sobrescritura clara del logo y adopta el mismo fondo grafito que Presentacion, Calificacion y Relevamiento.' },
   { v: '1.4.26', date: '2026-07-16', desc: 'Los logos blancos de sellers se presentan sobre fondos grafito en chips y tarjetas para asegurar contraste y legibilidad.' },
   { v: '1.4.25', date: '2026-07-16', desc: 'Los logos blancos sobre transparencia dejan de interpretarse como placeholders vacios y vuelven a mostrarse en las paginas publicas de sellers.' },
   { v: '1.4.24', date: '2026-07-16', desc: 'Seguimiento Operativo unifica contadores, corrige el scroll y la legibilidad de Lista, reduce acciones riesgosas y mejora contraste y accesibilidad.' },

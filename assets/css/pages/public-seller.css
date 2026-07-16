@@ -363,6 +363,17 @@ small {
   box-shadow: 0 10px 26px rgba(0, 0, 0, .22);
 }
 
+/* Header publico canonico: marca | navegacion centrada | acciones. */
+.portal-topbar.portal-topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  column-gap: 18px;
+}
+.portal-topbar.portal-topbar > .brand { justify-self: start; }
+.portal-topbar.portal-topbar > .public-flow-nav { justify-self: center; }
+.portal-topbar.portal-topbar > .tb-right,
+.portal-topbar.portal-topbar > .user-chip { justify-self: end; margin-left: 0; }
+
 /* Etapa 27B: patron comun de headers/topbars publicos. */
 .topbar {
   min-height: 56px;
@@ -491,7 +502,10 @@ small {
   background: var(--g2);
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1200px) {
+  .portal-topbar.portal-topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
   .topbar .public-flow-nav {
     display: none;
   }
