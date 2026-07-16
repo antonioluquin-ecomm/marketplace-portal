@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-16 - Corrige logos blancos de sellers
+
+Tipo de cambio: correccion funcional de frontend (sin cambios de backend ni de datos).
+
+- El detector compartido de logos valida pixeles con opacidad sin descartar el color blanco.
+- Los PNG blancos sobre transparencia, incluido Topper, dejan de caer incorrectamente al fallback de iniciales.
+
 ## 2026-07-16 - Corrige la vista Lista de Seguimiento Operativo
 
 Tipo de cambio: correccion funcional y mejora de usabilidad de frontend (sin cambios de backend ni de datos).

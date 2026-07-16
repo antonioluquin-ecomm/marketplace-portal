@@ -353,7 +353,7 @@ function isBlankLogoImage(img) {
     let visible = 0;
     for (let i = 0; i < data.length; i += 4) {
       const a = data[i + 3];
-      if (a > 10 && (data[i] < 245 || data[i + 1] < 245 || data[i + 2] < 245)) visible++;
+      if (a > 10) visible++;
     }
     return visible < 4;
   } catch (e) {
