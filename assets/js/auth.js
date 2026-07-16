@@ -385,6 +385,26 @@ let _rolesData = [];
 let _sellersData = [];
 let _usuariosData = [];
 
+/* Cierra un modal-overlay con click afuera o Escape, y envía el form con
+   Enter (excepto si el foco está en un <select> o <button>, donde Enter ya
+   tiene su propio comportamiento nativo). Mismo patrón que el modal de
+   "Cambiar contraseña" más arriba en este archivo. */
+function _wireModalDismiss(modalId, onClose, onSubmit) {
+  const overlay = document.getElementById(modalId);
+  if (!overlay || overlay.dataset.wired) return;
+  overlay.dataset.wired = '1';
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) onClose();
+  });
+  overlay.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { onClose(); return; }
+    if (e.key === 'Enter' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'BUTTON') {
+      e.preventDefault();
+      onSubmit();
+    }
+  });
+}
+
 function renderUserManagementSection() {
   if (!SESSION.isAdmin()) return;
   const host = document.getElementById('cfg-tabs-host');
@@ -475,25 +495,32 @@ function renderUserManagementSection() {
         <h3 id="user-form-title">Nuevo usuario</h3>
         <div class="field" style="margin-bottom:12px">
           <label>Tipo de cuenta</label>
-          <div style="display:flex;gap:6px">
-            <button type="button" id="uf-tipo-interno" class="tab-btn active" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:7px 12px;margin-right:0" onclick="_setTipoCuenta('interno')">Interno</button>
-            <button type="button" id="uf-tipo-seller" class="tab-btn" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:7px 12px;margin-right:0" onclick="_setTipoCuenta('seller')">Seller</button>
+          <div class="segmented">
+            <button type="button" id="uf-tipo-interno" class="active" onclick="_setTipoCuenta('interno')">Interno</button>
+            <button type="button" id="uf-tipo-seller" onclick="_setTipoCuenta('seller')">Seller</button>
           </div>
         </div>
         <div class="field-row" style="margin-bottom:12px">
           <div class="field">
             <label for="uf-nombre">Nombre *</label>
             <input id="uf-nombre" placeholder="Nombre completo">
+            <span class="field-error" id="uf-nombre-err" hidden></span>
           </div>
           <div class="field">
             <label for="uf-email">Email *</label>
             <input id="uf-email" type="email" placeholder="email@empresa.com">
+            <span class="field-error" id="uf-email-err" hidden></span>
           </div>
         </div>
         <div class="field" style="margin-bottom:12px">
           <label for="uf-password">Contraseña <span id="uf-pw-req">*</span></label>
-          <input id="uf-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+          <div class="pw-group">
+            <input id="uf-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+            <button type="button" id="uf-pw-toggle" onclick="_togglePasswordVisibility()">Ver</button>
+            <button type="button" onclick="_generatePassword()">Generar</button>
+          </div>
           <span class="field-hint" id="uf-pw-hint"></span>
+          <span class="field-error" id="uf-password-err" hidden></span>
         </div>
         <div class="field-row" style="margin-bottom:6px">
           <div class="field" id="uf-rol-wrap">
@@ -502,14 +529,15 @@ function renderUserManagementSection() {
           </div>
           <div class="field" id="uf-sellerid-wrap" hidden>
             <label for="uf-sellerid">Seller *</label>
-            <select id="uf-sellerid"></select>
-            <span class="field-hint">Podés dar de alta varias cuentas para el mismo seller</span>
+            <select id="uf-sellerid" onchange="_updateSellerAccountsHint()"></select>
+            <span class="field-hint" id="uf-seller-hint">Podés dar de alta varias cuentas para el mismo seller</span>
+            <span class="field-error" id="uf-sellerid-err" hidden></span>
           </div>
         </div>
         <div class="status-bar error" id="uf-error" style="margin-top:10px" hidden></div>
         <div class="modal-actions">
           <button class="button secondary" onclick="_closeUserForm()">Cancelar</button>
-          <button class="button" onclick="_saveUser()">Guardar</button>
+          <button class="button" id="uf-save-btn" onclick="_saveUser()">Guardar</button>
         </div>
       </div>
     </div>
@@ -532,6 +560,8 @@ function renderUserManagementSection() {
   `;
 
   host.appendChild(section);
+  _wireModalDismiss('user-modal', _closeUserForm, _saveUser);
+  _wireModalDismiss('rol-modal', _closeRolForm, _saveRol);
   const urlEl = document.getElementById('cfg-apps-script-url');
   if (urlEl) urlEl.textContent = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || '—';
   Promise.all([_loadRoles(), _loadSellers()]).then(function (results) {
@@ -661,7 +691,57 @@ function _setTipoCuenta(tipo) {
   if (selWrap) selWrap.hidden = tipo !== 'seller';
   if (btnInt)  btnInt.classList.toggle('active', tipo !== 'seller');
   if (btnSel)  btnSel.classList.toggle('active', tipo === 'seller');
+  if (tipo === 'seller') _updateSellerAccountsHint();
 }
+
+function _updateSellerAccountsHint() {
+  const hintEl = document.getElementById('uf-seller-hint');
+  const sel    = document.getElementById('uf-sellerid');
+  if (!hintEl || !sel) return;
+  const sellerId = sel.value;
+  if (!sellerId) { hintEl.textContent = 'Podés dar de alta varias cuentas para el mismo seller'; return; }
+  const count = _usuariosData.filter(function (u) {
+    return Number(u.id_rol) === 2 && u.activo === 'SI' && Number(u.id) !== Number(_editingUserId) &&
+      String(u.seller_id || '').toUpperCase() === sellerId.toUpperCase();
+  }).length;
+  hintEl.textContent = count > 0
+    ? 'Este seller ya tiene ' + count + ' cuenta' + (count !== 1 ? 's' : '') + ' activa' + (count !== 1 ? 's' : '') + '.'
+    : 'Este seller todavía no tiene ninguna cuenta activa.';
+}
+
+function _togglePasswordVisibility() {
+  const inp = document.getElementById('uf-password');
+  const btn = document.getElementById('uf-pw-toggle');
+  if (!inp || !btn) return;
+  const showing = inp.type === 'text';
+  inp.type = showing ? 'password' : 'text';
+  btn.textContent = showing ? 'Ver' : 'Ocultar';
+}
+
+function _generatePassword() {
+  const inp = document.getElementById('uf-password');
+  if (!inp) return;
+  // Sin caracteres ambiguos (0/O, 1/l/I) — el admin suele tener que dictarla o pasarla a mano.
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  const bytes = new Uint32Array(12);
+  crypto.getRandomValues(bytes);
+  let pw = '';
+  for (let i = 0; i < bytes.length; i++) pw += chars[bytes[i] % chars.length];
+  inp.value = pw;
+  inp.type = 'text';
+  const btn = document.getElementById('uf-pw-toggle');
+  if (btn) btn.textContent = 'Ocultar';
+  _clearFieldError('uf-password');
+}
+
+function _setFieldError(id, msg) {
+  const el  = document.getElementById(id);
+  const err = document.getElementById(id + '-err');
+  if (el)  el.classList.toggle('error', !!msg);
+  if (err) { err.textContent = msg || ''; err.hidden = !msg; }
+}
+
+function _clearFieldError(id) { _setFieldError(id, ''); }
 
 function _openUserForm(usuario) {
   _editingUserId = usuario ? Number(usuario.id) : null;
@@ -672,10 +752,17 @@ function _openUserForm(usuario) {
   const errEl  = document.getElementById('uf-error');
 
   if (errEl) errEl.hidden = true;
+  ['uf-nombre', 'uf-email', 'uf-password', 'uf-sellerid'].forEach(_clearFieldError);
+
+  const pwEl = document.getElementById('uf-password');
+  if (pwEl) pwEl.type = 'password';
+  const pwToggle = document.getElementById('uf-pw-toggle');
+  if (pwToggle) pwToggle.textContent = 'Ver';
 
   const esSeller = !!(usuario && usuario.seller_id);
   _setTipoCuenta(esSeller ? 'seller' : 'interno');
   _populateSellerSelect(usuario && usuario.seller_id);
+  _updateSellerAccountsHint();
 
   if (usuario) {
     if (title)  title.textContent = 'Editar usuario';
@@ -706,32 +793,38 @@ function _closeUserForm() {
   _editingUserId = null;
 }
 
+const _EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 async function _saveUser() {
   const nombre   = (document.getElementById('uf-nombre')   || {}).value || '';
   const email    = (document.getElementById('uf-email')    || {}).value || '';
   const password = (document.getElementById('uf-password') || {}).value || '';
   const errEl    = document.getElementById('uf-error');
+  if (errEl) errEl.hidden = true;
 
   const esSeller = document.getElementById('uf-sellerid-wrap') && !document.getElementById('uf-sellerid-wrap').hidden;
   const sellerId = esSeller ? (document.getElementById('uf-sellerid').value || '').trim() : '';
   const id_rol   = esSeller ? 2 : Number((document.getElementById('uf-rol') || {}).value || 1);
 
-  if (!nombre.trim() || !email.trim()) {
-    if (errEl) { errEl.textContent = 'Nombre y email son requeridos.'; errEl.hidden = false; }
+  ['uf-nombre', 'uf-email', 'uf-password', 'uf-sellerid'].forEach(_clearFieldError);
+  let firstInvalid = null;
+  const invalid = function (id, msg) { _setFieldError(id, msg); firstInvalid = firstInvalid || id; };
+
+  if (!nombre.trim()) invalid('uf-nombre', 'El nombre es obligatorio.');
+  if (!email.trim()) invalid('uf-email', 'El email es obligatorio.');
+  else if (!_EMAIL_RE.test(email.trim())) invalid('uf-email', 'El email no tiene un formato válido.');
+  if (esSeller && !sellerId) invalid('uf-sellerid', 'Elegí un seller para la cuenta.');
+  if (!_editingUserId && !password.trim()) invalid('uf-password', 'La contraseña es requerida para nuevos usuarios.');
+  else if (password.trim() && password.trim().length < 6) invalid('uf-password', 'La contraseña debe tener al menos 6 caracteres.');
+
+  if (firstInvalid) {
+    const el = document.getElementById(firstInvalid);
+    if (el) el.focus();
     return;
   }
-  if (esSeller && !sellerId) {
-    if (errEl) { errEl.textContent = 'Elegí un seller para la cuenta.'; errEl.hidden = false; }
-    return;
-  }
-  if (!_editingUserId && !password.trim()) {
-    if (errEl) { errEl.textContent = 'La contraseña es requerida para nuevos usuarios.'; errEl.hidden = false; }
-    return;
-  }
-  if (password.trim() && password.trim().length < 6) {
-    if (errEl) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.hidden = false; }
-    return;
-  }
+
+  const btn = document.getElementById('uf-save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Guardando…'; }
 
   try {
     if (_editingUserId) {
@@ -748,6 +841,8 @@ async function _saveUser() {
     _loadUsuarios();
   } catch (err) {
     if (errEl) { errEl.textContent = err.message || 'Error al guardar'; errEl.hidden = false; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Guardar'; }
   }
 }
 

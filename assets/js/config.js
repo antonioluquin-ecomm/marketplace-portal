@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.15',
+  number: '1.4.16',
   date:   '2026-07-16',
-  notes:  'Varias cuentas Seller por seller_id',
+  notes:  'Mejora el modal de alta de usuario',
 };
 
 const CHANGELOG = [
+  { v: '1.4.16', date: '2026-07-16', desc: 'Se mejora el modal de alta/edición de usuario en Configuración: selector segmentado Interno/Seller, errores por campo, validación de email, generador de contraseña, cierre con Escape/click afuera y Enter para guardar, y aviso de cuántas cuentas activas tiene ya un seller.' },
   { v: '1.4.15', date: '2026-07-16', desc: 'Se permite crear varias cuentas Seller para el mismo seller_id (antes era una cuenta compartida). Configuración suma buscador y filtro por seller, el alta de usuario Seller pasa de texto libre a un selector con los sellers reales, y se agrega un resguardo para no dejar a un seller sin ninguna cuenta activa.' },
   { v: '1.4.14', date: '2026-07-16', desc: 'Se introducen primitivas opt-in portal-* para KPIs, panels, campos y cards, aplicadas inicialmente en Config. Tarifas y Seller Center.' },
   { v: '1.4.13', date: '2026-07-16', desc: 'Se normaliza el espaciado y la jerarquia de encabezados internos en paginas de administracion, estrategia, Seller Center y Config. Tarifas mediante el patron opt-in portal-main.' },

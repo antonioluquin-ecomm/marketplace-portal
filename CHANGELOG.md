@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-16 - Mejora el modal de alta/edición de usuario en Configuración
+
+Tipo de cambio: mejora visual y funcional de frontend (sin cambios de backend ni de datos).
+
+- El toggle Interno/Seller pasa de botones de pestaña con estilos forzados a mano a un selector segmentado real.
+- Errores de validación por campo (borde rojo + mensaje debajo), en vez de un solo cartel genérico abajo del formulario. Se suma validación de formato de email.
+- Botón "Generar" crea una contraseña aleatoria de 12 caracteres (sin 0/O/1/l/I) y la muestra en claro; botón "Ver/Ocultar" para togglear visibilidad.
+- El botón Guardar se deshabilita con "Guardando…" mientras espera la respuesta, para evitar doble submit.
+- El modal cierra con Escape o click afuera, y Enter en cualquier campo lo envía — mismo patrón que ya usaba "Cambiar contraseña". Se aplica también al modal de "Nuevo rol".
+- Al elegir tipo Seller y un seller puntual, se muestra cuántas cuentas activas tiene ya ese seller.
+
 ## 2026-07-16 - Permite varias cuentas Seller por seller_id
 
 Tipo de cambio: cambio de comportamiento de backend + mejora de frontend.
