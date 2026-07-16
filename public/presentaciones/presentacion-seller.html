@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../../assets/css/tokens.css"/>
   <link rel="stylesheet" href="../../assets/css/internal-components.css"/>
-  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css"/>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.35"/>
   <style>
     :root{
       /* Alias 1:1 (mismo valor) a los tokens canónicos de tokens.css — la
@@ -232,6 +232,7 @@
     .card,.seller-card,.metric,.step,.note{box-shadow:none;border-color:var(--bdr)}
     /* Etapa 27B: header/topbar unificado — .portal-topbar (internal-components.css) define tamaño/color. */
   </style>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller-shell.css?v=1.4.37" />
 </head>
 <body data-public-page="presentacion">
 
@@ -259,16 +260,16 @@
     </div>
   </header>
 
-  <main id="main-content">
+  <main id="main-content" class="seller-page-shell">
   <!-- HERO -->
   <section id="hero">
     <div class="hero-bg"><div class="hero-bg-line"></div></div>
-    <div class="hero-inner">
+    <div class="hero-inner seller-page-container">
       <div class="hero-copy">
         <div class="hero-eyebrow">Propuesta comercial para sellers</div>
         <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
         <h1>Vendé más.<br><em>Sporting<br>Marketplace.</em></h1>
-        <p class="hero-lead"><strong id="sellerLeadName">Tu marca</strong> puede llegar a más de 4,5 millones de usuarios deportivos dentro de un canal digital con operación, checkout y tráfico ya instalados.</p>
+        <p class="hero-lead"><strong id="sellerLeadName">La marca seleccionada</strong> puede llegar a más de 4,5 millones de usuarios deportivos dentro de un canal digital con operación, checkout y tráfico ya instalados.</p>
         <p class="hero-sub">Tu marca aporta producto, stock y capacidad operativa. Marketplace Sporting aporta canal, exposición, medios de pago y una experiencia de compra preparada para escalar.</p>
         <div class="hero-actions">
           <a id="mainCta" class="button cta btn-lg" href="#" target="_blank" rel="noopener">Completar calificación →</a>
@@ -277,13 +278,13 @@
       </div>
 
       <aside>
-        <div class="seller-card">
+        <div class="seller-card seller-identity-loading" id="sellerIdentity" aria-busy="true">
           <div class="sc-head">
             <img id="sellerLogo" class="sc-logo hidden" alt="Logo del seller"/>
-            <div id="sellerFallback" class="sc-fallback">S</div>
+            <div id="sellerFallback" class="sc-fallback">&middot;</div>
             <div>
               <div class="sc-for">Propuesta preparada para</div>
-              <div id="sellerName" class="sc-name">Tu marca</div>
+              <div id="sellerName" class="sc-name">Cargando seller&hellip;</div>
             </div>
           </div>
           <div class="sc-note" id="sellerNote">Sumate a Marketplace Sporting y empezá a vender en un canal con tráfico activo, operación eCommerce instalada y crecimiento real.</div>
@@ -683,6 +684,11 @@
 
       $("sellerName").textContent = sellerName;
       $("sellerLeadName").textContent = sellerName;
+      const identity = $("sellerIdentity");
+      if (identity) {
+        identity.classList.remove("seller-identity-loading");
+        identity.setAttribute("aria-busy", "false");
+      }
       $("sellerFallback").textContent = sellerInitials(sellerName);
 
       // Nota personalizada si hay seller
@@ -782,8 +788,6 @@
     async function init() {
       wirePublicLinks();
       setCtaLinks();
-      applySellerIdentity({name:"Tu marca",logoUrl:""});
-
       // Identidad del seller (independiente)
       try {
         const seller = await loadSellerFromSheet();
@@ -791,8 +795,13 @@
           const name = pick(seller,["nombre","seller_nombre","nombre_marca","nombre___marca","marca"]);
           const logoUrl = pick(seller,["logo_url","logo","url_logo","imagen_logo"]);
           applySellerIdentity({name,logoUrl});
+        } else {
+          applySellerIdentity({name:sellerId || "Seller no disponible",logoUrl:""});
         }
-      } catch(e) { console.warn("Identidad seller:", e); }
+      } catch(e) {
+        console.warn("Identidad seller:", e);
+        applySellerIdentity({name:sellerId || "Seller no disponible",logoUrl:""});
+      }
 
       // Valores económicos (independiente — nunca se cancela por errores de identidad)
       try {

@@ -1,5 +1,35 @@
 # Changelog
 
+## 2026-07-16 - Normaliza responsive de paginas seller
+
+Tipo de cambio: mejora responsive y de usabilidad de frontend (sin cambios de backend ni de datos).
+
+- La navegacion secundaria usa dos columnas en movil y una columna en pantallas de hasta 420 px, con objetivos tactiles de al menos 40 px.
+- Inputs, selects, textareas y botones se adaptan al ancho disponible y evitan zoom involuntario por tipografia pequena en iOS.
+- La barra Ver como seller se reorganiza en grilla, hace que el selector ocupe todo el ancho y mantiene accesible el regreso al Hub.
+- Un `ResizeObserver` actualiza el padding inferior cuando cambia la altura de la barra, evitando que tape contenido al rotar o redimensionar.
+- Los avisos flotantes del Simulador se desplazan por encima de la barra de administrador.
+- El CSS del shell se publica con `?v=1.4.37`.
+
+## 2026-07-16 - Alinea contenido e identidad de paginas seller
+
+Tipo de cambio: mejora estructural y visual de frontend (sin cambios de backend ni de datos).
+
+- Simulador, Calificacion, Relevamiento y Gantt adoptan el mismo ancho maximo, gutter, padding superior y cierre vertical mediante `seller-page-frame`.
+- Presentacion e Integracion usan `seller-page-container` para compartir el mismo limite horizontal sin perder su composicion de landing o guia.
+- Presentacion y Simulador muestran un estado visual de carga hasta resolver la identidad y usan el ID de sesion como fallback, nunca datos genericos como definitivos.
+- Calificacion y Relevamiento muestran su tarjeta de identidad desde el inicio, finalizan correctamente el skeleton ante exito, seller inexistente o error de red.
+- El CSS del shell se publica con `?v=1.4.36` para invalidar la version anterior.
+
+## 2026-07-16 - Unifica el shell visual de paginas seller
+
+Tipo de cambio: mejora estructural y visual de frontend (sin cambios de backend ni de datos).
+
+- Las seis paginas publicas cargan al final `public-seller-shell.css`, que blinda altura, grilla, marca, navegacion, acciones y breakpoints del header.
+- Los enlaces a estilos compartidos incorporan version de recurso para evitar mezclar CSS anterior en cache.
+- Calificacion y Relevamiento eliminan el desplazamiento superior exclusivo que desalineaba su header respecto del resto del flujo.
+- Los estilos internos de cada modulo siguen intactos; esta primera entrega normaliza solamente el shell compartido.
+
 ## 2026-07-16 - Mejora semantica y teclado en paginas seller
 
 Tipo de cambio: mejora de accesibilidad de frontend (sin cambios de backend ni de datos).

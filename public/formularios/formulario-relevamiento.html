@@ -12,8 +12,8 @@
     />
     <link rel="stylesheet" href="../../assets/css/tokens.css" />
     <link rel="stylesheet" href="../../assets/css/internal-components.css" />
-    <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
-    <link rel="stylesheet" href="../../assets/css/pages/public-seller-form.css" />
+    <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.35" />
+    <link rel="stylesheet" href="../../assets/css/pages/public-seller-form.css?v=1.4.35" />
     <style>
       .seller-chip.err {
         background: rgba(217, 64, 64, 0.12);
@@ -431,6 +431,7 @@
       .section-nav { background: var(--panel); border-color: var(--line); box-shadow: none; }
       .field-group-title { letter-spacing: .015em; }
     </style>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller-shell.css?v=1.4.37" />
   </head>
   <body data-public-page="relevamiento">
     <header class="topbar portal-topbar">
@@ -448,7 +449,7 @@
         </div>
       </div>
     </header>
-    <main class="wrap" id="main-content">
+    <main class="wrap seller-page-frame" id="main-content">
       <header class="hero">
         <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
         <h1>Relevamiento de Seller</h1>
@@ -494,7 +495,7 @@
           <span class="badge sections" id="badgeSecciones">📂 9 secciones</span>
           <span class="badge required">* Campos obligatorios marcados</span>
         </div>
-        <div id="sellerIdentity" class="seller-identity">
+        <div id="sellerIdentity" class="seller-identity visible seller-identity-loading" aria-busy="true">
           <img
             id="sellerLogo"
             class="seller-logo hidden"
@@ -510,7 +511,7 @@
           </div>
         </div>
         <div id="sellerChip" class="seller-chip">
-          Validando link del seller…
+          Validando seller…
         </div>
       </header>
 
@@ -2699,6 +2700,8 @@
         }
 
         sellerIdentity.classList.add("visible");
+        sellerIdentity.classList.remove("seller-identity-loading");
+        sellerIdentity.setAttribute("aria-busy", "false");
         chip.classList.add("hidden");
 
         const nombreInput = document.querySelector('[name="nombre"]');
@@ -2835,6 +2838,11 @@
             chip.textContent = "No se encontró el seller " + sellerId;
             chip.classList.add("err");
             submitBtn.disabled = true;
+            sellerNameView.textContent = sellerId;
+            sellerMetaView.textContent = "Seller no encontrado";
+            sellerIdView.textContent = "ID interno: " + sellerId;
+            sellerIdentity.classList.remove("seller-identity-loading");
+            sellerIdentity.setAttribute("aria-busy", "false");
             setStatus(
               "El seller seleccionado no fue encontrado. Elegí otro seller o contactá al equipo de Sporting.",
               "err",
@@ -2848,6 +2856,11 @@
           );
         } catch (err) {
           console.warn(err);
+          sellerNameView.textContent = sellerId;
+          sellerMetaView.textContent = "No se pudo cargar el detalle del seller";
+          sellerIdView.textContent = "ID interno: " + sellerId;
+          sellerIdentity.classList.remove("seller-identity-loading");
+          sellerIdentity.setAttribute("aria-busy", "false");
           chip.textContent = "Relevamiento asociado a " + sellerId;
           setStatus(
             "No se pudo cargar el nombre del seller, pero podés enviar el formulario igualmente.",

@@ -1,0 +1,266 @@
+/* Public seller shell v1.4.35
+   Loaded after page-local styles so every seller page shares one header contract. */
+
+body[data-public-page] {
+  padding-top: 0 !important;
+}
+
+body[data-public-page] > .portal-topbar.portal-topbar {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 100;
+  width: 100%;
+  height: 56px !important;
+  min-height: 56px !important;
+  margin: 0 !important;
+  padding: 0 clamp(18px, 2.4vw, 28px) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  column-gap: 18px !important;
+  background: rgba(255, 255, 255, .97) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--line, rgba(17, 24, 39, .08)) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(18px);
+}
+
+body[data-public-page] > .portal-topbar > .brand {
+  justify-self: start !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-public-page] > .portal-topbar .logo {
+  margin: 0 !important;
+  font-family: var(--font) !important;
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: .015em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap;
+}
+
+body[data-public-page] > .portal-topbar > .public-flow-nav {
+  justify-self: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-public-page] > .portal-topbar > .public-flow-nav a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  padding: 6px 10px !important;
+  border: 1px solid var(--line, rgba(17, 24, 39, .10)) !important;
+  border-radius: var(--radius-control, 8px) !important;
+  background: var(--card, #fff) !important;
+  color: var(--muted, #6b7280) !important;
+  font-family: var(--font) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: .015em !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+  box-shadow: none !important;
+}
+
+body[data-public-page] > .portal-topbar > .public-flow-nav a:hover,
+body[data-public-page] > .portal-topbar > .public-flow-nav a.active {
+  border-color: rgba(37, 182, 12, .28) !important;
+  background: rgba(37, 182, 12, .09) !important;
+  color: var(--primary-hover, #1e9209) !important;
+}
+
+body[data-public-page] > .portal-topbar > .public-flow-nav a:focus-visible {
+  outline: 2px solid var(--primary, #25b60c) !important;
+  outline-offset: 2px;
+}
+
+body[data-public-page] > .portal-topbar > .tb-right,
+body[data-public-page] > .portal-topbar > .user-chip {
+  justify-self: end !important;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+@media (max-width: 1200px) {
+  body[data-public-page] > .portal-topbar.portal-topbar {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+  body[data-public-page] > .portal-topbar > .public-flow-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 720px) {
+  body[data-public-page] > .portal-topbar.portal-topbar {
+    padding-inline: 16px !important;
+  }
+}
+
+
+/* Common content geometry for seller tools. Marketing pages keep their own
+   vertical rhythm but use seller-page-container for the same horizontal edge. */
+body[data-public-page] .seller-page-frame {
+  width: calc(100% - 48px) !important;
+  max-width: 1200px !important;
+  margin-inline: auto !important;
+  padding: 32px 0 72px !important;
+}
+
+body[data-public-page] .seller-page-container {
+  width: calc(100% - 48px) !important;
+  max-width: 1200px !important;
+  margin-inline: auto !important;
+}
+
+body[data-public-page] .seller-identity-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-public-page] .seller-identity-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.62) 42%, transparent 64%);
+  transform: translateX(-100%);
+  animation: sellerIdentityLoading 1.25s ease-in-out infinite;
+}
+
+body[data-public-page] .seller-identity-loading .seller-name,
+body[data-public-page] .seller-identity-loading .sc-name,
+body[data-public-page] .seller-identity-loading .seller-meta {
+  color: var(--muted2, #9ca3af) !important;
+}
+
+@keyframes sellerIdentityLoading {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-public-page] .seller-identity-loading::after { animation: none; }
+}
+
+@media (max-width: 720px) {
+  body[data-public-page] .seller-page-frame {
+    width: calc(100% - 32px) !important;
+    padding-block: 24px 56px !important;
+  }
+  body[data-public-page] .seller-page-container {
+    width: calc(100% - 32px) !important;
+  }
+}
+
+
+/* Responsive administrator chrome. The bar may grow to multiple rows; JS keeps
+   body padding synchronized through ResizeObserver. */
+body[data-public-page] #staff-seller-bar {
+  box-sizing: border-box;
+  max-width: 100vw;
+}
+
+body[data-public-page] #staff-seller-select {
+  max-width: min(520px, 52vw);
+}
+
+body[data-public-page].staff-view-active .toast-container {
+  bottom: 82px !important;
+}
+
+@media (max-width: 720px) {
+  body[data-public-page] > .portal-topbar.portal-topbar {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  body[data-public-page] > .portal-topbar > .brand {
+    width: 100%;
+  }
+
+  body[data-public-page] .hero-public-nav,
+  body[data-public-page] .hero .public-flow-nav {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  body[data-public-page] .hero-public-nav a,
+  body[data-public-page] .hero .public-flow-nav a {
+    min-height: 40px !important;
+    padding-inline: 8px !important;
+    justify-content: center !important;
+    text-align: center;
+    white-space: normal;
+  }
+
+  body[data-public-page] input,
+  body[data-public-page] select,
+  body[data-public-page] textarea {
+    max-width: 100%;
+    font-size: 16px;
+  }
+
+  body[data-public-page] button,
+  body[data-public-page] .button {
+    min-height: 40px;
+  }
+
+  body[data-public-page] #staff-seller-bar {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    gap: 7px 10px !important;
+    padding: 10px 14px !important;
+  }
+
+  body[data-public-page] #staff-seller-bar > strong,
+  body[data-public-page] #staff-seller-bar > span:not([style*="flex:1"]) {
+    align-self: center;
+  }
+
+  body[data-public-page] #staff-seller-bar > span[style*="flex:1"] {
+    display: none !important;
+  }
+
+  body[data-public-page] #staff-seller-select {
+    grid-column: 1 / -1;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 40px;
+  }
+
+  body[data-public-page] #staff-seller-bar > a {
+    grid-column: 1 / -1;
+    justify-self: end;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  body[data-public-page].staff-view-active .toast-container {
+    bottom: 132px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  body[data-public-page] .hero-public-nav,
+  body[data-public-page] .hero .public-flow-nav {
+    grid-template-columns: 1fr !important;
+  }
+}

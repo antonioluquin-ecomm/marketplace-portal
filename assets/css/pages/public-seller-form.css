@@ -16,10 +16,6 @@ body {
   font-size: 15px;
   line-height: 1.65;
   background: radial-gradient(circle at 80% 8%, rgba(37, 182, 12, .08), transparent 36%), var(--bg, #f0f2f7);
-  padding-top: 28px;
-}
-@media (max-width: 720px) {
-  body { padding-top: 0; }
 }
 
 /* .wrap: mismo ancho full-bleed que presentación/simulador/gantt (antes 1040px en card). */

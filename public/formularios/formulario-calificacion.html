@@ -12,8 +12,8 @@
     />
     <link rel="stylesheet" href="../../assets/css/tokens.css" />
     <link rel="stylesheet" href="../../assets/css/internal-components.css" />
-    <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
-    <link rel="stylesheet" href="../../assets/css/pages/public-seller-form.css" />
+    <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.35" />
+    <link rel="stylesheet" href="../../assets/css/pages/public-seller-form.css?v=1.4.35" />
     <style>
       .seller-chip.err {
         background: rgba(217, 64, 64, 0.12);
@@ -322,6 +322,7 @@
          formulario-relevamiento.html vía public-seller-form.css (ya
          enlazado arriba) — no redeclarar acá. */
     </style>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller-shell.css?v=1.4.37" />
   </head>
   <body data-public-page="calificacion">
     <header class="topbar portal-topbar">
@@ -339,7 +340,7 @@
         </div>
       </div>
     </header>
-    <main class="wrap" id="main-content">
+    <main class="wrap seller-page-frame" id="main-content">
       <header class="hero">
         <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
         <a class="public-next-cta" data-public-link="relevamiento" href="./formulario-relevamiento.html">Ir a relevamiento →</a>
@@ -364,7 +365,7 @@
           ><span class="badge sections">5 bloques simples</span
           ><span class="badge required">Campos obligatorios marcados</span>
         </div>
-        <div id="sellerIdentity" class="seller-identity">
+        <div id="sellerIdentity" class="seller-identity visible seller-identity-loading" aria-busy="true">
           <img
             id="sellerLogo"
             class="seller-logo hidden"
@@ -379,7 +380,7 @@
           </div>
         </div>
         <div id="sellerChip" class="seller-chip">
-          Validando link del seller…
+          Validando seller…
         </div>
       </header>
 
@@ -887,6 +888,11 @@
             chip.textContent = "No se encontró el seller " + sellerId;
             chip.classList.add("err");
             submitBtn.disabled = true;
+            sellerNameView.textContent = sellerId;
+            sellerMetaView.textContent = "Seller no encontrado";
+            sellerIdView.textContent = "ID interno: " + sellerId;
+            sellerIdentity.classList.remove("seller-identity-loading");
+            sellerIdentity.setAttribute("aria-busy", "false");
             setStatus(
               "El seller seleccionado no fue encontrado. Elegí otro seller o contactá al equipo de Sporting.",
               "err",
@@ -896,6 +902,11 @@
           renderSellerIdentity(seller);
         } catch (err) {
           console.warn(err);
+          sellerNameView.textContent = sellerId;
+          sellerMetaView.textContent = "No se pudo cargar el detalle del seller";
+          sellerIdView.textContent = "ID interno: " + sellerId;
+          sellerIdentity.classList.remove("seller-identity-loading");
+          sellerIdentity.setAttribute("aria-busy", "false");
           chip.textContent = "Calificación asociada a " + sellerId;
           setStatus(
             "No se pudo cargar el detalle del seller, pero el formulario sigue asociado a la sesión actual.",
@@ -939,6 +950,8 @@
           sellerInitials.classList.remove("hidden");
         }
         sellerIdentity.classList.add("visible");
+        sellerIdentity.classList.remove("seller-identity-loading");
+        sellerIdentity.setAttribute("aria-busy", "false");
         chip.classList.add("hidden");
         const nombreInput = document.querySelector('[name="nombre"]');
         const categoriasInput = document.querySelector('[name="categorias"]');

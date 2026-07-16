@@ -248,7 +248,18 @@ async function renderStaffSellerBar() {
     '<span style="flex:1"></span>' +
     '<a href="' + _internalHubPath() + '" style="color:#fff;text-decoration:underline;font-size:12px">← Hub interno</a>';
   document.body.appendChild(bar);
-  document.body.style.paddingBottom = (bar.offsetHeight + 16) + 'px';
+  document.body.classList.add('staff-view-active');
+
+  function syncStaffBarSpace() {
+    document.body.style.paddingBottom = (bar.offsetHeight + 16) + 'px';
+  }
+  syncStaffBarSpace();
+  if (typeof ResizeObserver === 'function') {
+    const staffBarObserver = new ResizeObserver(syncStaffBarSpace);
+    staffBarObserver.observe(bar);
+  } else {
+    window.addEventListener('resize', syncStaffBarSpace);
+  }
 
   const sel = document.getElementById('staff-seller-select');
   sel.addEventListener('change', function () {

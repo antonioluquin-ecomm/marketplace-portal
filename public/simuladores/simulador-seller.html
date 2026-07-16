@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../assets/css/tokens.css" />
     <link rel="stylesheet" href="../../assets/css/internal-components.css" />
-  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css" />
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.35" />
   <style>
     :root{
       /* Alias 1:1 (mismo valor) a los tokens canónicos de tokens.css — la
@@ -265,6 +265,7 @@
     /* Etapa 27B: header/topbar unificado — .portal-topbar (internal-components.css) define tamaño/color. */
     .tb-right{margin-left:auto}
   </style>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller-shell.css?v=1.4.37" />
 </head>
 <body data-public-page="simulador">
 
@@ -294,7 +295,7 @@
   </div>
 </header>
 
-<div class="wrap">
+<div class="wrap seller-page-frame">
 
   <!-- HERO -->
   <section class="hero">
@@ -303,13 +304,13 @@
       <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
       <h1>Simulá tus ventas en <span>Sporting</span></h1>
       <p class="lead">Completá tus datos de venta, elegí los servicios a considerar y visualizá una estimación orientativa de facturación, deducciones y neto para tu marca dentro de Marketplace Sporting.</p>
-      <div class="seller-box">
+      <div class="seller-box seller-identity-loading" id="sellerIdentity" aria-busy="true">
         <img id="sellerLogo" class="seller-logo hidden" alt="Logo seller" referrerpolicy="no-referrer" loading="lazy">
-        <div id="sellerFallback" class="seller-fallback" aria-hidden="true">S</div>
+        <div id="sellerFallback" class="seller-fallback" aria-hidden="true">&middot;</div>
         <div>
           <div class="seller-for">Simulación para</div>
-          <div id="sellerName" class="seller-name">Seller</div>
-          <div id="sellerMeta" class="seller-meta">Sporting Marketplace</div>
+          <div id="sellerName" class="seller-name">Cargando seller&hellip;</div>
+          <div id="sellerMeta" class="seller-meta">Validando condiciones&hellip;</div>
         </div>
       </div>
     </div>
@@ -856,12 +857,17 @@ function applySellerInfo(shouldPrefill = true){
   const sellerFound = !!(CURRENT_SELLER_ID && getSellerIdFromRow(SELLER));
   applyOverridesForSeller();
 
-  const name = pick(SELLER,["seller_nombre","nombre","nombre_seller","marca"]) || "Tu marca";
+  const name = pick(SELLER,["seller_nombre","nombre","nombre_seller","marca"]) || CURRENT_SELLER_ID || "Seller no disponible";
   const logo = normalizeLogoUrl(getSellerLogoFromRow(SELLER) || localLogoFallback());
   const site = pick(SELLER,["sitio_objetivo","sitio"]) || "Sporting";
 
   $("sellerName").textContent   = name;
   $("sellerMeta").textContent   = site;
+  const identity = $("sellerIdentity");
+  if(identity){
+    identity.classList.remove("seller-identity-loading");
+    identity.setAttribute("aria-busy", "false");
+  }
   $("infoSellerId").textContent = name || CURRENT_SELLER_ID || "—";
   const linkWarning = $("sellerLinkWarning");
   if(linkWarning){
@@ -1287,7 +1293,7 @@ async function init(){
     applySellerInfo(true);
     DATA_READY=!sourceErrors.length&&(tarifaRows||[]).length>0&&Object.keys(SELLER||{}).length>0;
     if(!CURRENT_SELLER_ID){
-      setStatus("err", "Link sin seller");
+      setStatus("err", "Seller no seleccionado");
     }else if(!Object.keys(SELLER || {}).length){
       setStatus("err", "Seller no encontrado");
     }else{

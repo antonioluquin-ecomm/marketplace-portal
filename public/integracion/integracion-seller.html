@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../../assets/css/tokens.css"/>
   <link rel="stylesheet" href="../../assets/css/internal-components.css"/>
-  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css"/>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.35"/>
   <style>
     :root{
       --g:var(--primary, #25b60c);--g2:var(--primary-hover, #1e9209);--g3:#187007;
@@ -129,6 +129,7 @@
       #topSeller{display:none !important}
     }
   </style>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller-shell.css?v=1.4.37" />
 </head>
 <body data-public-page="integracion">
 
@@ -152,11 +153,11 @@
     </div>
   </header>
 
-  <main id="main-content">
+  <main id="main-content" class="seller-page-shell">
   <!-- HERO -->
   <section id="hero">
     <div class="hero-bg"><div class="hero-bg-line"></div></div>
-    <div class="hero-inner">
+    <div class="hero-inner seller-page-container">
       <div class="hero-eyebrow" id="integrationEyebrow">Modelo de integraci&oacute;n</div>
       <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegaci&oacute;n p&uacute;blica seller"></nav>
       <h1 id="integrationTitle">Validando tu<br><em>integraci&oacute;n.</em></h1>
@@ -167,7 +168,7 @@
 
   <!-- ROADMAP -->
   <section id="roadmap" class="section">
-    <div class="inner">
+    <div class="inner seller-page-container">
       <div class="eyebrow">El camino completo</div>
       <h2>Hoja de ruta de tu integración</h2>
       <p class="section-lead">Así se ve el proceso de punta a punta, desde la conexión inicial hasta que tus productos estén a la venta. Los pasos marcados <span class="rm-tag">Nosotros</span> los hacemos de este lado — te los mostramos igual para que tengas la foto completa.</p>
@@ -189,7 +190,7 @@
 
   <!-- PREPARAR -->
   <section id="preparar" class="section">
-    <div class="inner">
+    <div class="inner seller-page-container">
       <div class="eyebrow">Antes de salir a la venta</div>
       <h2>Lo que tenés que preparar</h2>
       <p class="section-lead">Una vez por marca. La mayoría es compartirnos información de tu VTEX para que hagamos el mapeo; con eso tus publicaciones llegan completas y alineadas al sitio.</p>
@@ -257,7 +258,7 @@
 
   <!-- OPERAR -->
   <section id="operar" class="section">
-    <div class="inner">
+    <div class="inner seller-page-container">
       <div class="eyebrow">Día a día</div>
       <h2>Cómo operás cada pedido</h2>
       <p class="section-lead">Cuando un cliente compra, el pedido aparece en tu VTEX (con un número que empieza con nuestro identificador). Desde ahí, el flujo es tuyo.</p>
@@ -273,7 +274,7 @@
 
   <!-- REGLAS -->
   <section id="reglas" class="section">
-    <div class="inner">
+    <div class="inner seller-page-container">
       <div class="eyebrow">Del canal</div>
       <h2>Reglas y políticas</h2>
       <p class="section-lead">Condiciones del Marketplace que conviene tener claras desde el arranque. El detalle completo vive en los Términos y Condiciones.</p>
@@ -293,7 +294,7 @@
 
   <!-- PLAZOS -->
   <section id="plazos" class="section">
-    <div class="inner">
+    <div class="inner seller-page-container">
       <div class="eyebrow">Compromisos</div>
       <h2>Plazos que cumplís</h2>
       <p class="section-lead">Los tiempos de respuesta que dependen de vos como seller.</p>
