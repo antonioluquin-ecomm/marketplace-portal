@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-16 - Unifica el nav del flujo publico de seller
+
+Tipo de cambio: refactor de frontend (sin cambios de backend ni de datos).
+
+Las 6 paginas del flujo publico de seller (presentacion, simulador, calificacion, relevamiento, gantt, integracion) tenian cada una su propia lista de links hardcodeada, duplicada 2 veces por pagina (topbar + hero). Eso genero drift real: integracion-seller.html habia quedado sin nav en el topbar.
+
+- Se agrega `PUBLIC_FLOW_ITEMS` + `renderPublicFlowNav()` en `assets/js/auth-seller.js` como fuente unica de los 6 items del flujo, con el orden, label y ruta de cada uno.
+- `initSellerAuth()` la invoca automaticamente en cada pagina autenticada — ya no hace falta tocar el JS de cada pagina.
+- Las 6 paginas dejan un `<nav class="public-flow-nav" data-public-nav>` vacio (topbar y hero) que el script completa; se agrega `data-public-page` al `<body>` de cada una para marcar el activo.
+- Se corrige integracion-seller.html, que no tenia el nav compacto en el topbar (solo en el hero, oculto en desktop).
+
 ## 2026-07-16 - Corrige que Rol y Seller se mostraran a la vez en el modal de usuario
 
 Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).

@@ -93,6 +93,35 @@ function _internalHubPath() {
   return '../'.repeat(_sellerPublicDepth() + 1) + 'index.html';
 }
 
+/* ─── NAV DEL FLUJO PÚBLICO (header compartido) ──────────────
+   Fuente única de las 6 páginas del flujo seller. Antes cada página
+   tenía su propia lista de <a> hardcodeada (topbar + hero, x2), lo que
+   generaba drift entre headers (orden distinto, links faltantes —
+   integracion-seller.html llegó a no tener nav en el topbar). Cada
+   página deja un <nav class="public-flow-nav" data-public-nav> vacío
+   y renderPublicFlowNav() lo completa con el mismo contenido en todas.
+   ────────────────────────────────────────────────────────────── */
+const PUBLIC_FLOW_ITEMS = [
+  { id: 'presentacion', label: 'Presentación', path: 'presentaciones/presentacion-seller.html' },
+  { id: 'simulador',    label: 'Simulador',    path: 'simuladores/simulador-seller.html' },
+  { id: 'calificacion', label: 'Calificación', path: 'formularios/formulario-calificacion.html' },
+  { id: 'relevamiento', label: 'Relevamiento', path: 'formularios/formulario-relevamiento.html' },
+  { id: 'gantt',        label: 'Gantt',        path: 'gantt/gantt-seller.html' },
+  { id: 'integracion',  label: 'Integración',  path: 'integracion/integracion-seller.html' },
+];
+
+function renderPublicFlowNav() {
+  const navs = document.querySelectorAll('.public-flow-nav[data-public-nav]');
+  if (!navs.length) return;
+  const activeId = document.body.getAttribute('data-public-page') || '';
+  const prefix = '../'.repeat(_sellerPublicDepth());
+  const html = PUBLIC_FLOW_ITEMS.map(function (item) {
+    const cls = item.id === activeId ? ' class="active"' : '';
+    return '<a' + cls + ' data-public-link="' + item.id + '" href="' + prefix + item.path + '">' + item.label + '</a>';
+  }).join('');
+  navs.forEach(function (nav) { nav.innerHTML = html; });
+}
+
 /* ─── INIT ────────────────────────────────────────────────── */
 
 async function initSellerAuth() {
@@ -122,7 +151,10 @@ async function initSellerAuth() {
   // (el admin lo elige con el selector; la página arranca sin seller cargado).
   if (SellerSESSION.mode === 'seller' && !SellerSESSION.sellerId) {
     window.location.href = _sellerLoginPath();
+    return;
   }
+
+  renderPublicFlowNav();
 }
 
 /* ─── BARRA "VER COMO SELLER" (modo staff) ────────────────────── */
