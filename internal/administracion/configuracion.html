@@ -30,10 +30,44 @@
     h1{font-size:28px;font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:8px}
     .lead{max-width:640px;font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:26px}
 
-    .cfg-tab{padding:8px 14px;font-size:13px;font-weight:600;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);color:var(--muted);cursor:pointer}
-    .cfg-tab.active{background:var(--primary-soft);color:var(--primary);border-color:var(--primary-mid)}
-    .btn{padding:8px 14px;font-size:13px;font-weight:600;border:none;border-radius:var(--radius-sm);background:var(--primary);color:#fff;cursor:pointer}
-    .btn:hover{background:var(--primary-hover)}
+    /* ── Tabs (formato VCC/PCC — subrayado, no caja) ── */
+    .tabs-nav{display:flex;gap:4px;margin:0 0 20px;border-bottom:1px solid var(--line)}
+    .tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:10px 2px;margin-right:22px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .15s,border-color .15s;font-family:inherit}
+    .tab-btn:hover{color:var(--text)}
+    .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+    .tab-pane{display:none}
+    .tab-pane.active{display:block}
+
+    .panel{margin-bottom:18px}
+    .panel-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+    .panel-toolbar h2{font-size:15px;font-weight:700;color:var(--text)}
+    .panel-toolbar .text-muted{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+    /* ── Badges ── */
+    .role-pill,.status-pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:var(--radius-pill);letter-spacing:.02em}
+    .role-pill.sistema{background:var(--primary-soft);color:var(--primary)}
+    .role-pill.personalizado{background:color-mix(in srgb, var(--text) 8%, var(--card));color:var(--text)}
+    .status-pill.active{background:var(--success-bg);color:var(--success)}
+    .status-pill.inactive{background:var(--bg);color:var(--muted)}
+    .row-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+
+    /* ── Formularios (style_guide.md §7.1) ── */
+    .field{display:grid;gap:5px}
+    .field label{font-size:12.5px;font-weight:500;color:var(--text)}
+    .field-hint{font-size:11.5px;color:var(--muted)}
+    .field-row{display:flex;gap:12px}
+    .field-row .field{flex:1}
+    input[type="text"],input[type="email"],input[type="password"],input[type="search"],select{
+      border:1px solid var(--line);border-radius:var(--radius-sm);padding:9px 12px;background:var(--card);
+      color:var(--text);font-family:var(--font);font-size:13.5px;outline:none;
+      transition:border-color .15s,box-shadow .15s;width:100%}
+    input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent)}
+
+    /* ── Modales (style_guide.md §7.4) ── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.55);display:flex;align-items:center;justify-content:center;z-index:9998;backdrop-filter:blur(2px)}
+    .modal{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:24px 26px 22px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
+    .modal h3{font-size:15px;font-weight:700;margin-bottom:16px}
+    .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
 
     @media(max-width:960px){.shell{grid-template-columns:1fr}.main{padding:24px 18px 60px}}
   </style>
@@ -96,9 +130,9 @@
       </div>
     </aside>
     <main class="main">
-      <div class="page-eyebrow">Configuración</div>
+      <div class="page-eyebrow">Administración</div>
       <h1>Configuración</h1>
-      <p class="lead">Gestión de usuarios, permisos y configuración del sistema.</p>
+      <p class="lead">Gestión de usuarios, roles personalizados y permisos por módulo.</p>
       <div id="cfg-tabs-host"></div>
       <div id="no-admin-msg" class="callout" hidden>No tenés permisos de Administrador para ver esta sección.</div>
     </main>

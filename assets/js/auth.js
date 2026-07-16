@@ -394,89 +394,39 @@ function renderUserManagementSection() {
   const section = document.createElement('div');
   section.id = 'user-mgmt-section';
   section.innerHTML = `
-    <div class="cfg-tabs" style="display:flex;gap:8px;margin-bottom:14px">
-      <button class="cfg-tab active" id="ctab-usuarios" onclick="_showCfgTab('usuarios')">Usuarios</button>
-      <button class="cfg-tab" id="ctab-roles" onclick="_showCfgTab('roles')">Roles y permisos</button>
-      <button class="cfg-tab" id="ctab-integraciones" onclick="_showCfgTab('integraciones')">Integraciones</button>
+    <div class="tabs-nav">
+      <button type="button" class="tab-btn active" id="ctab-usuarios" onclick="_showCfgTab('usuarios')">Usuarios</button>
+      <button type="button" class="tab-btn" id="ctab-roles" onclick="_showCfgTab('roles')">Roles y permisos</button>
+      <button type="button" class="tab-btn" id="ctab-integraciones" onclick="_showCfgTab('integraciones')">Integraciones</button>
     </div>
 
-    <div id="ctab-content-usuarios">
-      <div style="display:flex;align-items:center;margin-bottom:10px">
-        <span id="usuarios-count" style="font-size:12px;color:var(--muted)">Cargando…</span>
-        <div style="flex:1"></div>
-        <button class="btn" onclick="_openUserForm()">+ Nuevo usuario</button>
-      </div>
-
-      <div id="user-form-inline" hidden
-           style="background:var(--sidebar-bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px">
-        <div id="user-form-title" style="font-weight:700;margin-bottom:12px">Nuevo usuario</div>
-        <div style="margin-bottom:10px">
-          <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Tipo de cuenta</label>
-          <div style="display:flex;gap:6px">
-            <button type="button" id="uf-tipo-interno" class="cfg-tab active" onclick="_setTipoCuenta('interno')">Interno</button>
-            <button type="button" id="uf-tipo-seller" class="cfg-tab" onclick="_setTipoCuenta('seller')">Seller</button>
+    <div class="tab-pane active" id="ctab-content-usuarios">
+      <section class="panel">
+        <div class="panel-toolbar">
+          <div>
+            <h2>Usuarios del sistema</h2>
+            <p class="text-muted" id="usuarios-count">Cargando…</p>
           </div>
+          <button class="button" onclick="_openUserForm()">+ Nuevo usuario</button>
         </div>
-        <div style="display:flex;gap:12px;margin-bottom:10px">
-          <div style="flex:1">
-            <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Nombre *</label>
-            <input id="uf-nombre" placeholder="Nombre completo" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box">
-          </div>
-          <div style="flex:1">
-            <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Email *</label>
-            <input id="uf-email" type="email" placeholder="email@empresa.com" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box">
-          </div>
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:10px">
-          <div style="flex:1">
-            <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Contraseña <span id="uf-pw-req">*</span></label>
-            <input id="uf-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box">
-            <div id="uf-pw-hint" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
-          </div>
-          <div style="flex:1" id="uf-rol-wrap">
-            <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Rol *</label>
-            <select id="uf-rol" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box"></select>
-          </div>
-          <div style="flex:1" id="uf-sellerid-wrap" hidden>
-            <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Seller ID *</label>
-            <input id="uf-sellerid" placeholder="SPT-XXX" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box">
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">Debe coincidir con el seller_id de la hoja sellers</div>
-          </div>
-        </div>
-        <div id="uf-error" style="color:var(--danger);font-size:12px;margin-bottom:10px" hidden></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" onclick="_saveUser()">Guardar</button>
-          <button onclick="_closeUserForm()" style="padding:8px 14px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer">Cancelar</button>
-        </div>
-      </div>
-
-      <div id="usuarios-table-wrap"><div style="font-size:12px;color:var(--muted)">Cargando usuarios…</div></div>
+        <div id="usuarios-table-wrap"><div class="status-bar">Cargando usuarios…</div></div>
+      </section>
     </div>
 
-    <div id="ctab-content-roles" hidden>
-      <div style="display:flex;align-items:center;margin-bottom:10px">
-        <span style="font-size:12px;color:var(--muted)">Roles del sistema</span>
-        <div style="flex:1"></div>
-        <button class="btn" onclick="_openRolForm()">+ Nuevo rol</button>
-      </div>
-
-      <div id="rol-form-inline" hidden
-           style="background:var(--sidebar-bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px">
-        <div id="rol-form-title" style="font-weight:700;margin-bottom:12px">Nuevo rol</div>
-        <label style="display:block;font-size:12px;font-weight:500;margin-bottom:5px">Nombre del rol *</label>
-        <input id="rf-nombre" placeholder="Ej: Backlog, Gestión Comercial" style="width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);box-sizing:border-box;margin-bottom:10px">
-        <div id="rf-error" style="color:var(--danger);font-size:12px;margin-bottom:10px" hidden></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" onclick="_saveRol()">Guardar</button>
-          <button onclick="_closeRolForm()" style="padding:8px 14px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer">Cancelar</button>
+    <div class="tab-pane" id="ctab-content-roles" hidden>
+      <section class="panel">
+        <div class="panel-toolbar">
+          <h2>Roles del sistema</h2>
+          <button class="button" onclick="_openRolForm()">+ Nuevo rol</button>
         </div>
-      </div>
-
-      <div id="roles-table-wrap"><div style="font-size:12px;color:var(--muted)">Cargando roles…</div></div>
-      <div id="permisos-matrix-wrap" style="margin-top:18px"></div>
+        <div id="roles-table-wrap"><div class="status-bar">Cargando roles…</div></div>
+      </section>
+      <section class="panel" id="permisos-panel-wrap" hidden>
+        <div id="permisos-matrix-wrap"></div>
+      </section>
     </div>
 
-    <div id="ctab-content-integraciones" hidden>
+    <div class="tab-pane" id="ctab-content-integraciones" hidden>
       <div class="cfg-section">
         <div class="cfg-title">Conexión</div>
         <div class="cfg-row">
@@ -484,8 +434,8 @@ function renderUserManagementSection() {
           <span class="cfg-val" id="cfg-apps-script-url">—</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
-          <button class="btn" onclick="_testConexionApi()">Probar conexión</button>
-          <span id="cfg-conexion-status" style="font-size:12px;color:var(--muted)"></span>
+          <button class="button secondary" onclick="_testConexionApi()">Probar conexión</button>
+          <span id="cfg-conexion-status" class="text-muted" style="font-size:12px"></span>
         </div>
       </div>
 
@@ -506,6 +456,67 @@ function renderUserManagementSection() {
         <div class="cfg-row"><span class="cfg-label">ROLES</span><span class="cfg-val">Roles del sistema</span></div>
         <div class="cfg-row"><span class="cfg-label">PERMISOS_MODULOS</span><span class="cfg-val">Matriz de permisos por rol</span></div>
         <div class="cfg-row"><span class="cfg-label">SESIONES</span><span class="cfg-val">Tokens de sesión activos</span></div>
+      </div>
+    </div>
+
+    <!-- MODAL: crear / editar usuario -->
+    <div class="modal-overlay" id="user-modal" style="display:none">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="user-form-title">
+        <h3 id="user-form-title">Nuevo usuario</h3>
+        <div class="field" style="margin-bottom:12px">
+          <label>Tipo de cuenta</label>
+          <div style="display:flex;gap:6px">
+            <button type="button" id="uf-tipo-interno" class="tab-btn active" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:7px 12px;margin-right:0" onclick="_setTipoCuenta('interno')">Interno</button>
+            <button type="button" id="uf-tipo-seller" class="tab-btn" style="border:1px solid var(--line);border-radius:var(--radius-sm);padding:7px 12px;margin-right:0" onclick="_setTipoCuenta('seller')">Seller</button>
+          </div>
+        </div>
+        <div class="field-row" style="margin-bottom:12px">
+          <div class="field">
+            <label for="uf-nombre">Nombre *</label>
+            <input id="uf-nombre" placeholder="Nombre completo">
+          </div>
+          <div class="field">
+            <label for="uf-email">Email *</label>
+            <input id="uf-email" type="email" placeholder="email@empresa.com">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:12px">
+          <label for="uf-password">Contraseña <span id="uf-pw-req">*</span></label>
+          <input id="uf-password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+          <span class="field-hint" id="uf-pw-hint"></span>
+        </div>
+        <div class="field-row" style="margin-bottom:6px">
+          <div class="field" id="uf-rol-wrap">
+            <label for="uf-rol">Rol *</label>
+            <select id="uf-rol"></select>
+          </div>
+          <div class="field" id="uf-sellerid-wrap" hidden>
+            <label for="uf-sellerid">Seller ID *</label>
+            <input id="uf-sellerid" placeholder="SPT-XXX">
+            <span class="field-hint">Debe coincidir con el seller_id de la hoja sellers</span>
+          </div>
+        </div>
+        <div class="status-bar error" id="uf-error" style="margin-top:10px" hidden></div>
+        <div class="modal-actions">
+          <button class="button secondary" onclick="_closeUserForm()">Cancelar</button>
+          <button class="button" onclick="_saveUser()">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: crear / editar rol -->
+    <div class="modal-overlay" id="rol-modal" style="display:none">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="rol-form-title" style="max-width:380px">
+        <h3 id="rol-form-title">Nuevo rol</h3>
+        <div class="field">
+          <label for="rf-nombre">Nombre del rol *</label>
+          <input id="rf-nombre" placeholder="Ej: Backlog, Gestión Comercial">
+        </div>
+        <div class="status-bar error" id="rf-error" style="margin-top:10px" hidden></div>
+        <div class="modal-actions">
+          <button class="button secondary" onclick="_closeRolForm()">Cancelar</button>
+          <button class="button" onclick="_saveRol()">Guardar</button>
+        </div>
       </div>
     </div>
   `;
@@ -535,7 +546,7 @@ function _showCfgTab(tab) {
   ['usuarios', 'roles', 'integraciones'].forEach(function (t) {
     const content = document.getElementById('ctab-content-' + t);
     const btn     = document.getElementById('ctab-' + t);
-    if (content) content.hidden = (t !== tab);
+    if (content) { content.hidden = (t !== tab); content.classList.toggle('active', t === tab); }
     if (btn)     btn.classList.toggle('active', t === tab);
   });
 }
@@ -581,7 +592,7 @@ function _setTipoCuenta(tipo) {
 
 function _openUserForm(usuario) {
   _editingUserId = usuario ? Number(usuario.id) : null;
-  const form   = document.getElementById('user-form-inline');
+  const modal  = document.getElementById('user-modal');
   const title  = document.getElementById('user-form-title');
   const pwHint = document.getElementById('uf-pw-hint');
   const pwReq  = document.getElementById('uf-pw-req');
@@ -611,14 +622,14 @@ function _openUserForm(usuario) {
     if (pwReq)  pwReq.style.display = '';
   }
 
-  if (form) form.hidden = false;
+  if (modal) modal.style.display = 'flex';
   const nameEl = document.getElementById('uf-nombre');
   if (nameEl) nameEl.focus();
 }
 
 function _closeUserForm() {
-  const form = document.getElementById('user-form-inline');
-  if (form) form.hidden = true;
+  const modal = document.getElementById('user-modal');
+  if (modal) modal.style.display = 'none';
   _editingUserId = null;
 }
 
@@ -679,44 +690,46 @@ async function _loadUsuarios() {
     if (countEl) countEl.textContent = usuarios.length + ' usuario' + (usuarios.length !== 1 ? 's' : '');
 
     if (!usuarios.length) {
-      wrap.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay usuarios configurados.</div>';
+      wrap.innerHTML = '<div class="status-bar">No hay usuarios configurados.</div>';
       return;
     }
 
     wrap.innerHTML = `
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead>
-          <tr style="background:var(--sidebar-bg);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)">
-            <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)">Nombre</th>
-            <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)">Email</th>
-            <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)">Rol</th>
-            <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--line)">Estado</th>
-            <th style="padding:7px 10px;text-align:right;border-bottom:1px solid var(--line)">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${usuarios.map(function (u) {
-            const rolLabel = _rolNombre(u.id_rol);
-            const activo   = u.activo === 'SI';
-            const uJson    = JSON.stringify(u).replace(/"/g, '&quot;');
-            return `<tr style="border-bottom:1px solid var(--line)">
-              <td style="padding:7px 10px;color:var(--text)">${_escHtml(u.nombre || '—')}</td>
-              <td style="padding:7px 10px;color:var(--muted);font-family:var(--mono);font-size:11px">${_escHtml(u.email || '—')}</td>
-              <td style="padding:7px 10px">${_escHtml(rolLabel)}${u.seller_id ? ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : ''}</td>
-              <td style="padding:7px 10px;text-align:center">${activo ? 'Activo' : 'Inactivo'}</td>
-              <td style="padding:7px 10px;text-align:right;white-space:nowrap">
-                <button style="margin-right:4px;font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer"
-                        onclick="_openUserForm(${uJson})">Editar</button>
-                <button style="font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer"
-                        onclick="_toggleUserActivo(${u.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th style="text-align:right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${usuarios.map(function (u) {
+              const rolLabel = _rolNombre(u.id_rol);
+              const activo   = u.activo === 'SI';
+              const uJson    = JSON.stringify(u).replace(/"/g, '&quot;');
+              return `<tr>
+                <td>${_escHtml(u.nombre || '—')}</td>
+                <td style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">${_escHtml(u.email || '—')}</td>
+                <td>${_escHtml(rolLabel)}${u.seller_id ? ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : ''}</td>
+                <td><span class="status-pill ${activo ? 'active' : 'inactive'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
+                <td>
+                  <div class="row-actions">
+                    <button class="button secondary" onclick="_openUserForm(${uJson})">Editar</button>
+                    <button class="button ${activo ? 'danger' : 'secondary'}" onclick="_toggleUserActivo(${u.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>
+                  </div>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
     `;
   } catch (err) {
-    wrap.innerHTML = '<div style="color:var(--danger);font-size:12px;padding:8px 0">Error: ' + (err.message || 'No se pudo cargar') + '</div>';
+    wrap.innerHTML = '<div class="status-bar error">Error: ' + (err.message || 'No se pudo cargar') + '</div>';
   }
 }
 
@@ -734,39 +747,43 @@ function _renderRolesTable() {
   if (!wrap) return;
 
   if (!_rolesData.length) {
-    wrap.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay roles configurados.</div>';
+    wrap.innerHTML = '<div class="status-bar">No hay roles configurados.</div>';
     return;
   }
 
   wrap.innerHTML = `
-    <table style="width:100%;border-collapse:collapse;font-size:12px">
-      <thead>
-        <tr style="background:var(--sidebar-bg);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)">
-          <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)">Rol</th>
-          <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)">Tipo</th>
-          <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--line)">Estado</th>
-          <th style="padding:7px 10px;text-align:right;border-bottom:1px solid var(--line)">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${_rolesData.map(function (r) {
-          const sistema = String(r.es_sistema) === 'SI';
-          const activo  = String(r.activo) !== 'NO';
-          const rJson   = JSON.stringify(r).replace(/"/g, '&quot;');
-          return `<tr style="border-bottom:1px solid var(--line)">
-            <td style="padding:7px 10px;color:var(--text);font-weight:500">${_escHtml(r.nombre || '—')}</td>
-            <td style="padding:7px 10px">${sistema ? 'Sistema' : 'Personalizado'}</td>
-            <td style="padding:7px 10px;text-align:center">${activo ? 'Activo' : 'Inactivo'}</td>
-            <td style="padding:7px 10px;text-align:right;white-space:nowrap">
-              <button style="margin-right:4px;font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer" onclick="_selectRolForPermisos(${r.id})">Permisos</button>
-              ${sistema ? '' :
-                `<button style="margin-right:4px;font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer" onclick="_openRolForm(${rJson})">Editar</button>
-                 <button style="font-size:11px;padding:4px 8px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--card);cursor:pointer" onclick="_toggleRolActivo(${r.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>`}
-            </td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rol</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th style="text-align:right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${_rolesData.map(function (r) {
+            const sistema = String(r.es_sistema) === 'SI';
+            const activo  = String(r.activo) !== 'NO';
+            const rJson   = JSON.stringify(r).replace(/"/g, '&quot;');
+            return `<tr>
+              <td style="font-weight:500">${_escHtml(r.nombre || '—')}</td>
+              <td><span class="role-pill ${sistema ? 'sistema' : 'personalizado'}">${sistema ? 'Sistema' : 'Personalizado'}</span></td>
+              <td><span class="status-pill ${activo ? 'active' : 'inactive'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
+              <td>
+                <div class="row-actions">
+                  <button class="button secondary" onclick="_selectRolForPermisos(${r.id})">Permisos</button>
+                  ${sistema ? '' :
+                    `<button class="button secondary" onclick="_openRolForm(${rJson})">Editar</button>
+                     <button class="button ${activo ? 'danger' : 'secondary'}" onclick="_toggleRolActivo(${r.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>`}
+                </div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
   `;
 }
 
@@ -774,20 +791,20 @@ let _editingRolId = null;
 
 function _openRolForm(rol) {
   _editingRolId = rol ? Number(rol.id) : null;
-  const form  = document.getElementById('rol-form-inline');
+  const modal = document.getElementById('rol-modal');
   const title = document.getElementById('rol-form-title');
   const err   = document.getElementById('rf-error');
   const inp   = document.getElementById('rf-nombre');
   if (err) err.hidden = true;
   if (title) title.textContent = rol ? 'Editar rol' : 'Nuevo rol';
   if (inp) inp.value = rol ? (rol.nombre || '') : '';
-  if (form) form.hidden = false;
+  if (modal) modal.style.display = 'flex';
   if (inp) inp.focus();
 }
 
 function _closeRolForm() {
-  const form = document.getElementById('rol-form-inline');
-  if (form) form.hidden = true;
+  const modal = document.getElementById('rol-modal');
+  if (modal) modal.style.display = 'none';
   _editingRolId = null;
 }
 
@@ -823,6 +840,8 @@ async function _toggleRolActivo(id, nuevoActivo) {
 let _permisosData = [];
 
 function _selectRolForPermisos(idRol) {
+  const panelWrap = document.getElementById('permisos-panel-wrap');
+  if (panelWrap) panelWrap.hidden = false;
   _renderPermisosMatrix(idRol);
   const wrap = document.getElementById('permisos-matrix-wrap');
   if (wrap && wrap.scrollIntoView) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -831,13 +850,13 @@ function _selectRolForPermisos(idRol) {
 async function _renderPermisosMatrix(idRol) {
   const wrap = document.getElementById('permisos-matrix-wrap');
   if (!wrap) return;
-  wrap.innerHTML = '<div style="font-size:12px;color:var(--muted)">Cargando permisos…</div>';
+  wrap.innerHTML = '<div class="status-bar">Cargando permisos…</div>';
 
   try {
     const res = await _apiAuthPost({ action: 'getPermisos' });
     _permisosData = res.data || [];
   } catch (e) {
-    wrap.innerHTML = '<div style="color:var(--danger);font-size:12px;padding:8px 0">Error: ' + (e.message || 'No se pudo cargar') + '</div>';
+    wrap.innerHTML = '<div class="status-bar error">Error: ' + (e.message || 'No se pudo cargar') + '</div>';
     return;
   }
 
@@ -863,7 +882,7 @@ async function _renderPermisosMatrix(idRol) {
 
   if (!MODULOS.length) {
     wrap.innerHTML = `
-      <div style="font-size:12px;color:var(--muted);padding:8px 0">
+      <div class="status-bar">
         Permisos — ${_escHtml(rol ? rol.nombre : '')}: todavía no hay módulos definidos para asignar permisos granulares.
         ${sistema ? 'El Administrador tiene acceso total.' : ''}
       </div>`;
@@ -871,38 +890,39 @@ async function _renderPermisosMatrix(idRol) {
   }
 
   wrap.innerHTML = `
-    <div>
-      <div style="font-weight:700;margin-bottom:6px">Permisos — ${_escHtml(rol ? rol.nombre : '')}</div>
+    <div class="panel-toolbar" style="margin-bottom:6px">
+      <h2>Permisos — ${_escHtml(rol ? rol.nombre : '')}</h2>
+      ${sistema ? '' : `<button class="button" onclick="_savePermisosMatrix(${idRol})">Guardar permisos</button>`}
+    </div>
+    <p class="text-muted" style="margin:0 0 14px">
       ${sistema
-        ? '<p style="font-size:12px;color:var(--muted);margin:4px 0 12px">El <strong>Administrador</strong> tiene acceso total a todos los módulos y no es configurable.</p>'
-        : '<p style="font-size:12px;color:var(--muted);margin:4px 0 12px">Definí el acceso de este rol a cada módulo.</p>'}
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        ? 'El <strong>Administrador</strong> tiene acceso total a todos los módulos y no es configurable.'
+        : 'Definí el acceso de este rol a cada módulo.'}
+    </p>
+    <div class="table-wrap">
+      <table>
         <thead>
-          <tr style="background:var(--sidebar-bg);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)">
-            <th style="padding:7px 10px;text-align:left;border-bottom:1px solid var(--line)">Módulo</th>
-            <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--line)">Oculto</th>
-            <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--line)">Solo ver</th>
-            <th style="padding:7px 10px;text-align:center;border-bottom:1px solid var(--line)">Ver + editar</th>
+          <tr>
+            <th>Módulo</th>
+            <th style="text-align:center;width:110px">Oculto</th>
+            <th style="text-align:center;width:110px">Solo ver</th>
+            <th style="text-align:center;width:120px">Ver + editar</th>
           </tr>
         </thead>
         <tbody>
           ${MODULOS.map(function (mod) {
             const est = estadoDe(mod.key);
-            return `<tr style="border-bottom:1px solid var(--line)">
-              <td style="padding:7px 10px;color:var(--text);font-weight:500">${_escHtml(mod.label)}</td>
-              <td style="padding:7px 10px;text-align:center">${radio(mod.key, 'oculto', est)}</td>
-              <td style="padding:7px 10px;text-align:center">${radio(mod.key, 'ver', est)}</td>
-              <td style="padding:7px 10px;text-align:center">${radio(mod.key, 'editar', est)}</td>
+            return `<tr>
+              <td style="font-weight:500">${_escHtml(mod.label)}</td>
+              <td style="text-align:center">${radio(mod.key, 'oculto', est)}</td>
+              <td style="text-align:center">${radio(mod.key, 'ver', est)}</td>
+              <td style="text-align:center">${radio(mod.key, 'editar', est)}</td>
             </tr>`;
           }).join('')}
         </tbody>
       </table>
-      ${sistema ? '' : `
-        <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
-          <button class="btn" onclick="_savePermisosMatrix(${idRol})">Guardar permisos</button>
-          <span id="permisos-save-status" style="font-size:12px;color:var(--muted)"></span>
-        </div>`}
     </div>
+    ${sistema ? '' : `<div id="permisos-save-status" class="text-muted" style="font-size:12px;margin-top:10px"></div>`}
   `;
 }
 
