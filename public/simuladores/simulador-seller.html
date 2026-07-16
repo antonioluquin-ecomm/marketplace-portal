@@ -94,7 +94,8 @@
 
     /* ── CUOTAS CHIPS ── */
     .cuotas-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-    .cuota-chip{border:1px solid var(--bdr);background:rgba(17, 24, 39,.035);border-radius:9px;padding:9px 4px;color:var(--t2);font-size:12px;font-weight:800;text-align:center;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+    .cuota-chip{appearance:none;font-family:inherit;border:1px solid var(--bdr);background:rgba(17, 24, 39,.035);border-radius:9px;padding:9px 4px;color:var(--t2);font-size:12px;font-weight:800;text-align:center;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+    .cuota-chip:focus-visible{outline:2px solid var(--g);outline-offset:2px}
     .cuota-chip.active{border-color:var(--g-brd);background:var(--g-dim);color:var(--g)}
     .cuota-chip:hover:not(.active){color:var(--t1);border-color:rgba(17,24,39,.16)}
     .cuota-chip .chip-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:inherit;opacity:.7;display:block;margin-bottom:2px}
@@ -334,38 +335,11 @@
       <div class="section">
         <div class="section-title">Información de uso</div>
         <div style="font-size:11.5px;color:var(--t2);margin-bottom:10px;line-height:1.55">Este simulador es privado y orientativo. El enlace fue generado para tu marca y la información se utiliza únicamente para estimar condiciones comerciales preliminares dentro de Marketplace Sporting.</div>
-        <div id="sellerLinkWarning" style="display:none;padding:10px 12px;border-radius:9px;border:1px solid rgba(217,64,64,.28);background:rgba(217,64,64,.10);color:var(--danger, #991b1b);font-size:11.5px;line-height:1.45">No se pudo identificar el seller. Verificá que el link recibido sea correcto.</div>
+        <div id="sellerLinkWarning" style="display:none;padding:10px 12px;border-radius:9px;border:1px solid rgba(217,64,64,.28);background:rgba(217,64,64,.10);color:var(--danger, #991b1b);font-size:11.5px;line-height:1.45">No se pudo identificar el seller. Verific? que el link recibido sea correcto.</div>
+        <div id="sourceWarning" role="alert" style="display:none;margin-top:8px;padding:10px 12px;border-radius:9px;border:1px solid rgba(146,64,14,.28);background:var(--warning-bg,#fffbeb);color:var(--warning,#92400e);font-size:11.5px;line-height:1.45"></div>
       </div>
 
-      <!-- 1. FINANCIACIÓN (moved to top) -->
-      <div class="section">
-        <div class="section-title">Financiación</div>
-        <div style="font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.5">Seleccioná la cantidad máxima de cuotas que querés simular. La opción no viene preseleccionada para que puedas elegir el escenario correcto.</div>
-        <div class="cuotas-chips" id="cuotasChips">
-          <div class="cuota-chip" data-q="1" onclick="setCuota(1)">
-            <span class="chip-label">Contado</span>1
-          </div>
-          <div class="cuota-chip" data-q="3" onclick="setCuota(3)">
-            <span class="chip-label">Hasta</span>3x
-          </div>
-          <div class="cuota-chip" data-q="6" onclick="setCuota(6)">
-            <span class="chip-label">Hasta</span>6x
-          </div>
-          <div class="cuota-chip" data-q="12" onclick="setCuota(12)">
-            <span class="chip-label">Hasta</span>12x
-          </div>
-        </div>
-        <!-- hidden select kept for JS compatibility -->
-        <select id="cuotasMax" style="display:none" aria-hidden="true">
-          <option value="" selected>Sin selección</option>
-          <option value="1">1</option>
-          <option value="3">3</option>
-          <option value="6">6</option>
-          <option value="12">12</option>
-        </select>
-      </div>
-
-      <!-- 2. DATOS DE VENTA -->
+      <!-- 1. DATOS DE VENTA -->
       <div class="section">
         <div class="section-title">Datos de venta</div>
         <div class="mode-toggle">
@@ -374,16 +348,16 @@
         </div>
 
         <div class="field" id="monthlySalesField">
-          <label>Venta mensual estimada <small>ARS</small></label>
+          <label for="monthlySales">Venta mensual estimada <small>ARS</small></label>
           <input id="monthlySales" class="inp" type="number" min="0" step="1000" value="0" aria-label="Venta mensual estimada en ARS">
         </div>
         <div class="field" id="ticketField" style="display:none">
-          <label>Ticket promedio <small>ARS</small></label>
+          <label for="ticket">Ticket promedio <small>ARS</small></label>
           <input id="ticket" class="inp" type="number" min="0" step="100" value="0" aria-label="Ticket promedio en ARS">
           <div id="ticketWarn" style="display:none;font-size:11px;color:var(--warning, #92400e);margin-top:5px">El ticket promedio no puede ser $0 si hay pedidos.</div>
         </div>
         <div class="field">
-          <label>Pedidos mensuales estimados <small>cant.</small></label>
+          <label for="orders">Pedidos mensuales estimados <small>cant.</small></label>
           <input id="orders" class="inp" type="number" min="0" step="1" value="0" aria-label="Pedidos mensuales estimados">
         </div>
 
@@ -397,6 +371,34 @@
         </div>
       </div>
 
+      <!-- 2. FINANCIACIÓN (moved to top) -->
+      <div class="section">
+        <div class="section-title">Financiación</div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.5">Seleccioná la cantidad máxima de cuotas que querés simular. La opción no viene preseleccionada para que puedas elegir el escenario correcto.</div>
+        <div class="cuotas-chips" id="cuotasChips">
+          <button class="cuota-chip" type="button" data-q="1" aria-pressed="false" onclick="setCuota(1)">
+            <span class="chip-label">Contado</span>1
+          </button>
+          <button class="cuota-chip" type="button" data-q="3" aria-pressed="false" onclick="setCuota(3)">
+            <span class="chip-label">Hasta</span>3x
+          </button>
+          <button class="cuota-chip" type="button" data-q="6" aria-pressed="false" onclick="setCuota(6)">
+            <span class="chip-label">Hasta</span>6x
+          </button>
+          <button class="cuota-chip" type="button" data-q="12" aria-pressed="false" onclick="setCuota(12)">
+            <span class="chip-label">Hasta</span>12x
+          </button>
+        </div>
+        <!-- hidden select kept for JS compatibility -->
+        <select id="cuotasMax" style="display:none" aria-hidden="true">
+          <option value="" selected>Sin selección</option>
+          <option value="1">1</option>
+          <option value="3">3</option>
+          <option value="6">6</option>
+          <option value="12">12</option>
+        </select>
+      </div>
+
       <!-- 3. SERVICIOS -->
       <div class="section">
         <div class="section-title">Servicios a considerar</div>
@@ -408,7 +410,7 @@
         <!-- SKUs field: only visible when catalogación is active -->
         <div class="conditional-field" id="skusField">
           <div class="field" style="margin-bottom:0;padding:4px 0 2px">
-            <label style="font-size:11px">SKUs a catalogar <small>cantidad</small></label>
+            <label for="skus" style="font-size:11px">SKUs a catalogar <small>cantidad</small></label>
             <input id="skus" class="inp" type="number" min="0" step="1" value="0" aria-label="SKUs a catalogar" style="padding:9px 12px;font-size:13px">
           </div>
         </div>
@@ -436,7 +438,7 @@
         <!-- Devoluciones % field: only visible when logInv or gestionDevol is active -->
         <div class="conditional-field" id="devolField">
           <div class="field" style="margin-bottom:0;padding:4px 0 2px">
-            <label style="font-size:11px">Devoluciones estimadas <small>%</small></label>
+            <label for="returnsPct" style="font-size:11px">Devoluciones estimadas <small>%</small></label>
             <input id="returnsPct" class="inp" type="number" min="0" max="100" step="0.1" value="0" aria-label="Porcentaje de devoluciones" style="padding:9px 12px;font-size:13px">
           </div>
         </div>
@@ -459,11 +461,11 @@
       </div>
 
       <!-- KPIs -->
-      <div class="kpi-grid">
+      <div class="kpi-grid" id="resultKpis" aria-live="polite">
         <div class="kpi primary" id="kpiNetCard">
-          <div class="kpi-label">Neto estimado para el seller</div>
+          <div class="kpi-label">Ingreso estimado luego de cargos</div>
           <div id="kpiNet" class="kpi-val">$ 0</div>
-          <div class="kpi-sub" id="kpiNetSub">Luego de comisión, financiación y servicios.</div>
+          <div class="kpi-sub" id="kpiNetSub">Despu?s de comisi?n, financiaci?n y servicios Marketplace.</div>
         </div>
         <div class="kpi">
           <div class="kpi-label">Facturación bruta estimada</div>
@@ -478,9 +480,9 @@
       </div>
 
       <!-- Empty state -->
-      <div class="empty-state" id="emptyState">
+      <div class="empty-state" id="emptyState" role="status" aria-live="polite">
         <div class="ei">📊</div>
-        <p>Ingresá la venta mensual o el ticket promedio para ver la proyección económica.</p>
+        <p id="emptyStateText">Ingresá la venta mensual o el ticket promedio para ver la proyección económica.</p>
       </div>
 
       <div id="resultsContent">
@@ -516,7 +518,7 @@
             <span class="bd-amt" id="bdServices">-$ 0</span>
           </div>
           <div class="bd-row total" id="bdTotalRow">
-            <span>Neto estimado</span>
+            <span>Ingreso luego de cargos</span>
             <span class="bd-pct" id="bdNetPct">—</span>
             <span class="bd-amt" id="bdNet">$ 0</span>
           </div>
@@ -539,27 +541,23 @@
               <div class="scenario-label">Conservador</div>
               <div class="scenario-vol">−40% de ventas</div>
               <div id="lowNet" class="scenario-value">$ 0</div>
-              <div id="lowPct" class="scenario-pct">Margen 0%</div>
+              <div id="lowPct" class="scenario-pct">Ingreso 0%</div>
               <div class="scen-bar-wrap"><div class="scen-bar-fill" id="lowBar" style="width:0%"></div></div>
             </div>
             <div class="scenario base-scen">
               <div class="scenario-label g">Base</div>
               <div class="scenario-vol">Datos ingresados</div>
               <div id="midNet" class="scenario-value">$ 0</div>
-              <div id="midPct" class="scenario-pct">Margen 0%</div>
+              <div id="midPct" class="scenario-pct">Ingreso 0%</div>
               <div class="scen-bar-wrap"><div class="scen-bar-fill" id="midBar" style="width:0%"></div></div>
             </div>
             <div class="scenario">
               <div class="scenario-label">Optimista</div>
               <div class="scenario-vol">+60% de ventas</div>
               <div id="highNet" class="scenario-value">$ 0</div>
-              <div id="highPct" class="scenario-pct">Margen 0%</div>
+              <div id="highPct" class="scenario-pct">Ingreso 0%</div>
               <div class="scen-bar-wrap"><div class="scen-bar-fill" id="highBar" style="width:0%"></div></div>
             </div>
-          </div>
-          <div class="actions">
-            <button class="button cta" type="button" onclick="copySummary()">📋 Copiar resumen</button>
-            <button class="button secondary cta" type="button" onclick="window.print()">Imprimir / PDF</button>
           </div>
         </div>
 
@@ -643,14 +641,13 @@ let RATES      = {...FALLBACK_RATES};
 let SELLER     = {};
 let SELLERS    = [];
 let OVERRIDES  = [];
+let DATA_READY = false;
 let INPUT_MODE = "total";
 let _rtimer    = null;
 
 const params = new URLSearchParams(window.location.search);
 // Etapa 3: el seller_id de partida viene de la sesión autenticada
-// (mp_seller_session), gateada por initSellerAuth() arriba. El selector de
-// seller de esta página sigue permitiendo simular con otro seller_id (no es
-// una escritura, solo lectura de tarifas/overrides ya publicados).
+// (mp_seller_session), gateada por initSellerAuth() arriba.
 let CURRENT_SELLER_ID = SellerSESSION.sellerId || (params.get("seller_id") || params.get("seller") || params.get("id") || "").trim();
 const PUBLIC_LINKS = {
   presentacion: "../presentaciones/presentacion-seller.html",
@@ -692,15 +689,15 @@ const initials = name => String(name||"S").split(/\s+/).filter(Boolean).slice(0,
 const sel    = id => $(id).checked;
 
 async function loadCsvSources(){
-  // Etapa 6: sellers/tarifas/overrides ya no se leen de CSVs publicados —
-  // endpoints gateados por sesión. getSellers/getOverrides ya vienen
-  // filtrados a la propia fila para una sesión Seller.
-  const [sellerRows, tarifaRows, overrideRows] = await Promise.all([
-    _apiSellerPost({ action: "getSellers" }).then(j => j.data || []).catch(()=>[]),
-    _apiSellerPost({ action: "getTarifas" }).then(j => j.data || []).catch(()=>[]),
-    _apiSellerPost({ action: "getOverrides" }).then(j => j.data || []).catch(()=>[])
+  const results = await Promise.allSettled([
+    _apiSellerPost({ action: "getSellers" }),
+    _apiSellerPost({ action: "getTarifas" }),
+    _apiSellerPost({ action: "getOverrides" })
   ]);
-  return {sellerRows, tarifaRows, overrideRows};
+  const names = ["seller", "tarifas", "condiciones particulares"];
+  const rows = results.map(r => r.status === "fulfilled" ? (r.value.data || []) : []);
+  const sourceErrors = results.flatMap((r,i) => r.status === "rejected" ? [names[i]] : []);
+  return {sellerRows:rows[0], tarifaRows:rows[1], overrideRows:rows[2], sourceErrors};
 }
 
 function canonicalRateKey(key){
@@ -843,22 +840,6 @@ function normalizeLogoUrl(url){
 
   return raw;
 }
-function buildSellerSelect(){
-  const select = $("sellerSelect");
-  if(!select) return;
-
-  const sorted = [...SELLERS].sort((a,b)=>String(getSellerNameFromRow(a)).localeCompare(String(getSellerNameFromRow(b)),"es"));
-  select.innerHTML = '<option value="">Completar manualmente / sin seller definido</option>' +
-    sorted.map(row=>{
-      const id = getSellerIdFromRow(row);
-      const name = getSellerNameFromRow(row) || id || "Seller";
-      return `<option value="${escapeHtml(id)}">${escapeHtml(name)}${id ? " · " + escapeHtml(id) : ""}</option>`;
-    }).join("");
-
-  if(CURRENT_SELLER_ID){
-    select.value = CURRENT_SELLER_ID;
-  }
-}
 function escapeHtml(value){
   return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
 }
@@ -934,12 +915,6 @@ function applySellerInfo(shouldPrefill = true){
   }
   enforceMaxCuotas();
 }
-function onSellerSelectChange(){
-  const select = $("sellerSelect");
-  CURRENT_SELLER_ID = select ? select.value : "";
-  applySellerInfo(true);
-  render();
-}
 
 function enforceMaxCuotas(){
   const max = RATES.cuotas_max_default || 12;
@@ -953,22 +928,19 @@ function enforceMaxCuotas(){
 
 /* ── cuotas chips ── */
 function clearCuotaSelection(){
-  document.querySelectorAll(".cuota-chip").forEach(c=>c.classList.remove("active"));
+  document.querySelectorAll(".cuota-chip").forEach(c=>{c.classList.remove("active");c.setAttribute("aria-pressed","false");});
   const cuotas = $("cuotasMax");
   if(cuotas) cuotas.value = "";
 }
 
 function setCuota(q){
   document.querySelectorAll(".cuota-chip").forEach(c=>{
-    c.classList.toggle("active", parseInt(c.dataset.q)===q);
+    const active=parseInt(c.dataset.q)===q;
+    c.classList.toggle("active",active);
+    c.setAttribute("aria-pressed",active);
   });
   $("cuotasMax").value=String(q);
   scheduleRender();
-}
-function setCuotasSelect(q){
-  const allowed=[1,3,6,12];
-  const chosen=allowed.reduce((prev,cur)=>q>=cur?cur:prev,1);
-  setCuota(chosen);
 }
 
 /* ── conditional fields ── */
@@ -1037,107 +1009,71 @@ function serviceRows(mult=1){
 
 /* ── calculate ── */
 function calculate(mult=1){
-  const gross     =currentGross()*mult;
+  const gross=currentGross()*mult;
   const commission=gross*(num(RATES.comision_pct)/100);
   const financePct=effectiveFinancePct();
-  const finance   =gross*((financePct||0)/100);
-  const services  =serviceRows(mult).reduce((a,b)=>a+b.applied,0);
-  const costs     =commission+finance+services;
-  const net       =gross-costs;
+  const finance=gross*((financePct||0)/100);
+  const services=serviceRows(mult).reduce((a,b)=>a+b.applied,0);
+  const costs=commission+finance+services;
+  const net=gross-costs;
   return {gross,commission,finance,services,costs,net,netClamped:Math.max(0,net),financePct};
+}
+
+function validateScenario(){
+  const errors=[];
+  if(!DATA_READY) errors.push("No se pudieron validar las tarifas y condiciones del seller.");
+  const gross=currentGross();
+  const orders=num($("orders").value);
+  if(gross<=0) errors.push("Ingres\u00e1 una venta mensual mayor a cero.");
+  if(!$("cuotasMax").value) errors.push("Seleccion\u00e1 la financiaci\u00f3n a simular.");
+  const perOrderService=sel("svcFulfillment")||sel("svcLogDir")||sel("svcLogInv")||sel("svcGestionDevol");
+  if(perOrderService&&orders<=0) errors.push("Ingres\u00e1 pedidos mensuales para calcular los servicios por operaci\u00f3n.");
+  if(sel("svcCatalog")&&num($("skus").value)<=0) errors.push("Ingres\u00e1 la cantidad de SKUs para Catalogaci\u00f3n.");
+  const returnsRequired=sel("svcLogInv")||sel("svcGestionDevol");
+  const returnsPct=num($("returnsPct").value);
+  if(returnsRequired&&(returnsPct<=0||returnsPct>100)) errors.push("Ingres\u00e1 un porcentaje de devoluciones entre 0 y 100.");
+  if(INPUT_MODE==="ticket"&&num($("ticket").value)<=0) errors.push("Ingres\u00e1 un ticket promedio mayor a cero.");
+  return errors;
 }
 
 /* ── render ── */
 /* ── VIABILITY + CTA ─────────────────────────── */
 function updateViabilityAndCTA(r, gross) {
-  if (!gross || gross === 0) {
-    ["viabilityBar","ctaPanel","ctaDisclaimer"].forEach(id => {
-      const el = $(id); if (el) el.style.display = "none";
-    });
+  if (!gross || gross <= 0) {
+    ["viabilityBar","ctaPanel","ctaDisclaimer"].forEach(id => { const el=$(id); if(el) el.style.display="none"; });
     return;
   }
-
-  const netPct = gross ? (r.netClamped / gross) * 100 : 0;
-
-  // ── Viability semaphore
-  const bar = $("viabilityBar");
-  const icon = $("viabIcon");
-  const title = $("viabTitle");
-  const desc = $("viabDesc");
-  if (bar) {
-    bar.style.display = "flex";
+  const chargePct=(r.costs/gross)*100;
+  const bar=$("viabilityBar"), icon=$("viabIcon"), title=$("viabTitle"), desc=$("viabDesc");
+  if(bar){
+    bar.style.display="flex";
     bar.classList.remove("good","warn","bad");
-    if (netPct >= 60) {
-      bar.classList.add("good");
-      icon.textContent = "✓";
-      title.textContent = "Margen saludable";
-      desc.textContent = `Con un margen neto estimado del ${fmtPct(netPct)}, la operación muestra buena viabilidad. Podés avanzar con el proceso de calificación.`;
-    } else if (netPct >= 35) {
-      bar.classList.add("warn");
-      icon.textContent = "⚠";
-      title.textContent = "Margen moderado";
-      desc.textContent = `El margen neto estimado es del ${fmtPct(netPct)}. Revisá los servicios seleccionados o el volumen para optimizar la ecuación antes de avanzar.`;
-    } else {
-      bar.classList.add("bad");
-      icon.textContent = "✗";
-      title.textContent = "Margen bajo — revisá la configuración";
-      desc.textContent = `Con ${fmtPct(netPct)} de margen neto, la operación actual puede no ser viable. Ajustá volumen, ticket o servicios antes de avanzar.`;
+    if(chargePct<=20){
+      bar.classList.add("good"); icon.textContent="?"; title.textContent="Carga de cargos baja";
+    }else if(chargePct<=40){
+      bar.classList.add("warn"); icon.textContent="!"; title.textContent="Carga de cargos moderada";
+    }else{
+      bar.classList.add("bad"); icon.textContent="?"; title.textContent="Carga de cargos alta";
     }
+    desc.textContent=`Los cargos Marketplace representan ${fmtPct(chargePct)} de la venta simulada. Este indicador no contempla costo de producto, impuestos ni otros costos propios del seller.`;
   }
-
-  // ── CTA panel: personalize with seller name + margin
-  const panel = $("ctaPanel");
-  const disc = $("ctaDisclaimer");
-  if (panel) {
-    panel.style.display = "block";
-    if (disc) disc.style.display = "block";
-
-    const sellerNombre = $("sellerName")?.textContent?.trim();
-    const hasName = sellerNombre && sellerNombre !== "Tu marca" && sellerNombre !== "—";
-
-    // Title: personalized if we know the seller
-    const ctaTitle = $("ctaPanelTitle");
-    if (ctaTitle) {
-      ctaTitle.textContent = hasName
-        ? `${sellerNombre}, ¿querés avanzar con Sporting Marketplace?`
-        : "¿Querés avanzar con Sporting Marketplace?";
-    }
-
-    // Sub: adapt message based on viability
-    const ctaSub = $("ctaPanelSub");
-    if (ctaSub) {
-      if (netPct >= 60) {
-        ctaSub.textContent = "La proyección es positiva. Completá el formulario y el equipo de Sporting te contactará para definir las condiciones y arrancar el proceso.";
-      } else if (netPct >= 35) {
-        ctaSub.textContent = "Los números son razonables. Completá el formulario y el equipo analizará cómo optimizar la propuesta para tu operación.";
-      } else {
-        ctaSub.textContent = "Antes de avanzar, te recomendamos revisar la configuración. Si querés, completá igual el formulario y el equipo puede ayudarte a encontrar el modelo correcto.";
-      }
-    }
-
-    // Wire CTA links
-    const formUrl = publicLink("calificacion");
-    const formLink = $("ctaFormLink");
-    if (formLink) formLink.href = formUrl;
-
-    // WhatsApp: share summary
-    const waLink = $("ctaWhatsapp");
-    if (waLink) {
-      const cuotasVal = $("cuotasMax").value;
-      const cuotasLabel = cuotasVal === "1" ? "Contado / 1 cuota" : cuotasVal ? `Hasta ${cuotasVal} cuotas` : "Sin seleccionar";
-      const activeSvcs = serviceRows().filter(s => s.active).map(s => s.name).join(", ") || "Ninguno";
-      const waText = [
-        "📊 *Simulación económica — Sporting Marketplace*",
-        hasName ? `Seller: ${sellerNombre}` : "",
-        `Facturación bruta estimada: ${fmt(gross)}`,
-        `Neto estimado: ${fmt(r.netClamped)} (${fmtPct(netPct)} margen)`,
-        `Financiación: ${cuotasLabel}`,
-        `Servicios: ${activeSvcs}`,
-        "",
-        "Valores orientativos sujetos a validación comercial.",
-        formUrl ? `Formulario de calificación: ${new URL(formUrl, window.location.href).href}` : "",
-      ].filter(Boolean).join("\n");
-      waLink.href = "https://wa.me/?text=" + encodeURIComponent(waText);
+  const panel=$("ctaPanel"), disc=$("ctaDisclaimer");
+  if(panel){
+    panel.style.display="block"; if(disc) disc.style.display="block";
+    const sellerNombre=$("sellerName")?.textContent?.trim();
+    const hasName=sellerNombre&&sellerNombre!=="Tu marca"&&sellerNombre!=="?";
+    const ctaTitle=$("ctaPanelTitle"), ctaSub=$("ctaPanelSub");
+    if(ctaTitle) ctaTitle.textContent=hasName?`${sellerNombre}, ?quer?s avanzar con Sporting Marketplace?`:"?Quer?s avanzar con Sporting Marketplace?";
+    if(ctaSub) ctaSub.textContent="Complet? el formulario para que el equipo valide tarifas, condiciones y la viabilidad comercial con los costos completos de tu operaci?n.";
+    const formUrl=publicLink("calificacion"), formLink=$("ctaFormLink");
+    if(formLink) formLink.href=formUrl;
+    const waLink=$("ctaWhatsapp");
+    if(waLink){
+      const cuotasVal=$("cuotasMax").value;
+      const cuotasLabel=cuotasVal==="1"?"Contado / 1 cuota":`Hasta ${cuotasVal} cuotas`;
+      const activeSvcs=serviceRows().filter(x=>x.active).map(x=>x.name).join(", ")||"Ninguno";
+      const waText=["Simulacion economica - Sporting Marketplace",hasName?`Seller: ${sellerNombre}`:"",`Venta bruta estimada: ${fmt(gross)}`,`Ingreso luego de cargos Marketplace: ${fmt(r.net)}`,`Cargos Marketplace: ${fmtPct(chargePct)}`,`Financiacion: ${cuotasLabel}`,`Servicios: ${activeSvcs}`,"","Valores orientativos sujetos a validacion comercial.",formUrl?`Formulario de calificacion: ${new URL(formUrl,window.location.href).href}`:""].filter(Boolean).join("\n");
+      waLink.href="https://wa.me/?text="+encodeURIComponent(waText);
     }
   }
 }
@@ -1147,8 +1083,10 @@ function render(){
   const ticket =currentTicket();
   const orders =num($("orders").value);
   const gross  =r.gross;
+  const errors =validateScenario();
+  const isValid=errors.length===0;
   const isZero =gross===0;
-  const isLoss =!isZero&&r.net<0;
+  const isLoss =isValid&&r.net<0;
 
   /* cuotas chips highlight when nothing selected */
   $("cuotasChips")?.classList.toggle("needs-selection", r.financePct===null&&!isZero);
@@ -1178,21 +1116,26 @@ function render(){
   chip.style.display="flex";
   $("topbarComision").textContent=comPct;
 
-  /* kpis */
-  $("kpiNet").textContent   =fmt(r.netClamped);
+  /* Validacion previa: sin escenario completo no se muestran cifras parciales. */
+  $("resultKpis").style.display=isValid?"grid":"none";
+  $("emptyState").style.display=isValid?"none":"flex";
+  $("resultsContent").style.display=isValid?"block":"none";
+  if(!isValid){
+    $("emptyStateText").textContent=errors.join(" ");
+    $("alertStrip").classList.remove("visible");
+    ["viabilityBar","ctaPanel","ctaDisclaimer"].forEach(id=>{const el=$(id);if(el)el.style.display="none";});
+    return;
+  }
+
+  $("kpiNet").textContent   =fmt(r.net);
   $("kpiGross").textContent =fmt(gross);
   $("kpiCosts").textContent =fmt(r.costs);
-  $("kpiCostsSub").textContent=(gross?fmtPct((r.costs/gross)*100):"0,0%")+" sobre facturación";
-  $("kpiNetSub").textContent =gross?`Margen neto ${fmtPct((r.netClamped/gross)*100)}${r.financePct === null ? " · financiación pendiente" : ""}`:"Luego de comisión, financiación y servicios.";
+  $("kpiCostsSub").textContent=fmtPct((r.costs/gross)*100)+" sobre facturaci?n";
+  $("kpiNetSub").textContent=`Ingreso luego de cargos Marketplace ${fmtPct((r.net/gross)*100)}`;
 
-  /* alert / loss state */
-  $("alertStrip").classList.toggle("visible", isLoss);
-  $("kpiNetCard").classList.toggle("loss", isLoss);
-  $("bdTotalRow").classList.toggle("loss", isLoss);
-
-  /* empty state */
-  $("emptyState").style.display   =isZero?"flex":"none";
-  $("resultsContent").style.display=isZero?"none":"block";
+  $("alertStrip").classList.toggle("visible",isLoss);
+  $("kpiNetCard").classList.toggle("loss",isLoss);
+  $("bdTotalRow").classList.toggle("loss",isLoss);
 
   /* breakdown with % */
   const pctOf = v => gross ? fmtPct((v/gross)*100) : "—";
@@ -1200,11 +1143,11 @@ function render(){
   $("bdCommission").textContent ="-"+fmt(r.commission);
   $("bdFinance").textContent    ="-"+fmt(r.finance);
   $("bdServices").textContent   ="-"+fmt(r.services);
-  $("bdNet").textContent        =fmt(r.netClamped);
+  $("bdNet").textContent        =fmt(r.net);
   $("bdCommissionPct").textContent=gross?pctOf(r.commission):"";
   $("bdFinancePct").textContent   =r.financePct === null ? "Pendiente" : (gross?pctOf(r.finance):"");
   $("bdServicesPct").textContent  =gross?pctOf(r.services):"";
-  $("bdNetPct").textContent       =gross?fmtPct((r.netClamped/gross)*100):"";
+  $("bdNetPct").textContent       =gross?fmtPct((r.net/gross)*100):"";
 
   /* bar */
   const netP =gross?Math.max(0,Math.min(100,(r.netClamped/gross)*100)):0;
@@ -1216,13 +1159,13 @@ function render(){
   /* scenarios */
   function scen(mult){
     const s=calculate(mult);
-    return {net:s.netClamped,pct:s.gross?((s.netClamped/s.gross)*100):0,gross:s.gross};
+    return {net:s.net,pct:s.gross?((s.net/s.gross)*100):0,gross:s.gross};
   }
   const lo=scen(.6),mi=scen(1),hi=scen(1.6);
-  const maxNet=Math.max(lo.net,mi.net,hi.net)||1;
+  const maxNet=Math.max(0,lo.net,mi.net,hi.net)||1;
   [$("lowNet"),$("midNet"),$("highNet")].forEach((el,i)=>el.textContent=fmt([lo,mi,hi][i].net));
-  [$("lowPct"),$("midPct"),$("highPct")].forEach((el,i)=>el.textContent="Margen "+fmtPct([lo,mi,hi][i].pct));
-  [$("lowBar"),$("midBar"),$("highBar")].forEach((el,i)=>el.style.width=fmtPct(([lo,mi,hi][i].net/maxNet)*100));
+  [$("lowPct"),$("midPct"),$("highPct")].forEach((el,i)=>el.textContent="Ingreso "+fmtPct([lo,mi,hi][i].pct));
+  [$("lowBar"),$("midBar"),$("highBar")].forEach((el,i)=>el.style.width=fmtPct(Math.max(0,([lo,mi,hi][i].net/maxNet)*100)));
 
   /* services impact grid */
   renderSvcImpact();
@@ -1290,12 +1233,13 @@ function showToast(msg,isError=false,dur=2500){
 
 /* ── copy ── */
 function copySummary(){
+  const errors=validateScenario();
+  if(errors.length){showToast(errors[0],true);return;}
   const r=calculate();
   const rows=serviceRows().filter(s=>s.active);
   const gross=r.gross;
   const sellerNomCopy = $("sellerName")?.textContent?.trim() || "—";
-  const netPctCopy = gross ? ((r.netClamped/gross)*100) : 0;
-  const viabLabel = netPctCopy >= 60 ? "✓ Margen saludable" : netPctCopy >= 35 ? "⚠ Margen moderado" : "✗ Margen bajo";
+  const netPctCopy = gross ? ((r.net/gross)*100) : 0;
   const txt=[
     "📊 Simulación económica · Sporting Marketplace",
     "─────────────────────────────────",
@@ -1307,8 +1251,7 @@ function copySummary(){
     `  · Costo financiero est.:    ${r.financePct === null ? "Pendiente de selección" : fmt(r.finance) + " (" + (gross?fmtPct((r.finance/gross)*100):"—") + ")"}`,
     `  · Servicios seleccionados:  ${fmt(r.services)}`,
     "─────────────────────────────────",
-    `Neto estimado para el seller: ${fmt(r.netClamped)} (${gross?fmtPct(netPctCopy):"—"} margen)`,
-    `Viabilidad: ${viabLabel}`,
+    `Ingreso luego de cargos:       ${fmt(r.net)} (${gross?fmtPct(netPctCopy):"?"} de la venta)`,
     "─────────────────────────────────",
     `Servicios activos: ${rows.length?rows.map(s=>s.name).join(", "):"Sin servicios adicionales"}`,
     "",
@@ -1328,11 +1271,22 @@ function copySummary(){
 async function init(){
   try{
     setStatus("loading","Cargando…");
-    const {sellerRows, tarifaRows, overrideRows} = await loadCsvSources();
+    const {sellerRows, tarifaRows, overrideRows, sourceErrors} = await loadCsvSources();
     SELLERS = sellerRows || [];
     OVERRIDES = overrideRows || [];
     BASE_RATES = {...FALLBACK_RATES, ...parseRates(tarifaRows || [])};
+    const sourceWarning=$("sourceWarning");
+    const fallbackRates=sourceErrors.includes("tarifas")||!(tarifaRows||[]).length;
+    if(sourceErrors.length||fallbackRates){
+      sourceWarning.style.display="block";
+      sourceWarning.textContent=fallbackRates
+        ? "No se pudieron validar las tarifas vigentes. La simulaci\u00f3n usa valores generales de respaldo y no debe interpretarse como propuesta comercial."
+        : `No se pudieron cargar: ${sourceErrors.join(", ")}. Revis\u00e1 los datos antes de usar el resultado.`;
+    }else{
+      sourceWarning.style.display="none";
+    }
     applySellerInfo(true);
+    DATA_READY=!sourceErrors.length&&(tarifaRows||[]).length>0&&Object.keys(SELLER||{}).length>0;
     if(!CURRENT_SELLER_ID){
       setStatus("err", "Link sin seller");
     }else if(!Object.keys(SELLER || {}).length){
@@ -1346,7 +1300,11 @@ async function init(){
     OVERRIDES = [];
     BASE_RATES = {...FALLBACK_RATES};
     RATES = {...FALLBACK_RATES};
+    DATA_READY=false;
     applySellerInfo(false);
+    const sourceWarning=$("sourceWarning");
+    sourceWarning.style.display="block";
+    sourceWarning.textContent="No se pudieron validar las fuentes. La simulaci\u00f3n usa valores generales de respaldo y no debe interpretarse como propuesta comercial.";
     setStatus("err","Tarifas de respaldo");
   }
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-16 - Refuerza integridad del Simulador Seller
+
+Tipo de cambio: correccion funcional y mejora de UX de frontend (sin cambios de backend ni de datos).
+
+- Los resultados se bloquean hasta validar fuentes, venta, financiacion y campos dependientes de servicios.
+- Las fallas de tarifas o condiciones muestran una advertencia visible y ya no producen una propuesta silenciosa con valores de respaldo.
+- Las perdidas se muestran con valor negativo real; el clamp queda limitado a las barras visuales.
+- Se reemplazan margen y viabilidad por ingreso luego de cargos y carga de cargos Marketplace, aclarando que no incluye costos propios del seller.
+- El flujo se ordena como ventas, financiacion y servicios; cuotas pasan a botones accesibles y se eliminan acciones y funciones duplicadas.
+
 ## 2026-07-16 - Simplifica el header publico
 
 Tipo de cambio: mejora de jerarquia visual de frontend (sin cambios de backend ni de datos).
