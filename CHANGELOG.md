@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-16 - Acelera navegacion en vista de administrador
+
+Tipo de cambio: mejora de performance de frontend (sin cambios de backend ni de datos).
+
+- La validacion de sesion se reutiliza durante 60 segundos; cualquier llamada de datos sigue validada por el backend.
+- Sellers, tarifas, overrides y Gantt usan cache breve en sessionStorage con claves separadas por modo, token, seller y accion.
+- La barra Ver como seller se monta inmediatamente y actualiza su lista en segundo plano, sin bloquear el contenido de la pagina.
+- La lista completa de sellers puede resolver la identidad del target seleccionado; las tarifas generales se comparten entre sellers y los overrides permanecen aislados.
+- Las escrituras nunca se cachean y actualizar una tarea invalida el Gantt cacheado. La navegacion agrega prefetch bajo hover o foco.
+
 ## 2026-07-16 - Refuerza integridad del Simulador Seller
 
 Tipo de cambio: correccion funcional y mejora de UX de frontend (sin cambios de backend ni de datos).

@@ -119,10 +119,72 @@ function renderPublicFlowNav() {
     const cls = item.id === activeId ? ' class="active"' : '';
     return '<a' + cls + ' data-public-link="' + item.id + '" href="' + prefix + item.path + '">' + item.label + '</a>';
   }).join('');
-  navs.forEach(function (nav) { nav.innerHTML = html; });
+  navs.forEach(function (nav) {
+    nav.innerHTML = html;
+    nav.querySelectorAll('a').forEach(function (link) {
+      function prefetch() {
+        if (document.querySelector('link[rel="prefetch"][href="' + link.href + '"]')) return;
+        const hint = document.createElement('link');
+        hint.rel = 'prefetch'; hint.href = link.href; hint.as = 'document';
+        document.head.appendChild(hint);
+      }
+      link.addEventListener('mouseenter', prefetch, { once: true });
+      link.addEventListener('focus', prefetch, { once: true });
+    });
+  });
 }
 
 /* ─── INIT ────────────────────────────────────────────────── */
+
+const SELLER_READ_CACHE_TTL = {
+  getSellers: 5 * 60 * 1000,
+  getTarifas: 5 * 60 * 1000,
+  getOverrides: 2 * 60 * 1000,
+  getGantt: 30 * 1000
+};
+const _sellerReadInflight = new Map();
+
+function _sellerCachePrefix() { return 'mp_public_cache:'; }
+function _sellerCacheKey(payload) {
+  const tokenScope = (SellerSESSION.token || '').slice(-12);
+  const target = payload.action === 'getTarifas'
+    ? 'global'
+    : (payload.target_seller_id !== undefined ? String(payload.target_seller_id || 'all') : String(SellerSESSION.sellerId || 'none'));
+  return _sellerCachePrefix() + [SellerSESSION.mode || 'none', tokenScope, target, payload.action || '', payload.seller_id || ''].join(':');
+}
+function _sellerCacheRead(key, ttl) {
+  try {
+    const item = JSON.parse(sessionStorage.getItem(key) || 'null');
+    if (!item || Date.now() - item.saved_at > ttl) { sessionStorage.removeItem(key); return null; }
+    return item.value;
+  } catch (_) { return null; }
+}
+function _sellerCacheWrite(key, value) {
+  try { sessionStorage.setItem(key, JSON.stringify({ saved_at: Date.now(), value: value })); } catch (_) {}
+}
+function _sellerCacheClear() {
+  try {
+    Object.keys(sessionStorage).forEach(function (key) { if (key.indexOf(_sellerCachePrefix()) === 0) sessionStorage.removeItem(key); });
+    sessionStorage.removeItem('mp_public_session_validated_at');
+  } catch (_) {}
+  _sellerReadInflight.clear();
+}
+function _sellerCacheInvalidateAction(action) {
+  try {
+    Object.keys(sessionStorage).forEach(function (key) {
+      if (key.indexOf(_sellerCachePrefix()) === 0 && key.indexOf(':' + action + ':') !== -1) sessionStorage.removeItem(key);
+    });
+  } catch (_) {}
+}
+function _sellerSessionRecentlyValidated() {
+  try {
+    const raw = JSON.parse(sessionStorage.getItem('mp_public_session_validated_at') || 'null');
+    return !!raw && raw.token === SellerSESSION.token && Date.now() - raw.at < 60 * 1000;
+  } catch (_) { return false; }
+}
+function _markSellerSessionValidated() {
+  try { sessionStorage.setItem('mp_public_session_validated_at', JSON.stringify({ token: SellerSESSION.token, at: Date.now() })); } catch (_) {}
+}
 
 async function initSellerAuth() {
   const modo = SellerSESSION.mode;
@@ -131,15 +193,17 @@ async function initSellerAuth() {
     return;
   }
 
-  try {
-    const fresh = await _apiSellerPost({ action: 'validateSession' });
-    if (fresh && fresh.usuario && SellerSESSION.mode === 'seller') {
-      // Solo refrescamos la sesión de seller; la interna la gestiona auth.js.
-      const cur = SellerSESSION._sellerData;
-      if (cur) localStorage.setItem('mp_seller_session', JSON.stringify(Object.assign({}, cur, { usuario: fresh.usuario })));
+  if (!_sellerSessionRecentlyValidated()) {
+    try {
+      const fresh = await _apiSellerPost({ action: 'validateSession' });
+      _markSellerSessionValidated();
+      if (fresh && fresh.usuario && SellerSESSION.mode === 'seller') {
+        const cur = SellerSESSION._sellerData;
+        if (cur) localStorage.setItem('mp_seller_session', JSON.stringify(Object.assign({}, cur, { usuario: fresh.usuario })));
+      }
+    } catch (e) {
+      // _apiSellerPost gestiona la sesion invalida o expirada.
     }
-  } catch (e) {
-    // Sesión inválida/expirada: _apiSellerPost ya redirigió según el modo
   }
 
   if (!SellerSESSION.isLoggedIn()) {
@@ -192,23 +256,21 @@ async function renderStaffSellerBar() {
     window.location.reload();               // re-arranca la página con el nuevo seller
   });
 
-  try {
-    // getSellers con target vacío devuelve todos (para poblar el selector).
-    const json = await _apiSellerPost({ action: 'getSellers', target_seller_id: '' });
+  function populateStaffSellers(json) {
     const sellers = (json.data || []).slice().sort(function (a, b) {
       return String(a.seller_nombre || a.seller_id).localeCompare(String(b.seller_nombre || b.seller_id), 'es');
     });
     const actual = SellerSESSION.sellerId;
-    sel.innerHTML = '<option value="">— Elegí un seller —</option>' +
-      sellers.map(function (s) {
-        const id  = s.seller_id;
-        const nom = s.seller_nombre || s.nombre || id;
-        const selAttr = String(id).toUpperCase() === String(actual).toUpperCase() ? ' selected' : '';
-        return '<option value="' + id + '"' + selAttr + '>' + nom + ' · ' + id + '</option>';
-      }).join('');
-  } catch (e) {
-    sel.innerHTML = '<option value="">Error al cargar sellers</option>';
+    sel.innerHTML = '<option value="">? Eleg? un seller ?</option>' + sellers.map(function (seller) {
+      const id = seller.seller_id;
+      const nom = seller.seller_nombre || seller.nombre || id;
+      const selected = String(id).toUpperCase() === String(actual).toUpperCase() ? ' selected' : '';
+      return '<option value="' + id + '"' + selected + '>' + nom + ' ? ' + id + '</option>';
+    }).join('');
   }
+  _apiSellerPost({ action: 'getSellers', target_seller_id: '' })
+    .then(populateStaffSellers)
+    .catch(function () { sel.innerHTML = '<option value="">Error al cargar sellers</option>'; });
   return true;
 }
 
@@ -232,6 +294,7 @@ async function initPortalPage(load, onStaffNoTarget) {
 function logoutSeller() {
   const token = SellerSESSION.token;
   SellerSESSION.clear();
+  _sellerCacheClear();
 
   const apiUrl = window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL;
   if (token && apiUrl) {
@@ -375,27 +438,51 @@ async function _apiSellerPost(body) {
   if (!url) throw new Error('No hay URL de API configurada');
 
   const payload = Object.assign({ session_token: SellerSESSION.token }, body);
-  // Modo staff con un seller elegido: se pasa como target_seller_id. El backend
-  // solo lo respeta para sesiones internas; una sesión de seller lo ignora.
   if (SellerSESSION.isStaff && SellerSESSION.sellerId && payload.target_seller_id === undefined) {
     payload.target_seller_id = SellerSESSION.sellerId;
   }
 
-  const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const json = await res.json();
-  if (!json.ok) {
-    if (json.code === 401) {
-      // Sesión vencida: redirige según el dominio de la sesión activa.
-      if (SellerSESSION.mode === 'staff') {
-        localStorage.removeItem('mp_session');
-        window.location.href = _internalLoginPath();
-      } else {
-        logoutSeller();
-      }
-      throw new Error('Sesión expirada. Ingresá de nuevo.');
+  const ttl = SELLER_READ_CACHE_TTL[payload.action] || 0;
+  const cacheKey = ttl ? _sellerCacheKey(payload) : '';
+  if (payload.action === 'getSellers' && payload.target_seller_id) {
+    const allPayload = Object.assign({}, payload, { target_seller_id: '' });
+    const allCached = _sellerCacheRead(_sellerCacheKey(allPayload), SELLER_READ_CACHE_TTL.getSellers);
+    if (allCached && Array.isArray(allCached.data)) {
+      const target = String(payload.target_seller_id).toUpperCase();
+      const derived = Object.assign({}, allCached, { data: allCached.data.filter(function (row) { return String(row.seller_id || '').toUpperCase() === target; }) });
+      if (cacheKey) _sellerCacheWrite(cacheKey, derived);
+      return derived;
     }
-    throw new Error(json.error || 'Error desconocido');
   }
-  return json;
+  if (cacheKey) {
+    const cached = _sellerCacheRead(cacheKey, ttl);
+    if (cached) return cached;
+    if (_sellerReadInflight.has(cacheKey)) return _sellerReadInflight.get(cacheKey);
+  }
+
+  const request = (async function () {
+    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (!json.ok) {
+      if (json.code === 401) {
+        _sellerCacheClear();
+        if (SellerSESSION.mode === 'staff') {
+          localStorage.removeItem('mp_session');
+          window.location.href = _internalLoginPath();
+        } else {
+          logoutSeller();
+        }
+        throw new Error('Sesion expirada. Ingresa de nuevo.');
+      }
+      throw new Error(json.error || 'Error desconocido');
+    }
+    if (cacheKey) _sellerCacheWrite(cacheKey, json);
+    if (payload.action === 'updateGanttTask') _sellerCacheInvalidateAction('getGantt');
+    return json;
+  })();
+
+  if (cacheKey) _sellerReadInflight.set(cacheKey, request);
+  try { return await request; }
+  finally { if (cacheKey) _sellerReadInflight.delete(cacheKey); }
 }
