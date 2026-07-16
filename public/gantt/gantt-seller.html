@@ -48,6 +48,15 @@
   .empty{padding:32px;border:1px dashed var(--line);border-radius:var(--radius);color:var(--muted);font-size:13px;text-align:center}
   .err{padding:16px;border:1px solid color-mix(in srgb, var(--danger) 30%, transparent);background:var(--danger-bg);border-radius:var(--radius-sm);color:var(--danger);font-size:13px}
 
+
+  /* 2026-07-16 - Etapa 8: marco publico simple para Gantt seller. */
+  .public-simple-main.public-simple-main{padding:38px 38px 76px}
+  .public-simple-main.public-simple-main .task-card,
+  .public-simple-main.public-simple-main .empty,
+  .public-simple-main.public-simple-main .err{border-radius:8px;box-shadow:none}
+  .public-simple-main.public-simple-main .task-card{transition:border-color .15s,background .15s}
+  .public-simple-main.public-simple-main .task-card:hover{border-color:var(--primary-mid);background:color-mix(in srgb,var(--primary) 3%,var(--card))}
+  .public-simple-main.public-simple-main .task-edit{border-radius:0 0 8px 8px}
   @media(max-width:640px){.main{padding:30px 18px 60px}.task-card{flex-wrap:wrap}.task-dates{text-align:left}}
 </style>
 </head>
@@ -73,7 +82,7 @@
     </div>
   </header>
 
-  <main class="main">
+  <main class="main public-simple-main">
     <nav class="public-flow-nav hero-public-nav" aria-label="Navegación pública seller">
       <a data-public-link="presentacion" href="../presentaciones/presentacion-seller.html">Presentación</a>
       <a data-public-link="simulador" href="../simuladores/simulador-seller.html">Simulador</a>

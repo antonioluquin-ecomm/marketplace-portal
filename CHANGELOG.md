@@ -1,5 +1,55 @@
 # Changelog
 
+## 2026-07-16 - Alinea paginas publicas simples del seller
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 8 de consistencia visual: se ajustan las paginas publicas livianas del portal seller sin migrarlas al shell interno.
+
+- Portal de Sellers y Gantt del seller adoptan un scope `public-simple-main`.
+- Cards, estados vacios y tareas bajan a radios de 8px con sombras mas discretas.
+- Los iconos de recursos del portal seller pasan de emojis a codigos textuales estables.
+
+## 2026-07-16 - Alinea Hub Central al shell interno
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 7 de consistencia visual: se ajusta el Hub Central, que es la entrada principal del portal, para que no lea como una landing separada del resto del sistema.
+
+- Se suma un scope `portal-hub-main` para normalizar margenes y ritmo de secciones.
+- Cards, panel snapshot, flujo, bloques de acceso y tabla de rutas pasan a radios de 8px.
+- Se simplifican iconos puntuales de navegacion para evitar mezcla visual con emojis.
+
+## 2026-07-16 - Alinea Simulador Economico como herramienta operativa
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 6 de consistencia visual: se ajusta el Simulador Economico sin convertirlo en pagina documental, conservando su layout de tres columnas.
+
+- Se agrega un encabezado interno con eyebrow + H1 para que la herramienta tenga jerarquia clara dentro del area de trabajo.
+- Inputs, tabs y resultados adoptan margenes operativos consistentes con Backlog/Gantt.
+- La columna de tarifas mantiene lectura compacta y el simulador conserva todo el ancho util para calculos.
+
+## 2026-07-16 - Alinea Gantt Seller Center al marco operativo
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 5 de consistencia visual: se suma Gantt Seller Center al marco `portal-ops-*`, manteniendo su timeline y controles propios.
+
+- El header adopta eyebrow + H1 consistente con Seguimiento Operativo.
+- La fila de KPIs/escala, filtros y avance por modulo quedan alineados al mismo margen operativo.
+- El timeline mantiene el ancho completo para no perder densidad de trabajo.
+
+## 2026-07-16 - Alinea pantallas operativas densas
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 4 de consistencia visual: se introduce una capa `portal-ops-*` para normalizar pantallas de trabajo con alta densidad de datos, sin forzarles el patron de pagina documental.
+
+- Backlog de Sellers adopta el marco operativo para titulo, filtros y area de contenido.
+- Gestion de Sellers adopta el ancho operativo del shell, conservando sus panels y formulario propios.
+- Seguimiento Operativo adopta el marco operativo en hero y filtros, manteniendo el timeline con todo el ancho util.
+
 ## 2026-07-16 - Mejora el modal de alta/edición de usuario en Configuración
 
 Tipo de cambio: mejora visual y funcional de frontend (sin cambios de backend ni de datos).

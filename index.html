@@ -426,6 +426,44 @@ h1 em { color:var(--g); font-style:normal; }
 .empty-state.visible { display:block; }
 
 /* ─── RESPONSIVE ─── */
+
+/* 2026-07-16 - Etapa 7: Hub Central alineado al shell interno.
+   Mantiene su rol de indice operativo, pero usa radios y ritmos mas cercanos
+   al resto del portal para que no lea como una landing separada. */
+.portal-hub-main.portal-hub-main .hero {
+  padding:36px 38px 34px;
+}
+.portal-hub-main.portal-hub-main .section {
+  padding:32px 38px;
+}
+.portal-hub-main.portal-hub-main .snap,
+.portal-hub-main.portal-hub-main .flow,
+.portal-hub-main.portal-hub-main .card,
+.portal-hub-main.portal-hub-main .access-box,
+.portal-hub-main.portal-hub-main .route-table,
+.portal-hub-main.portal-hub-main .all-card,
+.portal-hub-main.portal-hub-main .empty-state {
+  border-radius:8px;
+}
+.portal-hub-main.portal-hub-main .card-icon {
+  border-radius:7px;
+}
+.portal-hub-main.portal-hub-main .card,
+.portal-hub-main.portal-hub-main .all-card {
+  box-shadow:none;
+}
+.portal-hub-main.portal-hub-main .card:hover,
+.portal-hub-main.portal-hub-main .all-card:hover {
+  transform:translateY(-1px);
+  box-shadow:var(--shadow-sm);
+}
+@media(max-width:620px) {
+  .portal-hub-main.portal-hub-main .hero,
+  .portal-hub-main.portal-hub-main .section {
+    padding-left:18px;
+    padding-right:18px;
+  }
+}
 @media (max-width:1160px) {
   .shell { grid-template-columns:1fr; }
   .sidebar { display:none; }
@@ -523,7 +561,7 @@ h1 em { color:var(--g); font-style:normal; }
 </aside>
 
 <!-- MAIN -->
-<main class="main">
+<main class="main portal-hub-main">
 
   <!-- ══ HERO ══ -->
   <section id="inicio" class="hero">
@@ -612,7 +650,7 @@ h1 em { color:var(--g); font-style:normal; }
     </div>
     <div class="cards col3">
       <a class="card" href="internal/backlog/gestion-sellers.html">
-        <div class="card-top"><div class="card-icon">➕</div><span class="card-badge">Interno</span></div>
+        <div class="card-top"><div class="card-icon">+</div><span class="card-badge">Interno</span></div>
         <div class="card-title">Gestión de Sellers</div>
         <div class="card-desc">Alta o edición de sellers y marcas. Generación de links y mensaje de primer contacto.</div>
         <div class="card-path">/internal/backlog/gestion-sellers.html</div>
@@ -836,14 +874,14 @@ h1 em { color:var(--g); font-style:normal; }
 
 <script>
 const RESOURCES = [
-  { key:'gestion_sellers',        label:'Gestión de Sellers',      access:'Interno', icon:'➕', accent:'var(--g)',    route:'/internal/backlog/gestion-sellers.html',          desc:'Alta o edición de sellers y marcas. Generación de links y mensajes de primer contacto.' },
+  { key:'gestion_sellers',        label:'Gestión de Sellers',      access:'Interno', icon:'+', accent:'var(--g)',    route:'/internal/backlog/gestion-sellers.html',          desc:'Alta o edición de sellers y marcas. Generación de links y mensajes de primer contacto.' },
   { key:'backlog_sellers',        label:'Backlog de Sellers',       access:'Interno', icon:'▦', accent:'var(--info)', route:'/internal/backlog/backlog-sellers.html',           desc:'Pipeline comercial: estado, prioridad, bloqueos, readiness y seguimiento por seller.' },
   { key:'gantt_operativo',        label:'Seguimiento Operativo',          access:'Interno', icon:'▣', accent:'var(--teal)', route:'/internal/gantt/gantt-operativo.html',             desc:'Seguimiento de tareas: responsables, fechas, bloqueos y próximos hitos.' },
   { key:'dashboard_seller_center',label:'Dashboard Seller Center',  access:'Interno', icon:'◉', accent:'var(--g)',    route:'/internal/seller-center/index.html',               desc:'Panel institucional y operativo del Seller Center.' },
   { key:'maqueta_seller_center',  label:'Maqueta Seller Center',    access:'Interno', icon:'▧', accent:'var(--warn)', route:'/internal/seller-center/maqueta-seller-center.html',desc:'Prototipo tipo PIM para validar pantallas y experiencia del Seller Center.' },
   { key:'gantt_seller_center',    label:'Gantt Seller Center',      access:'Interno', icon:'▤', accent:'var(--vio)',  route:'/internal/gantt/gantt-seller-center.html',         desc:'Roadmap de módulos y tareas de desarrollo de la plataforma.' },
   { key:'simulador_economico',    label:'Simulador Económico',      access:'Interno', icon:'$', accent:'var(--red)',  route:'/internal/simuladores/simulador-economico.html',   desc:'Herramienta interna para analizar costos, servicios y escenarios económicos.' },
-  { key:'config_tarifas',         label:'Config. Tarifas y Overrides', access:'Interno', icon:'⚙', accent:'var(--warn)', route:'/internal/simuladores/config-tarifas.html',      desc:'Editor de tarifas estándar y de condiciones especiales (overrides) por seller.' },
+  { key:'config_tarifas',         label:'Config. Tarifas y Overrides', access:'Interno', icon:'CFG', accent:'var(--warn)', route:'/internal/simuladores/config-tarifas.html',      desc:'Editor de tarifas estándar y de condiciones especiales (overrides) por seller.' },
   { key:'proyecto_marketplace',   label:'Proyecto Marketplace',     access:'Interno', icon:'◇', accent:'var(--g)',    route:'/internal/estrategia/proyecto-marketplace.html',   desc:'Contexto, objetivo, alcance y roadmap conceptual del proyecto.' },
   { key:'modelo_integracion',     label:'Modelo de Integración',    access:'Interno', icon:'⇄', accent:'var(--info)', route:'/internal/estrategia/modelo-integracion.html',     desc:'Criterios y caminos técnicos según tipo de seller.' },
   { key:'integracion_vtex_vtex',  label:'Integración VTEX ↔ VTEX',  access:'Interno', icon:'↔', accent:'var(--info)', route:'/internal/estrategia/integracion-vtex-vtex.html',  desc:'Playbook operativo del modelo VTEX ↔ VTEX: fases, tareas por rol, SLAs y hoja de ruta.' },
@@ -856,7 +894,7 @@ const RESOURCES = [
   { key:'formulario_relevamiento',label:'Formulario Relevamiento',  access:'Seller',  icon:'✎', accent:'var(--teal)', route:'/public/formularios/formulario-relevamiento.html', desc:'Relevamiento técnico completo: integración, catálogo y operación.' },
   { key:'simulador_seller',       label:'Simulador Seller',         access:'Seller',  icon:'≈', accent:'var(--warn)', route:'/public/simuladores/simulador-seller.html',        desc:'Estima el resultado económico orientativo del seller.' },
   { key:'gantt_seller',           label:'Gantt de tu proyecto',     access:'Seller',  icon:'▥', accent:'var(--teal)', route:'/public/gantt/gantt-seller.html',                  desc:'Seguimiento del proyecto de integración, visible para el seller.' },
-  { key:'integracion_seller',     label:'Guía de integración',      access:'Seller',  icon:'🔌', accent:'var(--info)', route:'/public/integracion/integracion-seller.html',      desc:'Hoja de ruta y checklist de integración VTEX ↔ VTEX para el seller.' },
+  { key:'integracion_seller',     label:'Guía de integración',      access:'Seller',  icon:'API', accent:'var(--info)', route:'/public/integracion/integracion-seller.html',      desc:'Hoja de ruta y checklist de integración VTEX ↔ VTEX para el seller.' },
 ];
 
 function toUrl(route) {

@@ -288,8 +288,8 @@ tbody tr{cursor:pointer}
 
   </aside>
 
-  <div class="content-wrap">
-    <div class="page-title">
+  <div class="content-wrap portal-ops-main">
+    <div class="page-title portal-ops-title">
       <div class="eyebrow">Flujo de incorporación</div>
       <h1>Backlog de <span>Sellers</span></h1>
       <p class="lead">Pipeline completo de sellers en proceso de incorporación: estado, prioridad, modelo de integración y próximo paso de cada uno.</p>
@@ -302,7 +302,7 @@ tbody tr{cursor:pointer}
       <div class="kpi"><div class="kpi-val d" id="kpi-blk">—</div><div class="kpi-lbl">Bloqueados</div></div>
       <div class="kpi"><div class="kpi-val w" id="kpi-alta">—</div><div class="kpi-lbl">Alta prioridad</div></div>
     </div>
-    <div class="filter-bar">
+    <div class="filter-bar portal-ops-filter">
       <div class="filter-group">
         <label class="fi-label" for="search-input">Buscar</label>
         <input class="search-input" id="search-input" type="text" placeholder="Seller, ID, grupo o marca…" oninput="renderContent()">
@@ -368,7 +368,7 @@ tbody tr{cursor:pointer}
         <button class="button secondary" onclick="exportExcel()" title="Exportar vista filtrada a Excel">↓ Excel</button>
       </div>
     </div>
-    <div class="content-area" id="content-area">
+    <div class="content-area portal-ops-content" id="content-area">
       <div class="state-box"><div class="state-icon">⟳</div><div class="state-title">Cargando backlog</div><div class="state-desc">Conectando con la base operativa de sellers…</div></div>
     </div>
   </div>

@@ -443,11 +443,12 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
   </aside>
 
   <!-- MAIN -->
-  <main class="main">
-    <div class="main-header">
+  <main class="main portal-ops-main">
+    <div class="main-header portal-ops-title">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
         <div>
-          <div class="main-title">Gantt Seller Center</div>
+          <div class="ops-eyebrow">Seller Center</div>
+          <h1 class="main-title">Gantt Seller Center</h1>
           <div class="main-sub">Roadmap funcional del Seller Center: módulos, modalidades, hitos, dependencias y avance real para coordinar implementación. Clic en barra para detalle completo · <kbd style="font-size:9px;padding:1px 5px;border:1px solid var(--bdr);border-radius:3px;color:var(--t3)">T</kbd> hoy · <kbd style="font-size:9px;padding:1px 5px;border:1px solid var(--bdr);border-radius:3px;color:var(--t3)">Esc</kbd> cerrar drawer</div>
         </div>
         <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
@@ -456,7 +457,7 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
       </div>
     </div>
 
-    <div class="sc-topbar">
+    <div class="sc-topbar portal-ops-filter">
       <div class="stats-strip">
         <div class="stat-card"><div class="stat-num" id="stTotal">—</div><div class="stat-lbl">Tareas</div></div>
         <div class="stat-card"><div class="stat-num" id="stAvg">—</div><div class="stat-lbl">Avance</div></div>
@@ -470,7 +471,7 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
       </div>
     </div>
 
-    <div class="filter-bar">
+    <div class="filter-bar portal-ops-filter">
       <div class="filter-group">
         <label class="sb-lbl" for="searchInput">Buscar</label>
         <input class="sb-search" id="searchInput" placeholder="Tarea, módulo, ID, responsable…" oninput="applyFilters()">
@@ -524,7 +525,7 @@ input[type=range].zoom-slider{flex:1;accent-color:var(--g);height:4px}
       </div>
     </div>
 
-    <details class="sc-modprogress">
+    <details class="sc-modprogress portal-ops-strip">
       <summary>Avance por módulo</summary>
       <div class="mod-list" id="modList"></div>
     </details>

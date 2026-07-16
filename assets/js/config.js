@@ -18,12 +18,17 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.16',
+  number: '1.4.21',
   date:   '2026-07-16',
-  notes:  'Mejora el modal de alta de usuario',
+  notes:  'Se alinean paginas publicas simples',
 };
 
 const CHANGELOG = [
+  { v: '1.4.21', date: '2026-07-16', desc: 'Las paginas publicas simples del portal seller adoptan un marco visual liviano: margenes consistentes, radios de 8px y codigos de recursos mas estables.' },
+  { v: '1.4.20', date: '2026-07-16', desc: 'El Hub Central se alinea al shell interno: margenes, radios de cards/paneles y jerarquia visual quedan consistentes con las pantallas operativas migradas.' },
+  { v: '1.4.19', date: '2026-07-16', desc: 'El Simulador Economico adopta un marco visual propio de herramienta: encabezado interno con jerarquia clara, margenes operativos consistentes y columnas de resultados/tarifas alineadas sin tocar calculos.' },
+  { v: '1.4.18', date: '2026-07-16', desc: 'Gantt Seller Center adopta el mismo marco portal-ops-* que las pantallas operativas densas: header, KPIs, filtros y avance por modulo quedan alineados al ancho comun.' },
+  { v: '1.4.17', date: '2026-07-16', desc: 'Se agrega una capa opt-in portal-ops-* para normalizar el marco visual de pantallas operativas densas: Backlog, Gestion de Sellers y Seguimiento Operativo alinean ancho, encabezados y filtros sin tocar su logica.' },
   { v: '1.4.16', date: '2026-07-16', desc: 'Se mejora el modal de alta/edición de usuario en Configuración: selector segmentado Interno/Seller, errores por campo, validación de email, generador de contraseña, cierre con Escape/click afuera y Enter para guardar, y aviso de cuántas cuentas activas tiene ya un seller.' },
   { v: '1.4.15', date: '2026-07-16', desc: 'Se permite crear varias cuentas Seller para el mismo seller_id (antes era una cuenta compartida). Configuración suma buscador y filtro por seller, el alta de usuario Seller pasa de texto libre a un selector con los sellers reales, y se agrega un resguardo para no dejar a un seller sin ninguna cuenta activa.' },
   { v: '1.4.14', date: '2026-07-16', desc: 'Se introducen primitivas opt-in portal-* para KPIs, panels, campos y cards, aplicadas inicialmente en Config. Tarifas y Seller Center.' },

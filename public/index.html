@@ -42,6 +42,14 @@
   .bar-track{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
   .bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-hover));border-radius:99px;transition:width .6s ease}
 
+
+  /* 2026-07-16 - Etapa 8: marco publico simple para portal seller. */
+  .public-simple-main.public-simple-main{padding:46px 38px 76px}
+  .public-simple-main.public-simple-main .card,
+  .public-simple-main.public-simple-main .stat-card,
+  .public-simple-main.public-simple-main .empty{border-radius:8px;box-shadow:none}
+  .public-simple-main.public-simple-main .card:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+  .public-simple-main.public-simple-main .card .ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;border:1px solid var(--line);background:var(--bg);font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--primary);margin-bottom:10px}
   @media(max-width:720px){.grid{grid-template-columns:1fr}.progress-section{grid-template-columns:1fr}.main{padding:40px 20px 60px}}
 </style>
 </head>
@@ -58,7 +66,7 @@
     </div>
   </header>
 
-  <main class="main">
+  <main class="main public-simple-main">
     <div class="hero-eyebrow">Bienvenido</div>
     <h1 id="hero-title">Tu espacio en el Marketplace</h1>
     <p class="lead">Desde acá accedés a la presentación, los formularios y las herramientas de tu proceso con Sporting Marketplace.</p>
@@ -85,12 +93,12 @@
   <script src="../assets/js/auth-seller.js"></script>
   <script>
     const ICONS = {
-      formulario_calificacion: "📝",
-      formulario_relevamiento: "📋",
-      presentacion_seller:     "📣",
-      simulador_seller:        "🧮",
-      gantt_seller:            "📊",
-      integracion_seller:      "🔌",
+      formulario_calificacion: "FORM",
+      formulario_relevamiento: "REL",
+      presentacion_seller:     "PPT",
+      simulador_seller:        "SIM",
+      gantt_seller:            "GAN",
+      integracion_seller:      "API",
     };
 
     async function loadProgressSummary() {
@@ -141,7 +149,7 @@
       grid.innerHTML = resources.map(function (r) {
         const href = r.route.replace(/^\/public\//, '');
         return '<a class="card" href="' + href + '">' +
-          '<span class="ico">' + (ICONS[r.key] || '🔗') + '</span>' +
+          '<span class="ico">' + (ICONS[r.key] || 'LINK') + '</span>' +
           '<strong>' + r.label + '</strong>' +
           '<em>Abrir →</em>' +
         '</a>';

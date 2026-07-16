@@ -1040,3 +1040,91 @@
     grid-column:auto;
   }
 }
+
+
+/* 2026-07-16 - Etapa 6: marco visual del Simulador Economico.
+   Es una herramienta de 3 columnas, no una pagina documental: se alinean
+   margenes y jerarquia sin cambiar calculos, tabs ni columnas funcionales. */
+.sim-workbench.sim-workbench {
+  grid-template-columns:224px minmax(760px, 1fr) 248px;
+  background:var(--bg);
+}
+.sim-workbench .col-inputs > .col-header.sim-hero {
+  margin:24px 38px 0;
+  padding:0 0 14px;
+  border-bottom:1px solid var(--line);
+}
+.sim-workbench .sim-eyebrow {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  color:var(--primary);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.sim-workbench .sim-eyebrow::before {
+  content:"";
+  width:22px;
+  height:2px;
+  background:var(--primary);
+  flex:0 0 auto;
+}
+.sim-workbench .col-header.sim-hero .col-title {
+  margin:0 0 8px;
+  color:var(--text);
+  font-size:clamp(28px, 3vw, 38px);
+  font-weight:700;
+  letter-spacing:0;
+  line-height:1.05;
+  text-transform:none;
+}
+.sim-workbench .col-header.sim-hero .col-sub {
+  max-width:780px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+.sim-workbench .col-inputs > .section,
+.sim-workbench .col-results .tab-bar,
+.sim-workbench .col-results .results-inner {
+  margin-left:38px;
+  margin-right:38px;
+}
+.sim-workbench .col-inputs > .section {
+  border-radius:8px;
+  border-color:var(--line);
+}
+.sim-workbench .col-results .tab-bar {
+  margin-top:18px;
+  border-radius:8px 8px 0 0;
+}
+.sim-workbench .col-results .results-inner {
+  padding:18px 0 24px;
+}
+.sim-workbench .col-rates {
+  border-left-color:var(--line);
+}
+.sim-workbench .col-rates .col-header {
+  padding:16px 18px 12px;
+}
+@media(max-width:1180px) {
+  .sim-workbench.sim-workbench {
+    grid-template-columns:224px minmax(0, 1fr);
+  }
+}
+@media(max-width:960px) {
+  .sim-workbench .col-inputs > .col-header.sim-hero,
+  .sim-workbench .col-inputs > .section,
+  .sim-workbench .col-results .tab-bar,
+  .sim-workbench .col-results .results-inner {
+    margin-left:18px;
+    margin-right:18px;
+    max-width:calc(100% - 36px);
+  }
+  .sim-workbench .col-header.sim-hero .col-title {
+    font-size:28px;
+  }
+}

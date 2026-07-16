@@ -1220,3 +1220,121 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
     display: none;
   }
 }
+/* 2026-07-16 - Marco opt-in para pantallas operativas densas.
+   Backlog, Gantt y Gestion de Sellers necesitan usar todo el ancho y mantener
+   controles/tablas compactas, pero con el mismo arranque visual que el resto
+   del portal interno. */
+.portal-ops-main.portal-ops-main,
+.portal-ops-wrap.portal-ops-wrap {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+.portal-ops-main.portal-ops-main {
+  background: var(--bg, #f3f6fb);
+}
+
+.portal-ops-title.portal-ops-title,
+.portal-ops-hero.portal-ops-hero {
+  padding: 26px 38px 14px;
+}
+
+.portal-ops-title.portal-ops-title .eyebrow,
+.portal-ops-title.portal-ops-title .ops-eyebrow,
+.portal-ops-hero.portal-ops-hero .eyebrow,
+.portal-ops-hero.portal-ops-hero .ops-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: var(--primary, #25b60c);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.portal-ops-title.portal-ops-title .eyebrow::before,
+.portal-ops-title.portal-ops-title .ops-eyebrow::before,
+.portal-ops-hero.portal-ops-hero .eyebrow::before,
+.portal-ops-hero.portal-ops-hero .ops-eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--primary, #25b60c);
+  flex: 0 0 auto;
+}
+
+.portal-ops-title.portal-ops-title h1,
+.portal-ops-title.portal-ops-title .ops-title,
+.portal-ops-hero.portal-ops-hero h1,
+.portal-ops-hero.portal-ops-hero .ops-title {
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 10px;
+}
+
+.portal-ops-title.portal-ops-title .lead,
+.portal-ops-title.portal-ops-title .ops-lead,
+.portal-ops-hero.portal-ops-hero .lead,
+.portal-ops-hero.portal-ops-hero .ops-lead {
+  max-width: 780px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted, #6b7280);
+}
+
+.portal-ops-filter.portal-ops-filter {
+  padding: 16px 38px;
+  gap: 12px;
+  align-items: end;
+}
+
+.portal-ops-filter.portal-ops-filter .filter-group {
+  min-width: 160px;
+}
+
+.portal-ops-content.portal-ops-content {
+  padding: 24px 38px 72px;
+}
+.portal-ops-strip.portal-ops-strip {
+  margin: 12px 38px 0;
+}
+
+.portal-ops-panel.portal-ops-panel {
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: var(--radius, 14px);
+  background: var(--card, #fff);
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(17, 24, 39, .06));
+}
+
+@media (max-width: 980px) {
+  .portal-ops-title.portal-ops-title,
+  .portal-ops-hero.portal-ops-hero,
+  .portal-ops-filter.portal-ops-filter,
+  .portal-ops-content.portal-ops-content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .portal-ops-filter.portal-ops-filter .filter-group {
+    min-width: 0;
+  }
+
+  .portal-ops-strip.portal-ops-strip {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+}
+
+
+.shell > .portal-ops-wrap.portal-ops-wrap.main {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  min-width: 0;
+  padding: 26px 38px 72px;
+}
