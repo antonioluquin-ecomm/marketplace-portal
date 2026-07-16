@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-16 - Permite varias cuentas Seller por seller_id
+
+Tipo de cambio: cambio de comportamiento de backend + mejora de frontend.
+
+Antes, `apps-script/Users.gs` bloqueaba crear más de una cuenta de tipo Seller para un mismo `seller_id` ("cuenta compartida"). Un seller como Topper que necesitaba varios accesos (uno por persona) tenía que compartir usuario y contraseña entre todo su equipo.
+
+- Se sacan las dos validaciones de unicidad en `createUsuario`/`updateUsuario` (Users.gs). El resto del backend (Gantt, Relevamientos, Tarifas, Sellers) ya scopeaba los datos por el `seller_id` de la sesión individual, no por unicidad de cuenta, así que no requirió cambios.
+- En Configuración → Usuarios: se agrega un buscador y un filtro por seller, y el campo "Seller ID" del alta/edición pasa de texto libre a un `<select>` con los sellers reales (evita typos).
+- La tabla de usuarios ahora muestra el nombre del seller (no solo el código) junto a cada cuenta.
+- Se agrega un invariante nuevo en `updateUsuario`: no se puede desactivar, cambiar de rol o reasignar la última cuenta Seller activa de un `seller_id` (mismo patrón que "siempre debe quedar un Administrador activo"), para no dejar a un seller sin acceso a public/ por error.
+- **Requiere redeploy manual de Apps Script** (Users.gs) para que el cambio de backend tenga efecto.
+
 ## 2026-07-16 - Introduce primitivas visuales opt-in para componentes internos
 
 Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
@@ -10,6 +22,7 @@ Etapa 3 de consistencia visual: se agregan componentes `portal-*` reutilizables 
 - Aplicacion inicial en Config. Tarifas: resumen superior, panels de configuracion y grillas de campos.
 - Aplicacion inicial en Seller Center: KPIs de overview y grilla de herramientas.
 - Se mantiene opt-in para no alterar Backlog, Gantt ni Simulador Economico, que tienen layouts densos propios.
+
 ## 2026-07-16 - Normaliza encabezados y espaciado base de paginas internas
 
 Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).

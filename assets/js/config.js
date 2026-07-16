@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.14',
+  number: '1.4.15',
   date:   '2026-07-16',
-  notes:  'Se normalizan componentes internos',
+  notes:  'Varias cuentas Seller por seller_id',
 };
 
 const CHANGELOG = [
+  { v: '1.4.15', date: '2026-07-16', desc: 'Se permite crear varias cuentas Seller para el mismo seller_id (antes era una cuenta compartida). Configuración suma buscador y filtro por seller, el alta de usuario Seller pasa de texto libre a un selector con los sellers reales, y se agrega un resguardo para no dejar a un seller sin ninguna cuenta activa.' },
   { v: '1.4.14', date: '2026-07-16', desc: 'Se introducen primitivas opt-in portal-* para KPIs, panels, campos y cards, aplicadas inicialmente en Config. Tarifas y Seller Center.' },
   { v: '1.4.13', date: '2026-07-16', desc: 'Se normaliza el espaciado y la jerarquia de encabezados internos en paginas de administracion, estrategia, Seller Center y Config. Tarifas mediante el patron opt-in portal-main.' },
   { v: '1.4.12', date: '2026-07-16', desc: 'El Simulador Economico interno nunca usaba tarifas en vivo (bug de orden de scripts, mismo patron que el Gantt Seller Center) y el toggle de Logistica directa no recalculaba el total. Ambos corregidos.' },

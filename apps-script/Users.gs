@@ -20,8 +20,15 @@
  *                      fecha_creacion, activa
  *
  * Etapa 1: rol de sistema Administrador (id=1), solo staff interno.
- * Etapa 3: rol de sistema Seller (id=2) — cuenta compartida por seller_id,
- * usada para loguearse en public/ (ver public/login.html + auth-seller.js).
+ * Etapa 3: rol de sistema Seller (id=2), usada para loguearse en public/
+ * (ver public/login.html + auth-seller.js). Un mismo seller_id puede tener
+ * varias cuentas Seller (una por persona del equipo del seller) — no hay
+ * restricción de unicidad; cada usuario mantiene su propio email/contraseña
+ * y el scope de datos (Gantt, Relevamientos, Tarifas, Sellers) se resuelve
+ * por el seller_id de SU fila en USUARIOS, no por una cuenta única (ver
+ * _aplicarSellerScope en Helpers.gs). updateUsuario() sí impide dejar a un
+ * seller sin NINGUNA cuenta Seller activa (mismo patrón que el invariante
+ * de Administrador), para no bloquearlo del todo por error.
  * La columna `seller_id` en USUARIOS queda vacía para cuentas de staff.
  * Los roles de Sistema (Admin y Seller) no usan PERMISOS_MODULOS.
  */
@@ -625,14 +632,9 @@ function createUsuario(body) {
 
   var existing  = sheet.getDataRange().getValues();
   var eEmailIdx = existing[0].indexOf("email");
-  var eSelIdx   = existing[0].indexOf("seller_id");
   for (var i = 1; i < existing.length; i++) {
     if (String(existing[i][eEmailIdx]).toLowerCase() === email) {
       return { ok: false, error: "El email ya está en uso", code: 409 };
-    }
-    if (id_rol === 2 && sellerId && eSelIdx !== -1 &&
-        String(existing[i][eSelIdx] || "").trim().toUpperCase() === sellerId.toUpperCase()) {
-      return { ok: false, error: "Ya existe una cuenta para el seller " + sellerId, code: 409 };
     }
   }
 
@@ -663,6 +665,7 @@ function updateUsuario(body) {
   // Invariante: el sistema nunca puede quedarse sin un Administrador activo.
   var rolColIdx = headers.indexOf("id_rol");
   var actColIdx = headers.indexOf("activo");
+  var selColIdx = headers.indexOf("seller_id");
   var rowActual = allData[rowNum - 1];
   var eraAdmin  = Number(rowActual[rolColIdx]) === 1 && String(rowActual[actColIdx]) === "SI";
   if (eraAdmin) {
@@ -680,6 +683,31 @@ function updateUsuario(body) {
     }
   }
 
+  // Invariante: un seller nunca puede quedarse sin ninguna cuenta Seller activa
+  // (bloquea desactivar/reasignar la ÚLTIMA cuenta activa de un seller_id dado;
+  // no aplica si ya tiene otra cuenta activa cubriéndolo).
+  var eraSellerActivo = selColIdx !== -1 && Number(rowActual[rolColIdx]) === 2 &&
+    String(rowActual[actColIdx]) === "SI" && String(rowActual[selColIdx] || "").trim() !== "";
+  if (eraSellerActivo) {
+    var sellerOriginal  = String(rowActual[selColIdx]).trim().toUpperCase();
+    var dejaRolSeller    = data.id_rol !== undefined && Number(data.id_rol) !== 2;
+    var cambiaSellerId   = data.seller_id !== undefined && String(data.seller_id).trim().toUpperCase() !== sellerOriginal;
+    var desactivaSeller  = data.activo !== undefined && data.activo !== "SI";
+    if (dejaRolSeller || cambiaSellerId || desactivaSeller) {
+      var otrasCuentasSeller = 0;
+      for (var b = 1; b < allData.length; b++) {
+        if (b === rowNum - 1) continue;
+        if (Number(allData[b][rolColIdx]) === 2 && String(allData[b][actColIdx]) === "SI" &&
+            String(allData[b][selColIdx] || "").trim().toUpperCase() === sellerOriginal) {
+          otrasCuentasSeller++;
+        }
+      }
+      if (otrasCuentasSeller === 0) {
+        return { ok: false, error: "El seller " + rowActual[selColIdx] + " se quedaría sin ninguna cuenta activa. Creá o activá otra cuenta para ese seller antes de continuar.", code: 409 };
+      }
+    }
+  }
+
   if (data.email !== undefined) {
     var newEmail = String(data.email).toLowerCase().trim();
     var colId = headers.indexOf("id");
@@ -690,22 +718,6 @@ function updateUsuario(body) {
       }
     }
     sheet.getRange(rowNum, colEm + 1).setValue(newEmail);
-  }
-
-  // Guard: no permitir dos cuentas Seller con el mismo seller_id.
-  var selColIdx  = headers.indexOf("seller_id");
-  var rolFinal   = data.id_rol !== undefined ? Number(data.id_rol) : Number(rowActual[rolColIdx]);
-  var sellerFinal = data.seller_id !== undefined
-    ? String(data.seller_id).trim()
-    : (selColIdx !== -1 ? String(rowActual[selColIdx] || "").trim() : "");
-  if (rolFinal === 2 && sellerFinal && selColIdx !== -1) {
-    var idColIdx = headers.indexOf("id");
-    for (var s = 1; s < allData.length; s++) {
-      if (Number(allData[s][idColIdx]) === id) continue;
-      if (String(allData[s][selColIdx] || "").trim().toUpperCase() === sellerFinal.toUpperCase()) {
-        return { ok: false, error: "Ya existe una cuenta para el seller " + sellerFinal, code: 409 };
-      }
-    }
   }
 
   if (data.nombre !== undefined) sheet.getRange(rowNum, headers.indexOf("nombre") + 1).setValue(String(data.nombre).trim());

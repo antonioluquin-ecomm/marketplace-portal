@@ -382,6 +382,8 @@ function _renderUserIndicator() {
 /* ─── GESTIÓN DE USUARIOS / ROLES / PERMISOS (admin) ─────────── */
 
 let _rolesData = [];
+let _sellersData = [];
+let _usuariosData = [];
 
 function renderUserManagementSection() {
   if (!SESSION.isAdmin()) return;
@@ -404,7 +406,18 @@ function renderUserManagementSection() {
             <h2>Usuarios del sistema</h2>
             <p class="text-muted" id="usuarios-count">Cargando…</p>
           </div>
-          <button class="button" onclick="_openUserForm()">+ Nuevo usuario</button>
+          <button class="button" id="uf-new-btn" disabled onclick="_openUserForm()">+ Nuevo usuario</button>
+        </div>
+        <div id="uf-sellers-error" class="status-bar error" style="margin-bottom:14px" hidden></div>
+        <div class="field-row" style="margin-bottom:14px">
+          <div class="field" style="max-width:280px">
+            <input type="search" id="uf-search" placeholder="Buscar por nombre, email o seller…" oninput="_renderUsuariosTable()">
+          </div>
+          <div class="field" style="max-width:260px">
+            <select id="uf-seller-filter" onchange="_renderUsuariosTable()">
+              <option value="">Todos los sellers</option>
+            </select>
+          </div>
         </div>
         <div id="usuarios-table-wrap"><div class="status-bar">Cargando usuarios…</div></div>
       </section>
@@ -488,9 +501,9 @@ function renderUserManagementSection() {
             <select id="uf-rol"></select>
           </div>
           <div class="field" id="uf-sellerid-wrap" hidden>
-            <label for="uf-sellerid">Seller ID *</label>
-            <input id="uf-sellerid" placeholder="SPT-XXX">
-            <span class="field-hint">Debe coincidir con el seller_id de la hoja sellers</span>
+            <label for="uf-sellerid">Seller *</label>
+            <select id="uf-sellerid"></select>
+            <span class="field-hint">Podés dar de alta varias cuentas para el mismo seller</span>
           </div>
         </div>
         <div class="status-bar error" id="uf-error" style="margin-top:10px" hidden></div>
@@ -521,7 +534,17 @@ function renderUserManagementSection() {
   host.appendChild(section);
   const urlEl = document.getElementById('cfg-apps-script-url');
   if (urlEl) urlEl.textContent = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) || '—';
-  _loadRoles().then(_loadUsuarios);
+  Promise.all([_loadRoles(), _loadSellers()]).then(function (results) {
+    const sellersOk = results[1];
+    const errEl = document.getElementById('uf-sellers-error');
+    if (errEl) {
+      errEl.textContent = 'No se pudo cargar la lista de sellers. Recargá la página o revisá la conexión con Apps Script antes de crear o editar cuentas de tipo Seller.';
+      errEl.hidden = sellersOk !== false;
+    }
+    const newBtn = document.getElementById('uf-new-btn');
+    if (newBtn) newBtn.disabled = false;
+    _loadUsuarios();
+  });
 }
 
 async function _testConexionApi() {
@@ -574,6 +597,59 @@ async function _loadRoles() {
   _populateRolSelect();
 }
 
+function _sellerNombre(sellerId) {
+  if (!sellerId) return '';
+  const s = _sellersData.find(function (x) { return String(x.seller_id).toUpperCase() === String(sellerId).toUpperCase(); });
+  return s ? (s.seller_nombre || s.seller_id) : sellerId;
+}
+
+function _sellersOrdenados() {
+  return _sellersData.slice().sort(function (a, b) {
+    return String(a.seller_nombre || a.seller_id).localeCompare(String(b.seller_nombre || b.seller_id), 'es');
+  });
+}
+
+function _populateSellerSelect(selectedId) {
+  const sel = document.getElementById('uf-sellerid');
+  if (!sel) return;
+  const selectedUp = selectedId != null ? String(selectedId).toUpperCase() : null;
+  sel.innerHTML = '<option value="">— Seleccioná un seller —</option>' + _sellersOrdenados().map(function (s) {
+    return '<option value="' + _escHtml(s.seller_id) + '">' + _escHtml(s.seller_nombre || s.seller_id) + ' (' + _escHtml(s.seller_id) + ')</option>';
+  }).join('');
+  if (selectedUp) {
+    const match = _sellersData.find(function (s) { return String(s.seller_id).toUpperCase() === selectedUp; });
+    sel.value = match ? match.seller_id : '';
+  }
+}
+
+function _populateSellerFilter() {
+  const sel = document.getElementById('uf-seller-filter');
+  if (!sel) return;
+  const usados = {};
+  _usuariosData.forEach(function (u) { if (u.seller_id) usados[String(u.seller_id).toUpperCase()] = true; });
+  const ordenados = _sellersOrdenados().filter(function (s) { return usados[String(s.seller_id).toUpperCase()]; });
+  const actual = sel.value;
+  sel.innerHTML = '<option value="">Todos los sellers</option>' + ordenados.map(function (s) {
+    return '<option value="' + _escHtml(s.seller_id) + '">' + _escHtml(s.seller_nombre || s.seller_id) + '</option>';
+  }).join('');
+  sel.value = actual;
+}
+
+async function _loadSellers() {
+  try {
+    const res = await _apiAuthPost({ action: 'getSellers' });
+    _sellersData = res.data || [];
+    return true;
+  } catch (e) {
+    _sellersData = [];
+    return false;
+  }
+}
+
+function _normalizeText(v) {
+  return (v || '').toString().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
 let _editingUserId = null;
 
 function _setTipoCuenta(tipo) {
@@ -599,7 +675,7 @@ function _openUserForm(usuario) {
 
   const esSeller = !!(usuario && usuario.seller_id);
   _setTipoCuenta(esSeller ? 'seller' : 'interno');
-  document.getElementById('uf-sellerid').value = (usuario && usuario.seller_id) || '';
+  _populateSellerSelect(usuario && usuario.seller_id);
 
   if (usuario) {
     if (title)  title.textContent = 'Editar usuario';
@@ -645,7 +721,7 @@ async function _saveUser() {
     return;
   }
   if (esSeller && !sellerId) {
-    if (errEl) { errEl.textContent = 'El Seller ID es requerido para cuentas de tipo Seller.'; errEl.hidden = false; }
+    if (errEl) { errEl.textContent = 'Elegí un seller para la cuenta.'; errEl.hidden = false; }
     return;
   }
   if (!_editingUserId && !password.trim()) {
@@ -680,54 +756,77 @@ async function _loadUsuarios() {
   if (!wrap) return;
 
   try {
-    const res      = await _apiAuthPost({ action: 'getUsuarios' });
-    const usuarios = res.data || [];
-
-    const countEl = document.getElementById('usuarios-count');
-    if (countEl) countEl.textContent = usuarios.length + ' usuario' + (usuarios.length !== 1 ? 's' : '');
-
-    if (!usuarios.length) {
-      wrap.innerHTML = '<div class="status-bar">No hay usuarios configurados.</div>';
-      return;
-    }
-
-    wrap.innerHTML = `
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Rol</th>
-              <th>Estado</th>
-              <th style="text-align:right">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${usuarios.map(function (u) {
-              const rolLabel = _rolNombre(u.id_rol);
-              const activo   = u.activo === 'SI';
-              const uJson    = JSON.stringify(u).replace(/"/g, '&quot;');
-              return `<tr>
-                <td>${_escHtml(u.nombre || '—')}</td>
-                <td style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">${_escHtml(u.email || '—')}</td>
-                <td>${_escHtml(rolLabel)}${u.seller_id ? ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : ''}</td>
-                <td><span class="status-pill ${activo ? 'active' : 'inactive'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
-                <td>
-                  <div class="row-actions">
-                    <button class="button secondary" onclick="_openUserForm(${uJson})">Editar</button>
-                    <button class="button ${activo ? 'danger' : 'secondary'}" onclick="_toggleUserActivo(${u.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>
-                  </div>
-                </td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
+    const res = await _apiAuthPost({ action: 'getUsuarios' });
+    _usuariosData = res.data || [];
   } catch (err) {
     wrap.innerHTML = '<div class="status-bar error">Error: ' + (err.message || 'No se pudo cargar') + '</div>';
+    return;
   }
+
+  _populateSellerFilter();
+  _renderUsuariosTable();
+}
+
+function _renderUsuariosTable() {
+  const wrap = document.getElementById('usuarios-table-wrap');
+  if (!wrap) return;
+
+  const q      = _normalizeText((document.getElementById('uf-search') || {}).value);
+  const seller = (document.getElementById('uf-seller-filter') || {}).value || '';
+
+  const usuarios = _usuariosData.filter(function (u) {
+    if (seller && String(u.seller_id || '').toUpperCase() !== seller.toUpperCase()) return false;
+    if (!q) return true;
+    const haystack = _normalizeText(u.nombre + ' ' + u.email + ' ' + u.seller_id + ' ' + _sellerNombre(u.seller_id));
+    return haystack.indexOf(q) !== -1;
+  });
+
+  const countEl = document.getElementById('usuarios-count');
+  if (countEl) {
+    countEl.textContent = usuarios.length + ' de ' + _usuariosData.length + ' usuario' + (_usuariosData.length !== 1 ? 's' : '');
+  }
+
+  if (!usuarios.length) {
+    wrap.innerHTML = '<div class="status-bar">Ningún usuario coincide con el filtro.</div>';
+    return;
+  }
+
+  wrap.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Seller</th>
+            <th>Estado</th>
+            <th style="text-align:right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${usuarios.map(function (u) {
+            const rolLabel = _rolNombre(u.id_rol);
+            const activo   = u.activo === 'SI';
+            const uJson    = JSON.stringify(u).replace(/"/g, '&quot;');
+            return `<tr>
+              <td>${_escHtml(u.nombre || '—')}</td>
+              <td style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">${_escHtml(u.email || '—')}</td>
+              <td>${_escHtml(rolLabel)}</td>
+              <td>${u.seller_id ? _escHtml(_sellerNombre(u.seller_id)) + ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : '<span class="text-muted">—</span>'}</td>
+              <td><span class="status-pill ${activo ? 'active' : 'inactive'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
+              <td>
+                <div class="row-actions">
+                  <button class="button secondary" onclick="_openUserForm(${uJson})">Editar</button>
+                  <button class="button ${activo ? 'danger' : 'secondary'}" onclick="_toggleUserActivo(${u.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>
+                </div>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 async function _toggleUserActivo(id, nuevoActivo) {
