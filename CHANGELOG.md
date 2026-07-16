@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-16 - Simplifica el header publico
+
+Tipo de cambio: mejora de jerarquia visual de frontend (sin cambios de backend ni de datos).
+
+- El header conserva solo marca, navegacion del flujo y controles de sesion.
+- Se retiran del topbar el breadcrumb, la identidad duplicada del seller, la comision, el estado de carga y los CTA contextuales.
+- Los datos y acciones siguen disponibles dentro del contenido de cada pagina, sin romper sus IDs ni su logica.
+
 ## 2026-07-16 - Unifica headers de paginas publicas de sellers
 
 Tipo de cambio: mejora estructural y visual de frontend (sin cambios de backend ni de datos).

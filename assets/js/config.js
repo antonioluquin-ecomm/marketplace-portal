@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.28',
+  number: '1.4.29',
   date:   '2026-07-16',
-  notes:  'Unifica el header de las paginas publicas de sellers',
+  notes:  'Simplifica el header publico a informacion global',
 };
 
 const CHANGELOG = [
+  { v: '1.4.29', date: '2026-07-16', desc: 'El header publico conserva solo marca, navegacion y sesion; seller, comision, estado de carga, breadcrumb y CTA quedan en el contenido contextual.' },
   { v: '1.4.28', date: '2026-07-16', desc: 'Las seis paginas publicas adoptan el mismo header de tres zonas: marca, navegacion centrada y acciones alineadas a la derecha.' },
   { v: '1.4.27', date: '2026-07-16', desc: 'El Simulador Seller elimina su sobrescritura clara del logo y adopta el mismo fondo grafito que Presentacion, Calificacion y Relevamiento.' },
   { v: '1.4.26', date: '2026-07-16', desc: 'Los logos blancos de sellers se presentan sobre fondos grafito en chips y tarjetas para asegurar contraste y legibilidad.' },

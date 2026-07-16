@@ -374,6 +374,17 @@ small {
 .portal-topbar.portal-topbar > .tb-right,
 .portal-topbar.portal-topbar > .user-chip { justify-self: end; margin-left: 0; }
 
+/* El header contiene solo informacion global. El contexto operativo queda
+   dentro del contenido de cada pagina, donde no compite con la navegacion. */
+.portal-topbar.portal-topbar .crumb,
+.portal-topbar.portal-topbar .seller-id-chip,
+.portal-topbar.portal-topbar .tb-chip,
+.portal-topbar.portal-topbar .status,
+.portal-topbar.portal-topbar .tb-cta,
+.portal-topbar.portal-topbar .button.cta {
+  display: none !important;
+}
+
 /* Etapa 27B: patron comun de headers/topbars publicos. */
 .topbar {
   min-height: 56px;
