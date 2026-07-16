@@ -1,5 +1,36 @@
 # Changelog
 
+## 2026-07-16 - Normaliza encabezados y espaciado base de paginas internas
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 2 de consistencia visual: se introduce el patron opt-in `portal-main` para alinear el arranque de paginas internas con encabezado clasico.
+
+- Se agrega CSS comun para padding de pagina, subnav, eyebrow, H1/titulo y lead inicial.
+- Se aplica en Administracion, paginas de Estrategia, Dashboard Seller Center y Config. Tarifas.
+- Se excluyen por ahora Backlog/Gantt/Simulador Economico porque son herramientas densas con layout propio y requieren una pasada de componentes/tablas separada.
+
+## 2026-07-16 - Corrige dos bugs reales del Simulador Económico interno
+
+Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).
+
+Auditoría pedida por el usuario sobre `simulador-economico.html`. Encontró dos bugs reales, uno serio.
+
+- **El simulador nunca usaba tarifas en vivo** (mismo patrón que el bug de seguridad ya corregido en Gantt Seller Center): `loadRates()` se llamaba al final del `<script>` principal, que aparecía *antes* de los `<script>` de `config.js`/`auth.js`/`initAuth('simuladores')` en el documento. Como `_apiAuthPost` recién se define al cargar `auth.js`, cada carga de la página tiraba `ReferenceError: _apiAuthPost is not defined`, caía siempre en el catch, y el simulador quedaba permanentemente en "Tarifas de respaldo" — nunca reflejaba los valores cargados en Config. Tarifas, y el selector de sellers nunca se poblaba desde la hoja real. El mensaje de error ("No se pudo cargar tarifas desde Google Sheets") sugería un problema de conexión, no un bug de orden de scripts. Se reordenan los `<script>` para que carguen antes del script principal, mismo patrón ya aplicado en `gantt-operativo.html` y `gantt-seller-center.html`.
+- **El toggle de "Logística directa" no recalculaba el total al tildarlo**: su `onchange` llamaba `toggleSvcSub('sub-ld', false)`, pero no existe ningún elemento `sub-ld` en el archivo (a diferencia de Catalogación/Soporte, que sí tienen sub-campo) — la llamada tiraba error y cortaba la ejecución antes de llegar a `recalc()`. Resto de copy-paste de los checkboxes con sub-campo. Se saca la llamada, dejando `onchange="recalc()"` como en los demás servicios sin sub-campo.
+- Verificado en local con sesión y datos mock: el status pasa a "Tarifas actualizadas" (`lastRatesSource: 'live'`) con los valores mockeados, y tildar "Logística directa" actualiza el total sin error de consola.
+
+## 2026-07-16 - Normaliza la primera etapa del shell interno
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Inicio de Etapa 0 + 1 de consistencia visual del portal: se ajusta la base comun del shell antes de avanzar sobre cards, tablas o componentes de cada modulo.
+
+- El boton de colapso del sidebar deja de insertarse dentro de las acciones del topbar y pasa a montarse en `body`, con posicion fija propia. Asi no ocupa espacio ni puede tapar titulos o badges del header.
+- Se compacta el espacio superior del sidebar canonico y el gap entre secciones para que el primer item de navegacion quede mas alineado entre paginas.
+- Se mantiene el comportamiento de colapsar/expandir sidebar por `data-sidebar`, con el mismo estado persistido en `localStorage`.
+- Verificado con servidor local: Hub, Backlog, Proyecto Marketplace, Config. Tarifas, Simulador Economico y Public Hub responden 200. La inspeccion headless con Chrome quedo bloqueada por permisos del entorno (`spawn EPERM`).
+
 ## 2026-07-15 - Saca el panel "Clave de escritura" de Config. Tarifas (código muerto engañoso)
 
 Tipo de cambio: limpieza de seguridad/frontend (sin cambios de comportamiento real).

@@ -18,12 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.10',
-  date:   '2026-07-15',
-  notes:  'Se saca el panel "Clave de escritura" de Config. Tarifas',
+  number: '1.4.13',
+  date:   '2026-07-16',
+  notes:  'Se normalizan encabezados internos',
 };
 
 const CHANGELOG = [
+  { v: '1.4.13', date: '2026-07-16', desc: 'Se normaliza el espaciado y la jerarquia de encabezados internos en paginas de administracion, estrategia, Seller Center y Config. Tarifas mediante el patron opt-in portal-main.' },
+  { v: '1.4.12', date: '2026-07-16', desc: 'El Simulador Economico interno nunca usaba tarifas en vivo (bug de orden de scripts, mismo patron que el Gantt Seller Center) y el toggle de Logistica directa no recalculaba el total. Ambos corregidos.' },
+  { v: '1.4.11', date: '2026-07-16', desc: 'Se normaliza la primera etapa del shell interno: el boton de colapso del sidebar queda desacoplado del topbar y se reduce el espacio superior del menu lateral para alinear mejor las paginas.' },
   { v: '1.4.10', date: '2026-07-15', desc: 'Se saca el panel "Clave de escritura" de Config. Tarifas: era codigo muerto (nunca se enviaba al backend) que sugeria una proteccion de escritura que no existe. La escritura ya esta 100% gateada por sesion/RBAC.' },
   { v: '1.4.9', date: '2026-07-15', desc: 'Se refina el topbar interno: la marca deja de usar la placa verde completa, queda como simbolo + texto, el badge de version baja protagonismo y el control de sidebar pasa al borde del panel lateral.' },
   { v: '1.4.8', date: '2026-07-15', desc: 'Se saca una linea no-op en qfClick() y la clase CSS .dep-line sin uso del Gantt Seller Center: ninguna reproducia un bug, era codigo muerto.' },
