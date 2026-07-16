@@ -143,8 +143,8 @@ p {
   height: 54px;
   border-radius: var(--radius-card);
   object-fit: contain;
-  background: rgba(17, 24, 39, 0.05);
-  border: 1px solid var(--line);
+  background: #111827;
+  border: 1px solid #374151;
   padding: 6px;
   flex-shrink: 0;
 }

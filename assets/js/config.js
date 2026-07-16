@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.25',
+  number: '1.4.26',
   date:   '2026-07-16',
-  notes:  'Corrige la deteccion de logos blancos de sellers',
+  notes:  'Mejora el contraste de logos blancos de sellers',
 };
 
 const CHANGELOG = [
+  { v: '1.4.26', date: '2026-07-16', desc: 'Los logos blancos de sellers se presentan sobre fondos grafito en chips y tarjetas para asegurar contraste y legibilidad.' },
   { v: '1.4.25', date: '2026-07-16', desc: 'Los logos blancos sobre transparencia dejan de interpretarse como placeholders vacios y vuelven a mostrarse en las paginas publicas de sellers.' },
   { v: '1.4.24', date: '2026-07-16', desc: 'Seguimiento Operativo unifica contadores, corrige el scroll y la legibilidad de Lista, reduce acciones riesgosas y mejora contraste y accesibilidad.' },
   { v: '1.4.23', date: '2026-07-16', desc: 'El nav de las 6 paginas publicas de seller (presentacion, simulador, calificacion, relevamiento, gantt, integracion) pasa a generarse desde una unica fuente en auth-seller.js en vez de estar hardcodeado y duplicado por pagina — corrige que integracion-seller.html no tuviera nav en el topbar.' },

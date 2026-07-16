@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-16 - Mejora contraste de logos blancos de sellers
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+- Los logos blancos se muestran sobre fondo grafito en el chip superior y la tarjeta de Presentacion Seller.
+- El componente compartido de identidad seller adopta el mismo tratamiento para mantener consistencia entre paginas publicas.
+
 ## 2026-07-16 - Corrige logos blancos de sellers
 
 Tipo de cambio: correccion funcional de frontend (sin cambios de backend ni de datos).
