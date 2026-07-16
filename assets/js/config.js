@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.33',
+  number: '1.4.34',
   date:   '2026-07-16',
-  notes:  'Estandariza el ciclo de paginas seller',
+  notes:  'Mejora semantica y teclado en paginas seller',
 };
 
 const CHANGELOG = [
+  { v: '1.4.34', date: '2026-07-16', desc: 'Presentacion, Calificacion, Relevamiento e Integracion suman un landmark principal; el editor del Gantt vincula etiquetas, anuncia guardados y gestiona foco y expansion por teclado.' },
   { v: '1.4.33', date: '2026-07-16', desc: 'Las seis paginas seller comparten inicializacion, identidad de sesion, estados sin target y titulos; Presentacion y Simulador dejan de aceptar identidad por URL.' },
   { v: '1.4.32', date: '2026-07-16', desc: 'Calificacion y Relevamiento usan el canal autenticado comun en vista seller y administrador; Integracion solo muestra la guia VTEX tras validar el modelo asignado.' },
   { v: '1.4.31', date: '2026-07-16', desc: 'La vista de administrador cachea brevemente sesion y lecturas por seller, monta el selector sin bloquear la pagina y precarga destinos al navegar.' },

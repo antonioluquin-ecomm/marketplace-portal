@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-16 - Mejora semantica y teclado en paginas seller
+
+Tipo de cambio: mejora de accesibilidad de frontend (sin cambios de backend ni de datos).
+
+- Presentacion, Calificacion, Relevamiento e Integracion incorporan un unico landmark `main` para identificar el contenido principal.
+- El editor de tareas del Gantt vincula cada etiqueta con su control y declara tipos de boton explicitos.
+- El boton Editar informa su estado expandido, mueve el foco al primer control al abrir y los resultados de guardado se anuncian como estado dinamico.
+
 ## 2026-07-16 - Estandariza el ciclo de paginas seller
 
 Tipo de cambio: mejora de consistencia, seguridad y accesibilidad de frontend (sin cambios de backend ni de datos).

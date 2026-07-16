@@ -191,16 +191,16 @@
               '</div>' +
               '<span class="badge ' + badgeClass + '">' + t.estado + '</span>' +
               '<div class="task-dates">' + fmtDate(t.inicio) + ' → ' + fmtDate(t.fin) + '</div>' +
-              '<button class="button secondary btn-sm" onclick="toggleEdit(\'' + id + '\')">Editar</button>' +
+              '<button type="button" class="button secondary btn-sm" aria-expanded="false" aria-controls="edit-' + id + '" onclick="toggleEdit(\'' + id + '\', this)">Editar</button>' +
             '</div>' +
             '<div class="task-edit" id="edit-' + id + '" hidden>' +
-              '<label>Estado</label>' +
+              '<label for="est-' + id + '">Estado</label>' +
               '<select id="est-' + id + '">' + estOpts + '</select>' +
-              '<label>Comentario</label>' +
+              '<label for="com-' + id + '">Comentario</label>' +
               '<textarea id="com-' + id + '" placeholder="Dejá una nota sobre esta tarea…">' + escapeHtml(t.comentario) + '</textarea>' +
               '<div class="edit-actions">' +
-                '<button class="button btn-sm" onclick="guardarTarea(\'' + id + '\')">Guardar</button>' +
-                '<span class="edit-status" id="status-' + id + '"></span>' +
+                '<button type="button" class="button btn-sm" onclick="guardarTarea(\'' + id + '\')">Guardar</button>' +
+                '<span class="edit-status" id="status-' + id + '" role="status" aria-live="polite"></span>' +
               '</div>' +
             '</div>';
           }).join('') +
@@ -208,9 +208,15 @@
       }).join('');
     }
 
-    function toggleEdit(id) {
+    function toggleEdit(id, button) {
       const panel = document.getElementById('edit-' + id);
-      if (panel) panel.hidden = !panel.hidden;
+      if (!panel) return;
+      panel.hidden = !panel.hidden;
+      if (button) button.setAttribute('aria-expanded', String(!panel.hidden));
+      if (!panel.hidden) {
+        const firstControl = panel.querySelector('select, textarea, button');
+        if (firstControl) firstControl.focus();
+      }
     }
 
     async function guardarTarea(id) {
