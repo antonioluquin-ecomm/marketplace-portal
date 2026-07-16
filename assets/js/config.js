@@ -18,12 +18,14 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.31',
+  number: '1.4.33',
   date:   '2026-07-16',
-  notes:  'Acelera la navegacion en vista de administrador',
+  notes:  'Estandariza el ciclo de paginas seller',
 };
 
 const CHANGELOG = [
+  { v: '1.4.33', date: '2026-07-16', desc: 'Las seis paginas seller comparten inicializacion, identidad de sesion, estados sin target y titulos; Presentacion y Simulador dejan de aceptar identidad por URL.' },
+  { v: '1.4.32', date: '2026-07-16', desc: 'Calificacion y Relevamiento usan el canal autenticado comun en vista seller y administrador; Integracion solo muestra la guia VTEX tras validar el modelo asignado.' },
   { v: '1.4.31', date: '2026-07-16', desc: 'La vista de administrador cachea brevemente sesion y lecturas por seller, monta el selector sin bloquear la pagina y precarga destinos al navegar.' },
   { v: '1.4.30', date: '2026-07-16', desc: 'El Simulador Seller bloquea resultados incompletos o con fuentes no validadas, muestra perdidas reales y reemplaza afirmaciones de rentabilidad por una lectura neutral de cargos.' },
   { v: '1.4.29', date: '2026-07-16', desc: 'El header publico conserva solo marca, navegacion y sesion; seller, comision, estado de carga, breadcrumb y CTA quedan en el contenido contextual.' },

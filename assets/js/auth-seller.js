@@ -278,9 +278,17 @@ async function renderStaffSellerBar() {
 // staff. Ejecuta load() en modo seller, o en modo staff si ya hay un seller
 // elegido (target persistido). En modo staff sin seller elegido, llama
 // onStaffNoTarget() (para mostrar un placeholder) y no carga contenido.
+function renderSellerSessionIdentity() {
+  const label = SellerSESSION.nombre || SellerSESSION.email || '';
+  document.querySelectorAll('[data-seller-session-name], #user-chip-name').forEach(function (el) {
+    el.textContent = label;
+  });
+}
+
 async function initPortalPage(load, onStaffNoTarget) {
   await initSellerAuth();
   if (!SellerSESSION.isLoggedIn()) return; // initSellerAuth ya redirigió
+  renderSellerSessionIdentity();
   const staff = await renderStaffSellerBar();
   if (staff && !SellerSESSION.sellerId) {
     if (typeof onStaffNoTarget === 'function') onStaffNoTarget();

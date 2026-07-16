@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Calificación Inicial de Seller | Marketplace Sporting</title>
+    <title>Calificación Seller | Marketplace Sporting</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -759,7 +759,7 @@
         </section>
 
         <div class="actions">
-          <div class="status" id="statusMsg">
+          <div class="status" id="statusMsg" role="status" aria-live="polite">
             Completá el formulario. La calificación quedará asociada al seller
             indicado arriba.
           </div>
@@ -778,16 +778,9 @@
 
     <script src="../../assets/js/config.js"></script>
     <script src="../../assets/js/auth-seller.js"></script>
-    <script>initSellerAuth().then(function () {
-      renderStaffSellerBar();
-      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
-    });</script>
     <script>
-      const ENDPOINT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) ||
-        "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
-
       // Etapa 3: el seller_id ya no se lee de la URL — viene de la sesión
-      // autenticada (mp_seller_session), gateada por initSellerAuth() arriba.
+      // autenticada (mp_seller_session), validada por initPortalPage().
       const sellerId = SellerSESSION.sellerId;
       const PUBLIC_LINKS = {
         presentacion: "../presentaciones/presentacion-seller.html",
@@ -876,11 +869,11 @@
 
       async function loadSellerIdentity() {
         if (!sellerId) {
-          chip.textContent = "Link inválido: falta seller_id";
+          chip.textContent = "Seller no seleccionado";
           chip.classList.add("err");
           submitBtn.disabled = true;
           setStatus(
-            "No se detectó seller_id en la URL. Solicitá un link válido al equipo de Sporting.",
+            "No hay un seller asociado a la sesión. Si sos administrador, elegí uno en la barra inferior.",
             "err",
           );
           return;
@@ -895,7 +888,7 @@
             chip.classList.add("err");
             submitBtn.disabled = true;
             setStatus(
-              "El seller_id existe en el link, pero no fue encontrado en la hoja sellers. Revisá el ID o la publicación del CSV.",
+              "El seller seleccionado no fue encontrado. Elegí otro seller o contactá al equipo de Sporting.",
               "err",
             );
             return;
@@ -905,7 +898,7 @@
           console.warn(err);
           chip.textContent = "Calificación asociada a " + sellerId;
           setStatus(
-            "No se pudo cargar el detalle del seller, pero el formulario puede enviarse con el seller_id del link.",
+            "No se pudo cargar el detalle del seller, pero el formulario sigue asociado a la sesión actual.",
           );
         }
       }
@@ -1125,7 +1118,7 @@
         e.preventDefault();
         const ev = evaluateSeller();
         if (!sellerId) {
-          setStatus("Falta seller_id en la URL.", "err");
+          setStatus("No hay un seller seleccionado.", "err");
           return;
         }
         if (!form.checkValidity() || !hasCarrier()) {
@@ -1136,7 +1129,6 @@
         const payload = {
           ...ev.data,
           seller_id: sellerId,
-          session_token: SellerSESSION.token,
           action: "saveCalificacion",
           resultado_sugerido: ev.clasificacion,
           modelo_sugerido: ev.modelo,
@@ -1157,13 +1149,8 @@
           submitBtn.textContent = "Enviando…";
           statusMsg.textContent = "Enviando calificación…";
           statusMsg.className = "status sending";
-          const res = await fetch(ENDPOINT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload),
-          });
-          const json = await res.json();
-          if (json.status === "ok") {
+          const json = await _apiSellerPost(payload);
+          if (json.ok) {
             // ── CONFIRMACIÓN COMPLETA ──────────────────────────────────
             // 1. Mensaje claro con próximo paso
             const sellerNombre = form.querySelector('[name="nombre"]')?.value?.trim() || "";
@@ -1185,15 +1172,23 @@
             statusMsg.scrollIntoView({ behavior: "smooth", block: "center" });
 
             showToast("✓ Calificación enviada");
-          } else throw new Error(json.message || "Error desconocido");
+          } else throw new Error(json.message || json.error || "Error desconocido");
         } catch (err) {
           setStatus("No se pudo enviar: " + err.message + ". Intentá nuevamente.", "err");
           submitBtn.disabled = false;
         }
       });
 
-      loadSellerIdentity();
-      updateAll();
+      initPortalPage(function () {
+        loadSellerIdentity();
+        updateAll();
+      }, function () {
+        chip.textContent = "Seller no seleccionado";
+        chip.classList.add("err");
+        submitBtn.disabled = true;
+        setStatus("Elegí un seller en la barra inferior para completar la calificación.", "err");
+        updateAll();
+      });
     </script>
   </body>
 </html>

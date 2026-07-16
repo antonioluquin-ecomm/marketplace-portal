@@ -335,7 +335,7 @@
       <div class="section">
         <div class="section-title">Información de uso</div>
         <div style="font-size:11.5px;color:var(--t2);margin-bottom:10px;line-height:1.55">Este simulador es privado y orientativo. El enlace fue generado para tu marca y la información se utiliza únicamente para estimar condiciones comerciales preliminares dentro de Marketplace Sporting.</div>
-        <div id="sellerLinkWarning" style="display:none;padding:10px 12px;border-radius:9px;border:1px solid rgba(217,64,64,.28);background:rgba(217,64,64,.10);color:var(--danger, #991b1b);font-size:11.5px;line-height:1.45">No se pudo identificar el seller. Verific? que el link recibido sea correcto.</div>
+        <div id="sellerLinkWarning" role="alert" style="display:none;padding:10px 12px;border-radius:9px;border:1px solid rgba(217,64,64,.28);background:rgba(217,64,64,.10);color:var(--danger, #991b1b);font-size:11.5px;line-height:1.45">No hay un seller asociado a la sesi&oacute;n actual.</div>
         <div id="sourceWarning" role="alert" style="display:none;margin-top:8px;padding:10px 12px;border-radius:9px;border:1px solid rgba(146,64,14,.28);background:var(--warning-bg,#fffbeb);color:var(--warning,#92400e);font-size:11.5px;line-height:1.45"></div>
       </div>
 
@@ -645,10 +645,9 @@ let DATA_READY = false;
 let INPUT_MODE = "total";
 let _rtimer    = null;
 
-const params = new URLSearchParams(window.location.search);
 // Etapa 3: el seller_id de partida viene de la sesión autenticada
-// (mp_seller_session), gateada por initSellerAuth() arriba.
-let CURRENT_SELLER_ID = SellerSESSION.sellerId || (params.get("seller_id") || params.get("seller") || params.get("id") || "").trim();
+// (mp_seller_session), validada por initPortalPage().
+let CURRENT_SELLER_ID = SellerSESSION.sellerId;
 const PUBLIC_LINKS = {
   presentacion: "../presentaciones/presentacion-seller.html",
   simulador: "./simulador-seller.html",
@@ -659,7 +658,7 @@ const PUBLIC_LINKS = {
 /* ── helpers ── */
 const $     = id => document.getElementById(id);
 function publicSellerId(){
-  return (CURRENT_SELLER_ID || params.get("seller_id") || "").trim();
+  return (CURRENT_SELLER_ID || "").trim();
 }
 function publicLink(key){
   const base = PUBLIC_LINKS[key] || key;
@@ -857,8 +856,8 @@ function applySellerInfo(shouldPrefill = true){
   const sellerFound = !!(CURRENT_SELLER_ID && getSellerIdFromRow(SELLER));
   applyOverridesForSeller();
 
-  const name = pick(SELLER,["seller_nombre","nombre","nombre_seller","marca"]) || params.get("seller_name") || "Tu marca";
-  const logo = normalizeLogoUrl(getSellerLogoFromRow(SELLER) || params.get("logo") || params.get("logo_url") || localLogoFallback());
+  const name = pick(SELLER,["seller_nombre","nombre","nombre_seller","marca"]) || "Tu marca";
+  const logo = normalizeLogoUrl(getSellerLogoFromRow(SELLER) || localLogoFallback());
   const site = pick(SELLER,["sitio_objetivo","sitio"]) || "Sporting";
 
   $("sellerName").textContent   = name;
@@ -868,7 +867,7 @@ function applySellerInfo(shouldPrefill = true){
   if(linkWarning){
     if(!CURRENT_SELLER_ID){
       linkWarning.style.display = "block";
-      linkWarning.textContent = "No se pudo identificar el seller. Verificá que el link recibido sea correcto.";
+      linkWarning.textContent = "No hay un seller asociado a la sesión actual.";
     }else if(!sellerFound){
       linkWarning.style.display = "block";
       linkWarning.textContent = "No encontramos condiciones cargadas para este seller. Podés simular con valores generales, pero la propuesta deberá validarse comercialmente.";
@@ -1320,7 +1319,6 @@ async function init(){
 }
 
 initPortalPage(function () {
-  document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
   init();
 }, function () {
   setStatus("err", "Elegí un seller en la barra inferior");

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marketplace Sporting · Guía de integración para sellers</title>
+  <title>Integración Seller | Marketplace Sporting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -38,6 +38,15 @@
     h1 em{color:transparent;-webkit-text-stroke:2px var(--g);font-style:normal}
     .hero-lead{font-size:16px;line-height:1.7;color:var(--t3);max-width:680px;margin-bottom:8px}
     .hero-lead strong{color:var(--t1)}
+    #roadmap,#preparar,#operar,#reglas,#plazos{display:none}
+    body.integration-model-vtex #roadmap,
+    body.integration-model-vtex #preparar,
+    body.integration-model-vtex #operar,
+    body.integration-model-vtex #reglas,
+    body.integration-model-vtex #plazos{display:block}
+    .integration-model-notice{display:none;max-width:680px;margin-top:24px;padding:18px 20px;border:1px solid var(--g-brd);border-left:4px solid var(--g);border-radius:var(--r);background:var(--g-dim);color:var(--t2);line-height:1.6}
+    .integration-model-notice.show{display:block}
+    .integration-model-notice strong{display:block;margin-bottom:4px;color:var(--t1);font-size:15px}
 
     /* SECTION BASE */
     .section{padding:64px 36px;border-bottom:1px solid var(--bdr2)}
@@ -147,10 +156,11 @@
   <section id="hero">
     <div class="hero-bg"><div class="hero-bg-line"></div></div>
     <div class="hero-inner">
-      <div class="hero-eyebrow">Integración VTEX ↔ VTEX</div>
-      <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
-      <h1>Tu integración<br><em>paso a paso.</em></h1>
-      <p class="hero-lead"><strong id="heroSellerName">Tu marca</strong> se conecta al Marketplace vía <strong>VTEX ↔ VTEX</strong>: tu catálogo, precios, stock y pedidos viajan automáticamente entre tu VTEX y el nuestro. Esta guía resume <strong>lo que preparás vos</strong>, cómo operás cada pedido y las reglas del canal.</p>
+      <div class="hero-eyebrow" id="integrationEyebrow">Modelo de integraci&oacute;n</div>
+      <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegaci&oacute;n p&uacute;blica seller"></nav>
+      <h1 id="integrationTitle">Validando tu<br><em>integraci&oacute;n.</em></h1>
+      <p class="hero-lead" id="integrationLead"><strong id="heroSellerName">Tu marca</strong>: estamos verificando el modelo asignado antes de mostrar instrucciones t&eacute;cnicas.</p>
+      <div class="integration-model-notice" id="integrationModelNotice" role="status" aria-live="polite"></div>
     </div>
   </section>
 
@@ -311,36 +321,83 @@
   <script src="../../assets/js/config.js"></script>
   <script src="../../assets/js/auth-seller.js"></script>
   <script>
-    initSellerAuth().then(function () {
-      if (!SellerSESSION.isLoggedIn()) return;      // ya redirigió al login
-      renderStaffSellerBar();                       // modo staff: barra "ver como seller"
-
-      var chip = document.getElementById('user-chip-name');
-      if (chip) chip.textContent = SellerSESSION.nombre || SellerSESSION.email || '';
-
+    initPortalPage(function () {
       var sid = SellerSESSION.sellerId;
       var topSeller = document.getElementById('topSeller');
       var topName = document.getElementById('topSellerName');
       var heroName = document.getElementById('heroSellerName');
-      if (!sid) return;
+      var eyebrow = document.getElementById('integrationEyebrow');
+      var title = document.getElementById('integrationTitle');
+      var lead = document.getElementById('integrationLead');
+      var notice = document.getElementById('integrationModelNotice');
+
+      function showUnavailable(model, detail) {
+        document.body.classList.remove('integration-model-vtex');
+        eyebrow.textContent = model || 'Modelo de integraci\u00f3n pendiente';
+        title.innerHTML = 'Gu\u00eda t\u00e9cnica<br><em>no disponible.</em>';
+        lead.innerHTML = '<strong id="heroSellerName"></strong> Esta gu\u00eda solo aplica a sellers con integraci\u00f3n VTEX \u2194 VTEX.';
+        heroName = document.getElementById('heroSellerName');
+        heroName.textContent = topName.textContent || sid || 'Tu marca';
+        notice.replaceChildren();
+        var noticeTitle = document.createElement('strong');
+        noticeTitle.textContent = model;
+        notice.appendChild(noticeTitle);
+        notice.appendChild(document.createTextNode(detail));
+        notice.classList.add('show');
+      }
+
+      function normalizeModel(value) {
+        var model = String(value || '').trim();
+        var normalized = model.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        if (normalized.indexOf('vtex') !== -1 && normalized.indexOf('pim') === -1 && normalized.indexOf('api') === -1 && normalized.indexOf('seller center') === -1) return 'VTEX \u2194 VTEX';
+        if (normalized.indexOf('gestion asistida') !== -1 || normalized.indexOf('seller center') !== -1 || normalized.indexOf('seller_center') !== -1) return 'Gesti\u00f3n asistida';
+        if (normalized.indexOf('sistemas propios') !== -1 || normalized.indexOf('api') !== -1 || normalized.indexOf('pim') !== -1) return 'Sistemas propios';
+        return model;
+      }
+
+      if (!sid) {
+        showUnavailable('Seller no seleccionado', 'Seleccion\u00e1 un seller en la barra de administrador para consultar su modelo.');
+        return;
+      }
 
       if (topSeller) topSeller.classList.add('show');
 
-      // El nombre de marca (seller_nombre, hoja "sellers") es la fuente canónica —
-      // no depende de la cuenta de login, que puede tener el "nombre" vacío o ser
-      // un contacto genérico (mismo patrón que public/index.html).
       _apiSellerPost({ action: 'getSellers' }).then(function (json) {
         var row = (json.data || [])[0];
-        var marca = row && row.seller_nombre;
-        if (marca) {
-          if (topName) topName.textContent = marca;
-          if (heroName) heroName.textContent = marca;
-        } else {
-          if (topName) topName.textContent = sid;
+        if (!row) throw new Error('No se encontr\u00f3 el seller seleccionado.');
+        var marca = row.seller_nombre || sid;
+        var model = normalizeModel(row.modelo_integracion_definido || row.modelo_integracion_estimado || row.modelo_integracion);
+        if (topName) topName.textContent = marca;
+        if (heroName) heroName.textContent = marca;
+
+        if (model === 'VTEX \u2194 VTEX') {
+          document.body.classList.add('integration-model-vtex');
+          eyebrow.textContent = 'Integraci\u00f3n VTEX \u2194 VTEX';
+          title.innerHTML = 'Tu integraci\u00f3n<br><em>paso a paso.</em>';
+          lead.innerHTML = '<strong id="heroSellerName"></strong> se conecta al Marketplace v\u00eda <strong>VTEX \u2194 VTEX</strong>: tu cat\u00e1logo, precios, stock y pedidos viajan autom\u00e1ticamente entre tu VTEX y el nuestro. Esta gu\u00eda resume <strong>lo que prepar\u00e1s vos</strong>, c\u00f3mo oper\u00e1s cada pedido y las reglas del canal.';
+          document.getElementById('heroSellerName').textContent = marca;
+          notice.classList.remove('show');
+          return;
         }
-      }).catch(function () {
+
+        if (model === 'Gesti\u00f3n asistida') {
+          showUnavailable(model, 'El flujo se define con el equipo de Sporting Marketplace y no usa esta configuraci\u00f3n VTEX \u2194 VTEX.');
+        } else if (model === 'Sistemas propios') {
+          showUnavailable(model, 'La integraci\u00f3n requiere documentaci\u00f3n de API o PIM espec\u00edfica para el seller.');
+        } else {
+          showUnavailable('Modelo pendiente de definici\u00f3n', 'El equipo debe confirmar el modelo antes de habilitar instrucciones t\u00e9cnicas.');
+        }
+      }).catch(function (error) {
         if (topName) topName.textContent = sid;
+        showUnavailable('No pudimos validar el modelo', 'Actualiz\u00e1 la p\u00e1gina o contact\u00e1 al equipo de Sporting Marketplace. ' + (error.message || ''));
       });
+    }, function () {
+      document.getElementById('integrationEyebrow').textContent = 'Seller no seleccionado';
+      document.getElementById('integrationTitle').innerHTML = 'Elegí un seller<br><em>para continuar.</em>';
+      document.getElementById('integrationLead').textContent = 'Usá la barra inferior para consultar la guía correspondiente al modelo de integración asignado.';
+      var notice = document.getElementById('integrationModelNotice');
+      notice.textContent = 'La guía técnica permanecerá oculta hasta seleccionar y validar un seller.';
+      notice.classList.add('show');
     });
   </script>
 </body>

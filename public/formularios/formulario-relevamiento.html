@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Relevamiento de Seller | Marketplace Sporting</title>
+    <title>Relevamiento Seller | Marketplace Sporting</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -2489,7 +2489,7 @@
         </section>
 
         <div class="actions">
-          <div class="status" id="statusMsg">
+          <div class="status" id="statusMsg" role="status" aria-live="polite">
             Antes de enviar, verificá que el formulario esté completo.
           </div>
           <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
@@ -2506,16 +2506,12 @@
 
     <script src="../../assets/js/config.js"></script>
     <script src="../../assets/js/auth-seller.js"></script>
-    <script>initSellerAuth().then(function () {
-      renderStaffSellerBar();
-      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
-    });</script>
     <script>
       const APPS_SCRIPT_URL = (window.MP_CONFIG && window.MP_CONFIG.APPS_SCRIPT_URL) ||
         "https://script.google.com/macros/s/AKfycbxryK0ucSoM_SMrAuwolP-KfxXwpMNUiAapVxC4UVV1G2wFtRohSExivRwQjh60ZHjd/exec";
 
       // Etapa 3: el seller_id ya no se lee de la URL — viene de la sesión
-      // autenticada (mp_seller_session), gateada por initSellerAuth() arriba.
+      // autenticada (mp_seller_session), validada por initPortalPage().
       const sellerId = SellerSESSION.sellerId;
       const PUBLIC_LINKS = {
         presentacion: "../presentaciones/presentacion-seller.html",
@@ -2818,11 +2814,11 @@
 
       async function loadSellerIdentity() {
         if (!sellerId) {
-          chip.textContent = "Link inválido: falta seller_id";
+          chip.textContent = "Seller no seleccionado";
           chip.classList.add("err");
           submitBtn.disabled = true;
           setStatus(
-            "No se detectó seller_id en la URL. Solicitá un link válido al equipo de Sporting.",
+            "No hay un seller asociado a la sesión. Si sos administrador, elegí uno en la barra inferior.",
             "err",
           );
           return;
@@ -2840,7 +2836,7 @@
             chip.classList.add("err");
             submitBtn.disabled = true;
             setStatus(
-              "El seller_id existe en el link, pero no fue encontrado en la hoja sellers. Revisá el ID o la publicación del CSV.",
+              "El seller seleccionado no fue encontrado. Elegí otro seller o contactá al equipo de Sporting.",
               "err",
             );
             return;
@@ -2937,7 +2933,6 @@
         });
         return {
           seller_id: sellerId,
-          session_token: SellerSESSION.token,
           action: "saveRelevamientoProfile",
           modo_guardado: "draft",
           payload_version: "relevamiento_profile_v1",
@@ -2953,12 +2948,7 @@
         saveDraftBtn.disabled = true;
         saveDraftBtn.textContent = "Guardando…";
         try {
-          const res = await fetch(APPS_SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(buildDraftPayload()),
-          });
-          const json = await res.json();
+          const json = await _apiSellerPost(buildDraftPayload());
           console.log("[saveDraft] response:", JSON.stringify(json));
           if (!json.ok) throw new Error(json.message || json.error || JSON.stringify(json) || "No se pudo guardar el borrador.");
           setStatus(
@@ -3133,21 +3123,14 @@
           try {
             const payload = {
               ...formToObject(ev.currentTarget),
-              session_token: SellerSESSION.token,
               action: "saveRelevamiento",
             };
 
-            const res = await fetch(APPS_SCRIPT_URL, {
-              method: "POST",
-              headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify(payload),
-            });
+            const json = await _apiSellerPost(payload);
 
-            const json = await res.json();
-
-            if (json.status !== "ok") {
+            if (!json.ok) {
               throw new Error(
-                json.message || "No se pudo enviar el relevamiento.",
+                json.message || json.error || "No se pudo enviar el relevamiento.",
               );
             }
             setStatus(
@@ -3175,7 +3158,15 @@
 
       applyConditionals();
       updateProgress();
-      loadSellerIdentity().then(loadPerfilRelevamiento);
+      initPortalPage(function () {
+        loadSellerIdentity().then(loadPerfilRelevamiento);
+      }, function () {
+        chip.textContent = "Seller no seleccionado";
+        chip.classList.add("err");
+        submitBtn.disabled = true;
+        saveDraftBtn.disabled = true;
+        setStatus("Elegí un seller en la barra inferior para completar el relevamiento.", "err");
+      });
     </script>
   </body>
 </html>

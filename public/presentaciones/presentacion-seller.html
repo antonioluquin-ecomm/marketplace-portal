@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marketplace Sporting · Propuesta comercial para sellers</title>
+  <title>Presentación Seller | Marketplace Sporting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -623,12 +623,9 @@
       CLASSIFICATION_URL: BASE_URL + "/public/formularios/formulario-calificacion.html"
     };
 
-    const params = new URLSearchParams(window.location.search);
     // Etapa 3: el seller_id ya no se lee de la URL — viene de la sesión
-    // autenticada (mp_seller_session), gateada por initSellerAuth() arriba.
-    const sellerId       = SellerSESSION.sellerId;
-    const sellerNameParam= (params.get("seller_name") || params.get("nombre") || "").trim();
-    const logoParam      = (params.get("logo") || params.get("logo_url") || "").trim();
+    // autenticada (mp_seller_session), validada por initPortalPage().
+    const sellerId = SellerSESSION.sellerId;
     const PUBLIC_LINKS = {
       presentacion: "./presentacion-seller.html",
       simulador: "../simuladores/simulador-seller.html",
@@ -678,15 +675,15 @@
     }
 
     function applySellerIdentity({name,logoUrl}) {
-      const sellerName = name||sellerNameParam||"Tu marca";
-      const sellerLogo = logoUrl||logoParam||localLogoFallback();
+      const sellerName = name||"Tu marca";
+      const sellerLogo = logoUrl||localLogoFallback();
 
       $("sellerName").textContent = sellerName;
       $("sellerLeadName").textContent = sellerName;
       $("sellerFallback").textContent = sellerInitials(sellerName);
 
       // Nota personalizada si hay seller
-      if(sellerId||sellerNameParam||name){
+      if(sellerId||name){
         $("sellerNote").textContent = `Preparamos esta propuesta específicamente para ${sellerName}. El equipo de Sporting Marketplace la acompaña durante todo el proceso de incorporación.`;
       }
 
@@ -695,7 +692,7 @@
 
       function hideLogo(){logo.removeAttribute("src");logo.classList.add("hidden");fallback.classList.remove("hidden");topLogo.removeAttribute("src");topLogo.style.display="none";}
 
-      if(sellerId||sellerNameParam||name){
+      if(sellerId||name){
         topChip.classList.add("show");
         topName.textContent=sellerName;
       }
@@ -782,7 +779,7 @@
     async function init() {
       wirePublicLinks();
       setCtaLinks();
-      applySellerIdentity({name:sellerNameParam||"Tu marca",logoUrl:logoParam});
+      applySellerIdentity({name:"Tu marca",logoUrl:""});
 
       // Identidad del seller (independiente)
       try {
@@ -807,7 +804,6 @@
     }
 
     initPortalPage(function () {
-      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
       init();
     }, function () {
       // Staff sin seller elegido todavía: se deja la presentación con los

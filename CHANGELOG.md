@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-07-16 - Estandariza el ciclo de paginas seller
+
+Tipo de cambio: mejora de consistencia, seguridad y accesibilidad de frontend (sin cambios de backend ni de datos).
+
+- Las seis paginas publicas usan `initPortalPage` para validar sesion, montar la vista de administrador y gestionar la ausencia de seller seleccionado.
+- El nombre de la cuenta se completa desde un unico helper compartido en el header.
+- Presentacion y Simulador dejan de aceptar seller, nombre o logo desde parametros de URL; la identidad proviene de la sesion y de `getSellers`.
+- Calificacion y Relevamiento reemplazan mensajes obsoletos sobre links con estados de sesion y seleccion de seller.
+- Titulos de navegador y regiones dinamicas de estado quedan alineados y anuncian cambios relevantes a tecnologias asistivas.
+
+## 2026-07-16 - Protege escrituras y guia tecnica del seller
+
+Tipo de cambio: correccion funcional y de seguridad de frontend (sin cambios de backend ni de datos).
+
+- Calificacion, Relevamiento y su borrador usan el helper autenticado comun, incluyendo el seller seleccionado por un administrador.
+- Las respuestas de guardado se validan contra el contrato real `ok` del backend.
+- La guia VTEX se oculta hasta confirmar que el modelo asignado es VTEX a VTEX.
+- Gestion asistida, Sistemas propios, modelos pendientes y errores de carga muestran un estado seguro sin instrucciones tecnicas incorrectas.
+
 ## 2026-07-16 - Acelera navegacion en vista de administrador
 
 Tipo de cambio: mejora de performance de frontend (sin cambios de backend ni de datos).

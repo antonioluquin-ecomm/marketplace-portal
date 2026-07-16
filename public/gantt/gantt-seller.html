@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Gantt de tu proyecto | Marketplace Sporting</title>
+<title>Gantt Seller | Marketplace Sporting</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -83,7 +83,7 @@
     <h1>Gantt de tu proyecto</h1>
     <p class="lead">Estado y fechas de las tareas de tu proceso de integración con Sporting Marketplace. Podés actualizar el <strong>estado</strong> y dejar un <strong>comentario</strong> en tus tareas.</p>
 
-    <div id="content"><div class="empty">Cargando…</div></div>
+    <div id="content" aria-live="polite"><div class="empty">Cargando…</div></div>
   </main>
 
   <script src="../../assets/js/config.js"></script>
@@ -250,7 +250,6 @@
     }
 
     initPortalPage(function () {
-      document.getElementById('user-chip-name').textContent = SellerSESSION.nombre || SellerSESSION.email;
       loadGantt();
     }, function () {
       document.getElementById('content').innerHTML =
