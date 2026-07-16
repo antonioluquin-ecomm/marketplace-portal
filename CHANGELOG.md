@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-15 - Saca el panel "Clave de escritura" de Config. Tarifas (código muerto engañoso)
+
+Tipo de cambio: limpieza de seguridad/frontend (sin cambios de comportamiento real).
+
+Auditoría pedida por el usuario sobre `config-tarifas.html`. El panel "Clave de escritura" (`secretInput`/`saveSecret()`/`refreshSecretStatus()`) guardaba un valor en `localStorage` y mostraba "✓ Clave configurada", simulando un gate de seguridad — pero ese valor nunca se enviaba en los payloads de `updateTarifas` ni `updateOverrides` (solo viaja `session_token`), y no hay ningún código en `apps-script/` que lea o valide `WRITE_SECRET`. Era 100% código muerto, remanente de un mecanismo pre-auth nunca completado, y hoy es engañoso: sugiere una protección de escritura que no existe (la escritura ya está 100% gateada por sesión/RBAC desde la Etapa 6/7).
+
+- Se saca el panel HTML, sus estilos (`.secret-panel`/`.btn-secret`/`.secret-status`, en ambos bloques `<style>` del archivo) y las funciones `getWriteSecret()`/`saveSecret()`/`refreshSecretStatus()`/`SECRET_LS_KEY`.
+- Se saca el comentario stale de `Schema.gs` que documentaba cómo configurar `WRITE_SECRET` (nunca implementado).
+- Verificado sirviendo en local con sesión y datos mock: el resto del formulario (comisión, mix, tarifas de servicios, overrides por seller) carga y calcula igual que antes. Sin errores de consola.
+
 ## 2026-07-15 - Refina topbar interno y control del sidebar
 
 Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).

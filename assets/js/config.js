@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.9',
+  number: '1.4.10',
   date:   '2026-07-15',
-  notes:  'Se refina el topbar interno y el control del sidebar',
+  notes:  'Se saca el panel "Clave de escritura" de Config. Tarifas',
 };
 
 const CHANGELOG = [
+  { v: '1.4.10', date: '2026-07-15', desc: 'Se saca el panel "Clave de escritura" de Config. Tarifas: era codigo muerto (nunca se enviaba al backend) que sugeria una proteccion de escritura que no existe. La escritura ya esta 100% gateada por sesion/RBAC.' },
   { v: '1.4.9', date: '2026-07-15', desc: 'Se refina el topbar interno: la marca deja de usar la placa verde completa, queda como simbolo + texto, el badge de version baja protagonismo y el control de sidebar pasa al borde del panel lateral.' },
   { v: '1.4.8', date: '2026-07-15', desc: 'Se saca una linea no-op en qfClick() y la clase CSS .dep-line sin uso del Gantt Seller Center: ninguna reproducia un bug, era codigo muerto.' },
   { v: '1.4.7', date: '2026-07-15', desc: 'Se migra el Gantt Seller Center de un CSV publicado a la web (sin login) a la accion gateada getScRoadmap: cerraba una exposicion real de datos del roadmap interno.' },
