@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.13',
+  number: '1.4.14',
   date:   '2026-07-16',
-  notes:  'Se normalizan encabezados internos',
+  notes:  'Se normalizan componentes internos',
 };
 
 const CHANGELOG = [
+  { v: '1.4.14', date: '2026-07-16', desc: 'Se introducen primitivas opt-in portal-* para KPIs, panels, campos y cards, aplicadas inicialmente en Config. Tarifas y Seller Center.' },
   { v: '1.4.13', date: '2026-07-16', desc: 'Se normaliza el espaciado y la jerarquia de encabezados internos en paginas de administracion, estrategia, Seller Center y Config. Tarifas mediante el patron opt-in portal-main.' },
   { v: '1.4.12', date: '2026-07-16', desc: 'El Simulador Economico interno nunca usaba tarifas en vivo (bug de orden de scripts, mismo patron que el Gantt Seller Center) y el toggle de Logistica directa no recalculaba el total. Ambos corregidos.' },
   { v: '1.4.11', date: '2026-07-16', desc: 'Se normaliza la primera etapa del shell interno: el boton de colapso del sidebar queda desacoplado del topbar y se reduce el espacio superior del menu lateral para alinear mejor las paginas.' },

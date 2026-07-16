@@ -116,18 +116,15 @@ function initSidebarCollapse() {
   const nav = document.querySelector('[data-portal-nav]');
   if (!nav) return;
 
-  const topbarActions = document.querySelector(
-    '.portal-topbar .tb-right, .portal-topbar .top-actions, .portal-topbar .topbar-right, .topbar .tb-right, .topbar .top-actions, .topbar .topbar-right'
-  );
-  if (!topbarActions) return;
-
   let btn = document.getElementById('sidebarCollapseBtn');
   if (!btn) {
     btn = document.createElement('button');
     btn.id = 'sidebarCollapseBtn';
     btn.className = 'sidebar-collapse-toggle';
     btn.type = 'button';
-    topbarActions.insertBefore(btn, topbarActions.firstChild);
+    document.body.appendChild(btn);
+  } else if (btn.parentElement !== document.body) {
+    document.body.appendChild(btn);
   }
 
   function sync() {

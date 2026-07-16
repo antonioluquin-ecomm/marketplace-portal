@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-16 - Introduce primitivas visuales opt-in para componentes internos
+
+Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
+
+Etapa 3 de consistencia visual: se agregan componentes `portal-*` reutilizables para normalizar superficies sin depender de nombres genericos como `.card`, `.section` o `.kpi`, que cada pagina usa con significados distintos.
+
+- Nuevas primitivas: `portal-kpi-grid`, `portal-kpi-card`, `portal-panel`, `portal-panel-title`, `portal-field-grid`, `portal-field`, `portal-card-grid` y `portal-card`.
+- Aplicacion inicial en Config. Tarifas: resumen superior, panels de configuracion y grillas de campos.
+- Aplicacion inicial en Seller Center: KPIs de overview y grilla de herramientas.
+- Se mantiene opt-in para no alterar Backlog, Gantt ni Simulador Economico, que tienen layouts densos propios.
 ## 2026-07-16 - Normaliza encabezados y espaciado base de paginas internas
 
 Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).

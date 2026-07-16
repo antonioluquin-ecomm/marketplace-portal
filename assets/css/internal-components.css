@@ -289,6 +289,201 @@
 }
 
 
+
+
+/* 2026-07-16 - Etapa 3: primitivas opt-in de componentes internos. */
+.portal-kpi-grid.portal-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.portal-kpi-card.portal-kpi-card {
+  min-width: 0;
+  min-height: 78px;
+  padding: 14px 16px;
+  background: var(--card, var(--k3, #fff));
+  border: 1px solid var(--line, var(--bdr, #e5e7eb));
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05));
+}
+.portal-kpi-label.portal-kpi-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--muted, var(--t4, #6b7280));
+}
+.portal-kpi-value.portal-kpi-value {
+  margin-top: 8px;
+  color: var(--text, var(--t1, #111827));
+  font-family: var(--font, system-ui, sans-serif);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.portal-kpi-note.portal-kpi-note {
+  margin-top: 4px;
+  color: var(--muted, var(--t4, #6b7280));
+  font-size: 11px;
+  line-height: 1.35;
+}
+.portal-panel.portal-panel {
+  min-width: 0;
+  margin-bottom: 14px;
+  padding: 18px 20px 20px;
+  background: var(--card, var(--k3, #fff));
+  border: 1px solid var(--line, var(--bdr, #e5e7eb));
+  border-radius: var(--radius, 14px);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05));
+}
+.portal-panel-title.portal-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line, var(--bdr, #e5e7eb));
+  color: var(--muted, var(--t3, #6b7280));
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+.portal-field-grid.portal-field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+.portal-field.portal-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+}
+.portal-field.portal-field > label {
+  color: var(--text, var(--t2, #111827));
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.portal-field.portal-field input,
+.portal-field.portal-field select,
+.portal-field.portal-field textarea {
+  width: 100%;
+  min-height: 36px;
+  border: 1px solid var(--line, var(--bdr, #e5e7eb));
+  border-radius: var(--radius-sm, 8px);
+  background: var(--card, #fff);
+  color: var(--text, var(--t1, #111827));
+  font-family: var(--font, system-ui, sans-serif);
+  font-size: 13.5px;
+  font-weight: 500;
+  outline: none;
+  padding: 8px 10px;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.portal-field.portal-field input:focus,
+.portal-field.portal-field select:focus,
+.portal-field.portal-field textarea:focus {
+  border-color: var(--primary-mid, var(--g-brd, #b8ecad));
+  box-shadow: 0 0 0 3px var(--primary-soft, var(--g-dim, #eaf8e6));
+}
+.portal-card-grid.portal-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.portal-card.portal-card {
+  min-width: 0;
+  border: 1px solid var(--line, var(--bdr, #e5e7eb));
+  border-radius: var(--radius, 14px);
+  background: var(--card, var(--k3, #fff));
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05));
+}
+@media (max-width: 720px) {
+  .portal-kpi-grid,
+  .portal-card-grid.portal-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .portal-panel.portal-panel {
+    padding: 16px;
+  }
+}
+
+/* 2026-07-16 - Etapa 2: encabezado y espaciado base opt-in para paginas internas. */
+.portal-main.portal-main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 28px 32px 72px;
+}
+.portal-main.portal-main > .page-subnav {
+  margin-top: -6px;
+  margin-bottom: 18px;
+}
+.portal-main.portal-main > .page-eyebrow,
+.portal-main.portal-main > .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 9px;
+  color: var(--primary, var(--g, #25b60c));
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.portal-main.portal-main > .page-eyebrow::before,
+.portal-main.portal-main > .eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  flex: 0 0 22px;
+}
+.portal-main.portal-main > h1,
+.portal-main.portal-main > .page-title {
+  max-width: 920px;
+  margin: 0 0 8px;
+  color: var(--text, var(--t1, #111827));
+  font-family: var(--font, system-ui, sans-serif);
+  font-size: clamp(30px, 3vw, 36px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.08;
+}
+.portal-main.portal-main > h1 span,
+.portal-main.portal-main > .page-title span {
+  color: var(--primary, var(--g, #25b60c));
+}
+.portal-main.portal-main > .lead {
+  max-width: 900px;
+  margin: 0 0 24px;
+  color: var(--muted, var(--t2, #6b7280));
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+@media (max-width: 960px) {
+  .portal-main.portal-main {
+    padding: 22px 18px 60px;
+  }
+  .portal-main.portal-main > .page-subnav {
+    margin-top: -4px;
+  }
+}
+@media (max-width: 640px) {
+  .portal-main.portal-main > h1,
+  .portal-main.portal-main > .page-title {
+    font-size: 30px;
+  }
+}
+
 /* 2026-07-02 - sidebar canonico opt-in para paginas internas.
    Usar en etapas de migracion como <aside class="sidebar portal-sidebar" data-portal-nav>.
    La clase tiene mayor especificidad que las reglas locales .nav/.sb-label, pero no afecta
@@ -300,7 +495,7 @@
   overflow-y: auto;
   background: var(--sidebar-bg, var(--k2, #f1f5f9));
   border-right: 1px solid var(--sidebar-line, var(--line, var(--bdr, #e5e7eb)));
-  padding: 16px 0 40px;
+  padding: 8px 0 32px;
 }
 .portal-sidebar.portal-sidebar::-webkit-scrollbar { width: 3px; }
 .portal-sidebar.portal-sidebar::-webkit-scrollbar-thumb {
@@ -309,7 +504,7 @@
 }
 .portal-sidebar.portal-sidebar .sb-section {
   padding: 0 10px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 .portal-sidebar.portal-sidebar .sb-label {
   display: flex;
@@ -898,15 +1093,15 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
   display: none;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm, 8px);
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
   border: 1px solid var(--line, #e5e7eb);
   background: rgba(255, 255, 255, .96);
   color: var(--muted, #6b7280);
-  box-shadow: 0 8px 20px rgba(17, 24, 39, .08);
+  box-shadow: 0 6px 14px rgba(17, 24, 39, .07);
   font-family: var(--mono, monospace);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   cursor: pointer;
   flex-shrink: 0;
@@ -994,14 +1189,14 @@ th[data-sortable].sort-desc::after { content: ' ↓'; opacity: 1; color: var(--p
 @media (min-width: 961px) {
   .sidebar-collapse-toggle {
     position: fixed;
-    top: calc(var(--topbar-height, var(--tb, 50px)) + 12px);
-    left: calc(var(--sidebar-w, var(--sb, 224px)) - 16px);
+    top: calc(var(--topbar-height, var(--tb, 50px)) + 10px);
+    left: calc(var(--sidebar-w, var(--sb, 224px)) - 13px);
     z-index: 360;
     display: inline-flex;
   }
   html[data-sidebar="collapsed"] .sidebar-collapse-toggle {
-    left: 12px;
-    top: calc(var(--topbar-height, var(--tb, 50px)) + 12px);
+    left: 10px;
+    top: calc(var(--topbar-height, var(--tb, 50px)) + 10px);
   }
 
   [data-portal-nav] {

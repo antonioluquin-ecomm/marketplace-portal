@@ -555,7 +555,7 @@ body {
     <a class="nav" data-page="administracion" href="../administracion/configuracion.html">Configuración</a>
   </div>
 </aside>
-<main class="main">
+<main class="main portal-main">
 
   <section class="page-hero">
     <div>
@@ -565,26 +565,26 @@ body {
     </div>
   </section>
 
-  <div class="summary-grid" aria-label="Resumen de tarifas vigentes">
-    <div class="summary-card">
-      <div class="summary-label">Comisión base</div>
-      <div class="summary-value" id="sumComision">--</div>
-      <div class="summary-note">sobre GMV</div>
+  <div class="summary-grid portal-kpi-grid" aria-label="Resumen de tarifas vigentes">
+    <div class="summary-card portal-kpi-card">
+      <div class="summary-label portal-kpi-label">Comisión base</div>
+      <div class="summary-value portal-kpi-value" id="sumComision">--</div>
+      <div class="summary-note portal-kpi-note">sobre GMV</div>
     </div>
-    <div class="summary-card">
-      <div class="summary-label">Financiación máx.</div>
-      <div class="summary-value" id="sumFinanciacion">--</div>
-      <div class="summary-note">12 cuotas</div>
+    <div class="summary-card portal-kpi-card">
+      <div class="summary-label portal-kpi-label">Financiación máx.</div>
+      <div class="summary-value portal-kpi-value" id="sumFinanciacion">--</div>
+      <div class="summary-note portal-kpi-note">12 cuotas</div>
     </div>
-    <div class="summary-card">
-      <div class="summary-label">Mix cuotas</div>
-      <div class="summary-value" id="sumMix">--</div>
-      <div class="summary-note">debe cerrar en 100%</div>
+    <div class="summary-card portal-kpi-card">
+      <div class="summary-label portal-kpi-label">Mix cuotas</div>
+      <div class="summary-value portal-kpi-value" id="sumMix">--</div>
+      <div class="summary-note portal-kpi-note">debe cerrar en 100%</div>
     </div>
-    <div class="summary-card">
-      <div class="summary-label">Overrides activos</div>
-      <div class="summary-value" id="sumOverrides">--</div>
-      <div class="summary-note">sellers con excepción</div>
+    <div class="summary-card portal-kpi-card">
+      <div class="summary-label portal-kpi-label">Overrides activos</div>
+      <div class="summary-value portal-kpi-value" id="sumOverrides">--</div>
+      <div class="summary-note portal-kpi-note">sellers con excepción</div>
     </div>
   </div>
 
@@ -594,10 +594,10 @@ body {
   </div>
 
   <!-- COMISIÓN -->
-  <div class="section">
-    <div class="section-title">Comisión del Marketplace</div>
-    <div class="fields-grid">
-      <div class="field">
+  <div class="section portal-panel">
+    <div class="section-title portal-panel-title">Comisión del Marketplace</div>
+    <div class="fields-grid portal-field-grid">
+      <div class="field portal-field">
         <label for="f_comision_pct">Comisión base <span class="unit">% GMV</span></label>
         <input type="number" id="f_comision_pct" min="0" max="100" step="0.1">
         <span class="orig-val" id="orig_comision_pct"></span>
@@ -606,25 +606,25 @@ body {
   </div>
 
   <!-- COSTO FINANCIERO -->
-  <div class="section">
-    <div class="section-title">Costo Financiero por Cuotas</div>
-    <div class="fields-grid">
-      <div class="field">
+  <div class="section portal-panel">
+    <div class="section-title portal-panel-title">Costo Financiero por Cuotas</div>
+    <div class="fields-grid portal-field-grid">
+      <div class="field portal-field">
         <label for="f_c1_pct">Contado / 1 cuota <span class="unit">% GMV</span></label>
         <input type="number" id="f_c1_pct" min="0" max="100" step="0.1">
         <span class="orig-val" id="orig_c1_pct"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_c3_pct">3 cuotas <span class="unit">% GMV</span></label>
         <input type="number" id="f_c3_pct" min="0" max="100" step="0.1">
         <span class="orig-val" id="orig_c3_pct"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_c6_pct">6 cuotas <span class="unit">% GMV</span></label>
         <input type="number" id="f_c6_pct" min="0" max="100" step="0.1">
         <span class="orig-val" id="orig_c6_pct"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_c12_pct">12 cuotas <span class="unit">% GMV</span></label>
         <input type="number" id="f_c12_pct" min="0" max="100" step="0.1">
         <span class="orig-val" id="orig_c12_pct"></span>
@@ -633,25 +633,25 @@ body {
   </div>
 
   <!-- MIX HISTÓRICO -->
-  <div class="section">
-    <div class="section-title">Mix Histórico de Cuotas</div>
-    <div class="fields-grid">
-      <div class="field">
+  <div class="section portal-panel">
+    <div class="section-title portal-panel-title">Mix Histórico de Cuotas</div>
+    <div class="fields-grid portal-field-grid">
+      <div class="field portal-field">
         <label for="f_mix_c1">Mix contado <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c1" min="0" max="100" step="0.01">
         <span class="orig-val" id="orig_mix_c1"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_mix_c3">Mix 3 cuotas <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c3" min="0" max="100" step="0.01">
         <span class="orig-val" id="orig_mix_c3"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_mix_c6">Mix 6 cuotas <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c6" min="0" max="100" step="0.01">
         <span class="orig-val" id="orig_mix_c6"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_mix_c12">Mix 12 cuotas <span class="unit">% ventas</span></label>
         <input type="number" id="f_mix_c12" min="0" max="100" step="0.01">
         <span class="orig-val" id="orig_mix_c12"></span>
@@ -661,40 +661,40 @@ body {
   </div>
 
   <!-- TARIFAS DE SERVICIOS -->
-  <div class="section">
-    <div class="section-title">Tarifas de Servicios</div>
-    <div class="fields-grid">
-      <div class="field">
+  <div class="section portal-panel">
+    <div class="section-title portal-panel-title">Tarifas de Servicios</div>
+    <div class="fields-grid portal-field-grid">
+      <div class="field portal-field">
         <label for="f_t_logistica_dir">Logística directa <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_logistica_dir" min="0" step="1">
         <span class="orig-val" id="orig_t_logistica_dir"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_t_logistica_inv">Logística inversa <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_logistica_inv" min="0" step="1">
         <span class="orig-val" id="orig_t_logistica_inv"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_t_catalogacion">Catalogación <span class="unit">ARS/SKU</span></label>
         <input type="number" id="f_t_catalogacion" min="0" step="1">
         <span class="orig-val" id="orig_t_catalogacion"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_t_fulfillment">Fulfillment <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_fulfillment" min="0" step="1">
         <span class="orig-val" id="orig_t_fulfillment"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_t_gestion_devol">Gestión devoluciones <span class="unit">ARS/pedido</span></label>
         <input type="number" id="f_t_gestion_devol" min="0" step="1">
         <span class="orig-val" id="orig_t_gestion_devol"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_t_soporte">Soporte <span class="unit">ARS/mes</span></label>
         <input type="number" id="f_t_soporte" min="0" step="1">
         <span class="orig-val" id="orig_t_soporte"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_t_almacenamiento">Almacenamiento <span class="unit">ARS/mes</span></label>
         <input type="number" id="f_t_almacenamiento" min="0" step="1">
         <span class="orig-val" id="orig_t_almacenamiento"></span>
@@ -703,25 +703,25 @@ body {
   </div>
 
   <!-- PARÁMETROS OPERATIVOS -->
-  <div class="section">
-    <div class="section-title">Parámetros Operativos</div>
-    <div class="fields-grid">
-      <div class="field">
+  <div class="section portal-panel">
+    <div class="section-title portal-panel-title">Parámetros Operativos</div>
+    <div class="fields-grid portal-field-grid">
+      <div class="field portal-field">
         <label for="f_dias_habiles">Días hábiles <span class="unit">días/mes</span></label>
         <input type="number" id="f_dias_habiles" min="1" max="31" step="1">
         <span class="orig-val" id="orig_dias_habiles"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_dias_calendario">Días calendario <span class="unit">días/mes</span></label>
         <input type="number" id="f_dias_calendario" min="1" max="31" step="1">
         <span class="orig-val" id="orig_dias_calendario"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_capacidad_deposito">Capacidad depósito <span class="unit">SKU</span></label>
         <input type="number" id="f_capacidad_deposito" min="0" step="1">
         <span class="orig-val" id="orig_capacidad_deposito"></span>
       </div>
-      <div class="field">
+      <div class="field portal-field">
         <label for="f_devol_pct_default">Devoluciones default <span class="unit">%</span></label>
         <input type="number" id="f_devol_pct_default" min="0" max="100" step="0.1">
         <span class="orig-val" id="orig_devol_pct_default"></span>
@@ -730,8 +730,8 @@ body {
   </div>
 
   <!-- OVERRIDES POR SELLER -->
-  <div class="section">
-    <div class="section-title">Condiciones especiales por seller</div>
+  <div class="section portal-panel">
+    <div class="section-title portal-panel-title">Condiciones especiales por seller</div>
     <p class="ov-intro">
       <strong>Vacío</strong> = usa tarifa base estándar. &nbsp;
       <strong>Comisión:</strong> % directo que reemplaza la base. &nbsp;
@@ -740,7 +740,7 @@ body {
     </p>
 
     <div style="max-width:300px; margin-bottom:18px">
-      <div class="field">
+      <div class="field portal-field">
         <label>Seller</label>
         <div class="select-wrap">
           <select id="ovSellerSelect" onchange="onSellerChange(this.value)">
@@ -751,56 +751,56 @@ body {
     </div>
 
     <div id="ovForm" style="display:none">
-      <div class="fields-grid">
-        <div class="field">
+      <div class="fields-grid portal-field-grid">
+        <div class="field portal-field">
           <label>Comisión override <span class="unit">% directo</span></label>
           <input type="number" id="ov_comision_override" min="0" max="100" step="0.1"
                  placeholder="Vacío = usa base">
           <span class="ov-hint" id="ovbase_comision_override"></span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Bon. logística dir. <span class="unit">% dto.</span></label>
           <input type="number" id="ov_bon_logistica_dir" min="0" max="100" step="1"
                  placeholder="Vacío = sin dto.">
           <span class="ov-hint" id="ovhint_bon_logistica_dir">0 = sin descuento · 100 = gratis</span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Bon. logística inv. <span class="unit">% dto.</span></label>
           <input type="number" id="ov_bon_logistica_inv" min="0" max="100" step="1"
                  placeholder="Vacío = sin dto.">
           <span class="ov-hint" id="ovhint_bon_logistica_inv">0 = sin descuento · 100 = gratis</span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Bon. catalogación <span class="unit">% dto.</span></label>
           <input type="number" id="ov_bon_catalogacion" min="0" max="100" step="1"
                  placeholder="Vacío = sin dto.">
           <span class="ov-hint" id="ovhint_bon_catalogacion">0 = sin descuento · 100 = gratis</span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Bon. fulfillment <span class="unit">% dto.</span></label>
           <input type="number" id="ov_bon_fulfillment" min="0" max="100" step="1"
                  placeholder="Vacío = sin dto.">
           <span class="ov-hint" id="ovhint_bon_fulfillment">0 = sin descuento · 100 = gratis</span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Bon. gest. devol. <span class="unit">% dto.</span></label>
           <input type="number" id="ov_bon_gest_devol" min="0" max="100" step="1"
                  placeholder="Vacío = sin dto.">
           <span class="ov-hint" id="ovhint_bon_gest_devol">0 = sin descuento · 100 = gratis</span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Bon. soporte <span class="unit">% dto.</span></label>
           <input type="number" id="ov_bon_soporte" min="0" max="100" step="1"
                  placeholder="Vacío = sin dto.">
           <span class="ov-hint" id="ovhint_bon_soporte">0 = sin descuento · 100 = gratis</span>
         </div>
-        <div class="field">
+        <div class="field portal-field">
           <label>Cuotas máx. override <span class="unit">cuotas</span></label>
           <input type="number" id="ov_cuotas_max" min="1" max="24" step="1"
                  placeholder="Vacío = sin límite">
           <span class="ov-hint">Reemplaza el máximo global</span>
         </div>
-        <div class="field" style="grid-column:1/-1">
+        <div class="field portal-field" style="grid-column:1/-1">
           <label>Notas comerciales</label>
           <textarea class="ov-notes" id="ov_notas"
                     placeholder="Condiciones especiales, acuerdos, vigencia…"></textarea>
