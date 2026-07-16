@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-16 - Corrige la vista Lista de Seguimiento Operativo
+
+Tipo de cambio: correccion funcional y mejora de usabilidad de frontend (sin cambios de backend ni de datos).
+
+- Los KPIs y el contador de resultados usan el mismo universo de tareas, incluidas las canceladas.
+- La tabla de 12 columnas obtiene scroll horizontal propio y ancho suficiente para evitar superposiciones.
+- Responsable deja de ser un segundo editor inline; Estado se conserva como unica accion rapida.
+- Dar de baja pierde protagonismo y no se ofrece para tareas completadas o canceladas.
+- Comentarios y checklist se resumen en indicadores compactos; se mejora contraste y acceso por teclado.
+
 ## 2026-07-16 - Unifica el nav del flujo publico de seller
 
 Tipo de cambio: refactor de frontend (sin cambios de backend ni de datos).

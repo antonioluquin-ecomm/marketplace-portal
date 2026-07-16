@@ -221,11 +221,11 @@
 </div>
 
 <!-- MODAL -->
-<div class="modal-ov" id="modal-ov" onclick="closeModal(event)">
-  <div class="modal">
+<div class="modal-ov" id="modal-ov" onclick="closeModal(event)" role="dialog" aria-modal="true" aria-labelledby="m-task">
+  <div class="modal" tabindex="-1">
     <div class="modal-hd">
       <div><div class="mhd-task" id="m-task">—</div><div class="mhd-sub" id="m-sub">—</div></div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" type="button" aria-label="Cerrar detalle de tarea" onclick="closeModal()">&times;</button>
     </div>
     <div class="modal-body" id="m-body">—</div>
   </div>
@@ -1095,16 +1095,15 @@ function updateCounts(tasks,nSel){
 
 /* ── KPI BAR ── */
 function updateGanttKPIs(tasks){
-  const active=tasks.filter(t=>t.estado!=='Cancelado');
   const today=new Date(); today.setHours(0,0,0,0);
-  const late=active.filter(t=>!['Completado','Cancelado'].includes(t.estado)&&t.fin instanceof Date&&t.fin<today);
+  const late=tasks.filter(t=>!['Completado','Cancelado'].includes(t.estado)&&t.fin instanceof Date&&t.fin<today);
   const setText=(id,v)=>{const el=$( id);if(el)el.textContent=v;};
-  setText('gkpi-total',active.length);
-  setText('gkpi-done',active.filter(t=>t.estado==='Completado').length);
-  setText('gkpi-wip',active.filter(t=>t.estado==='En curso').length);
-  setText('gkpi-blk',active.filter(t=>t.estado==='Bloqueado').length);
+  setText('gkpi-total',tasks.length);
+  setText('gkpi-done',tasks.filter(t=>t.estado==='Completado').length);
+  setText('gkpi-wip',tasks.filter(t=>t.estado==='En curso').length);
+  setText('gkpi-blk',tasks.filter(t=>t.estado==='Bloqueado').length);
   setText('gkpi-late',late.length);
-  const nSel=new Set(active.map(t=>t.seller_id).filter(Boolean)).size;
+  const nSel=new Set(tasks.map(t=>t.seller_id).filter(Boolean)).size;
   setText('gkpi-sellers',nSel);
 }
 
@@ -1477,6 +1476,7 @@ function renderLista(tasks,sellerIds,today){
             <span class="lsh-pn">${pct}%</span>
           </div>
         </summary>
+        <div class="lista-table-scroll" tabindex="0" aria-label="Tareas de ${esc(seller.nombre)}; desplazamiento horizontal disponible">
         <table class="data-table">
           <thead><tr>
             <th data-sortable data-key="tarea" class="${sortClass('tarea')}" onclick="setListSort('tarea')">Tarea</th>
@@ -1505,26 +1505,27 @@ function renderLista(tasks,sellerIds,today){
               const rowCls=t.estado==='Bloqueado'?'row-blk':t.estado==='Completado'?'row-done':'';
               const checklistBadge=t.checklist_count?`<span class="mini-badge" title="Checklist">☑ ${t.checklist_done_count}/${t.checklist_count}</span>`:'';
               const comentBadge=t.comentarios_count?`<span class="mini-badge" title="Comentarios">💬 ${t.comentarios_count}</span>`:'';
-              return`<tr class="${rowCls}" onclick="openModal('${esc(t.task_id)}')">
+              return`<tr class="${rowCls}" tabindex="0" aria-label="Abrir detalle de ${esc(t.tarea)}" onclick="openModal('${esc(t.task_id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('${esc(t.task_id)}')}">
                 <td class="td-tarea">${esc(t.tarea)}</td>
                 <td style="font-size:11px;color:var(--t3);max-width:140px;white-space:normal">${esc(t.hito||'—')}</td>
                 <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
                 <td onclick="event.stopPropagation()"><select class="inline-select ${estadoClass(t.estado)}" onchange="updateEstadoInline('${esc(t.task_id)}',this)">${estadoOptionsHtml(t.estado)}</select></td>
                 <td class="td-resp">${esc(t.area_responsable||'—')}</td>
-                <td onclick="event.stopPropagation()"><select class="inline-select" onchange="updateResponsablePersonaInline('${esc(t.task_id)}',this)">${userOptionsHtml(t.responsable_persona_id)}</select></td>
+                <td class="td-resp">${esc(t.responsable_persona_nombre||'Sin asignar')}</td>
                 <td class="td-resp">${entornoBadge(t.entorno)}</td>
                 <td class="td-dates">${fmtDfull(t.inicio)}</td>
                 <td class="td-dates">${fmtDfull(t.fin)}</td>
                 <td class="td-atraso">${atr>0?`<span class="atraso-pill ${ac}">+${atr}d</span>`:t.estado==='Completado'?`<span class="atraso-pill ${ac}">✓ Ok</span>`:'—'}</td>
-                <td class="td-comment">${esc((t.comentario||'').substring(0,70))}${t.comentario&&t.comentario.length>70?'…':''} ${checklistBadge} ${comentBadge}</td>
+                <td class="td-comment" title="${esc(t.comentario||'Sin comentarios')}">${checklistBadge} ${comentBadge || '<span class="comment-empty">Sin comentarios</span>'}</td>
                 <td class="td-acciones" onclick="event.stopPropagation()">
                   <button class="button secondary btn-sm" onclick="openEditTask('${esc(t.task_id)}')">Editar</button>
-                  <button class="button danger btn-sm" ${t.estado==='Cancelado'?'disabled':''} onclick="disableGanttTask('${esc(t.task_id)}')">Cancelar</button>
+                  ${!['Completado','Cancelado'].includes(t.estado)?`<button class="button ghost btn-sm row-disable-btn" onclick="disableGanttTask('${esc(t.task_id)}')">Dar de baja</button>`:''}
                 </td>
               </tr>`;
             }).join('')}
           </tbody>
         </table>
+        </div>
       </details>`;
   });
   html+=`</div>`;
@@ -2056,6 +2057,7 @@ function openModal(taskId){
       <button type="button" class="button" onclick="openEditTask('${esc(t.task_id)}')">Editar tarea</button>
     </div>`;
   $('modal-ov').classList.add('open');
+  $('modal-ov').querySelector('.modal')?.focus();
   loadModalDetalle(t.task_id);
 }
 

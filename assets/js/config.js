@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.23',
+  number: '1.4.24',
   date:   '2026-07-16',
-  notes:  'Unifica el nav del flujo publico de seller',
+  notes:  'Corrige la vista Lista de Seguimiento Operativo',
 };
 
 const CHANGELOG = [
+  { v: '1.4.24', date: '2026-07-16', desc: 'Seguimiento Operativo unifica contadores, corrige el scroll y la legibilidad de Lista, reduce acciones riesgosas y mejora contraste y accesibilidad.' },
   { v: '1.4.23', date: '2026-07-16', desc: 'El nav de las 6 paginas publicas de seller (presentacion, simulador, calificacion, relevamiento, gantt, integracion) pasa a generarse desde una unica fuente en auth-seller.js en vez de estar hardcodeado y duplicado por pagina — corrige que integracion-seller.html no tuviera nav en el topbar.' },
   { v: '1.4.22', date: '2026-07-16', desc: 'Corrige que los campos Rol y Seller del modal de "Nuevo usuario" (Configuración) se mostraran a la vez: .field{display:grid} le ganaba en cascada a [hidden]{display:none}.' },
   { v: '1.4.21', date: '2026-07-16', desc: 'Las paginas publicas simples del portal seller adoptan un marco visual liviano: margenes consistentes, radios de 8px y codigos de recursos mas estables.' },
