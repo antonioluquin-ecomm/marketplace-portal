@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.21',
+  number: '1.4.22',
   date:   '2026-07-16',
-  notes:  'Se alinean paginas publicas simples',
+  notes:  'Corrige Rol/Seller superpuestos en el modal',
 };
 
 const CHANGELOG = [
+  { v: '1.4.22', date: '2026-07-16', desc: 'Corrige que los campos Rol y Seller del modal de "Nuevo usuario" (Configuración) se mostraran a la vez: .field{display:grid} le ganaba en cascada a [hidden]{display:none}.' },
   { v: '1.4.21', date: '2026-07-16', desc: 'Las paginas publicas simples del portal seller adoptan un marco visual liviano: margenes consistentes, radios de 8px y codigos de recursos mas estables.' },
   { v: '1.4.20', date: '2026-07-16', desc: 'El Hub Central se alinea al shell interno: margenes, radios de cards/paneles y jerarquia visual quedan consistentes con las pantallas operativas migradas.' },
   { v: '1.4.19', date: '2026-07-16', desc: 'El Simulador Economico adopta un marco visual propio de herramienta: encabezado interno con jerarquia clara, margenes operativos consistentes y columnas de resultados/tarifas alineadas sin tocar calculos.' },

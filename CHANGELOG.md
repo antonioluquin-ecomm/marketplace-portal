@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-16 - Corrige que Rol y Seller se mostraran a la vez en el modal de usuario
+
+Tipo de cambio: fix de frontend (sin cambios de backend ni de datos).
+
+`.field{display:grid}` (regla de autor) le ganaba en cascada a `[hidden]{display:none}` (regla del user-agent) pese a tener la misma especificidad — los estilos de autor siempre le ganan a los del user-agent. Resultado: en el modal de "Nuevo usuario" de Configuración, el campo Rol y el campo Seller aparecían visibles al mismo tiempo sin importar qué Tipo de cuenta estuviera seleccionado.
+
+- Se agrega `.field[hidden]{display:none}` en `internal/administracion/configuracion.html` para restaurar el comportamiento nativo de `hidden`.
+
 ## 2026-07-16 - Alinea paginas publicas simples del seller
 
 Tipo de cambio: mejora visual de frontend (sin cambios de backend ni de datos).
