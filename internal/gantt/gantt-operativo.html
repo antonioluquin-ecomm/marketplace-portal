@@ -109,7 +109,10 @@
   <div class="filter-bar portal-ops-filter">
     <div class="filter-group">
       <label class="fi-label" for="search">Buscar</label>
-      <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 9.5L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
+      </div>
     </div>
     <div class="filter-group">
       <label class="fi-label" for="seller-sel">Seller</label>
@@ -152,6 +155,11 @@
         <option value="todos">Todos</option>
       </select>
     </div>
+    <div class="filter-group filter-group-toggle">
+      <label class="toggle-lbl" for="mis-tareas-chk">
+        <input type="checkbox" id="mis-tareas-chk" onchange="setFilter('misTareas',this.checked)"> Mis tareas
+      </label>
+    </div>
     <div class="filter-group">
       <label class="fi-label" for="entorno-sel">Entorno</label>
       <select class="sel" id="entorno-sel" onchange="setFilter('entorno',this.value)">
@@ -168,11 +176,6 @@
         <option value="9">9 meses</option>
         <option value="12">12 meses</option>
       </select>
-    </div>
-    <div class="filter-group">
-      <label class="toggle-lbl" for="mis-tareas-chk">
-        <input type="checkbox" id="mis-tareas-chk" onchange="setFilter('misTareas',this.checked)"> Mis tareas
-      </label>
     </div>
     <div class="filter-bar-actions">
       <button class="button secondary" onclick="clearFilters()">Limpiar filtros</button>
@@ -1481,7 +1484,6 @@ function renderLista(tasks,sellerIds,today){
           <thead><tr>
             <th data-sortable data-key="tarea" class="${sortClass('tarea')}" onclick="setListSort('tarea')">Tarea</th>
             <th data-sortable data-key="hito" class="${sortClass('hito')}" onclick="setListSort('hito')">Hito</th>
-            <th data-sortable data-key="fase" class="${sortClass('fase')}" onclick="setListSort('fase')">Fase</th>
             <th data-sortable data-key="estado" class="${sortClass('estado')}" onclick="setListSort('estado')">Estado</th>
             <th data-sortable data-key="area_responsable" class="${sortClass('area_responsable')}" onclick="setListSort('area_responsable')">Área</th>
             <th data-sortable data-key="responsable_persona_nombre" class="${sortClass('responsable_persona_nombre')}" onclick="setListSort('responsable_persona_nombre')">Responsable</th>
@@ -1489,7 +1491,6 @@ function renderLista(tasks,sellerIds,today){
             <th data-sortable data-key="inicio" class="${sortClass('inicio')}" onclick="setListSort('inicio')">Inicio</th>
             <th data-sortable data-key="fin" class="${sortClass('fin')}" onclick="setListSort('fin')">Fin</th>
             <th data-sortable data-key="atraso_calc" class="${sortClass('atraso_calc')}" onclick="setListSort('atraso_calc')">Atraso</th>
-            <th>Comentario</th>
             <th>Acciones</th>
           </tr></thead>
           <tbody>
@@ -1506,9 +1507,14 @@ function renderLista(tasks,sellerIds,today){
               const checklistBadge=t.checklist_count?`<span class="mini-badge" title="Checklist">☑ ${t.checklist_done_count}/${t.checklist_count}</span>`:'';
               const comentBadge=t.comentarios_count?`<span class="mini-badge" title="Comentarios">💬 ${t.comentarios_count}</span>`:'';
               return`<tr class="${rowCls}" tabindex="0" aria-label="Abrir detalle de ${esc(t.tarea)}" onclick="openModal('${esc(t.task_id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('${esc(t.task_id)}')}">
-                <td class="td-tarea">${esc(t.tarea)}</td>
-                <td style="font-size:11px;color:var(--t3);max-width:140px;white-space:normal">${esc(t.hito||'—')}</td>
-                <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:10px"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</span></td>
+                <td class="td-tarea" title="${esc(t.comentario||'')}">
+                  <div class="td-tarea-title">${esc(t.tarea)}</div>
+                  <div class="td-tarea-meta">
+                    <span class="fase-chip" style="--fc:${faseColor(t.fase)}">${esc(t.fase)}</span>
+                    ${checklistBadge}${comentBadge}
+                  </div>
+                </td>
+                <td class="td-hito">${esc(t.hito||'—')}</td>
                 <td onclick="event.stopPropagation()"><select class="inline-select ${estadoClass(t.estado)}" onchange="updateEstadoInline('${esc(t.task_id)}',this)">${estadoOptionsHtml(t.estado)}</select></td>
                 <td class="td-resp">${esc(t.area_responsable||'—')}</td>
                 <td class="td-resp">${esc(t.responsable_persona_nombre||'Sin asignar')}</td>
@@ -1516,7 +1522,6 @@ function renderLista(tasks,sellerIds,today){
                 <td class="td-dates">${fmtDfull(t.inicio)}</td>
                 <td class="td-dates">${fmtDfull(t.fin)}</td>
                 <td class="td-atraso">${atr>0?`<span class="atraso-pill ${ac}">+${atr}d</span>`:t.estado==='Completado'?`<span class="atraso-pill ${ac}">✓ Ok</span>`:'—'}</td>
-                <td class="td-comment" title="${esc(t.comentario||'Sin comentarios')}">${checklistBadge} ${comentBadge || '<span class="comment-empty">Sin comentarios</span>'}</td>
                 <td class="td-acciones" onclick="event.stopPropagation()">
                   <div class="row-actions">
                     <button class="action-icon" onclick="openEditTask('${esc(t.task_id)}')" title="Editar tarea" aria-label="Editar ${esc(t.tarea)}">

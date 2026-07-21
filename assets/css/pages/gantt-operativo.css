@@ -80,6 +80,17 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .il-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;font-weight:700;white-space:nowrap}
 .toggle-lbl{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
 .toggle-lbl input{accent-color:var(--g)}
+/* "Mis tareas" es el único filtro sin label propio arriba (checkbox, no
+   select) — sin esto queda más alto que el resto de los controles, ya que
+   .filter-bar alinea por abajo (align-items:flex-end) asumiendo label+control. */
+.filter-group-toggle{justify-content:flex-end;padding-bottom:9px}
+
+/* Buscador — icono de lupa alineado al patrón canónico .search-wrap
+   (style_guide.md §9.2), ausente antes (era un input suelto sin afordance
+   de búsqueda). */
+.search-input-wrap{position:relative;display:flex;align-items:center}
+.search-input-wrap .search-icon{position:absolute;left:10px;color:var(--t4, var(--t3));pointer-events:none}
+.search-input-wrap .fi{padding-left:30px}
 
 /* ── GANTT ── */
 .gantt-wrap{overflow:auto;flex:1}
@@ -169,7 +180,12 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 
 /* ── LISTA VIEW — secciones colapsables por seller (<details>/<summary>) ── */
 .lista-wrap{padding:16px 22px}
-.lista-seller{margin-bottom:22px;background:var(--k2);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
+/* El estándar de tabla (.table-wrap/.data-table, style_guide.md §6) asume
+   fondo blanco (var(--card)) — antes todo el bloque (header + tabla) vivía
+   sobre var(--k2), un gris azulado de superficie de sidebar que le restaba
+   contraste a los tintes semánticos de fila (row-done/row-blk) y a los
+   badges. El header conserva su propio tinte sutil vía .lista-seller-hd. */
+.lista-seller{margin-bottom:22px;background:var(--card);border:1px solid var(--bdr);border-radius:10px;overflow:hidden}
 .lista-seller-hd{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bdr);background:rgba(17,24,39,.02);cursor:pointer;list-style:none;user-select:none}
 .lista-seller-hd::-webkit-details-marker{display:none}
 .lsh-chevron{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0}
@@ -185,19 +201,39 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
    internal-components.css (style_guide.md §6). Esta tabla se repite una vez
    por cada <details> de seller dentro del mismo contenedor con scroll
    (#content) — el sticky header pensado para una sola tabla por contenedor
-   se desactiva aca para que no se pisen entre si al scrollear. Columnas
-   reales: 4=Estado(select), 5=Area — ninguna es nombre/descripcion, se
-   neutraliza el tratamiento especial que asume .data-table. */
+   se desactiva aca para que no se pisen entre si al scrollear. */
 #content .data-table th { position: static; }
-.lista-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-gutter:stable}
+.lista-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-gutter:stable;background:var(--card)}
 .lista-table-scroll:focus-visible{outline:2px solid var(--primary-mid);outline-offset:-2px}
-#content .data-table { min-width: 1680px; }
-#content .data-table td:nth-child(4),
-#content .data-table td:nth-child(5) {
-  font-family: var(--mono); font-weight: 400; white-space: nowrap;
-  color: inherit; max-width: none; overflow: visible; text-overflow: clip;
+#content .data-table { min-width: 1420px; }
+/* Tipografía por columna — antes .data-table td forzaba mono en TODA celda
+   (internal-components.css asume tablas de IDs/códigos) y esta página lo
+   neutralizaba solo en nth-child(4)/(5) asumiendo que ahí caían
+   nombre/descripción — con las columnas reales (Tarea, Hito, Estado, Área...)
+   ese supuesto era falso: Tarea, Hito, Área y Responsable quedaban en DM Mono
+   cuando son texto libre, no datos tabulares. Se fija por clase, no por
+   posición, para no volver a romperse si cambia el orden de columnas. */
+#content .data-table td.td-tarea,
+#content .data-table td.td-hito,
+#content .data-table td.td-resp {
+  font-family: var(--font); font-weight: 400;
+  color: inherit; overflow: visible; text-overflow: clip;
 }
-.td-tarea{color:var(--t1);font-size:12px;max-width:260px;white-space:normal}
+/* .td-tarea traía white-space:normal pero .data-table td (internal-components.css)
+   define white-space:nowrap con mayor especificidad (clase+elemento vs. clase
+   sola) y siempre ganaba: la tarea larga desbordaba fuera de su columna y se
+   superponía visualmente con Hito, en vez de pasar a una segunda línea. Se
+   fija acá, con la misma especificidad alta que el resto de esta sección. */
+#content .data-table td.td-tarea{white-space:normal;overflow-wrap:break-word;max-width:280px}
+.td-tarea{color:var(--t1);font-size:12px}
+.td-tarea-title{font-weight:500}
+.td-tarea-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px}
+/* Fase deja de ser columna propia (12→10 columnas: menos scroll horizontal,
+   menos ruido) y pasa a chip dentro de la celda de Tarea — incluye Comentario/
+   Checklist como mini-badges al lado, en vez de una columna "Comentario" que
+   en la enorme mayoría de las filas solo mostraba "Sin comentarios". */
+.fase-chip{display:inline-flex;align-items:center;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:var(--radius-pill,999px);white-space:nowrap;background:color-mix(in srgb, var(--fc) 12%, var(--card));color:var(--fc);border:1px solid color-mix(in srgb, var(--fc) 32%, transparent)}
+#content .data-table td.td-hito{font-size:11px;color:var(--t3);max-width:140px;white-space:normal}
 .td-resp{white-space:nowrap;font-size:11px}
 .td-dates{font-size:11px;white-space:nowrap}
 .td-atraso{white-space:nowrap}
@@ -205,8 +241,6 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .atraso-ok{background:var(--g-dim);color:var(--g2)}
 .atraso-warn{background:var(--wad, rgba(146,64,14,.1));color:var(--warn)}
 .atraso-bad{background:var(--dng-dim);color:var(--danger, #991b1b)}
-.td-comment{font-size:11px;color:var(--t3);min-width:120px;white-space:nowrap}
-.comment-empty{font-family:var(--font);font-size:10px;color:var(--t4)}
 /* ── ACCIONES DE FILA — icon buttons compactos (mismo patrón que PCC:
    modules/tareas/tareas.html .row-actions/.compact-actions/.action-icon),
    reemplaza los botones de texto "Editar"/"Dar de baja" que rompían la

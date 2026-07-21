@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-21 - Revision critica de la tabla y filtros de Seguimiento Operativo
+
+Tipo de cambio: correccion y simplificacion visual de frontend, sin cambios de datos ni de backend.
+
+Diagnostico punto por punto pedido por el usuario:
+
+- **Fondo gris**: `.lista-seller` (contenedor de cada bloque de seller en la vista Lista) usaba `background:var(--k2)` (gris azulado de superficie de sidebar) para todo el bloque, incluida la tabla. El estandar (`style_guide.md` §6) asume tabla sobre fondo blanco (`var(--card)`). Se corrige: el contenedor y el scroll de la tabla pasan a blanco: el header conserva su propio tinte sutil.
+- **Tipografia**: prácticamente toda la tabla (Tarea, Hito, Área, Responsable) se renderizaba en DM Mono. Causa: `.data-table td` (`internal-components.css`) fuerza mono en toda celda por defecto (asume tablas de IDs/codigos) y esta pagina lo neutralizaba solo en `td:nth-child(4)`/`(5)`, asumiendo que ahi caian nombre/descripcion — un supuesto falso para las columnas reales de esta tabla. Se reemplaza por reglas basadas en clase (`.td-tarea`, `.td-hito`, `.td-resp`), no en posicion, para que no se rompa de nuevo si cambia el orden de columnas.
+- **Fase como chip**: pasa de columna propia a chip de color dentro de la celda de Tarea, junto a los badges de checklist/comentarios.
+- **Columna Comentario eliminada**: en la enorme mayoria de las filas solo mostraba "Sin comentarios"; sus badges de checklist/comentarios se mueven a la celda de Tarea. Con Fase y Comentario fuera, la tabla pasa de 12 a 10 columnas.
+- **Tarea se pisaba con Hito**: `.td-tarea` definia `white-space:normal`, pero `.data-table td` (mas especifica: clase+elemento vs. clase sola) ganaba con `white-space:nowrap`, asi que las tareas largas desbordaban su columna en vez de pasar a una segunda linea. Se corrige subiendo la especificidad de la regla de Tarea.
+- **Orden de filtros**: en general es logico (Buscar -> Seller -> Fase -> Estado -> Area -> Responsable -> Entorno); se reordena "Mis tareas" para que quede junto a Responsable, su filtro relacionado, en vez de al final de la barra.
+- **Buscador**: la logica de busqueda ya cubria lo que promete el placeholder (nombre/ID de seller, tarea, hito, fase, area, responsable, comentario); se le agrega el icono de lupa del patron canonico (`style_guide.md` §9.2), que faltaba.
+
 ## 2026-07-21 - Corrige los labels de filtro de Seguimiento Operativo
 
 Tipo de cambio: correccion visual de frontend, sin cambios de datos ni de backend.
