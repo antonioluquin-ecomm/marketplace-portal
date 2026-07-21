@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-21 - Blinda el selector CSS de inputs en Configuración contra `type` faltante
+
+Tipo de cambio: refuerzo defensivo de frontend, sin cambios visuales para el estado actual del modal.
+
+Al revisar si Project Control Center (PCC) tenía los mismos bugs que se acababan de corregir en marketplace-portal, se encontró que PCC también tiene inputs sin `type` explícito (`m_nombre`, `r_nombre`, `r_desc`) pero **no se rompe**, porque su selector CSS excluye en vez de incluir: `input:not([type="checkbox"]):not([type="radio"])`. Se adopta el mismo patrón en `internal/administracion/configuracion.html`, reemplazando la lista de inclusión (`input[type="text"], input[type="email"], ...`) — así un input sin `type` recibe el estilo del design system en vez de quedar roto la próxima vez que alguien lo agregue sin `type`. Verificado que el checkbox sigue excluido correctamente. Estándar actualizado en `project-standards/login_standard.md §17`.
+
 ## 2026-07-21 - Corrige alineación del modal "Nuevo usuario" en Configuración
 
 Tipo de cambio: corrección visual de frontend, sin cambios de datos ni de backend.

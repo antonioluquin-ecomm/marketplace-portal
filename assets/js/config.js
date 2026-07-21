@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.46',
+  number: '1.4.47',
   date:   '2026-07-21',
-  notes:  'Corrige alineacion del modal "Nuevo usuario" en Configuracion',
+  notes:  'Blinda el selector CSS de inputs en Configuracion contra type faltante',
 };
 
 const CHANGELOG = [
+  { v: '1.4.47', date: '2026-07-21', desc: 'El selector CSS de inputs de Configuracion (modal de usuarios/roles) pasa de lista de inclusion (input[type="text"], input[type="email"], ...) a exclusion (input:not([type="checkbox"]):not([type="radio"])), igual que Project Control Center: asi un input sin type explicito recibe el estilo del design system de todas formas, en vez de quedar roto la proxima vez que alguien lo agregue sin type.' },
   { v: '1.4.46', date: '2026-07-21', desc: 'Se corrigen dos bugs visuales del modal "Nuevo usuario" (Configuracion > Usuarios): el segmentado "Interno"/"Seller" medía distinto por texto en vez de partir el ancho en partes iguales (se agrega flex:1 a los botones), y el campo Nombre no tenia type="text" explicito por lo que quedaba sin el estilo del design system (borde, padding, ancho) a diferencia de Email. Documentado como estandar en project-standards/login_standard.md §17.' },
   { v: '1.4.45', date: '2026-07-21', desc: 'Se agrega el estado "Configurado en QA" a las tareas de Seguimiento Operativo: intermedio entre "En curso" y "Completado" para tareas ya armadas en QA a las que todavia les falta el mismo trabajo en Productivo. Cuenta como estado abierto (Solo activos, atraso, resumen por seller), tiene su propio color (violeta) en badges/select/barras de Gantt y Roadmap/columna de Kanban/export a Excel. Requiere redeploy manual de Apps Script (apps-script/Gantt.gs) para que el backend acepte el nuevo valor.' },
   { v: '1.4.44', date: '2026-07-21', desc: 'Seguimiento Operativo: el hint bajo el filtro de Seller decia "Todos los sellers" duplicando el texto que ya muestra el propio select por defecto - ahora solo aparece cuando hay un seller elegido ("Filtrado por X"). Se corrige tambien que "Limpiar filtros" saltara al extremo derecho de la fila que le tocara al hacer wrap la barra (7 filtros + Mis tareas ya no entran en una sola fila) - ahora siempre ocupa su propia fila, alineado a la derecha.' },
