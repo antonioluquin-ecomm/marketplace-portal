@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.37',
-  date:   '2026-07-16',
-  notes:  'Normaliza responsive de paginas seller',
+  number: '1.4.38',
+  date:   '2026-07-21',
+  notes:  'Alinea la tabla de Seguimiento Operativo al estandar de tablas',
 };
 
 const CHANGELOG = [
+  { v: '1.4.38', date: '2026-07-21', desc: 'La tabla de Seguimiento Operativo (vista Lista) uniforma sus badges de Estado/Atraso/Entorno en pill y reemplaza los botones de texto "Editar"/"Dar de baja" por botones de icono compactos, siguiendo el mismo patron de tabla que Project Control Center.' },
   { v: '1.4.37', date: '2026-07-16', desc: 'El flujo seller normaliza navegacion y controles moviles; la barra de administrador se reorganiza y actualiza siempre el espacio inferior para no tapar contenido ni avisos.' },
   { v: '1.4.36', date: '2026-07-16', desc: 'Simulador, Calificacion, Relevamiento y Gantt comparten ancho, padding e inicio vertical; Presentacion e Integracion alinean sus contenedores y la identidad usa carga explicita sin datos genericos.' },
   { v: '1.4.35', date: '2026-07-16', desc: 'Las seis paginas seller cargan al final un contrato CSS unico y versionado para header, navegacion, marca y breakpoints; los formularios eliminan su desplazamiento superior exclusivo.' },

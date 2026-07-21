@@ -1518,8 +1518,14 @@ function renderLista(tasks,sellerIds,today){
                 <td class="td-atraso">${atr>0?`<span class="atraso-pill ${ac}">+${atr}d</span>`:t.estado==='Completado'?`<span class="atraso-pill ${ac}">✓ Ok</span>`:'—'}</td>
                 <td class="td-comment" title="${esc(t.comentario||'Sin comentarios')}">${checklistBadge} ${comentBadge || '<span class="comment-empty">Sin comentarios</span>'}</td>
                 <td class="td-acciones" onclick="event.stopPropagation()">
-                  <button class="button secondary btn-sm" onclick="openEditTask('${esc(t.task_id)}')">Editar</button>
-                  ${!['Completado','Cancelado'].includes(t.estado)?`<button class="button ghost btn-sm row-disable-btn" onclick="disableGanttTask('${esc(t.task_id)}')">Dar de baja</button>`:''}
+                  <div class="row-actions">
+                    <button class="action-icon" onclick="openEditTask('${esc(t.task_id)}')" title="Editar tarea" aria-label="Editar ${esc(t.tarea)}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+                    </button>
+                    ${!['Completado','Cancelado'].includes(t.estado)?`<button class="action-icon danger" onclick="disableGanttTask('${esc(t.task_id)}')" title="Dar de baja" aria-label="Dar de baja ${esc(t.tarea)}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                    </button>`:''}
+                  </div>
                 </td>
               </tr>`;
             }).join('')}

@@ -127,15 +127,18 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
    (#a5d6a7/#9ed0fb/#f29a9a) eran resabio del tema oscuro viejo — bajo
    contraste sobre fondo claro. Se reemplazan por los tokens semánticos
    ya usados en el resto del proyecto (--primary/--danger/--warning). */
-.estado-badge{font-size:10px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:3px;white-space:nowrap;border:1px solid transparent}
+.estado-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--radius-pill,999px);white-space:nowrap;border:1px solid transparent}
 .st-done{background:var(--g-dim);color:var(--g2);border-color:var(--g-brd)}
 .st-wip{background:rgba(37,99,235,.1);color:#1d4ed8;border-color:rgba(37,99,235,.25)}
 .st-pend{background:rgba(17,24,39,.06);color:var(--t3);border-color:rgba(17,24,39,.10)}
 .st-blk{background:var(--dng-dim);color:var(--danger, #991b1b);border-color:rgba(217,64,64,.34)}
 .st-can{background:rgba(17,24,39,.04);color:var(--t4);text-decoration:line-through}
 
-/* Select de estado inline coloreado por valor (misma paleta que .estado-badge),
-   para que la fila lea el estado de un vistazo en vez de un select gris neutro. */
+/* Select de estado inline coloreado por valor (misma paleta que .estado-badge)
+   y con la misma forma de pill — antes tenía radius de select (6px) y quedaba
+   como control de formulario suelto en vez de leerse como el resto de los
+   badges de la fila (entorno/atraso, ya en pill). */
+.inline-select{border-radius:var(--radius-pill,999px);font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px 4px 8px}
 .inline-select.st-done{background:var(--g-dim);color:var(--g2);border-color:var(--g-brd)}
 .inline-select.st-wip{background:rgba(37,99,235,.1);color:#1d4ed8;border-color:rgba(37,99,235,.25)}
 .inline-select.st-pend{background:rgba(17,24,39,.05);color:var(--t2);border-color:var(--bdr)}
@@ -204,19 +207,33 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .atraso-bad{background:var(--dng-dim);color:var(--danger, #991b1b)}
 .td-comment{font-size:11px;color:var(--t3);min-width:120px;white-space:nowrap}
 .comment-empty{font-family:var(--font);font-size:10px;color:var(--t4)}
-.td-acciones{white-space:nowrap;display:flex;gap:5px}
+/* ── ACCIONES DE FILA — icon buttons compactos (mismo patrón que PCC:
+   modules/tareas/tareas.html .row-actions/.compact-actions/.action-icon),
+   reemplaza los botones de texto "Editar"/"Dar de baja" que rompían la
+   alineación vertical de la fila y no tenían la densidad del resto de las
+   tablas del ecosistema. */
+.row-actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:nowrap;align-items:center}
+.action-icon{
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 28px;
+  width:28px;height:28px;padding:0;border-radius:7px;
+  background:transparent;border:1px solid transparent;color:var(--t3);
+  cursor:pointer;transition:all .12s;
+}
+.action-icon:hover{color:var(--t1);background:rgba(17,24,39,.05);border-color:var(--bdr)}
+.action-icon.danger{color:var(--danger, #991b1b)}
+.action-icon.danger:hover{color:var(--danger, #991b1b);background:var(--dng-dim);border-color:rgba(217,64,64,.34)}
+.action-icon svg{width:14px;height:14px;flex:0 0 14px}
+.td-acciones{white-space:nowrap}
 
 /* dropdowns embebidos en la tabla — mismo look que .sel/.edit-select,
    compactado para caber en una celda */
-.inline-select{width:auto;min-width:100px;padding:4px 6px;background:rgba(17,24,39,.04);border:1px solid var(--bdr);border-radius:6px;color:var(--t1);font-family:var(--font);font-size:11px;outline:none;cursor:pointer}
+.inline-select{width:auto;min-width:100px;background:rgba(17,24,39,.04);border:1px solid var(--bdr);color:var(--t1);font-family:var(--font);font-size:11px;outline:none;cursor:pointer}
 .inline-select:focus{border-color:var(--g-brd);box-shadow:0 0 0 2px var(--g-dim)}
 .inline-select option{background:var(--k2);color:var(--t1)}
 
 .mini-badge{display:inline-flex;align-items:center;gap:2px;font-size:9.5px;color:var(--t3);white-space:nowrap;margin-left:4px}
 
 .btn-sm{padding:4px 9px;font-size:11px;min-height:0}
-.row-disable-btn{color:var(--danger);border-color:transparent;background:transparent}
-.row-disable-btn:hover{background:var(--danger-bg);border-color:var(--danger-border, #fca5a5)}
 
 /* ── RESALTADO POR ESTADO EN LISTA ── */
 #content .data-table tbody tr{cursor:pointer}

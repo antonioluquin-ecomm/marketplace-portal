@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-21 - Alinea la tabla de Seguimiento Operativo al estandar de tablas
+
+Tipo de cambio: mejora visual de frontend, sin cambios de datos ni de backend.
+
+- Referencia usada: la tabla de tareas de Project Control Center (`modules/tareas/tareas.html`), senalada como "la mejor armada" del ecosistema.
+- Los badges de Estado (`.estado-badge`, select inline `.inline-select`) pasan de un radio de 3px a pill (`var(--radius-pill)`), igual que los badges de Atraso y Entorno que ya eran pill — antes convivian dos formas distintas de badge en la misma fila.
+- La columna Acciones reemplaza los botones de texto "Editar" y "Dar de baja" por botones de icono compactos (28x28px, SVG, tooltip + `aria-label`), agrupados en `.row-actions`, igual que el patron `.action-icon`/`.compact-actions` de PCC.
+- Se elimina `.row-disable-btn`, clase CSS que quedo sin uso tras el cambio de boton.
+
 ## 2026-07-16 - Normaliza responsive de paginas seller
 
 Tipo de cambio: mejora responsive y de usabilidad de frontend (sin cambios de backend ni de datos).
