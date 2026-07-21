@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.47',
+  number: '1.4.48',
   date:   '2026-07-21',
-  notes:  'Blinda el selector CSS de inputs en Configuracion contra type faltante',
+  notes:  'Filtro por rol/estado, ordenamiento y acciones de icono en la tabla de Usuarios',
 };
 
 const CHANGELOG = [
+  { v: '1.4.48', date: '2026-07-21', desc: 'Configuracion > Usuarios se alinea al patron estandar de tablas del ecosistema: la barra de filtros pasa de inputs sueltos a .filter-bar/.filter-group (label arriba de cada control, igual que Seguimiento Operativo y Backlog), suma filtros por Rol y Estado (antes solo Buscar y Seller) y un boton "Limpiar filtros". Las columnas Nombre/Email/Rol/Seller/Estado son ahora ordenables por click en el header (mismo patron data-sortable/sort-asc/sort-desc de Seguimiento Operativo). Los botones de texto "Editar"/"Activar"/"Desactivar" pasan a botones de icono compactos (mismo patron que Project Control Center).' },
   { v: '1.4.47', date: '2026-07-21', desc: 'El selector CSS de inputs de Configuracion (modal de usuarios/roles) pasa de lista de inclusion (input[type="text"], input[type="email"], ...) a exclusion (input:not([type="checkbox"]):not([type="radio"])), igual que Project Control Center: asi un input sin type explicito recibe el estilo del design system de todas formas, en vez de quedar roto la proxima vez que alguien lo agregue sin type.' },
   { v: '1.4.46', date: '2026-07-21', desc: 'Se corrigen dos bugs visuales del modal "Nuevo usuario" (Configuracion > Usuarios): el segmentado "Interno"/"Seller" medía distinto por texto en vez de partir el ancho en partes iguales (se agrega flex:1 a los botones), y el campo Nombre no tenia type="text" explicito por lo que quedaba sin el estilo del design system (borde, padding, ancho) a diferencia de Email. Documentado como estandar en project-standards/login_standard.md §17.' },
   { v: '1.4.45', date: '2026-07-21', desc: 'Se agrega el estado "Configurado en QA" a las tareas de Seguimiento Operativo: intermedio entre "En curso" y "Completado" para tareas ya armadas en QA a las que todavia les falta el mismo trabajo en Productivo. Cuenta como estado abierto (Solo activos, atraso, resumen por seller), tiene su propio color (violeta) en badges/select/barras de Gantt y Roadmap/columna de Kanban/export a Excel. Requiere redeploy manual de Apps Script (apps-script/Gantt.gs) para que el backend acepte el nuevo valor.' },

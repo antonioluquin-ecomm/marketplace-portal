@@ -384,6 +384,7 @@ function _renderUserIndicator() {
 let _rolesData = [];
 let _sellersData = [];
 let _usuariosData = [];
+let _usuariosSort = { col: 'nombre', dir: 1 };
 
 /* Cierra un modal-overlay con click afuera o Escape, y envía el form con
    Enter (excepto si el foco está en un <select> o <button>, donde Enter ya
@@ -429,14 +430,36 @@ function renderUserManagementSection() {
           <button class="button" id="uf-new-btn" disabled onclick="_openUserForm()">+ Nuevo usuario</button>
         </div>
         <div id="uf-sellers-error" class="status-bar error" style="margin-bottom:14px" hidden></div>
-        <div class="field-row" style="margin-bottom:14px">
-          <div class="field" style="max-width:280px">
-            <input type="search" id="uf-search" placeholder="Buscar por nombre, email o seller…" oninput="_renderUsuariosTable()">
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label class="fi-label" for="uf-search">Buscar</label>
+            <div class="search-input-wrap">
+              <svg class="search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 9.5L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <input type="search" id="uf-search" style="max-width:220px" placeholder="Nombre, email o seller…" oninput="_renderUsuariosTable()">
+            </div>
           </div>
-          <div class="field" style="max-width:260px">
-            <select id="uf-seller-filter" onchange="_renderUsuariosTable()">
+          <div class="filter-group">
+            <label class="fi-label" for="uf-seller-filter">Seller</label>
+            <select id="uf-seller-filter" style="max-width:200px" onchange="_renderUsuariosTable()">
               <option value="">Todos los sellers</option>
             </select>
+          </div>
+          <div class="filter-group">
+            <label class="fi-label" for="uf-rol-filter">Rol</label>
+            <select id="uf-rol-filter" style="max-width:180px" onchange="_renderUsuariosTable()">
+              <option value="">Todos los roles</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="fi-label" for="uf-estado-filter">Estado</label>
+            <select id="uf-estado-filter" style="max-width:160px" onchange="_renderUsuariosTable()">
+              <option value="">Todos los estados</option>
+              <option value="SI">Activo</option>
+              <option value="NO">Inactivo</option>
+            </select>
+          </div>
+          <div class="filter-bar-actions">
+            <button class="button secondary" onclick="_clearUsuariosFilters()">Limpiar filtros</button>
           </div>
         </div>
         <div id="usuarios-table-wrap"><div class="status-bar">Cargando usuarios…</div></div>
@@ -665,6 +688,31 @@ function _populateSellerFilter() {
   sel.value = actual;
 }
 
+function _populateRolFilter() {
+  const sel = document.getElementById('uf-rol-filter');
+  if (!sel) return;
+  const usados = {};
+  _usuariosData.forEach(function (u) { usados[Number(u.id_rol)] = true; });
+  const roles = _rolesData.filter(function (r) { return usados[Number(r.id)]; });
+  const actual = sel.value;
+  sel.innerHTML = '<option value="">Todos los roles</option>' + roles.map(function (r) {
+    return '<option value="' + r.id + '">' + _escHtml(r.nombre) + '</option>';
+  }).join('');
+  sel.value = actual;
+}
+
+function _clearUsuariosFilters() {
+  const search = document.getElementById('uf-search');
+  const seller = document.getElementById('uf-seller-filter');
+  const rol    = document.getElementById('uf-rol-filter');
+  const estado = document.getElementById('uf-estado-filter');
+  if (search) search.value = '';
+  if (seller) seller.value = '';
+  if (rol)    rol.value = '';
+  if (estado) estado.value = '';
+  _renderUsuariosTable();
+}
+
 async function _loadSellers() {
   try {
     const res = await _apiAuthPost({ action: 'getSellers' });
@@ -859,7 +907,19 @@ async function _loadUsuarios() {
   }
 
   _populateSellerFilter();
+  _populateRolFilter();
   _renderUsuariosTable();
+}
+
+function _setUsuariosSort(col) {
+  if (_usuariosSort.col === col) _usuariosSort.dir *= -1;
+  else _usuariosSort = { col: col, dir: 1 };
+  _renderUsuariosTable();
+}
+
+function _usuariosSortClass(col) {
+  if (_usuariosSort.col !== col) return '';
+  return _usuariosSort.dir === 1 ? 'sort-asc' : 'sort-desc';
 }
 
 function _renderUsuariosTable() {
@@ -868,12 +928,31 @@ function _renderUsuariosTable() {
 
   const q      = _normalizeText((document.getElementById('uf-search') || {}).value);
   const seller = (document.getElementById('uf-seller-filter') || {}).value || '';
+  const rol    = (document.getElementById('uf-rol-filter') || {}).value || '';
+  const estado = (document.getElementById('uf-estado-filter') || {}).value || '';
 
-  const usuarios = _usuariosData.filter(function (u) {
+  let usuarios = _usuariosData.filter(function (u) {
     if (seller && String(u.seller_id || '').toUpperCase() !== seller.toUpperCase()) return false;
+    if (rol && Number(u.id_rol) !== Number(rol)) return false;
+    if (estado && (u.activo === 'SI') !== (estado === 'SI')) return false;
     if (!q) return true;
     const haystack = _normalizeText(u.nombre + ' ' + u.email + ' ' + u.seller_id + ' ' + _sellerNombre(u.seller_id));
     return haystack.indexOf(q) !== -1;
+  });
+
+  usuarios = usuarios.map(function (u) {
+    return {
+      raw: u,
+      nombre: u.nombre || '',
+      email: u.email || '',
+      rolLabel: _rolNombre(u.id_rol),
+      sellerLabel: u.seller_id ? _sellerNombre(u.seller_id) : '',
+      estadoLabel: u.activo === 'SI' ? 'Activo' : 'Inactivo',
+    };
+  }).sort(function (a, b) {
+    const va = String(a[_usuariosSort.col] || '').toLowerCase();
+    const vb = String(b[_usuariosSort.col] || '').toLowerCase();
+    return va < vb ? -_usuariosSort.dir : va > vb ? _usuariosSort.dir : 0;
   });
 
   const countEl = document.getElementById('usuarios-count');
@@ -891,29 +970,33 @@ function _renderUsuariosTable() {
       <table>
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Seller</th>
-            <th>Estado</th>
+            <th data-sortable class="${_usuariosSortClass('nombre')}" onclick="_setUsuariosSort('nombre')">Nombre</th>
+            <th data-sortable class="${_usuariosSortClass('email')}" onclick="_setUsuariosSort('email')">Email</th>
+            <th data-sortable class="${_usuariosSortClass('rolLabel')}" onclick="_setUsuariosSort('rolLabel')">Rol</th>
+            <th data-sortable class="${_usuariosSortClass('sellerLabel')}" onclick="_setUsuariosSort('sellerLabel')">Seller</th>
+            <th data-sortable class="${_usuariosSortClass('estadoLabel')}" onclick="_setUsuariosSort('estadoLabel')">Estado</th>
             <th style="text-align:right">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          ${usuarios.map(function (u) {
-            const rolLabel = _rolNombre(u.id_rol);
+          ${usuarios.map(function (row) {
+            const u        = row.raw;
             const activo   = u.activo === 'SI';
             const uJson    = JSON.stringify(u).replace(/"/g, '&quot;');
             return `<tr>
               <td>${_escHtml(u.nombre || '—')}</td>
               <td style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">${_escHtml(u.email || '—')}</td>
-              <td>${_escHtml(rolLabel)}</td>
-              <td>${u.seller_id ? _escHtml(_sellerNombre(u.seller_id)) + ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : '<span class="text-muted">—</span>'}</td>
-              <td><span class="status-pill ${activo ? 'active' : 'inactive'}">${activo ? 'Activo' : 'Inactivo'}</span></td>
+              <td>${_escHtml(row.rolLabel)}</td>
+              <td>${u.seller_id ? _escHtml(row.sellerLabel) + ' <span style="color:var(--muted);font-family:var(--mono);font-size:11px">(' + _escHtml(u.seller_id) + ')</span>' : '<span class="text-muted">—</span>'}</td>
+              <td><span class="status-pill ${activo ? 'active' : 'inactive'}">${row.estadoLabel}</span></td>
               <td>
                 <div class="row-actions">
-                  <button class="button secondary" onclick="_openUserForm(${uJson})">Editar</button>
-                  <button class="button ${activo ? 'danger' : 'secondary'}" onclick="_toggleUserActivo(${u.id},'${activo ? 'NO' : 'SI'}')">${activo ? 'Desactivar' : 'Activar'}</button>
+                  <button class="action-icon" onclick="_openUserForm(${uJson})" title="Editar usuario" aria-label="Editar ${_escHtml(u.nombre || u.email)}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+                  </button>
+                  <button class="action-icon ${activo ? 'danger' : ''}" onclick="_toggleUserActivo(${u.id},'${activo ? 'NO' : 'SI'}')" title="${activo ? 'Desactivar' : 'Activar'}" aria-label="${activo ? 'Desactivar' : 'Activar'} ${_escHtml(u.nombre || u.email)}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v10"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg>
+                  </button>
                 </div>
               </td>
             </tr>`;

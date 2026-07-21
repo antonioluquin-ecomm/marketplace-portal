@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-21 - Tabla de Usuarios (Configuración): filtros, ordenamiento y acciones de ícono
+
+Tipo de cambio: mejora de frontend en Configuración > Usuarios, sin cambios de backend.
+
+Se alinea la tabla de Usuarios al mismo patrón que ya usan Seguimiento Operativo/Backlog (filtros) y Project Control Center (acciones de fila):
+
+- **Barra de filtros**: pasa de dos inputs sueltos (Buscar + Seller, sin label) a `.filter-bar`/`.filter-group` con el título arriba de cada control — mismo patrón que Gantt y Backlog.
+- **Filtros nuevos**: Rol y Estado (antes solo se podía filtrar por Seller y buscar por texto libre).
+- **"Limpiar filtros"**: nuevo botón que resetea los 4 filtros de una vez.
+- **Ordenamiento por columna**: Nombre, Email, Rol, Seller y Estado son ahora clicleables para ordenar asc/desc (mismo patrón `data-sortable`/`sort-asc`/`sort-desc` de Seguimiento Operativo).
+- **Acciones de fila**: los botones de texto "Editar"/"Activar"/"Desactivar" pasan a botones de ícono compactos (lápiz + toggle), mismo patrón que Project Control Center.
+
 ## 2026-07-21 - Blinda el selector CSS de inputs en Configuración contra `type` faltante
 
 Tipo de cambio: refuerzo defensivo de frontend, sin cambios visuales para el estado actual del modal.

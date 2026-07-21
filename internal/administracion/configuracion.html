@@ -50,6 +50,17 @@
     .status-pill.active{background:var(--success-bg);color:var(--success)}
     .status-pill.inactive{background:var(--bg);color:var(--muted)}
     .row-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+    .action-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 28px;width:28px;height:28px;padding:0;border-radius:7px;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;transition:all .12s}
+    .action-icon:hover{color:var(--text);background:color-mix(in srgb, var(--text) 6%, transparent);border-color:var(--line)}
+    .action-icon.danger{color:var(--danger)}
+    .action-icon.danger:hover{color:var(--danger);background:var(--danger-bg);border-color:color-mix(in srgb, var(--danger) 34%, transparent)}
+    .action-icon svg{width:14px;height:14px;flex:0 0 14px}
+
+    /* ── Barra de filtros (style_guide.md §9.2 / patron .filter-bar del ecosistema) ── */
+    .panel .filter-bar{padding:0 0 16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+    .search-input-wrap{position:relative;display:flex;align-items:center}
+    .search-input-wrap .search-icon{position:absolute;left:10px;color:var(--muted);pointer-events:none}
+    .search-input-wrap input{padding-left:30px}
 
     /* ── Formularios (style_guide.md §7.1) ── */
     .field{display:grid;gap:5px}
