@@ -19,9 +19,15 @@ const CAMPOS_GANTT_EDITABLES_QA = {
   depende_de: ["Depende de", "depende_de", "dependencia"],
 };
 
+// "Configurado en QA" — Etapa 2026-07-21: estado intermedio entre "En curso"
+// y "Completado" para tareas que ya se armaron en QA pero todavia requieren
+// el mismo trabajo en Productivo antes de poder cerrarse. Sin este estado,
+// un agente que termina la parte de QA no tenia forma de reflejar "hice esto,
+// pero falta Productivo" sin marcar la tarea como Completado prematuramente.
 const ESTADOS_GANTT_PERMITIDOS = {
   pendiente: "Pendiente",
   en_curso: "En curso",
+  configurado_en_qa: "Configurado en QA",
   bloqueado: "Bloqueado",
   completado: "Completado",
   cancelado: "Cancelado",

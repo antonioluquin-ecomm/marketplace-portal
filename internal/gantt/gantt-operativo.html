@@ -138,6 +138,7 @@
         <option value="todos">Todos los estados</option>
         <option value="Pendiente">Pendiente</option>
         <option value="En curso">En curso</option>
+        <option value="Configurado en QA">Configurado en QA</option>
         <option value="Bloqueado">Bloqueado</option>
         <option value="Completado">Completado</option>
         <option value="Cancelado">Cancelado</option>
@@ -277,6 +278,7 @@
             <select class="edit-select" id="edit-estado" name="estado">
               <option value="Pendiente">Pendiente</option>
               <option value="En curso">En curso</option>
+              <option value="Configurado en QA">Configurado en QA</option>
               <option value="Bloqueado">Bloqueado</option>
               <option value="Completado">Completado</option>
               <option value="Cancelado">Cancelado</option>
@@ -367,6 +369,7 @@
             <select class="edit-select" id="create-estado" name="estado">
               <option value="Pendiente">Pendiente</option>
               <option value="En curso">En curso</option>
+              <option value="Configurado en QA">Configurado en QA</option>
               <option value="Bloqueado">Bloqueado</option>
               <option value="Completado">Completado</option>
               <option value="Cancelado">Cancelado</option>
@@ -490,6 +493,12 @@ let listSort = {col:'inicio',dir:1};
 let modalDetalle = {task_id:'', checklist:[], comentarios:[], loading:false};
 
 const FASES_GANTT_PERMITIDAS = ['Comercial','Técnica','Operativa','QA / Validación','Go Live'];
+// Estados "abiertos" (no Pendiente ni terminales Completado/Cancelado): cuentan
+// para "Solo activos", siguen acumulando atraso y suman en "N activa(s)" del
+// resumen por seller. "Configurado en QA" es un estado abierto más — la tarea
+// no está cerrada, sigue pendiente el mismo trabajo en Productivo.
+const ESTADOS_GANTT_ACTIVOS = ['En curso','Configurado en QA','Bloqueado'];
+const ESTADOS_GANTT_TODOS = ['Pendiente','En curso','Configurado en QA','Bloqueado','Completado','Cancelado'];
 // Etapa 12 — antes "responsable" era texto libre de equipo; ahora es el enum de
 // ÁREA responsable. La persona individual asignada sale de USERS (getUsuariosGantt).
 const AREAS_GANTT_PERMITIDAS = ['eCommerce','InfraCommerce','Agente PIM','Administración','Seller','Comercial','Operaciones','QA','IT'];
@@ -621,6 +630,7 @@ function estadoNorm(v) {
   if(!v||v==='') return 'Pendiente';
   const n=norm(v);
   if(n.includes('completado')||n.includes('done')) return 'Completado';
+  if(n.includes('configurado')) return 'Configurado en QA';
   if(n.includes('curso')||n.includes('progreso')) return 'En curso';
   if(n.includes('bloqueado')) return 'Bloqueado';
   if(n.includes('cancelado')) return 'Cancelado';
@@ -985,11 +995,11 @@ function faseColor(f){
   return 'var(--t3)';
 }
 function estadoClass(e){
-  switch(e){case'Completado':return'st-done';case'En curso':return'st-wip';case'Bloqueado':return'st-blk';case'Cancelado':return'st-can';}
+  switch(e){case'Completado':return'st-done';case'En curso':return'st-wip';case'Configurado en QA':return'st-qa';case'Bloqueado':return'st-blk';case'Cancelado':return'st-can';}
   return 'st-pend';
 }
 function barClass(e){
-  switch(e){case'Completado':return'done';case'En curso':return'wip';case'Bloqueado':return'blk';case'Cancelado':return'can';}
+  switch(e){case'Completado':return'done';case'En curso':return'wip';case'Configurado en QA':return'confqa';case'Bloqueado':return'blk';case'Cancelado':return'can';}
   return 'pend';
 }
 function normalizarIdLocal(value){
@@ -1046,7 +1056,7 @@ function render(){
     if(areaFilter!=='todos'&&t.area_responsable!==areaFilter) return false;
     if(respPersonaFilter!=='todos'&&String(t.responsable_persona_id)!==respPersonaFilter) return false;
     if(misTareas&&(!myId||String(t.responsable_persona_id)!==myId)) return false;
-    if(soloAct&&t.estado!=='En curso'&&t.estado!=='Bloqueado') return false;
+    if(soloAct&&!ESTADOS_GANTT_ACTIVOS.includes(t.estado)) return false;
     if(search){
       const hay=[t.seller_id,t.seller_nombre,t.tarea,t.hito,t.fase,t.area_responsable,t.responsable_persona_nombre,t.comentario].join(' ').toLowerCase();
       if(!hay.includes(search)) return false;
@@ -1058,7 +1068,7 @@ function render(){
   tasks=tasks.map(t=>{
     let atr=parseFloat(t.atraso_raw)||0;
     if(!atr&&t.fin){
-      const finRef=(['En curso','Bloqueado'].includes(t.estado))?today:null;
+      const finRef=(ESTADOS_GANTT_ACTIVOS.includes(t.estado))?today:null;
       if(finRef&&finRef>t.fin) atr=dBetween(t.fin,finRef)||0;
     }
     return{...t,atraso_calc:atr};
@@ -1155,12 +1165,12 @@ function filteredTasksForExport(){
     if(entornoFilter!=='todos'&&t.entorno!==entornoFilter) return false;
     if(areaFilter!=='todos'&&t.area_responsable!==areaFilter) return false;
     if(respPersonaFilter!=='todos'&&String(t.responsable_persona_id)!==respPersonaFilter) return false;
-    if(soloAct&&t.estado!=='En curso'&&t.estado!=='Bloqueado') return false;
+    if(soloAct&&!ESTADOS_GANTT_ACTIVOS.includes(t.estado)) return false;
     if(search){const hay=[t.seller_id,t.seller_nombre,t.tarea,t.hito,t.fase,t.area_responsable,t.responsable_persona_nombre,t.comentario].join(' ').toLowerCase();if(!hay.includes(search))return false;}
     return true;
   }).map(t=>{
     let atr=parseFloat(t.atraso_raw)||0;
-    if(!atr&&t.fin){const today2=new Date();today2.setHours(0,0,0,0);const finRef=['En curso','Bloqueado'].includes(t.estado)?today2:null;if(finRef&&finRef>t.fin)atr=dBetween(t.fin,finRef)||0;}
+    if(!atr&&t.fin){const today2=new Date();today2.setHours(0,0,0,0);const finRef=ESTADOS_GANTT_ACTIVOS.includes(t.estado)?today2:null;if(finRef&&finRef>t.fin)atr=dBetween(t.fin,finRef)||0;}
     return{...t,atraso_calc:atr};
   });
 }
@@ -1211,6 +1221,7 @@ async function exportExcel(){
     hdrFont:{bold:true,sz:10,color:{rgb:'d4edda'}},
     blkFill:{patternType:'solid',fgColor:{rgb:'3d1515'}},
     wipFill:{patternType:'solid',fgColor:{rgb:'0e1e35'}},
+    qaFill:{patternType:'solid',fgColor:{rgb:'2a1a3d'}},
     doneFill:{patternType:'solid',fgColor:{rgb:'0e2a14'}},
     baseFont:{sz:10},
     center:{vertical:'center'},
@@ -1227,7 +1238,7 @@ async function exportExcel(){
       if(R===0){
         ws[addr].s={font:S.hdrFont,fill:S.hdrFill,alignment:S.center};
       } else {
-        const fill=estado==='Bloqueado'?S.blkFill:estado==='En curso'?S.wipFill:estado==='Completado'?S.doneFill:null;
+        const fill=estado==='Bloqueado'?S.blkFill:estado==='En curso'?S.wipFill:estado==='Configurado en QA'?S.qaFill:estado==='Completado'?S.doneFill:null;
         ws[addr].s={font:S.baseFont,alignment:isWrap?S.wrap:S.center,...(fill?{fill}:{})};
       }
     }
@@ -1420,7 +1431,7 @@ function toggleGroup(sid){
 
 /* ── LISTA ── */
 function estadoOptionsHtml(selected){
-  return ['Pendiente','En curso','Bloqueado','Completado','Cancelado']
+  return ESTADOS_GANTT_TODOS
     .map(e=>`<option value="${e}" ${e===selected?'selected':''}>${e}</option>`).join('');
 }
 function userOptionsHtml(selectedId){
@@ -1468,7 +1479,7 @@ function renderLista(tasks,sellerIds,today){
     if(!st.length) return;
     const pct=seller.progreso_pct||0;
     const nBlk=st.filter(t=>t.estado==='Bloqueado').length;
-    const nAct=st.filter(t=>t.estado==='En curso').length;
+    const nAct=st.filter(t=>t.estado==='En curso'||t.estado==='Configurado en QA').length;
     const isOpen=!collapsedSellers.has(sid);
     html+=`
       <details class="lista-seller" data-seller-id="${esc(sid)}" ${isOpen?'open':''} ontoggle="if(this.open)collapsedSellers.delete('${esc(sid)}');else collapsedSellers.add('${esc(sid)}')">
@@ -1506,7 +1517,7 @@ function renderLista(tasks,sellerIds,today){
             }).map(t=>{
               const atr=t.atraso_calc;
               const ac=atr===0?'atraso-ok':atr<=3?'atraso-warn':'atraso-bad';
-              const rowCls=t.estado==='Bloqueado'?'row-blk':t.estado==='Completado'?'row-done':'';
+              const rowCls=t.estado==='Bloqueado'?'row-blk':t.estado==='Completado'?'row-done':t.estado==='Configurado en QA'?'row-qa':'';
               const checklistBadge=t.checklist_count?`<span class="mini-badge" title="Checklist">☑ ${t.checklist_done_count}/${t.checklist_count}</span>`:'';
               const comentBadge=t.comentarios_count?`<span class="mini-badge" title="Comentarios">💬 ${t.comentarios_count}</span>`:'';
               return`<tr class="${rowCls}" tabindex="0" aria-label="Abrir detalle de ${esc(t.tarea)}" onclick="openModal('${esc(t.task_id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('${esc(t.task_id)}')}">
@@ -1550,6 +1561,7 @@ function renderKanban(tasks,today){
   const cols=[
     {key:'Pendiente',  label:'Pendiente',  accent:'var(--t2)',    border:'rgba(17,24,39,.18)'},
     {key:'En curso',   label:'En curso',   accent:'var(--info)',  border:'rgba(33,150,243,.45)'},
+    {key:'Configurado en QA', label:'Configurado en QA', accent:'var(--violet)', border:'rgba(124,58,237,.45)'},
     {key:'Bloqueado',  label:'Bloqueado',  accent:'#f29a9a',      border:'rgba(217,64,64,.55)'},
     {key:'Completado', label:'Completado', accent:'var(--g)',     border:'rgba(106,168,79,.45)'},
     {key:'Cancelado',  label:'Cancelado',  accent:'var(--t4)',    border:'rgba(17,24,39,.14)'},
@@ -1663,8 +1675,9 @@ function renderRoadmap(tasks,today){
       const barW=Math.max(6,(right===null?ganttW:right)-left);
       const anyBlk=ht.some(t=>t.estado==='Bloqueado');
       const allDone=ht.every(t=>t.estado==='Completado');
+      const anyConfQa=ht.some(t=>t.estado==='Configurado en QA');
       const anyWip=ht.some(t=>t.estado==='En curso');
-      const cls=anyBlk?'blk':allDone?'done':anyWip?'wip':'pend';
+      const cls=anyBlk?'blk':allDone?'done':anyConfQa?'confqa':anyWip?'wip':'pend';
       const done=ht.filter(t=>t.estado==='Completado').length;
       html+=`
         <div class="roadmap-hito-row" style="display:flex">
@@ -1722,7 +1735,7 @@ function validateTaskEditFields(fields){
   if(!fields.hito) return 'El hito es obligatorio.';
   if(!hitoPerteneceAFase(fields.fase,fields.hito)&&fields.hito!==(original?.hito||'')) return 'Hito no permitido para la fase seleccionada.';
   if(!fields.estado) return 'El estado es obligatorio.';
-  if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(fields.estado)) return 'Estado no permitido.';
+  if(!ESTADOS_GANTT_TODOS.includes(fields.estado)) return 'Estado no permitido.';
   if(!fields.entorno) return 'El entorno es obligatorio.';
   if(!ENTORNOS_GANTT_PERMITIDOS_UI.includes(fields.entorno)) return 'Entorno no permitido.';
   if(!fields.inicio) return 'Inicio es obligatorio.';
@@ -1918,7 +1931,7 @@ function validateTaskCreateFields(task){
   if(!task.entorno) return 'El entorno es obligatorio.';
   if(!task.inicio) return 'Inicio es obligatorio.';
   if(!task.fin) return 'Fin es obligatorio.';
-  if(!['Pendiente','En curso','Bloqueado','Completado','Cancelado'].includes(task.estado)) return 'Estado no permitido.';
+  if(!ESTADOS_GANTT_TODOS.includes(task.estado)) return 'Estado no permitido.';
   if(!ENTORNOS_GANTT_PERMITIDOS_UI.includes(task.entorno)) return 'Entorno no permitido.';
   if(!isValidEditDate(task.inicio)) return 'Inicio debe usar formato YYYY-MM-DD.';
   if(!isValidEditDate(task.fin)) return 'Fin debe usar formato YYYY-MM-DD.';

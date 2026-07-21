@@ -151,6 +151,10 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .estado-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--radius-pill,999px);white-space:nowrap;border:1px solid transparent}
 .st-done{background:var(--g-dim);color:var(--g2);border-color:var(--g-brd)}
 .st-wip{background:rgba(37,99,235,.1);color:#1d4ed8;border-color:rgba(37,99,235,.25)}
+/* "Configurado en QA" — violeta, distinto de "En curso" (azul) y "Completado"
+   (verde): tarea armada en QA pero todavia abierta, falta el mismo trabajo
+   en Productivo antes de poder cerrarla. */
+.st-qa{background:rgba(124,58,237,.1);color:var(--violet, #7c3aed);border-color:rgba(124,58,237,.28)}
 .st-pend{background:rgba(17,24,39,.06);color:var(--t3);border-color:rgba(17,24,39,.10)}
 .st-blk{background:var(--dng-dim);color:var(--danger, #991b1b);border-color:rgba(217,64,64,.34)}
 .st-can{background:rgba(17,24,39,.04);color:var(--t4);text-decoration:line-through}
@@ -162,6 +166,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .inline-select{border-radius:var(--radius-pill,999px);font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:4px 10px 4px 8px}
 .inline-select.st-done{background:var(--g-dim);color:var(--g2);border-color:var(--g-brd)}
 .inline-select.st-wip{background:rgba(37,99,235,.1);color:#1d4ed8;border-color:rgba(37,99,235,.25)}
+.inline-select.st-qa{background:rgba(124,58,237,.1);color:var(--violet, #7c3aed);border-color:rgba(124,58,237,.28)}
 .inline-select.st-pend{background:rgba(17,24,39,.05);color:var(--t2);border-color:var(--bdr)}
 .inline-select.st-blk{background:var(--dng-dim);color:var(--danger, #991b1b);border-color:rgba(217,64,64,.34)}
 .inline-select.st-can{background:rgba(17,24,39,.04);color:var(--t4);border-color:var(--bdr)}
@@ -177,6 +182,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .g-bar:hover{opacity:.82}
 .g-bar.done{background:linear-gradient(90deg,#388657,#58b875);color:#f0fff3}
 .g-bar.wip{background:linear-gradient(90deg,#2f7ccf,#5aa6f7);color:#eef6ff}
+.g-bar.confqa{background:linear-gradient(90deg,#6d28d9,#9061e0);color:#f3edff}
 .g-bar.pend{background:rgba(17,24,39,.18);color:#ccd4c8}
 .g-bar.blk{background:linear-gradient(90deg,#a92d2d,#df5353);color:#fff1f1}
 .g-bar.can{background:rgba(17,24,39,.06);color:var(--t3)}
@@ -285,6 +291,8 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 #content .data-table tr.row-blk:hover td{background:rgba(217,64,64,.10)}
 #content .data-table tr.row-done td{background:rgba(78,167,106,.04)}
 #content .data-table tr.row-done:hover td{background:rgba(78,167,106,.08)}
+#content .data-table tr.row-qa td{background:rgba(124,58,237,.045)}
+#content .data-table tr.row-qa:hover td{background:rgba(124,58,237,.09)}
 
 /* ── MODAL ── */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(5px)}

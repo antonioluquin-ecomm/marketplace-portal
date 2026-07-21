@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-21 - Agrega el estado "Configurado en QA" en Seguimiento Operativo
+
+Tipo de cambio: nueva funcionalidad en Seguimiento Operativo (frontend + Apps Script).
+
+**Motivacion**: el modelo actual tiene una tarea = una fila, con un `entorno` fijo (QA o Productivo) y un `estado` independiente. Antes de este cambio, no existia forma de reflejar "ya arme esto en QA, pero todavia falta el mismo trabajo en Productivo" sin marcar la tarea como "Completado" antes de tiempo — un agente no tenia un estado correcto para ese punto intermedio.
+
+**Cambio**: se agrega el estado "Configurado en QA", entre "En curso" y "Completado" en la secuencia logica. Aplica a cualquier tarea (sin restriccion por fase/hito).
+
+- Cuenta como estado abierto: participa de "Solo activos", sigue acumulando atraso si se pasa de fecha, y suma en el "N activa(s)" del resumen por seller.
+- Color propio (violeta) para no confundirse con "En curso" (azul) o "Completado" (verde): badge de estado, select inline de la tabla, barra de Gantt, columna de Kanban, swimlane de Roadmap y relleno de fila/columna en la exportacion a Excel.
+- Disponible en los 3 selects de Estado (filtro, editar tarea, nueva tarea).
+
+**Pendiente de accion manual**: `apps-script/Gantt.gs` se actualizo (`ESTADOS_GANTT_PERMITIDOS`) pero Apps Script no se autodespliega — hay que pegar el archivo actualizado en el editor de GAS y crear una nueva versión del deployment. Sin ese paso, el backend sigue rechazando "Configurado en QA" como estado invalido en los POST de escritura.
+
 ## 2026-07-21 - Corrige hint de Seller redundante y salto de Limpiar filtros al wrap
 
 Tipo de cambio: correccion visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.
