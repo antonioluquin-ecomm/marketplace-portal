@@ -18,13 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.48',
+  number: '1.4.49',
   date:   '2026-07-21',
-  notes:  'Filtro por rol/estado, ordenamiento y acciones de icono en la tabla de Usuarios',
+  notes:  'Modulo provisorio "Catalogo (Taika Sport)": ver/editar precio y stock, exportar/importar CSV',
 };
 
 const CHANGELOG = [
-  { v: '1.4.48', date: '2026-07-21', desc: 'Configuracion > Usuarios se alinea al patron estandar de tablas del ecosistema: la barra de filtros pasa de inputs sueltos a .filter-bar/.filter-group (label arriba de cada control, igual que Seguimiento Operativo y Backlog), suma filtros por Rol y Estado (antes solo Buscar y Seller) y un boton "Limpiar filtros". Las columnas Nombre/Email/Rol/Seller/Estado son ahora ordenables por click en el header (mismo patron data-sortable/sort-asc/sort-desc de Seguimiento Operativo). Los botones de texto "Editar"/"Activar"/"Desactivar" pasan a botones de icono compactos (mismo patron que Project Control Center).' },
+  { v: '1.4.49', date: '2026-07-21', desc: 'Se agrega el modulo provisorio "Catalogo (Taika Sport)" (publico/catalogo/catalogo-seller.html), mientras se termina el Seller Center definitivo. Taika es el primer seller de "gestion asistida": sus productos se cargan directo en el catalogo propio de Sporting en VTEX, identificados por especificacion de producto (no por seller_id). La pagina deja ver el catalogo, editar solo precio y stock, y exportar/importar por CSV. Nuevo modulo RBAC ext_catalogo (tier externo). El backend (apps-script/CatalogoSeller.gs) proxea contra acciones nuevas del repo hermano vtex-control-center (apps-script/CatalogoTaika.gs), gateadas por token de servicio - este proyecto nunca ve credenciales de VTEX.' },
   { v: '1.4.47', date: '2026-07-21', desc: 'El selector CSS de inputs de Configuracion (modal de usuarios/roles) pasa de lista de inclusion (input[type="text"], input[type="email"], ...) a exclusion (input:not([type="checkbox"]):not([type="radio"])), igual que Project Control Center: asi un input sin type explicito recibe el estilo del design system de todas formas, en vez de quedar roto la proxima vez que alguien lo agregue sin type.' },
   { v: '1.4.46', date: '2026-07-21', desc: 'Se corrigen dos bugs visuales del modal "Nuevo usuario" (Configuracion > Usuarios): el segmentado "Interno"/"Seller" medía distinto por texto en vez de partir el ancho en partes iguales (se agrega flex:1 a los botones), y el campo Nombre no tenia type="text" explicito por lo que quedaba sin el estilo del design system (borde, padding, ancho) a diferencia de Email. Documentado como estandar en project-standards/login_standard.md §17.' },
   { v: '1.4.45', date: '2026-07-21', desc: 'Se agrega el estado "Configurado en QA" a las tareas de Seguimiento Operativo: intermedio entre "En curso" y "Completado" para tareas ya armadas en QA a las que todavia les falta el mismo trabajo en Productivo. Cuenta como estado abierto (Solo activos, atraso, resumen por seller), tiene su propio color (violeta) en badges/select/barras de Gantt y Roadmap/columna de Kanban/export a Excel. Requiere redeploy manual de Apps Script (apps-script/Gantt.gs) para que el backend acepte el nuevo valor.' },
@@ -231,7 +231,10 @@ window.MP_CONFIG = {
         "/public/gantt/gantt-seller.html",
 
       INTEGRACION_SELLER:
-        "/public/integracion/integracion-seller.html"
+        "/public/integracion/integracion-seller.html",
+
+      CATALOGO_SELLER:
+        "/public/catalogo/catalogo-seller.html"
     }
   },
 
@@ -365,6 +368,12 @@ window.MP_CONFIG = {
       label: "Guía de integración",
       access: "Seller",
       route: "/public/integracion/integracion-seller.html"
+    },
+    {
+      key: "catalogo_seller",
+      label: "Catálogo (Taika Sport)",
+      access: "Seller",
+      route: "/public/catalogo/catalogo-seller.html"
     }
   ],
 
@@ -427,5 +436,6 @@ window.MP_RBAC_MODULOS = [
   { key: "ext_relevamiento", label: "Formulario relevamiento",         tier: "externo" },
   { key: "ext_simulador",    label: "Simulador seller",                tier: "externo" },
   { key: "ext_gantt",        label: "Gantt del seller",                tier: "externo" },
-  { key: "ext_integracion",  label: "Guía de integración",             tier: "externo" }
+  { key: "ext_integracion",  label: "Guía de integración",             tier: "externo" },
+  { key: "ext_catalogo",     label: "Catálogo (Taika Sport)",          tier: "externo" }
 ];

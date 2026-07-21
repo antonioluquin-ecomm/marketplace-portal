@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-21 - Módulo provisorio "Catálogo (Taika Sport)"
+
+Tipo de cambio: nueva funcionalidad (frontend + backend cross-repo), provisoria hasta que el Seller Center definitivo esté listo.
+
+Taika Sport es el primer seller del modelo "gestión asistida": sus productos se cargan directo en el catálogo propio de Sporting en VTEX, diferenciados por un valor de especificación de producto (no por `seller_id` de marketplace, que no existe en este modelo). Se agrega una interfaz seller-facing para que Taika vea sus productos catalogados, edite **solo precio y stock**, y exporte/importe por CSV:
+
+- **Nueva página** `public/catalogo/catalogo-seller.html`, con sesión Seller (`auth-seller.js`), en el mismo flujo que Presentación/Simulador/Gantt/Integración. Registrada en `RESOURCES`/`ROUTES.PUBLIC` (`assets/js/config.js`) y en el nav compartido (`PUBLIC_FLOW_ITEMS`, `auth-seller.js`).
+- **Nuevo módulo RBAC** `ext_catalogo` (tier `externo`) — el staff también puede verlo en modo "ver como seller" desde el sidebar interno (agregado a las 14 páginas que ya tienen la sección "Vista de sellers").
+- **Nuevo backend** `apps-script/CatalogoSeller.gs` (marketplace-portal): valida sesión seller + ownership (reusa `_resolverSellerScope`) y proxea 4 acciones nuevas contra el repo hermano `vtex-control-center`, gateadas por un token de servicio (mismo patrón que `getPedidosClienteCache`) — este proyecto nunca ve ni guarda credenciales de VTEX.
+- **Nuevo `apps-script/CatalogoTaika.gs` en vtex-control-center**: primera integración del repo con la API de Pricing de VTEX (lectura y escritura de precio fijo) y primera escritura de stock (hasta ahora `Stock.gs` era explícitamente solo lectura). Filtra el catálogo de Taika reusando el mecanismo de `specificationFilter` ya probado en `Ofertas.gs`.
+- **Pendiente de completar en Script Properties** (no bloquea el deploy del código, sí el funcionamiento real): `TAIKA_SPEC_FIELD_ID`/`TAIKA_SPEC_VALUE` (el spec ya asignado a los productos de Taika), `TAIKA_WAREHOUSE_ID` (su depósito propio) y los tokens de servicio compartidos entre ambos proyectos.
+
 ## 2026-07-21 - Tabla de Usuarios (Configuración): filtros, ordenamiento y acciones de ícono
 
 Tipo de cambio: mejora de frontend en Configuración > Usuarios, sin cambios de backend.

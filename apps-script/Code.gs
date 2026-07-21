@@ -28,6 +28,7 @@ var WRITE_ACTIONS = [
   "updateGanttTask", "createGanttTask", "disableGanttTask",
   "addChecklistItem", "toggleChecklistItem", "deleteChecklistItem", "addComentarioGantt",
   "updateTarifas", "updateOverrides", "uploadLogo",
+  "updateCatalogoSellerPrice", "updateCatalogoSellerStock", "importCatalogoSellerBulk",
 ];
 
 // Escrituras internas (staff) → el rol debe poder editar alguno de estos módulos.
@@ -83,6 +84,9 @@ function routeAction(data, action) {
     case "updateTarifas":           return _handleUpdateTarifas(data);
     case "updateOverrides":         return _handleUpdateOverrides(data);
     case "uploadLogo":              return _handleUploadLogo(data);
+    case "updateCatalogoSellerPrice":  return _handleUpdateCatalogoSellerPrice(data);
+    case "updateCatalogoSellerStock":  return _handleUpdateCatalogoSellerStock(data);
+    case "importCatalogoSellerBulk":   return _handleImportCatalogoSellerBulk(data);
   }
   return { ok: false, error: "Acción no implementada: " + action, code: 400 };
 }

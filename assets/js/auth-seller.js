@@ -108,6 +108,7 @@ const PUBLIC_FLOW_ITEMS = [
   { id: 'relevamiento', label: 'Relevamiento', path: 'formularios/formulario-relevamiento.html' },
   { id: 'gantt',        label: 'Gantt',        path: 'gantt/gantt-seller.html' },
   { id: 'integracion',  label: 'Integración',  path: 'integracion/integracion-seller.html' },
+  { id: 'catalogo',     label: 'Catálogo',     path: 'catalogo/catalogo-seller.html' },
 ];
 
 function renderPublicFlowNav() {

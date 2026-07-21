@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/css/tokens.css" />
+  <link rel="stylesheet" href="../../assets/css/internal-components.css" />
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.35" />
+  <style>
+    :root{
+      /* Mismo alias que el resto de public/ (ver simulador-seller.html) —
+         identidad verde intencional, no se alinea al azul interno. */
+      --g:var(--primary, #25b60c);--g2:var(--primary-hover, #1e9209);--g-dim:rgba(37,182,12,.12);--g-brd:rgba(37,182,12,.28);
+      --k:var(--bg, #f0f2f7);--k3:var(--card, #ffffff);--w:var(--text, #111827);
+      --t1:var(--text, #111827);--t2:#374151;--t3:var(--muted, #6b7280);--t4:#9ca3af;
+      --bdr:rgba(17,24,39,.08);--warn:var(--warning, #92400e);--danger:#991b1b;
+      --shadow:0 4px 16px rgba(17,24,39,.08);
+    }
+    body{font-family:var(--font);background:radial-gradient(circle at 80% 8%,rgba(37,182,12,.08),transparent 36%),var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
+
+    .tb-right{display:flex;align-items:center;gap:10px;min-width:0;flex-shrink:0}
+    .status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t2)}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px rgba(255,183,77,.14);animation:pulse 2s infinite;flex-shrink:0}
+    .dot.ok{background:var(--g);box-shadow:0 0 0 4px rgba(37,182,12,.18)}
+    .dot.err{background:var(--danger);box-shadow:0 0 0 4px rgba(217,64,64,.15)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+    .wrap{max-width:1200px;margin:0 auto;padding:32px 22px 60px}
+    .panel{background:var(--k3);border:1px solid var(--bdr);border-radius:18px;padding:24px;box-shadow:var(--shadow);min-width:0}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--g);font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase}
+    .eyebrow:before{content:"";width:26px;height:2px;background:var(--g)}
+    h1{font-family:var(--font);text-transform:uppercase;letter-spacing:.01em;font-size:clamp(30px,4vw,44px);line-height:1;font-weight:900;margin-bottom:10px}
+    h1 span{color:var(--g)}
+    .lead{font-size:14px;line-height:1.6;color:var(--t2);max-width:680px}
+
+    .toolbar{display:flex;align-items:center;gap:10px;margin:22px 0 14px;flex-wrap:wrap}
+    .toolbar .inp{flex:1;min-width:200px;padding:10px 12px;border-radius:9px;border:1px solid rgba(17,24,39,.12);background:rgba(17,24,39,.05);color:var(--t1);font-size:13px;outline:none}
+    .toolbar .inp:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(37,182,12,.13)}
+
+    .cat-table-wrap{overflow:auto;border:1px solid var(--bdr);border-radius:14px;background:var(--k3)}
+    .cat-table{width:100%;border-collapse:collapse;font-size:13px}
+    .cat-table th{position:sticky;top:0;background:var(--k3);border-bottom:1px solid var(--bdr);text-align:left;padding:10px 12px;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--t4)}
+    .cat-table td{padding:8px 12px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+    .cat-table tr:last-child td{border-bottom:none}
+    .cat-img{width:38px;height:38px;object-fit:contain;border-radius:8px;background:#f4f5f8;border:1px solid var(--bdr)}
+    .cat-sku{font-family:var(--mono);font-size:11.5px;color:var(--t3)}
+    .cat-name{font-weight:600;color:var(--t1)}
+    .cat-input{width:110px;padding:7px 9px;border-radius:7px;border:1px solid rgba(17,24,39,.14);background:rgba(17,24,39,.03);color:var(--t1);font-size:13px;outline:none}
+    .cat-input:focus{border-color:var(--g);box-shadow:0 0 0 2px rgba(37,182,12,.13)}
+    .cat-input.dirty{border-color:var(--warn)}
+    .cat-row-actions{display:flex;gap:6px}
+    .cat-row-status{font-size:11px;color:var(--t3)}
+    .cat-row-status.ok{color:var(--g)}
+    .cat-row-status.err{color:var(--danger)}
+    .cat-empty{padding:40px;text-align:center;color:var(--t3);font-size:13px}
+
+    .import-summary{margin-top:12px;font-size:12px;color:var(--t2)}
+    .import-summary.err{color:var(--danger)}
+  </style>
+  <script src="../../assets/js/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body data-public-page="catalogo">
+
+<header class="topbar portal-topbar">
+  <div class="brand">
+    <span class="logo">SPORTING <span>MARKETPLACE</span></span>
+    <div class="crumb">CATÁLOGO</div>
+  </div>
+  <nav class="public-flow-nav" data-public-nav aria-label="Navegación pública seller"></nav>
+  <div class="tb-right">
+    <div class="status">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Cargando…</span>
+    </div>
+    <div class="user-chip">
+      <span class="user-chip-name" id="user-chip-name"></span>
+      <a class="button ghost btn-sm" href="../index.html">← Portal</a>
+      <button type="button" class="button secondary btn-sm" onclick="_showSellerChangePasswordModal()">Cambiar contraseña</button>
+      <button type="button" class="button ghost btn-sm" onclick="logoutSeller()">Cerrar sesión</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap seller-page-frame">
+  <section class="panel">
+    <div class="eyebrow">Módulo provisorio</div>
+    <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
+    <h1>Tu <span>catálogo</span></h1>
+    <p class="lead">Productos ya catalogados en Sporting Marketplace. Podés actualizar precio y stock, y exportar/importar por CSV. El resto de la información del producto (nombre, imagen, categoría) se administra desde Sporting y no es editable acá.</p>
+
+    <div class="toolbar">
+      <input class="inp" id="catSearch" type="text" placeholder="Buscar por SKU o nombre…">
+      <button class="button secondary" type="button" id="btnExport">Exportar CSV</button>
+      <button class="button secondary" type="button" id="btnImportTrigger">Importar CSV</button>
+      <input type="file" id="fileImport" accept=".csv" hidden>
+    </div>
+
+    <div id="importSummary" class="import-summary" hidden></div>
+
+    <div class="cat-table-wrap">
+      <table class="cat-table" id="catTable">
+        <thead>
+          <tr>
+            <th></th>
+            <th>SKU</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="catTableBody"></tbody>
+      </table>
+      <div class="cat-empty" id="catEmpty" hidden>Todavía no hay productos catalogados para mostrar.</div>
+    </div>
+  </section>
+</div>
+
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth-seller.js"></script>
+<script>
+let PRODUCTS = [];
+const $ = (id) => document.getElementById(id);
+
+function setStatus(kind, text) {
+  $("statusDot").className = "dot " + (kind === "ok" ? "ok" : kind === "err" ? "err" : "");
+  $("statusText").textContent = text;
+}
+
+function toast(msg) {
+  const c = $("toastContainer");
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = msg;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+function fmtMoney(n) {
+  if (n === null || n === undefined) return "—";
+  return Number(n).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function renderRow(p) {
+  const tr = document.createElement("tr");
+  tr.dataset.sku = p.sku;
+  tr.innerHTML = `
+    <td>${p.image ? `<img class="cat-img" src="${p.image}" alt="" loading="lazy">` : ""}</td>
+    <td class="cat-sku">${p.sku}</td>
+    <td class="cat-name">${p.name || "(sin nombre)"}</td>
+    <td><input class="cat-input cat-price" type="number" min="0" step="0.01" value="${p.price ?? ""}"></td>
+    <td><input class="cat-input cat-stock" type="number" min="0" step="1" value="${p.stock ?? 0}"></td>
+    <td class="cat-row-actions">
+      <button class="button secondary btn-sm cat-save" type="button">Guardar</button>
+      <span class="cat-row-status"></span>
+    </td>
+  `;
+  const priceInput = tr.querySelector(".cat-price");
+  const stockInput = tr.querySelector(".cat-stock");
+  const statusEl = tr.querySelector(".cat-row-status");
+  const markDirty = () => { priceInput.classList.add("dirty"); stockInput.classList.add("dirty"); };
+  priceInput.addEventListener("input", markDirty);
+  stockInput.addEventListener("input", markDirty);
+
+  tr.querySelector(".cat-save").addEventListener("click", async () => {
+    statusEl.textContent = "Guardando…";
+    statusEl.className = "cat-row-status";
+    try {
+      const newPrice = Number(priceInput.value);
+      const newStock = Number(stockInput.value);
+      if (newPrice !== p.price) {
+        await _apiSellerPost({ action: "updateCatalogoSellerPrice", sku: p.sku, price: newPrice });
+        p.price = newPrice;
+      }
+      if (newStock !== p.stock) {
+        await _apiSellerPost({ action: "updateCatalogoSellerStock", sku: p.sku, stock: newStock });
+        p.stock = newStock;
+      }
+      priceInput.classList.remove("dirty");
+      stockInput.classList.remove("dirty");
+      statusEl.textContent = "Guardado";
+      statusEl.className = "cat-row-status ok";
+    } catch (e) {
+      statusEl.textContent = e.message || "Error";
+      statusEl.className = "cat-row-status err";
+    }
+  });
+
+  return tr;
+}
+
+function renderTable(list) {
+  const body = $("catTableBody");
+  body.innerHTML = "";
+  $("catEmpty").hidden = list.length > 0;
+  list.forEach((p) => body.appendChild(renderRow(p)));
+}
+
+function applyFilter() {
+  const q = $("catSearch").value.trim().toLowerCase();
+  if (!q) return renderTable(PRODUCTS);
+  renderTable(PRODUCTS.filter((p) =>
+    p.sku.toLowerCase().includes(q) || (p.name || "").toLowerCase().includes(q)
+  ));
+}
+
+function downloadCsv(filename, rows) {
+  const csv = rows.map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function exportCsv() {
+  const rows = [["sku", "nombre", "precio", "stock"]].concat(
+    PRODUCTS.map((p) => [p.sku, p.name || "", p.price ?? "", p.stock ?? 0])
+  );
+  downloadCsv("catalogo-" + (SellerSESSION.sellerId || "seller").toLowerCase() + ".csv", rows);
+}
+
+// Parseo simple: columnas fijas sku,precio,stock (sin comas/comillas embebidas
+// esperadas en esas 3 columnas). No reintenta interpretar "nombre" — es
+// informativo, se ignora al importar.
+function parseImportCsv(text) {
+  const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  if (!lines.length) return [];
+  const header = lines[0].split(",").map((h) => h.replace(/"/g, "").trim().toLowerCase());
+  const idxSku = header.indexOf("sku");
+  const idxPrecio = header.indexOf("precio");
+  const idxStock = header.indexOf("stock");
+  if (idxSku === -1) throw new Error("El CSV debe tener una columna 'sku'.");
+
+  return lines.slice(1).map((line) => {
+    const cols = line.split(",").map((c) => c.replace(/"/g, "").trim());
+    const row = { sku: cols[idxSku] };
+    if (idxPrecio !== -1 && cols[idxPrecio] !== "") row.price = Number(cols[idxPrecio]);
+    if (idxStock !== -1 && cols[idxStock] !== "") row.stock = Number(cols[idxStock]);
+    return row;
+  }).filter((r) => r.sku);
+}
+
+async function handleImportFile(file) {
+  const summary = $("importSummary");
+  summary.hidden = false;
+  summary.className = "import-summary";
+  summary.textContent = "Procesando importación…";
+  try {
+    const text = await file.text();
+    const rows = parseImportCsv(text);
+    if (!rows.length) throw new Error("No se encontraron filas válidas en el archivo.");
+    const res = await _apiSellerPost({ action: "importCatalogoSellerBulk", rows });
+    const data = res.data || {};
+    summary.textContent = `Importación completa: ${data.total || rows.length} filas, ${data.errors || 0} con error.`;
+    if (data.errors) summary.className = "import-summary err";
+    await loadCatalogo();
+  } catch (e) {
+    summary.className = "import-summary err";
+    summary.textContent = e.message || "Error al importar el archivo.";
+  }
+}
+
+async function loadCatalogo() {
+  setStatus("", "Cargando…");
+  try {
+    const res = await _apiSellerPost({ action: "getCatalogoSellerProducts" });
+    PRODUCTS = (res.data && res.data.products) || [];
+    applyFilter();
+    setStatus("ok", PRODUCTS.length + " producto(s)");
+  } catch (e) {
+    setStatus("err", e.message || "Error al cargar el catálogo");
+    toast(e.message || "Error al cargar el catálogo");
+  }
+}
+
+$("catSearch").addEventListener("input", applyFilter);
+$("btnExport").addEventListener("click", exportCsv);
+$("btnImportTrigger").addEventListener("click", () => $("fileImport").click());
+$("fileImport").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file) handleImportFile(file);
+  e.target.value = "";
+});
+
+initPortalPage(function () {
+  loadCatalogo();
+}, function () {
+  setStatus("err", "Elegí un seller en la barra inferior");
+});
+</script>
+</body>
+</html>
