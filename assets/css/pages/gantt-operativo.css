@@ -80,10 +80,10 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .il-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;font-weight:700;white-space:nowrap}
 .toggle-lbl{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
 .toggle-lbl input{accent-color:var(--g)}
-/* "Mis tareas" es el único filtro que es checkbox, no select — su fila de
-   texto es más baja que un <select> con padding. .filter-bar ya alinea por
-   abajo (align-items:flex-end), esto solo afina el remate fino. */
-.filter-group-toggle{padding-bottom:9px}
+/* "Mis tareas" es el único filtro sin label propio arriba (checkbox, no
+   select) — sin esto queda más alto que el resto de los controles, ya que
+   .filter-bar alinea por abajo (align-items:flex-end) asumiendo label+control. */
+.filter-group-toggle{justify-content:flex-end;padding-bottom:9px}
 
 /* Buscador — icono de lupa alineado al patrón canónico .search-wrap
    (style_guide.md §9.2), ausente antes (era un input suelto sin afordance

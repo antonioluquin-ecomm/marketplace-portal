@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-21 - Revierte los labels ocultos de filtro; define estandar documentado
+
+Tipo de cambio: correccion de una decision de diseno tomada el mismo dia (v1.4.41), documentada como estandar del proyecto.
+
+- Se revierte el cambio anterior: los labels de filtro (Buscar/Seller/Fase/Estado/Area/Responsable/Entorno/Periodo) vuelven a mostrarse siempre, sin `.sr-only`.
+- Motivo: sin label visible, un filtro en su valor default ("Todos los estados") se lee bien, pero un filtro **activo** ("Bloqueado", "Tecnica", "eCommerce") queda sin ninguna pista de a que categoria pertenece — justo el momento en que mas se necesita esa claridad. El patron de PCC del que se tomo la idea tampoco cubre esto con accesibilidad: sus selects no tienen `label` ni `aria-label`.
+- Se mantiene lo que si aportaba valor sin ese costo: opciones por defecto autodescriptivas ("Todos los estados", "Todas las areas"), el icono de lupa del buscador y el orden de "Mis tareas" junto a Responsable.
+- Se elimina la utilidad `.sr-only` de `internal-components.css` (quedo sin uso).
+- Decision documentada en [`docs/decisions/2026-07-21-labels-de-filtro.md`](docs/decisions/2026-07-21-labels-de-filtro.md) como estandar del proyecto: los labels de filtro siempre son visibles.
+
 ## 2026-07-21 - Compacta la barra de filtros de Seguimiento Operativo (guia PCC)
 
 Tipo de cambio: mejora visual de frontend, sin cambios de datos ni de backend.
