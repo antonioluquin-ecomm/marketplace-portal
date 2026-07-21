@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-21 - Corrige alineación del modal "Nuevo usuario" en Configuración
+
+Tipo de cambio: corrección visual de frontend, sin cambios de datos ni de backend.
+
+Bugs detectados al comparar el modal de alta de usuario de marketplace-portal con el de Project Control Center (PCC) para definir un estándar común (`project-standards/login_standard.md §17`):
+
+- **Tabs "Interno"/"Seller" con ancho distinto**: `.segmented button` no tenía `flex:1`, así que el ancho de cada opción dependía del largo de su texto en vez de repartirse en partes iguales. Se agrega `display:flex` al contenedor y `flex:1;text-align:center` a los botones.
+- **Campo Nombre con estilo distinto al de Email**: el input de Nombre no tenía `type="text"` explícito. El selector CSS compartido (`input[type="text"], input[type="email"], ...`) solo matchea el atributo literal — sin él, el input quedaba sin borde, padding ni ancho completo del design system, a diferencia de Email (que sí tenía `type="email"`).
+
 ## 2026-07-21 - Agrega el estado "Configurado en QA" en Seguimiento Operativo
 
 Tipo de cambio: nueva funcionalidad en Seguimiento Operativo (frontend + Apps Script).

@@ -503,7 +503,7 @@ function renderUserManagementSection() {
         <div class="field-row" style="margin-bottom:12px">
           <div class="field">
             <label for="uf-nombre">Nombre *</label>
-            <input id="uf-nombre" placeholder="Nombre completo">
+            <input id="uf-nombre" type="text" placeholder="Nombre completo">
             <span class="field-error" id="uf-nombre-err" hidden></span>
           </div>
           <div class="field">
