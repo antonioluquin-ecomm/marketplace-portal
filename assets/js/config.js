@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.43',
+  number: '1.4.44',
   date:   '2026-07-21',
-  notes:  'Corrige en Backlog y Gantt Seller Center los mismos bugs de Seguimiento Operativo',
+  notes:  'Corrige hint de Seller redundante y salto de Limpiar filtros al wrap',
 };
 
 const CHANGELOG = [
+  { v: '1.4.44', date: '2026-07-21', desc: 'Seguimiento Operativo: el hint bajo el filtro de Seller decia "Todos los sellers" duplicando el texto que ya muestra el propio select por defecto - ahora solo aparece cuando hay un seller elegido ("Filtrado por X"). Se corrige tambien que "Limpiar filtros" saltara al extremo derecho de la fila que le tocara al hacer wrap la barra (7 filtros + Mis tareas ya no entran en una sola fila) - ahora siempre ocupa su propia fila, alineado a la derecha.' },
   { v: '1.4.43', date: '2026-07-21', desc: 'Se audito el resto de internal/ buscando los mismos bugs encontrados en Seguimiento Operativo. Gantt Seller Center tenia el mismo label sb-lbl mal usado en su barra de filtros (Buscar/Estado/Modulo/Responsable) con la linea divisoria de encabezado de sidebar - pasa a fi-label. Backlog de Sellers tenia la misma colision de especificidad en la columna "Proximo paso" (.td-next perdia contra .data-table td y el texto desbordaba en una sola linea en vez de ajustarse a 220px) - se corrige subiendo la especificidad. El resto de internal/ (Gestion de Sellers, Config. Tarifas, Simulador Economico, Configuracion, paginas de estrategia) no presenta estos patrones.' },
   { v: '1.4.41', date: '2026-07-21', desc: 'La barra de filtros de Seguimiento Operativo toma el patron compacto de Project Control Center: se saca la fila de labels en mayuscula y cada select se autodescribe con su opcion por defecto ("Todos los estados", "Todas las areas", etc). A diferencia de PCC (que no tiene label ni aria-label en sus selects de filtro), los <label> se mantienen para lectores de pantalla via .sr-only en vez de eliminarse.' },
   { v: '1.4.40', date: '2026-07-21', desc: 'Seguimiento Operativo: fondo de tabla pasa de gris a blanco (estandar .table-wrap), se corrige tipografia (Tarea/Hito/Area/Responsable estaban en DM Mono por un hack de nth-child que asumia columnas que no son las reales), Fase pasa a chip dentro de Tarea y se saca la columna Comentario (12 a 10 columnas), se corrige el desborde de Tarea que se superponia con Hito (white-space:nowrap le ganaba por especificidad a white-space:normal), se agrega icono de lupa al buscador y "Mis tareas" se reordena junto a Responsable.' },

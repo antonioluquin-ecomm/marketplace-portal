@@ -119,7 +119,7 @@
       <select class="sel" id="seller-sel" onchange="setSellerFilter(this.value)">
         <option value="todos">Todos los sellers</option>
       </select>
-      <div class="filter-hint" id="seller-filter-hint">Todos los sellers</div>
+      <div class="filter-hint" id="seller-filter-hint"></div>
     </div>
     <div class="filter-group">
       <label class="fi-label" for="fase-sel">Fase</label>
@@ -903,7 +903,10 @@ function updateSellerHint(){
   if(!sel||!hint) return;
   const active=filters.seller&&filters.seller!=='todos';
   sel.classList.toggle('filter-active',active);
-  if(!active){ hint.textContent='Todos los sellers'; return; }
+  // El select ya dice "Todos los sellers" por sí solo (opción por defecto
+  // autodescriptiva) — repetir el mismo texto acá abajo era redundante.
+  // El hint solo aporta información nueva cuando hay un seller elegido.
+  if(!active){ hint.textContent=''; return; }
   const seller=SELLERS[filters.seller]||{};
   hint.textContent=`Filtrado por ${seller.nombre||filters.seller}`;
 }

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-21 - Corrige hint de Seller redundante y salto de Limpiar filtros al wrap
+
+Tipo de cambio: correccion visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.
+
+- **Hint de Seller duplicado**: al hacer autodescriptiva la opcion por defecto del select ("Todos los sellers"), el texto de ayuda debajo del filtro seguia mostrando el mismo "Todos los sellers" — quedo redundante. Ahora el hint queda vacio salvo cuando hay un seller elegido, donde muestra "Filtrado por {nombre}".
+- **"Limpiar filtros" saltaba lejos de los demas filtros**: con 7 filtros + el checkbox "Mis tareas", la barra ya no entra en una sola fila en la mayoria de los anchos de pantalla y hace wrap. `.filter-bar-actions` usa `margin-left:auto` para pegarse al borde derecho, pero al hacer wrap eso lo empujaba al extremo derecho de la fila que le tocara en suerte (junto a "Entorno", con un hueco enorme en el medio) en vez de una posicion predecible. Se fuerza (scoped a esta pagina) a que el boton ocupe siempre su propia fila completa, alineado a la derecha.
+- El highlight azul debajo de "Seller" que se veia en la captura de referencia no era un bug de CSS: era texto seleccionado en el navegador al momento de la captura.
+
 ## 2026-07-21 - Corrige en Backlog y Gantt Seller Center los mismos bugs de Seguimiento Operativo
 
 Tipo de cambio: correccion de frontend, sin cambios de datos ni de backend.

@@ -92,6 +92,16 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .search-input-wrap .search-icon{position:absolute;left:10px;color:var(--t4, var(--t3));pointer-events:none}
 .search-input-wrap .fi{padding-left:30px}
 
+/* "Limpiar filtros" — con 7 filtros + "Mis tareas" la barra ya no entra en
+   una sola fila en la mayoría de los anchos y hace wrap. .filter-bar-actions
+   (internal-components.css) usa margin-left:auto para pegarse al borde
+   derecho, pero al hacer wrap eso lo empuja al extremo derecho de la fila
+   que le toque en suerte (junto a Entorno, con un hueco enorme en el medio)
+   en vez de quedar siempre alineado de forma predecible. Se fuerza a que
+   sea su propia fila completa, con el botón siempre a la derecha de esa
+   fila — scoped a esta página, no a .filter-bar-actions en general. */
+.filter-bar .filter-bar-actions{flex-basis:100%;justify-content:flex-end;margin-left:0}
+
 /* ── GANTT ── */
 .gantt-wrap{overflow:auto;flex:1}
 .gantt{min-width:900px}
