@@ -96,10 +96,11 @@
 
     <div class="toolbar">
       <input class="inp" id="catSearch" type="text" placeholder="Buscar por SKU o nombre…">
-      <button class="button secondary" type="button" id="btnExport">Exportar CSV</button>
+      <button class="button secondary" type="button" id="btnExport">Exportar Excel</button>
       <button class="button secondary" type="button" id="btnImportTrigger">Importar CSV</button>
       <input type="file" id="fileImport" accept=".csv" hidden>
     </div>
+    <p style="font-size:11px;color:var(--t3);margin:-8px 0 12px">La importación acepta archivos <strong>.csv</strong> (columnas sku, precio, stock). Si editaste el Excel exportado, usá "Guardar como" → CSV antes de subirlo.</p>
 
     <div id="importSummary" class="import-summary" hidden></div>
 
@@ -212,9 +213,21 @@ function applyFilter() {
   ));
 }
 
-function downloadCsv(filename, rows) {
-  const csv = rows.map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
-  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+// Excel real sin librerías externas (SpreadsheetML — mismo patrón que
+// downloadXLS() en vtex-control-center/app.js): los números quedan como
+// Number (se pueden sumar/pivotar en Excel), SKU y nombre como texto (sin
+// riesgo de que Excel les coma ceros a la izquierda).
+function downloadXls(filename, rows) {
+  const xmlEsc = (v) => String(v == null ? "" : v)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const cells = (row) => row.map((v) =>
+    (typeof v === "number" && isFinite(v))
+      ? `<Cell><Data ss:Type="Number">${v}</Data></Cell>`
+      : `<Cell><Data ss:Type="String">${xmlEsc(v)}</Data></Cell>`
+  ).join("");
+  const xmlRows = rows.map((r) => `<Row>${cells(r)}</Row>`).join("");
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Catálogo"><Table>${xmlRows}</Table></Worksheet></Workbook>`;
+  const blob = new Blob([xml], { type: "application/vnd.ms-excel;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url; a.download = filename;
@@ -222,11 +235,11 @@ function downloadCsv(filename, rows) {
   URL.revokeObjectURL(url);
 }
 
-function exportCsv() {
+function exportExcel() {
   const rows = [["sku", "nombre", "precio", "stock"]].concat(
     PRODUCTS.map((p) => [p.sku, p.name || "", p.price ?? "", p.stock ?? 0])
   );
-  downloadCsv("catalogo-" + (SellerSESSION.sellerId || "seller").toLowerCase() + ".csv", rows);
+  downloadXls("catalogo-" + (SellerSESSION.sellerId || "seller").toLowerCase() + ".xls", rows);
 }
 
 // Parseo simple: columnas fijas sku,precio,stock (sin comas/comillas embebidas
@@ -284,7 +297,7 @@ async function loadCatalogo() {
 }
 
 $("catSearch").addEventListener("input", applyFilter);
-$("btnExport").addEventListener("click", exportCsv);
+$("btnExport").addEventListener("click", exportExcel);
 $("btnImportTrigger").addEventListener("click", () => $("fileImport").click());
 $("fileImport").addEventListener("change", (e) => {
   const file = e.target.files[0];
