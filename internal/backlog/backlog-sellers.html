@@ -124,7 +124,12 @@ tbody tr{cursor:pointer}
 .td-id{font-family:var(--font);font-size:12px;font-weight:700;color:var(--t4);white-space:nowrap}
 .td-seller{display:flex;align-items:center;gap:8px}
 .td-name{font-weight:700;color:var(--t1);white-space:nowrap}
-.td-next{max-width:220px;white-space:normal}
+/* .data-table td (internal-components.css) fuerza white-space:nowrap con
+   mayor especificidad (clase+elemento) que .td-next sola (clase) — sin el
+   prefijo de mayor especificidad, "Próximo paso" desbordaba en una sola
+   línea en vez de ajustarse a los 220px, invadiendo la columna siguiente
+   (mismo bug que se encontró y corrigió en Seguimiento Operativo). */
+#content-area .data-table td.td-next{max-width:220px;white-space:normal}
 .td-next-text{font-size:12px;color:var(--t2);line-height:1.4}
 .td-next-resp{font-size:10px;color:var(--t4);margin-top:2px}
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-21 - Corrige en Backlog y Gantt Seller Center los mismos bugs de Seguimiento Operativo
+
+Tipo de cambio: correccion de frontend, sin cambios de datos ni de backend.
+
+Auditoria pedida tras las correcciones de Seguimiento Operativo: revisar si el resto de `internal/` repite los mismos patrones de bug (label `sb-lbl` mal usado, colision de especificidad en `white-space`, fondo de tabla gris, hack de tipografia por `nth-child`).
+
+- **`internal/gantt/gantt-seller-center.html`**: los labels de su barra de filtros (Buscar, Estado, Modulo, Responsable) usaban `class="sb-lbl"` — la misma clase de encabezado de sidebar que causaba la linea divisoria en Seguimiento Operativo (carga el mismo `gantt.css`). Se reemplaza por `fi-label`.
+- **`internal/backlog/backlog-sellers.html`**: la columna "Proximo paso" (`.td-next{white-space:normal}`) perdia por especificidad contra `.data-table td{white-space:nowrap}` (clase+elemento vs. clase sola) — el texto desbordaba en una sola linea en vez de ajustarse a los 220px de ancho, el mismo bug que hacia que "Tarea" se superpusiera con "Hito" en Seguimiento Operativo. Se sube la especificidad de la regla.
+- Se revisaron ademas los hacks de tipografia por posicion (`nth-child(4)/(5)`) en `backlog-sellers.html` y en las paginas de `estrategia/` (`modelo-integracion.html`, `integracion-vtex-vtex.html`, `governance.html`, `modelo-economico.html`): en todos los casos el override es deliberado y correcto para las columnas reales de esas tablas (a diferencia de Seguimiento Operativo, donde el supuesto de columna era falso) — no requieren cambios.
+- El fondo gris de tabla (`.lista-seller{background:var(--k2)}`) era exclusivo de Seguimiento Operativo — ninguna otra pagina de `internal/` reutiliza ese patron.
+- Gestion de Sellers, Config. Tarifas y Overrides, Simulador Economico y Configuracion no presentan ninguno de estos patrones.
+
 ## 2026-07-21 - Revierte los labels ocultos de filtro; define estandar documentado
 
 Tipo de cambio: correccion de una decision de diseno tomada el mismo dia (v1.4.41), documentada como estandar del proyecto.
