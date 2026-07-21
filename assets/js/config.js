@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.38',
+  number: '1.4.39',
   date:   '2026-07-21',
-  notes:  'Alinea la tabla de Seguimiento Operativo al estandar de tablas',
+  notes:  'Corrige los labels de filtro de Seguimiento Operativo',
 };
 
 const CHANGELOG = [
+  { v: '1.4.39', date: '2026-07-21', desc: 'Los labels de la barra de filtros de Seguimiento Operativo (Buscar/Seller/Fase/Estado/Area/Responsable/Entorno) usaban la clase de encabezado de seccion del sidebar (sb-lbl), que agrega una linea divisoria pensada para separar secciones de navegacion. Pasan a fi-label, la clase real de labels de filtro que ya usan Backlog y Gestion de Sellers.' },
   { v: '1.4.38', date: '2026-07-21', desc: 'La tabla de Seguimiento Operativo (vista Lista) uniforma sus badges de Estado/Atraso/Entorno en pill y reemplaza los botones de texto "Editar"/"Dar de baja" por botones de icono compactos, siguiendo el mismo patron de tabla que Project Control Center.' },
   { v: '1.4.37', date: '2026-07-16', desc: 'El flujo seller normaliza navegacion y controles moviles; la barra de administrador se reorganiza y actualiza siempre el espacio inferior para no tapar contenido ni avisos.' },
   { v: '1.4.36', date: '2026-07-16', desc: 'Simulador, Calificacion, Relevamiento y Gantt comparten ancho, padding e inicio vertical; Presentacion e Integracion alinean sus contenedores y la identidad usa carga explicita sin datos genericos.' },

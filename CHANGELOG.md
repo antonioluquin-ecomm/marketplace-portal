@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-21 - Corrige los labels de filtro de Seguimiento Operativo
+
+Tipo de cambio: correccion visual de frontend, sin cambios de datos ni de backend.
+
+- Diagnostico: los 8 labels de la barra de filtros (Buscar, Seller, Fase, Estado, Area responsable, Responsable, Entorno, Periodo) usaban `class="sb-lbl"` — la clase de los encabezados de seccion del sidebar (ej. "SELLER CENTER"), que trae un pseudo-elemento `::after` con una linea divisoria de 1px pensada para separar secciones de navegacion.
+- Al reutilizarse como label de un filtro suelto, esa linea aparecia flotando despues de cada palabra ("BUSCAR ————"), un artefacto visual sin ningun proposito en ese contexto.
+- Se reemplaza `sb-lbl` por `fi-label`, la clase real para labels de filtro ya definida en `internal-components.css` (`.filter-group > .fi-label`) y usada consistentemente en Backlog de Sellers y Gestion de Sellers.
+
 ## 2026-07-21 - Alinea la tabla de Seguimiento Operativo al estandar de tablas
 
 Tipo de cambio: mejora visual de frontend, sin cambios de datos ni de backend.
