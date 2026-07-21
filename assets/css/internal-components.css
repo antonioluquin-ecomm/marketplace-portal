@@ -788,6 +788,15 @@
   color: var(--primary, var(--g, #25b60c));
 }
 
+/* Utilidad genérica: oculta visualmente sin sacar del árbol de accesibilidad.
+   Para labels de filtro cuyo control ya se autodescribe (ej. un <select> con
+   opción por defecto "Todos los estados") — se saca el label de la vista sin
+   perder el nombre accesible para lectores de pantalla. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
 /* 2026-07-02 — barra de filtros horizontal. Reemplaza los filtros que antes
    vivian en el sidebar de las herramientas de datos (backlog, gantt). Se
    coloca arriba del contenido (tabla/gantt). Cada filtro es un .filter-group

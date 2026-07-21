@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-21 - Compacta la barra de filtros de Seguimiento Operativo (guia PCC)
+
+Tipo de cambio: mejora visual de frontend, sin cambios de datos ni de backend.
+
+- Referencia: la barra de filtros de "Tareas" en Project Control Center (`modules/tareas/tareas.html`), sin fila de labels separada — el texto de la opcion por defecto de cada select ("Todos los estados", "Todas las prioridades") hace de label.
+- Se aplica el mismo patron: Fase, Estado, Area responsable, Responsable, Entorno y Seller pasan de "Todos"/"Todas" a opciones autodescriptivas ("Todos los estados", "Todas las areas", etc.), y el label de mayuscula que vivia arriba de cada select se oculta visualmente.
+- Diferencia deliberada con PCC: alli esos selects no tienen `<label>` ni `aria-label` (sin nombre accesible para lectores de pantalla). Aca los `<label for="...">` se mantienen en el DOM, solo se ocultan visualmente con una nueva utilidad `.sr-only` (`internal-components.css`) — se gana la densidad visual de PCC sin perder accesibilidad.
+- El checkbox "Mis tareas" ajusta su remate vertical dado que el resto de los grupos de filtro quedaron mas bajos (ya no cargan una fila de label visible).
+
 ## 2026-07-21 - Revision critica de la tabla y filtros de Seguimiento Operativo
 
 Tipo de cambio: correccion y simplificacion visual de frontend, sin cambios de datos ni de backend.

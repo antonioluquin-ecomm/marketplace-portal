@@ -18,12 +18,13 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.40',
+  number: '1.4.41',
   date:   '2026-07-21',
-  notes:  'Revision critica de la tabla y filtros de Seguimiento Operativo',
+  notes:  'Compacta la barra de filtros de Seguimiento Operativo (guia PCC)',
 };
 
 const CHANGELOG = [
+  { v: '1.4.41', date: '2026-07-21', desc: 'La barra de filtros de Seguimiento Operativo toma el patron compacto de Project Control Center: se saca la fila de labels en mayuscula y cada select se autodescribe con su opcion por defecto ("Todos los estados", "Todas las areas", etc). A diferencia de PCC (que no tiene label ni aria-label en sus selects de filtro), los <label> se mantienen para lectores de pantalla via .sr-only en vez de eliminarse.' },
   { v: '1.4.40', date: '2026-07-21', desc: 'Seguimiento Operativo: fondo de tabla pasa de gris a blanco (estandar .table-wrap), se corrige tipografia (Tarea/Hito/Area/Responsable estaban en DM Mono por un hack de nth-child que asumia columnas que no son las reales), Fase pasa a chip dentro de Tarea y se saca la columna Comentario (12 a 10 columnas), se corrige el desborde de Tarea que se superponia con Hito (white-space:nowrap le ganaba por especificidad a white-space:normal), se agrega icono de lupa al buscador y "Mis tareas" se reordena junto a Responsable.' },
   { v: '1.4.39', date: '2026-07-21', desc: 'Los labels de la barra de filtros de Seguimiento Operativo (Buscar/Seller/Fase/Estado/Area/Responsable/Entorno) usaban la clase de encabezado de seccion del sidebar (sb-lbl), que agrega una linea divisoria pensada para separar secciones de navegacion. Pasan a fi-label, la clase real de labels de filtro que ya usan Backlog y Gestion de Sellers.' },
   { v: '1.4.38', date: '2026-07-21', desc: 'La tabla de Seguimiento Operativo (vista Lista) uniforma sus badges de Estado/Atraso/Entorno en pill y reemplaza los botones de texto "Editar"/"Dar de baja" por botones de icono compactos, siguiendo el mismo patron de tabla que Project Control Center.' },

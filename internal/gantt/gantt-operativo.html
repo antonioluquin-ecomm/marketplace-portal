@@ -108,23 +108,23 @@
 
   <div class="filter-bar portal-ops-filter">
     <div class="filter-group">
-      <label class="fi-label" for="search">Buscar</label>
+      <label class="fi-label sr-only" for="search">Buscar</label>
       <div class="search-input-wrap">
         <svg class="search-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 9.5L12.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         <input class="fi" type="text" id="search" placeholder="Nombre, ID, tarea…" oninput="render()">
       </div>
     </div>
     <div class="filter-group">
-      <label class="fi-label" for="seller-sel">Seller</label>
+      <label class="fi-label sr-only" for="seller-sel">Seller</label>
       <select class="sel" id="seller-sel" onchange="setSellerFilter(this.value)">
-        <option value="todos">Todos</option>
+        <option value="todos">Todos los sellers</option>
       </select>
       <div class="filter-hint" id="seller-filter-hint">Todos los sellers</div>
     </div>
     <div class="filter-group">
-      <label class="fi-label" for="fase-sel">Fase</label>
+      <label class="fi-label sr-only" for="fase-sel">Fase</label>
       <select class="sel" id="fase-sel" onchange="setFilter('fase',this.value)">
-        <option value="todos">Todas</option>
+        <option value="todos">Todas las fases</option>
         <option value="Comercial">Comercial</option>
         <option value="Técnica">Técnica</option>
         <option value="Operativa">Operativa</option>
@@ -133,9 +133,9 @@
       </select>
     </div>
     <div class="filter-group">
-      <label class="fi-label" for="estado-sel">Estado</label>
+      <label class="fi-label sr-only" for="estado-sel">Estado</label>
       <select class="sel" id="estado-sel" onchange="setFilter('estado',this.value)">
-        <option value="todos">Todos</option>
+        <option value="todos">Todos los estados</option>
         <option value="Pendiente">Pendiente</option>
         <option value="En curso">En curso</option>
         <option value="Bloqueado">Bloqueado</option>
@@ -144,15 +144,15 @@
       </select>
     </div>
     <div class="filter-group">
-      <label class="fi-label" for="area-sel">Área responsable</label>
+      <label class="fi-label sr-only" for="area-sel">Área responsable</label>
       <select class="sel" id="area-sel" onchange="setFilter('area',this.value)">
-        <option value="todos">Todas</option>
+        <option value="todos">Todas las áreas</option>
       </select>
     </div>
     <div class="filter-group">
-      <label class="fi-label" for="resp-sel">Responsable</label>
+      <label class="fi-label sr-only" for="resp-sel">Responsable</label>
       <select class="sel" id="resp-sel" onchange="setFilter('responsablePersona',this.value)">
-        <option value="todos">Todos</option>
+        <option value="todos">Todos los responsables</option>
       </select>
     </div>
     <div class="filter-group filter-group-toggle">
@@ -161,15 +161,15 @@
       </label>
     </div>
     <div class="filter-group">
-      <label class="fi-label" for="entorno-sel">Entorno</label>
+      <label class="fi-label sr-only" for="entorno-sel">Entorno</label>
       <select class="sel" id="entorno-sel" onchange="setFilter('entorno',this.value)">
-        <option value="todos">Todos</option>
+        <option value="todos">Todos los entornos</option>
         <option value="QA">QA</option>
         <option value="Productivo">Productivo</option>
       </select>
     </div>
     <div class="filter-group" id="period-group" style="display:none">
-      <label class="fi-label" for="period-sel">Período</label>
+      <label class="fi-label sr-only" for="period-sel">Período</label>
       <select class="sel" id="period-sel" onchange="render()">
         <option value="3">3 meses</option>
         <option value="6" selected>6 meses</option>
