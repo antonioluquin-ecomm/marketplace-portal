@@ -96,6 +96,7 @@
 
     <div class="toolbar">
       <input class="inp" id="catSearch" type="text" placeholder="Buscar por SKU o nombre…">
+      <button class="button ghost" type="button" id="btnRefresh" title="Volver a consultar VTEX (los datos se guardan unos minutos en el navegador)">↻ Actualizar</button>
       <button class="button secondary" type="button" id="btnExport">Exportar Excel</button>
       <button class="button secondary" type="button" id="btnImportTrigger">Importar CSV</button>
       <input type="file" id="fileImport" accept=".csv" hidden>
@@ -297,6 +298,10 @@ async function loadCatalogo() {
 }
 
 $("catSearch").addEventListener("input", applyFilter);
+$("btnRefresh").addEventListener("click", () => {
+  _sellerCacheInvalidateAction("getCatalogoSellerProducts");
+  loadCatalogo();
+});
 $("btnExport").addEventListener("click", exportExcel);
 $("btnImportTrigger").addEventListener("click", () => $("fileImport").click());
 $("fileImport").addEventListener("change", (e) => {

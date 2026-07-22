@@ -141,7 +141,8 @@ const SELLER_READ_CACHE_TTL = {
   getSellers: 5 * 60 * 1000,
   getTarifas: 5 * 60 * 1000,
   getOverrides: 2 * 60 * 1000,
-  getGantt: 30 * 1000
+  getGantt: 30 * 1000,
+  getCatalogoSellerProducts: 3 * 60 * 1000
 };
 const _sellerReadInflight = new Map();
 
@@ -499,6 +500,9 @@ async function _apiSellerPost(body) {
     }
     if (cacheKey) _sellerCacheWrite(cacheKey, json);
     if (payload.action === 'updateGanttTask') _sellerCacheInvalidateAction('getGantt');
+    if (['updateCatalogoSellerPrice', 'updateCatalogoSellerStock', 'importCatalogoSellerBulk'].indexOf(payload.action) !== -1) {
+      _sellerCacheInvalidateAction('getCatalogoSellerProducts');
+    }
     return json;
   })();
 
