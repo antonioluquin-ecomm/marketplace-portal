@@ -976,6 +976,31 @@ function scrollToToday(){
 
 /* ── HELPERS ── */
 const dBetween=(a,b)=>a&&b?Math.round((b-a)/86400000):null;
+/* Rango temporal de Gantt/Roadmap (escala Mes) — antes quedaba fijo a
+   "hoy − 1 mes" + N meses (el selector de Período), sin mirar la data real.
+   Con tareas fuera de ese rango (ej. fechas de test en el pasado) las barras
+   quedaban todas pegadas al borde izquierdo, clampeadas a 0. Ahora el rango
+   se estira -nunca se achica- para cubrir siempre min(inicio)/max(fin) de
+   las tareas visibles, además de la ventana "hoy ± período" que ya elegía el
+   usuario con el selector de Período — lo que sea más amplio, gana. */
+function computeGanttRangeMes(tasks,today,months){
+  const todayStart=new Date(today.getFullYear(),today.getMonth()-1,1);
+  const todayEnd  =new Date(todayStart.getFullYear(),todayStart.getMonth()+months+1,0);
+  const inicios=tasks.map(t=>t.inicio).filter(Boolean);
+  const fines  =tasks.map(t=>t.fin).filter(Boolean);
+  let rangeStart=todayStart, rangeEnd=todayEnd;
+  if(inicios.length){
+    const dataMin=new Date(Math.min(...inicios.map(d=>d.getTime())));
+    const dataMinMonth=new Date(dataMin.getFullYear(),dataMin.getMonth(),1);
+    if(dataMinMonth<rangeStart) rangeStart=dataMinMonth;
+  }
+  if(fines.length){
+    const dataMax=new Date(Math.max(...fines.map(d=>d.getTime())));
+    const dataMaxMonthEnd=new Date(dataMax.getFullYear(),dataMax.getMonth()+1,0);
+    if(dataMaxMonthEnd>rangeEnd) rangeEnd=dataMaxMonthEnd;
+  }
+  return {rangeStart,rangeEnd};
+}
 function fmtDMonth(d){if(!d)return'—';return `${String(d.getDate()).padStart(2,'0')} ${d.toLocaleDateString('es-AR',{month:'short'}).replace('.','')}`;}
 function fmtD(d){if(!d)return'—';return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});}
 function fmtDfull(d){if(!d)return'—';return d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit'});}
@@ -1266,9 +1291,11 @@ function sortClass(col){
 function renderGantt(tasks,sellerIds,today){
   const months=parseInt($('period-sel').value)||6;
 
-  // Rango
-  let rangeStart=new Date(today.getFullYear(),today.getMonth()-1,1);
-  let rangeEnd  =new Date(rangeStart.getFullYear(),rangeStart.getMonth()+months+1,0);
+  // Rango — auto-ajustado a la data en escala Mes (ver computeGanttRangeMes).
+  // Semana queda anclada a la semana actual: es una ventana corta (10
+  // semanas) pensada para operar el día a día, no para repasar el historial
+  // completo de tareas.
+  let {rangeStart,rangeEnd}=computeGanttRangeMes(tasks,today,months);
   if(currentScale==='semana'){
     const NEXT_WEEKS_SEMANA=8;
     const currentWeekStart=new Date(today);
@@ -1581,8 +1608,7 @@ function renderKanban(tasks,today){
 ══════════════════════════════════════════ */
 function renderRoadmap(tasks,today){
   const months=parseInt($('period-sel').value)||6;
-  const rangeStart=new Date(today.getFullYear(),today.getMonth()-1,1);
-  const rangeEnd=new Date(rangeStart.getFullYear(),rangeStart.getMonth()+months+1,0);
+  const {rangeStart,rangeEnd}=computeGanttRangeMes(tasks,today,months);
   const totalDays=dBetween(rangeStart,rangeEnd)+1;
   const COL_W=3, FIXED_W=280;
   const ganttW=totalDays*COL_W;

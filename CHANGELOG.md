@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-22 - Gantt/Roadmap: el rango temporal se auto-ajusta a la data
+
+Tipo de cambio: correccion funcional de frontend en Gantt y Roadmap, sin cambios de datos ni de backend.
+
+Resuelve la nota dejada en la auditoria anterior: Gantt (escala Mes) y Roadmap anclaban el rango temporal a "hoy − 1 mes" + N meses (el selector de Periodo), sin mirar la data real. Con tareas fuera de esa ventana (tipicamente data de test con fechas pasadas), todas las barras quedaban clampeadas al borde izquierdo del timeline.
+
+- Nuevo helper `computeGanttRangeMes(tasks, today, months)`: parte de la ventana "hoy ± periodo" de siempre, y la **estira** (nunca la achica) para cubrir min(inicio) y max(fin) de las tareas visibles. Si toda la data cae dentro de la ventana elegida, el comportamiento es identico al de antes.
+- Aplicado en `renderGantt` (solo escala Mes) y en `renderRoadmap`.
+- **Escala Semana queda sin cambios a proposito**: es una ventana corta (10 semanas) pensada para operar el dia a dia, ancorada a la semana actual — no para repasar el historial completo de tareas.
+
 ## 2026-07-22 - Auditoria de las vistas Gantt y Roadmap de Seguimiento Operativo
 
 Tipo de cambio: correccion visual de frontend en la vista Gantt, sin cambios de datos ni de backend.

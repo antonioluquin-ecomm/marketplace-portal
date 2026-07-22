@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.56',
+  number: '1.4.57',
   date:   '2026-07-22',
-  notes:  'Gantt: el badge de estado ya no se derrama sobre el timeline',
+  notes:  'Gantt/Roadmap: el rango temporal se auto-ajusta a la data',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.57', date: '2026-07-22', desc: 'Gantt (escala Mes) y Roadmap: el rango temporal ya no queda fijo a "hoy ± período" — se estira para cubrir siempre las fechas reales de las tareas visibles, sin achicar la ventana que ya elegía el usuario. Antes, tareas fuera de ese rango quedaban todas clampeadas al borde izquierdo.' },
   { v: '1.4.56', date: '2026-07-22', desc: 'Gantt: el badge de estado se derramaba 37px sobre el timeline con "Configurado en QA"; la columna fija ahora deriva su ancho de las partes (corrige además un desajuste en escala Semana), abrevia ese estado a "En QA" y recorta cualquier excedente.' },
   { v: '1.4.55', date: '2026-07-22', desc: 'Seguimiento Operativo: se agrega el KPI "En QA" (faltaba pese a ser el 2º estado más frecuente), los headers de tabla se alinean a la izquierda con sus celdas, y el ancho sobrante de las columnas pasa a Tarea en vez de repartirse en huecos.' },
   { v: '1.4.54', date: '2026-07-22', desc: 'Seguimiento Operativo: se saca el conteo redundante de la toolbar, Estado pasa de select siempre editable a badge de lectura, y Hito se pliega dentro de Tarea (10→9 columnas).' },
@@ -35,7 +36,6 @@ const CHANGELOG = [
   { v: '1.4.50', date: '2026-07-22', desc: 'Portal de Sellers: accesos compactos, recursos agrupados y pr\u00f3ximo paso din\u00e1mico.' },
   { v: '1.4.49', date: '2026-07-21', desc: 'Módulo provisorio "Catálogo (Taika Sport)": ver/editar precio y stock, exportar/importar CSV.' },
   { v: '1.4.47', date: '2026-07-21', desc: 'Selector CSS de inputs de Configuración pasa de inclusión a exclusión por tipo.' },
-  { v: '1.4.46', date: '2026-07-21', desc: 'Fix visual del modal "Nuevo usuario": segmentado parejo y campo Nombre estilado.' },
 ];
 
 
