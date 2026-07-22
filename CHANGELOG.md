@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-22 - El titulo y los KPIs de Seguimiento Operativo pasan a scrollear con la lista
+
+Tipo de cambio: mejora visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.
+
+**Motivacion**: el layout tenia el titulo + bajada + KPIs como bloque fijo (fuera del area de scroll), permanentemente reservando ~110-120px de alto encima de la tabla, sin aportar nada util una vez que el usuario ya esta mirando filas (los KPIs no cambian al scrollear, solo al cambiar filtros). Eso dejaba muy poca altura visible para la tabla en pantallas comunes.
+
+- El bloque de titulo/KPIs (`.ops-hero`) se mueve de ser hermano fijo del area de contenido a ser el primer elemento *dentro* del area que scrollea — desaparece de la vista al bajar, liberando esa altura para las filas.
+- La barra de filtros y la barra de Vista/acciones (Gantt/Lista/Kanban/Roadmap, Expandir todo, Solo activos, Excel) quedan exactamente donde estaban: fijas arriba, fuera del area de scroll — siguen siempre visibles mientras se navega la lista.
+- El contenedor que scrollea cambia de id `content` a `content-scroll`; el div `content` original (donde cada vista inyecta su HTML via `innerHTML`) queda anidado adentro sin cambios, por lo que ninguna funcion de render tuvo que modificarse.
+- Los headers sticky propios de la vista Gantt/Roadmap (`gantt-months`, `seller-header`) siguen funcionando igual: su `position:sticky` sigue calculando contra el mismo contenedor con scroll, solo que ahora se llama distinto.
+
 ## 2026-07-22 - Redise&ntilde;a los accesos del Portal de Sellers
 
 Tipo de cambio: mejora funcional y visual de frontend, sin cambios de autenticaci&oacute;n, rutas ni backend.

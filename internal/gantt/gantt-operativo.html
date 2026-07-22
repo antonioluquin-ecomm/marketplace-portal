@@ -88,25 +88,6 @@
 <!-- ══ MAIN ══ -->
 <main class="main portal-ops-main" id="main-area">
 
-  <section class="ops-hero portal-ops-hero">
-    <div class="ops-hero-text">
-      <div class="ops-eyebrow">Flujo de incorporación</div>
-      <h1 class="ops-title">Seguimiento Operativo</h1>
-      <p class="ops-lead">Tareas de onboarding por seller: responsables, fechas, checklist, comentarios y bloqueos. Cambios de estado quedan auditados; agrupá por seller en Lista o mirá el avance por hito en Roadmap.</p>
-    </div>
-    <div class="kpi-bar" id="gantt-kpi-bar">
-      <div class="kpi"><div class="kpi-val" id="gkpi-total">—</div><div class="kpi-lbl">Tareas</div></div>
-      <div class="kpi-sep"></div>
-      <div class="kpi"><div class="kpi-val g" id="gkpi-done">—</div><div class="kpi-lbl">Completadas</div></div>
-      <div class="kpi"><div class="kpi-val i" id="gkpi-wip">—</div><div class="kpi-lbl">En curso</div></div>
-      <div class="kpi"><div class="kpi-val d" id="gkpi-blk">—</div><div class="kpi-lbl">Bloqueadas</div></div>
-      <div class="kpi-sep"></div>
-      <div class="kpi"><div class="kpi-val w" id="gkpi-late">—</div><div class="kpi-lbl">Atrasadas</div></div>
-      <div class="kpi-sep"></div>
-      <div class="kpi"><div class="kpi-val" id="gkpi-sellers">—</div><div class="kpi-lbl">Sellers</div></div>
-    </div>
-  </section>
-
   <div class="filter-bar portal-ops-filter">
     <div class="filter-group">
       <label class="fi-label" for="search">Buscar</label>
@@ -218,8 +199,28 @@
   </section>
 
   <div id="filter-chips"></div>
-  <div id="content" style="flex:1;overflow:auto">
-    <div class="center-state"><div class="spinner"></div><span>Cargando timeline operativo desde Google Sheets…</span></div>
+  <div id="content-scroll" style="flex:1;overflow:auto">
+    <section class="ops-hero portal-ops-hero">
+      <div class="ops-hero-text">
+        <div class="ops-eyebrow">Flujo de incorporación</div>
+        <h1 class="ops-title">Seguimiento Operativo</h1>
+        <p class="ops-lead">Tareas de onboarding por seller: responsables, fechas, checklist, comentarios y bloqueos. Cambios de estado quedan auditados; agrupá por seller en Lista o mirá el avance por hito en Roadmap.</p>
+      </div>
+      <div class="kpi-bar" id="gantt-kpi-bar">
+        <div class="kpi"><div class="kpi-val" id="gkpi-total">—</div><div class="kpi-lbl">Tareas</div></div>
+        <div class="kpi-sep"></div>
+        <div class="kpi"><div class="kpi-val g" id="gkpi-done">—</div><div class="kpi-lbl">Completadas</div></div>
+        <div class="kpi"><div class="kpi-val i" id="gkpi-wip">—</div><div class="kpi-lbl">En curso</div></div>
+        <div class="kpi"><div class="kpi-val d" id="gkpi-blk">—</div><div class="kpi-lbl">Bloqueadas</div></div>
+        <div class="kpi-sep"></div>
+        <div class="kpi"><div class="kpi-val w" id="gkpi-late">—</div><div class="kpi-lbl">Atrasadas</div></div>
+        <div class="kpi-sep"></div>
+        <div class="kpi"><div class="kpi-val" id="gkpi-sellers">—</div><div class="kpi-lbl">Sellers</div></div>
+      </div>
+    </section>
+    <div id="content">
+      <div class="center-state"><div class="spinner"></div><span>Cargando timeline operativo desde Google Sheets…</span></div>
+    </div>
   </div>
 
 </main>

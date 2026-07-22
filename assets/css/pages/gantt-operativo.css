@@ -403,7 +403,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 /* ── VIEWPORT: scrollbar del gantt siempre visible ── */
 html,body{height:100%;overflow:hidden}
 .shell{height:calc(100vh - 50px);min-height:0;overflow:hidden}
-#content{min-height:0}
+#content-scroll{min-height:0}
 
 /* ── SIDEBAR: footer de usuario fijo, nunca tapado por secciones largas ──
    Esta página tiene una sección extra ("Vista de sellers") que hace que el
