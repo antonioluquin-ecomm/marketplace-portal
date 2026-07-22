@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-07-22 - Auditoria critica de Seguimiento Operativo: KPI "En QA", headers y anchos de columna
+
+Tipo de cambio: correccion funcional + visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.
+
+Auditoria critica (visual + funcional) pedida por el usuario. Hallazgos y correcciones, por etapa:
+
+### Etapa 1 — Funcional: los KPIs escondian el estado real
+- La barra de KPIs del hero mostraba Completadas / En curso / Bloqueadas / Atrasadas, pero **omitia "Configurado en QA"** — que en la data real era el 2do estado mas frecuente (9 de 31 tareas), con columna propia en Kanban. Un usuario mirando solo los KPIs no veia que casi un tercio de las tareas estaban esperando el pase a Productivo.
+- Se agrega el KPI "En QA" (violeta, mismo color que el estado en tabla/Kanban/Gantt), entre "En curso" y "Bloqueadas".
+
+### Etapa 2 — Visual: tabla de la vista Lista
+- **Headers desalineados**: los `<th>` se renderizaban centrados (default del navegador) mientras las celdas van a la izquierda — el titulo no se sentaba sobre su dato. Se alinean los headers a la izquierda (style_guide §4.4: nunca centrar texto en tablas).
+- **Huecos excesivos entre columnas**: `min-width:1420px` habia sido calibrado para las 12 columnas originales; con 9 columnas la tabla se estiraba a todo el ancho del contenedor y repartia el sobrante en partes iguales (Estado/Area/Responsable quedaban ~200px para textos cortos, con grandes huecos que dificultaban leer una fila de corrido). Ahora las columnas de datos se ajustan a su contenido (`width:1%` + `nowrap`) y todo el espacio libre lo absorbe la columna Tarea; `min-width` baja a 1080px como piso para el scroll horizontal en pantallas angostas.
+
+### Etapa 3 — Pulido
+- La columna Entorno pasa a ser ordenable (`data-sortable`), como el resto de las columnas de datos — antes era la unica sin sort.
+
 ## 2026-07-22 - Poda visual de la tabla de Seguimiento Operativo
 
 Tipo de cambio: simplificacion visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.

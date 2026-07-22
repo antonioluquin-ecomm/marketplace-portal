@@ -210,6 +210,7 @@
         <div class="kpi-sep"></div>
         <div class="kpi"><div class="kpi-val g" id="gkpi-done">—</div><div class="kpi-lbl">Completadas</div></div>
         <div class="kpi"><div class="kpi-val i" id="gkpi-wip">—</div><div class="kpi-lbl">En curso</div></div>
+        <div class="kpi"><div class="kpi-val v" id="gkpi-qa">—</div><div class="kpi-lbl">En QA</div></div>
         <div class="kpi"><div class="kpi-val d" id="gkpi-blk">—</div><div class="kpi-lbl">Bloqueadas</div></div>
         <div class="kpi-sep"></div>
         <div class="kpi"><div class="kpi-val w" id="gkpi-late">—</div><div class="kpi-lbl">Atrasadas</div></div>
@@ -1109,6 +1110,7 @@ function updateGanttKPIs(tasks){
   setText('gkpi-total',tasks.length);
   setText('gkpi-done',tasks.filter(t=>t.estado==='Completado').length);
   setText('gkpi-wip',tasks.filter(t=>t.estado==='En curso').length);
+  setText('gkpi-qa',tasks.filter(t=>t.estado==='Configurado en QA').length);
   setText('gkpi-blk',tasks.filter(t=>t.estado==='Bloqueado').length);
   setText('gkpi-late',late.length);
   const nSel=new Set(tasks.map(t=>t.seller_id).filter(Boolean)).size;
@@ -1456,7 +1458,7 @@ function renderLista(tasks,sellerIds,today){
             <th data-sortable data-key="estado" class="${sortClass('estado')}" onclick="setListSort('estado')">Estado</th>
             <th data-sortable data-key="area_responsable" class="${sortClass('area_responsable')}" onclick="setListSort('area_responsable')">Área</th>
             <th data-sortable data-key="responsable_persona_nombre" class="${sortClass('responsable_persona_nombre')}" onclick="setListSort('responsable_persona_nombre')">Responsable</th>
-            <th>Entorno</th>
+            <th data-sortable data-key="entorno" class="${sortClass('entorno')}" onclick="setListSort('entorno')">Entorno</th>
             <th data-sortable data-key="inicio" class="${sortClass('inicio')}" onclick="setListSort('inicio')">Inicio</th>
             <th data-sortable data-key="fin" class="${sortClass('fin')}" onclick="setListSort('fin')">Fin</th>
             <th data-sortable data-key="atraso_calc" class="${sortClass('atraso_calc')}" onclick="setListSort('atraso_calc')">Atraso</th>

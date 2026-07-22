@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.54',
+  number: '1.4.55',
   date:   '2026-07-22',
-  notes:  'Poda visual de la tabla de Seguimiento Operativo',
+  notes:  'Auditoría de Seguimiento Operativo: KPI En QA, headers y anchos de columna',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.55', date: '2026-07-22', desc: 'Seguimiento Operativo: se agrega el KPI "En QA" (faltaba pese a ser el 2º estado más frecuente), los headers de tabla se alinean a la izquierda con sus celdas, y el ancho sobrante de las columnas pasa a Tarea en vez de repartirse en huecos.' },
   { v: '1.4.54', date: '2026-07-22', desc: 'Seguimiento Operativo: se saca el conteo redundante de la toolbar, Estado pasa de select siempre editable a badge de lectura, y Hito se pliega dentro de Tarea (10→9 columnas).' },
   { v: '1.4.53', date: '2026-07-22', desc: 'Seguimiento Operativo: el select de Seller quedaba 7px más arriba que el resto de los filtros por el hint vacío debajo — corregido.' },
   { v: '1.4.52', date: '2026-07-22', desc: 'Portal de Sellers: layout m\u00e1s compacto y menor desplazamiento vertical.' },
@@ -35,7 +36,6 @@ const CHANGELOG = [
   { v: '1.4.47', date: '2026-07-21', desc: 'Selector CSS de inputs de Configuración pasa de inclusión a exclusión por tipo.' },
   { v: '1.4.46', date: '2026-07-21', desc: 'Fix visual del modal "Nuevo usuario": segmentado parejo y campo Nombre estilado.' },
   { v: '1.4.45', date: '2026-07-21', desc: 'Nuevo estado "Configurado en QA" en tareas de Seguimiento Operativo.' },
-  { v: '1.4.44', date: '2026-07-21', desc: 'Seguimiento Operativo: fix de hint duplicado y de "Limpiar filtros" descolocado.' },
 ];
 
 

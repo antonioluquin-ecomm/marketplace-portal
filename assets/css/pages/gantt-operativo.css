@@ -55,7 +55,7 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .kpi-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;flex-shrink:0}
 .kpi{display:flex;flex-direction:column;gap:1px;min-width:56px}
 .kpi-val{font-family:var(--font);font-size:18px;font-weight:800;line-height:1;color:var(--t1)}
-.kpi-val.g{color:var(--g)}.kpi-val.w{color:var(--warn)}.kpi-val.d{color:var(--danger)}.kpi-val.i{color:var(--info)}
+.kpi-val.g{color:var(--g)}.kpi-val.w{color:var(--warn)}.kpi-val.d{color:var(--danger)}.kpi-val.i{color:var(--info)}.kpi-val.v{color:var(--violet)}
 .kpi-lbl{font-size:8px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)}
 .kpi-sep{width:1px;height:26px;background:var(--bdr);align-self:center}
 
@@ -207,10 +207,22 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
    por cada <details> de seller dentro del mismo contenedor con scroll
    (#content) — el sticky header pensado para una sola tabla por contenedor
    se desactiva aca para que no se pisen entre si al scrollear. */
-#content .data-table th { position: static; }
+/* th default es text-align:center; las celdas (td) son left. Sin esto el
+   header quedaba centrado sobre una columna con datos alineados a la izquierda
+   (style_guide §4.4: nunca centrar texto en tablas). */
+#content .data-table th { position: static; text-align: left; }
 .lista-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-gutter:stable;background:var(--card)}
 .lista-table-scroll:focus-visible{outline:2px solid var(--primary-mid);outline-offset:-2px}
-#content .data-table { min-width: 1420px; }
+/* min-width:1420 estaba calibrado para 12 columnas; con 9 la tabla se estiraba
+   a todo el ancho del contenedor repartiendo el sobrante en partes iguales
+   (Estado/Área/Responsable quedaban ~200px para textos cortos, con enormes
+   huecos entre columnas). Ahora las columnas de datos se ajustan a su contenido
+   (width:1% + nowrap) y todo el espacio libre lo absorbe Tarea, que es la que
+   se beneficia del ancho. min-width baja a un piso razonable para el scroll
+   horizontal en pantallas angostas. */
+#content .data-table { min-width: 1080px; }
+#content .data-table th:not(:first-child),
+#content .data-table td:not(.td-tarea) { width: 1%; white-space: nowrap; }
 /* Tipografía por columna — antes .data-table td forzaba mono en TODA celda
    (internal-components.css asume tablas de IDs/códigos) y esta página lo
    neutralizaba solo en nth-child(4)/(5) asumiendo que ahí caían
@@ -227,7 +239,11 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
    define white-space:nowrap con mayor especificidad (clase+elemento vs. clase
    sola) y siempre ganaba: la tarea larga desbordaba fuera de su columna. Se
    fija acá, con la misma especificidad alta que el resto de esta sección. */
-#content .data-table td.td-tarea{white-space:normal;overflow-wrap:break-word;max-width:280px}
+/* Tarea es la columna flexible: absorbe todo el espacio libre de la tabla
+   (las demás columnas se ajustan a su contenido). Sin max-width para poder
+   crecer; white-space:normal para que los títulos largos hagan wrap dentro
+   de ese ancho generoso en vez de forzar scroll. */
+#content .data-table td.td-tarea{white-space:normal;overflow-wrap:break-word;min-width:260px}
 .td-tarea{color:var(--t1);font-size:12px}
 .td-tarea-title{font-weight:500}
 .td-tarea-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px}
