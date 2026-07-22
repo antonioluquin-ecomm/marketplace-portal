@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-07-22 - Auditoria de las vistas Gantt y Roadmap de Seguimiento Operativo
+
+Tipo de cambio: correccion visual de frontend en la vista Gantt, sin cambios de datos ni de backend.
+
+Auditoria critica de las vistas Gantt y Roadmap (las que no se habian revisado a fondo).
+
+### Gantt — bug real: el badge de estado se derramaba sobre el timeline
+- La columna fija del Gantt reservaba 90px para el badge de estado. Al agregar el estado "Configurado en QA" (17 caracteres) el badge media 164px con el sufijo de atraso ("Configurado en QA +60d") y se **derramaba 37px sobre el area del timeline**, tapando barras.
+- Correcciones:
+  - La columna fija (`FIXED_W`) ahora **deriva su ancho de las partes** (`NAME_W` + `EST_W`) en vez de un literal. Esto ademas corrige un desajuste pre-existente en la escala Semana, donde las celdas fijas sumaban 400px dentro de un contenedor declarado de 330px.
+  - `EST_W` sube a 100px y el estado "Configurado en QA" se abrevia a **"En QA"** solo en esta columna compacta (mismo texto que el KPI); la vista Lista conserva el nombre completo, donde si hay espacio.
+  - Se saca el sufijo "+Nd" del badge en el Gantt (el atraso ya se indica con el rayado rojo de la barra y en el tooltip/modal).
+  - `.tr-estado-cell` gana `overflow:hidden` como red de seguridad: cualquier excedente se recorta en el borde en vez de invadir el timeline.
+
+### Roadmap — sin cambios necesarios
+- Los swimlanes por hito agregan correctamente el color de estado (incluido el nuevo "Configurado en QA" en violeta) y las barras no tienen texto que pueda desbordar. La vista quedo consistente sin tocar codigo.
+
+### Nota (sin cambio de codigo): barras fuera de rango
+- Tanto Gantt como Roadmap anclan la ventana temporal a "hoy − 1 mes". Con la data de prueba (fechas de mayo, anteriores al rango) todas las barras quedan pegadas al borde izquierdo. Es un artefacto de los datos de prueba, no de la logica: con fechas cercanas a hoy las barras se ubican normalmente. Se deja anotado por si a futuro se quiere que el rango se auto-ajuste a la data.
+
 ## 2026-07-22 - Auditoria critica de Seguimiento Operativo: KPI "En QA", headers y anchos de columna
 
 Tipo de cambio: correccion funcional + visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.

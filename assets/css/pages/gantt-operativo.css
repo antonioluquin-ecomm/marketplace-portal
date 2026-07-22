@@ -140,7 +140,11 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .tr-tarea{font-size:12px;color:var(--t2);line-height:1.3}
 .tr-fase{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--t3)}
 .fase-pip{width:5px;height:5px;border-radius:1px;flex-shrink:0}
-.tr-estado-cell{padding:6px 13px;border-right:1px solid var(--bdr);display:flex;align-items:center;justify-content:center}
+/* overflow:hidden es la red de seguridad: si un badge de estado quedara más
+   ancho que la celda fija, se recorta en el borde en vez de derramarse sobre
+   el área del timeline (que era lo que pasaba con "Configurado en QA"). El
+   padding baja de 13 a 8px para darle más ancho útil al badge. */
+.tr-estado-cell{padding:6px 8px;border-right:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .tr-resp-cell{padding:6px 10px;border-right:1px solid var(--bdr);display:flex;align-items:center;font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ── BADGES (estado / entorno) — convención única: pill, borde sutil,

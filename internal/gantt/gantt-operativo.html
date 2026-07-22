@@ -1000,6 +1000,12 @@ function estadoClass(e){
   switch(e){case'Completado':return'st-done';case'En curso':return'st-wip';case'Configurado en QA':return'st-qa';case'Bloqueado':return'st-blk';case'Cancelado':return'st-can';}
   return 'st-pend';
 }
+/* Etiqueta compacta de estado para la columna fija del Gantt (~100px): el
+   badge "Configurado en QA" (17 caracteres) no entra y se derramaba sobre el
+   timeline. Solo ese estado se abrevia a "En QA" (mismo texto que el KPI); el
+   resto conserva su nombre completo. La tabla Lista sigue mostrando el nombre
+   completo, donde sí hay espacio. */
+function estadoGanttLabel(e){ return e==='Configurado en QA' ? 'En QA' : e; }
 function barClass(e){
   switch(e){case'Completado':return'done';case'En curso':return'wip';case'Configurado en QA':return'confqa';case'Bloqueado':return'blk';case'Cancelado':return'can';}
   return 'pend';
@@ -1275,8 +1281,16 @@ function renderGantt(tasks,sellerIds,today){
   }
   const totalDays =dBetween(rangeStart,rangeEnd)+1;
 
-  const FIXED_W=currentScale==='semana'?330:310; // px col fija
+  // Col fija = nombre/tarea (NAME_W) + estado (EST_W). Antes FIXED_W era un
+  // literal (310/330) que en modo semana NO coincidía con la suma real de las
+  // celdas (220+90 nombre + 90 estado = 400 ≠ 330): las celdas fijas
+  // desbordaban su contenedor. Ahora FIXED_W se deriva de las partes, así
+  // siempre cierra. EST_W sube a 100 porque el badge de estado "Configurado
+  // en QA" no entraba en 90px y se derramaba sobre el timeline.
   const RESP_W =currentScale==='semana'?90:0;    // col responsable extra en vista semana
+  const NAME_W =220+RESP_W;                       // celda nombre/tarea
+  const EST_W  =100;                              // celda estado (badge)
+  const FIXED_W=NAME_W+EST_W;                      // px col fija
   const COL_W  =currentScale==='semana'?28:3;    // px por día (semana: 4px/día × 7 = 28px/semana, mes: 3px/día)
 
   const ganttW=totalDays*COL_W;
@@ -1331,8 +1345,8 @@ function renderGantt(tasks,sellerIds,today){
   html+=`
     <div class="gantt-months" style="display:flex">
       <div class="gm-fixed" style="width:${FIXED_W}px;flex-shrink:0">
-        <div class="gm-fixed-cell" style="width:${220+RESP_W}px">Seller / Tarea</div>
-        <div class="gm-fixed-cell" style="width:${90}px;justify-content:center">Estado</div>
+        <div class="gm-fixed-cell" style="width:${NAME_W}px">Seller / Tarea</div>
+        <div class="gm-fixed-cell" style="width:${EST_W}px;justify-content:center">Estado</div>
       </div>
       <div class="gm-cells-wrap" style="min-width:${ganttW}px">
         <div class="gm-cells">
@@ -1355,7 +1369,7 @@ function renderGantt(tasks,sellerIds,today){
       <div class="seller-group" id="sg-${esc(sid)}">
         <div class="seller-header" style="display:flex" onclick="toggleGroup('${esc(sid)}')">
           <div class="sh-fixed" style="width:${FIXED_W}px;flex-shrink:0">
-            <div class="sh-name-cell" style="width:${220+RESP_W}px">
+            <div class="sh-name-cell" style="width:${NAME_W}px">
               <span class="sh-chevron">▾</span>
               <div style="min-width:0">
                 <div class="sh-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(seller.nombre)}</div>
@@ -1363,7 +1377,7 @@ function renderGantt(tasks,sellerIds,today){
               </div>
               ${hasBloq?`<span style="margin-left:auto;font-size:9px;font-weight:800;color:#f29a9a;background:var(--dng-dim);border:1px solid var(--dng-brd);padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0">BLOQUEADO</span>`:''}
             </div>
-            <div class="sh-prog-cell" style="width:90px">
+            <div class="sh-prog-cell" style="width:${EST_W}px">
               <div class="sh-prog-bar"><div class="sh-prog-fill" style="${progStyle(pct)};width:${pct}%"></div></div>
               <span class="sh-prog-n">${pct}%</span>
             </div>
@@ -1386,13 +1400,13 @@ function renderGantt(tasks,sellerIds,today){
       html+=`
           <div class="task-row" style="display:flex" onclick="openModal('${esc(t.task_id)}')">
             <div class="tr-fixed" style="width:${FIXED_W}px;flex-shrink:0">
-              <div class="tr-name-cell" style="width:${220+RESP_W}px">
+              <div class="tr-name-cell" style="width:${NAME_W}px">
                 <div class="tr-tarea">${esc(t.tarea)}</div>
                 <div class="tr-fase"><span class="fase-pip" style="background:${faseColor(t.fase)}"></span>${esc(t.fase)}</div>
                 ${currentScale==='semana'?`<div style="font-size:9px;color:var(--t3);margin-top:2px">${esc(t.area_responsable||'—')}</div>`:''}
               </div>
-              <div class="tr-estado-cell" style="width:90px">
-                <span class="estado-badge ${estadoClass(t.estado)}">${t.estado}${isOver?` +${t.atraso_calc}d`:''}</span>
+              <div class="tr-estado-cell" style="width:${EST_W}px">
+                <span class="estado-badge ${estadoClass(t.estado)}">${esc(estadoGanttLabel(t.estado))}</span>
               </div>
             </div>
             <div class="tr-gantt" style="flex:1;min-width:${ganttW}px;position:relative;min-height:36px">
