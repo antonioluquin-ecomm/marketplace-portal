@@ -24,14 +24,23 @@
   h1{font-size:clamp(28px,4vw,38px);font-weight:700;letter-spacing:-.01em;margin-bottom:10px;color:var(--text)}
   .lead{font-size:14px;line-height:1.6;color:var(--muted);max-width:600px;margin-bottom:40px}
 
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-  .card{display:flex;flex-direction:column;min-height:130px;padding:20px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow-sm);transition:.15s}
+  .resource-section{margin-top:32px}
+  .resource-section-title{font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--text);margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .card{display:flex;align-items:center;gap:16px;min-height:92px;padding:18px 20px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow-sm);transition:.15s}
   .card:hover{transform:translateY(-2px);border-color:var(--primary-mid);box-shadow:var(--shadow)}
-  .card .ico{font-size:22px;margin-bottom:10px}
-  .card strong{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--text);margin-bottom:6px}
-  .card small{font-size:12.5px;line-height:1.5;color:var(--muted)}
-  .card em{margin-top:auto;padding-top:12px;font-style:normal;color:var(--primary);font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
-
+  .card-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .card strong{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+  .card small{font-size:12.5px;line-height:1.45;color:var(--muted)}
+  .card-arrow{margin-left:auto;color:var(--primary);font-size:21px;line-height:1;transition:transform .15s}
+  .card:hover .card-arrow{transform:translateX(3px)}
+  .card-full{grid-column:1/-1}
+  .next-step{display:flex;align-items:center;gap:18px;margin:0 0 36px;padding:20px 22px;border:1px solid var(--primary-mid);border-left:4px solid var(--primary);border-radius:8px;background:var(--primary-light)}
+  .next-step-copy{display:flex;flex-direction:column;gap:4px}
+  .next-step-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
+  .next-step-title{font-size:16px;font-weight:700;color:var(--text)}
+  .next-step-description{font-size:12.5px;line-height:1.45;color:var(--muted)}
+  .next-step-arrow{margin-left:auto;color:var(--primary);font-size:22px}
   .empty{padding:32px;border:1px dashed var(--line);border-radius:var(--radius);color:var(--muted);font-size:13px;text-align:center}
 
   .progress-section{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:36px}
@@ -49,8 +58,7 @@
   .public-simple-main.public-simple-main .stat-card,
   .public-simple-main.public-simple-main .empty{border-radius:8px;box-shadow:none}
   .public-simple-main.public-simple-main .card:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
-  .public-simple-main.public-simple-main .card .ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:7px;border:1px solid var(--line);background:var(--bg);font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--primary);margin-bottom:10px}
-  @media(max-width:720px){.grid{grid-template-columns:1fr}.progress-section{grid-template-columns:1fr}.main{padding:40px 20px 60px}}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}.card-full{grid-column:auto}.progress-section{grid-template-columns:1fr}.public-simple-main.public-simple-main{padding:40px 20px 60px}.portal-topbar{height:auto;flex-wrap:wrap;gap:10px}.portal-topbar .crumb{display:none}.user-chip{margin-left:auto;flex-wrap:wrap}.next-step{align-items:flex-start}.resource-section{margin-top:28px}}
 </style>
 </head>
 <body>
@@ -85,21 +93,34 @@
       </div>
     </div>
 
-    <div class="grid" id="resources-grid"></div>
+    <a class="next-step" id="next-step" href="formularios/formulario-relevamiento.html" hidden>
+      <span class="next-step-copy"><span class="next-step-label">Tu pr&oacute;ximo paso</span><strong class="next-step-title" id="next-step-title">Completar el relevamiento</strong><span class="next-step-description" id="next-step-description">Sum&aacute; la informaci&oacute;n pendiente para avanzar con tu incorporaci&oacute;n.</span></span><span class="next-step-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+    <section class="resource-section"><h2 class="resource-section-title">Proceso de incorporaci&oacute;n</h2><div class="grid" id="onboarding-grid"></div></section>
+    <section class="resource-section"><h2 class="resource-section-title">Herramientas disponibles</h2><div class="grid" id="tools-grid"></div></section>
     <div class="empty" id="empty-state" hidden>Todavía no hay recursos disponibles para tu cuenta.</div>
   </main>
 
   <script src="../assets/js/config.js"></script>
   <script src="../assets/js/auth-seller.js"></script>
   <script>
-    const ICONS = {
-      formulario_calificacion: "FORM",
-      formulario_relevamiento: "REL",
-      presentacion_seller:     "PPT",
-      simulador_seller:        "SIM",
-      gantt_seller:            "GAN",
-      integracion_seller:      "API",
+    const RESOURCE_DETAILS = {
+      formulario_calificacion: { description: 'Contanos sobre tu propuesta comercial.', group: 'onboarding' },
+      formulario_relevamiento: { description: 'Complet\u00e1 la informaci\u00f3n t\u00e9cnica y operativa.', group: 'onboarding' },
+      presentacion_seller: { description: 'Conoc\u00e9 el modelo de trabajo de Sporting Marketplace.', group: 'onboarding' },
+      simulador_seller: { description: 'Estim\u00e1 costos y resultados de tu operaci\u00f3n.', group: 'onboarding' },
+      gantt_seller: { description: 'Consult\u00e1 etapas, tareas y avances del proyecto.', group: 'onboarding' },
+      integracion_seller: { description: 'Revis\u00e1 los requisitos y pasos de integraci\u00f3n.', group: 'onboarding' },
+      catalogo_seller: { description: 'Gestion\u00e1 precios y stock de tus productos.', group: 'tools' },
     };
+    function updateNextStep(pct) {
+      const nextStep = document.getElementById('next-step');
+      const complete = pct >= 100;
+      nextStep.href = complete ? 'gantt/gantt-seller.html' : 'formularios/formulario-relevamiento.html';
+      document.getElementById('next-step-title').textContent = complete ? 'Consultar el avance del proyecto' : 'Completar el relevamiento';
+      document.getElementById('next-step-description').textContent = complete ? 'Revis\u00e1 las etapas, tareas y avances de tu incorporaci\u00f3n.' : 'Sum\u00e1 la informaci\u00f3n pendiente para avanzar con tu incorporaci\u00f3n.';
+      nextStep.hidden = false;
+    }
 
     async function loadProgressSummary() {
       const sellerId = SellerSESSION.sellerId;
@@ -126,9 +147,11 @@
           document.getElementById('stat-relevamiento').textContent = pct + '%';
           document.getElementById('stat-relevamiento-sub').textContent = json.metadata.estado_relevamiento || '—';
           document.getElementById('stat-relevamiento-bar').style.width = pct + '%';
+          updateNextStep(pct);
         } else {
           document.getElementById('stat-relevamiento').textContent = '0%';
           document.getElementById('stat-relevamiento-sub').textContent = 'Sin iniciar';
+          updateNextStep(0);
         }
       } catch (e) {
         document.getElementById('stat-relevamiento').textContent = '—';
@@ -137,23 +160,22 @@
     }
 
     function renderGrid() {
-      const grid = document.getElementById('resources-grid');
       const resources = (window.MP_CONFIG && window.MP_CONFIG.RESOURCES || [])
-        .filter(function (r) { return r.access === 'Seller'; });
+        .filter(function (r) { return r.access === 'Seller' && RESOURCE_DETAILS[r.key]; });
 
       if (!resources.length) {
         document.getElementById('empty-state').hidden = false;
         return;
       }
 
-      grid.innerHTML = resources.map(function (r) {
+      function renderResource(r) {
         const href = r.route.replace(/^\/public\//, '');
-        return '<a class="card" href="' + href + '">' +
-          '<span class="ico">' + (ICONS[r.key] || 'LINK') + '</span>' +
-          '<strong>' + r.label + '</strong>' +
-          '<em>Abrir →</em>' +
-        '</a>';
-      }).join('');
+        const detail = RESOURCE_DETAILS[r.key];
+        const fullClass = detail.group === 'tools' ? ' card-full' : '';
+        return '<a class="card' + fullClass + '" href="' + href + '"><span class="card-copy"><strong>' + r.label + '</strong><small>' + detail.description + '</small></span><span class="card-arrow" aria-hidden="true">&rarr;</span></a>';
+      }
+      document.getElementById('onboarding-grid').innerHTML = resources.filter(function (r) { return RESOURCE_DETAILS[r.key].group === 'onboarding'; }).map(renderResource).join('');
+      document.getElementById('tools-grid').innerHTML = resources.filter(function (r) { return RESOURCE_DETAILS[r.key].group === 'tools'; }).map(renderResource).join('');
     }
 
     renderGrid(); // los recursos de seller no dependen de la sesión puntual
@@ -167,6 +189,7 @@
       function () { // modo staff, sin seller elegido todavía
         document.getElementById('hero-title').textContent = 'Elegí un seller para ver su portal';
         document.getElementById('progress-section').style.display = 'none';
+        document.getElementById('next-step').hidden = true;
       }
     );
   </script>

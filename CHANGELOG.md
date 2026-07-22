@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-07-22 - Redise&ntilde;a los accesos del Portal de Sellers
+
+Tipo de cambio: mejora funcional y visual de frontend, sin cambios de autenticaci&oacute;n, rutas ni backend.
+
+- Las tarjetas pierden las siglas decorativas y pasan a ser accesos compactos, completamente clickeables, con t&iacute;tulo, descripci&oacute;n espec&iacute;fica y flecha.
+- Se agrega el bloque destacado "Tu pr&oacute;ximo paso": recomienda completar el relevamiento mientras est&aacute; incompleto y consultar el avance del proyecto al llegar al 100%. En modo staff permanece oculto hasta elegir un seller.
+- Los recursos se separan entre "Proceso de incorporaci&oacute;n" y "Herramientas disponibles"; Cat&aacute;logo ocupa todo el ancho de su secci&oacute;n.
+- Se mantienen la identidad verde de Sporting Marketplace, los indicadores existentes y el layout responsive de dos columnas en escritorio y una en mobile.
+
 ## 2026-07-21 - Módulo provisorio "Catálogo (Taika Sport)"
 
 Tipo de cambio: nueva funcionalidad (frontend + backend cross-repo), provisoria hasta que el Seller Center definitivo esté listo.
