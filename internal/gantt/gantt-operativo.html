@@ -190,7 +190,6 @@
     </div>
     <div class="tl-r">
       <span class="ri" id="range-info" style="display:none">Rango: —</span>
-      <span class="ri" id="ri-info">—</span>
       <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
         <input type="checkbox" id="solo-activos" style="accent-color:var(--g)" onchange="render()"> Solo activos
       </label>
@@ -1084,7 +1083,6 @@ function render(){
     return(sa?.nombre||a).localeCompare(sb?.nombre||b,'es');
   });
 
-  updateCounts(tasks,sellerIds.length);
   updateGanttKPIs(tasks);
 
   if(!TASKS.length){
@@ -1101,14 +1099,6 @@ function render(){
   else if(currentView==='kanban') renderKanban(tasks,today);
   else if(currentView==='roadmap') renderRoadmap(tasks,today);
   else renderLista(tasks,sellerIds,today);
-}
-
-/* ── COUNTS ── */
-function pluralizar(n,singular,plural){
-  return `${n} ${n===1?singular:plural}`;
-}
-function updateCounts(tasks,nSel){
-  $('ri-info').textContent=`${pluralizar(tasks.length,'tarea','tareas')} · ${pluralizar(nSel,'seller','sellers')}`;
 }
 
 /* ── KPI BAR ── */
@@ -1432,42 +1422,6 @@ function toggleGroup(sid){
 }
 
 /* ── LISTA ── */
-function estadoOptionsHtml(selected){
-  return ESTADOS_GANTT_TODOS
-    .map(e=>`<option value="${e}" ${e===selected?'selected':''}>${e}</option>`).join('');
-}
-function userOptionsHtml(selectedId){
-  const sel=String(selectedId||'');
-  let html=`<option value="" ${sel===''?'selected':''}>Sin asignar</option>`;
-  USERS.forEach(u=>{ html+=`<option value="${esc(u.id)}" ${String(u.id)===sel?'selected':''}>${esc(u.nombre)}</option>`; });
-  return html;
-}
-async function updateEstadoInline(taskId,selectEl){
-  const t=TASKS.find(x=>x.task_id===taskId);
-  if(!t) return;
-  const prev=t.estado, next=selectEl.value;
-  if(prev===next) return;
-  t.estado=next; calcProgreso(); render();
-  try{
-    await callGanttWriteAction('updateGanttTask',{task_id:taskId,updated_by:currentUserEmail(),fields:{estado:next}});
-  }catch(err){
-    t.estado=prev; calcProgreso(); render();
-    alert('No se pudo actualizar el estado: '+(err.message||err));
-  }
-}
-async function updateResponsablePersonaInline(taskId,selectEl){
-  const t=TASKS.find(x=>x.task_id===taskId);
-  if(!t) return;
-  const prevId=t.responsable_persona_id, nextId=selectEl.value;
-  if(String(prevId||'')===String(nextId||'')) return;
-  t.responsable_persona_id=nextId; t.responsable_persona_nombre=resolverNombreUsuario(nextId); render();
-  try{
-    await callGanttWriteAction('updateGanttTask',{task_id:taskId,updated_by:currentUserEmail(),fields:{responsable_persona:nextId}});
-  }catch(err){
-    t.responsable_persona_id=prevId; t.responsable_persona_nombre=resolverNombreUsuario(prevId); render();
-    alert('No se pudo actualizar el responsable: '+(err.message||err));
-  }
-}
 function currentUserEmail(){
   const d=SESSION&&SESSION.data;
   return (d&&d.usuario&&d.usuario.email)||'front@gantt-operativo';
@@ -1499,7 +1453,6 @@ function renderLista(tasks,sellerIds,today){
         <table class="data-table">
           <thead><tr>
             <th data-sortable data-key="tarea" class="${sortClass('tarea')}" onclick="setListSort('tarea')">Tarea</th>
-            <th data-sortable data-key="hito" class="${sortClass('hito')}" onclick="setListSort('hito')">Hito</th>
             <th data-sortable data-key="estado" class="${sortClass('estado')}" onclick="setListSort('estado')">Estado</th>
             <th data-sortable data-key="area_responsable" class="${sortClass('area_responsable')}" onclick="setListSort('area_responsable')">Área</th>
             <th data-sortable data-key="responsable_persona_nombre" class="${sortClass('responsable_persona_nombre')}" onclick="setListSort('responsable_persona_nombre')">Responsable</th>
@@ -1527,11 +1480,11 @@ function renderLista(tasks,sellerIds,today){
                   <div class="td-tarea-title">${esc(t.tarea)}</div>
                   <div class="td-tarea-meta">
                     <span class="fase-chip" style="--fc:${faseColor(t.fase)}">${esc(t.fase)}</span>
+                    <span class="hito-text">${esc(t.hito||'—')}</span>
                     ${checklistBadge}${comentBadge}
                   </div>
                 </td>
-                <td class="td-hito">${esc(t.hito||'—')}</td>
-                <td onclick="event.stopPropagation()"><select class="inline-select ${estadoClass(t.estado)}" onchange="updateEstadoInline('${esc(t.task_id)}',this)">${estadoOptionsHtml(t.estado)}</select></td>
+                <td><span class="estado-badge ${estadoClass(t.estado)}">${esc(t.estado)}</span></td>
                 <td class="td-resp">${esc(t.area_responsable||'—')}</td>
                 <td class="td-resp">${esc(t.responsable_persona_nombre||'Sin asignar')}</td>
                 <td class="td-resp">${entornoBadge(t.entorno)}</td>

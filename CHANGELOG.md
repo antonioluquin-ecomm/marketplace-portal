@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-22 - Poda visual de la tabla de Seguimiento Operativo
+
+Tipo de cambio: simplificacion visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.
+
+Revision critica pedida por el usuario: la pagina no necesitaba un rediseno de sistema visual (paleta/tipografia/layout ya son consistentes con el resto del proyecto), pero si tenia redundancia y ruido evitables.
+
+- **Conteo redundante eliminado**: "N tareas · M sellers" aparecia 3 veces en pantalla (KPI del hero, barra de Vista/acciones, header de cada grupo de seller) sin variar entre las 4 vistas. Se saca de la barra de Vista (`#ri-info`, funcion `updateCounts`); el hero queda como unica fuente agregada, y el header de cada grupo de seller conserva su propio desglose (legitimo cuando hay mas de un seller en pantalla).
+- **Estado deja de ser un `<select>` siempre editable**: cada fila tenia un dropdown completo solo para mostrar el estado — con 31 tareas eso son 31 flechitas de edicion visibles a la vez, mas "formulario" que "tabla de datos". Pasa a un badge de solo lectura; el cambio de estado se sigue haciendo desde el lapiz de Acciones (ya abria el editor).
+- **Hito se pliega dentro de la celda de Tarea** (como texto secundario, mismo tratamiento que ya tenia Fase) en vez de columna propia — sigue el mismo patron: la tabla pasa de 10 a 9 columnas.
+- Limpieza de codigo muerto: `estadoOptionsHtml`/`updateEstadoInline` (huerfanos por el cambio de Estado) y `userOptionsHtml`/`updateResponsablePersonaInline` (ya estaban huerfanos de antes, mismo patron de select-inline que ya no existe en ninguna columna).
+
 ## 2026-07-22 - Corrige el select de Seller corrido hacia arriba en Seguimiento Operativo
 
 Tipo de cambio: correccion visual de frontend, sin cambios de datos ni de backend.
