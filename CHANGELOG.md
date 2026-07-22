@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-22 - Compacta el Portal de Sellers
+
+Tipo de cambio: ajuste visual de densidad, sin cambios funcionales, de rutas ni autenticaci&oacute;n.
+
+- Se reduce el espacio vertical del encabezado, indicadores, bloque "Tu pr&oacute;ximo paso" y secciones de recursos.
+- Las tarjetas mantienen t&iacute;tulo, descripci&oacute;n, flecha y &aacute;rea clickeable completa, pero usan una altura m&aacute;s eficiente.
+- El contenido gana ancho &uacute;til y reduce el scroll en escritorio sin alterar la grilla de dos columnas ni la adaptaci&oacute;n a una columna en mobile.
+
 ## 2026-07-22 - El titulo y los KPIs de Seguimiento Operativo pasan a scrollear con la lista
 
 Tipo de cambio: mejora visual de frontend en Seguimiento Operativo, sin cambios de datos ni de backend.

@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.51',
+  number: '1.4.52',
   date:   '2026-07-22',
-  notes:  'Seguimiento Operativo: titulo/KPIs pasan a scrollear con la lista',
+  notes:  'Portal de Sellers: layout mas compacto y menor desplazamiento vertical',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.52', date: '2026-07-22', desc: 'Portal de Sellers: layout m\u00e1s compacto y menor desplazamiento vertical.' },
   { v: '1.4.51', date: '2026-07-22', desc: 'Seguimiento Operativo: título/KPIs pasan a scrollear con la lista; filtros y barra de vista quedan fijos arriba.' },
   { v: '1.4.50', date: '2026-07-22', desc: 'Portal de Sellers: accesos compactos, recursos agrupados y pr\u00f3ximo paso din\u00e1mico.' },
   { v: '1.4.49', date: '2026-07-21', desc: 'Módulo provisorio "Catálogo (Taika Sport)": ver/editar precio y stock, exportar/importar CSV.' },
@@ -35,7 +36,6 @@ const CHANGELOG = [
   { v: '1.4.44', date: '2026-07-21', desc: 'Seguimiento Operativo: fix de hint duplicado y de "Limpiar filtros" descolocado.' },
   { v: '1.4.43', date: '2026-07-21', desc: 'Auditoría de internal/: mismos bugs de label y desborde corregidos en otros módulos.' },
   { v: '1.4.41', date: '2026-07-21', desc: 'Barra de filtros de Seguimiento Operativo pasa al patrón compacto de PCC.' },
-  { v: '1.4.40', date: '2026-07-21', desc: 'Seguimiento Operativo: fondo, tipografía y columnas de la tabla ajustadas.' },
 ];
 
 
