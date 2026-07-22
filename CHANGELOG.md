@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-22 - Corrige el select de Seller corrido hacia arriba en Seguimiento Operativo
+
+Tipo de cambio: correccion visual de frontend, sin cambios de datos ni de backend.
+
+- El `<div class="filter-hint">` debajo del select de Seller queda vacio por defecto (solo muestra texto cuando hay un seller elegido: "Filtrado por X"), pero aun vacio seguia ocupando `margin-top` + un gap extra del `flex-direction:column` del grupo de filtro — eso hacia que la caja de "Seller" fuera ~7px mas alta que sus hermanos, y como `.filter-bar` alinea por abajo (`align-items:flex-end`), el select de Seller quedaba corrido hacia arriba respecto al resto de los filtros.
+- Se agrega `.filter-bar .filter-hint:empty{display:none}`: cuando no hay texto, el div no ocupa espacio y el grupo de Seller queda con la misma altura que los demas.
+
 ## 2026-07-22 - Compacta el Portal de Sellers
 
 Tipo de cambio: ajuste visual de densidad, sin cambios funcionales, de rutas ni autenticaci&oacute;n.

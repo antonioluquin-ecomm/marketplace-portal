@@ -365,6 +365,11 @@ body{font-family:var(--font);background:var(--k);color:var(--t1);min-height:100v
 .control-group{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 .control-label{font-size:8.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
 .filter-hint{margin-top:5px;padding:0 2px;font-size:10px;line-height:1.35;color:var(--t3)}
+/* Vacío por default (solo aparece con "Filtrado por X"): sin esto, el
+   margin-top + el gap extra del flex-column hacían que el grupo "Seller"
+   quedara más alto que sus hermanos y el select se viera corrido hacia
+   arriba respecto al resto de los filtros. */
+.filter-bar .filter-hint:empty{display:none}
 .sel.filter-active{border-color:rgba(106,168,79,.48);background:rgba(106,168,79,.10);color:#d8ead0}
 
 /* ── FILTROS ACTIVOS ── */
