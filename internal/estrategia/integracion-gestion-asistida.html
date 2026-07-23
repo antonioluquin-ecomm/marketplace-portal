@@ -100,8 +100,8 @@
         <a href="#leyenda">Leyenda</a>
         <a href="#roadmap">Hoja de ruta</a>
         <a href="#f1">1 · Conexión y catálogo VTEX</a>
-        <a href="#f2">2 · Infraestructura logística</a>
-        <a href="#f3">3 · Depósito PIM y facturación</a>
+        <a href="#f2">2 · Depósito PIM y facturación</a>
+        <a href="#f3">3 · Infraestructura logística</a>
         <a href="#f4">4 · Catálogo de productos</a>
         <a href="#f5">5 · Front y comercial</a>
         <a href="#f6">6 · Precio/stock (portal)</a>
@@ -175,18 +175,19 @@
             <tr><td>0</td><td><strong>Kickoff + Contrato</strong></td><td>—</td><td>Agente Comercial (contrato, en paralelo) + Ecomm (contacto de integración)</td><td>El contrato se redacta y envía en paralelo a todo el setup técnico, pero <strong>debe estar firmado antes de salir a productivo</strong>.</td></tr>
             <tr><td>1</td><td><strong>Conexión VTEX</strong></td><td>1</td><td>Ecomm</td><td>Condición comercial (la crea Ecomm) + política comercial (Ecomm la solicita a Infracommerce) + especificación "Seller".</td></tr>
             <tr><td>2</td><td><strong>Catálogo — marcas/categorías</strong></td><td>1</td><td>Seller + Ecomm</td><td>El seller informa qué marcas y categorías vende; Ecomm crea lo que falte en VTEX.</td></tr>
-            <tr><td>3</td><td><strong>Infraestructura logística VTEX</strong></td><td>2</td><td>Ecomm</td><td>Almacén, muelle y estrategia de envío del seller.</td></tr>
-            <tr><td>4</td><td><strong>Depósito PIM y facturación</strong></td><td>3</td><td>Agente PIM + Seller/IT</td><td>Depósito en PIM asociado al almacén; alta del punto de facturación en AFIP; configuración de facturación en PIM Depósitos.</td></tr>
+            <tr><td>3</td><td><strong>Depósito PIM y facturación</strong></td><td>2</td><td>Agente PIM + Seller/IT</td><td>El depósito en PIM se crea primero — al crearlo asigna un número de depósito. En paralelo: alta del punto de facturación en AFIP y configuración de facturación en PIM Depósitos.</td></tr>
+            <tr><td>4</td><td><strong>Infraestructura logística VTEX</strong></td><td>3</td><td>Ecomm</td><td>Almacén y muelle en VTEX, usando el número de depósito ya asignado en el paso anterior; estrategia de envío del seller.</td></tr>
             <tr><td>5</td><td><strong>Instalación de PIM Depósitos</strong></td><td>8</td><td>IT</td><td>En la computadora del seller. Puede correr en paralelo, pero <strong>bloquea</strong> la operación de pedidos.</td></tr>
-            <tr><td>6</td><td><strong>Catálogo de productos</strong></td><td>4</td><td>Seller + Agente ABM + Agente PIM</td><td>Excel de artículos → alta en BAS → precio/stock inicial → catalogación en PIM.</td></tr>
-            <tr><td>7</td><td><strong>Front y comercial</strong></td><td>5</td><td>Ecomm + Diseño + Administración</td><td>Grilla personalizada, medios de pago, envío gratis, cucarda, número de comercio.</td></tr>
+            <tr><td>6</td><td><strong>Catálogo de productos</strong></td><td>4</td><td>Seller + Agente ABM + Agente PIM + Ecomm</td><td>Excel de artículos → alta en BAS → precio/stock inicial → catalogación en PIM.</td></tr>
+            <tr><td>7</td><td><strong>Front y comercial</strong></td><td>5</td><td>Ecomm + Diseño + Administración + Agente PIM</td><td>Grilla personalizada, medios de pago, envío gratis, cucarda, número de comercio y su facturación asociada.</td></tr>
             <tr><td>8</td><td><strong>Logística (forward + inversa)</strong></td><td>7, 10</td><td>Seller + Ecomm + Agente PIM</td><td>Definir quién hace la logística de ida y de devoluciones, y configurar el Carrier correspondiente.</td></tr>
             <tr><td>9</td><td><strong>Experiencia y soporte</strong></td><td>8</td><td>Ecomm + Infracommerce + Agente PIM</td><td>Info diferencial en PDP/checkout, mails transaccionales, carrito compartido, comprobantes, condiciones de devolución, T&amp;C.</td></tr>
-            <tr><td>10</td><td><strong>Validación</strong></td><td>—</td><td>Seller + Ecomm + Agente PIM</td><td>Flujo completo: catálogo → precio/stock → pedido → facturación → despacho → devolución.</td></tr>
-            <tr><td>11</td><td><strong>Go Live</strong></td><td>4 (4.4)</td><td>—</td><td>Contrato firmado + catálogo visible con precio y stock.</td></tr>
+            <tr><td>10</td><td><strong>Validación en QA</strong></td><td>—</td><td>Seller + Ecomm + Agente PIM</td><td>Flujo completo probado en el ambiente de QA del Marketplace (<strong>VTEX QA + PIM dev</strong>): catálogo → precio/stock → pedido → facturación → despacho → devolución.</td></tr>
+            <tr><td>11</td><td><strong>Pase a Producción</strong></td><td>—</td><td>Ecomm + Agente PIM</td><td>Se replica en el ambiente productivo (VTEX prod + PIM prod) la configuración ya validada en QA.</td></tr>
+            <tr><td>12</td><td><strong>Go Live</strong></td><td>4 (4.4)</td><td>—</td><td>Contrato firmado + catálogo visible con precio y stock.</td></tr>
           </tbody>
         </table></div>
-        <div class="callout warn"><strong>Diferencia clave con VTEX↔VTEX:</strong> no hay ambiente de QA propio del seller (no tiene VTEX). Toda la validación se hace directo sobre el ambiente del Marketplace.</div>
+        <div class="callout"><strong>Sí hay ambiente de QA:</strong> a diferencia de lo que podría parecer por no tener el seller una cuenta VTEX propia, la validación de este modelo corre sobre el <strong>ambiente de QA del propio Marketplace</strong> (VTEX QA + PIM dev) antes de replicarse en producción — no se prueba directo sobre el ambiente productivo.</div>
       </section>
 
       <section id="f1" class="section">
@@ -210,39 +211,39 @@
       </section>
 
       <section id="f2" class="section">
-        <div class="section-head"><div class="section-title"><span>🏭</span><h2>Fase 2 — Infraestructura logística en VTEX</h2></div><p class="section-desc">Almacén, muelle y estrategia de envío: la base sobre la que impacta el stock y desde donde sale la mercadería.</p></div>
-        <h3>Tareas</h3>
-        <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>#</th><th>Ítem</th><th>Ecomm</th><th>Estado</th></tr></thead>
-          <tbody>
-            <tr><td>2.1</td><td><strong>Almacén</strong> — donde impacta el stock. ID con formato <code>1_xx</code>, donde <code>xx</code> identifica al almacén (no es un ID derivado del seller).</td><td>Crear el almacén en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>2.2</td><td><strong>Muelle</strong> — desde donde sale la mercadería; se le asocia la estrategia de envío. El ID del muelle es el <strong>mismo ID del depósito creado en PIM</strong> (Fase 3.1), no uno propio.</td><td>Crear el muelle en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>2.3</td><td><strong>Estrategia de envío</strong> — una por seller (por ahora). Nomenclatura ejemplo: <code>tucuman_ocasataika_normal</code>.</td><td>Crear la estrategia de envío del seller en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
-          </tbody>
-        </table></div>
-        <div class="callout warn"><strong>Orden de dependencia:</strong> el muelle usa el ID del depósito PIM, así que en la práctica 2.2 no puede cerrarse del todo hasta tener el depósito de la Fase 3 creado (aunque el alta en VTEX se haga antes en el orden de la hoja de ruta — coordinar los IDs de antemano).</div>
-        <h3>Reglas / decisiones</h3>
-        <ul>
-          <li><strong>Un almacén, un muelle, una estrategia de envío por seller</strong> — sin stock diferenciado ni multi-sucursal por ahora (a futuro se puede reevaluar).</li>
-        </ul>
-      </section>
-
-      <section id="f3" class="section">
-        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 3 — Depósito PIM y facturación</h2></div><p class="section-desc">El depósito en PIM se asocia al almacén VTEX; la facturación queda configurada para que las facturas salgan del AFIP del seller.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 2 — Depósito PIM y facturación</h2></div><p class="section-desc">El depósito en PIM se crea primero — el número que asigna es lo que después identifica al almacén y al muelle en VTEX (Fase 3). En paralelo, la facturación queda configurada para que las facturas salgan del AFIP del seller.</p></div>
         <h3>Tareas</h3>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Agente PIM</th><th>IT</th><th>Estado</th></tr></thead>
           <tbody>
-            <tr><td>3.1</td><td><strong>Depósito en PIM</strong> (uno por seller, por ahora).</td><td>—</td><td>Crear el depósito y asociarlo al <code>warehouse id</code> creado en VTEX (Fase 2.1).</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>3.2</td><td><strong>Punto de facturación en AFIP</strong> — lo hace el seller desde su propio AFIP; si no sabe, lo hace el Marketplace.</td><td>Gestionarlo si puede, o dar acceso a IT.</td><td>—</td><td>Hacerlo por el seller si no sabe, con los accesos que el seller comparte.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>3.3</td><td><strong>Configurar facturación en PIM Depósitos</strong> — con las credenciales AFIP generadas, así las facturas se emiten desde el AFIP del seller.</td><td>Compartir las credenciales generadas en 3.2.</td><td>Configurar PIM Depósitos con esas credenciales.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>3.4</td><td><strong>Confección de la factura</strong> — Agente PIM arma la factura con la misma estructura que un pedido b2c, pero con los logos y datos del seller. Requiere que el seller comparte esa información.</td><td>Compartir logos y datos de facturación.</td><td>Confeccionar la factura con esos datos.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+            <tr><td>2.1</td><td><strong>Depósito en PIM</strong> (uno por seller, por ahora) — al crearlo, PIM le asigna un número de depósito (ej. <code>198</code>). Ese número es la base de los IDs de almacén y muelle en VTEX (Fase 3).</td><td>—</td><td>Crear el depósito en PIM.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.2</td><td><strong>Punto de facturación en AFIP</strong> — lo hace el seller desde su propio AFIP; si no sabe, lo hace el Marketplace.</td><td>Gestionarlo si puede, o dar acceso a IT.</td><td>—</td><td>Hacerlo por el seller si no sabe, con los accesos que el seller comparte.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.3</td><td><strong>Configurar facturación en PIM Depósitos</strong> — con las credenciales AFIP generadas, así las facturas se emiten desde el AFIP del seller.</td><td>Compartir las credenciales generadas en 2.2.</td><td>Configurar PIM Depósitos con esas credenciales.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.4</td><td><strong>Confección de la factura</strong> — Agente PIM arma la factura con la misma estructura que un pedido b2c, pero con los logos y datos del seller. Requiere que el seller comparte esa información.</td><td>Compartir logos y datos de facturación.</td><td>Confeccionar la factura con esos datos.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
         <ul>
+          <li><strong>Orden obligatorio:</strong> el depósito en PIM (2.1) se crea <strong>antes</strong> que el almacén y el muelle en VTEX (Fase 3) — sin el número de depósito asignado acá, no se puede completar el alta en VTEX.</li>
           <li><strong>No hay SLA definido</strong> para que el seller entregue las credenciales AFIP — ver Pendientes.</li>
           <li><strong>Un depósito por seller</strong>, por ahora — sin multi-sucursal.</li>
+        </ul>
+      </section>
+
+      <section id="f3" class="section">
+        <div class="section-head"><div class="section-title"><span>🏭</span><h2>Fase 3 — Infraestructura logística en VTEX</h2></div><p class="section-desc">Almacén, muelle y estrategia de envío: la base sobre la que impacta el stock y desde donde sale la mercadería. Usa el número de depósito ya asignado en la Fase 2.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Ecomm</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>3.1</td><td><strong>Almacén</strong> — donde impacta el stock. ID con formato <code>1_xx</code>, donde <code>xx</code> es el número de depósito asignado en PIM (Fase 2.1). Ejemplo: depósito PIM <code>198</code> → almacén <code>1_198</code>.</td><td>Crear el almacén en VTEX, usando el número de depósito de la Fase 2.1.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.2</td><td><strong>Muelle</strong> — desde donde sale la mercadería; se le asocia la estrategia de envío. El ID del muelle es el <strong>mismo número de depósito de PIM</strong>, sin el prefijo <code>1_</code>. Ejemplo: depósito PIM <code>198</code> → muelle <code>198</code>.</td><td>Crear el muelle en VTEX con ese ID.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.3</td><td><strong>Estrategia de envío</strong> — una por seller (por ahora). Nomenclatura ejemplo: <code>tucuman_ocasataika_normal</code>.</td><td>Crear la estrategia de envío del seller en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Un almacén, un muelle, una estrategia de envío por seller</strong> — sin stock diferenciado ni multi-sucursal por ahora (a futuro se puede reevaluar).</li>
         </ul>
       </section>
 
@@ -250,12 +251,12 @@
         <div class="section-head"><div class="section-title"><span>📦</span><h2>Fase 4 — Catálogo de productos</h2></div><p class="section-desc">A diferencia de VTEX↔VTEX (donde el catálogo viaja por API desde el VTEX del seller), acá el Marketplace carga el articulado a mano a partir de un Excel del seller.</p></div>
         <h3>Tareas</h3>
         <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Agente ABM</th><th>Agente PIM</th><th>Estado</th></tr></thead>
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Agente ABM</th><th>Agente PIM</th><th>Ecomm</th><th>Estado</th></tr></thead>
           <tbody>
-            <tr><td>4.1</td><td><strong>Excel de artículos</strong> a catalogar — formato libre.</td><td>Pasar el Excel con los artículos.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>4.2</td><td><strong>Alta de artículos en BAS</strong>.</td><td>—</td><td>Crear el articulado en BAS.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>4.3</td><td><strong>Precio y stock inicial</strong> — carga en BAS; con eso el producto aparece en PIM para catalogar.</td><td>—</td><td>Cargar precio y stock inicial en BAS.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>4.4</td><td><strong>Catalogación en PIM</strong> — una vez que aparece con precio/stock, se cataloga desde PIM frontend; impacta directo en el catálogo VTEX del Marketplace.</td><td>—</td><td>—</td><td>Catalogar el producto desde PIM frontend.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.1</td><td><strong>Excel de artículos</strong> a catalogar — formato libre.</td><td>Pasar el Excel con los artículos.</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.2</td><td><strong>Alta de artículos en BAS</strong>.</td><td>—</td><td>Crear el articulado en BAS.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.3</td><td><strong>Precio y stock inicial</strong> — carga en BAS; con eso el producto aparece en PIM para catalogar.</td><td>—</td><td>—</td><td>Cargar precio y stock inicial en BAS.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.4</td><td><strong>Catalogación en PIM</strong> — una vez que aparece con precio/stock, se cataloga desde PIM frontend; impacta directo en el catálogo VTEX del Marketplace.</td><td>—</td><td>—</td><td>—</td><td>Catalogar el producto desde PIM frontend.</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
@@ -269,18 +270,19 @@
         <div class="section-head"><div class="section-title"><span>🖥️</span><h2>Fase 5 — Front y comercial</h2></div><p class="section-desc">Lo que ve el cliente, más la parte comercial (medios de pago, número de comercio).</p></div>
         <h3>Tareas</h3>
         <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>#</th><th>Ítem</th><th>Ecomm</th><th>Diseño</th><th>Administración</th><th>Estado</th></tr></thead>
+          <thead><tr><th>#</th><th>Ítem</th><th>Ecomm</th><th>Diseño</th><th>Administración</th><th>Agente PIM</th><th>Estado</th></tr></thead>
           <tbody>
-            <tr><td>5.1</td><td><strong>Grilla personalizada</strong> — landing del seller.</td><td>Pedir gráficas a Diseño y personalizar la página.</td><td>Hacer las gráficas y entregarlas.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>5.2</td><td><strong>Medios de pago</strong> — según los medios definidos para el seller.</td><td>Configurar los medios de pago en VTEX.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>5.3</td><td><strong>Promoción de envío gratis</strong>.</td><td>Chequear que la promo esté aplicada a los productos del seller.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>5.4</td><td><strong>Cucarda de producto</strong> — "Tienda xxx" en card y PDP.</td><td>Agregar la cucarda usando la especificación "Seller" (Fase 1.3).</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>5.5</td><td><strong>Número de comercio específico</strong> — uno por seller, siempre.</td><td>Solicitar el alta a Administración, indicando medios de pago y cuotas definidas.</td><td>—</td><td>Crear los planes de tarjeta.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.1</td><td><strong>Grilla personalizada</strong> — landing del seller.</td><td>Pedir gráficas a Diseño y personalizar la página.</td><td>Hacer las gráficas y entregarlas.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.2</td><td><strong>Medios de pago</strong> — según los medios definidos para el seller.</td><td>Configurar los medios de pago en VTEX.</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.3</td><td><strong>Promoción de envío gratis</strong>.</td><td>Chequear que la promo esté aplicada a los productos del seller.</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.4</td><td><strong>Cucarda de producto</strong> — "Tienda xxx" en card y PDP.</td><td>Agregar la cucarda usando la especificación "Seller" (Fase 1.3).</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.5</td><td><strong>Número de comercio específico</strong> — uno por seller, siempre.</td><td>Solicitar el alta a Administración, indicando medios de pago y cuotas definidas.</td><td>—</td><td>Crear los planes de tarjeta.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.6</td><td><strong>Configurar facturación con los planes de tarjeta</strong> — para que el comprobante de factura pegue en BAS en los planes correspondientes.</td><td>Pasar a Agente PIM los planes creados en 5.5.</td><td>—</td><td>—</td><td>Configurar la facturación con esos planes.</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
         <ul>
-          <li><strong>Envío gratis:</strong> mismo umbral global que VTEX↔VTEX, hoy <strong>$149.990</strong>.</li>
+          <li><strong>Envío gratis:</strong> aplica el umbral global vigente del sitio (no se fija el monto acá para no tener que actualizar este documento cada vez que cambie).</li>
           <li><strong>Sin cupones ni GiftCards</strong> para productos de este modelo, misma regla que VTEX↔VTEX.</li>
           <li><strong>Un número de comercio por seller</strong> — no se comparte el número de comercio general del Marketplace.</li>
         </ul>
@@ -290,18 +292,18 @@
         <div class="section-head"><div class="section-title"><span>💳</span><h2>Fase 6 — Mantenimiento de precio y stock</h2></div><p class="section-desc">Diferencia clave con VTEX↔VTEX: acá no hay API del lado del seller. El mantenimiento es manual, vía marketplace-portal.</p></div>
         <h3>Flujo</h3>
         <ul class="autolist">
-          <li>El seller entra al módulo <strong>Catálogo (Taika)</strong> del marketplace-portal.</li>
+          <li>El seller entra a su módulo <strong>Catálogo</strong> dentro del marketplace-portal.</li>
           <li>Consulta sus productos y modifica precio y/o stock.</li>
           <li>El cambio impacta <strong>directo, sin revisión</strong> — no hay instancia de aprobación intermedia.</li>
         </ul>
-        <div class="callout">Módulo ya existente en el portal: <a href="../../public/catalogo/catalogo-seller.html" style="color:var(--g);font-weight:700">Catálogo (Taika)</a>. No es una pantalla nueva a construir.</div>
+        <div class="callout">Módulo ya existente en el portal: <a href="../../public/catalogo/catalogo-seller.html" style="color:var(--g);font-weight:700">Catálogo</a>. No es una pantalla nueva a construir — cada seller ve su propio catálogo; "Taika" es el nombre del seller de prueba usado para armar y probar la pantalla, no el nombre del módulo.</div>
       </section>
 
       <section id="f7" class="section">
         <div class="section-head"><div class="section-title"><span>🚚</span><h2>Fase 7 — Logística / Carrier (forward)</h2></div><p class="section-desc">Primero hay que definir quién hace la logística de despacho: el seller o el Marketplace.</p></div>
         <div class="decision">
           <div class="decision-box"><span class="tag info">Modo A</span><h3>Logística por el seller</h3><p>El seller indica qué logística usa. Si es <strong>Andreani</strong>, decide si usa su contrato actual o pide uno nuevo directamente a Andreani; luego informa el contrato, App Key y Token para configurar el Carrier. Si es otro servicio, informa cuál y comparte las credenciales necesarias para generar orden y etiqueta de envío.</p></div>
-          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Logística por el Marketplace</h3><p>Se solicita un nuevo contrato logístico y Agente PIM lo asocia a PIM Depósitos, así al hacer el pickeo se crea la etiqueta con ese contrato. Si es con <strong>OCASA</strong>, Ecomm pide a OCASA un nuevo acuerdo de producto.</p></div>
+          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Logística por el Marketplace</h3><p>Se solicita un nuevo contrato logístico (si se decide usar <strong>Andreani</strong>) y Agente PIM lo asocia a PIM Depósitos, así al hacer el pickeo se crea la etiqueta con ese contrato. Si es con <strong>OCASA</strong>, Ecomm pide a OCASA un nuevo acuerdo de producto.</p></div>
         </div>
         <h3>Tareas de setup</h3>
         <div class="table-wrap"><table class="data-table">
@@ -345,7 +347,7 @@
         <ul class="autolist">
           <li>El seller se asigna el pedido, lo busca y lo pickea.</li>
           <li>Se genera la etiqueta de envío.</li>
-          <li>Se factura — la factura se genera en el AFIP del seller (Fase 3).</li>
+          <li>Se factura — la factura se genera en el AFIP del seller (Fase 2).</li>
           <li>Prepara el pedido; el Carrier pasa a buscarlo.</li>
         </ul>
         <h3>Cancelaciones — flujo distinto a VTEX↔VTEX</h3>
@@ -389,8 +391,8 @@
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
           <tbody>
-            <tr><td>3.2</td><td>Definir un SLA para que el seller entregue las credenciales AFIP, antes de que bloquee el Go Live.</td></tr>
-            <tr><td>3.4</td><td>Datos concretos que el seller debe compartir para que Agente PIM confeccione la factura (misma estructura que b2c, con logos y datos propios) — a confirmar.</td></tr>
+            <tr><td>2.2</td><td>Definir un SLA para que el seller entregue las credenciales AFIP, antes de que bloquee el Go Live.</td></tr>
+            <tr><td>2.4</td><td>Datos concretos que el seller debe compartir para que Agente PIM confeccione la factura (misma estructura que b2c, con logos y datos propios) — a confirmar.</td></tr>
             <tr><td>8.2</td><td>Plantilla y datos exactos que piden los mails transaccionales con marca del seller — a confirmar.</td></tr>
             <tr><td>9</td><td>Refinar el flujo y los SLAs de pedidos no entregados (arrepentimiento, dirección incorrecta, extravío) para este modelo — queda pendiente, no se asume el mismo que VTEX↔VTEX.</td></tr>
             <tr><td>7</td><td>Confirmar si existen otros Carriers propios además de Andreani con flujo ya validado, más allá del caso genérico "otro servicio".</td></tr>

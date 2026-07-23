@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.58',
+  number: '1.4.59',
   date:   '2026-07-23',
-  notes:  'Gantt/Roadmap: el rango temporal se auto-ajusta a la data',
+  notes:  'Playbook "Integración Gestión Asistida": correcciones de flujo (orden depósito/almacén, ambiente de QA, roles)',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.59', date: '2026-07-23', desc: 'Playbook "Integración Gestión Asistida": correcciones de flujo — el depósito PIM se crea antes que el almacén/muelle VTEX (con los IDs reales), sí hay ambiente de QA propio (VTEX QA + PIM dev), la catalogación en PIM la hace Ecomm, y se suma la configuración de facturación con los planes de tarjeta.' },
   { v: '1.4.58', date: '2026-07-23', desc: 'Nuevo playbook "Integración Gestión Asistida": vista interna con fases/roles/SLAs y guía pública para sellers de ese modelo (antes mostraba "no disponible").' },
   { v: '1.4.57', date: '2026-07-22', desc: 'Gantt (escala Mes) y Roadmap: el rango temporal ya no queda fijo a "hoy ± período" — se estira para cubrir siempre las fechas reales de las tareas visibles, sin achicar la ventana que ya elegía el usuario. Antes, tareas fuera de ese rango quedaban todas clampeadas al borde izquierdo.' },
   { v: '1.4.56', date: '2026-07-22', desc: 'Gantt: el badge de estado se derramaba 37px sobre el timeline con "Configurado en QA"; la columna fija ahora deriva su ancho de las partes (corrige además un desajuste en escala Semana), abrevia ese estado a "En QA" y recorta cualquier excedente.' },

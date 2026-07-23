@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-23 - Correcciones de flujo al playbook de Gestión Asistida
+
+Tipo de cambio: correcciones de contenido (documentación operativa), a partir de revisión funcional del usuario sobre la entrada anterior.
+
+- **Orden Depósito PIM ↔ Infraestructura VTEX invertido**: el depósito en PIM se crea primero (asigna el número de depósito) y recién después se crea el almacén/muelle en VTEX usando ese número — antes el documento sugería el orden contrario. IDs corregidos con ejemplo real: almacén `1_198`, muelle `198` (198 = número de depósito en PIM, no un ID derivado del seller).
+- **Ambiente de QA**: se corrige el callout que afirmaba que este modelo no tenía ambiente de QA propio del seller — sí existe un ambiente de QA del Marketplace (VTEX QA + PIM dev) donde se valida antes de pasar a producción. Se agrega el paso "Pase a Producción" a la hoja de ruta.
+- **Catalogación en PIM**: pasa de Agente PIM a **Ecomm** (Fase 4.4).
+- **Facturación con planes de tarjeta**: nueva tarea 5.6 — una vez que Administración crea los planes, Ecomm se los pasa a Agente PIM para configurar la facturación y que el comprobante pegue en BAS en los planes correctos.
+- **Envío gratis**: se saca el monto hardcodeado ($149.990) de la vista interna y de la guía pública del seller — ahora dice "umbral vigente del sitio", para no tener que mantener el documento sincronizado si el monto cambia.
+- **"Catálogo (Taika)"**: se aclara que Taika es el seller de prueba usado para armar la pantalla, no el nombre del módulo — cada seller ve su propio catálogo.
+- **Modo B de logística**: se aclara que el nuevo contrato logístico aplica cuando se decide usar Andreani.
+
 ## 2026-07-23 - Playbook del modelo de integración Gestión Asistida
 
 Tipo de cambio: contenido nuevo (documentación operativa), sin cambios de backend ni de datos.
