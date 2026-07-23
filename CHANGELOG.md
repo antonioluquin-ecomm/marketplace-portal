@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-23 - Playbook del modelo de integración Gestión Asistida
+
+Tipo de cambio: contenido nuevo (documentación operativa), sin cambios de backend ni de datos.
+
+Se documenta el flujo end-to-end del modelo **Gestión Asistida** (sellers sin plataforma marketplace propia, cuyos productos se catalogan dentro de la cuenta Marketplace y se distinguen solo por condición comercial, política comercial y el valor de especificación "Seller"), mismo nivel de detalle que el playbook de VTEX ↔ VTEX.
+
+- **Nueva vista interna**: `internal/estrategia/integracion-gestion-asistida.html` — 10 fases (Conexión/catálogo VTEX, Infraestructura logística, Depósito PIM/facturación, Catálogo de productos, Front/comercial, Mantenimiento de precio-stock, Logística/Carrier, Experiencia y soporte, Pedido/cancelaciones, Devoluciones), roles canónicos ampliados (suma Agente ABM, Administración, IT y Agente Comercial a los ya existentes de VTEX↔VTEX), tabla de SLAs (mayormente pendientes de definir) y registro de 6 pendientes.
+- **Vista pública del seller**: `public/integracion/integracion-seller.html` ya no muestra "no disponible" para el modelo Gestión Asistida — se agregan secciones de roadmap, checklist de preparación, operación diaria, reglas y plazos propias del modelo, y el script de detección de modelo activa esa rama en vez del mensaje de guía no disponible.
+- **Navegación**: se agregó el link "Integración Gestión Asistida" en la sección "Modelo y estrategia" del sidebar de las mismas páginas que ya listan "Integración VTEX ↔ VTEX" (`index.html` + `internal/**`), la tarjeta correspondiente en el hub (`index.html`), la entrada en el array de páginas de `assets/js/config.js`, y una link-card nueva en `modelo-integracion.html`.
+- **Pendientes explícitos** (no bloqueantes): datos exactos para las plantillas de mail transaccional con marca del seller, datos que el seller debe compartir para que Agente PIM confeccione la factura, SLA de entrega de credenciales AFIP, y el flujo/SLA de pedidos no entregados para este modelo (no se asume el mismo que VTEX↔VTEX).
+
 ## 2026-07-22 - Gantt/Roadmap: el rango temporal se auto-ajusta a la data
 
 Tipo de cambio: correccion funcional de frontend en Gantt y Roadmap, sin cambios de datos ni de backend.

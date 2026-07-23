@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integración Gestión Asistida | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="../../assets/css/internal-components.css">
+  <style>
+    /* Alias locales de nombres históricos apuntando a tokens.css (mismo patrón
+       que integracion-vtex-vtex.html — ver docs/decisions/2026-07-01). */
+    :root{--g:var(--primary);--g2:var(--primary-hover);--g-dim:var(--primary-soft);--g-brd:var(--primary-mid);--k:var(--bg);--k2:var(--sidebar-bg);--k3:var(--card);--k4:var(--card);--k5:var(--card);--w:var(--text);--t1:var(--text);--t2:var(--muted);--t3:#7c8698;--t4:#9aa3b2;--bdr:var(--line);--bdr2:rgba(17,24,39,.05);--warn:var(--warning);--info:var(--primary);--teal:#0d9488;--violet:#7c3aed;--danger:var(--danger);--shadow:var(--shadow-lg);--tb:var(--topbar-height);--sb:var(--sidebar-w)}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--font);background:radial-gradient(circle at 20% 0%,rgba(37,182,12,.09),transparent 36%),var(--k);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}a{text-decoration:none;color:inherit}button,input,select{font-family:inherit}
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--tb);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--g-brd);backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:14px}.logo{font-family:var(--font);font-weight:900;text-transform:uppercase;letter-spacing:.04em;font-size:20px;color:var(--w)}.logo span{color:var(--g)}.crumb{border-left:1px solid var(--bdr);padding-left:14px;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--t3)}.top-actions{display:flex;align-items:center;gap:10px}.status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--t2)}.dot{width:8px;height:8px;border-radius:50%;background:var(--g);box-shadow:0 0 0 4px rgba(37,182,12,.18);animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}    .shell{display:grid;grid-template-columns:var(--sb) 1fr;min-height:100vh}.sidebar{position:sticky;top:var(--tb);height:calc(100vh - var(--tb));overflow:auto;background:var(--sidebar-bg);border-right:1px solid var(--bdr);padding:18px 0}.sb-section{margin-bottom:18px}.sb-label{display:flex;align-items:center;gap:8px;padding:0 16px;margin-bottom:7px;font-size:9px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--t4)}.sb-label:after{content:"";height:1px;background:var(--bdr);flex:1}.nav{display:flex;align-items:center;gap:9px;width:100%;padding:8px 16px;border-left:3px solid transparent;font-size:12.5px;color:var(--t2);transition:.15s}.nav:hover,.nav.active{background:rgba(17,24,39,.04);color:var(--t1);border-left-color:var(--g)}.nav.active{color:var(--g);background:var(--g-dim);font-weight:700}.nav small{margin-left:auto;color:var(--t4);font-size:9px;font-weight:800;text-transform:uppercase}
+    .main{padding:30px 34px 70px;width:100%;box-sizing:border-box}.page-eyebrow{font-size:10px;font-weight:900;letter-spacing:.22em;text-transform:uppercase;color:var(--g);margin-bottom:8px}h1{font-family:var(--font);font-size:32px;font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:8px}.lead{max-width:900px;font-size:14px;line-height:1.65;color:var(--t2);margin-bottom:24px}h2{font-size:18px;margin-bottom:12px}h3{font-size:14px;margin:18px 0 7px;color:var(--t1)}p,li{font-size:13px;line-height:1.62;color:var(--t2)}ul{padding-left:18px;margin-top:8px}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:24px}.callout{margin-top:14px}.callout.danger{border-left-color:var(--danger);background:rgba(153,27,27,.08)}.callout.warn{border-left-color:var(--warn);background:rgba(146,64,14,.08)}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 26px}.kpi{background:var(--k3);border:1px solid var(--bdr);border-radius:12px;padding:16px}.kpi .num{font-family:var(--font);font-size:32px;font-weight:900;line-height:1;color:var(--g)}.kpi .lbl{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);margin-top:5px}.kpi.info .num{color:var(--info)}.kpi.warn .num{color:var(--warn)}.kpi.teal .num{color:var(--teal)}.kpi.danger .num{color:var(--danger)}
+    .section{margin:34px 0}.section-desc{max-width:640px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid.two{grid-template-columns:repeat(2,1fr)}.grid.four{grid-template-columns:repeat(4,1fr)}
+    .card{background:var(--k3);border:1px solid var(--bdr);border-radius:12px;padding:16px;border-left:3px solid transparent}.card.priority{border-left-color:var(--g)}.card.target{border-left-color:var(--info)}.card.transitional{border-left-color:var(--warn)}.card.exception{border-left-color:var(--danger)}.tag{display:inline-block;padding:4px 8px;border-radius:999px;background:rgba(17,24,39,.06);border:1px solid var(--bdr);color:var(--t2);font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}.tag.green{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.tag.info{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.tag.warn{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.tag.danger{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
+    .decision{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}.decision-box{background:var(--k3);border:1px solid var(--bdr);border-radius:14px;padding:18px;border-left:3px solid var(--info)}.decision-box.b{border-left-color:var(--warn)}.decision-box h3{margin:0 0 6px}.decision-box .tag{margin-bottom:8px}
+    .data-table { min-width: 0; }
+    .data-table td { font-family: var(--font); font-weight: 400; white-space: normal; color: var(--t2); max-width: none; overflow: visible; text-overflow: clip; vertical-align: top; }
+    .data-table td:nth-child(4),.data-table td:nth-child(5),.data-table td:nth-child(6){ color: var(--t2); max-width: none; overflow: visible; text-overflow: clip; }
+    .data-table td strong{color:var(--t1)}.data-table th{white-space:nowrap}.data-table code{font-family:var(--mono);font-size:11px;background:rgba(17,24,39,.05);border:1px solid var(--bdr);border-radius:5px;padding:1px 5px;color:var(--t1)}
+    .pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.05em;background:rgba(17,24,39,.06);color:var(--t2);border:1px solid var(--bdr);white-space:nowrap}.pill.g{background:var(--g-dim);border-color:var(--g-brd);color:var(--g)}.pill.b{background:rgba(37,182,12,.1);border-color:rgba(37,182,12,.25);color:var(--info)}.pill.w{background:rgba(146,64,14,.1);border-color:rgba(146,64,14,.25);color:var(--warn)}.pill.r{background:rgba(153,27,27,.1);border-color:rgba(153,27,27,.25);color:var(--danger)}
+    .rolechips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.rolechip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;background:var(--k3);border:1px solid var(--bdr);font-size:11.5px;color:var(--t2)}.rolechip b{color:var(--t1);font-weight:700}
+    .autolist{list-style:none;padding:0;counter-reset:st}.autolist li{position:relative;padding:9px 0 9px 34px;border-bottom:1px solid var(--bdr2);font-size:12.5px;color:var(--t2)}.autolist li:last-child{border-bottom:0}.autolist li:before{counter-increment:st;content:counter(st);position:absolute;left:0;top:8px;width:22px;height:22px;border-radius:7px;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px}
+    .footer{margin-top:40px;color:var(--t4);font-size:11px;border-top:1px solid var(--bdr);padding-top:16px}.hidden{display:none!important}
+    @media(max-width:1050px){.shell{grid-template-columns:1fr}.sidebar{display:none}.hero,.decision,.grid.two{grid-template-columns:1fr}.kpis,.grid,.grid.four{grid-template-columns:repeat(2,1fr)}.main{padding:24px 18px 60px}.top-actions{display:none}}@media(max-width:650px){.kpis,.grid,.grid.four{grid-template-columns:1fr}h1{font-size:30px}.topbar{padding:0 14px}.crumb{display:none}.main,.main>*{min-width:0;max-width:100%}.main{overflow-x:clip}}
+    body{font-size:15px;line-height:1.65}.topbar{min-height:var(--tb)}.sidebar{background:var(--sidebar-bg)}.panel,.card,.kpi,.decision-box{background:var(--k3);border-color:var(--bdr)}
+  </style>
+<script src="../../assets/js/theme.js"></script>
+<link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body>
+  <header class="topbar portal-topbar">
+    <div class="brand"><a class="logo" href="../../index.html" title="Volver al Portal">SPORTING <span>MARKETPLACE</span></a><div class="crumb">INTEGRACIÓN GESTIÓN ASISTIDA</div></div>
+    <div class="top-actions"><button class="mnav-toggle" type="button" aria-label="Abrir navegación" onclick="document.querySelector('[data-portal-nav]').classList.toggle('mnav-open');document.querySelector('.mnav-backdrop').classList.toggle('show')">☰</button><div class="status"><span class="dot"></span>Playbook operativo</div></div>
+  </header>
+  <div class="mnav-backdrop" onclick="document.querySelector('[data-portal-nav]').classList.remove('mnav-open');this.classList.remove('show')"></div>
+
+  <div class="shell">
+    <aside class="sidebar portal-sidebar" data-portal-nav>
+      <div class="sb-section">
+        <a class="nav" href="../../index.html">Inicio</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Flujo de incorporación</div>
+        <a class="nav" data-page="backlog" href="../backlog/gestion-sellers.html">Gestión de Sellers</a>
+        <a class="nav" data-page="backlog" href="../backlog/backlog-sellers.html">Backlog de Sellers</a>
+        <a class="nav" data-page="gantt" href="../gantt/gantt-operativo.html">Seguimiento Operativo</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Seller Center</div>
+        <a class="nav" data-page="seller_center" href="../seller-center/index.html">Dashboard Seller Center</a>
+        <a class="nav" data-page="seller_center" href="../seller-center/maqueta-seller-center.html">Maqueta Seller Center</a>
+        <a class="nav" data-page="gantt" href="../gantt/gantt-seller-center.html">Gantt Seller Center</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Modelo y estrategia</div>
+        <a class="nav" data-page="estrategia" href="./proyecto-marketplace.html">Proyecto Marketplace</a>
+        <a class="nav" data-page="estrategia" href="./modelo-integracion.html">Modelo de Integración</a>
+        <a class="nav" data-page="estrategia" href="./integracion-vtex-vtex.html">Integración VTEX ↔ VTEX</a>
+        <a class="nav active" data-page="estrategia" href="./integracion-gestion-asistida.html">Integración Gestión Asistida</a>
+        <a class="nav" data-page="estrategia" href="./modelo-economico.html">Modelo Económico</a>
+        <a class="nav" data-page="estrategia" href="./governance.html">Governance</a>
+        <a class="nav" data-page="estrategia" href="./proceso-onboarding.html">Proceso de Onboarding</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label">Simuladores</div>
+        <a class="nav" data-page="simuladores" href="../simuladores/simulador-economico.html">Simulador Económico</a>
+        <a class="nav" data-page="simuladores" href="../simuladores/config-tarifas.html">Config. Tarifas y Overrides</a>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-section">
+        <div class="sb-label">Vista de sellers</div>
+        <a class="nav" data-page="ext_presentacion" href="../../public/presentaciones/presentacion-seller.html">Presentación seller <span>↗</span></a>
+        <a class="nav" data-page="ext_calificacion" href="../../public/formularios/formulario-calificacion.html">Calificación <span>↗</span></a>
+        <a class="nav" data-page="ext_relevamiento" href="../../public/formularios/formulario-relevamiento.html">Relevamiento <span>↗</span></a>
+        <a class="nav" data-page="ext_simulador" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
+      <a class="nav" data-page="ext_gantt" href="../../public/gantt/gantt-seller.html">Gantt del seller <span>↗</span></a>
+      <a class="nav" data-page="ext_integracion" href="../../public/integracion/integracion-seller.html">Guía de integración <span>↗</span></a>
+      <a class="nav" data-page="ext_catalogo" href="../../public/catalogo/catalogo-seller.html">Catálogo (Taika) <span>↗</span></a>
+      </div>
+
+      <div class="sb-section">
+        <div class="sb-label">Sistema</div>
+        <a class="nav" data-page="administracion" href="../administracion/configuracion.html">Configuración</a>
+      </div>
+    </aside>
+
+    <main class="main portal-main">
+      <nav class="page-subnav" aria-label="En esta página">
+        <span class="page-subnav-label">En esta página</span>
+        <a href="#inicio">Inicio</a>
+        <a href="#leyenda">Leyenda</a>
+        <a href="#roadmap">Hoja de ruta</a>
+        <a href="#f1">1 · Conexión y catálogo VTEX</a>
+        <a href="#f2">2 · Infraestructura logística</a>
+        <a href="#f3">3 · Depósito PIM y facturación</a>
+        <a href="#f4">4 · Catálogo de productos</a>
+        <a href="#f5">5 · Front y comercial</a>
+        <a href="#f6">6 · Precio/stock (portal)</a>
+        <a href="#f7">7 · Logística / Carrier</a>
+        <a href="#f8">8 · Experiencia y soporte</a>
+        <a href="#f9">9 · Pedido y cancelaciones</a>
+        <a href="#f10">10 · Devoluciones</a>
+        <a href="#slas">SLAs</a>
+        <a href="#agujeros">Pendientes</a>
+      </nav>
+
+      <section id="inicio">
+        <div class="page-eyebrow">Playbook operativo · Marketplace Sporting</div>
+        <h1>Integración Gestión Asistida</h1>
+        <p class="lead">Proceso end-to-end para incorporar y operar un seller <strong>sin plataforma marketplace propia</strong>. A diferencia de <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">VTEX ↔ VTEX</a>, el seller no tiene cuenta VTEX ni <code>seller_id</code> propio: sus productos se catalogan <strong>dentro de la cuenta Marketplace</strong> y se distinguen solo por condición comercial, política comercial y el valor de especificación "Seller". El seller opera con las herramientas que le da Sporting (marketplace-portal, PIM Depósitos), bajo gobierno de PIM.</p>
+        <div class="hero">
+          <div class="panel">
+            <h2>Qué resuelve esta página</h2>
+            <p>Ordena todo el proceso para poder crear y asignar tareas por rol, y sirve de referencia operativa durante el onboarding y la operación de cada seller de este modelo.</p>
+            <div class="callout">El playbook es el deep-dive de la etapa <strong>Integración</strong> del <a href="./proceso-onboarding.html" style="color:var(--g);font-weight:700">Onboarding</a>, para el modelo <strong>Gestión Asistida</strong> del <a href="./modelo-integracion.html" style="color:var(--g);font-weight:700">Modelo de Integración</a>.</div>
+          </div>
+          <div class="panel soft">
+            <h2>Cómo se usa</h2>
+            <ul>
+              <li>Onboarding: checklist de tareas de setup por seller (Fases 1-8).</li>
+              <li>Operación: runbook de responsabilidades por pedido (Fases 9-10).</li>
+              <li>Términos y Condiciones: reglas y políticas que ve el seller.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><div class="num">10</div><div class="lbl">Fases del proceso</div></div>
+          <div class="kpi info"><div class="num">9</div><div class="lbl">Roles involucrados</div></div>
+          <div class="kpi warn"><div class="num">6</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi danger"><div class="num">0</div><div class="lbl">SLAs numéricos definidos</div></div>
+        </div>
+      </section>
+
+      <section id="leyenda" class="section">
+        <div class="section-head"><div class="section-title"><span>🧭</span><h2>Cómo leer el proceso</h2></div><p class="section-desc">Cada fase mezcla hasta cuatro tipos de contenido. Solo el primero alimenta el checklist de alta del seller. Mismo criterio que <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">VTEX ↔ VTEX</a>, para no duplicar convenciones.</p></div>
+        <div class="grid four">
+          <div class="card priority"><span class="tag green">Tarea (setup)</span><p>Una vez por seller en el onboarding. <strong>Va al tablero de tareas.</strong> Domina Fases 1-8.</p></div>
+          <div class="card target"><span class="tag info">Responsabilidad operativa</span><p>Recurrente por pedido (runtime). Va a un <strong>RACI / runbook</strong>, no al alta. Domina Fases 9-10.</p></div>
+          <div class="card transitional"><span class="tag warn">Regla / decisión</span><p>Política fija del negocio. No se asigna a nadie: va a <strong>T&amp;C</strong>.</p></div>
+          <div class="card"><span class="tag">Flujo automático</span><p>Lo que hace el sistema solo (VTEX↔PIM, mails, reembolsos). Sin dueño.</p></div>
+        </div>
+        <h3>Roles canónicos</h3>
+        <div class="rolechips">
+          <span class="rolechip"><b>Seller</b> vendedor externo (sin VTEX propio)</span>
+          <span class="rolechip"><b>Ecomm</b> e-commerce del MP (VTEX, condición/política comercial, front, medios de pago)</span>
+          <span class="rolechip"><b>Agente PIM</b> depósito, facturación, logística, devoluciones</span>
+          <span class="rolechip"><b>Agente ABM</b> carga de artículos en BAS</span>
+          <span class="rolechip"><b>Administración</b> número de comercio, planes de tarjeta</span>
+          <span class="rolechip"><b>IT</b> AFIP del seller, instalación de PIM Depósitos</span>
+          <span class="rolechip"><b>Agente Comercial</b> redacción y firma del contrato</span>
+          <span class="rolechip"><b>Infracommerce</b> ajustes de front/checkout (ticket)</span>
+          <span class="rolechip"><b>Diseño</b> grillas, banners, headers</span>
+        </div>
+        <div class="callout"><strong>Mismos roles del ecosistema, tres nuevos:</strong> Seller, Ecomm, Agente PIM, Infracommerce y Diseño son los mismos de <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">VTEX ↔ VTEX</a>. Este modelo suma <strong>Agente ABM</strong>, <strong>Administración</strong>, <strong>IT</strong> y <strong>Agente Comercial</strong> porque acá el Marketplace asume tareas que en VTEX↔VTEX hace el seller desde su propia cuenta (cargar artículos, dar de alta un punto de facturación, instalar herramientas).</div>
+        <div class="rolechips" style="margin-top:12px">
+          <span class="rolechip"><span class="pill g">Listo</span> info suficiente</span>
+          <span class="rolechip"><span class="pill w">Falta / parcial</span> hueco por resolver</span>
+        </div>
+      </section>
+
+      <section id="roadmap" class="section">
+        <div class="section-head"><div class="section-title"><span>🗺️</span><h2>Hoja de ruta de la integración</h2></div><p class="section-desc">Orden real de ejecución, punta a punta. El contrato corre en paralelo desde el arranque, pero es la única precondición dura para el Go Live.</p></div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Paso</th><th>Fase(s)</th><th>Quién actúa</th><th>Nota</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td><strong>Kickoff + Contrato</strong></td><td>—</td><td>Agente Comercial (contrato, en paralelo) + Ecomm (contacto de integración)</td><td>El contrato se redacta y envía en paralelo a todo el setup técnico, pero <strong>debe estar firmado antes de salir a productivo</strong>.</td></tr>
+            <tr><td>1</td><td><strong>Conexión VTEX</strong></td><td>1</td><td>Ecomm</td><td>Condición comercial (la crea Ecomm) + política comercial (Ecomm la solicita a Infracommerce) + especificación "Seller".</td></tr>
+            <tr><td>2</td><td><strong>Catálogo — marcas/categorías</strong></td><td>1</td><td>Seller + Ecomm</td><td>El seller informa qué marcas y categorías vende; Ecomm crea lo que falte en VTEX.</td></tr>
+            <tr><td>3</td><td><strong>Infraestructura logística VTEX</strong></td><td>2</td><td>Ecomm</td><td>Almacén, muelle y estrategia de envío del seller.</td></tr>
+            <tr><td>4</td><td><strong>Depósito PIM y facturación</strong></td><td>3</td><td>Agente PIM + Seller/IT</td><td>Depósito en PIM asociado al almacén; alta del punto de facturación en AFIP; configuración de facturación en PIM Depósitos.</td></tr>
+            <tr><td>5</td><td><strong>Instalación de PIM Depósitos</strong></td><td>8</td><td>IT</td><td>En la computadora del seller. Puede correr en paralelo, pero <strong>bloquea</strong> la operación de pedidos.</td></tr>
+            <tr><td>6</td><td><strong>Catálogo de productos</strong></td><td>4</td><td>Seller + Agente ABM + Agente PIM</td><td>Excel de artículos → alta en BAS → precio/stock inicial → catalogación en PIM.</td></tr>
+            <tr><td>7</td><td><strong>Front y comercial</strong></td><td>5</td><td>Ecomm + Diseño + Administración</td><td>Grilla personalizada, medios de pago, envío gratis, cucarda, número de comercio.</td></tr>
+            <tr><td>8</td><td><strong>Logística (forward + inversa)</strong></td><td>7, 10</td><td>Seller + Ecomm + Agente PIM</td><td>Definir quién hace la logística de ida y de devoluciones, y configurar el Carrier correspondiente.</td></tr>
+            <tr><td>9</td><td><strong>Experiencia y soporte</strong></td><td>8</td><td>Ecomm + Infracommerce + Agente PIM</td><td>Info diferencial en PDP/checkout, mails transaccionales, carrito compartido, comprobantes, condiciones de devolución, T&amp;C.</td></tr>
+            <tr><td>10</td><td><strong>Validación</strong></td><td>—</td><td>Seller + Ecomm + Agente PIM</td><td>Flujo completo: catálogo → precio/stock → pedido → facturación → despacho → devolución.</td></tr>
+            <tr><td>11</td><td><strong>Go Live</strong></td><td>4 (4.4)</td><td>—</td><td>Contrato firmado + catálogo visible con precio y stock.</td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn"><strong>Diferencia clave con VTEX↔VTEX:</strong> no hay ambiente de QA propio del seller (no tiene VTEX). Toda la validación se hace directo sobre el ambiente del Marketplace.</div>
+      </section>
+
+      <section id="f1" class="section">
+        <div class="section-head"><div class="section-title"><span>🔌</span><h2>Fase 1 — Conexión y catálogo en VTEX</h2></div><p class="section-desc">No hay alta de "seller" como cuenta VTEX independiente. La identificación del seller dentro de la cuenta Marketplace se arma con tres piezas: condición comercial, política comercial y especificación de producto.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>1.1</td><td><strong>Condición comercial</strong> — Ecomm la crea directamente, no requiere trámite externo.</td><td>—</td><td>Crear la condición comercial del seller en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.2</td><td><strong>Política comercial</strong> — a diferencia de la condición, esta se solicita a Infracommerce para su creación.</td><td>—</td><td>Solicitar la creación a Infracommerce.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.3</td><td><strong>Especificación "Seller &gt; Xxxx"</strong> — sirve para filtrar y distinguir los productos del seller dentro del catálogo único de la cuenta Marketplace.</td><td>—</td><td>Crear el valor de especificación en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>1.4</td><td><strong>Marcas y categorías</strong> — el seller informa qué vende; se crean en VTEX solo si no existen.</td><td>Informar las marcas y categorías que vende.</td><td>Crear marca y/o categorías en VTEX si aplica.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Costo:</strong> la política comercial cuesta <strong>USD 40</strong>, igual que en VTEX↔VTEX. La abona el Marketplace (acá no hay una parte "seller" que pague la suya, porque no tiene cuenta VTEX propia).</li>
+          <li><strong>Sin cuenta propia:</strong> el seller no tramita nada de esta fase por su cuenta — todo el alta en VTEX la ejecuta Ecomm.</li>
+          <li><strong>La especificación "Seller" es la única distinción de catálogo</strong>, y alimenta las mismas tres features que en VTEX↔VTEX: filtro "Vendido por" en la PLP, cucarda de producto y leyenda en PDP/checkout (ver Fase 5).</li>
+        </ul>
+      </section>
+
+      <section id="f2" class="section">
+        <div class="section-head"><div class="section-title"><span>🏭</span><h2>Fase 2 — Infraestructura logística en VTEX</h2></div><p class="section-desc">Almacén, muelle y estrategia de envío: la base sobre la que impacta el stock y desde donde sale la mercadería.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Ecomm</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>2.1</td><td><strong>Almacén</strong> — donde impacta el stock. ID con formato <code>1_xx</code>, donde <code>xx</code> identifica al almacén (no es un ID derivado del seller).</td><td>Crear el almacén en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.2</td><td><strong>Muelle</strong> — desde donde sale la mercadería; se le asocia la estrategia de envío. El ID del muelle es el <strong>mismo ID del depósito creado en PIM</strong> (Fase 3.1), no uno propio.</td><td>Crear el muelle en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.3</td><td><strong>Estrategia de envío</strong> — una por seller (por ahora). Nomenclatura ejemplo: <code>tucuman_ocasataika_normal</code>.</td><td>Crear la estrategia de envío del seller en VTEX.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn"><strong>Orden de dependencia:</strong> el muelle usa el ID del depósito PIM, así que en la práctica 2.2 no puede cerrarse del todo hasta tener el depósito de la Fase 3 creado (aunque el alta en VTEX se haga antes en el orden de la hoja de ruta — coordinar los IDs de antemano).</div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Un almacén, un muelle, una estrategia de envío por seller</strong> — sin stock diferenciado ni multi-sucursal por ahora (a futuro se puede reevaluar).</li>
+        </ul>
+      </section>
+
+      <section id="f3" class="section">
+        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 3 — Depósito PIM y facturación</h2></div><p class="section-desc">El depósito en PIM se asocia al almacén VTEX; la facturación queda configurada para que las facturas salgan del AFIP del seller.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Agente PIM</th><th>IT</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>3.1</td><td><strong>Depósito en PIM</strong> (uno por seller, por ahora).</td><td>—</td><td>Crear el depósito y asociarlo al <code>warehouse id</code> creado en VTEX (Fase 2.1).</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.2</td><td><strong>Punto de facturación en AFIP</strong> — lo hace el seller desde su propio AFIP; si no sabe, lo hace el Marketplace.</td><td>Gestionarlo si puede, o dar acceso a IT.</td><td>—</td><td>Hacerlo por el seller si no sabe, con los accesos que el seller comparte.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.3</td><td><strong>Configurar facturación en PIM Depósitos</strong> — con las credenciales AFIP generadas, así las facturas se emiten desde el AFIP del seller.</td><td>Compartir las credenciales generadas en 3.2.</td><td>Configurar PIM Depósitos con esas credenciales.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>3.4</td><td><strong>Confección de la factura</strong> — Agente PIM arma la factura con la misma estructura que un pedido b2c, pero con los logos y datos del seller. Requiere que el seller comparte esa información.</td><td>Compartir logos y datos de facturación.</td><td>Confeccionar la factura con esos datos.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>No hay SLA definido</strong> para que el seller entregue las credenciales AFIP — ver Pendientes.</li>
+          <li><strong>Un depósito por seller</strong>, por ahora — sin multi-sucursal.</li>
+        </ul>
+      </section>
+
+      <section id="f4" class="section">
+        <div class="section-head"><div class="section-title"><span>📦</span><h2>Fase 4 — Catálogo de productos</h2></div><p class="section-desc">A diferencia de VTEX↔VTEX (donde el catálogo viaja por API desde el VTEX del seller), acá el Marketplace carga el articulado a mano a partir de un Excel del seller.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Agente ABM</th><th>Agente PIM</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>4.1</td><td><strong>Excel de artículos</strong> a catalogar — formato libre.</td><td>Pasar el Excel con los artículos.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.2</td><td><strong>Alta de artículos en BAS</strong>.</td><td>—</td><td>Crear el articulado en BAS.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.3</td><td><strong>Precio y stock inicial</strong> — carga en BAS; con eso el producto aparece en PIM para catalogar.</td><td>—</td><td>Cargar precio y stock inicial en BAS.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>4.4</td><td><strong>Catalogación en PIM</strong> — una vez que aparece con precio/stock, se cataloga desde PIM frontend; impacta directo en el catálogo VTEX del Marketplace.</td><td>—</td><td>—</td><td>Catalogar el producto desde PIM frontend.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Sin bandeja de aprobación:</strong> a diferencia de VTEX↔VTEX (2.9/2.10), acá no hay política comercial propia del seller que dispare una revisión — el producto se cataloga directo.</li>
+          <li><strong>Visibilidad:</strong> igual que en VTEX↔VTEX, un producto solo se muestra con precio y stock.</li>
+        </ul>
+      </section>
+
+      <section id="f5" class="section">
+        <div class="section-head"><div class="section-title"><span>🖥️</span><h2>Fase 5 — Front y comercial</h2></div><p class="section-desc">Lo que ve el cliente, más la parte comercial (medios de pago, número de comercio).</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Ecomm</th><th>Diseño</th><th>Administración</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>5.1</td><td><strong>Grilla personalizada</strong> — landing del seller.</td><td>Pedir gráficas a Diseño y personalizar la página.</td><td>Hacer las gráficas y entregarlas.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.2</td><td><strong>Medios de pago</strong> — según los medios definidos para el seller.</td><td>Configurar los medios de pago en VTEX.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.3</td><td><strong>Promoción de envío gratis</strong>.</td><td>Chequear que la promo esté aplicada a los productos del seller.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.4</td><td><strong>Cucarda de producto</strong> — "Tienda xxx" en card y PDP.</td><td>Agregar la cucarda usando la especificación "Seller" (Fase 1.3).</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.5</td><td><strong>Número de comercio específico</strong> — uno por seller, siempre.</td><td>Solicitar el alta a Administración, indicando medios de pago y cuotas definidas.</td><td>—</td><td>Crear los planes de tarjeta.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Envío gratis:</strong> mismo umbral global que VTEX↔VTEX, hoy <strong>$149.990</strong>.</li>
+          <li><strong>Sin cupones ni GiftCards</strong> para productos de este modelo, misma regla que VTEX↔VTEX.</li>
+          <li><strong>Un número de comercio por seller</strong> — no se comparte el número de comercio general del Marketplace.</li>
+        </ul>
+      </section>
+
+      <section id="f6" class="section">
+        <div class="section-head"><div class="section-title"><span>💳</span><h2>Fase 6 — Mantenimiento de precio y stock</h2></div><p class="section-desc">Diferencia clave con VTEX↔VTEX: acá no hay API del lado del seller. El mantenimiento es manual, vía marketplace-portal.</p></div>
+        <h3>Flujo</h3>
+        <ul class="autolist">
+          <li>El seller entra al módulo <strong>Catálogo (Taika)</strong> del marketplace-portal.</li>
+          <li>Consulta sus productos y modifica precio y/o stock.</li>
+          <li>El cambio impacta <strong>directo, sin revisión</strong> — no hay instancia de aprobación intermedia.</li>
+        </ul>
+        <div class="callout">Módulo ya existente en el portal: <a href="../../public/catalogo/catalogo-seller.html" style="color:var(--g);font-weight:700">Catálogo (Taika)</a>. No es una pantalla nueva a construir.</div>
+      </section>
+
+      <section id="f7" class="section">
+        <div class="section-head"><div class="section-title"><span>🚚</span><h2>Fase 7 — Logística / Carrier (forward)</h2></div><p class="section-desc">Primero hay que definir quién hace la logística de despacho: el seller o el Marketplace.</p></div>
+        <div class="decision">
+          <div class="decision-box"><span class="tag info">Modo A</span><h3>Logística por el seller</h3><p>El seller indica qué logística usa. Si es <strong>Andreani</strong>, decide si usa su contrato actual o pide uno nuevo directamente a Andreani; luego informa el contrato, App Key y Token para configurar el Carrier. Si es otro servicio, informa cuál y comparte las credenciales necesarias para generar orden y etiqueta de envío.</p></div>
+          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Logística por el Marketplace</h3><p>Se solicita un nuevo contrato logístico y Agente PIM lo asocia a PIM Depósitos, así al hacer el pickeo se crea la etiqueta con ese contrato. Si es con <strong>OCASA</strong>, Ecomm pide a OCASA un nuevo acuerdo de producto.</p></div>
+        </div>
+        <h3>Tareas de setup</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Aplica a</th><th>Seller</th><th>Ecomm</th><th>Agente PIM</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>7.1</td><td><strong>Carrier propio del seller — Andreani</strong>.</td><td>Modo A, Andreani</td><td>Decidir contrato actual o nuevo (pedido a Andreani); informar contrato, App Key y Token.</td><td>—</td><td>Configurar el Carrier en PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>7.2</td><td><strong>Carrier propio del seller — otro servicio</strong>.</td><td>Modo A, otro</td><td>Indicar el servicio y compartir las credenciales para orden/etiqueta.</td><td>—</td><td>Configurar el Carrier en PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>7.3</td><td><strong>Logística por el Marketplace — OCASA</strong>.</td><td>Modo B</td><td>—</td><td>Solicitar a OCASA el nuevo acuerdo de producto.</td><td>Asociar el contrato a PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="f8" class="section">
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Fase 8 — Experiencia diferencial y soporte</h2></div><p class="section-desc">Ajustes de front por ticket, mails con marca del seller, restricciones de carrito, comprobantes, condiciones de devolución, instalación de PIM Depósitos y publicación de T&amp;C.</p></div>
+        <h3>Tareas</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Infra</th><th>Agente PIM / IT</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>8.1</td><td><strong>Info diferencial</strong> en PDP, mini-cart y checkout.</td><td>—</td><td>Crear ticket para Infracommerce.</td><td>Hacer los ajustes de front necesarios.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.2</td><td><strong>Templates y datos del seller en mails transaccionales</strong>.</td><td>Compartir sus datos (logo, remitente, texto legal).</td><td>Configurar las plantillas con esos datos.</td><td>—</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+            <tr><td>8.3</td><td><strong>Restricción de carrito compartido</strong> — mismo criterio que VTEX↔VTEX: no se combinan productos de distintos sellers en un carrito.</td><td>—</td><td>Crear ticket para Infracommerce.</td><td>Configurar la restricción.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.4</td><td><strong>Comprobante del seller en BAS</strong> — cómo llega la factura y la nota de crédito a BAS.</td><td>—</td><td>—</td><td>—</td><td>Agente PIM configura el comprobante en BAS.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.5</td><td><strong>Condiciones de devolución</strong> en el Portal de Gestión de Pedidos, si aplica — categorías excluyentes que no admiten cambios/devoluciones.</td><td>Indicar si hay categorías excluyentes u otra info diferente.</td><td>—</td><td>—</td><td>Agente PIM ajusta el portal para que no las considere.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.6</td><td><strong>Instalación de PIM Depósitos</strong> en la computadora del seller.</td><td>Tener PC, impresora e internet (precondición).</td><td>—</td><td>—</td><td>IT instala la herramienta.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.7</td><td><strong>Contrato y firma</strong> — corre en paralelo al setup técnico, pero debe estar firmado antes de salir a productivo.</td><td>Leer y firmar el contrato.</td><td>Agente Comercial redacta y envía el contrato.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.8</td><td><strong>Términos y condiciones</strong> del seller en las landings informativas del footer.</td><td>—</td><td>Elaborar los T&amp;C y agregarlos donde corresponda.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="callout warn">La plantilla y los datos exactos que pide el mail transaccional (8.2) todavía no están definidos — ver Pendientes.</div>
+      </section>
+
+      <section id="f9" class="section">
+        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 9 — Pedido y cancelaciones</h2></div><p class="section-desc">El pedido de este modelo no cae en una tienda VTEX diferente: usa el mismo circuito que un pedido b2c de Sporting.</p></div>
+        <h3>Flujo automático</h3>
+        <ul class="autolist">
+          <li>El producto tiene precio, stock y está catalogado → aparece en el sitio.</li>
+          <li>El cliente lo compra → el pedido se genera en VTEX con el <strong>mismo identificador que los pedidos de Sporting</strong> (no hay tienda ni numeración diferente, a diferencia del Customer PO con ID de afiliado de VTEX↔VTEX).</li>
+          <li>El pedido cae en PIM Depósitos, en el depósito del seller, en estado <strong>Activo</strong>.</li>
+        </ul>
+        <h3>Responsabilidades operativas — mismo proceso que b2c</h3>
+        <ul class="autolist">
+          <li>El seller se asigna el pedido, lo busca y lo pickea.</li>
+          <li>Se genera la etiqueta de envío.</li>
+          <li>Se factura — la factura se genera en el AFIP del seller (Fase 3).</li>
+          <li>Prepara el pedido; el Carrier pasa a buscarlo.</li>
+        </ul>
+        <h3>Cancelaciones — flujo distinto a VTEX↔VTEX</h3>
+        <p>No existe el estado "Esperando Cambio de Seller" de VTEX↔VTEX. El pedido se da de baja <strong>igual que un pedido b2c</strong>: desde PIM Depósitos está la opción de reportar un artículo como perdido, lo que termina en baja del pedido y devolución del dinero al cliente.</p>
+      </section>
+
+      <section id="f10" class="section">
+        <div class="section-head"><div class="section-title"><span>↩️</span><h2>Fase 10 — Devoluciones</h2></div><p class="section-desc">El cliente siempre usa el Portal de Pedidos. La logística de retiro depende de quién la haga; la aceptación/rechazo la resuelve el seller desde PIM Depósitos.</p></div>
+        <div class="decision">
+          <div class="decision-box"><span class="tag info">Logística por el seller</span><p>Agente PIM configura PIM Depósitos para que se genere la orden de retiro en el Carrier del seller.</p></div>
+          <div class="decision-box b"><span class="tag warn">Logística por el Marketplace</span><p>Solo queda configurar el destino de retiro.</p></div>
+        </div>
+        <h3>Flujo</h3>
+        <ul class="autolist">
+          <li>El cliente inicia la devolución desde el Portal de Pedidos.</li>
+          <li>El seller usa el módulo de <strong>Devoluciones</strong> de PIM Depósitos para aceptar o rechazar.</li>
+          <li>Al aceptar: como no es stock propio del Marketplace, <strong>no se hace nada con el stock</strong> — el nuevo ingreso llega recién cuando el seller lo vuelva a informar (Fase 6).</li>
+          <li>Se genera la <strong>nota de crédito</strong> y se impacta en BAS.</li>
+          <li>En PIM frontend se genera la <strong>transacción de reembolso</strong>, para que el agente de reembolso haga la devolución del dinero al cliente.</li>
+        </ul>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Condiciones de devolución:</strong> mismos plazos que VTEX↔VTEX — Devolución 60 días, Garantía 180 días, portal 180 días.</li>
+        </ul>
+      </section>
+
+      <section id="slas" class="section">
+        <div class="section-head"><div class="section-title"><span>⏱️</span><h2>Plazos y SLAs</h2></div><p class="section-desc">A diferencia de VTEX↔VTEX, este modelo <strong>no tiene SLAs numéricos definidos todavía</strong> — ver Pendientes para el detalle de lo que falta cerrar.</p></div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Plazo</th><th>Aplica a</th><th>Quién debe cumplirlo</th><th>Fase</th></tr></thead>
+          <tbody>
+            <tr><td><strong>60 días</strong></td><td>Iniciar una Devolución en el portal.</td><td>Cliente</td><td>10</td></tr>
+            <tr><td><strong>180 días</strong></td><td>Vigencia del portal / Devolución por Garantía.</td><td>Cliente</td><td>10</td></tr>
+            <tr><td><em>Antes del Go Live</em></td><td>Contrato firmado.</td><td>Seller</td><td>0 / 8</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="agujeros" class="section">
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 6 ítems, ninguno bloqueante para empezar a documentar el flujo.</p></div>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
+          <tbody>
+            <tr><td>3.2</td><td>Definir un SLA para que el seller entregue las credenciales AFIP, antes de que bloquee el Go Live.</td></tr>
+            <tr><td>3.4</td><td>Datos concretos que el seller debe compartir para que Agente PIM confeccione la factura (misma estructura que b2c, con logos y datos propios) — a confirmar.</td></tr>
+            <tr><td>8.2</td><td>Plantilla y datos exactos que piden los mails transaccionales con marca del seller — a confirmar.</td></tr>
+            <tr><td>9</td><td>Refinar el flujo y los SLAs de pedidos no entregados (arrepentimiento, dirección incorrecta, extravío) para este modelo — queda pendiente, no se asume el mismo que VTEX↔VTEX.</td></tr>
+            <tr><td>7</td><td>Confirmar si existen otros Carriers propios además de Andreani con flujo ya validado, más allá del caso genérico "otro servicio".</td></tr>
+            <tr><td>General</td><td>Terminar de alinear el nombre del modelo en toda la documentación existente (ya está resuelto como "Gestión Asistida" en <code>modelo-integracion.html</code> y esta página — verificar que no queden menciones con otro nombre).</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <div class="footer">Marketplace Sporting · Integración Gestión Asistida · Playbook interno.</div>
+    </main>
+  </div>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth.js"></script>
+  <script>initAuth('estrategia');</script>
+</body>
+</html>

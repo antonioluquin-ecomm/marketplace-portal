@@ -38,12 +38,17 @@
     h1 em{color:transparent;-webkit-text-stroke:2px var(--g);font-style:normal}
     .hero-lead{font-size:16px;line-height:1.7;color:var(--t3);max-width:680px;margin-bottom:8px}
     .hero-lead strong{color:var(--t1)}
-    #roadmap,#preparar,#operar,#reglas,#plazos{display:none}
+    #roadmap,#preparar,#operar,#reglas,#plazos,#roadmap-ga,#preparar-ga,#operar-ga,#reglas-ga,#plazos-ga{display:none}
     body.integration-model-vtex #roadmap,
     body.integration-model-vtex #preparar,
     body.integration-model-vtex #operar,
     body.integration-model-vtex #reglas,
     body.integration-model-vtex #plazos{display:block}
+    body.integration-model-asistida #roadmap-ga,
+    body.integration-model-asistida #preparar-ga,
+    body.integration-model-asistida #operar-ga,
+    body.integration-model-asistida #reglas-ga,
+    body.integration-model-asistida #plazos-ga{display:block}
     .integration-model-notice{display:none;max-width:680px;margin-top:24px;padding:18px 20px;border:1px solid var(--g-brd);border-left:4px solid var(--g);border-radius:var(--r);background:var(--g-dim);color:var(--t2);line-height:1.6}
     .integration-model-notice.show{display:block}
     .integration-model-notice strong{display:block;margin-bottom:4px;color:var(--t1);font-size:15px}
@@ -308,6 +313,139 @@
     </div>
   </section>
 
+  <!-- ROADMAP — Gestión Asistida -->
+  <section id="roadmap-ga" class="section">
+    <div class="inner seller-page-container">
+      <div class="eyebrow">El camino completo</div>
+      <h2>Hoja de ruta de tu integración</h2>
+      <p class="section-lead">Así se ve el proceso de punta a punta. Como no tenés VTEX propio, la mayoría de la configuración técnica la hacemos nosotros — te la mostramos igual para que tengas la foto completa.</p>
+      <ol class="roadmap-list">
+        <li><span class="rm-num">0</span><div><strong>Kickoff y contrato</strong><span>Reunión inicial. El contrato corre en paralelo al setup técnico, pero debe estar firmado antes de salir a la venta.</span></div></li>
+        <li><span class="rm-num rm-internal">1</span><div><strong>Conexión<span class="rm-tag">Nosotros</span></strong><span>Damos de alta tu condición comercial, tu política comercial y la especificación que identifica tus productos.</span></div></li>
+        <li><span class="rm-num">2</span><div><strong>Catálogo</strong><span>Nos informás qué marcas y categorías vendés.</span></div></li>
+        <li><span class="rm-num rm-internal">3</span><div><strong>Infraestructura logística<span class="rm-tag">Nosotros</span></strong><span>Creamos tu almacén, tu muelle y tu estrategia de envío en VTEX.</span></div></li>
+        <li><span class="rm-num">4</span><div><strong>Depósito y facturación</strong><span>Damos de alta tu depósito en PIM. Vos gestionás (o nos das acceso para gestionar) tu punto de facturación en AFIP.</span></div></li>
+        <li><span class="rm-num">5</span><div><strong>Instalación de PIM Depósitos</strong><span>Instalamos la herramienta en tu computadora — necesitás PC, impresora e internet.</span></div></li>
+        <li><span class="rm-num">6</span><div><strong>Catálogo de productos</strong><span>Nos pasás tu Excel de artículos; nosotros los cargamos y catalogamos.</span></div></li>
+        <li><span class="rm-num rm-internal">7</span><div><strong>Front y comercial<span class="rm-tag">Nosotros</span></strong><span>Armamos tu grilla personalizada y configuramos medios de pago y tu número de comercio.</span></div></li>
+        <li><span class="rm-num">8</span><div><strong>Logística</strong><span>Definís si el despacho y las devoluciones las hacés vos o nosotros.</span></div></li>
+        <li><span class="rm-num">9</span><div><strong>Experiencia y soporte</strong><span>Nos compartís tus datos para mails, comprobantes y condiciones de devolución.</span></div></li>
+        <li><span class="rm-num">10</span><div><strong>Validación</strong><span>Probamos juntos el flujo completo antes de salir a la venta.</span></div></li>
+        <li><span class="rm-num">11</span><div><strong>Go Live</strong><span>Tus productos, visibles y a la venta en el Marketplace.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- PREPARAR — Gestión Asistida -->
+  <section id="preparar-ga" class="section">
+    <div class="inner seller-page-container">
+      <div class="eyebrow">Antes de salir a la venta</div>
+      <h2>Lo que tenés que preparar</h2>
+      <p class="section-lead">Como no tenés plataforma propia, la mayor parte del trabajo técnico la hacemos nosotros. Tu parte es compartirnos información y los accesos que necesitamos.</p>
+      <div class="area-grid">
+
+        <div class="area">
+          <div class="area-ico">📦</div>
+          <h3>Catálogo</h3>
+          <div class="area-sub">Para que carguemos tus productos</div>
+          <ul class="checks">
+            <li>Contanos qué <strong>marcas y categorías</strong> vendés.</li>
+            <li>Pasanos un <strong>Excel con los artículos</strong> a catalogar (formato libre).</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">🧾</div>
+          <h3>Facturación</h3>
+          <div class="area-sub">Tus facturas salen de tu propio AFIP</div>
+          <ul class="checks">
+            <li>Gestioná tu <strong>punto de facturación en AFIP</strong> (si no sabés, lo hacemos nosotros con los accesos que nos des).</li>
+            <li>Compartinos <strong>logos y datos</strong> para armar tus facturas y notas de crédito.</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">🚚</div>
+          <h3>Logística</h3>
+          <div class="area-sub">Vos decidís quién hace el despacho</div>
+          <ul class="checks">
+            <li>Definí si el despacho lo hacés <strong>vos</strong> o el <strong>Marketplace</strong>.</li>
+            <li>Si lo hacés vos, indicanos tu <strong>Carrier</strong> (con Andreani u otro) y compartinos las credenciales necesarias.</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">↩️</div>
+          <h3>Devoluciones</h3>
+          <div class="area-sub">Reglas y logística inversa</div>
+          <ul class="checks">
+            <li>Definí si la logística de devolución la hacés vos o el Marketplace.</li>
+            <li>Indicanos tus <strong>condiciones de devolución</strong>: plazos y categorías no habilitadas.</li>
+          </ul>
+        </div>
+
+        <div class="area">
+          <div class="area-ico">🖥️</div>
+          <h3>Instalación</h3>
+          <div class="area-sub">Herramienta para operar tus pedidos</div>
+          <ul class="checks">
+            <li>Tené lista una <strong>computadora, impresora e internet</strong> — instalamos PIM Depósitos ahí.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OPERAR — Gestión Asistida -->
+  <section id="operar-ga" class="section">
+    <div class="inner seller-page-container">
+      <div class="eyebrow">Día a día</div>
+      <h2>Cómo operás cada pedido</h2>
+      <p class="section-lead">Tus productos viven dentro de nuestro catálogo — el pedido usa el mismo identificador que un pedido de Sporting. Desde que te llega, el flujo es tuyo.</p>
+      <ol class="steps">
+        <li class="step"><div class="step-num">1</div><div><div class="step-t">Te llega el pedido</div><div class="step-d">Cae en <strong>PIM Depósitos</strong>, en tu depósito, en estado Activo. Te lo asignás, lo buscás y lo pickeás.</div></div></li>
+        <li class="step"><div class="step-num">2</div><div><div class="step-t">Facturás</div><div class="step-d">La factura se emite desde <strong>tu AFIP</strong>.</div></div></li>
+        <li class="step"><div class="step-num">3</div><div><div class="step-t">Despachás</div><div class="step-d">Se genera la etiqueta de envío y tu Carrier pasa a buscarlo.</div></div></li>
+        <li class="step"><div class="step-num">4</div><div><div class="step-t">Si perdés el artículo</div><div class="step-d">Desde <strong>PIM Depósitos</strong> lo reportás como perdido: el pedido se da de baja y se devuelve el dinero al cliente.</div></div></li>
+        <li class="step"><div class="step-num">5</div><div><div class="step-t">Precio y stock</div><div class="step-d">Los mantenés vos, desde el módulo <strong>Catálogo</strong> del portal — el cambio impacta directo, sin revisión previa.</div></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- REGLAS — Gestión Asistida -->
+  <section id="reglas-ga" class="section">
+    <div class="inner seller-page-container">
+      <div class="eyebrow">Del canal</div>
+      <h2>Reglas y políticas</h2>
+      <p class="section-lead">Condiciones del Marketplace que conviene tener claras desde el arranque. El detalle completo vive en los Términos y Condiciones.</p>
+      <div class="rules-grid">
+        <div class="rule"><div class="rule-t">Vos mantenés precio y stock</div><div class="rule-d">Los cargás desde el portal y se aplican directo, sin aprobación previa de nuestro lado.</div></div>
+        <div class="rule"><div class="rule-t">Envío gratis del sitio</div><div class="rule-d">Aplica a tus productos según el umbral del sitio (hoy $149.990). Es la única promoción que se mantiene para todos los sellers.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin carrito compartido</div><div class="rule-d">Un carrito no combina productos de distintos sellers: cada compra es de un solo vendedor.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin cupones</div><div class="rule-d">No se aceptan cupones de descuento sobre tus productos.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin GiftCards</div><div class="rule-d">Las giftcards no se pueden usar en tus productos.</div></div>
+        <div class="rule"><div class="rule-t">Facturás desde tu AFIP</div><div class="rule-d">Configuramos PIM Depósitos con tus credenciales para que la factura salga a tu nombre.</div></div>
+        <div class="rule"><div class="rule-t">Devoluciones por el portal</div><div class="rule-d">Toda devolución se gestiona por el Portal de Pedidos y se acepta o rechaza desde PIM Depósitos.</div></div>
+        <div class="rule"><div class="rule-t">Tus condiciones en los T&amp;C</div><div class="rule-d">Tus categorías no habilitadas para cambios/devoluciones quedan publicadas en los Términos y Condiciones.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAZOS — Gestión Asistida -->
+  <section id="plazos-ga" class="section">
+    <div class="inner seller-page-container">
+      <div class="eyebrow">Compromisos</div>
+      <h2>Plazos que cumplís</h2>
+      <p class="section-lead">Este modelo todavía no tiene todos los plazos operativos definidos con día exacto — los que ya están cerrados son estos.</p>
+      <div class="sla-grid">
+        <div class="sla"><div class="sla-val">Antes del Go Live</div><div class="sla-txt"><strong>Contrato firmado</strong>, aunque se redacte y gestione en paralelo al resto del setup.</div></div>
+        <div class="sla client"><div class="sla-val">60 / 180</div><div class="sla-txt">Plazo del <strong>cliente</strong> para Devolución (60 días) y Garantía (180 días) por el portal.</div></div>
+      </div>
+      <p class="plazos-note">Los plazos de entrega de credenciales AFIP y de respuesta ante pedidos no entregados todavía se están definiendo con el equipo de Sporting Marketplace.</p>
+    </div>
+  </section>
+
   <!-- CONTACTO -->
   <section id="contacto" class="section">
     <div class="inner contact-box">
@@ -337,6 +475,7 @@
 
       function showUnavailable(model, detail) {
         document.body.classList.remove('integration-model-vtex');
+        document.body.classList.remove('integration-model-asistida');
         eyebrow.textContent = model || 'Modelo de integraci\u00f3n pendiente';
         title.innerHTML = 'Gu\u00eda t\u00e9cnica<br><em>no disponible.</em>';
         lead.innerHTML = '<strong id="heroSellerName"></strong> Esta gu\u00eda solo aplica a sellers con integraci\u00f3n VTEX \u2194 VTEX.';
@@ -376,6 +515,7 @@
 
         if (model === 'VTEX \u2194 VTEX') {
           document.body.classList.add('integration-model-vtex');
+          document.body.classList.remove('integration-model-asistida');
           eyebrow.textContent = 'Integraci\u00f3n VTEX \u2194 VTEX';
           title.innerHTML = 'Tu integraci\u00f3n<br><em>paso a paso.</em>';
           lead.innerHTML = '<strong id="heroSellerName"></strong> se conecta al Marketplace v\u00eda <strong>VTEX \u2194 VTEX</strong>: tu cat\u00e1logo, precios, stock y pedidos viajan autom\u00e1ticamente entre tu VTEX y el nuestro. Esta gu\u00eda resume <strong>lo que prepar\u00e1s vos</strong>, c\u00f3mo oper\u00e1s cada pedido y las reglas del canal.';
@@ -385,8 +525,17 @@
         }
 
         if (model === 'Gesti\u00f3n asistida') {
-          showUnavailable(model, 'El flujo se define con el equipo de Sporting Marketplace y no usa esta configuraci\u00f3n VTEX \u2194 VTEX.');
-        } else if (model === 'Sistemas propios') {
+          document.body.classList.add('integration-model-asistida');
+          document.body.classList.remove('integration-model-vtex');
+          eyebrow.textContent = 'Integraci\u00f3n Gesti\u00f3n Asistida';
+          title.innerHTML = 'Tu integraci\u00f3n<br><em>paso a paso.</em>';
+          lead.innerHTML = '<strong id="heroSellerName"></strong> se conecta al Marketplace v\u00eda <strong>Gesti\u00f3n Asistida</strong>: no ten\u00e9s VTEX propio, as\u00ed que tus productos se catalogan dentro de nuestra cuenta y oper\u00e1s con las herramientas que te damos (portal y PIM Dep\u00f3sitos). Esta gu\u00eda resume <strong>lo que prepar\u00e1s vos</strong>, c\u00f3mo oper\u00e1s cada pedido y las reglas del canal.';
+          document.getElementById('heroSellerName').textContent = marca;
+          notice.classList.remove('show');
+          return;
+        }
+
+        if (model === 'Sistemas propios') {
           showUnavailable(model, 'La integraci\u00f3n requiere documentaci\u00f3n de API o PIM espec\u00edfica para el seller.');
         } else {
           showUnavailable('Modelo pendiente de definici\u00f3n', 'El equipo debe confirmar el modelo antes de habilitar instrucciones t\u00e9cnicas.');
