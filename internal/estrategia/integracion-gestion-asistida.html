@@ -134,8 +134,8 @@
         </div>
         <div class="kpis">
           <div class="kpi"><div class="num">10</div><div class="lbl">Fases del proceso</div></div>
-          <div class="kpi info"><div class="num">9</div><div class="lbl">Roles involucrados</div></div>
-          <div class="kpi warn"><div class="num">6</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi info"><div class="num">10</div><div class="lbl">Roles involucrados</div></div>
+          <div class="kpi warn"><div class="num">0</div><div class="lbl">Pendientes por cerrar</div></div>
           <div class="kpi danger"><div class="num">0</div><div class="lbl">SLAs numéricos definidos</div></div>
         </div>
       </section>
@@ -159,8 +159,9 @@
           <span class="rolechip"><b>Agente Comercial</b> redacción y firma del contrato</span>
           <span class="rolechip"><b>Infracommerce</b> ajustes de front/checkout (ticket)</span>
           <span class="rolechip"><b>Diseño</b> grillas, banners, headers</span>
+          <span class="rolechip"><b>Operaciones</b> resuelve incidencias de pedidos (dirección incorrecta, extravíos)</span>
         </div>
-        <div class="callout"><strong>Mismos roles del ecosistema, tres nuevos:</strong> Seller, Ecomm, Agente PIM, Infracommerce y Diseño son los mismos de <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">VTEX ↔ VTEX</a>. Este modelo suma <strong>Agente ABM</strong>, <strong>Administración</strong>, <strong>IT</strong> y <strong>Agente Comercial</strong> porque acá el Marketplace asume tareas que en VTEX↔VTEX hace el seller desde su propia cuenta (cargar artículos, dar de alta un punto de facturación, instalar herramientas).</div>
+        <div class="callout"><strong>Mismos roles del ecosistema, cuatro nuevos:</strong> Seller, Ecomm, Agente PIM, Infracommerce y Diseño son los mismos de <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">VTEX ↔ VTEX</a>. Este modelo suma <strong>Agente ABM</strong>, <strong>Administración</strong>, <strong>IT</strong> y <strong>Agente Comercial</strong> porque acá el Marketplace asume tareas que en VTEX↔VTEX hace el seller desde su propia cuenta (cargar artículos, dar de alta un punto de facturación, instalar herramientas); y <strong>Operaciones</strong>, que resuelve incidencias puntuales de pedidos en Fase 9.</div>
         <div class="rolechips" style="margin-top:12px">
           <span class="rolechip"><span class="pill g">Listo</span> info suficiente</span>
           <span class="rolechip"><span class="pill w">Falta / parcial</span> hueco por resolver</span>
@@ -217,15 +218,16 @@
           <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Agente PIM</th><th>IT</th><th>Estado</th></tr></thead>
           <tbody>
             <tr><td>2.1</td><td><strong>Depósito en PIM</strong> (uno por seller, por ahora) — al crearlo, PIM le asigna un número de depósito (ej. <code>198</code>). Ese número es la base de los IDs de almacén y muelle en VTEX (Fase 3).</td><td>—</td><td>Crear el depósito en PIM.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>2.2</td><td><strong>Punto de facturación en AFIP</strong> — lo hace el seller desde su propio AFIP; si no sabe, lo hace el Marketplace.</td><td>Gestionarlo si puede, o dar acceso a IT.</td><td>—</td><td>Hacerlo por el seller si no sabe, con los accesos que el seller comparte.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>2.3</td><td><strong>Configurar facturación en PIM Depósitos</strong> — con las credenciales AFIP generadas, así las facturas se emiten desde el AFIP del seller.</td><td>Compartir las credenciales generadas en 2.2.</td><td>Configurar PIM Depósitos con esas credenciales.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>2.4</td><td><strong>Confección de la factura</strong> — Agente PIM arma la factura con la misma estructura que un pedido b2c, pero con los logos y datos del seller. Requiere que el seller comparte esa información.</td><td>Compartir logos y datos de facturación.</td><td>Confeccionar la factura con esos datos.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+            <tr><td>2.2</td><td><strong>Punto de facturación en AFIP</strong> — lo hace el seller desde su propio AFIP; si no sabe, lo hace el Marketplace. Lo que se genera son los <strong>certificados de AFIP</strong> del seller.</td><td>Gestionarlo si puede, o dar acceso a IT.</td><td>—</td><td>Hacerlo por el seller si no sabe, con los accesos que el seller comparte.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.3</td><td><strong>Configurar facturación en PIM Depósitos</strong> — con los certificados de AFIP generados, así las facturas se emiten desde el AFIP del seller.</td><td>Compartir los certificados generados en 2.2.</td><td>Configurar PIM Depósitos con esos certificados.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.4</td><td><strong>Confección de la factura</strong> — Agente PIM arma la factura con el mismo modelo que un pedido b2c, pero con los datos del seller. Datos necesarios: <strong>CUIT, razón social, dirección, logo (opcional)</strong> y los certificados de AFIP de 2.2.</td><td>Compartir CUIT, razón social, dirección y logo (opcional).</td><td>Confeccionar la factura con esos datos.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>2.5</td><td><strong>Datos de BAS para cupones de pago</strong> — de los pedidos de este seller (punto de venta, imputación contable, etc.).</td><td>—</td><td>Configurar en BAS el punto de venta y la imputación contable del seller.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
         <ul>
           <li><strong>Orden obligatorio:</strong> el depósito en PIM (2.1) se crea <strong>antes</strong> que el almacén y el muelle en VTEX (Fase 3) — sin el número de depósito asignado acá, no se puede completar el alta en VTEX.</li>
-          <li><strong>No hay SLA definido</strong> para que el seller entregue las credenciales AFIP — ver Pendientes.</li>
+          <li><strong>Sin SLA para los certificados de AFIP:</strong> no hay un plazo definido para que el seller los entregue — si tarda, se espera, sin bloquear con una fecha límite.</li>
           <li><strong>Un depósito por seller</strong>, por ahora — sin multi-sucursal.</li>
         </ul>
       </section>
@@ -276,8 +278,8 @@
             <tr><td>5.2</td><td><strong>Medios de pago</strong> — según los medios definidos para el seller.</td><td>Configurar los medios de pago en VTEX.</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>5.3</td><td><strong>Promoción de envío gratis</strong>.</td><td>Chequear que la promo esté aplicada a los productos del seller.</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>5.4</td><td><strong>Cucarda de producto</strong> — "Tienda xxx" en card y PDP.</td><td>Agregar la cucarda usando la especificación "Seller" (Fase 1.3).</td><td>—</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>5.5</td><td><strong>Número de comercio específico</strong> — uno por seller, siempre.</td><td>Solicitar el alta a Administración, indicando medios de pago y cuotas definidas.</td><td>—</td><td>Crear los planes de tarjeta.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>5.6</td><td><strong>Configurar facturación con los planes de tarjeta</strong> — para que el comprobante de factura pegue en BAS en los planes correspondientes.</td><td>Pasar a Agente PIM los planes creados en 5.5.</td><td>—</td><td>—</td><td>Configurar la facturación con esos planes.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.5</td><td><strong>Número de comercio específico</strong> — uno por seller, siempre.</td><td>Solicitar el alta a Administración, indicando medios de pago y cuotas definidas.</td><td>—</td><td>Crear los planes de tarjeta correspondientes a esta modalidad de venta, con sus <strong>RuleId's de VTEX</strong>.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>5.6</td><td><strong>Configurar facturación con los planes de tarjeta</strong> — para que el comprobante de factura pegue en BAS en los planes correspondientes.</td><td>Pasar a Agente PIM los planes y sus RuleId's creados en 5.5.</td><td>—</td><td>—</td><td>Configurar la facturación con esos planes y RuleId's.</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
@@ -309,11 +311,15 @@
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>#</th><th>Ítem</th><th>Aplica a</th><th>Seller</th><th>Ecomm</th><th>Agente PIM</th><th>Estado</th></tr></thead>
           <tbody>
-            <tr><td>7.1</td><td><strong>Carrier propio del seller — Andreani</strong>.</td><td>Modo A, Andreani</td><td>Decidir contrato actual o nuevo (pedido a Andreani); informar contrato, App Key y Token.</td><td>—</td><td>Configurar el Carrier en PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>7.1</td><td><strong>Carrier propio del seller — Andreani</strong>.</td><td>Modo A, Andreani</td><td>Decidir contrato actual o nuevo (pedido a Andreani); informar contrato, App Key y Token.</td><td>—</td><td>Configurar el Carrier en PIM Depósitos con las credenciales de Andreani (contrato nuevo o existente).</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>7.2</td><td><strong>Carrier propio del seller — otro servicio</strong>.</td><td>Modo A, otro</td><td>Indicar el servicio y compartir las credenciales para orden/etiqueta.</td><td>—</td><td>Configurar el Carrier en PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>7.3</td><td><strong>Logística por el Marketplace — OCASA</strong>.</td><td>Modo B</td><td>—</td><td>Solicitar a OCASA el nuevo acuerdo de producto.</td><td>Asociar el contrato a PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>7.3</td><td><strong>Logística por el Marketplace — Andreani u OCASA</strong>.</td><td>Modo B</td><td>—</td><td>Solicitar el nuevo contrato/acuerdo (nuevo número de contrato o nuevas credenciales, según el caso).</td><td>Asociar las credenciales de Andreani y/o OCASA a PIM Depósitos.</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
+        <h3>Reglas / decisiones</h3>
+        <ul>
+          <li><strong>Carriers validados:</strong> por ahora solo <strong>Andreani</strong> y <strong>OCASA</strong> tienen flujo validado extremo a extremo. "Otro servicio" (7.2) sigue siendo un caso genérico, sin un flujo validado todavía.</li>
+        </ul>
       </section>
 
       <section id="f8" class="section">
@@ -323,7 +329,7 @@
           <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Infra</th><th>Agente PIM / IT</th><th>Estado</th></tr></thead>
           <tbody>
             <tr><td>8.1</td><td><strong>Info diferencial</strong> en PDP, mini-cart y checkout.</td><td>—</td><td>Crear ticket para Infracommerce.</td><td>Hacer los ajustes de front necesarios.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>8.2</td><td><strong>Templates y datos del seller en mails transaccionales</strong>.</td><td>Compartir sus datos (logo, remitente, texto legal).</td><td>Configurar las plantillas con esos datos.</td><td>—</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+            <tr><td>8.2</td><td><strong>Templates y datos del seller en mails transaccionales</strong> — solo se menciona que el producto es "vendido y distribuido por el seller Xxxx", sin plantilla adicional.</td><td>Confirmar el nombre del seller a mostrar.</td><td>Configurar la plantilla con ese texto.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.3</td><td><strong>Restricción de carrito compartido</strong> — mismo criterio que VTEX↔VTEX: no se combinan productos de distintos sellers en un carrito.</td><td>—</td><td>Crear ticket para Infracommerce.</td><td>Configurar la restricción.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.4</td><td><strong>Comprobante del seller en BAS</strong> — cómo llega la factura y la nota de crédito a BAS.</td><td>—</td><td>—</td><td>—</td><td>Agente PIM configura el comprobante en BAS.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.5</td><td><strong>Condiciones de devolución</strong> en el Portal de Gestión de Pedidos, si aplica — categorías excluyentes que no admiten cambios/devoluciones.</td><td>Indicar si hay categorías excluyentes u otra info diferente.</td><td>—</td><td>—</td><td>Agente PIM ajusta el portal para que no las considere.</td><td><span class="pill g">Listo</span></td></tr>
@@ -332,7 +338,6 @@
             <tr><td>8.8</td><td><strong>Términos y condiciones</strong> del seller en las landings informativas del footer.</td><td>—</td><td>Elaborar los T&amp;C y agregarlos donde corresponda.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
           </tbody>
         </table></div>
-        <div class="callout warn">La plantilla y los datos exactos que pide el mail transaccional (8.2) todavía no están definidos — ver Pendientes.</div>
       </section>
 
       <section id="f9" class="section">
@@ -352,6 +357,15 @@
         </ul>
         <h3>Cancelaciones — flujo distinto a VTEX↔VTEX</h3>
         <p>No existe el estado "Esperando Cambio de Seller" de VTEX↔VTEX. El pedido se da de baja <strong>igual que un pedido b2c</strong>: desde PIM Depósitos está la opción de reportar un artículo como perdido, lo que termina en baja del pedido y devolución del dinero al cliente.</p>
+        <h3>Pedidos no entregados</h3>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>Caso</th><th>Flujo</th><th>Quién resuelve</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Arrepentimiento</strong></td><td>Igual que un pedido b2c: si el pedido <strong>todavía no está facturado</strong>, se puede dar de baja.</td><td>Ecomm da de baja el pedido; el seller lo pierde de sus pendientes; se devuelve el dinero al cliente.</td></tr>
+            <tr><td><strong>Dirección incorrecta</strong></td><td>El Carrier no puede entregar y necesita los datos correctos.</td><td>El seller consulta al equipo de <strong>Operaciones</strong> del Marketplace, que le responde con los datos correctos.</td></tr>
+            <tr><td><strong>Extravío</strong></td><td>Depende de quién hace la logística de despacho (Fase 7).</td><td>Si la hace el <strong>seller</strong>, responde él — envía otro producto al cliente. Si la hace el <strong>Marketplace</strong>, el Marketplace envía otro pedido y se hace cargo.</td></tr>
+          </tbody>
+        </table></div>
       </section>
 
       <section id="f10" class="section">
@@ -375,7 +389,7 @@
       </section>
 
       <section id="slas" class="section">
-        <div class="section-head"><div class="section-title"><span>⏱️</span><h2>Plazos y SLAs</h2></div><p class="section-desc">A diferencia de VTEX↔VTEX, este modelo <strong>no tiene SLAs numéricos definidos todavía</strong> — ver Pendientes para el detalle de lo que falta cerrar.</p></div>
+        <div class="section-head"><div class="section-title"><span>⏱️</span><h2>Plazos y SLAs</h2></div><p class="section-desc">A diferencia de VTEX↔VTEX, este modelo <strong>no fija SLAs numéricos</strong> para varios puntos por decisión explícita (ej. certificados de AFIP, pedidos no entregados) — se resuelven caso a caso en vez de con un plazo fijo.</p></div>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Plazo</th><th>Aplica a</th><th>Quién debe cumplirlo</th><th>Fase</th></tr></thead>
           <tbody>
@@ -387,16 +401,16 @@
       </section>
 
       <section id="agujeros" class="section">
-        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 6 ítems, ninguno bloqueante para empezar a documentar el flujo.</p></div>
+        <div class="section-head"><div class="section-title"><span>✅</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Los 6 ítems que quedaban abiertos en la primera versión de este playbook se resolvieron en la revisión funcional del 2026-07-23 — quedaron incorporados en las fases correspondientes (ver detalle abajo). No queda ningún pendiente abierto.</p></div>
         <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
+          <thead><tr><th>Ítem</th><th>Cómo quedó resuelto</th></tr></thead>
           <tbody>
-            <tr><td>2.2</td><td>Definir un SLA para que el seller entregue las credenciales AFIP, antes de que bloquee el Go Live.</td></tr>
-            <tr><td>2.4</td><td>Datos concretos que el seller debe compartir para que Agente PIM confeccione la factura (misma estructura que b2c, con logos y datos propios) — a confirmar.</td></tr>
-            <tr><td>8.2</td><td>Plantilla y datos exactos que piden los mails transaccionales con marca del seller — a confirmar.</td></tr>
-            <tr><td>9</td><td>Refinar el flujo y los SLAs de pedidos no entregados (arrepentimiento, dirección incorrecta, extravío) para este modelo — queda pendiente, no se asume el mismo que VTEX↔VTEX.</td></tr>
-            <tr><td>7</td><td>Confirmar si existen otros Carriers propios además de Andreani con flujo ya validado, más allá del caso genérico "otro servicio".</td></tr>
-            <tr><td>General</td><td>Terminar de alinear el nombre del modelo en toda la documentación existente (ya está resuelto como "Gestión Asistida" en <code>modelo-integracion.html</code> y esta página — verificar que no queden menciones con otro nombre).</td></tr>
+            <tr><td>2.2</td><td>No hay SLA para los certificados de AFIP — decisión explícita: si el seller tarda, se espera, sin plazo límite.</td></tr>
+            <tr><td>2.4</td><td>Datos definidos: CUIT, razón social, dirección, logo (opcional) y los certificados de AFIP — mismo modelo de factura que b2c.</td></tr>
+            <tr><td>8.2</td><td>Definido: el mail solo menciona que el producto es "vendido y distribuido por el seller Xxxx", sin plantilla adicional.</td></tr>
+            <tr><td>9</td><td>Flujo definido para los tres casos — ver "Pedidos no entregados" arriba (arrepentimiento, dirección incorrecta, extravío).</td></tr>
+            <tr><td>7</td><td>Confirmado: solo Andreani y OCASA tienen flujo de Carrier validado por ahora.</td></tr>
+            <tr><td>General</td><td>Confirmado — "Gestión Asistida" es el nombre a usar en toda la documentación.</td></tr>
           </tbody>
         </table></div>
       </section>

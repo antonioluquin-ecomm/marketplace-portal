@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.59',
+  number: '1.4.60',
   date:   '2026-07-23',
-  notes:  'Playbook "Integración Gestión Asistida": correcciones de flujo (orden depósito/almacén, ambiente de QA, roles)',
+  notes:  'Playbook "Integración Gestión Asistida": se cierran los 6 pendientes (datos de factura, AFIP, mail, RuleId\'s, Carriers, pedidos no entregados)',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.60', date: '2026-07-23', desc: 'Playbook "Integración Gestión Asistida": se cierran los 6 pendientes registrados — datos de factura del seller, certificados de AFIP sin SLA, texto del mail transaccional, RuleId\'s de los planes de tarjeta, Carriers validados (Andreani/OCASA) y el flujo de pedidos no entregados.' },
   { v: '1.4.59', date: '2026-07-23', desc: 'Playbook "Integración Gestión Asistida": correcciones de flujo — el depósito PIM se crea antes que el almacén/muelle VTEX (con los IDs reales), sí hay ambiente de QA propio (VTEX QA + PIM dev), la catalogación en PIM la hace Ecomm, y se suma la configuración de facturación con los planes de tarjeta.' },
   { v: '1.4.58', date: '2026-07-23', desc: 'Nuevo playbook "Integración Gestión Asistida": vista interna con fases/roles/SLAs y guía pública para sellers de ese modelo (antes mostraba "no disponible").' },
   { v: '1.4.57', date: '2026-07-22', desc: 'Gantt (escala Mes) y Roadmap: el rango temporal ya no queda fijo a "hoy ± período" — se estira para cubrir siempre las fechas reales de las tareas visibles, sin achicar la ventana que ya elegía el usuario. Antes, tareas fuera de ese rango quedaban todas clampeadas al borde izquierdo.' },

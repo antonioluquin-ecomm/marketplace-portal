@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-07-23 - Cierre de pendientes del playbook de Gestión Asistida
+
+Tipo de cambio: correcciones y completado de contenido (documentación operativa), a partir de las respuestas del usuario a los 6 pendientes registrados en la entrada anterior.
+
+- **Certificados de AFIP** (terminología corregida, antes "credenciales"): sin SLA definido — decisión explícita de esperar sin plazo límite en vez de bloquear el Go Live.
+- **Datos de factura del seller** (2.4): definidos — CUIT, razón social, dirección, logo (opcional) y los certificados de AFIP; mismo modelo que la factura b2c.
+- **Nueva tarea 2.5**: configuración en BAS del punto de venta e imputación contable para los cupones de pago de pedidos de sellers de este modelo.
+- **Mail transaccional** (8.2): definido — solo menciona "vendido y distribuido por el seller Xxxx", sin plantilla adicional.
+- **RuleId's de VTEX**: se suman a la tarea 5.5/5.6 — Administración entrega los RuleId's de los planes de tarjeta junto con el alta, y Agente PIM los usa para configurar la facturación.
+- **Pedidos no entregados** (Fase 9): se documentan los 3 casos — arrepentimiento (si no está facturado, Ecomm da de baja y se reembolsa), dirección incorrecta (el seller consulta al nuevo rol **Operaciones**) y extravío (responde quien hace la logística, seller o Marketplace).
+- **Carriers validados**: confirmado que solo Andreani y OCASA tienen flujo validado; se agrega la aclaración de que las credenciales pueden ser un contrato nuevo o credenciales nuevas sobre uno existente.
+- **Nombre del modelo**: confirmado como definitivo "Gestión Asistida" en toda la documentación.
+- La sección de Pendientes pasa de 6 ítems abiertos a un registro de cómo quedó resuelto cada uno (0 pendientes reales). Mismos ajustes reflejados en la guía pública del seller (`public/integracion/integracion-seller.html`).
+
 ## 2026-07-23 - Correcciones de flujo al playbook de Gestión Asistida
 
 Tipo de cambio: correcciones de contenido (documentación operativa), a partir de revisión funcional del usuario sobre la entrada anterior.
