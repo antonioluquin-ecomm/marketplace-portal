@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.61',
+  number: '1.4.62',
   date:   '2026-07-24',
-  notes:  'Simulador seller: fallback local de logos y mejor legibilidad del panel de datos',
+  notes:  'Backlog de Sellers: corrige el chip de Modelo para "Gestión asistida" (bug de normalización)',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.62', date: '2026-07-24', desc: 'Backlog de Sellers: el chip de Modelo mostraba "Sistemas propios" para sellers guardados como "Gestión asistida" (bug de comparación espacio/guión bajo en normInteg); guía del seller: ajustes de wording en "Cómo operás cada pedido".' },
   { v: '1.4.61', date: '2026-07-24', desc: 'Simulador seller: fallback local de logo y mejor legibilidad del panel de datos.' },
   { v: '1.4.60', date: '2026-07-23', desc: 'Playbook "Integración Gestión Asistida": se cierran los 6 pendientes registrados — datos de factura del seller, certificados de AFIP sin SLA, texto del mail transaccional, RuleId\'s de los planes de tarjeta, Carriers validados (Andreani/OCASA) y el flujo de pedidos no entregados.' },
   { v: '1.4.59', date: '2026-07-23', desc: 'Playbook "Integración Gestión Asistida": correcciones de flujo — el depósito PIM se crea antes que el almacén/muelle VTEX (con los IDs reales), sí hay ambiente de QA propio (VTEX QA + PIM dev), la catalogación en PIM la hace Ecomm, y se suma la configuración de facturación con los planes de tarjeta.' },

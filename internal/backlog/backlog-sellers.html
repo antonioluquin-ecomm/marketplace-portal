@@ -518,8 +518,9 @@ function normInteg(v){
   const n=norm(v||"");
   if(!n||n.includes("definir"))return "A definir";
   if(n.includes("vtex") && !n.includes("pim") && !n.includes("seller") && !n.includes("api"))return"VTEX ↔ VTEX";
-  // "seller_center"/"seller center" cubre el valor legado guardado antes del rename a "Gestión asistida".
-  if((n.includes("gestion asistida")||n.includes("seller_center")||n.includes("seller center")) && !n.includes("api") && !n.includes("pim"))return"Gestión asistida";
+  // norm() colapsa espacios/acentos a "_", por eso se compara en snake_case ("gestion_asistida", no "gestion asistida").
+  // "seller_center" cubre el valor legado guardado antes del rename a "Gestión asistida".
+  if((n.includes("gestion_asistida")||n.includes("seller_center")) && !n.includes("api") && !n.includes("pim"))return"Gestión asistida";
   return "Sistemas propios";
 }
 

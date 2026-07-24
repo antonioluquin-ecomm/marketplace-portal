@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-24 - Corrige el chip de Modelo en Backlog de Sellers y ajusta la guía del seller
+
+Tipo de cambio: corrección de bug de frontend (Backlog) + wording de la guía pública del seller, sin cambios de datos ni de backend.
+
+- **Bug corregido en `internal/backlog/backlog-sellers.html`**: la función `normInteg()` comparaba el modelo normalizado contra `"gestion asistida"` **con espacio**, pero `norm()` colapsa espacios y acentos a guión bajo — el valor real a comparar era `"gestion_asistida"`. Como el `.includes()` con espacio nunca matcheaba, todo seller guardado como "Gestión asistida" caía al `return` por defecto y se mostraba como **"Sistemas propios"** en el chip de Modelo del Backlog, aunque el dato real en Gestión de Sellers estuviera correcto. No era un problema de datos — era la comparación de texto. Se corrige a `"gestion_asistida"` y se limpia la rama muerta `"seller center"` (con espacio, mismo motivo).
+- **`public/integracion/integracion-seller.html`** (guía Gestión Asistida, sección "Cómo operás cada pedido"): se saca la mención de que el pedido usa "el mismo identificador que un pedido de Sporting" (detalle interno sin valor para el seller); el paso de despacho ahora aclara que la etiqueta se pega al paquete ya preparado antes de que pase el Carrier; y el paso de reporte de pérdida ya no dice solo "si perdés el artículo" — cubre los dos motivos reales: quiebre de stock o producto no en condiciones.
+
 ## 2026-07-24 - Logo y legibilidad del simulador seller
 
 Tipo de cambio: correccion visual y de resiliencia del frontend publico, sin cambios de datos ni backend.
