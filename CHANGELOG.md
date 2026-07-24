@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-24 - Consolidación de simuladores.css — tercer pase (familia .col-inputs > .section)
+
+Tipo de cambio: limpieza interna de CSS compartido en `assets/css/pages/simuladores.css`, sin cambios de HTML ni JS. Continúa la consolidación manual e incremental (ver entradas anteriores del mismo día: `.kpi.primary`, luego `.tab-btn`/`.kpi-grid`). Esta fue la familia más grande y enredada del archivo: 11 subselectores distintos (la sección base, las 3 secciones posicionales del formulario vía `:nth-child` con `+`, y 8 descendientes — `.field-label`, `.field-hint`, `.inp`/`.sel`, `.seller-select-wrap`, `.seller-helper`, `.svc-list`, `.svc-row`, `.field`), cada uno redefinido entre 2 y 6 veces a lo largo de las mismas 5 "pasadas" del archivo.
+
+- Se rastreó cada propiedad (expandiendo shorthands a longhands donde hacía falta) a través de todas las apariciones de cada selector exacto, en orden de archivo, y se dejó solo la declaración ganadora — eliminando las que quedaban pisadas y los bloques que quedaban completamente vacíos.
+- Caso más extremo: `.svc-row` tenía 5 redefiniciones; la última reescribía por completo lo que las 4 anteriores establecían (incluido un `border` shorthand que también invalidaba un `border-bottom-color` de una pasada intermedia) — quedaron las 4 primeras enteramente eliminadas.
+- Donde dos apariciones del mismo selector no tenían ningún conflicto real (propiedades distintas, ej. `.seller-helper` con `font-size` en una pasada y `max-width`/`color` en otra), se fusionaron en un solo bloque en vez de dejarlas duplicadas.
+- Los bloques dentro de `@media` no se tocaron — se confirmó explícitamente que ninguno queda "huérfano": para cada media query que sigue apuntando a estos selectores, el override que corresponde ganar en su breakpoint sigue siendo el correcto.
+- **Verificación**: se generó una huella (hash) de todas las propiedades computadas relevantes (grid, márgenes, padding, colores, bordes, radios, box-shadow, etc. de las 3 secciones y los 8 descendientes) en **6 anchos de pantalla** que cubren los 6 breakpoints del archivo (650/900/1150/1250/1400/1650px, correspondientes a los `max-width` 720/960/1100/1180/1280/1500). Las 6 huellas del original y las 6 del consolidado coinciden exactamente — cero cambio visual.
+- Resultado: **80 líneas netas eliminadas** (1103 → 1027 líneas), la reducción más grande de las tres pasadas.
+
 ## 2026-07-24 - Consolidación de simuladores.css — segundo pase (.tab-btn, .kpi-grid)
 
 Tipo de cambio: limpieza interna de CSS compartido en `assets/css/pages/simuladores.css`, sin cambios de HTML ni JS. Continúa la consolidación manual e incremental iniciada con `.kpi.primary` (ver entrada del mismo día).
