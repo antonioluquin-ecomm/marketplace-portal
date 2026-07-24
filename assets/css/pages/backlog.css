@@ -134,6 +134,8 @@
   justify-content:center;
 }
 .state-icon{font-size:38px;opacity:.42}
+.state-icon.spin{display:inline-block;animation:state-spin 1s linear infinite}
+@keyframes state-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .state-title{font-family:var(--font);font-size:17px;font-weight:700;color:var(--t3)}
 .state-desc{font-size:13.5px;line-height:1.6;max-width:420px}
 
