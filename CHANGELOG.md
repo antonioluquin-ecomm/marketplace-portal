@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-24 - Logo y legibilidad del simulador seller
+
+Tipo de cambio: correccion visual y de resiliencia del frontend publico, sin cambios de datos ni backend.
+
+- El logo del seller ahora intenta el asset local `assets/logos/{seller_id}.png` cuando la URL informada no carga o devuelve una imagen vacia; recien despues cae a las iniciales.
+- La columna de configuracion pasa de un maximo de 360 px a 400 px y el texto de Informacion de uso aumenta a 13 px con mayor interlineado.
+
 ## 2026-07-23 - Cierre de pendientes del playbook de Gestión Asistida
 
 Tipo de cambio: correcciones y completado de contenido (documentación operativa), a partir de las respuestas del usuario a los 6 pendientes registrados en la entrada anterior.
