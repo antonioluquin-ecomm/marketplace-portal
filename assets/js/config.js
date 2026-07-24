@@ -331,7 +331,7 @@ window.MP_CONFIG = {
     },
     {
       key: "catalogo_seller",
-      label: "Catálogo (Taika Sport)",
+      label: "Catálogo",
       access: "Seller",
       route: "/public/catalogo/catalogo-seller.html"
     }
@@ -397,5 +397,5 @@ window.MP_RBAC_MODULOS = [
   { key: "ext_simulador",    label: "Simulador seller",                tier: "externo" },
   { key: "ext_gantt",        label: "Gantt del seller",                tier: "externo" },
   { key: "ext_integracion",  label: "Guía de integración",             tier: "externo" },
-  { key: "ext_catalogo",     label: "Catálogo (Taika Sport)",          tier: "externo" }
+  { key: "ext_catalogo",     label: "Catálogo",                        tier: "externo" }
 ];
