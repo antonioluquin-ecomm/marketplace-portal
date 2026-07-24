@@ -467,7 +467,7 @@
         <div class="kpi primary" id="kpiNetCard">
           <div class="kpi-label">Ingreso estimado luego de cargos</div>
           <div id="kpiNet" class="kpi-val">$ 0</div>
-          <div class="kpi-sub" id="kpiNetSub">Despu?s de comisi?n, financiaci?n y servicios Marketplace.</div>
+          <div class="kpi-sub" id="kpiNetSub">Después de comisión, financiación y servicios Marketplace.</div>
         </div>
         <div class="kpi">
           <div class="kpi-label">Facturación bruta estimada</div>
@@ -1073,8 +1073,8 @@ function updateViabilityAndCTA(r, gross) {
     const sellerNombre=$("sellerName")?.textContent?.trim();
     const hasName=sellerNombre&&sellerNombre!=="Tu marca"&&sellerNombre!=="?";
     const ctaTitle=$("ctaPanelTitle"), ctaSub=$("ctaPanelSub");
-    if(ctaTitle) ctaTitle.textContent=hasName?`${sellerNombre}, ?quer?s avanzar con Sporting Marketplace?`:"?Quer?s avanzar con Sporting Marketplace?";
-    if(ctaSub) ctaSub.textContent="Complet? el formulario para que el equipo valide tarifas, condiciones y la viabilidad comercial con los costos completos de tu operaci?n.";
+    if(ctaTitle) ctaTitle.textContent=hasName?`${sellerNombre}, ¿querés avanzar con Sporting Marketplace?`:"¿Querés avanzar con Sporting Marketplace?";
+    if(ctaSub) ctaSub.textContent="Completá el formulario para que el equipo valide tarifas, condiciones y la viabilidad comercial con los costos completos de tu operación.";
     const formUrl=publicLink("calificacion"), formLink=$("ctaFormLink");
     if(formLink) formLink.href=formUrl;
     const waLink=$("ctaWhatsapp");
@@ -1140,7 +1140,7 @@ function render(){
   $("kpiNet").textContent   =fmt(r.net);
   $("kpiGross").textContent =fmt(gross);
   $("kpiCosts").textContent =fmt(r.costs);
-  $("kpiCostsSub").textContent=fmtPct((r.costs/gross)*100)+" sobre facturaci?n";
+  $("kpiCostsSub").textContent=fmtPct((r.costs/gross)*100)+" sobre facturación";
   $("kpiNetSub").textContent=`Ingreso luego de cargos Marketplace ${fmtPct((r.net/gross)*100)}`;
 
   $("alertStrip").classList.toggle("visible",isLoss);
