@@ -9,18 +9,22 @@
 <link rel="stylesheet" href="../../assets/css/internal-components.css">
 <link rel="stylesheet" href="../../assets/css/pages/simuladores.css">
 <style>
-/* 2026-07-01 — alineación al design system estándar (ver
-   docs/decisions/2026-07-01-alineacion-design-system.md). Alias locales
-   de los nombres históricos de esta página apuntando a tokens.css.
-   No se modificó el parser de overrides ni la lógica de guardado (freeze
-   zone parcial, ver CLAUDE.md). */
+/* config-tarifas — estilos propios de la página.
+   ------------------------------------------------------------------
+   Auditoría 2026-07-24: la estructura base (paneles, grids, campos, KPI,
+   sidebar y topbar) la aporta internal-components.css vía las clases
+   portal-* (con especificidad doble-clase, ganan a cualquier regla local).
+   Se eliminó ~250 líneas de CSS que duplicaban esas clases y quedaban
+   pisadas (incluidos los @media de responsive de las grillas, que no tenían
+   efecto). Acá quedan solo: estados propios de la herramienta (campo
+   modificado, suma del mix, overrides por seller), la barra de guardado
+   sticky y el toast. No se tocó el parser de overrides ni la lógica de
+   guardado (freeze zone parcial, ver CLAUDE.md). */
 :root {
   --green:      var(--primary);
   --green-dark: var(--primary-hover);
   --green-dim:  var(--primary-soft);
   --green-brd:  var(--primary-mid);
-  --bg:         var(--bg);
-  --surface-1:  var(--card);
   --surface-2:  var(--bg);
   --surface-3:  var(--card);
   --border:     var(--line);
@@ -28,466 +32,187 @@
   --text-2:     var(--muted);
   --text-3:     #7c8698;
   --warn-dim:   var(--warning-bg);
-  --warn-brd:   rgba(146,64,14,.20);
+  --warn-brd:   rgba(146,64,14,.22);
   --warn-txt:   var(--warning);
   --red:        var(--danger);
   --red-dim:    var(--danger-bg);
   --red-brd:    rgba(153,27,27,.20);
 }
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
-html { font-size:15px }
-body {
-  font-family:var(--font);
-  background:var(--bg);
-  color:var(--text-1);
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-}
+body { -webkit-font-smoothing:antialiased }
 
-.main {
-  max-width:1180px;
-  margin:0 auto;
-  padding:32px 28px 96px;
-  min-width:0;
-}
-
-.page-hero {
-  display:grid;
-  grid-template-columns:minmax(0, 1fr) auto;
-  gap:18px;
-  align-items:end;
-  margin-bottom:18px;
-}
-.page-kicker {
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:var(--green);
-  margin-bottom:6px;
-}
-.page-title {
-  font-size:26px;
-  line-height:1.1;
-  letter-spacing:0;
-  color:var(--text-1);
-}
-.page-copy {
-  max-width:660px;
-  margin-top:8px;
-  font-size:13px;
-  line-height:1.55;
-  color:var(--text-3);
-}
-.summary-grid {
-  display:grid;
-  grid-template-columns:repeat(4, minmax(120px, 1fr));
-  gap:10px;
-  margin-bottom:18px;
-}
-.summary-card {
-  min-height:78px;
-  padding:13px 14px;
-  background:var(--surface-1);
-  border:1px solid var(--border);
-  border-radius:10px;
-  box-shadow:0 1px 2px rgba(17,24,39,.035);
-}
-.summary-label {
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:var(--text-3);
-}
-.summary-value {
-  margin-top:8px;
-  font-size:22px;
-  font-weight:800;
-  letter-spacing:0;
-  color:var(--text-1);
-}
-.summary-note {
-  margin-top:2px;
-  font-size:10.5px;
-  color:var(--text-3);
-}
-
-/* 2026-07-01 — sidebar de navegación del portal. Nombre propio (nav-shell/nav-sidebar)
-   para no chocar con .shell/.col-* de simuladores.css (layout de 3 columnas del simulador). */
+/* Layout: sidebar fijo + contenido acotado (el auto-fit de portal-main
+   dejaba el formulario estirado a todo el ancho en pantallas grandes). */
 .nav-shell {
   display:grid;
-  grid-template-columns:224px 1fr;
+  grid-template-columns:var(--sidebar-w, 224px) 1fr;
   align-items:stretch;
   min-height:calc(100vh - var(--topbar-height, 50px));
 }
-.nav-sidebar {
-  position:sticky;
-  top:var(--topbar-height, 50px);
-  height:calc(100vh - var(--topbar-height, 50px));
-  overflow:auto;
-  background:var(--sidebar-bg, var(--surface-1));
-  border-right:1px solid var(--border, var(--line));
-  padding:18px 0 0;
-}
-.nav-sidebar.portal-sidebar {
-  padding:18px 0 0;
-}
-.nav-sidebar .sb-section { margin-bottom:18px }
-.nav-sidebar .sb-label {
-  display:flex; align-items:center; gap:8px;
-  padding:0 16px; margin-bottom:7px;
-  font-size:9px; font-weight:900; letter-spacing:.18em; text-transform:uppercase;
-  color:var(--text-3);
-}
-.nav-sidebar .sb-label:after { content:""; height:1px; background:var(--border, var(--line)); flex:1 }
-.nav-sidebar .nav {
-  display:flex; align-items:center; gap:9px; width:100%;
-  padding:8px 16px; border-left:3px solid transparent;
-  font-size:12.5px; color:var(--text-2); transition:.15s;
-}
-.nav-sidebar .nav:hover, .nav-sidebar .nav.active { background:rgba(17,24,39,.04); color:var(--text-1); border-left-color:var(--green) }
-.nav-sidebar .nav.active { color:var(--green); background:var(--green-dim); font-weight:700 }
-@media (max-width:900px) { .nav-shell { grid-template-columns:1fr } .nav-sidebar { display:none } }
+.main.portal-main { max-width:1080px; margin-inline:auto }
+@media (max-width:960px) { .nav-shell { grid-template-columns:1fr } }
 
+/* Hero — eyebrow con guion de acento, alineado al resto del portal */
+.page-hero { margin-bottom:22px }
+.page-kicker {
+  display:inline-flex; align-items:center; gap:9px;
+  margin-bottom:9px;
+  font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--green);
+}
+.page-kicker::before { content:""; width:22px; height:2px; background:currentColor }
+.page-title {
+  font-size:clamp(24px, 2.6vw, 30px);
+  line-height:1.1; letter-spacing:-.01em; color:var(--text-1);
+}
+.page-copy { max-width:680px; margin-top:8px; font-size:14px; line-height:1.6; color:var(--text-2) }
+
+/* Banner de advertencia */
 .warn-banner {
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  padding:12px 16px;
-  border-radius:8px;
-  background:var(--warn-dim);
-  border:1px solid var(--warn-brd);
-  font-size:13px;
-  color:var(--warn-txt);
-  margin-bottom:32px;
-  line-height:1.55;
+  display:flex; align-items:flex-start; gap:10px;
+  padding:11px 14px; margin-bottom:18px;
+  border-radius:var(--radius-sm, 8px);
+  background:var(--warn-dim); border:1px solid var(--warn-brd);
+  font-size:13px; line-height:1.55; color:var(--warn-txt);
 }
-.warn-icon { font-size:15px; flex-shrink:0; margin-top:1px }
+.warn-icon { font-size:15px; line-height:1.4; flex-shrink:0 }
 
-.section {
-  margin-bottom:14px;
-  padding:18px 20px 20px;
-  background:var(--surface-1);
-  border:1px solid var(--border);
-  border-radius:10px;
-  box-shadow:0 1px 2px rgba(17,24,39,.035);
-}
-.section-title {
-  font-family:var(--font);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--text-3);
-  margin-bottom:12px;
-  padding-bottom:8px;
-  border-bottom:1px solid var(--border);
-}
-
-.fields-grid {
-  display:grid;
-  grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:12px;
-}
-.field { display:flex; flex-direction:column; gap:5px }
-.field label {
-  font-size:11px;
-  font-weight:600;
-  color:var(--text-2);
-  letter-spacing:.03em;
-}
-.field .unit {
-  font-size:10px;
-  color:var(--text-3);
-  font-weight:400;
-  margin-left:3px;
-}
-.field input[type=number] {
-  width:100%;
-  background:var(--surface-2);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:8px 10px;
-  font-family:var(--font);
-  font-size:14px;
-  font-weight:500;
-  color:var(--text-1);
-  outline:none;
-  transition:border-color .15s, background .15s;
-  -moz-appearance:textfield;
-}
-.field input[type=number]::-webkit-inner-spin-button,
-.field input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none }
-.field input[type=number]:focus {
-  border-color:var(--green);
-  background:var(--surface-3);
-}
-.field input.modified {
-  border-color:var(--green);
-  background:var(--green-dim);
-}
-
-/* Valor original debajo del input cuando está modificado */
-.field .orig-val {
-  display:none;
-  font-size:10px;
-  color:var(--text-3);
-}
+/* Unidad del label + valor anterior cuando el campo está modificado */
+.field .unit { margin-left:3px; font-size:10.5px; font-weight:400; color:var(--text-3) }
+.field .orig-val { display:none; font-size:10.5px; color:var(--text-3) }
 .field input.modified ~ .orig-val { display:block }
 
-/* Indicador suma del mix */
-.mix-sum {
-  grid-column:1 / -1;
-  font-size:11px;
-  font-weight:600;
-  padding:6px 10px;
-  border-radius:5px;
-  margin-top:2px;
-  transition:background .2s;
-}
-.mix-sum.ok  { color:var(--green) }
-.mix-sum.err {
-  color:var(--red);
-  background:var(--red-dim);
-  border:1px solid var(--red-brd);
+/* Estado "modificado" (respecto al valor guardado). Doble .portal-field para
+   ganarle sin ambigüedad a .portal-field.portal-field input (mismo peso). */
+.portal-field.portal-field input.modified,
+.field input.modified { border-color:var(--green); background:var(--green-dim) }
+
+/* Number sin spinners y con ancho acotado: en secciones de un solo campo el
+   auto-fit de portal estiraba el input a toda la fila. */
+.field input[type=number] { max-width:240px; -moz-appearance:textfield }
+.field input[type=number]::-webkit-inner-spin-button,
+.field input[type=number]::-webkit-outer-spin-button { -webkit-appearance:none; margin:0 }
+
+/* Select: una sola flecha (portal-field no aplica appearance:none, por eso
+   antes quedaba la flecha nativa + la ▾ propia). */
+.select-wrap { position:relative }
+.portal-field.portal-field select,
+.field select { appearance:none; -webkit-appearance:none; padding-right:30px; cursor:pointer }
+.select-wrap::after {
+  content:"▾"; position:absolute; right:11px; top:50%; transform:translateY(-50%);
+  pointer-events:none; color:var(--text-3); font-size:12px;
 }
 
-.actions {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:18px;
-  padding:12px 14px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:rgba(255,255,255,.94);
-  box-shadow:0 -8px 22px rgba(17,24,39,.06);
-  position:sticky;
-  bottom:14px;
-  z-index:20;
+/* Suma del mix de cuotas */
+.mix-sum {
+  grid-column:1 / -1;
+  display:flex; align-items:center; gap:8px;
+  min-height:34px; margin-top:2px; padding:6px 12px;
+  border-radius:var(--radius-sm, 8px);
+  font-size:12px; font-weight:600;
+  transition:background .2s, color .2s, border-color .2s;
 }
+.mix-sum.ok  { color:var(--green-dark); background:var(--green-dim); border:1px solid var(--green-brd) }
+.mix-sum.err { color:var(--red); background:var(--red-dim); border:1px solid var(--red-brd) }
+
+/* Barra de guardado sticky */
+.actions {
+  display:flex; align-items:center; gap:12px;
+  margin-top:22px; padding:12px 16px;
+  border:1px solid var(--border); border-radius:var(--radius, 14px);
+  background:rgba(255,255,255,.96); backdrop-filter:blur(10px);
+  box-shadow:0 -6px 20px rgba(17,24,39,.07);
+  position:sticky; bottom:14px; z-index:20;
+}
+.pending {
+  display:none; align-items:center; gap:6px;
+  padding:4px 11px; border-radius:var(--radius-pill, 999px);
+  background:var(--green-dim); border:1px solid var(--green-brd);
+  color:var(--green-dark); font-size:11.5px; font-weight:700; white-space:nowrap;
+}
+.pending.show { display:inline-flex }
 .btn-save {
-  background:var(--green);
-  color:#fff;
-  border:none;
-  border-radius:7px;
-  padding:10px 22px;
-  font-family:var(--font);
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-  letter-spacing:.02em;
-  transition:background .15s, opacity .15s;
+  background:var(--green); color:#fff; border:none;
+  border-radius:var(--radius-sm, 8px); padding:10px 22px; min-height:38px;
+  font-family:var(--font); font-size:13px; font-weight:700; letter-spacing:.02em;
+  cursor:pointer; transition:background .15s, opacity .15s;
 }
 .btn-save:hover:not(:disabled) { background:var(--green-dark) }
 .btn-save:disabled { opacity:.4; cursor:not-allowed }
 .btn-reload {
-  background:transparent;
-  color:var(--text-2);
-  border:1px solid var(--border);
-  border-radius:7px;
-  padding:9px 16px;
-  font-family:var(--font);
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
-  transition:border-color .15s, color .15s;
+  background:transparent; color:var(--text-2);
+  border:1px solid var(--border); border-radius:var(--radius-sm, 8px);
+  padding:9px 16px; min-height:38px;
+  font-family:var(--font); font-size:13px; font-weight:600;
+  cursor:pointer; transition:border-color .15s, color .15s;
 }
 .btn-reload:hover { border-color:var(--green-brd); color:var(--text-1) }
-.status-txt {
-  margin-left:auto;
-  font-size:11px;
-  color:var(--text-3);
-  text-align:right;
-}
+.status-txt { margin-left:auto; font-size:11.5px; color:var(--text-3); text-align:right }
 
+/* Toast */
 .toast {
-  position:fixed;
-  bottom:24px;
-  right:24px;
-  padding:11px 18px;
-  border-radius:8px;
-  font-size:13px;
-  font-weight:600;
-  pointer-events:none;
-  opacity:0;
-  transform:translateY(8px);
-  transition:opacity .25s, transform .25s;
-  z-index:999;
-  max-width:340px;
+  position:fixed; bottom:24px; right:24px; max-width:340px;
+  padding:11px 18px; border-radius:var(--radius-sm, 8px);
+  font-size:13px; font-weight:600;
+  pointer-events:none; opacity:0; transform:translateY(8px);
+  transition:opacity .25s, transform .25s; z-index:999;
 }
 .toast.show { opacity:1; transform:translateY(0) }
-.toast.ok  { background:var(--green-dim); border:1px solid var(--green-brd); color:var(--green-dark) }
-.toast.err { background:var(--red-dim); border:1px solid var(--red-brd); color:var(--red) }
-.toast.info{ background:var(--surface-2); border:1px solid var(--border); color:var(--text-2) }
+.toast.ok   { background:var(--green-dim); border:1px solid var(--green-brd); color:var(--green-dark) }
+.toast.err  { background:var(--red-dim); border:1px solid var(--red-brd); color:var(--red) }
+.toast.info { background:var(--surface-2); border:1px solid var(--border); color:var(--text-2) }
 
-/* ── OVERRIDE POR SELLER ─────────────────────────────────── */
-.field select {
-  width:100%;
-  background:var(--surface-2);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:8px 10px;
-  font-family:var(--font);
-  font-size:14px;
-  font-weight:500;
-  color:var(--text-1);
-  outline:none;
-  cursor:pointer;
-  appearance:none;
-  -webkit-appearance:none;
-  padding-right:28px;
-  transition:border-color .15s, background .15s;
-}
-.field select:focus { border-color:var(--green); background:var(--surface-3); }
-.select-wrap { position:relative }
-.select-wrap::after {
-  content:"▾";
-  position:absolute;
-  right:10px;
-  top:50%;
-  transform:translateY(-50%);
-  pointer-events:none;
-  color:var(--text-3);
-  font-size:12px;
-}
-.ov-hint {
-  font-size:10px;
-  color:var(--text-3);
-  display:block;
-  margin-top:3px;
-  line-height:1.4;
-}
+/* ── Overrides por seller ─────────────────────────────────── */
 .ov-intro {
-  font-size:12px;
-  color:var(--text-3);
-  margin-bottom:16px;
-  line-height:1.6;
-  padding:10px 12px;
-  background:var(--surface-2);
-  border-radius:6px;
-  border:1px solid var(--border);
+  display:flex; flex-wrap:wrap; gap:8px;
+  margin-bottom:16px; font-size:12px; color:var(--text-3);
 }
-.ov-intro strong { color:var(--text-2) }
+.ov-intro .chip {
+  padding:6px 11px; line-height:1.45;
+  background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--radius-sm, 8px);
+}
+.ov-intro .chip strong { color:var(--text-2) }
+.ov-selector { width:min(420px, 100%); margin-bottom:18px }
+.ov-hint { display:block; margin-top:3px; font-size:10.5px; line-height:1.4; color:var(--text-3) }
 .ov-notes {
-  width:100%;
-  background:var(--surface-2);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:8px 10px;
-  font-family:var(--font);
-  font-size:13px;
-  color:var(--text-1);
-  outline:none;
-  resize:vertical;
-  min-height:58px;
-  transition:border-color .15s, background .15s;
+  width:100%; min-height:58px; resize:vertical;
+  background:var(--surface-3); border:1px solid var(--border);
+  border-radius:var(--radius-sm, 8px); padding:8px 10px;
+  font-family:var(--font); font-size:13px; color:var(--text-1); outline:none;
+  transition:border-color .15s, box-shadow .15s, background .15s;
 }
-.ov-notes:focus { border-color:var(--green); background:var(--surface-3); }
-.ov-notes.ov-active { border-color:var(--green); background:var(--green-dim); }
+.ov-notes:focus { border-color:var(--green-brd); box-shadow:0 0 0 3px var(--green-dim) }
+.ov-notes.ov-active { border-color:var(--green); background:var(--green-dim) }
 .ov-subactions {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:16px;
-  padding-top:16px;
-  border-top:1px solid var(--border);
-}
-
-/* El CSS de tabla estandar (.table-wrap/.data-table) vive en
-   internal-components.css (style_guide.md §6). Tabla de 3 columnas sin
-   sorting ni paginacion — no necesita override de posicion 4/5 (no existen). */
-#ovSummary .data-table { min-width: 720px; }
-#ovSummary td:first-child { font-family:var(--font); color:var(--text-1); font-weight:600; font-size:13px; white-space:normal }
-#ovSummary td:last-child { font-family:var(--font); white-space:normal }
-#ovSummary tr.has-ov:hover td { background:var(--surface-2); cursor:pointer }
-.ov-tag {
-  display:inline-block;
-  padding:2px 6px;
-  border-radius:4px;
-  font-size:10px;
-  font-weight:600;
-  background:var(--green-dim);
-  color:var(--green);
-  border:1px solid var(--green-brd);
-  margin:1px;
-  white-space:nowrap;
-}
-.ov-empty { font-size:12px; color:var(--text-3); padding:10px 0; text-align:center }
-.ov-loading { font-size:12px; color:var(--text-3); padding:8px 0 }
-
-/* Ajuste visual 2026-07-03: herramienta de tarifas más operativa y escaneable. */
-.warn-banner {
-  margin-bottom:14px;
-}
-.field input[type=number],
-.field select,
-.ov-notes {
-  min-height:36px;
-  background:#fff;
-  border-color:#d7e0ea;
-}
-.field input.modified,
-.ov-notes.ov-active {
-  background:#f5faf3;
-  border-color:#93b889;
-}
-.mix-sum {
-  min-height:34px;
-  display:flex;
-  align-items:center;
-}
-.mix-sum.ok {
-  background:#f5faf3;
-  border:1px solid #d7e8d1;
-}
-.ov-intro {
-  background:#f8fafc;
-}
-.ov-tag {
-  border-radius:999px;
+  display:flex; align-items:center; gap:12px;
+  margin-top:16px; padding-top:16px; border-top:1px solid var(--border);
 }
 #ovForm {
-  padding:16px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#fbfcfe;
-  margin-bottom:14px;
+  margin-bottom:16px; padding:16px;
+  border:1px solid var(--border); border-radius:var(--radius, 14px);
+  background:var(--surface-2);
 }
-.section:has(#ovSellerSelect) > div[style] {
-  max-width:none !important;
-  width:min(420px, 100%);
+
+/* Tabla estándar (.table-wrap/.data-table) desde internal-components.css. */
+#ovSummary .data-table { min-width:720px }
+#ovSummary td:first-child { font-family:var(--font); font-weight:600; font-size:13px; color:var(--text-1); white-space:normal }
+#ovSummary td:last-child { font-family:var(--font); white-space:normal }
+#ovSummary tr.has-ov { cursor:pointer }
+#ovSummary tr.has-ov:hover td { background:var(--surface-2) }
+.ov-tag {
+  display:inline-block; margin:1px; padding:2px 8px;
+  border-radius:var(--radius-pill, 999px);
+  font-size:10.5px; font-weight:600; white-space:nowrap;
+  background:var(--green-dim); color:var(--green); border:1px solid var(--green-brd);
 }
-.btn-save,
-.btn-reload {
-  min-height:34px;
-}
-@media(max-width:1200px) {
-  .summary-grid,
-  .fields-grid {
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-  }
-}
-@media(max-width:900px) {
-  .main {
-    padding:22px 16px 86px;
-  }
-  .page-hero {
-    grid-template-columns:1fr;
-  }
-  .summary-grid,
-  .fields-grid {
-    grid-template-columns:1fr;
-  }
-  .actions {
-    flex-wrap:wrap;
-  }
-  .status-txt {
-    width:100%;
-    margin-left:0;
-    text-align:left;
-  }
+.ov-empty { padding:14px 0; text-align:center; font-size:12px; color:var(--text-3) }
+.ov-loading { padding:10px 0; font-size:12px; color:var(--text-3) }
+
+@media (max-width:900px) {
+  .main.portal-main { padding-left:16px; padding-right:16px }
+  .actions { flex-wrap:wrap }
+  .status-txt { width:100%; margin-left:0; text-align:left }
 }
 </style>
 <script src="../../assets/js/theme.js"></script>
@@ -734,14 +459,14 @@ body {
   <!-- OVERRIDES POR SELLER -->
   <div class="section portal-panel">
     <div class="section-title portal-panel-title">Condiciones especiales por seller</div>
-    <p class="ov-intro">
-      <strong>Vacío</strong> = usa tarifa base estándar. &nbsp;
-      <strong>Comisión:</strong> % directo que reemplaza la base. &nbsp;
-      <strong>Bonificaciones:</strong> % de descuento sobre la tarifa base (50 = mitad de precio · 100 = gratis). &nbsp;
-      <strong>★</strong> = seller con condiciones ya cargadas. Para quitarlas: vaciá todos los campos y guardá.
-    </p>
+    <div class="ov-intro">
+      <span class="chip"><strong>Vacío</strong> = usa la tarifa base estándar</span>
+      <span class="chip"><strong>Comisión:</strong> % directo que reemplaza la base</span>
+      <span class="chip"><strong>Bonificaciones:</strong> % de descuento sobre la base (50 = mitad · 100 = gratis)</span>
+      <span class="chip"><strong>★</strong> = seller con condiciones cargadas · para quitarlas, vaciá los campos y guardá</span>
+    </div>
 
-    <div style="max-width:300px; margin-bottom:18px">
+    <div class="ov-selector">
       <div class="field portal-field">
         <label>Seller</label>
         <div class="select-wrap">
@@ -821,6 +546,7 @@ body {
   <div class="actions">
     <button class="btn-save" id="btnSave" onclick="saveForm()" disabled>Guardar cambios</button>
     <button class="btn-reload" onclick="reload()">↺ Recargar valores</button>
+    <span class="pending" id="pendingBadge" aria-live="polite"></span>
     <span class="status-txt" id="statusTxt"></span>
   </div>
 
@@ -927,6 +653,17 @@ function resetModifiedState() {
     const origEl = document.getElementById("orig_" + campo);
     if (origEl) origEl.textContent = "";
   });
+  updatePendingBadge();
+}
+
+// Cuenta de campos base cambiados respecto al último valor guardado.
+function updatePendingBadge() {
+  const badge = document.getElementById("pendingBadge");
+  if (!badge) return;
+  const n = Object.values(FIELD_MAP)
+    .filter(id => document.getElementById(id)?.classList.contains("modified")).length;
+  badge.textContent = n ? `${n} cambio${n > 1 ? "s" : ""} sin guardar` : "";
+  badge.classList.toggle("show", n > 0);
 }
 
 function attachListeners() {
@@ -942,6 +679,7 @@ function attachListeners() {
       if (origEl) origEl.textContent = changed ? "Antes: " + orig : "";
       if (MIX_KEYS.includes(campo)) updateMixSum();
       else updateSummaryCards();
+      updatePendingBadge();
     });
   });
 }

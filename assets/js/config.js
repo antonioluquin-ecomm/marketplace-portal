@@ -18,14 +18,18 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.62',
+  number: '1.4.66',
   date:   '2026-07-24',
-  notes:  'Backlog de Sellers: corrige el chip de Modelo para "Gestión asistida" (bug de normalización)',
+  notes:  'Bug crítico corregido: tarifas con decimales (ej. 6,5%) se mostraban infladas 10x-100x en Presentación y Simulador del seller por un error de parseo de punto/coma',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.66', date: '2026-07-24', desc: 'Bug crítico: en Presentación y Simulador del seller, tarifas con decimales (ej. comisión 6,5% o mix 8,47%) se mostraban/calculaban 10x-100x infladas (65%, 847) por un parseo que confundía el punto decimal con separador de miles. Corregido replicando el parser correcto que ya usaba Config. Tarifas — impacta cifras financieras reales que ve el seller, no solo texto.' },
+  { v: '1.4.65', date: '2026-07-24', desc: 'Simulador Económico: consolidación interna del CSS de la familia .kpi en pages/simuladores.css (estaba repartido en ~9 reglas de 5 "pasadas" apiladas). Sin cambio visual — verificado propiedad por propiedad contra la versión previa. Primer paso de limpieza del CSS compartido.' },
+  { v: '1.4.64', date: '2026-07-24', desc: 'Simulador Económico: el KPI de "Ingreso neto estimado" mostraba texto blanco sobre verde brillante (#25b60c), con contraste 2.7:1 (poco legible); una regla inline revertía la corrección que ya intentaba el CSS de página. Ahora usa el verde oscuro (--green-dark), contraste ~4:1. Además se quitaron bloques de comentarios muertos del <style>.' },
+  { v: '1.4.63', date: '2026-07-24', desc: 'Config. de Tarifas y Overrides: auditoría visual — se eliminó ~250 líneas de CSS muerto (pisado por las clases portal-*), se corrigió la flecha nativa duplicada en los selects, se acotó el ancho del contenido (antes se estiraba a toda la pantalla), la intro de overrides pasa a chips escaneables y la barra de guardado muestra cuántos campos quedan sin guardar.' },
   { v: '1.4.62', date: '2026-07-24', desc: 'Backlog de Sellers: el chip de Modelo mostraba "Sistemas propios" para sellers guardados como "Gestión asistida" (bug de comparación espacio/guión bajo en normInteg); guía del seller: ajustes de wording en "Cómo operás cada pedido".' },
   { v: '1.4.61', date: '2026-07-24', desc: 'Simulador seller: fallback local de logo y mejor legibilidad del panel de datos.' },
   { v: '1.4.60', date: '2026-07-23', desc: 'Playbook "Integración Gestión Asistida": se cierran los 6 pendientes registrados — datos de factura del seller, certificados de AFIP sin SLA, texto del mail transaccional, RuleId\'s de los planes de tarjeta, Carriers validados (Andreani/OCASA) y el flujo de pedidos no entregados.' },

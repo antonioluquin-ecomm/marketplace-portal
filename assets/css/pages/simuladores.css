@@ -162,16 +162,27 @@
 .col-results .results-inner {
   padding:22px;
 }
-.kpi.primary .kpi-lbl,
-.kpi.primary .kpi-sub {
-  color:rgba(255,255,255,.74);
-}
-.kpi.primary .kpi-val {
-  color:#fff;
-}
+/* KPI destacado (ingreso neto) — CONSOLIDADO 2026-07-24.
+   Reune la definicion que estaba repartida en 5 pasadas del archivo; los
+   valores son los efectivos que ya ganaban por orden (background solido en vez
+   del linear-gradient muerto de L723, val 34px en vez del 36px muerto). Sin
+   cambio visual. Solo quedan aparte los overrides por breakpoint (grid-column
+   en los @media del final) y el override de color del simulador (inline). */
 .kpi.primary {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  grid-column:auto;
+  min-height:112px;
+  padding:18px 20px;
+  border-radius:8px;
+  background:var(--primary-hover);
+  border-color:var(--primary-hover);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
 }
+.kpi.primary .kpi-lbl { color:rgba(255,255,255,.76); }
+.kpi.primary .kpi-sub { color:rgba(255,255,255,.68); }
+.kpi.primary .kpi-val { color:#fff; font-size:34px; letter-spacing:0; }
 .kpi.danger {
   background:var(--danger-bg);
   border-color:color-mix(in srgb, var(--danger) 18%, var(--line));
@@ -460,16 +471,6 @@
   border-radius:10px;
   padding:14px 16px;
 }
-.kpi.primary {
-  border-radius:10px;
-  min-height:104px;
-}
-.kpi.primary .kpi-lbl {
-  color:rgba(255,255,255,.76);
-}
-.kpi.primary .kpi-sub {
-  color:rgba(255,255,255,.68);
-}
 .comp-bar-wrap,
 .breakdown,
 .disclaimer {
@@ -715,18 +716,6 @@
 .kpi-grid {
   gap:12px;
 }
-.kpi.primary {
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  min-height:118px;
-  background:linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
-  border-color:var(--primary-hover);
-}
-.kpi.primary .kpi-val {
-  font-size:36px;
-  letter-spacing:0;
-}
 .kpi:not(.primary) {
   background:#fff;
 }
@@ -928,19 +917,12 @@
   grid-template-columns:1.15fr .9fr .9fr;
   gap:10px;
 }
-.kpi.primary,
 .kpi,
 .kpi.danger {
   grid-column:auto;
   min-height:112px;
   padding:18px 20px;
   border-radius:8px;
-}
-.kpi.primary {
-  background:var(--primary-hover);
-}
-.kpi.primary .kpi-val {
-  font-size:34px;
 }
 .kpi:not(.primary):not(.danger) {
   background:#fff;

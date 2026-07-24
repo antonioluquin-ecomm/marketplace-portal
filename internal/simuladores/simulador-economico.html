@@ -69,15 +69,8 @@ body {
 }
 
 /* ═══════════════════════════════════════════════
-   LAYOUT — 3 columnas: inputs | resultados | tarifas
-═══════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════
-   COLUMN SECTIONS
-═══════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════
    FORM ELEMENTS
+   (el layout de 3 columnas y las secciones viven en pages/simuladores.css)
 ═══════════════════════════════════════════════ */
 .field { margin-bottom:10px }
 .field:last-child { margin-bottom:0 }
@@ -288,14 +281,7 @@ body {
 @keyframes spin { to{transform:rotate(360deg)} }
 
 /* ═══════════════════════════════════════════════
-   RESULTS TABS
-═══════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════
-   DISCLAIMER FOOTER
-═══════════════════════════════════════════════ */
-
-/* ═══════════════════════════════════════════════
-   UTILS
+   UTILS  (tabs y disclaimer se estilan en pages/simuladores.css)
 ═══════════════════════════════════════════════ */
 .divider { height:1px; background:var(--border); margin:4px 0 }
 .text-green { color:var(--green) }
@@ -311,7 +297,9 @@ body {
 .inp,.sel{background:var(--surface-2);border-color:var(--border);border-radius:9px;font-size:14.5px}
 .inp:focus,.sel:focus{border-color:var(--green-brd);box-shadow:0 0 0 3px var(--green-dim)}
 .kpi,.comp-bar-wrap,.breakdown,.sc-card,.svc-sub{border-radius:12px;border-color:var(--border);box-shadow:none}
-.kpi.primary{background:var(--green);border-color:var(--green)}
+/* Verde oscuro en el KPI principal: el texto blanco sobre --green (#25b60c)
+   daba contraste 2.7:1 (ilegible); con --green-dark sube a ~4:1. */
+.kpi.primary{background:var(--green-dark);border-color:var(--green-dark)}
 .tog input:checked ~ .tog-track{background:var(--green)}
 </style>
 <script src="../../assets/js/theme.js"></script>

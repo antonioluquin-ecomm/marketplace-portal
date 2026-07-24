@@ -727,9 +727,18 @@
       return (json.data || [])[0] || null;
     }
 
+    // getTarifas/getOverrides devuelven el valor crudo de la celda del Sheet
+    // (a veces ya numerico, a veces texto). Solo tratar "." como separador de
+    // miles cuando el string trae ademas una "," decimal (carga manual en
+    // formato AR) — si no hay coma, "6.5" es 6,5 y no 6500 (bug: antes se
+    // borraba el punto siempre y "6.5" quedaba en 65).
     const num = v => {
-      const s = String(v||"").replace(/\./g,"").replace(",",".").replace(/[^\d.-]/g,"");
-      const n = parseFloat(s); return Number.isFinite(n) ? n : null;
+      const s = String(v ?? "").trim();
+      if (!s) return null;
+      const n = s.includes(",")
+        ? parseFloat(s.replace(/\./g,"").replace(",","."))
+        : parseFloat(s);
+      return Number.isFinite(n) ? n : null;
     };
     const fmtPct = v => Number.isFinite(v) ? (v%1===0 ? v+"%" : v.toFixed(1).replace(".",",")+"%") : null;
 

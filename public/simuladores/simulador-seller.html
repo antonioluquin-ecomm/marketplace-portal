@@ -674,10 +674,19 @@ function wirePublicLinks(){
   });
 }
 const norm  = v  => String(v ?? "").trim().toLowerCase();
+// getTarifas/getOverrides devuelven el valor crudo de la celda del Sheet (a
+// veces ya numerico, a veces texto). Solo tratar "." como separador de miles
+// cuando el string trae ademas una "," decimal (carga manual en formato AR)
+// — si no hay coma, "6.5" es 6,5 y no 650 (bug: antes se borraba el punto
+// siempre, y valores como mix_c1=8.47 quedaban en 847, comision 6.5 en 65).
 const num   = v  => {
   if(v === null || v === undefined || v === "") return 0;
-  const s = String(v).replace(/\./g,"").replace(",",".").replace(/[^\d.-]/g,"");
-  const n = parseFloat(s); return Number.isFinite(n) ? n : 0;
+  const s = String(v).trim();
+  if(!s) return 0;
+  const n = s.includes(",")
+    ? parseFloat(s.replace(/\./g,"").replace(",","."))
+    : parseFloat(s);
+  return Number.isFinite(n) ? n : 0;
 };
 const fmt    = v  => (Number(v)||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0});
 const fmtNum = v  => (Number(v)||0).toLocaleString("es-AR",{maximumFractionDigits:0});

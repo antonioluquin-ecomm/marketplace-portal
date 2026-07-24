@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-07-24 - Corrige bug crítico de parseo: tarifas con decimales se mostraban 10x/100x infladas en las páginas del seller
+
+Tipo de cambio: corrección de bug crítico de frontend en `public/presentaciones/presentacion-seller.html` y `public/simuladores/simulador-seller.html`. Sin cambios de datos ni backend.
+
+- **Síntoma reportado**: en la Presentación del seller, el costo financiero de "3 cuotas" (tarifa real: `6,5%`) se mostraba como **"65% (3 cuotas)"**.
+- **Causa raíz**: `getTarifas` (`apps-script/Tarifas.gs:28`) devuelve `valor` como el número crudo de la celda del Sheet (ej. `6.5`, con punto decimal JS). La función `num()` de ambas páginas asumía que **todo** dato numérico venía en formato argentino (punto = separador de miles) y le borraba el punto **sin verificar primero si había una coma** — convirtiendo `"6.5"` en `"65"`. `internal/simuladores/config-tarifas.html` ya tenía el parser correcto (`parseSheetNum`), que solo trata el punto como separador de miles cuando el string además trae una coma decimal; ese fue el patrón que se replicó acá.
+- **Impacto real — más grave en `simulador-seller.html`**: el mismo `num()` alimenta los cálculos de comisión, mix de cuotas y tarifas de servicios que ve el seller en su propio simulador. No era solo un problema de texto: `mix_c1 = 8,47%` se calculaba como `847`, y la comisión `6,5%` se aplicaba como `65%` — cifras financieras mostradas al seller con **10x a 100x** de error según el valor.
+- **Verificado**: con tarifas mock (`comision_pct: 6.5`, `mix_c1: 8.47`, `c3_pct: 6.5`) ambas páginas ahora muestran/calculan los valores correctos (`6,5%`, `8,47`, etc.); el formato de carga manual argentino (`"6,5"`) sigue funcionando igual que antes.
+- Se auditó el resto del repo por el mismo patrón (`replace(/\./g,"")` incondicional) — no había más instancias; los otros 3 parsers numéricos del proyecto (`config-tarifas.html`, `simulador-economico.html`) ya eran correctos.
+
+## 2026-07-24 - Auditoría del Simulador Económico — contraste del KPI y limpieza
+
+Tipo de cambio: corrección visual/accesibilidad de frontend en `internal/simuladores/simulador-economico.html`, sin cambios de cálculos, datos ni backend.
+
+- **Contraste del KPI principal**: la tarjeta "Ingreso neto estimado" mostraba texto blanco sobre verde brillante `#25b60c` — contraste **2.7:1**, por debajo del mínimo legible. La regla inline `.kpi.primary{background:var(--green)}` estaba **revirtiendo** la corrección que `pages/simuladores.css` ya intentaba (usar el verde oscuro). Se pasa a `--green-dark` (`#1e9209`) → contraste **~4:1**.
+- **Limpieza**: se eliminaron bloques de comentarios del `<style>` que no envolvían ninguna regla (los estilos de layout de 3 columnas, tabs y disclaimer viven en `pages/simuladores.css`).
+- **Consolidación de `simuladores.css` — empezada por `.kpi.primary`**: el archivo compartido es un palimpsesto (5 "pasadas finales" apiladas; `.kpi.primary` estaba definido en ~9 reglas dispersas). Se reunió la familia `.kpi.primary` en un solo bloque con los valores efectivos que ya ganaban (background sólido en vez del `linear-gradient` muerto, `.kpi-val` 34px en vez del 36px muerto, etc.) y se quitaron las redundantes de las otras pasadas (−36/+18 líneas). Verificado **propiedad por propiedad contra la versión original** (box + lbl/sub/val + danger + plain): render idéntico, **cero cambio visual**. Un intento previo de consolidación *automática* con parser artesanal se descartó porque perdía bloques `@media`; este pase manual e incremental es el camino seguro. Quedan pendientes las demás familias (`.col-inputs > .section`, `.shell`, tabs, etc.) para próximos pases.
+
+## 2026-07-24 - Auditoría visual del módulo Config. de Tarifas y Overrides
+
+Tipo de cambio: auditoría y refactor visual de frontend en `internal/simuladores/config-tarifas.html`, sin cambios de datos, de backend ni de la lógica de guardado/parseo (freeze zone respetada).
+
+- **CSS muerto eliminado (~250 líneas)**: la página redefinía inline `.section`, `.fields-grid`, `.summary-card`, `.field`/`.field input`, la grilla de KPIs, el sidebar, etc., pero esos elementos usan clases `portal-*` de `internal-components.css`, que ganan por especificidad doble-clase. Todo ese CSS local estaba pisado y no tenía efecto — **incluidos los `@media` de responsive de las grillas** (los `@media(max-width:1200px/900px)` sobre `.summary-grid`/`.fields-grid` nunca se aplicaban porque el `auto-fit` de portal los tapaba). Se dejó solo el CSS propio de la herramienta (estado "modificado", suma del mix, overrides, barra de guardado, toast).
+- **Flecha nativa duplicada en los `<select>`**: `.portal-field select` no aplicaba `appearance:none`, así que se veía la flecha nativa del navegador **más** la `▾` propia superpuesta. Se fuerza `appearance:none` con especificidad suficiente → una sola flecha.
+- **Ancho del contenido acotado**: `.main{max-width:1180px}` también estaba pisado por `portal-main` (`max-width:none`), así que el formulario se estiraba a todo el ancho de la pantalla. Se acota a 1080px centrado. Además, en las secciones de un solo campo (Comisión), el input dejaba de estirarse a toda la fila (se limita a 240px).
+- **Estado "modificado" robusto**: la regla que resalta un campo cambiado empataba en especificidad con la base de `portal-field` y dependía del orden de carga; se le sube la especificidad para que gane siempre.
+- **UX**: la intro de "Condiciones especiales por seller" pasa de un párrafo denso a chips escaneables; la barra de guardado sticky ahora muestra un indicador de **cuántos campos quedan sin guardar**; el eyebrow del encabezado se alinea al patrón del resto del portal (guion de acento).
+
 ## 2026-07-24 - Corrige el chip de Modelo en Backlog de Sellers y ajusta la guía del seller
 
 Tipo de cambio: corrección de bug de frontend (Backlog) + wording de la guía pública del seller, sin cambios de datos ni de backend.
