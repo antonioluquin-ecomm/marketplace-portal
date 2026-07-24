@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-24 - Consolidación de simuladores.css — segundo pase (.tab-btn, .kpi-grid)
+
+Tipo de cambio: limpieza interna de CSS compartido en `assets/css/pages/simuladores.css`, sin cambios de HTML ni JS. Continúa la consolidación manual e incremental iniciada con `.kpi.primary` (ver entrada del mismo día).
+
+- **`.tab-btn`**: estaba repartido en 3 bloques de 3 "pasadas" distintas del archivo (`padding`, `min-height` y `color` redefinidos hasta 3 veces). Se dejaron solo las declaraciones efectivas (las que ya ganaban por orden) y se eliminó el bloque que quedaba completamente vacío.
+- **`.tab-btn.active`**: 2 definiciones de `color` — se conservó la última; `border-bottom-color` solo existía una vez, se mantiene.
+- **`.kpi-grid`** (fuera de `@media`): `gap` redefinido 2 veces — se conserva el efectivo; el bloque que quedó vacío se eliminó.
+- Los bloques dentro de `@media` (mobile, 1500px, 960px) no se tocaron — son overrides legítimos por breakpoint, no duplicados.
+- **Verificado con estilos computados en 4 anchos** (1650/1400/966/650px, cubriendo cada breakpoint relevante): color, padding, min-height, border, font — todo idéntico al original, en los 3 tabs y en ambos estados (activo/inactivo).
+- Nota al margen (no corregida, fuera de alcance): `grid-template-columns` de `.kpi-grid` en `simuladores.css` es código muerto — el `<style>` inline de `simulador-economico.html` define su propio `.kpi-grid` que carga después y siempre gana. No afecta el render actual (ambas versiones, antes y después, pierden igual contra el inline).
+
 ## 2026-07-24 - Corrige bug crítico de parseo: tarifas con decimales se mostraban 10x/100x infladas en las páginas del seller
 
 Tipo de cambio: corrección de bug crítico de frontend en `public/presentaciones/presentacion-seller.html` y `public/simuladores/simulador-seller.html`. Sin cambios de datos ni backend.

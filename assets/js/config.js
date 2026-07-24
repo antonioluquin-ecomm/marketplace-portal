@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.66',
+  number: '1.4.67',
   date:   '2026-07-24',
-  notes:  'Bug crítico corregido: tarifas con decimales (ej. 6,5%) se mostraban infladas 10x-100x en Presentación y Simulador del seller por un error de parseo de punto/coma',
+  notes:  'Simulador Económico: segundo pase de consolidación de simuladores.css (.tab-btn, .kpi-grid) — sin cambio visual, verificado en 4 anchos',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.67', date: '2026-07-24', desc: 'Simulador Económico: consolidación de .tab-btn y .kpi-grid en simuladores.css (redefinidos hasta 3 veces en distintas pasadas). Sin cambio visual — verificado en 4 anchos de pantalla (1650/1400/966/650px), colores/paddings/estados idénticos.' },
   { v: '1.4.66', date: '2026-07-24', desc: 'Bug crítico: en Presentación y Simulador del seller, tarifas con decimales (ej. comisión 6,5% o mix 8,47%) se mostraban/calculaban 10x-100x infladas (65%, 847) por un parseo que confundía el punto decimal con separador de miles. Corregido replicando el parser correcto que ya usaba Config. Tarifas — impacta cifras financieras reales que ve el seller, no solo texto.' },
   { v: '1.4.65', date: '2026-07-24', desc: 'Simulador Económico: consolidación interna del CSS de la familia .kpi en pages/simuladores.css (estaba repartido en ~9 reglas de 5 "pasadas" apiladas). Sin cambio visual — verificado propiedad por propiedad contra la versión previa. Primer paso de limpieza del CSS compartido.' },
   { v: '1.4.64', date: '2026-07-24', desc: 'Simulador Económico: el KPI de "Ingreso neto estimado" mostraba texto blanco sobre verde brillante (#25b60c), con contraste 2.7:1 (poco legible); una regla inline revertía la corrección que ya intentaba el CSS de página. Ahora usa el verde oscuro (--green-dark), contraste ~4:1. Además se quitaron bloques de comentarios muertos del <style>.' },
