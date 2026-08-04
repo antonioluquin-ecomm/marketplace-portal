@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-24 - Suma alta de usuario y capacitación al playbook de Gestión Asistida
+
+Tipo de cambio: contenido nuevo (documentación operativa), sin cambios de backend ni de datos.
+
+Faltaban dos tareas del proceso real, previas a que el seller pueda operar un pedido: el alta de su usuario en **PIM Frontend** (con la asignación al depósito correspondiente) y la **capacitación operativa** en el uso de PIM Depósitos.
+
+- **`internal/estrategia/integracion-gestion-asistida.html`** (Fase 8): se agregan las tareas 8.7 (alta de usuario en PIM Frontend — Ecomm crea el usuario, lo asigna al depósito del seller y le comparte el ID de usuario) y 8.8 (capacitación operativa — Ecomm capacita al seller en recibir, asignar, imprimir, preparar, pickear, facturar y despachar el pedido). Contrato y T&C se renumeran a 8.9/8.10. Se agrega un callout marcando instalación (8.6) + usuario (8.7) + capacitación (8.8) como precondición dura para operar pedidos (Fase 9), y se actualiza el paso 5 de la hoja de ruta para reflejarlo.
+- **`public/integracion/integracion-seller.html`** (guía Gestión Asistida): la tarjeta "Instalación" pasa a "Instalación, acceso y capacitación" con los mismos tres puntos en lenguaje seller; el paso 5 del roadmap del seller se actualiza igual.
+
+No se agrega una Fase nueva — se evaluó y se descartó por el costo de renumerar las Fases 9-10 y todas sus referencias cruzadas para dos tareas que encajan naturalmente en la Fase 8 existente (setup de soporte/experiencia).
+
 ## 2026-07-24 - Consolidación de simuladores.css — tercer pase (familia .col-inputs > .section)
 
 Tipo de cambio: limpieza interna de CSS compartido en `assets/css/pages/simuladores.css`, sin cambios de HTML ni JS. Continúa la consolidación manual e incremental (ver entradas anteriores del mismo día: `.kpi.primary`, luego `.tab-btn`/`.kpi-grid`). Esta fue la familia más grande y enredada del archivo: 11 subselectores distintos (la sección base, las 3 secciones posicionales del formulario vía `:nth-child` con `+`, y 8 descendientes — `.field-label`, `.field-hint`, `.inp`/`.sel`, `.seller-select-wrap`, `.seller-helper`, `.svc-list`, `.svc-row`, `.field`), cada uno redefinido entre 2 y 6 veces a lo largo de las mismas 5 "pasadas" del archivo.
