@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-24 - Corrige el espaciado de la nav móvil en el hero de las páginas públicas del seller
+
+Tipo de cambio: corrección de bug de CSS compartido (`assets/css/pages/public-seller.css`), sin cambios de datos ni backend.
+
+Verificando en vivo con un seller real (Taika Sport) la guía de integración recién publicada, se detectó que la fila de tabs (Presentación/Simulador/Calificación/.../Integración/Catálogo) que se muestra en pantallas ≤1200px quedaba pegada al título de la página, sin espacio.
+
+- **Causa raíz**: la regla `.hero .public-flow-nav { margin: 4px 0 16px; }` depende de un ancestro con **clase** `hero`. `public/integracion/integracion-seller.html` y `public/presentaciones/presentacion-seller.html` usan `id="hero"` en su sección hero, no `class="hero"` — la regla nunca aplicaba ahí, y la nav móvil (`.hero-public-nav`) quedaba sin margen.
+- **Fix**: se agrega `.hero-public-nav` como selector adicional a esa regla, para que el margen no dependa de cómo cada página nombra su sección hero.
+- Se actualiza el cache-busting `?v=` de `public-seller.css` (1.4.35 → 1.4.70) en las 7 páginas públicas que lo comparten, para que sirvan el CSS corregido en vez de la copia cacheada.
+
 ## 2026-07-24 - Suma alta de usuario y capacitación al playbook de Gestión Asistida
 
 Tipo de cambio: contenido nuevo (documentación operativa), sin cambios de backend ni de datos.

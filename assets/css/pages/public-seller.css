@@ -480,7 +480,8 @@ small {
   color: var(--primary-hover, #1e9209);
 }
 
-.hero .public-flow-nav {
+.hero .public-flow-nav,
+.hero-public-nav {
   margin: 4px 0 16px;
 }
 

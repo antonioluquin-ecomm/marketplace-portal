@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.69',
+  number: '1.4.70',
   date:   '2026-07-24',
-  notes:  'Playbook "Integración Gestión Asistida": suma alta de usuario en PIM Frontend y capacitación operativa (Fase 8)',
+  notes:  'Páginas públicas del seller: corrige el margen de la nav móvil pegada al título del hero (bug de selector CSS)',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.70', date: '2026-07-24', desc: 'Páginas públicas del seller: la nav de tabs en pantallas ≤1200px quedaba pegada al título del hero en integracion-seller.html y presentacion-seller.html (usan id="hero", la regla de margen pedía class="hero"). Se corrige el selector y se actualiza el cache-busting de public-seller.css en las 7 páginas que lo comparten.' },
   { v: '1.4.69', date: '2026-07-24', desc: 'Playbook "Integración Gestión Asistida": se agregan las tareas de alta de usuario en PIM Frontend (asignado al depósito) y capacitación operativa del seller (Fase 8.7/8.8), precondición para operar pedidos. Reflejado también en la guía pública del seller.' },
   { v: '1.4.68', date: '2026-07-24', desc: 'Simulador Económico: consolidación de la familia .col-inputs > .section en simuladores.css — 11 subselectores redefinidos entre 2 y 6 veces cada uno (secciones del formulario, campos, inputs, servicios). 80 líneas eliminadas. Sin cambio visual — verificado en 6 anchos de pantalla, uno por cada breakpoint del archivo.' },
   { v: '1.4.67', date: '2026-07-24', desc: 'Simulador Económico: consolidación de .tab-btn y .kpi-grid en simuladores.css (redefinidos hasta 3 veces en distintas pasadas). Sin cambio visual — verificado en 4 anchos de pantalla (1650/1400/966/650px), colores/paddings/estados idénticos.' },
