@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.71',
+  number: '1.4.72',
   date:   '2026-08-04',
-  notes:  'Catálogo Seller: el gate de acceso ya no es una whitelist hardcodeada — se basa en el modelo de integración del seller',
+  notes:  'Playbook de Gestión Asistida: se suma el instructivo paso a paso de preparación y despacho de pedidos (Fase 9), adaptado del proceso b2c',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.72', date: '2026-08-04', desc: 'Playbook "Integración Gestión Asistida" (Fase 9): "Responsabilidades operativas" pasa de 4 líneas genéricas a 6 pasos detallados (asignación, búsqueda, control de calidad, pickeo/facturación, empaquetado/etiquetado, remito/despacho), adaptando el instructivo b2c de Preparación y Despacho al modelo de un solo depósito por seller. Reflejado también en la guía pública del seller (#operar-ga, ahora 8 pasos).' },
   { v: '1.4.71', date: '2026-08-04', desc: 'Catálogo Seller: un seller real de Taika (SPT-002) no podía ver su catálogo — el gate comparaba contra el literal "TAIKA" hardcodeado en vez del seller_id. Ahora habilita por modelo de integración ("Gestión asistida" en la hoja sellers), extensible a futuros sellers sin redeploy.' },
   { v: '1.4.70', date: '2026-07-24', desc: 'Páginas públicas del seller: la nav de tabs en pantallas ≤1200px quedaba pegada al título del hero en integracion-seller.html y presentacion-seller.html (usan id="hero", la regla de margen pedía class="hero"). Se corrige el selector y se actualiza el cache-busting de public-seller.css en las 7 páginas que lo comparten.' },
   { v: '1.4.69', date: '2026-07-24', desc: 'Playbook "Integración Gestión Asistida": se agregan las tareas de alta de usuario en PIM Frontend (asignado al depósito) y capacitación operativa del seller (Fase 8.7/8.8), precondición para operar pedidos. Reflejado también en la guía pública del seller.' },

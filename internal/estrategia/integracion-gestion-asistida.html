@@ -122,6 +122,7 @@
             <h2>Qué resuelve esta página</h2>
             <p>Ordena todo el proceso para poder crear y asignar tareas por rol, y sirve de referencia operativa durante el onboarding y la operación de cada seller de este modelo.</p>
             <div class="callout">El playbook es el deep-dive de la etapa <strong>Integración</strong> del <a href="./proceso-onboarding.html" style="color:var(--g);font-weight:700">Onboarding</a>, para el modelo <strong>Gestión Asistida</strong> del <a href="./modelo-integracion.html" style="color:var(--g);font-weight:700">Modelo de Integración</a>.</div>
+            <div class="callout">Esta página es la <strong>fuente de verdad</strong> del proceso. La vista del seller en <a href="../../public/integracion/integracion-seller.html" style="color:var(--g);font-weight:700">Guía de integración</a> (secciones <code>*-ga</code>) se redacta a partir de acá — no se edita a mano en paralelo.</div>
           </div>
           <div class="panel soft">
             <h2>Cómo se usa</h2>
@@ -351,12 +352,15 @@
           <li>El cliente lo compra → el pedido se genera en VTEX con el <strong>mismo identificador que los pedidos de Sporting</strong> (no hay tienda ni numeración diferente, a diferencia del Customer PO con ID de afiliado de VTEX↔VTEX).</li>
           <li>El pedido cae en PIM Depósitos, en el depósito del seller, en estado <strong>Activo</strong>.</li>
         </ul>
-        <h3>Responsabilidades operativas — mismo proceso que b2c</h3>
+        <h3>Responsabilidades operativas — mismo proceso que b2c, en un solo depósito</h3>
+        <p>El seller opera este circuito íntegramente desde <strong>PIM Depósitos</strong>, con las mismas pantallas que usa el equipo de Sporting para pedidos b2c. La diferencia es que acá el seller es dueño de un único depósito, sin la lógica de prioridad ni reasignación entre depósitos de la red que existe en b2c.</p>
         <ul class="autolist">
-          <li>El seller se asigna el pedido, lo busca y lo pickea.</li>
-          <li>Se genera la etiqueta de envío.</li>
-          <li>Se factura — la factura se genera en el AFIP del seller (Fase 2).</li>
-          <li>Prepara el pedido; el Carrier pasa a buscarlo.</li>
+          <li><strong>Asignación</strong> — desde "Pedidos Pendientes" el seller asigna el pedido, que pasa de estado <strong>Activo</strong> a <strong>Asignado</strong> y se imprime.</li>
+          <li><strong>Búsqueda del producto</strong> — recorre su depósito y junta lo pedido. Sin otro depósito al que reasignar: si no encuentra el producto, pasa directo a reportarlo como perdido (ver "Cancelaciones" más abajo).</li>
+          <li><strong>Control de calidad</strong> — antes de facturar, confirma que el producto y el talle sean los correctos y que esté en condiciones (sin daños, limpio, sin etiquetas visibles del proceso interno). Si no hay stock de reemplazo, también pasa a reportarlo como perdido.</li>
+          <li><strong>Pickeo y facturación</strong> — escanea el pedido y cada producto en PIM Depósitos. El sistema genera la <strong>etiqueta de envío</strong> con el Carrier configurado en la Fase 7 (Modo A o B), y la <strong>factura</strong> sale del AFIP propio del seller (Fase 2) — no del de Sporting.</li>
+          <li><strong>Empaquetado y etiquetado</strong> — empaqueta el pedido, pega la etiqueta generada y confirma que el código de barras quede legible para el Carrier.</li>
+          <li><strong>Remito y despacho</strong> — genera el remito en PIM Depósitos y entrega el paquete al Carrier que corresponda según la Fase 7 (propio del seller o gestionado por el Marketplace).</li>
         </ul>
         <h3>Cancelaciones — flujo distinto a VTEX↔VTEX</h3>
         <p>No existe el estado "Esperando Cambio de Seller" de VTEX↔VTEX. El pedido se da de baja <strong>igual que un pedido b2c</strong>: desde PIM Depósitos está la opción de reportar un artículo como perdido, lo que termina en baja del pedido y devolución del dinero al cliente.</p>

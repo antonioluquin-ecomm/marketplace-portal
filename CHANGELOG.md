@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-04 - Suma el instructivo de preparación y despacho de pedidos al playbook de Gestión Asistida
+
+Tipo de cambio: contenido nuevo (documentación operativa), sin cambios de backend ni de datos.
+
+La Fase 9 ("Pedido y cancelaciones") del playbook resolvía la búsqueda, el control de calidad, el pickeo, la facturación y el despacho en 4 líneas genéricas ("mismo proceso que b2c"), sin explicar en qué se parece y en qué difiere de un pedido b2c real. Se usó como base el instructivo "Preparación y Despacho de Pedidos B2C" del Portal eComm para completarlo, adaptado a que el seller opera un único depósito propio.
+
+- **`internal/estrategia/integracion-gestion-asistida.html`** (Fase 9): "Responsabilidades operativas" se expande a 6 pasos — asignación, búsqueda del producto, control de calidad, pickeo y facturación, empaquetado y etiquetado, remito y despacho — aclarando qué es igual a b2c (la mecánica de PIM Depósitos) y qué es distinto (sin reasignación entre depósitos porque el seller tiene uno solo, sin lógica de prioridad regional, factura emitida desde el AFIP propio del seller). Se suma además una nota de gobierno: esta página es la fuente de verdad de la que se deriva la guía pública del seller — no se edita a mano en paralelo.
+- **`public/integracion/integracion-seller.html`** (`#operar-ga`): el paso "Te llega el pedido... lo buscás y lo pickeás" se desagrega en los mismos 6 pasos, en lenguaje seller — la sección "Cómo operás cada pedido" pasa de 6 a 8 pasos totales.
+
 ## 2026-08-04 - Catálogo Seller: gate de acceso pasa de whitelist hardcodeada a modelo de integración
 
 Tipo de cambio: corrección de bug de backend (`apps-script/CatalogoSeller.gs`), sin cambios de frontend.
