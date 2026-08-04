@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-04 - Catálogo Seller: gate de acceso pasa de whitelist hardcodeada a modelo de integración
+
+Tipo de cambio: corrección de bug de backend (`apps-script/CatalogoSeller.gs`), sin cambios de frontend.
+
+Un usuario real de Taika Sport (`juani292@gmail.com`, `seller_id` = `SPT-002`) no podía ver su catálogo: la tabla cargaba vacía. Causa raíz: `getCatalogoSellerProductsAction` gateaba el acceso contra `CATALOGO_SELLER_HABILITADOS = ["TAIKA"]`, un whitelist hardcodeado que comparaba contra el literal `"TAIKA"` en vez del `seller_id` real (`SPT-002`) — quedó así desde el alta del módulo, con un TODO sin resolver ("reemplazar por el seller_id real de Taika Sport en la hoja USUARIOS").
+
+- Se reemplaza el array hardcodeado por `_catalogoSellerModeloHabilitado_(sellerId)`, que lee la hoja `sellers` y habilita a cualquier seller cuyo `modelo_integracion_definido` (fallback a `_estimado`) sea "Gestión asistida" — mismo campo y misma normalización (minúsculas, sin tildes) que ya usa `public/integracion/integracion-seller.html` para elegir la guía de integración.
+- Con esto, un seller nuevo que se sume con ese modelo queda habilitado automáticamente, sin tocar código ni redeployar Apps Script.
+- **Limitación que queda documentada en el header del archivo**: esto solo resuelve el gate de este proyecto. El fetch real de productos sigue yendo a `vtex-control-center` vía `getTaikaCatalogProducts` (y las acciones de escritura `updateTaikaCatalog*`), que identifica los SKUs por un spec value asignado específicamente a Taika en VTEX. Sumar un segundo seller de "gestión asistida" va a requerir generalizar ese mecanismo en el repo hermano también.
+
 ## 2026-07-24 - Corrige el espaciado de la nav móvil en el hero de las páginas públicas del seller
 
 Tipo de cambio: corrección de bug de CSS compartido (`assets/css/pages/public-seller.css`), sin cambios de datos ni backend.

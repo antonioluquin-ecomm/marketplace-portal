@@ -21,12 +21,34 @@
  * Ownership: usa _resolverSellerScope (Helpers.gs) — el mismo mecanismo que
  * getSellersAction/getTarifasAction/getRelevamientosAction: sesión de seller
  * queda "locked" a su propio seller_id; staff en modo "ver como seller" pasa
- * target_seller_id. Se valida además que ese seller_id esté habilitado para
- * este módulo (hoy solo Taika) — lista fácil de extender sin rediseñar nada.
+ * target_seller_id. Se valida además que ese seller esté marcado con modelo
+ * de integración "Gestión asistida" en la hoja SELLERS (mismo campo y misma
+ * normalización que usa integracion-seller.html) — así cualquier seller que
+ * se sume con ese modelo queda habilitado sin tocar código ni redeployar.
+ *
+ * IMPORTANTE: esta validación solo gatea el acceso en este proyecto. La
+ * identificación de SKUs del lado de vtex-control-center (getTaikaCatalogProducts
+ * y demás acciones "Taika*") sigue siendo específica de Taika hoy — sumar un
+ * segundo seller de gestión asistida requiere trabajo en ese repo hermano
+ * también (generalizar el mecanismo de spec value por seller).
  */
 
-// TODO: reemplazar por el seller_id real de Taika Sport en la hoja USUARIOS.
-var CATALOGO_SELLER_HABILITADOS = ["TAIKA"];
+function _catalogoSellerModeloHabilitado_(sellerId) {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var ws = obtenerHojaSellersConHeaders(ss);
+  var headers = obtenerHeaders(ws);
+  var lastRow = ws.getLastRow();
+  var rows = lastRow > 1 ? ws.getRange(2, 1, lastRow - 1, headers.length).getValues() : [];
+  var row = rows.map(function (r) { return rowToObj(headers, r); })
+    .filter(function (o) { return String(o.seller_id || "").toUpperCase() === sellerId; })[0];
+  if (!row) return false;
+
+  var modelo = row.modelo_integracion_definido || row.modelo_integracion_estimado || row.modelo_integracion || "";
+  var normalized = String(modelo).toLowerCase().normalize("NFD").replace(new RegExp("[\\u0300-\\u036f]", "g"), "");
+  return normalized.indexOf("gestion asistida") !== -1
+    || normalized.indexOf("seller center") !== -1
+    || normalized.indexOf("seller_center") !== -1;
+}
 
 function _catalogoSellerResolverTarget_(data) {
   var scope = _resolverSellerScope(data);
@@ -34,10 +56,11 @@ function _catalogoSellerResolverTarget_(data) {
   if (!sellerId) {
     throw new Error("Elegí un seller para ver su catálogo.");
   }
-  if (CATALOGO_SELLER_HABILITADOS.indexOf(sellerId.toUpperCase()) === -1) {
+  sellerId = sellerId.toUpperCase();
+  if (!_catalogoSellerModeloHabilitado_(sellerId)) {
     throw new Error("Este módulo todavía no está habilitado para este seller.");
   }
-  return sellerId.toUpperCase();
+  return sellerId;
 }
 
 function _callVtexControlCenter_(action, payload) {
