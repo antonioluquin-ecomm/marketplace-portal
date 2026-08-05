@@ -388,8 +388,15 @@ humano real es la **decisión del Marketplace en la ventana de 24 h**.
 | Actor | Acción |
 |---|---|
 | **Seller** | Cancelar el pedido desde su VTEX cuando no tiene stock (sin notificación previa). |
-| **Marketplace — Ecomm / Operaciones** | Dentro de las 24 h, elegir una de **tres** opciones: (a) seleccionar un **nuevo seller**; (b) **no hacer nada** → se cancela automáticamente a las 24 h; (c) **cancelar de inmediato**. |
+| **Marketplace — Ecomm / Operaciones** | Dentro de las 24 h, **cancela directo** (no espera a la cancelación automática por inacción). |
 | *Sistema (VTEX)* | Reembolso automático y correo de cancelación al cliente al pasar a "Cancelado". |
+
+> **Corregido (2026-08-05):** la redacción original de esta tabla listaba **tres** opciones —
+> (a) seleccionar un nuevo seller, (b) no hacer nada → cancelación automática a las 24 h, (c)
+> cancelar de inmediato. Confirmado con Gabriel que la opción (a) **no se usa en la operatoria
+> real**: el Marketplace cancela directo. No hay reasignación de pedido a otro seller en este
+> flujo hoy. Si en el futuro se habilita, actualizar acá y en Commerce Hub
+> (`documentacion.json`, página "Procesos Sellers").
 
 #### Reglas / Decisiones — Fase 6
 
@@ -397,8 +404,8 @@ humano real es la **decisión del Marketplace en la ventana de 24 h**.
 - **Sin notificación previa:** el seller cancela directamente desde su VTEX.
 - **Motivo único:** las cancelaciones del seller son **siempre por stock**.
 - **SLA seller:** plazo máximo para cancelar un pedido: **5 días**.
-- **SLA Marketplace:** **24 h** para seleccionar un nuevo seller antes de la cancelación
-  automática.
+- **SLA Marketplace:** **24 h** para cancelar el pedido tras el aviso de "Esperando Cambio de
+  Seller" (no hay reasignación a otro seller, ver corrección arriba).
 - **Reembolso y aviso:** siempre **automáticos** al pasar a "Cancelado".
 
 ---
@@ -642,7 +649,7 @@ Estaban dispersos por todo el proceso; acá juntos porque los sellers los piden 
 
 | Plazo | Aplica a | Quién debe cumplirlo | Fase |
 |---|---|---|---|
-| **24 h** | Elegir un nuevo seller ante cancelación por stock, antes de la cancelación automática | Marketplace | 6 |
+| **24 h** | Cancelar el pedido ante aviso de stock del seller ("Esperando Cambio de Seller") | Marketplace | 6 |
 | **5 días** | Cancelar un pedido por falta de stock | Seller | 6 |
 | **4-5 días** | Responder al carrier ante dirección incorrecta, antes de que el producto vuelva al CD | Seller | 7b |
 | **30 días** | Solicitar la cancelación por arrepentimiento | Cliente | 7b |

@@ -348,10 +348,11 @@
           <thead><tr><th>Actor</th><th>Acción</th></tr></thead>
           <tbody>
             <tr><td><strong>Seller</strong></td><td>Cancelar desde su VTEX cuando no tiene stock (sin aviso previo).</td></tr>
-            <tr><td><strong>MP — Ecomm / Operaciones</strong></td><td>Dentro de 24 h: (a) elegir nuevo seller; (b) dejar vencer → cancela solo; (c) cancelar de inmediato.</td></tr>
+            <tr><td><strong>MP — Ecomm / Operaciones</strong></td><td>Dentro de 24 h: cancela directo (no espera la cancelación automática por inacción).</td></tr>
             <tr><td><em>Sistema (VTEX)</em></td><td>Reembolso y correo de cancelación automáticos.</td></tr>
           </tbody>
         </table></div>
+        <div class="callout"><strong>Corregido (2026-08-05):</strong> esta tabla listaba antes tres opciones para el MP, incluyendo "elegir nuevo seller" — confirmado que esa opción no se usa en la operatoria real. El MP cancela directo dentro de la ventana de 24 h.</div>
         <h3>Reglas / decisiones</h3>
         <ul>
           <li>Sin cancelaciones parciales: si falta un producto, se cancela el pedido completo.</li>
@@ -467,7 +468,7 @@
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Plazo</th><th>Aplica a</th><th>Quién debe cumplirlo</th><th>Fase</th></tr></thead>
           <tbody>
-            <tr><td><strong>24 h</strong></td><td>Elegir un nuevo seller ante cancelación por stock, antes de la cancelación automática.</td><td>Marketplace</td><td>6</td></tr>
+            <tr><td><strong>24 h</strong></td><td>Cancelar el pedido ante aviso de stock del seller ("Esperando Cambio de Seller").</td><td>Marketplace</td><td>6</td></tr>
             <tr><td><strong>5 días</strong></td><td>Cancelar un pedido por falta de stock.</td><td>Seller</td><td>6</td></tr>
             <tr><td><strong>4-5 días</strong></td><td>Responder al carrier ante dirección incorrecta, antes de que vuelva al CD.</td><td>Seller</td><td>7b</td></tr>
             <tr><td><strong>30 días</strong></td><td>Solicitar la cancelación por arrepentimiento.</td><td>Cliente</td><td>7b</td></tr>
