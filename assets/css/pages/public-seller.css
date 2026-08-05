@@ -480,6 +480,16 @@ small {
   color: var(--primary-hover, #1e9209);
 }
 
+/* Separador entre el grupo "onboarding" (pasos del proceso) y "tools"
+   (herramientas de uso recurrente, ej. catálogo) dentro de la misma nav. */
+.public-flow-nav-sep {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 16px;
+  margin: 0 2px;
+  background: var(--line, #e5e7eb);
+}
+
 .hero .public-flow-nav,
 .hero-public-nav {
   margin: 4px 0 16px;
@@ -537,5 +547,15 @@ small {
   .hero .public-flow-nav a,
   .hero-public-nav a {
     justify-content: center;
+  }
+
+  /* En grid la separación vertical no aplica — el corte de grupo pasa a ser
+     una línea horizontal que ocupa toda la fila. */
+  .hero .public-flow-nav-sep,
+  .hero-public-nav .public-flow-nav-sep {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 1px;
+    margin: 2px 0;
   }
 }

@@ -101,14 +101,17 @@ function _internalHubPath() {
    página deja un <nav class="public-flow-nav" data-public-nav> vacío
    y renderPublicFlowNav() lo completa con el mismo contenido en todas.
    ────────────────────────────────────────────────────────────── */
+// group: 'onboarding' (pasos secuenciales del proceso de incorporación) o
+// 'tools' (herramientas de uso recurrente, sin orden de flujo) — misma
+// distinción que ya usa RESOURCE_DETAILS en public/index.html.
 const PUBLIC_FLOW_ITEMS = [
-  { id: 'presentacion', label: 'Presentación', path: 'presentaciones/presentacion-seller.html' },
-  { id: 'simulador',    label: 'Simulador',    path: 'simuladores/simulador-seller.html' },
-  { id: 'calificacion', label: 'Calificación', path: 'formularios/formulario-calificacion.html' },
-  { id: 'relevamiento', label: 'Relevamiento', path: 'formularios/formulario-relevamiento.html' },
-  { id: 'gantt',        label: 'Gantt',        path: 'gantt/gantt-seller.html' },
-  { id: 'integracion',  label: 'Integración',  path: 'integracion/integracion-seller.html' },
-  { id: 'catalogo',     label: 'Catálogo',     path: 'catalogo/catalogo-seller.html' },
+  { id: 'presentacion', label: 'Presentación', path: 'presentaciones/presentacion-seller.html', group: 'onboarding' },
+  { id: 'simulador',    label: 'Simulador',    path: 'simuladores/simulador-seller.html',        group: 'onboarding' },
+  { id: 'calificacion', label: 'Calificación', path: 'formularios/formulario-calificacion.html', group: 'onboarding' },
+  { id: 'relevamiento', label: 'Relevamiento', path: 'formularios/formulario-relevamiento.html', group: 'onboarding' },
+  { id: 'gantt',        label: 'Gantt',        path: 'gantt/gantt-seller.html',                  group: 'onboarding' },
+  { id: 'integracion',  label: 'Integración',  path: 'integracion/integracion-seller.html',       group: 'onboarding' },
+  { id: 'catalogo',     label: 'Catálogo',     path: 'catalogo/catalogo-seller.html',             group: 'tools' },
 ];
 
 function renderPublicFlowNav() {
@@ -116,10 +119,17 @@ function renderPublicFlowNav() {
   if (!navs.length) return;
   const activeId = document.body.getAttribute('data-public-page') || '';
   const prefix = '../'.repeat(_sellerPublicDepth());
-  const html = PUBLIC_FLOW_ITEMS.map(function (item) {
-    const cls = item.id === activeId ? ' class="active"' : '';
-    return '<a' + cls + ' data-public-link="' + item.id + '" href="' + prefix + item.path + '">' + item.label + '</a>';
-  }).join('');
+  const groups = ['onboarding', 'tools'];
+  const html = groups
+    .map(function (group) {
+      return PUBLIC_FLOW_ITEMS.filter(function (item) { return item.group === group; })
+        .map(function (item) {
+          const cls = item.id === activeId ? ' class="active"' : '';
+          return '<a' + cls + ' data-public-link="' + item.id + '" href="' + prefix + item.path + '">' + item.label + '</a>';
+        }).join('');
+    })
+    .filter(Boolean)
+    .join('<span class="public-flow-nav-sep" aria-hidden="true"></span>');
   navs.forEach(function (nav) {
     nav.innerHTML = html;
     nav.querySelectorAll('a').forEach(function (link) {

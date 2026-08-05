@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-05 - Agrupa la nav de flujo del seller en Proceso / Herramientas
+
+Tipo de cambio: mejora de UI (`assets/js/auth-seller.js`, `assets/css/pages/public-seller.css`), sin cambios de backend ni de datos.
+
+La nav compartida de las 7 páginas públicas del seller (`public-flow-nav`) era una lista plana sin jerarquía, mezclando los pasos secuenciales del proceso de incorporación (Presentación, Simulador, Calificación, Relevamiento, Gantt, Integración) con una herramienta de uso recurrente (Catálogo) — la misma distinción que `public/index.html` ya usa para agrupar sus tarjetas (onboarding vs. herramientas), pero que la nav no reflejaba.
+
+- `PUBLIC_FLOW_ITEMS` en `auth-seller.js` suma un campo `group` por ítem; `renderPublicFlowNav()` renderiza los dos grupos separados por un divisor visual (`.public-flow-nav-sep`) en vez de una lista plana continua.
+- El divisor es una línea vertical fina en la nav del topbar (desktop) y una línea horizontal de fila completa en la copia del hero (mobile, grid de 1-2 columnas) — verificado en ambos breakpoints sobre la página real (`gantt-seller.html`).
+- De paso se detectó (no corregido acá, queda para una tarea aparte) que `public-seller.css` redeclara `--line: var(--line, #e5e7eb)` en su propio `:root`, una custom property auto-referenciada que la CSS spec trata como inválida en todo el documento salvo donde una regla puntual le da su propio fallback — afecta cualquier `var(--line)` sin fallback explícito en ese archivo.
+- Se actualiza el cache-busting `?v=` de `public-seller.css` (1.4.70 → 1.4.73) en las 7 páginas públicas que lo comparten.
+
 ## 2026-08-04 - Suma el instructivo de preparación y despacho de pedidos al playbook de Gestión Asistida
 
 Tipo de cambio: contenido nuevo (documentación operativa), sin cambios de backend ni de datos.
