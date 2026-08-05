@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-05 - Suma plantilla de mail de kickoff para sellers de Gestión Asistida
+
+Tipo de cambio: documentación nueva (`docs/`), sin cambios de código.
+
+La única plantilla de mail de kickoff existente (`docs/plantilla-mail-kickoff-integracion.md`) es para el modelo VTEX↔VTEX (pide cuenta VTEX del seller, QA VTEX, política comercial vía agencia) — no aplica a Gestión Asistida, donde el seller no tiene VTEX propio ni integra por API. Se redactó y ajustó en conjunto con el kickoff real de Hirostar (seller de este modelo, sumado tras Taika).
+
+- **`docs/plantilla-mail-kickoff-integracion-gestion-asistida.md`** (nuevo): plantilla con los 5 pedidos concretos a un seller de este modelo — marcas/categorías, datos de facturación + certificados AFIP, Excel de productos (con variantes), dirección del depósito, e insumos para la instalación remota (PC/impresora/internet/AnyDesk). Redactada en lenguaje sin jerga técnica (cada pedido lleva un ejemplo y el "para qué"), porque varios sellers de este modelo no están al tanto de tecnología.
+- Incluye una nota de uso para el caso en que el acceso al portal ya lo haya compartido otra persona del equipo en una conversación previa (comercial, por ejemplo) — ahí se arranca directo desde el pedido de los 5 puntos, sin repetir credenciales.
+
 ## 2026-08-05 - Agrupa la nav de flujo del seller en Proceso / Herramientas
 
 Tipo de cambio: mejora de UI (`assets/js/auth-seller.js`, `assets/css/pages/public-seller.css`), sin cambios de backend ni de datos.
