@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.74',
+  number: '1.4.75',
   date:   '2026-08-06',
-  notes:  'Playbook VTEX↔VTEX: aclara que facturar es previo al despacho (adidas es la excepción, no el patrón); playbook Gestión Asistida: impresora de etiquetas es opcional',
+  notes:  'Playbook VTEX↔VTEX se separa en dos: Integración (onboarding, Fases 1-5) y Operación (runbook, Fases 6-8) — antes mezclaban un proyecto con fin y un proceso sin fin',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.75', date: '2026-08-06', desc: 'El playbook "Integración VTEX↔VTEX" (doc + página interna) mezclaba dos cosas de naturaleza distinta bajo una sola numeración de "Fase": un checklist de onboarding con fin (Fases 1-5) y un runbook operativo sin fin (Fases 6-8, cancelaciones/fulfillment/pedidos no entregados/devoluciones). Se separó en dos documentos y dos páginas: integracion-vtex-vtex.html (onboarding) y la nueva operacion-vtex-vtex.html (runbook), cruzadas entre sí. Se actualizaron las 16 páginas internas que enlazaban a la anterior y la referencia de Commerce Hub.' },
   { v: '1.4.74', date: '2026-08-06', desc: 'Auditoría cruzada con Commerce Hub: playbook VTEX↔VTEX aclara que facturar es previo al despacho para todo seller nuevo (el workaround de factura ficticia de adidas queda marcado como excepción puntual) y saca la tarea fantasma "2.11 Productos aprobados" (ya cubierta en Reglas). Playbook Gestión Asistida suma que la impresora de etiquetas es opcional (se puede imprimir en la impresora normal y pegar a mano) en el checklist de instalación, la guía del seller y la plantilla de mail de kickoff.' },
   { v: '1.4.73', date: '2026-08-05', desc: 'Portal de Sellers: la nav compartida de las 7 páginas públicas (public-flow-nav) era una lista plana; ahora agrupa Presentación/Simulador/Calificación/Relevamiento/Gantt/Integración como "Proceso" y Catálogo como "Herramientas", separados por un divisor visual, igual que ya distingue public/index.html.' },
   { v: '1.4.72', date: '2026-08-04', desc: 'Playbook "Integración Gestión Asistida" (Fase 9): "Responsabilidades operativas" pasa de 4 líneas genéricas a 6 pasos detallados (asignación, búsqueda, control de calidad, pickeo/facturación, empaquetado/etiquetado, remito/despacho), adaptando el instructivo b2c de Preparación y Despacho al modelo de un solo depósito por seller. Reflejado también en la guía pública del seller (#operar-ga, ahora 8 pasos).' },

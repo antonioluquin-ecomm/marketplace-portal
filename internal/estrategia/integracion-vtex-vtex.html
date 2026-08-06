@@ -65,6 +65,7 @@
         <a class="nav" data-page="estrategia" href="./proyecto-marketplace.html">Proyecto Marketplace</a>
         <a class="nav" data-page="estrategia" href="./modelo-integracion.html">Modelo de Integración</a>
         <a class="nav active" data-page="estrategia" href="./integracion-vtex-vtex.html">Integración VTEX ↔ VTEX</a>
+        <a class="nav" data-page="estrategia" href="./operacion-vtex-vtex.html">Operación VTEX ↔ VTEX</a>
         <a class="nav" data-page="estrategia" href="./modelo-economico.html">Modelo Económico</a>
         <a class="nav" data-page="estrategia" href="./governance.html">Governance</a>
         <a class="nav" data-page="estrategia" href="./proceso-onboarding.html">Proceso de Onboarding</a>
@@ -103,48 +104,42 @@
         <a href="#f3">3 · Precio/Pagos</a>
         <a href="#f4">4 · Front</a>
         <a href="#f5">5 · Pedido</a>
-        <a href="#f6">6 · Cancelaciones</a>
-        <a href="#f7a">7a · Fulfillment</a>
-        <a href="#f7b">7b · No entregados</a>
-        <a href="#f8">8 · Inversa</a>
-        <a href="#slas">SLAs</a>
         <a href="#agujeros">Pendientes</a>
       </nav>
 
       <section id="inicio">
-        <div class="page-eyebrow">Playbook operativo · Marketplace Sporting</div>
+        <div class="page-eyebrow">Playbook de onboarding · Marketplace Sporting</div>
         <h1>Integración VTEX ↔ VTEX</h1>
-        <p class="lead">Proceso end-to-end para incorporar y operar un seller que ya usa VTEX (integración tipo <strong>Seller VTEX</strong>). Es la vista interna: cubre las tareas de todos los roles, las reglas del negocio, los automatismos del sistema y los SLAs. La vista del seller es un subconjunto de esto. Fuente: <code>docs/integracion-vtex-vtex.md</code>.</p>
+        <p class="lead">Onboarding de un seller que ya usa VTEX (integración tipo <strong>Seller VTEX</strong>): alta, catálogo, precio/stock/pagos y front. Es un proyecto con inicio y fin — termina en Go Live. La operación diaria del seller ya activo (cancelaciones, fulfillment, pedidos no entregados, devoluciones) es un runbook aparte: <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>. Fuente: <code>docs/integracion-vtex-vtex.md</code>.</p>
         <div class="hero">
           <div class="panel">
             <h2>Qué resuelve esta página</h2>
-            <p>Ordena todo el proceso para poder crear y asignar tareas por rol, y sirve de referencia operativa durante el onboarding y la operación de cada seller.</p>
+            <p>Ordena el onboarding para poder crear y asignar tareas de setup por rol, punta a punta hasta el Go Live de cada seller.</p>
             <div class="callout">El playbook es el deep-dive de la etapa <strong>Integración</strong> del <a href="./proceso-onboarding.html" style="color:var(--g);font-weight:700">Onboarding</a>, para el modelo <strong>VTEX ↔ VTEX</strong> del <a href="./modelo-integracion.html" style="color:var(--g);font-weight:700">Modelo de Integración</a>.</div>
           </div>
           <div class="panel soft">
             <h2>Cómo se usa</h2>
             <ul>
-              <li>Onboarding: checklist de tareas de setup por seller (Fases 1-5).</li>
-              <li>Operación: runbook de responsabilidades por pedido (Fases 6-8).</li>
+              <li>Onboarding: checklist de tareas de setup por seller, Fase 1 a Go Live.</li>
+              <li>Operación (día a día del seller activo): ver <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</li>
               <li>Términos y Condiciones: reglas y políticas que ve el seller.</li>
             </ul>
           </div>
         </div>
         <div class="kpis">
-          <div class="kpi"><div class="num">8</div><div class="lbl">Fases del proceso</div></div>
+          <div class="kpi"><div class="num">5</div><div class="lbl">Fases de onboarding</div></div>
           <div class="kpi info"><div class="num">6</div><div class="lbl">Roles involucrados</div></div>
-          <div class="kpi teal"><div class="num">7</div><div class="lbl">SLAs / plazos</div></div>
-          <div class="kpi warn"><div class="num">13</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi teal"><div class="num">11</div><div class="lbl">Pasos del roadmap</div></div>
+          <div class="kpi warn"><div class="num">8</div><div class="lbl">Pendientes por cerrar</div></div>
         </div>
       </section>
 
       <section id="leyenda" class="section">
-        <div class="section-head"><div class="section-title"><span>🧭</span><h2>Cómo leer el proceso</h2></div><p class="section-desc">Cada fase mezcla hasta cuatro tipos de contenido. Solo el primero alimenta el checklist de alta del seller.</p></div>
-        <div class="grid four">
-          <div class="card priority"><span class="tag green">Tarea (setup)</span><p>Una vez por seller en el onboarding. <strong>Va al tablero de tareas.</strong> Domina Fases 1-5.</p></div>
-          <div class="card target"><span class="tag info">Responsabilidad operativa</span><p>Recurrente por pedido (runtime). Va a un <strong>RACI / runbook</strong>, no al alta. Domina Fases 6-8.</p></div>
-          <div class="card transitional"><span class="tag warn">Regla / decisión</span><p>Política fija del negocio. No se asigna a nadie: va a <strong>T&amp;C</strong>.</p></div>
-          <div class="card"><span class="tag">Flujo automático</span><p>Lo que hace el sistema solo (VTEX↔PIM, mails, reembolsos). Sin dueño.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧭</span><h2>Cómo leer el proceso</h2></div><p class="section-desc">Este documento es casi enteramente un checklist de setup. No incluye responsabilidades operativas recurrentes (RACI de cancelación, fulfillment, devoluciones) — eso vive en <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</p></div>
+        <div class="grid">
+          <div class="card priority"><span class="tag green">Tarea (setup)</span><p>Una vez por seller en el onboarding. <strong>Va al tablero de tareas.</strong></p></div>
+          <div class="card transitional"><span class="tag warn">Regla / decisión</span><p>Política fija del negocio para tomar decisiones de setup. No se asigna a nadie: va a <strong>T&amp;C</strong>.</p></div>
+          <div class="card"><span class="tag">Flujo automático</span><p>Lo que hace el sistema solo (VTEX↔PIM). Sin dueño, aparece en la Fase 5 como base del runbook.</p></div>
         </div>
         <h3>Roles canónicos</h3>
         <div class="rolechips">
@@ -172,12 +167,12 @@
             <tr><td>2</td><td><strong>Catálogo</strong></td><td>2</td><td>Seller + Ecomm</td><td>Mapeo de marcas, categorías, talles, especificaciones.</td></tr>
             <tr><td>3</td><td><strong>Precio, Stock y Pagos</strong></td><td>3</td><td>Seller + Ecomm</td><td>Fuente de precio/stock, condición comercial, medios de pago.</td></tr>
             <tr><td>4</td><td><strong>Envíos</strong></td><td>4 (parte seller)</td><td>Seller</td><td>Costos, plazos, destinos excluidos.</td></tr>
-            <tr><td>5</td><td><strong>Devoluciones</strong></td><td>8</td><td>Seller + Agente PIM</td><td>Logística inversa y condiciones de devolución.</td></tr>
+            <tr><td>5</td><td><strong>Devoluciones</strong></td><td>8 (ver Operación)</td><td>Seller + Agente PIM</td><td>Logística inversa y condiciones de devolución — tareas de setup detalladas en <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</td></tr>
             <tr><td>6</td><td><strong>Configuración en PIM</strong></td><td>5</td><td>Agente PIM</td><td>Tienda + depósito + asociación VTEX↔PIM. Puede correr en paralelo a 2-5, pero <strong>bloquea</strong> el paso 7.</td></tr>
             <tr><td>7</td><td><strong>Validación en QA</strong></td><td>—</td><td>Seller + Ecomm</td><td>Flujo completo: catálogo → aprobación → pedido → despacho → devolución.</td></tr>
             <tr><td>8</td><td><strong>Conexión y réplica en Producción</strong></td><td>1 (repetida)</td><td>Seller + Ecomm</td><td>Se repite la configuración validada en QA, ahora en producción.</td></tr>
             <tr><td>9</td><td><strong>Prueba piloto en Producción</strong></td><td>—</td><td>Seller + Ecomm</td><td>Validar con un set acotado de productos antes de abrir todo el catálogo.</td></tr>
-            <tr><td>10</td><td><strong>Go Live</strong></td><td>2</td><td>—</td><td>Seller "Activo"; catálogo visible con precio y stock.</td></tr>
+            <tr><td>10</td><td><strong>Go Live</strong></td><td>2</td><td>—</td><td>Seller "Activo"; catálogo visible con precio y stock. A partir de acá, la operación diaria pasa a regirse por <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</td></tr>
           </tbody>
         </table></div>
         <div class="callout"><strong>Por qué el paso 6 es fácil de omitir:</strong> no tiene tarea del lado del Seller, pero es la única precondición dura documentada (Fase 5) para que un pedido funcione. <strong>Por qué hay dos "pruebas" (7 y 9):</strong> validan cosas distintas — la 7 valida que el flujo funciona (QA); la 9 valida que funciona con datos reales de producción, acotado, antes de abrir todo el catálogo.</div>
@@ -203,13 +198,13 @@
               <tr><td>Información básica</td><td>Datos del seller</td><td><em>Nombre del seller*</em> (storefront) · <em>ID de seller*</em> (fijo al crear) · <em>Grupo de sellers</em> (opcional).</td></tr>
               <tr><td>Acuerdos comerciales</td><td>Acuerdos comerciales</td><td><strong>Políticas comerciales del marketplace*</strong> (ver callout abajo) · <em>Comisión de productos*/envío*</em> (%) · toggle <strong>GiftCards</strong> — desactivado por defecto, confirma la regla de Fase 3; lo tildea <strong>Ecomm</strong> al crear cada seller, el seller no toca esta pantalla.</td></tr>
               <tr><td>Información adicional <em>(opcional, colapsada)</em></td><td>Datos del seller</td><td><em>Email</em> · <em>Nro. de registro de persona jurídica</em> · <em>Descripción</em>.</td></tr>
-              <tr><td>— <em>(no existe en la creación)</em></td><td>Información operativa</td><td><em>Política de envío</em> · <em>Cambios y devoluciones</em> · <em>Política de privacidad y seguridad</em> — ubicación nativa para las reglas de Fase 4.6-4.8 y Fase 8.</td></tr>
+              <tr><td>— <em>(no existe en la creación)</em></td><td>Información operativa</td><td><em>Política de envío</em> · <em>Cambios y devoluciones</em> · <em>Política de privacidad y seguridad</em> — ubicación nativa para las reglas de Fase 4.6-4.8 y del runbook de devoluciones (Fase 8 de Operación).</td></tr>
             </tbody>
           </table></div>
           <p style="margin:10px 0">Al pie del formulario: checkbox <strong>"Pausar el seller después de registrarlo"</strong> (activado por defecto) — "En pausa" hasta terminar de configurar; "Activo" cuando está listo.</p>
           <p style="margin:0 0 10px"><strong>ID de afiliado</strong> — código corto derivado del nombre del seller (ej. Topper → <code>TOP</code>). Junto con la cuenta VTEX y la política comercial, arma la URL de fulfillment: <code>…/fulfillment?an={cuenta}&amp;affiliateId={ID afiliado}&amp;sc={política comercial}</code>.</p>
           <div class="callout danger"><strong>Hay DOS "política comercial" distintas:</strong> (1) la de <strong>Ecomm</strong>, campo obligatorio "Políticas comerciales del marketplace", vive en el VTEX de Sporting, nueva por cada seller (no se reutiliza), se crea <strong>antes</strong> de llegar a este formulario — en la pestaña Integración es el mismo campo, como ID numérico. (2) la del <strong>Seller</strong> (tarea 1.2), vive en <strong>su propio</strong> VTEX. Son objetos desacoplados: la del Seller <strong>no aparece en este formulario y no bloquea el alta</strong> — hace falta recién para la tarea <strong>2.9</strong> (Fase 2, asignarla a productos), y puede tramitarse en paralelo sin frenar nada de este lado.</div>
-          <div class="callout"><strong>Contacto de integración:</strong> Gabriel Luna — <code>gabriel.luna@luquin.com.ar</code> (distinto del contacto operativo de Fase 7b). <strong>Kickoff:</strong> Gabriel manda el primer mail con link + usuario y contraseña del portal ya creados; el seller entra y consulta la guía desde ahí.</div>
+          <div class="callout"><strong>Contacto de integración:</strong> Gabriel Luna — <code>gabriel.luna@luquin.com.ar</code> (distinto del contacto operativo, ver Operación VTEX ↔ VTEX). <strong>Kickoff:</strong> Gabriel manda el primer mail con link + usuario y contraseña del portal ya creados; el seller entra y consulta la guía desde ahí.</div>
           <div class="callout"><strong>Equipo de integración del seller:</strong> al kickoff, preguntarle con qué integrador/agencia técnica trabaja su VTEX (ej. Infracommerce, Suma, u otro). Puede coincidir con nuestro propio proveedor (Infracommerce, ver roles) o ser uno distinto — sirve como contacto técnico de referencia.</div>
           <div class="callout warn">Pendiente (no bloqueante): credenciales/permisos que activan la API, y qué hace el toggle MOI — para Topper, dejarlo desactivado (pendientes 1.1-c / 1.1-d).</div>
         </div>
@@ -286,7 +281,7 @@
       <section id="f4" class="section">
         <div class="section-head"><div class="section-title"><span>🖥️</span><h2>Fase 4 — Front</h2></div><p class="section-desc">Todo lo que ve el cliente. Mayoría de tareas de Ecomm, con dependencias de Diseño (grillas) e Infracommerce (checkout, vía ticket).</p></div>
         <div class="callout"><strong>Una config alimenta tres features:</strong> el valor de especificación <strong>“Seller”</strong> del filtrado (4.1) es el mismo dato de la cucarda (4.2) y de la leyenda de PDP/checkout (4.5).</div>
-        <div class="callout warn"><strong>"Envíos" aparece en tres fases — no es el mismo tema repetido:</strong> acá (4.6-4.8) el seller carga costos, plazos y destinos en <strong>su propio VTEX</strong> — es config de front. La Fase 7a define quién despacha (seller o MP). La Fase 8 define quién retira en una devolución. Mismo tema, momentos distintos del proceso.</div>
+        <div class="callout warn"><strong>"Envíos" aparece en varios lugares — no es el mismo tema repetido:</strong> acá (4.6-4.8) el seller carga costos, plazos y destinos en <strong>su propio VTEX</strong> — es config de front. En <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación</a>, la Fase 7a define quién despacha (seller o MP) y la Fase 8 quién retira en una devolución. Mismo tema, momentos distintos del proceso — las dos últimas ya son runbook, no onboarding.</div>
         <h3>Tareas</h3>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>#</th><th>Ítem</th><th>Seller</th><th>Ecomm</th><th>Infra</th><th>Diseño</th><th>Estado</th></tr></thead>
@@ -315,8 +310,8 @@
       </section>
 
       <section id="f5" class="section">
-        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 5 — Pedido</h2></div><p class="section-desc">El pedido viaja solo entre VTEX y PIM. Solo hay 3 tareas de setup, todas del Agente PIM y previas al go-live.</p></div>
-        <h3>Flujo automático</h3>
+        <div class="section-head"><div class="section-title"><span>🧾</span><h2>Fase 5 — Pedido (setup)</h2></div><p class="section-desc">Solo hay 3 tareas de setup, todas del Agente PIM y previas al go-live. El día a día de cada pedido ya es runbook operativo — ver <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</p></div>
+        <h3>Cómo se arma el circuito (referencia)</h3>
         <ul class="autolist">
           <li><strong>Customer PO</strong> — el número del seller es el ID de afiliado (derivado de su nombre, ej. Topper → <code>TOP</code>) + el del MP. Ej.: <code>1385074194464-01</code> → <code>TOP-1385074194464-01</code>.</li>
           <li><strong>Creación en VTEX</strong> — al finalizar la compra, el pedido es visible en ambos VTEX.</li>
@@ -336,159 +331,12 @@
         <ul>
           <li><strong>Mail del cliente:</strong> visible solo en el VTEX del MP; enmascarado para el seller (funcional, vigencia 60 días).</li>
           <li><strong>Valores:</strong> el MP puede ajustar el valor final; el seller no (función que no se usaría).</li>
-          <li><strong>Baja de pedidos:</strong> los pedidos activos de seller no se dan de baja desde PIM; las cancelaciones solo las hace el seller desde su VTEX.</li>
+          <li><strong>Baja de pedidos:</strong> los pedidos activos de seller no se dan de baja desde PIM; las cancelaciones solo las hace el seller desde su VTEX — ver el runbook de cancelaciones en <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</li>
         </ul>
-      </section>
-
-      <section id="f6" class="section">
-        <div class="section-head"><div class="section-title"><span>🚫</span><h2>Fase 6 — Cancelaciones (por el seller)</h2></div><p class="section-desc">Cancelación por falta de stock. Flujo mayormente automático; el único punto humano es la decisión del MP en la ventana de 24 h.</p></div>
-        <div class="callout">La cancelación iniciada por el <strong>cliente</strong> (arrepentimiento) no está acá — se maneja en la Fase 7b.</div>
-        <h3>Flujo automático (estados VTEX)</h3>
-        <ul class="autolist">
-          <li>El seller cancela desde su VTEX (por stock).</li>
-          <li>El pedido pasa a <strong>“Esperando Cambio de Seller”</strong>.</li>
-          <li>El MP tiene 24 h para actuar.</li>
-          <li>Al pasar a <strong>“Cancelado”</strong>: correo de cancelación + reembolso, ambos automáticos.</li>
-        </ul>
-        <h3>Responsabilidades operativas</h3>
-        <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>Actor</th><th>Acción</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Seller</strong></td><td>Cancelar desde su VTEX cuando no tiene stock (sin aviso previo).</td></tr>
-            <tr><td><strong>MP — Ecomm / Operaciones</strong></td><td>Dentro de 24 h: cancela directo (no espera la cancelación automática por inacción).</td></tr>
-            <tr><td><em>Sistema (VTEX)</em></td><td>Reembolso y correo de cancelación automáticos.</td></tr>
-          </tbody>
-        </table></div>
-        <div class="callout"><strong>No hay reasignación de pedido a otro seller</strong> en este flujo hoy — el MP cancela directo dentro de la ventana de 24 h.</div>
-        <h3>Reglas / decisiones</h3>
-        <ul>
-          <li>Sin cancelaciones parciales: si falta un producto, se cancela el pedido completo.</li>
-          <li>Motivo único: siempre por stock. <strong>SLA seller:</strong> 5 días. <strong>SLA MP:</strong> 24 h.</li>
-        </ul>
-      </section>
-
-      <section id="f7a" class="section">
-        <div class="section-head"><div class="section-title"><span>🚚</span><h2>Fase 7a — Fulfillment (camino feliz)</h2></div><p class="section-desc">Desde que el seller recibe el pedido hasta la entrega sin incidentes.</p></div>
-        <div class="decision">
-          <div class="decision-box"><span class="tag info">Modo A</span><h3>Logística directa (seller)</h3><p>El seller gestiona el despacho y <strong>carga la info logística en su VTEX</strong>. Aplica la tarea 7a.1.</p></div>
-          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Logística por Marketplace</h3><p>El despacho dispara la <strong>solicitud de retiro</strong> a nuestros carriers. Aplica 7a.2. No hace falta crear ni mapear logística.</p></div>
-        </div>
-        <h3>Flujo automático (VTEX ↔ PIM)</h3>
-        <ul class="autolist">
-          <li><strong>Factura</strong> → estado “facturado” dispara el mail con la URL de la factura (desde VTEX).</li>
-          <li><strong>Despacho</strong> → la info logística del seller dispara el mail de “despachado” <strong>desde PIM</strong> (no desde VTEX).</li>
-          <li><strong>Entrega</strong> → <code>Delivered: True</code> impacta en el VTEX del MP y luego en PIM (facturado).</li>
-        </ul>
-        <h3>Campos VTEX de referencia — <code>packageAttachment › packages › …</code></h3>
-        <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>Campo</th><th>Para qué</th></tr></thead>
-          <tbody>
-            <tr><td><code>invoiceUrl</code></td><td>URL de la factura → dispara el mail de facturado.</td></tr>
-            <tr><td><code>Courier</code></td><td>Carrier / logística que envía.</td></tr>
-            <tr><td><code>trackingNumber</code></td><td>Número de seguimiento.</td></tr>
-            <tr><td><code>trackingUrl</code></td><td>URL de seguimiento.</td></tr>
-            <tr><td><code>courierStatus</code></td><td>Estado logístico del carrier → PIM lo consume.</td></tr>
-          </tbody>
-        </table></div>
-        <h3>Tareas de setup</h3>
-        <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>#</th><th>Ítem</th><th>Aplica a</th><th>Seller</th><th>Ecomm</th><th>PIM</th><th>Estado</th></tr></thead>
-          <tbody>
-            <tr><td>7a.1</td><td><strong>Estados logísticos — logística nueva</strong></td><td>Modo A, carrier no configurado</td><td>Informar qué logística usa y pasar los estados.</td><td>Mapear los estados al estándar y pasarlos a PIM.</td><td>Crear la logística en PIM; consumir <code>courierStatus</code> y <code>Courier</code>; cargar el mapeo.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>7a.2</td><td><strong>Config. de retiro por MP</strong></td><td>Modo B</td><td>—</td><td>Configurar que el despacho envíe la solicitud de retiro a nuestros carriers.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>7a.3</td><td><strong>Integración de factura (fallback)</strong></td><td>Si el seller no carga la factura</td><td>—</td><td>Gestionar una integración para recibir la <code>invoiceUrl</code>.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
-          </tbody>
-        </table></div>
-        <h3>Reglas / decisiones</h3>
-        <ul>
-          <li><strong>Facturación previa al despacho:</strong> el seller factura como parte de la preparación del pedido, <strong>antes</strong> de entregarlo a la logística — es el flujo estándar para todo seller nuevo. El <strong>envío de la factura al cliente es del MP</strong> (automático por mail).</li>
-          <li><strong>Excepción — adidas:</strong> hoy adidas usa un workaround propio (factura ficticia para avanzar el estado en el despacho + factura real recién al llegar a "Entregado"). Es un caso puntual de ese seller, <strong>no el patrón a replicar</strong>.</li>
-          <li><strong>Factura A:</strong> no se aceptan para productos seller.</li>
-          <li><strong>Mail de despacho:</strong> se envía desde PIM, no desde VTEX.</li>
-          <li><strong>Estados logísticos:</strong> no llegan solos a VTEX; el seller los carga en <code>courierStatus</code>. En modo B no hace falta crear ni mapear logística.</li>
-        </ul>
-      </section>
-
-      <section id="f7b" class="section">
-        <div class="section-head"><div class="section-title"><span>📭</span><h2>Fase 7b — Pedidos no entregados</h2></div><p class="section-desc">Casos en que la entrega no se concreta y hay que reembolsar. Flujo 100 % operativo, liderado por CS del Marketplace (Luquin).</p></div>
-        <h3>7b.1 · Arrepentimiento de compra (cancelación del cliente)</h3>
-        <p>Entrada: el cliente contacta al MP (<code>sellers-soporte@sporting.com.ar</code>). CS MP verifica el estado en PIM y contacta a CS del seller.</p>
-        <div class="decision">
-          <div class="decision-box"><span class="tag info">A · Cancelación posible</span><p><strong>A1</strong> · No despachado (VTEX: Pago aprobado) → el seller cancela desde su VTEX → reembolso automático.<br><strong>A2</strong> · Despachado y el seller lo retiene → reembolso.</p></div>
-          <div class="decision-box b"><span class="tag warn">B · Cancelación imposible</span><p>El seller informa que no es factible → CS MP ofrece: <strong>B1</strong> rechazar el paquete, o <strong>B2</strong> recibir y devolver por el portal de cambios (Fase 8).</p></div>
-        </div>
-        <p style="margin-top:10px"><strong>SLA:</strong> el cliente tiene 30 días para solicitar la cancelación. Sin cancelaciones parciales.</p>
-        <h3>7b.2 · Falta de información / dirección incorrecta</h3>
-        <ul class="autolist">
-          <li>El carrier no puede entregar → el seller pide info adicional al MP.</li>
-          <li>CS MP contacta al cliente para recabar los datos.</li>
-          <li>El seller responde al carrier. <strong>SLA: 4-5 días</strong> o el producto vuelve al CD.</li>
-          <li>Si vuelve al CD sin respuesta: el seller envía un informe → CS Luquin reembolsa.</li>
-        </ul>
-        <h3>7b.3 · Paquete perdido (Lost in Transit)</h3>
-        <ul class="autolist">
-          <li>Se detecta la pérdida (carrier informa / vence el tránsito) → seller/carrier lo reporta al MP.</li>
-          <li><strong>CS Luquin</strong> ejecuta el reembolso al cliente (manual).</li>
-          <li><strong>Costo:</strong> se reclama al carrier; el reclamo lo presenta quien lo contrató (seller en A, MP en B).</li>
-        </ul>
-        <h3>Reglas / SLA</h3>
-        <ul>
-          <li><strong>Reembolsos, dos vías:</strong> automático (VTEX, al cancelar en el VTEX del seller) o manual (CS Luquin, tras el informe).</li>
-          <li>SLAs: arrepentimiento 30 días · dirección incorrecta 4-5 días.</li>
-        </ul>
-      </section>
-
-      <section id="f8" class="section">
-        <div class="section-head"><div class="section-title"><span>↩️</span><h2>Fase 8 — Logística inversa / devoluciones</h2></div><p class="section-desc">Todo pasa por el Portal de Cambios y Devoluciones (self-service). Vuelven las tareas de setup + el botón que dispara tres acciones.</p></div>
-        <div class="decision">
-          <div class="decision-box"><span class="tag info">Modo A</span><h3>Inversa por el seller</h3><p>El seller indica su Carrier (tareas 8.2 / 8.3 / 8.4).</p></div>
-          <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Inversa por el Marketplace</h3><p>Ecomm consigue un contrato de retiro (tarea 8.5).</p></div>
-        </div>
-        <h3>Flujo del portal (self-service del cliente)</h3>
-        <ul class="autolist">
-          <li>El cliente accede al Portal de Cambios y Devoluciones (hasta <strong>180 días</strong>).</li>
-          <li>Ingresa DNI + N.º de pedido/orden.</li>
-          <li>El N.º de orden determina si es del seller o del MP → aplica las políticas del seller (T&amp;C).</li>
-          <li><strong>Devolución</strong> (dentro de 60 días): producto → motivo → verificar datos. <strong>Garantía</strong> (hasta 180 días): producto → verificar datos (sin motivo).</li>
-        </ul>
-        <div class="callout"><strong>El botón “crear devolución” dispara 3 acciones atómicas:</strong> devolución en PIM · devolución en el VTEX del seller · orden de retiro para el Carrier.</div>
-        <h3>Tareas de setup</h3>
-        <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>#</th><th>Ítem</th><th>Aplica a</th><th>Seller</th><th>Ecomm</th><th>PIM</th><th>Estado</th></tr></thead>
-          <tbody>
-            <tr><td>8.1</td><td><strong>Condiciones de devolución</strong></td><td>Siempre</td><td>Indicar plazos, categorías no habilitadas, etc.</td><td>Redactar las condiciones en T&amp;C.</td><td>Configurar el portal con esas condiciones.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>8.2</td><td><strong>Carrier de inversa — configurado</strong></td><td>Modo A, carrier conocido</td><td>Compartir usuario y credenciales del Carrier.</td><td>—</td><td>Configurar el portal para crear órdenes de retiro.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>8.3</td><td><strong>Carrier de inversa — nuevo</strong></td><td>Modo A, carrier nuevo</td><td>Indicar el Carrier nuevo.</td><td>—</td><td>Crear la config para órdenes de retiro con esa logística.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>8.4</td><td><strong>Estados logísticos de inversa</strong></td><td>Modo A</td><td>Enviar los estados de inversa.</td><td>Mapear al estándar de inversa y pasar a PIM.</td><td>Cargar el mapeo.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>8.5</td><td><strong>Contrato de retiro (inversa por MP)</strong></td><td>Modo B</td><td>—</td><td>Solicitar un contrato de retiro al carrier.</td><td>Configurar el portal con ese contrato.</td><td><span class="pill g">Listo</span></td></tr>
-          </tbody>
-        </table></div>
-        <h3>Reglas / decisiones</h3>
-        <ul>
-          <li><strong>Canal único:</strong> las devoluciones se hacen sí o sí por el portal.</li>
-          <li><strong>Plazos:</strong> portal 180 días · Devolución 60 días · Garantía 180 días.</li>
-          <li><strong>Políticas por seller</strong> (plazos, categorías no habilitadas) → deben estar en T&amp;C.</li>
-        </ul>
-      </section>
-
-      <section id="slas" class="section">
-        <div class="section-head"><div class="section-title"><span>⏱️</span><h2>Plazos y SLAs (consolidado)</h2></div><p class="section-desc">Estaban dispersos por todo el proceso; los sellers los piden juntos.</p></div>
-        <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>Plazo</th><th>Aplica a</th><th>Quién debe cumplirlo</th><th>Fase</th></tr></thead>
-          <tbody>
-            <tr><td><strong>24 h</strong></td><td>Cancelar el pedido ante aviso de stock del seller ("Esperando Cambio de Seller").</td><td>Marketplace</td><td>6</td></tr>
-            <tr><td><strong>5 días</strong></td><td>Cancelar un pedido por falta de stock.</td><td>Seller</td><td>6</td></tr>
-            <tr><td><strong>4-5 días</strong></td><td>Responder al carrier ante dirección incorrecta, antes de que vuelva al CD.</td><td>Seller</td><td>7b</td></tr>
-            <tr><td><strong>30 días</strong></td><td>Solicitar la cancelación por arrepentimiento.</td><td>Cliente</td><td>7b</td></tr>
-            <tr><td><strong>60 días</strong></td><td>Vigencia del mail enmascarado del cliente.</td><td><em>sistema</em></td><td>5</td></tr>
-            <tr><td><strong>60 días</strong></td><td>Iniciar una Devolución en el portal.</td><td>Cliente</td><td>8</td></tr>
-            <tr><td><strong>180 días</strong></td><td>Vigencia del portal / Devolución por Garantía.</td><td>Cliente</td><td>8</td></tr>
-          </tbody>
-        </table></div>
       </section>
 
       <section id="agujeros" class="section">
-        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 13 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 8 ítems, ninguno bloqueante. Los pendientes del runbook operativo (Fases 6-8) viven en <a href="./operacion-vtex-vtex.html" style="color:var(--g);font-weight:700">Operación VTEX ↔ VTEX</a>.</p></div>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
           <tbody>
@@ -500,16 +348,11 @@
             <tr><td>Imágenes</td><td>Decidir con el seller qué se hace con fondos grises.</td></tr>
             <tr><td>4.2</td><td>Texto exacto de la cucarda (“Tienda xxx” es placeholder).</td></tr>
             <tr><td>4.4 / 4.5</td><td>Evaluar unificar los dos tickets a Infracommerce en uno.</td></tr>
-            <tr><td>7a.3</td><td>Definir la integración para recibir la <code>invoiceUrl</code> cuando el seller no factura por VTEX.</td></tr>
-            <tr><td>7b.1</td><td>Confirmar el árbol de arrepentimiento definitivo (hoy hay dos versiones no del todo alineadas).</td></tr>
-            <tr><td>7b</td><td>Definir quién en CS Luquin ejecuta el reembolso manual y con qué herramienta.</td></tr>
-            <tr><td>8.4</td><td>Confirmar si los estados de inversa comparten catálogo con los de forward (7a).</td></tr>
-            <tr><td>8</td><td>Diferencia operativa entre Devolución (60 d) y Garantía (180 d) más allá del plazo.</td></tr>
           </tbody>
         </table></div>
       </section>
 
-      <div class="footer">Marketplace Sporting · Integración VTEX ↔ VTEX · Playbook interno. Fuente de verdad: <code>docs/integracion-vtex-vtex.md</code>.</div>
+      <div class="footer">Marketplace Sporting · Integración VTEX ↔ VTEX · Playbook de onboarding (Fases 1-5). Fuente de verdad: <code>docs/integracion-vtex-vtex.md</code>. Runbook operativo: <a href="./operacion-vtex-vtex.html" style="color:var(--g)">Operación VTEX ↔ VTEX</a>.</div>
     </main>
   </div>
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-08-06 - Separa el playbook VTEX↔VTEX en Integración (onboarding) y Operación (runbook)
+
+Tipo de cambio: reorganización de contenido (`docs/`, `internal/estrategia/`), sin cambios de lógica de negocio.
+
+Auditoría crítica a pedido del usuario sobre si el documento entreveraba dos temas de naturaleza distinta. Conclusión: sí — `docs/integracion-vtex-vtex.md` y su vista interna mezclaban, bajo una sola numeración de "Fase" (1 a 8), un **checklist de onboarding** (Fases 1-5: alta, catálogo, precio/stock/pagos, front — un proyecto con inicio y fin, termina en Go Live) con un **runbook operativo** (Fases 6-8: cancelaciones, fulfillment, pedidos no entregados, devoluciones — un proceso sin fin, se repite en cada pedido para siempre). El propio documento ya necesitaba una sección "Cómo leer este documento" para compensar la mezcla, y Commerce Hub ya extraía solo la capa runtime de este documento para su página "Procesos Sellers" — evidencia de que el ecosistema ya trataba estas dos cosas como dominios distintos.
+
+- **`docs/integracion-vtex-vtex.md`**: se recorta a las Fases 1-5 (onboarding). Se agrega intro, legend y "Estado del documento" explicando la separación y linkeando al documento complementario.
+- **`docs/operacion-vtex-vtex.md`** (nuevo): Fases 6, 7a, 7b y 8 (runbook) + la tabla consolidada de "Plazos y SLAs", que antes vivía al final del documento único.
+- **`internal/estrategia/integracion-vtex-vtex.html`**: se recorta igual que el `.md` — queda con Fases 1-5, roadmap y su propio registro de agujeros (8 ítems, antes 13).
+- **`internal/estrategia/operacion-vtex-vtex.html`** (nuevo): vista interna del runbook, mismo shell visual que el resto de `internal/estrategia/`, con su propio registro de agujeros (5 ítems).
+- Se agrega el link a "Operación VTEX ↔ VTEX" en el sidebar de las 16 páginas internas que ya enlazaban a "Integración VTEX ↔ VTEX" (incluyendo la tarjeta del Hub Central en `index.html`), y se cruzan ambas páginas entre sí.
+- `internal/estrategia/governance.html`: el gap "Sistemas propios — Sin playbook" ahora referencia ambos documentos de VTEX↔VTEX (Integración + Operación).
+- **Commerce Hub** (`../commerce-hub/src/data/documentacion/procesos.json`): las dos citas a `marketplace-portal/docs/integracion-vtex-vtex.md` (una de ellas específicamente sobre la Fase 6 de cancelaciones) se actualizan a `docs/operacion-vtex-vtex.md`, que es donde vive ahora ese contenido runtime.
+- `public/integracion/integracion-seller.html` (la guía del seller) **no se tocó** — sigue siendo una sola página continua con secciones ancladas (Preparar / Operar / Reglas / Plazos); para un lector externo consultando ocasionalmente, dos páginas separadas agregarían fricción de navegación sin resolver un problema real de esa audiencia.
+
 ## 2026-08-06 - Auditoría cruzada con Commerce Hub: facturación VTEX↔VTEX e insumos de Gestión Asistida
 
 Tipo de cambio: correcciones de contenido en playbooks (`docs/`, `internal/estrategia/`, `public/integracion/`), sin cambios de código.
