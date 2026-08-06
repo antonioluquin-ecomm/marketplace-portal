@@ -34,7 +34,7 @@ checklist de alta del seller.
 
 ### Roles canónicos
 
-Usar **siempre** estos nombres (la redacción original mezclaba "Ecomm / Ecom / Marketplace / Markeplace"):
+Usar **siempre** estos nombres (evitar variantes como "Ecomm / Ecom / Marketplace / Markeplace"):
 
 | Rol | Quién es |
 |---|---|
@@ -76,35 +76,44 @@ entrar al detalle fase por fase — de acá sale también la versión que ve el 
 | 9 | **Prueba piloto en Producción** | — | Seller + Ecomm | Validar con un set acotado de productos antes de abrir todo el catálogo. |
 | 10 | **Go Live** | Fase 2 (2.11) | — | El seller queda **"Activo"**; el catálogo es visible en el sitio (regla: solo con precio y stock). |
 
-> **Por qué el paso 6 no estaba en la redacción original:** es fácil de omitir porque no
-> tiene tarea del lado del **Seller** — pero es la única precondición **dura** documentada
-> (Fase 5) para que un pedido funcione. Conviene arrancarlo en paralelo a 2-5, no dejarlo
-> para el final.
+> **Paso 6 en paralelo, no al final:** no tiene tarea del lado del **Seller**, por eso es
+> fácil de omitir — pero es la única precondición **dura** documentada (Fase 5) para que un
+> pedido funcione. Conviene arrancarlo junto con los pasos 2-5.
 >
-> **Por qué hay dos "pruebas" (7 y 9) y no una sola:** son ambientes y objetivos distintos —
-> la 7 valida que el flujo *funciona* (QA); la 9 valida que el flujo funciona *con datos
-> reales de producción*, acotado, antes de exponer todo el catálogo.
+> **Por qué hay dos "pruebas" (7 y 9):** son ambientes y objetivos distintos — la 7 valida
+> que el flujo *funciona* (QA); la 9 valida que el flujo funciona *con datos reales de
+> producción*, acotado, antes de exponer todo el catálogo.
 >
-> **Este roadmap no va en el mail de kickoff completo** (ver
-> `plantilla-mail-kickoff-integracion.md`) — mandar los 11 pasos de entrada genera la misma
-> sobrecarga que ya evitamos separando tareas de reglas. El mail linkea a la guía; la hoja de
-> ruta completa vive ahí.
+> **Este roadmap no va en el mail de kickoff** (ver `plantilla-mail-kickoff-integracion.md`)
+> — el mail linkea a la guía; la hoja de ruta completa vive acá.
 
 ---
 
 ## Fase 1 — Conexión / Política comercial
 
-### 1.0 · Conexión entre VTEX (alta del seller)
+### 1.0 · Ambiente de conexión (QA o Producción)
+
+Antes de arrancar el alta, hay que preguntarle al seller si tiene una cuenta **VTEX de QA**
+propia. De la respuesta depende cómo se hace la tarea 1.1:
+
+- **Tiene cuenta QA** → se conecta **QA↔QA** y se prueba el flujo completo sin tocar
+  producción. Es el camino recomendado.
+- **No tiene cuenta QA** → la integración de prueba se hace directamente sobre su cuenta de
+  **producción**. Es menos ideal (hay que evaluar el riesgo caso por caso), pero es una
+  opción válida si el seller no tiene ambiente de pruebas.
+
+Una vez validado en QA, el paso 8 del roadmap repite la misma configuración sobre la cuenta
+de producción del seller.
+
+### 1.1 · Conexión entre VTEX (alta del seller)
 
 La conexión la **inicia Luquin** desde su VTEX, en **Marketplace › Sellers › Gestión ›
 botón "+ Agregar seller"**. Existe además un módulo **"Invitación de sellers"** en el mismo
-menú, pero **no se usa en este proceso** — el alta siempre es por "Agregar seller"
-(confirmado).
+menú, pero **no se usa en este proceso** — el alta siempre es por "Agregar seller".
 
-**Dos vistas de la misma UI** (confirmado con capturas reales de una cuenta de prueba
-`sportingioqa`): la **creación** es un formulario largo de una sola página; la **edición**
-de un seller ya creado reorganiza los **mismos campos** en 4 pestañas. Solo cambia el
-agrupamiento visual, no el contenido.
+**Dos vistas de la misma UI**: la **creación** es un formulario largo de una sola página; la
+**edición** de un seller ya creado reorganiza los **mismos campos** en 4 pestañas. Solo
+cambia el agrupamiento visual, no el contenido.
 
 **Secciones del formulario de creación, en su orden real** (`*` = obligatorio):
 
@@ -122,18 +131,16 @@ defecto) — el seller queda **"En pausa"** hasta terminar de configurarlo; pasa
 cuando está listo.
 
 **ID de afiliado** — código corto que identifica al seller, **derivado de su propio nombre**
-(confirmado: ej. Topper → `TOP`). El `SPG` visto en la cuenta de prueba correspondía a esa
-cuenta de test (Sporting probando consigo misma), no a una convención fija de Luquin.
-Prefija el Customer PO del seller (Fase 5). Junto con la cuenta VTEX y la política comercial,
+(ej. Topper → `TOP`). Prefija el Customer PO del seller (Fase 5). Junto con la cuenta VTEX y la política comercial,
 arma automáticamente la **URL de fulfillment**:
 `.../api/fulfillment?an={cuenta}&affiliateId={ID de afiliado}&sc={política comercial}`.
 
 > ⚠️ **Hay DOS "política comercial" distintas, no una:**
 > 1. **La de Ecomm** (campo "Políticas comerciales del marketplace", obligatorio) — vive en
->    el **VTEX de Sporting**, la crea **Ecomm**, **nueva por cada seller** (confirmado: no se
->    reutiliza entre sellers), y se crea **antes** de llegar a este formulario. En la pestaña
+>    el **VTEX de Sporting**, la crea **Ecomm**, **nueva por cada seller** (no se reutiliza
+>    entre sellers), y se crea **antes** de llegar a este formulario. En la pestaña
 >    Integración es el mismo campo, mostrado como **ID numérico** (ej. `4`) en vez de selector.
-> 2. **La del Seller** (tarea 1.1 más abajo) — vive en **su propio VTEX**, la pide él a su
+> 2. **La del Seller** (tarea 1.2 más abajo) — vive en **su propio VTEX**, la pide él a su
 >    agencia, y sirve para que él marque qué productos manda al Marketplace.
 >
 > Son objetos **desacoplados**: la del Seller no aparece en ningún campo de este formulario
@@ -141,15 +148,14 @@ arma automáticamente la **URL de fulfillment**:
 > su propia política. La del Seller hace falta recién en la tarea **2.9** (Fase 2, asignarla
 > a productos), y puede tramitarse en paralelo sin frenar nada de este lado.
 
-> **Ambiente de prueba (QA) antes de ir a producción:** preguntarle al seller si tiene una
-> cuenta **VTEX de QA** propia, para conectar **QA↔QA** y probar el flujo completo sin tocar
-> producción. Si no tiene, se hace la integración de prueba directamente sobre su cuenta de
-> **producción** (menos ideal — evaluar el riesgo caso por caso). **Se recomienda priorizar
-> siempre QA↔QA cuando sea posible.**
-
 > **Contacto de integración:** Gabriel Luna — `gabriel.luna@luquin.com.ar`. Es un contacto
 > **distinto** del operativo de la Fase 7b (`sellers-soporte@sporting.com.ar`), que es para
 > incidencias de pedidos ya en marcha, no para arrancar una integración.
+
+> **Equipo de integración del seller:** al kickoff, preguntarle con qué integrador/agencia
+> técnica trabaja su VTEX (ej. **Infracommerce**, **Suma**, u otro). Puede coincidir con
+> nuestro propio proveedor (**Infracommerce**, ver tabla de roles) o ser uno distinto — sirve
+> como contacto técnico de referencia para resolver dudas de configuración de su lado.
 
 > **Kickoff:** el primer contacto con el seller lo hace Gabriel por mail, con el **link de
 > acceso al portal + usuario y contraseña** ya creados (cuenta tipo Seller, ver
@@ -187,8 +193,10 @@ para qué sirve), no su uso recurrente sobre el catálogo completo.
 
 | # | Ítem | Descripción | Tarea Seller | Tarea Ecomm | Estado |
 |---|---|---|---|---|---|
-| 1.0 | Alta del seller | Ecomm crea el seller en **Gestión › Agregar seller** (tipo *Seller VTEX*). | Compartir su **cuenta de seller VTEX** y, si tiene, su **cuenta de QA**. | Crear su propia política comercial (prerrequisito); completar el alta; decidir QA vs. producción; activar cuando esté listo. | ✅ |
-| 1.1 | Solicitar política comercial (seller) | Necesaria para la tarea **2.9** (Fase 2) — no bloquea el alta (ver recuadro arriba). | Solicitar una nueva política comercial a su agencia. | — | ✅ |
+| 1.0 | Confirmar ambiente (QA o producción) | Define si la conexión de prueba se hace QA↔QA o directo en producción (ver detalle arriba). | Informar si tiene una cuenta VTEX de QA propia. | Registrar la respuesta y definir el ambiente para la tarea 1.1. | ✅ |
+| 1.1 | Alta del seller | Ecomm crea el seller en **Gestión › Agregar seller** (tipo *Seller VTEX*), sobre el ambiente definido en 1.0. | Compartir su **cuenta de seller VTEX** (y de QA, si aplica). | Crear su propia política comercial (prerrequisito); completar el alta; activar cuando esté listo. | ✅ |
+| 1.2 | Solicitar política comercial (seller) | Necesaria para la tarea **2.9** (Fase 2) — no bloquea el alta (ver recuadro arriba). | Solicitar una nueva política comercial a su agencia. | — | ✅ |
+| 1.3 | Equipo de integración del seller | Contacto técnico de referencia para el resto del proceso. | Informar con qué integrador/agencia técnica trabaja (ej. Infracommerce, Suma, etc.). | Registrar el contacto. | ✅ |
 
 #### Reglas / Decisiones — Fase 1
 
@@ -218,7 +226,7 @@ usar **VCC** (módulo de aprobación de productos) para automatizar lo que se pu
 | 2.6 | Talles | Llega desde el VTEX del seller. El mapeo unifica al estándar del Marketplace (ej.: `2XL = XXL`). | Compartir Excel con todos los talles creados en su VTEX. | Con el archivo, hacer el mapeo correspondiente. | ✅ |
 | 2.7 | Score | Posicionamiento del producto en el catálogo. Ya automatizado: siempre arranca en **80**. | — | — | ✅ |
 | 2.8 | Imágenes | Llegan desde el VTEX del seller. | — | Usar **VCC** para automatizar el orden de las imágenes y alinearlas al estándar del sitio. | ⚠️ falta |
-| 2.9 | Aprobación de productos | Al asignar **su** política (Fase 1.1), el producto viaja al Marketplace y un agente lo revisa. | Asignar su política comercial a los productos a vender. | Revisar y aprobar los productos en la bandeja. | ✅ |
+| 2.9 | Aprobación de productos | Al asignar **su** política (Fase 1.2), el producto viaja al Marketplace y un agente lo revisa. | Asignar su política comercial a los productos a vender. | Revisar y aprobar los productos en la bandeja. | ✅ |
 | 2.10 | Rechazo de productos | El agente puede rechazar y dejar motivo; el seller corrige y reenvía. | Revisar bandeja de rechazados y corregir según el motivo. | Rechazar dejando un motivo claro. | 🧪 QA |
 | 2.11 | Productos aprobados | Aprobado + con precio y stock → visible en el sitio del Marketplace. | ⚠️ definir | ⚠️ definir | ⚠️ falta |
 
@@ -243,6 +251,11 @@ promociones** específicas del seller.
 
 > **Precondición:** los **medios de pago y cuotas** salen del **acuerdo comercial** con el
 > seller. Es un input **externo** a este proceso — sin él, la tarea 3.4 no puede arrancar.
+
+> **Esta fase no incluye la estrategia de envío del seller.** Costos, plazos y destinos
+> excluidos son configuración que el seller carga en **su propio VTEX** y afectan el front
+> (lo que ve el cliente) — están documentados en **Fase 4 (4.6-4.8)**. Acá en Fase 3 solo
+> vive la promoción de **envío gratis** (3.5), que es una regla del Marketplace.
 
 #### Tareas — Fase 3
 
@@ -269,11 +282,6 @@ promociones** específicas del seller.
   devuelve un producto del Marketplace y recibe una giftcard, **no** podrá usarla en
   productos seller.
 
-> **Reagrupación respecto de la redacción original:** "Políticas de precios", "Cupones de
-> descuento" y "GiftCards" venían sueltas cerca de la zona de Front, pero son reglas de
-> **precio/pago** → las traje a la Fase 3. En Front (Fase 4) queda solo el renderizado
-> (filtrado, cucarda, grilla, carrito compartido, PDP).
-
 ---
 
 ## Fase 4 — Front
@@ -285,6 +293,18 @@ ticket). El seller casi no interviene, salvo en la configuración de envíos.
 > **Dependencia clave (una config alimenta tres features):** el **valor de especificación
 > "Seller"** que se crea en el filtrado (4.1) es el mismo dato que habilita la **cucarda**
 > (4.2) y la **leyenda de PDP/checkout** (4.5). Se configura una vez.
+
+> **"Envíos" aparece en tres fases distintas — no es el mismo tema repetido:**
+> - **Acá (4.6-4.8):** el seller carga costos, plazos y destinos excluidos en **su propio
+>   VTEX**. Es configuración de front — determina lo que ve el cliente en la PDP y el
+>   checkout, y define si el pedido incluso puede tomarse (destino excluido).
+> - **Fase 7a (Fulfillment):** una vez que hay un pedido real, quién ejecuta el despacho —
+>   el seller con su propio carrier, o el Marketplace con los suyos.
+> - **Fase 8 (Logística inversa):** lo mismo pero para devoluciones — quién retira el
+>   producto que el cliente devuelve.
+>
+> Las tres son decisiones/configuraciones separadas del mismo tema "envío", en momentos
+> distintos del proceso (antes de vender / al despachar / al devolver).
 
 #### Tareas — Fase 4
 
@@ -323,15 +343,14 @@ Cuando el cliente compra, el pedido se genera y viaja solo entre VTEX y PIM. Por
 fase tiene **poco de tarea y mucho de comportamiento automático**. Las **únicas tareas**
 son 3, todas del **Agente PIM**, y son **setup previo al go-live**.
 
-> **Nuevo bloque: "Flujo automático".** A diferencia de las fases anteriores, acá separo lo
-> que el sistema hace solo (no se le asigna a nadie) de las tareas reales. Este patrón se
-> repite en las Fases 6-8.
+> A diferencia de las fases anteriores, acá se separa lo que el sistema hace solo (no se le
+> asigna a nadie) de las tareas reales de setup. Este mismo patrón se repite en las Fases 6-8.
 
 #### Flujo automático (comportamiento del sistema — sin dueño)
 
 - **Customer PO** — el número que le llega al seller es el **ID de afiliado + el número del
-  Marketplace**. El ID de afiliado se deriva del nombre del propio seller (confirmado, ej.
-  Topper → `TOP`) y se define en el **alta del seller** (Fase 1.0). Ej.: `1385074194464-01`
+  Marketplace**. El ID de afiliado se deriva del nombre del propio seller (ej.
+  Topper → `TOP`) y se define en el **alta del seller** (Fase 1.1). Ej.: `1385074194464-01`
   (Marketplace) → `TOP-1385074194464-01` (Topper).
 - **Creación en VTEX** — al finalizar la compra, el pedido se genera en VTEX y es visible
   **tanto en el VTEX del Seller como en el del Marketplace**.
@@ -391,12 +410,9 @@ humano real es la **decisión del Marketplace en la ventana de 24 h**.
 | **Marketplace — Ecomm / Operaciones** | Dentro de las 24 h, **cancela directo** (no espera a la cancelación automática por inacción). |
 | *Sistema (VTEX)* | Reembolso automático y correo de cancelación al cliente al pasar a "Cancelado". |
 
-> **Corregido (2026-08-05):** la redacción original de esta tabla listaba **tres** opciones —
-> (a) seleccionar un nuevo seller, (b) no hacer nada → cancelación automática a las 24 h, (c)
-> cancelar de inmediato. Confirmado con Gabriel que la opción (a) **no se usa en la operatoria
-> real**: el Marketplace cancela directo. No hay reasignación de pedido a otro seller en este
-> flujo hoy. Si en el futuro se habilita, actualizar acá y en Commerce Hub
-> (`documentacion.json`, página "Procesos Sellers").
+> **No hay reasignación de pedido a otro seller** en este flujo hoy — el Marketplace cancela
+> directo dentro de las 24 h. Si en el futuro se habilita esa opción, actualizar acá y en
+> Commerce Hub (`documentacion.json`, página "Procesos Sellers").
 
 #### Reglas / Decisiones — Fase 6
 
@@ -608,18 +624,17 @@ Al confirmar, el botón dispara **de una sola vez**:
 
 | Ítem | Qué falta | Bloqueante |
 |---|---|---|
-| 1.0-c | Documentar qué hace el toggle **"Inventario omnicanal (MOI) de varios niveles"** y cuándo conviene activarlo. Para Topper: dejarlo desactivado (default). | No |
-| 1.0-d | Confirmar qué **credenciales/permisos** se intercambian para que la integración por API quede activa. | No |
+| 1.1-c | Documentar qué hace el toggle **"Inventario omnicanal (MOI) de varios niveles"** y cuándo conviene activarlo. Para Topper: dejarlo desactivado (default). | No |
+| 1.1-d | Confirmar qué **credenciales/permisos** se intercambian para que la integración por API quede activa. | No |
 | 2.8 | Confirmar alcance de la automatización de orden de imágenes en VCC. | No |
-| 2.10 | **Lista de motivos de rechazo** (referida en la redacción como "[Hacer lista]"). | No |
+| 2.10 | **Lista de motivos de rechazo** — falta definirla. | No |
 | 2.10 | Probar flujo de rechazo/reenvío en QA. | No |
 | 2.11 | Definir tareas de "productos aprobados" (hoy vacías para ambos roles). | No |
 | Imágenes | Decidir con el seller qué se hace con fondos grises. | No |
 | 4.2 | Confirmar el texto exacto de la cucarda ("Tienda xxx" es placeholder). | No |
 | 4.4 / 4.5 | Evaluar unificar los dos tickets a Infracommerce en uno solo. | No |
 | 7a.3 | Definir la **integración** para recibir la `invoiceUrl` cuando el seller no carga la factura en su VTEX. | No (solo si el seller no factura por VTEX) |
-| 7b.1 | Confirmar el **árbol de arrepentimiento** definitivo: la redacción lo describe distinto en dos partes ("Pedido retenido / Rechazo" vs "Posibilidad / Imposibilidad"). | No |
-| 7b.2 | La redacción tiene **"Adidas" hardcodeado** como ejemplo de seller — generalizar a "el seller". | No |
+| 7b.1 | Confirmar el **árbol de arrepentimiento** definitivo (hoy hay dos versiones no del todo alineadas: "Pedido retenido / Rechazo" vs. "Posibilidad / Imposibilidad"). | No |
 | 7b | Definir **quién en CS Luquin** ejecuta el reembolso manual y con qué herramienta. | No |
 | 8.4 | Confirmar si los **estados logísticos de inversa** comparten catálogo con los de forward (7a) o son un set separado. | No |
 | 8 | Confirmar la diferencia operativa entre **Devolución (60 d)** y **Devolución por Garantía (180 d)** más allá del plazo (garantía no pide motivo). | No |
@@ -632,7 +647,7 @@ Al confirmar, el botón dispara **de una sola vez**:
 resta es cerrar los ítems del **Registro de agujeros** y, después, generar las vistas
 (interna azul + seller verde) desde esta fuente.
 
-**Reclasificaciones respecto de la redacción original** (por si buscás algo donde no está):
+**Dónde buscar cada tema** (por si no aparece donde se esperaría):
 - **Cupones, giftcards y políticas de precios** → Fase 3 (son reglas de precio/pago, no de front).
 - **Cancelación por arrepentimiento del cliente** → Fase 7b (la Fase 6 es solo la cancelación iniciada por el seller por stock).
 
