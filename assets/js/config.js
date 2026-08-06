@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.73',
-  date:   '2026-08-05',
-  notes:  'Portal de Sellers: la nav de flujo (Presentación...Catálogo) se agrupa en Proceso / Herramientas, con un divisor visual entre ambos grupos',
+  number: '1.4.74',
+  date:   '2026-08-06',
+  notes:  'Playbook VTEX↔VTEX: aclara que facturar es previo al despacho (adidas es la excepción, no el patrón); playbook Gestión Asistida: impresora de etiquetas es opcional',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.74', date: '2026-08-06', desc: 'Auditoría cruzada con Commerce Hub: playbook VTEX↔VTEX aclara que facturar es previo al despacho para todo seller nuevo (el workaround de factura ficticia de adidas queda marcado como excepción puntual) y saca la tarea fantasma "2.11 Productos aprobados" (ya cubierta en Reglas). Playbook Gestión Asistida suma que la impresora de etiquetas es opcional (se puede imprimir en la impresora normal y pegar a mano) en el checklist de instalación, la guía del seller y la plantilla de mail de kickoff.' },
   { v: '1.4.73', date: '2026-08-05', desc: 'Portal de Sellers: la nav compartida de las 7 páginas públicas (public-flow-nav) era una lista plana; ahora agrupa Presentación/Simulador/Calificación/Relevamiento/Gantt/Integración como "Proceso" y Catálogo como "Herramientas", separados por un divisor visual, igual que ya distingue public/index.html.' },
   { v: '1.4.72', date: '2026-08-04', desc: 'Playbook "Integración Gestión Asistida" (Fase 9): "Responsabilidades operativas" pasa de 4 líneas genéricas a 6 pasos detallados (asignación, búsqueda, control de calidad, pickeo/facturación, empaquetado/etiquetado, remito/despacho), adaptando el instructivo b2c de Preparación y Despacho al modelo de un solo depósito por seller. Reflejado también en la guía pública del seller (#operar-ga, ahora 8 pasos).' },
   { v: '1.4.71', date: '2026-08-04', desc: 'Catálogo Seller: un seller real de Taika (SPT-002) no podía ver su catálogo — el gate comparaba contra el literal "TAIKA" hardcodeado en vez del seller_id. Ahora habilita por modelo de integración ("Gestión asistida" en la hoja sellers), extensible a futuros sellers sin redeploy.' },

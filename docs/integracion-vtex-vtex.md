@@ -74,7 +74,7 @@ entrar al detalle fase por fase — de acá sale también la versión que ve el 
 | 7 | **Validación en QA** | — | Seller + Ecomm | Flujo completo end-to-end: catálogo → aprobación → pedido → despacho → devolución, sobre el ambiente de prueba. |
 | 8 | **Conexión y réplica en Producción** | Fase 1 (repetida) | Seller + Ecomm | Se repite la configuración ya validada en QA, ahora sobre la cuenta de producción. |
 | 9 | **Prueba piloto en Producción** | — | Seller + Ecomm | Validar con un set acotado de productos antes de abrir todo el catálogo. |
-| 10 | **Go Live** | Fase 2 (2.11) | — | El seller queda **"Activo"**; el catálogo es visible en el sitio (regla: solo con precio y stock). |
+| 10 | **Go Live** | Fase 2 | — | El seller queda **"Activo"**; el catálogo es visible en el sitio (regla: solo con precio y stock). |
 
 > **Paso 6 en paralelo, no al final:** no tiene tarea del lado del **Seller**, por eso es
 > fácil de omitir — pero es la única precondición **dura** documentada (Fase 5) para que un
@@ -228,7 +228,6 @@ usar **VCC** (módulo de aprobación de productos) para automatizar lo que se pu
 | 2.8 | Imágenes | Llegan desde el VTEX del seller. | — | Usar **VCC** para automatizar el orden de las imágenes y alinearlas al estándar del sitio. | ⚠️ falta |
 | 2.9 | Aprobación de productos | Al asignar **su** política (Fase 1.2), el producto viaja al Marketplace y un agente lo revisa. | Asignar su política comercial a los productos a vender. | Revisar y aprobar los productos en la bandeja. | ✅ |
 | 2.10 | Rechazo de productos | El agente puede rechazar y dejar motivo; el seller corrige y reenvía. | Revisar bandeja de rechazados y corregir según el motivo. | Rechazar dejando un motivo claro. | 🧪 QA |
-| 2.11 | Productos aprobados | Aprobado + con precio y stock → visible en el sitio del Marketplace. | ⚠️ definir | ⚠️ definir | ⚠️ falta |
 
 #### Reglas / Decisiones — Fase 2
 
@@ -478,8 +477,14 @@ de setup dependen de una **decisión bifurcante**.
 
 #### Reglas / Decisiones — Fase 7a
 
-- **Facturación:** el **seller factura**; el **envío de la factura al cliente es
-  responsabilidad del Marketplace** (automático por mail al detectar estado facturado).
+- **Facturación previa al despacho:** el seller factura como parte de la preparación del
+  pedido, **antes de entregarlo a la logística** — es el flujo estándar y el que aplica a
+  todo seller nuevo. El **envío de la factura al cliente es responsabilidad del
+  Marketplace** (automático por mail al detectar estado facturado).
+- **Excepción — adidas:** hoy adidas usa un workaround propio (factura ficticia para avanzar
+  el estado en el despacho + factura real recién al llegar a "Entregado"). Es un caso
+  puntual de ese seller, **no el patrón a replicar**: todo seller nuevo debe poder facturar
+  antes del despacho.
 - **Factura por VTEX:** debe llegar por `invoiceUrl`. Si el seller no la carga en su VTEX,
   se requiere una **integración** para recibir la URL (tarea 7a.3).
 - **Factura A:** **no** se aceptan facturas Tipo A para productos seller. Si el cliente la
@@ -629,7 +634,6 @@ Al confirmar, el botón dispara **de una sola vez**:
 | 2.8 | Confirmar alcance de la automatización de orden de imágenes en VCC. | No |
 | 2.10 | **Lista de motivos de rechazo** — falta definirla. | No |
 | 2.10 | Probar flujo de rechazo/reenvío en QA. | No |
-| 2.11 | Definir tareas de "productos aprobados" (hoy vacías para ambos roles). | No |
 | Imágenes | Decidir con el seller qué se hace con fondos grises. | No |
 | 4.2 | Confirmar el texto exacto de la cucarda ("Tienda xxx" es placeholder). | No |
 | 4.4 / 4.5 | Evaluar unificar los dos tickets a Infracommerce en uno solo. | No |

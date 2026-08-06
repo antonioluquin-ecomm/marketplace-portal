@@ -52,7 +52,7 @@ Puede ser el que ya usen internamente, no hace falta un formato especial. Si ven
 Desde donde va a salir la mercadería, para que el transporte sepa dónde retirar los pedidos.
 
 **5. Insumos para la instalación**
-Tengan lista una computadora, impresora, internet y **AnyDesk** instalado, así podemos hacer la instalación de las herramientas de forma remota.
+Tengan lista una computadora, impresora, internet y **AnyDesk** instalado, así podemos hacer la instalación de las herramientas de forma remota. Una impresora de etiquetas es **opcional** — si no tienen, se imprime la etiqueta de envío en la impresora normal y se pega a mano.
 
 Con esto arrancamos a cargar sus productos y hacer las configuraciones necesarias. En paralelo, coordinamos una reunión corta para mostrarles cómo van a actualizar precio y stock desde el portal y usar las herramientas, y para saber quién queda como contacto para estos temas de su lado.
 

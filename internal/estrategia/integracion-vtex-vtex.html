@@ -134,7 +134,7 @@
           <div class="kpi"><div class="num">8</div><div class="lbl">Fases del proceso</div></div>
           <div class="kpi info"><div class="num">6</div><div class="lbl">Roles involucrados</div></div>
           <div class="kpi teal"><div class="num">7</div><div class="lbl">SLAs / plazos</div></div>
-          <div class="kpi warn"><div class="num">14</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi warn"><div class="num">13</div><div class="lbl">Pendientes por cerrar</div></div>
         </div>
       </section>
 
@@ -177,7 +177,7 @@
             <tr><td>7</td><td><strong>Validación en QA</strong></td><td>—</td><td>Seller + Ecomm</td><td>Flujo completo: catálogo → aprobación → pedido → despacho → devolución.</td></tr>
             <tr><td>8</td><td><strong>Conexión y réplica en Producción</strong></td><td>1 (repetida)</td><td>Seller + Ecomm</td><td>Se repite la configuración validada en QA, ahora en producción.</td></tr>
             <tr><td>9</td><td><strong>Prueba piloto en Producción</strong></td><td>—</td><td>Seller + Ecomm</td><td>Validar con un set acotado de productos antes de abrir todo el catálogo.</td></tr>
-            <tr><td>10</td><td><strong>Go Live</strong></td><td>2 (2.11)</td><td>—</td><td>Seller "Activo"; catálogo visible con precio y stock.</td></tr>
+            <tr><td>10</td><td><strong>Go Live</strong></td><td>2</td><td>—</td><td>Seller "Activo"; catálogo visible con precio y stock.</td></tr>
           </tbody>
         </table></div>
         <div class="callout"><strong>Por qué el paso 6 es fácil de omitir:</strong> no tiene tarea del lado del Seller, pero es la única precondición dura documentada (Fase 5) para que un pedido funcione. <strong>Por qué hay dos "pruebas" (7 y 9):</strong> validan cosas distintas — la 7 valida que el flujo funciona (QA); la 9 valida que funciona con datos reales de producción, acotado, antes de abrir todo el catálogo.</div>
@@ -247,7 +247,6 @@
             <tr><td>2.8</td><td><strong>Imágenes</strong></td><td>—</td><td>VCC automatiza el orden de las imágenes.</td><td><span class="pill w">Falta</span></td></tr>
             <tr><td>2.9</td><td><strong>Aprobación</strong> — al asignar <strong>su</strong> política (Fase 1.2), el producto viaja al MP y un agente lo revisa.</td><td>Asignar su política comercial a los productos a vender.</td><td>Revisar y aprobar en la bandeja.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>2.10</td><td><strong>Rechazo</strong> — el agente rechaza y deja motivo; el seller corrige.</td><td>Revisar rechazados y corregir según el motivo.</td><td>Rechazar con motivo claro.</td><td><span class="pill b">QA</span></td></tr>
-            <tr><td>2.11</td><td><strong>Productos aprobados</strong> — visibles si tienen precio y stock.</td><td>—</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
@@ -402,7 +401,8 @@
         </table></div>
         <h3>Reglas / decisiones</h3>
         <ul>
-          <li><strong>Facturación:</strong> el seller factura; el <strong>envío de la factura al cliente es del MP</strong> (automático por mail).</li>
+          <li><strong>Facturación previa al despacho:</strong> el seller factura como parte de la preparación del pedido, <strong>antes</strong> de entregarlo a la logística — es el flujo estándar para todo seller nuevo. El <strong>envío de la factura al cliente es del MP</strong> (automático por mail).</li>
+          <li><strong>Excepción — adidas:</strong> hoy adidas usa un workaround propio (factura ficticia para avanzar el estado en el despacho + factura real recién al llegar a "Entregado"). Es un caso puntual de ese seller, <strong>no el patrón a replicar</strong>.</li>
           <li><strong>Factura A:</strong> no se aceptan para productos seller.</li>
           <li><strong>Mail de despacho:</strong> se envía desde PIM, no desde VTEX.</li>
           <li><strong>Estados logísticos:</strong> no llegan solos a VTEX; el seller los carga en <code>courierStatus</code>. En modo B no hace falta crear ni mapear logística.</li>
@@ -488,7 +488,7 @@
       </section>
 
       <section id="agujeros" class="section">
-        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 14 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 13 ítems, ninguno bloqueante. Confirmaciones, listas menores y un QA.</p></div>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
           <tbody>
@@ -497,7 +497,6 @@
             <tr><td>2.8</td><td>Alcance de la automatización de orden de imágenes en VCC.</td></tr>
             <tr><td>2.10</td><td>Lista de motivos de rechazo.</td></tr>
             <tr><td>2.10</td><td>Probar flujo de rechazo/reenvío en QA.</td></tr>
-            <tr><td>2.11</td><td>Definir tareas de “productos aprobados”.</td></tr>
             <tr><td>Imágenes</td><td>Decidir con el seller qué se hace con fondos grises.</td></tr>
             <tr><td>4.2</td><td>Texto exacto de la cucarda (“Tienda xxx” es placeholder).</td></tr>
             <tr><td>4.4 / 4.5</td><td>Evaluar unificar los dos tickets a Infracommerce en uno.</td></tr>

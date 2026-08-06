@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-06 - Auditoría cruzada con Commerce Hub: facturación VTEX↔VTEX e insumos de Gestión Asistida
+
+Tipo de cambio: correcciones de contenido en playbooks (`docs/`, `internal/estrategia/`, `public/integracion/`), sin cambios de código.
+
+Se cruzó `docs/integracion-vtex-vtex.md` contra la página "Procesos Sellers" de Commerce Hub (que ya usa marketplace-portal como fuente de verdad) para detectar inconsistencias antes del kickoff con Grupo Bisa (próximo seller VTEX↔VTEX).
+
+- **Facturación (Fase 7a):** el playbook no distinguía la regla general de la excepción de adidas. Commerce Hub documenta que adidas usa una factura ficticia para avanzar el estado en el despacho y recién genera la factura real al llegar a "Entregado" — un workaround propio de ese seller. Se aclaró explícitamente que **facturar es previo al despacho**, la regla estándar para todo seller nuevo, y que el caso de adidas es una excepción puntual, no el patrón a replicar. Reflejado en `docs/integracion-vtex-vtex.md`, `internal/estrategia/integracion-vtex-vtex.html` y reforzado en el paso 2 de `public/integracion/integracion-seller.html` ("antes de despachar").
+- **Tarea fantasma 2.11:** "Productos aprobados" figuraba en la tabla de Tareas de Fase 2 marcada "definir" para ambos roles, pero no es una tarea accionable — ya está cubierta en Reglas/Decisiones ("aprobado + precio + stock → visible"). Se sacó de la tabla de tareas, del roadmap y del registro de agujeros en las tres fuentes (`.md` + HTML interno).
+- **Impresora de etiquetas (Gestión Asistida):** el checklist de instalación (`internal/estrategia/proceso-onboarding.html`) ya la marcaba opcional, pero el playbook de Gestión Asistida y la guía del seller solo mencionaban "impresora" en general, sin aclarar que la de etiquetas es opcional (se puede imprimir en la impresora normal y pegar a mano). Se suma la aclaración en `internal/estrategia/integracion-gestion-asistida.html` (tarea 8.6), `public/integracion/integracion-seller.html` (área "Instalación, acceso y capacitación") y `docs/plantilla-mail-kickoff-integracion-gestion-asistida.md`.
+
 ## 2026-08-05 - Suma plantilla de mail de kickoff para sellers de Gestión Asistida
 
 Tipo de cambio: documentación nueva (`docs/`), sin cambios de código.
