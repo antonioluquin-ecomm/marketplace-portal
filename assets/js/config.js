@@ -18,14 +18,16 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.80',
+  number: '1.4.82',
   date:   '2026-08-07',
-  notes:  'Link "Volver al Hub" en el sidebar interno (navigation_standard.md §6)',
+  notes:  'Guía de integración del seller: nueva sección con el equipo de Sporting Marketplace (Kickoff)',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.82', date: '2026-08-07', desc: 'Guía pública de integración: nueva sección "Con quién vas a trabajar" antes del roadmap, con el equipo fijo de Sporting Marketplace (Gerente eCommerce, Comercial, Integración/Sistemas) que participa del kickoff y el seguimiento semanal, cada uno con una línea de qué hace. Avatar con iniciales, preparado para reemplazar por foto real.' },
+  { v: '1.4.81', date: '2026-08-07', desc: 'Guía pública de integración (modelo VTEX↔VTEX): se agrega la card "Facturación" al checklist de preparación (facturación electrónica activa antes de QA, quién emite la nota de crédito), se suma factura/nota de crédito al paso "Validación en QA" del roadmap y se agrega la regla "Facturás con tu propio circuito".' },
   { v: '1.4.80', date: '2026-08-07', desc: 'Link "Volver al Hub" en el sidebar de index.html y las 16 páginas internas, apunta a eCommerce Hub (navigation_standard.md §6). No aplica a public/ (portal del seller, marca propia).' },
   { v: '1.4.79', date: '2026-08-07', desc: 'Páginas públicas del seller: en anchos ~1500-1700px el botón "Cerrar sesión" del topbar se caía a una segunda línea sin fondo (flotaba sobre el hero) porque .user-chip tenía flex-wrap. Se pasa a nowrap con el nombre truncado, y se sube el breakpoint que oculta la nav central de 1200px a 1500px para que no colisione con el chip en el rango intermedio. Cache-busting actualizado en las 7 páginas del flujo seller.' },
   { v: '1.4.78', date: '2026-08-06', desc: 'Playbook de Operación VTEX↔VTEX (Fase 7b.1): el doc decía que el cliente contacta al Marketplace por sellers-soporte@sporting.com.ar — corregido, ese mail es el canal interno Marketplace↔Seller, el cliente usa los canales de atención habituales de Sporting. Se suma que el seller debe indicar un mail de contacto propio (nueva tarea de onboarding 1.4 en integracion-vtex-vtex.html), y se precisa el caso A2 (pedido despachado que el seller retiene): el reembolso es manual desde PIM, no automático como A1. También se corrige un hallazgo de la auditoría del 2026-08-06 anterior: "Portal de Cambios y Devoluciones" (VTEX↔VTEX) y "Portal de Pedidos" (Gestión Asistida) no son dos sistemas distintos como se había concluido — es el mismo portal. Se unifica el nombre a "Portal de Pedidos" en los dos modelos (docs/operacion-vtex-vtex.md, internal/estrategia/operacion-vtex-vtex.html, public/integracion/integracion-seller.html) y en Commerce Hub.' },

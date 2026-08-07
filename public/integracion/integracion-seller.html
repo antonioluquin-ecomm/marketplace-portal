@@ -126,8 +126,18 @@
 
     footer{padding:30px 36px;text-align:center;color:var(--t4);font-size:12px;border-top:1px solid var(--bdr)}
 
+    /* EQUIPO */
+    #equipo{background:var(--k2)}
+    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .team-card{background:var(--k3);border:1px solid var(--bdr);border-radius:var(--rl);padding:24px;text-align:center}
+    .team-avatar{width:56px;height:56px;border-radius:50%;background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g3);display:flex;align-items:center;justify-content:center;font-family:var(--font);font-weight:900;font-size:18px;margin:0 auto 14px;overflow:hidden}
+    .team-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .team-name{font-size:15px;font-weight:800;color:var(--t1);margin-bottom:2px}
+    .team-role{font-size:12px;color:var(--g3);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+    .team-note{font-size:12px;color:var(--t3);line-height:1.5}
+
     @media(max-width:820px){
-      .area-grid,.rules-grid,.sla-grid{grid-template-columns:1fr}
+      .area-grid,.rules-grid,.sla-grid,.team-grid{grid-template-columns:1fr}
       .section{padding:48px 20px}
       #hero{padding:40px 20px 32px}
     }
@@ -175,6 +185,35 @@
     </div>
   </section>
 
+  <!-- EQUIPO -->
+  <section id="equipo" class="section">
+    <div class="inner seller-page-container">
+      <div class="eyebrow">Kickoff</div>
+      <h2>Con quién vas a trabajar</h2>
+      <p class="section-lead">Este es el equipo de Sporting Marketplace con el que te vas a conectar en el kickoff (paso 0) y con el que vas a tener una reunión semanal de seguimiento, junto con el equipo que definas de tu lado.</p>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-avatar">LP</div>
+          <div class="team-name">Luis Pérez Hernández</div>
+          <div class="team-role">Gerente eCommerce</div>
+          <div class="team-note">Tu referencia para decisiones estratégicas y la prioridad de tu marca en el canal.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">RN</div>
+          <div class="team-name">Rafael Nieto</div>
+          <div class="team-role">Comercial</div>
+          <div class="team-note">Tu contacto para condiciones comerciales, catálogo y negociación del día a día.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">GL</div>
+          <div class="team-name">Gabriel Luna</div>
+          <div class="team-role">Integración / Sistemas</div>
+          <div class="team-note">Lidera la integración técnica: presente en todas las reuniones y a cargo del seguimiento semanal.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ROADMAP -->
   <section id="roadmap" class="section">
     <div class="inner seller-page-container">
@@ -190,7 +229,7 @@
         <li><span class="rm-num">4</span><div><strong>Envíos</strong><span>Cargás tus costos, plazos y destinos excluidos.</span></div></li>
         <li><span class="rm-num">5</span><div><strong>Devoluciones</strong><span>Definimos la logística inversa y tus condiciones de devolución.</span></div></li>
         <li><span class="rm-num rm-internal">6</span><div><strong>Configuración interna<span class="rm-tag">Nosotros</span></strong><span>Alta de tu tienda y depósito, y la asociación de pedidos en nuestro sistema (PIM).</span></div></li>
-        <li><span class="rm-num">7</span><div><strong>Validación en QA</strong><span>Probamos juntos el flujo completo: catálogo, pedido, despacho y devolución.</span></div></li>
+        <li><span class="rm-num">7</span><div><strong>Validación en QA</strong><span>Probamos juntos el flujo completo: catálogo, pedido, factura (incluido el campo <code>invoiceUrl</code>), despacho y devolución (incluida la nota de crédito).</span></div></li>
         <li><span class="rm-num">8</span><div><strong>Conexión en Producción</strong><span>Replicamos sobre tu cuenta de producción todo lo ya validado en QA.</span></div></li>
         <li><span class="rm-num">9</span><div><strong>Prueba piloto</strong><span>Validamos en producción con un grupo acotado de productos antes de abrir todo el catálogo.</span></div></li>
         <li><span class="rm-num">10</span><div><strong>Go Live</strong><span>Tus productos, visibles y a la venta en el Marketplace.</span></div></li>
@@ -254,6 +293,16 @@
         </div>
 
         <div class="area">
+          <div class="area-ico">🧾</div>
+          <h3>Facturación</h3>
+          <div class="area-sub">Facturás vos, desde tu propio VTEX</div>
+          <ul class="checks">
+            <li>Confirmá que tu VTEX tenga la <strong>facturación electrónica activa</strong> (punto de venta y tipo de comprobante habilitados) antes de la Validación en QA — sin esto no vas a poder cargar el campo <strong>invoiceUrl</strong>.</li>
+            <li>Como facturás vos mismo (ver "Cómo operás cada pedido"), también sos quien emite la <strong>nota de crédito</strong> ante una devolución o cancelación posterior a la factura.</li>
+          </ul>
+        </div>
+
+        <div class="area">
           <div class="area-ico">↩️</div>
           <h3>Devoluciones</h3>
           <div class="area-sub">Reglas y logística inversa</div>
@@ -297,6 +346,7 @@
         <div class="rule warn"><div class="rule-t">Sin cupones</div><div class="rule-d">No se aceptan cupones de descuento sobre productos de sellers.</div></div>
         <div class="rule warn"><div class="rule-t">Sin GiftCards</div><div class="rule-d">Las giftcards no se pueden usar en productos de sellers.</div></div>
         <div class="rule warn"><div class="rule-t">Sin factura A</div><div class="rule-d">No se aceptan facturas de tipo A para productos de sellers.</div></div>
+        <div class="rule"><div class="rule-t">Facturás con tu propio circuito</div><div class="rule-d">La factura y la nota de crédito (ante devoluciones o cancelaciones) salen de tu propia facturación electrónica, integrada a tu VTEX.</div></div>
         <div class="rule"><div class="rule-t">Mail del cliente enmascarado</div><div class="rule-d">Recibís el correo del cliente enmascarado. Funciona igual (si le escribís, le llega) y dura 60 días.</div></div>
         <div class="rule"><div class="rule-t">Devoluciones por el portal</div><div class="rule-d">Toda devolución se gestiona por el Portal de Pedidos, con tus condiciones específicas.</div></div>
         <div class="rule"><div class="rule-t">Tus condiciones en los T&amp;C</div><div class="rule-d">Tus plazos, destinos excluidos y categorías no habilitadas quedan publicados en los Términos y Condiciones.</div></div>

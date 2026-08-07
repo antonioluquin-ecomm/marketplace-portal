@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-08-07 - Suma sección "Con quién vas a trabajar" a la guía de integración del seller
+
+Tipo de cambio: contenido de negocio (`public/integracion/integracion-seller.html`, ambos modelos — sección fuera del gate por modelo de integración, así que se muestra una sola vez para cualquier seller).
+
+La guía tenía el paso "Kickoff" en el roadmap pero nunca decía con quién se iba a reunir el seller. Se agrega una sección nueva, justo después del hero y antes del roadmap, con las 3 personas de Sporting Marketplace que participan del proceso, cada una con nombre, rol y una línea de qué hace: Luis Pérez Hernández (Gerente eCommerce — estrategia y prioridad del canal), Rafael Nieto (Comercial — condiciones comerciales, catálogo y negociación del día a día) y Gabriel Luna (Integración / Sistemas — lidera la integración técnica, presente en todas las reuniones y a cargo del seguimiento semanal). Cada tarjeta usa un avatar circular con iniciales como placeholder — pensado para reemplazarse por una foto real (`<img>`) más adelante sin tocar el resto del layout. Es un equipo fijo (no varía por seller), por eso se hardcodea en el HTML en vez de traerse del Sheet. Autocrítica de la primera redacción: la línea de Luis quedó en tercera persona ("Define la estrategia...") mientras las otras dos hablaban en segunda persona al seller — se reescribió a "Tu referencia para decisiones estratégicas y la prioridad de tu marca en el canal" para que las tres tarjetas usen la misma voz.
+
+## 2026-08-07 - Suma facturación al roadmap de integración VTEX↔VTEX
+
+Tipo de cambio: contenido de negocio (`public/integracion/integracion-seller.html`, solo el modelo VTEX↔VTEX).
+
+Auditoría crítica de la guía pública del seller: la hoja de ruta y el checklist de preparación mencionaban pedidos pero no facturación como algo a preparar de antemano — solo aparecía como paso operativo del día a día ("Facturás y cargás la factura"). Faltaba dejar explícito que (a) el seller debe tener la facturación electrónica de su VTEX activa (punto de venta y tipo de comprobante) antes de la Validación en QA, sin lo cual no puede cargar `invoiceUrl`, y (b) quién emite la nota de crédito ante una devolución o cancelación posterior a la factura — no estaba mencionado en ningún lado del modelo VTEX↔VTEX (a diferencia de Gestión Asistida, donde sí está resuelto porque factura Sporting).
+
+Se agrega una card "Facturación" a la sección "Lo que tenés que preparar", se suma "factura" y "nota de crédito" al paso 7 del roadmap ("Validación en QA"), y se agrega la regla "Facturás con tu propio circuito" a "Reglas y políticas". Queda pendiente de definición de negocio (no incluido en este cambio): el SLA en días para facturar y para emitir la nota de crédito — hoy la página solo tiene SLA para cancelar (5 días) y responder al carrier (4-5 días).
+
 ## 2026-08-07 - Link "Volver al Hub" en el sidebar interno
 
 Tipo de cambio: nueva funcionalidad transversal (`index.html`, 16 páginas de `internal/`, `assets/css/internal-components.css`).
