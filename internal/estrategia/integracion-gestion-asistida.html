@@ -172,6 +172,7 @@
 
       <section id="roadmap" class="section">
         <div class="section-head"><div class="section-title"><span>🗺️</span><h2>Hoja de ruta de la integración</h2></div><p class="section-desc">Orden real de ejecución, punta a punta. El contrato corre en paralelo desde el arranque, pero es la única precondición dura para el Go Live.</p></div>
+        <div class="callout"><strong>Duración estimada: 6 a 10 semanas</strong>, del kickoff (paso 0) al Go Live (paso 12). Es un rango, no una fecha fija — depende sobre todo de qué tan rápido responden el seller (Excel de productos, datos de facturación) y de nuestra propia capacidad de setup (depósito, front, instalación de PIM Depósitos). Comunicar como estimación, no como promesa cerrada.</div>
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>#</th><th>Paso</th><th>Fase(s)</th><th>Quién actúa</th><th>Nota</th></tr></thead>
           <tbody>
@@ -287,7 +288,7 @@
         <h3>Reglas / decisiones</h3>
         <ul>
           <li><strong>Envío gratis:</strong> aplica el umbral global vigente del sitio (no se fija el monto acá para no tener que actualizar este documento cada vez que cambie).</li>
-          <li><strong>Sin cupones ni GiftCards</strong> para productos de este modelo, misma regla que VTEX↔VTEX.</li>
+          <li><strong>Sin cupones, GiftCards ni factura A</strong> para productos de este modelo, misma regla que VTEX↔VTEX — son reglas del canal Marketplace en general, no del circuito técnico.</li>
           <li><strong>Un número de comercio por seller</strong> — no se comparte el número de comercio general del Marketplace.</li>
         </ul>
       </section>
@@ -334,7 +335,7 @@
             <tr><td>8.2</td><td><strong>Templates y datos del seller en mails transaccionales</strong> — solo se menciona que el producto es "vendido y distribuido por el seller Xxxx", sin plantilla adicional.</td><td>Confirmar el nombre del seller a mostrar.</td><td>Configurar la plantilla con ese texto.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.3</td><td><strong>Restricción de carrito compartido</strong> — mismo criterio que VTEX↔VTEX: no se combinan productos de distintos sellers en un carrito.</td><td>—</td><td>Crear ticket para Infracommerce.</td><td>Configurar la restricción.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.4</td><td><strong>Comprobante del seller en BAS</strong> — cómo llega la factura y la nota de crédito a BAS.</td><td>—</td><td>—</td><td>—</td><td>Agente PIM configura el comprobante en BAS.</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>8.5</td><td><strong>Condiciones de devolución</strong> en el Portal de Gestión de Pedidos, si aplica — categorías excluyentes que no admiten cambios/devoluciones.</td><td>Indicar si hay categorías excluyentes u otra info diferente.</td><td>—</td><td>—</td><td>Agente PIM ajusta el portal para que no las considere.</td><td><span class="pill g">Listo</span></td></tr>
+            <tr><td>8.5</td><td><strong>Condiciones de devolución</strong> en el Portal de Pedidos, si aplica — categorías excluyentes que no admiten cambios/devoluciones.</td><td>Indicar si hay categorías excluyentes u otra info diferente.</td><td>—</td><td>—</td><td>Agente PIM ajusta el portal para que no las considere.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.6</td><td><strong>Instalación de PIM Depósitos</strong> en la computadora del seller.</td><td>Tener PC, impresora e internet (precondición). <strong>Impresora de etiquetas</strong>: opcional — si no tiene, imprime la etiqueta de envío en su impresora normal y la pega a mano.</td><td>—</td><td>—</td><td>IT instala la herramienta.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.7</td><td><strong>Alta de usuario en PIM Frontend</strong> — se crea el usuario del seller y se lo asigna a su depósito. Genera un <strong>ID de usuario</strong> que hay que pasarle al seller.</td><td>—</td><td>Crear el usuario en PIM Frontend, asignarlo al depósito del seller y compartirle el ID de usuario.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>8.8</td><td><strong>Capacitación operativa</strong> — con el usuario ya asignado (8.7), se capacita al seller en el uso de PIM Depósitos: recibir el pedido, asignárselo, imprimir, preparar, pickear, facturar, despachar, etc.</td><td>Participar de la capacitación.</td><td>Capacitar al seller en el uso operativo de PIM Depósitos.</td><td>—</td><td>—</td><td><span class="pill g">Listo</span></td></tr>

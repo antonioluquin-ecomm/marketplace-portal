@@ -72,6 +72,10 @@
     .roadmap-list li strong{display:block;font-size:14px;font-weight:700;color:var(--t1);margin-bottom:2px}
     .roadmap-list li span{font-size:12.5px;color:var(--t3);line-height:1.5}
     .rm-tag{display:inline-block;margin-left:8px;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--g);vertical-align:middle}
+    .duration-chip{display:inline-flex;align-items:center;gap:10px;margin-bottom:32px;padding:12px 18px;border-radius:999px;background:var(--g-dim);border:1px solid var(--g-brd);max-width:100%}
+    .duration-chip .ico{font-size:16px;flex-shrink:0}
+    .duration-chip span{font-size:13px;line-height:1.5;color:var(--t2)}
+    .duration-chip strong{color:var(--g3);font-weight:800}
 
     /* PREPARAR — tarjetas por área con checklist */
     #preparar{background:linear-gradient(180deg,var(--k2),var(--k))}
@@ -177,6 +181,7 @@
       <div class="eyebrow">El camino completo</div>
       <h2>Hoja de ruta de tu integración</h2>
       <p class="section-lead">Así se ve el proceso de punta a punta, desde la conexión inicial hasta que tus productos estén a la venta. Los pasos marcados <span class="rm-tag">Nosotros</span> los hacemos de este lado — te los mostramos igual para que tengas la foto completa.</p>
+      <div class="duration-chip"><span class="ico">⏱️</span><span><strong>6 a 10 semanas</strong> estimadas, del kickoff al Go Live. Es un rango, no una fecha fija — depende sobre todo de qué tan rápido avancemos juntos en los primeros pasos.</span></div>
       <ol class="roadmap-list">
         <li><span class="rm-num">0</span><div><strong>Kickoff</strong><span>Reunión inicial, con los contactos de ambos lados ya definidos.</span></div></li>
         <li><span class="rm-num">1</span><div><strong>Conexión QA</strong><span>Te damos de alta con tu cuenta VTEX (sobre tu cuenta de QA si tenés una). En paralelo, sin que te frene, tramitás tu política comercial para el paso siguiente.</span></div></li>
@@ -270,8 +275,8 @@
       <h2>Cómo operás cada pedido</h2>
       <p class="section-lead">Cuando un cliente compra, el pedido aparece en tu VTEX (con un número que empieza con nuestro identificador). Desde ahí, el flujo es tuyo.</p>
       <ol class="steps">
-        <li class="step"><div class="step-num">1</div><div><div class="step-t">Recibís y preparás</div><div class="step-d">El pedido llega a tu VTEX. Hacés la búsqueda, la preparación y la <strong>facturación</strong>.</div></div></li>
-        <li class="step"><div class="step-num">2</div><div><div class="step-t">Cargás la factura</div><div class="step-d">Subí la factura a tu VTEX (campo <code>invoiceUrl</code>) <strong>antes de despachar</strong>. Nosotros nos encargamos de que le llegue al cliente.</div></div></li>
+        <li class="step"><div class="step-num">1</div><div><div class="step-t">Recibís y preparás</div><div class="step-d">El pedido llega a tu VTEX. Hacés la búsqueda y la preparación del producto.</div></div></li>
+        <li class="step"><div class="step-num">2</div><div><div class="step-t">Facturás y cargás la factura</div><div class="step-d">Facturás <strong>antes de despachar</strong> y subís la factura a tu VTEX (campo <code>invoiceUrl</code>). Nosotros nos encargamos de que le llegue al cliente.</div></div></li>
         <li class="step"><div class="step-num">3</div><div><div class="step-t">Despachás</div><div class="step-d">Entregás a la logística y cargás en tu VTEX el <strong>courier, número y URL de seguimiento</strong> — con eso sale el aviso de despacho al cliente.</div></div></li>
         <li class="step"><div class="step-num">4</div><div><div class="step-t">Si no tenés stock, cancelás</div><div class="step-d">Cancelás el pedido <strong>completo</strong> desde tu VTEX (las cancelaciones son siempre por stock; no hay parciales).</div></div></li>
         <li class="step"><div class="step-num">5</div><div><div class="step-t">Ante incidencias de entrega</div><div class="step-d">Si el carrier necesita más datos, te los acercamos: respondé dentro del plazo. Ante una pérdida en tránsito, nos reportás para gestionar el reembolso.</div></div></li>
@@ -321,6 +326,7 @@
       <div class="eyebrow">El camino completo</div>
       <h2>Hoja de ruta de tu integración</h2>
       <p class="section-lead">Así se ve el proceso de punta a punta. Como no tenés VTEX propio, la mayoría de la configuración técnica la hacemos nosotros — te la mostramos igual para que tengas la foto completa.</p>
+      <div class="duration-chip"><span class="ico">⏱️</span><span><strong>6 a 10 semanas</strong> estimadas, del kickoff al Go Live. Es un rango, no una fecha fija — depende sobre todo de qué tan rápido avancemos juntos en los primeros pasos.</span></div>
       <ol class="roadmap-list">
         <li><span class="rm-num">0</span><div><strong>Kickoff y contrato</strong><span>Reunión inicial. El contrato corre en paralelo al setup técnico, pero debe estar firmado antes de salir a la venta.</span></div></li>
         <li><span class="rm-num rm-internal">1</span><div><strong>Conexión<span class="rm-tag">Nosotros</span></strong><span>Damos de alta tu condición comercial, tu política comercial y la especificación que identifica tus productos.</span></div></li>
@@ -389,7 +395,7 @@
 
         <div class="area">
           <div class="area-ico">🖥️</div>
-          <h3>Instalación, acceso y capacitación</h3>
+          <h3>Instalación, usuario y capacitación</h3>
           <div class="area-sub">Herramienta para operar tus pedidos</div>
           <ul class="checks">
             <li>Tené lista una <strong>computadora, impresora e internet</strong> — instalamos PIM Depósitos ahí. Una <strong>impresora de etiquetas es opcional</strong>: si no tenés, imprimís la etiqueta de envío en tu impresora normal y la pegás a mano.</li>
@@ -429,10 +435,11 @@
       <p class="section-lead">Condiciones del Marketplace que conviene tener claras desde el arranque. El detalle completo vive en los Términos y Condiciones.</p>
       <div class="rules-grid">
         <div class="rule"><div class="rule-t">Vos mantenés precio y stock</div><div class="rule-d">Los cargás desde el portal y se aplican directo, sin aprobación previa de nuestro lado.</div></div>
-        <div class="rule"><div class="rule-t">Envío gratis del sitio</div><div class="rule-d">Aplica a tus productos según el umbral vigente del sitio. Es la única promoción que se mantiene para todos los sellers.</div></div>
+        <div class="rule"><div class="rule-t">Envío gratis del sitio</div><div class="rule-d">Aplica a tus productos según el umbral del sitio (hoy $149.990). Es la única promoción que se mantiene para todos los sellers.</div></div>
         <div class="rule warn"><div class="rule-t">Sin carrito compartido</div><div class="rule-d">Un carrito no combina productos de distintos sellers: cada compra es de un solo vendedor.</div></div>
         <div class="rule warn"><div class="rule-t">Sin cupones</div><div class="rule-d">No se aceptan cupones de descuento sobre tus productos.</div></div>
         <div class="rule warn"><div class="rule-t">Sin GiftCards</div><div class="rule-d">Las giftcards no se pueden usar en tus productos.</div></div>
+        <div class="rule warn"><div class="rule-t">Sin factura A</div><div class="rule-d">No se aceptan facturas de tipo A para productos de sellers.</div></div>
         <div class="rule"><div class="rule-t">Facturás desde tu AFIP</div><div class="rule-d">Configuramos PIM Depósitos con tus credenciales para que la factura salga a tu nombre.</div></div>
         <div class="rule"><div class="rule-t">Devoluciones por el portal</div><div class="rule-d">Toda devolución se gestiona por el Portal de Pedidos y se acepta o rechaza desde PIM Depósitos.</div></div>
         <div class="rule"><div class="rule-t">Tus condiciones en los T&amp;C</div><div class="rule-d">Tus categorías no habilitadas para cambios/devoluciones quedan publicadas en los Términos y Condiciones.</div></div>

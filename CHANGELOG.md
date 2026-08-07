@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-06 - Auditoría crítica de la guía de integración del seller
+
+Tipo de cambio: contenido y UI de la página pública (`public/integracion/integracion-seller.html`), sin cambios de backend ni de datos.
+
+Auditoría a pedido del usuario sobre orden, información, claridad e inconsistencias de la guía que ve el seller (los dos modelos: VTEX↔VTEX y Gestión Asistida).
+
+- **Duración estimada:** se agrega un badge visual ("6 a 10 semanas, del kickoff al Go Live") al inicio del roadmap de ambos modelos — antes solo estaba en VTEX↔VTEX y con un hack de CSS (`margin-top` negativo) para no chocar con el texto de arriba; ahora es un componente propio (`.duration-chip`). También se suma la misma estimación a los dos mails de kickoff (`docs/plantilla-mail-kickoff-integracion.md` y `...-gestion-asistida.md`) y al roadmap interno de ambos playbooks.
+- **Fix de claridad — Operar (VTEX↔VTEX):** el paso 1 ("Recibís y preparás") mencionaba "la facturación" y el paso 2 se llamaba "Cargás la factura" — quedaba ambiguo en qué paso facturaba el seller. Se corrige: paso 1 es solo búsqueda y preparación, paso 2 pasa a ser "Facturás y cargás la factura" como una sola acción.
+- **Paridad entre modelos:** "Sin factura A" y el monto de envío gratis ($149.990) solo se mostraban en las Reglas de VTEX↔VTEX — se confirmó con el usuario que son reglas del canal Marketplace en general (no del circuito técnico) y se agregan también a Gestión Asistida, en la página pública y en `internal/estrategia/integracion-gestion-asistida.html`.
+- **Wording:** "Instalación, acceso y capacitación" (tarjeta de preparación) vs. "Instalación, usuario y capacitación" (paso del roadmap) — mismo hito de Gestión Asistida con dos nombres. Se unifica a "Instalación, usuario y capacitación".
+- Bonus: `internal/estrategia/integracion-gestion-asistida.html` (tarea 8.5) llamaba "Portal de Gestión de Pedidos" a lo que el resto del documento llama "Portal de Pedidos" — corregido.
+
 ## 2026-08-06 - Separa el playbook VTEX↔VTEX en Integración (onboarding) y Operación (runbook)
 
 Tipo de cambio: reorganización de contenido (`docs/`, `internal/estrategia/`), sin cambios de lógica de negocio.

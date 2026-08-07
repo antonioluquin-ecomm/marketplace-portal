@@ -67,7 +67,17 @@ Usar **siempre** estos nombres (evitar variantes como "Ecomm / Ecom / Marketplac
 Orden real de ejecución de un seller nuevo, punta a punta — desde el kickoff hasta el
 Go Live. Es el mapa que falta antes de entrar al detalle fase por fase — de acá sale
 también la versión que ve el seller (`public/integracion/integracion-seller.html`,
-sección "Hoja de ruta"). El paso 5 (Devoluciones) configura algo que **después** se usa
+sección "Hoja de ruta").
+
+> **Duración estimada: 6 a 10 semanas**, desde el kickoff (paso 0) hasta el Go Live
+> (paso 10). Es un rango, no una fecha fija — depende sobre todo de la velocidad de
+> respuesta del seller y de su agencia técnica (política comercial, mapeos, envío de
+> Excels) en los pasos 1-5, que son los que más varían de un seller a otro. Los pasos
+> con dependencias externas nuestras (Diseño para las grillas, Infracommerce vía
+> ticket) también pueden estirar el rango — ver Fase 4. No comunicar como promesa
+> cerrada; comunicar como estimación.
+
+El paso 5 (Devoluciones) configura algo que **después** se usa
 en el runbook operativo — su detalle de tareas vive en Fase 8 de
 [`docs/operacion-vtex-vtex.md`](./operacion-vtex-vtex.md), no en este documento.
 

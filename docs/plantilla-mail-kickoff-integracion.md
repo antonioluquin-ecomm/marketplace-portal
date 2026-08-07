@@ -21,7 +21,9 @@ a Sporting Marketplace.
 
 Ya te dejamos un acceso al portal de sellers, donde vas a encontrar la guía completa
 del proceso (qué necesitamos de tu lado, cómo se opera cada pedido y las reglas del
-canal), incluyendo la **hoja de ruta completa** con los pasos de punta a punta:
+canal), incluyendo la **hoja de ruta completa** con los pasos de punta a punta.
+Estimamos entre **6 y 10 semanas** desde este primer contacto hasta el Go Live —
+depende sobre todo de qué tan rápido podamos avanzar juntos en cada paso:
 
 - **Portal:** https://antonioluquin-ecomm.github.io/marketplace-portal/public/login.html
 - **Usuario:** {{USUARIO}}

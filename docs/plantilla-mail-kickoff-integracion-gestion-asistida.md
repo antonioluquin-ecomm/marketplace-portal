@@ -28,7 +28,8 @@ Hola {{NOMBRE_CONTACTO}}, equipo,
 
 Me presento: soy Gabriel, voy a estar a cargo de la integración de **{{NOMBRE_SELLER}}** a Sporting Marketplace.
 
-Ya te dejamos un acceso al portal de sellers, donde vas a encontrar la guía completa del proceso — qué necesitamos de tu lado y cómo se opera cada pedido una vez en marcha:
+Ya te dejamos un acceso al portal de sellers, donde vas a encontrar la guía completa del proceso — qué necesitamos de tu lado y cómo se opera cada pedido una vez en marcha.
+Estimamos entre **6 y 10 semanas** desde este primer contacto hasta el Go Live — depende sobre todo de qué tan rápido avancemos juntos con los 5 puntos de abajo:
 
 - **Portal:** https://antonioluquin-ecomm.github.io/marketplace-portal/public/login.html
 - **Usuario:** {{USUARIO}}
