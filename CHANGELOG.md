@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-08-06 - Define los 3 caminos de factura en el playbook de Operación VTEX↔VTEX
+
+Tipo de cambio: contenido de negocio (`docs/operacion-vtex-vtex.md`, `internal/estrategia/operacion-vtex-vtex.html`), sin cambios de código.
+
+La tarea 7a.3 estaba en el registro de agujeros como "definir la integración para recibir la `invoiceUrl` cuando el seller no factura por VTEX", sin resolver. El usuario aportó la definición real de negocio: son 3 caminos evaluados en orden de preferencia, no una elección libre del seller.
+
+- **Camino 1 (ideal, único operativo hoy):** el seller carga la factura en su VTEX (`invoiceUrl`) — el flujo estándar ya documentado.
+- **Camino 2**, si el anterior no es viable, según volumen del seller: **2A** (≥100 pedidos/mes, obligatorio a ese volumen) — el seller manda la factura a PIM vía API propia del Marketplace; **2B** (<100 pedidos/mes, fallback) — el seller manda la factura por mail a `sellers-soporte@sporting.com.ar` y un agente de Operaciones la carga a mano en PIM.
+
+**Autocrítica:** la primera pasada de este cambio marcó la tarea 7a.3 como `✅ Listo` apenas se definió la política de los 3 caminos, sin verificar si esos caminos ya existían técnicamente. Al releer la Fase 7a "como si fuera un agente ejecutándolo" (a pedido del usuario) aparecieron 4 huecos reales: sin contrato técnico para la API 2A, sin mecánica/SLA para la carga manual 2B, sin umbral definido para "bajo volumen", y sin resolver si el mail de factura al cliente se sigue disparando cuando la factura no pasa por `invoiceUrl` de VTEX. Las respuestas del usuario confirmaron que **ninguno de los dos caminos alternativos está construido**: la API 2A está en construcción, el mecanismo de carga manual 2B no existe, y el disparo del mail vía PIM (en vez de VTEX) tampoco está configurado — este último es bloqueante, porque sin él el cliente no recibe la factura.
+
+- La tarea 7a.3 vuelve a `⚠️ falta` (no `✅`) en la tabla de setup, con el detalle de qué construir en cada camino.
+- El pendiente único de antes se desglosa en 3 ítems concretos en el registro de agujeros: `7a.3-a` (endpoint de PIM para 2A), `7a.3-b` (proceso de carga manual para 2B) y `7a.3-c` (disparo del mail de factura vía PIM — **bloqueante**). El registro pasa de 4 a 6 ítems totales en la Fase 7a-8.
+- Se agrega el umbral de **100 pedidos/mes** como criterio de corte entre 2A y 2B, y el canal real de 2B (`sellers-soporte@sporting.com.ar`).
+
 ## 2026-08-06 - Auditoría crítica de la guía de integración del seller
 
 Tipo de cambio: contenido y UI de la página pública (`public/integracion/integracion-seller.html`), sin cambios de backend ni de datos.

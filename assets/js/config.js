@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.76',
+  number: '1.4.77',
   date:   '2026-08-06',
-  notes:  'Auditoría de la guía de integración del seller: duración estimada (6-10 semanas) para los dos modelos, fix de facturación en Operar, y paridad de reglas entre VTEX↔VTEX y Gestión Asistida',
+  notes:  'Playbook de Operación VTEX↔VTEX: define los 3 caminos de factura cuando el seller no puede cargarla en su VTEX — ninguno de los dos alternativos (API o carga manual) está construido todavía',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.77', date: '2026-08-06', desc: 'Playbook de Operación VTEX↔VTEX (Fase 7a): la tarea 7a.3 pasa de un pendiente vago a una decisión de negocio concreta con 3 caminos de factura (VTEX ideal; API a PIM desde 100 pedidos/mes; carga manual por Operaciones debajo de eso). Autocrítica: la primera versión marcó 7a.3 como "Listo" sin que ninguno de los dos caminos alternativos estuviera construido — corregido a "Falta" y desglosado en 3 pendientes concretos (endpoint de PIM, proceso de carga manual, y el disparo del mail de factura al cliente cuando la factura no pasa por VTEX, este último bloqueante).' },
   { v: '1.4.76', date: '2026-08-06', desc: 'Auditoría crítica de la guía de integración del seller (public/integracion/integracion-seller.html): se suma duración estimada (6-10 semanas, del kickoff al Go Live) a los roadmaps de VTEX↔VTEX y Gestión Asistida como badge visual (antes solo VTEX↔VTEX, con un hack de CSS de margen negativo); se corrige el paso "Operar" de VTEX↔VTEX donde facturación aparecía duplicada entre el paso 1 y el 2; se pareja "Sin factura A" y el monto de envío gratis ($149.990) entre los dos modelos, que antes solo se mostraban en VTEX↔VTEX; se unifica el wording "Instalación, usuario y capacitación" (antes decía "acceso" en una tarjeta y "usuario" en el roadmap).' },
   { v: '1.4.75', date: '2026-08-06', desc: 'El playbook "Integración VTEX↔VTEX" (doc + página interna) mezclaba dos cosas de naturaleza distinta bajo una sola numeración de "Fase": un checklist de onboarding con fin (Fases 1-5) y un runbook operativo sin fin (Fases 6-8, cancelaciones/fulfillment/pedidos no entregados/devoluciones). Se separó en dos documentos y dos páginas: integracion-vtex-vtex.html (onboarding) y la nueva operacion-vtex-vtex.html (runbook), cruzadas entre sí. Se actualizaron las 16 páginas internas que enlazaban a la anterior y la referencia de Commerce Hub.' },
   { v: '1.4.74', date: '2026-08-06', desc: 'Auditoría cruzada con Commerce Hub: playbook VTEX↔VTEX aclara que facturar es previo al despacho para todo seller nuevo (el workaround de factura ficticia de adidas queda marcado como excepción puntual) y saca la tarea fantasma "2.11 Productos aprobados" (ya cubierta en Reglas). Playbook Gestión Asistida suma que la impresora de etiquetas es opcional (se puede imprimir en la impresora normal y pegar a mano) en el checklist de instalación, la guía del seller y la plantilla de mail de kickoff.' },

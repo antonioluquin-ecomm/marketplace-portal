@@ -129,7 +129,7 @@
           <div class="kpi"><div class="num">4</div><div class="lbl">Fases del runbook</div></div>
           <div class="kpi info"><div class="num">4</div><div class="lbl">Roles protagonistas</div></div>
           <div class="kpi teal"><div class="num">7</div><div class="lbl">SLAs / plazos</div></div>
-          <div class="kpi warn"><div class="num">5</div><div class="lbl">Pendientes por cerrar</div></div>
+          <div class="kpi warn"><div class="num">6</div><div class="lbl">Pendientes por cerrar</div></div>
         </div>
       </section>
 
@@ -186,6 +186,14 @@
           <div class="decision-box"><span class="tag info">Modo A</span><h3>Logística directa (seller)</h3><p>El seller gestiona el despacho y <strong>carga la info logística en su VTEX</strong>. Aplica la tarea 7a.1.</p></div>
           <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Logística por Marketplace</h3><p>El despacho dispara la <strong>solicitud de retiro</strong> a nuestros carriers. Aplica 7a.2. No hace falta crear ni mapear logística.</p></div>
         </div>
+        <h3>Decisión — cómo llega la factura a PIM</h3>
+        <div class="callout warn">Ninguno de los caminos 2A/2B está construido todavía — hoy el único camino operativo es que el seller facture por su propio VTEX.</div>
+        <p>Tres caminos posibles, en orden de preferencia — no es una elección libre del seller: se evalúa en ese orden y se cae al siguiente solo si el anterior no es viable.</p>
+        <ul class="autolist">
+          <li><strong>Camino ideal</strong> — el seller carga la factura en su VTEX (<code>invoiceUrl</code>). Flujo estándar, ver "Flujo automático" y "Reglas" más abajo. Único camino operativo hoy.</li>
+          <li><strong>El seller no puede cargar en su VTEX</strong> → el volumen decide: <strong>2A</strong> (≥100 pedidos/mes, obligatorio a ese volumen) — el seller manda la factura a PIM vía API propia del Marketplace; <strong>estado: en construcción</strong>, no hay endpoint ni documentación todavía. <strong>2B</strong> (&lt;100 pedidos/mes, fallback) — el seller manda la factura por mail a <code>sellers-soporte@sporting.com.ar</code> y un agente de Operaciones la carga a mano en PIM; <strong>estado: no existe</strong>, falta pantalla, instructivo y SLA.</li>
+          <li>En los dos caminos del punto anterior, el pedido <strong>no</strong> pasa por <code>invoiceUrl</code> de VTEX — así que no llega solo a "facturado" ni dispara el mail automático al cliente. Hay que <strong>configurar que ese mail lo dispare PIM</strong> en vez de VTEX; tampoco existe todavía.</li>
+        </ul>
         <h3>Flujo automático (VTEX ↔ PIM)</h3>
         <ul class="autolist">
           <li><strong>Factura</strong> → estado “facturado” dispara el mail con la URL de la factura (desde VTEX).</li>
@@ -209,13 +217,14 @@
           <tbody>
             <tr><td>7a.1</td><td><strong>Estados logísticos — logística nueva</strong></td><td>Modo A, carrier no configurado</td><td>Informar qué logística usa y pasar los estados.</td><td>Mapear los estados al estándar y pasarlos a PIM.</td><td>Crear la logística en PIM; consumir <code>courierStatus</code> y <code>Courier</code>; cargar el mapeo.</td><td><span class="pill g">Listo</span></td></tr>
             <tr><td>7a.2</td><td><strong>Config. de retiro por MP</strong></td><td>Modo B</td><td>—</td><td>Configurar que el despacho envíe la solicitud de retiro a nuestros carriers.</td><td>—</td><td><span class="pill g">Listo</span></td></tr>
-            <tr><td>7a.3</td><td><strong>Integración de factura (fallback)</strong></td><td>Si el seller no carga la factura</td><td>—</td><td>Gestionar una integración para recibir la <code>invoiceUrl</code>.</td><td>—</td><td><span class="pill w">Falta</span></td></tr>
+            <tr><td>7a.3</td><td><strong>Camino de factura (fallback)</strong></td><td>Si el seller no puede cargar la factura en su VTEX</td><td>Mandar la factura vía API (2A, ≥100 pedidos/mes) o por mail a <code>sellers-soporte@sporting.com.ar</code> (2B, &lt;100 pedidos/mes).</td><td>Construir/documentar la API de PIM (2A).</td><td>2A: exponer y documentar el endpoint de PIM. 2B: definir el proceso de carga manual (pantalla, instructivo, SLA) y configurar en ambos casos que el mail de factura al cliente lo dispare PIM en vez de VTEX.</td><td><span class="pill w">Falta</span></td></tr>
           </tbody>
         </table></div>
         <h3>Reglas / decisiones</h3>
         <ul>
           <li><strong>Facturación previa al despacho:</strong> el seller factura como parte de la preparación del pedido, <strong>antes</strong> de entregarlo a la logística — es el flujo estándar para todo seller nuevo. El <strong>envío de la factura al cliente es del MP</strong> (automático por mail).</li>
           <li><strong>Excepción — adidas:</strong> hoy adidas usa un workaround propio (factura ficticia para avanzar el estado en el despacho + factura real recién al llegar a "Entregado"). Es un caso puntual de ese seller, <strong>no el patrón a replicar</strong>.</li>
+          <li><strong>Si no puede cargar en VTEX:</strong> ver la decisión de los 3 caminos arriba (7a.3) — hoy ninguno de los dos caminos alternativos (2A/2B) está construido, así que un seller que no pueda facturar por VTEX es un bloqueante real para su Go Live hasta que se resuelva.</li>
           <li><strong>Factura A:</strong> no se aceptan para productos seller.</li>
           <li><strong>Mail de despacho:</strong> se envía desde PIM, no desde VTEX.</li>
           <li><strong>Estados logísticos:</strong> no llegan solos a VTEX; el seller los carga en <code>courierStatus</code>. En modo B no hace falta crear ni mapear logística.</li>
@@ -301,15 +310,17 @@
       </section>
 
       <section id="agujeros" class="section">
-        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 5 ítems, ninguno bloqueante. Los pendientes de onboarding (Fases 1-5) viven en <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">Integración VTEX ↔ VTEX</a>.</p></div>
+        <div class="section-head"><div class="section-title"><span>🧩</span><h2>Pendientes por cerrar</h2></div><p class="section-desc">Registro de agujeros — 6 ítems, uno de ellos bloqueante (7a.3-c). Los pendientes de onboarding (Fases 1-5) viven en <a href="./integracion-vtex-vtex.html" style="color:var(--g);font-weight:700">Integración VTEX ↔ VTEX</a>.</p></div>
         <div class="table-wrap"><table class="data-table">
-          <thead><tr><th>Ítem</th><th>Qué falta</th></tr></thead>
+          <thead><tr><th>Ítem</th><th>Qué falta</th><th>Bloqueante</th></tr></thead>
           <tbody>
-            <tr><td>7a.3</td><td>Definir la integración para recibir la <code>invoiceUrl</code> cuando el seller no factura por VTEX.</td></tr>
-            <tr><td>7b.1</td><td>Confirmar el árbol de arrepentimiento definitivo (hoy hay dos versiones no del todo alineadas).</td></tr>
-            <tr><td>7b</td><td>Definir quién en CS Luquin ejecuta el reembolso manual y con qué herramienta.</td></tr>
-            <tr><td>8.4</td><td>Confirmar si los estados de inversa comparten catálogo con los de forward (7a).</td></tr>
-            <tr><td>8</td><td>Diferencia operativa entre Devolución (60 d) y Garantía (180 d) más allá del plazo.</td></tr>
+            <tr><td>7a.3-a</td><td>Construir y documentar el <strong>endpoint de PIM</strong> para que el seller mande la factura vía API (camino 2A, obligatorio a partir de 100 pedidos/mes).</td><td>Solo si un seller ≥100 pedidos/mes no puede facturar por VTEX</td></tr>
+            <tr><td>7a.3-b</td><td>Definir y construir el <strong>proceso de carga manual en PIM</strong> (camino 2B): la factura llegaría por mail a <code>sellers-soporte@sporting.com.ar</code>, pero falta la pantalla, el instructivo del agente y el SLA de carga.</td><td>Solo si un seller &lt;100 pedidos/mes no puede facturar por VTEX</td></tr>
+            <tr><td>7a.3-c</td><td><strong>Configurar que el mail de factura al cliente lo dispare PIM</strong> (no VTEX) para pedidos de los caminos 2A/2B — hoy ese disparo depende de <code>invoiceUrl</code> en VTEX, que en estos casos nunca se completa.</td><td><span class="pill r">Sí</span> — sin esto el cliente no recibe la factura</td></tr>
+            <tr><td>7b.1</td><td>Confirmar el árbol de arrepentimiento definitivo (hoy hay dos versiones no del todo alineadas).</td><td>No</td></tr>
+            <tr><td>7b</td><td>Definir quién en CS Luquin ejecuta el reembolso manual y con qué herramienta.</td><td>No</td></tr>
+            <tr><td>8.4</td><td>Confirmar si los estados de inversa comparten catálogo con los de forward (7a).</td><td>No</td></tr>
+            <tr><td>8</td><td>Diferencia operativa entre Devolución (60 d) y Garantía (180 d) más allá del plazo.</td><td>No</td></tr>
           </tbody>
         </table></div>
       </section>

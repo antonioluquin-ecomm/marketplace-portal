@@ -112,6 +112,29 @@ runbook que habilita.
 >   **solicitud de retiro** a nuestros carriers. Aplica la tarea 7a.2. En este modo **no**
 >   hace falta crear ni mapear logística.
 
+> ⚠️ **Decisión — cómo llega la factura a PIM (ninguno de los caminos 2A/2B está
+> construido todavía):** tres caminos posibles, en orden de preferencia. No es una
+> elección libre del seller — se evalúa en ese orden y se cae al siguiente solo si el
+> anterior no es viable.
+> - **1 · Camino ideal — el seller carga la factura en su VTEX** (`invoiceUrl`). Es el
+>   flujo estándar descrito en "Flujo automático" y "Reglas" más abajo — aplica a todo
+>   seller que pueda facturar antes del despacho. **Único camino operativo hoy.**
+> - **2 · El seller no puede cargar la factura en su VTEX** → el volumen del seller
+>   decide cuál de las dos sub-opciones aplica:
+>   - **2A · ≥ 100 pedidos/mes → integración a PIM vía API (obligatoria a ese volumen).**
+>     El seller manda la factura directo a PIM por una API propia del Marketplace.
+>     **Estado: en construcción** — no hay endpoint ni documentación todavía para dársela
+>     al seller.
+>   - **2B · < 100 pedidos/mes → carga manual en PIM (fallback).** El seller manda la
+>     factura por mail a `sellers-soporte@sporting.com.ar`; un agente de Operaciones la
+>     carga a mano en PIM. **Estado: no existe** — hoy no hay proceso definido para que
+>     Operaciones tome ese mail y la cargue (ni pantalla, ni instructivo, ni SLA).
+> - **En los dos caminos del punto 2, el pedido no pasa por `invoiceUrl` de VTEX** — así
+>   que **no** llega solo al estado "facturado" ni dispara el mail automático al cliente
+>   (ver "Flujo automático" abajo). Para esos casos hay que **configurar que el mail de
+>   factura al cliente lo dispare PIM**, no VTEX. Esta configuración tampoco existe
+>   todavía — es parte de lo que falta construir en ambos caminos.
+
 #### Flujo automático (VTEX ↔ PIM)
 
 - **Factura →** cuando el VTEX del Marketplace detecta el estado **facturado**, dispara el
@@ -146,7 +169,7 @@ runbook que habilita.
 |---|---|---|---|---|---|---|
 | 7a.1 | Estados logísticos — logística nueva | Modo A, si el carrier **no** está configurado | Informar qué logística usa y, si es nueva, pasar los estados que le llegan. | Mapear los estados del carrier a los **estados logísticos estándar** y pasarlos a PIM. | Crear la logística en PIM; consumir el estado desde `courierStatus` y el carrier desde `Courier`; dejar el mapeo cargado. | ✅ |
 | 7a.2 | Config. de retiro por Marketplace | Modo B | — | Configurar que, al despachar, se envíe la **solicitud de retiro** a nuestros carriers. | — | ✅ |
-| 7a.3 | Integración de factura (fallback) | Si el seller **no** carga la factura en su VTEX | — | Gestionar una **integración** para recibir la `invoiceUrl`. | — | ⚠️ falta |
+| 7a.3 | Camino de factura (fallback) | Si el seller **no** puede cargar la factura en su VTEX | Mandar la factura vía API (2A, ≥100 pedidos/mes) o por mail a `sellers-soporte@sporting.com.ar` (2B, <100 pedidos/mes). | Construir/documentar la API de PIM (2A). | 2A: exponer y documentar el endpoint de PIM. 2B: definir el proceso de carga manual (pantalla, instructivo, SLA) y configurar en ambos casos que el mail de factura al cliente lo dispare PIM en vez de VTEX. | ⚠️ falta |
 
 #### Reglas / Decisiones — Fase 7a
 
@@ -158,8 +181,10 @@ runbook que habilita.
   el estado en el despacho + factura real recién al llegar a "Entregado"). Es un caso
   puntual de ese seller, **no el patrón a replicar**: todo seller nuevo debe poder facturar
   antes del despacho.
-- **Factura por VTEX:** debe llegar por `invoiceUrl`. Si el seller no la carga en su VTEX,
-  se requiere una **integración** para recibir la URL (tarea 7a.3).
+- **Factura por VTEX:** debe llegar por `invoiceUrl`. Si el seller no puede cargarla en su
+  VTEX, ver la decisión de los 3 caminos más arriba (tarea 7a.3) — hoy **ninguno de los
+  dos caminos alternativos (2A/2B) está construido**, así que un seller que no pueda
+  facturar por VTEX es un bloqueante real para su Go Live hasta que se resuelva.
 - **Factura A:** **no** se aceptan facturas Tipo A para productos seller. Si el cliente la
   solicita, no se puede gestionar.
 - **Mail de despacho:** se envía **desde PIM**, no desde VTEX.
@@ -304,7 +329,9 @@ Al confirmar, el botón dispara **de una sola vez**:
 
 | Ítem | Qué falta | Bloqueante |
 |---|---|---|
-| 7a.3 | Definir la **integración** para recibir la `invoiceUrl` cuando el seller no carga la factura en su VTEX. | No (solo si el seller no factura por VTEX) |
+| 7a.3-a | Construir y documentar el **endpoint de PIM** para que el seller mande la factura vía API (camino 2A, obligatorio a partir de 100 pedidos/mes). | Solo para un seller ≥100 pedidos/mes que no pueda facturar por VTEX |
+| 7a.3-b | Definir y construir el **proceso de carga manual en PIM** (camino 2B): hoy la factura llegaría por mail a `sellers-soporte@sporting.com.ar`, pero falta la pantalla, el instructivo para el agente y el SLA de carga. | Solo para un seller <100 pedidos/mes que no pueda facturar por VTEX |
+| 7a.3-c | **Configurar que el mail de factura al cliente lo dispare PIM** (no VTEX) para pedidos que llegan por los caminos 2A/2B — hoy ese disparo depende de `invoiceUrl` en VTEX, que en estos casos nunca se completa. | Sí, para cualquier seller en 2A/2B: sin esto el cliente no recibe la factura |
 | 7b.1 | Confirmar el **árbol de arrepentimiento** definitivo (hoy hay dos versiones no del todo alineadas: "Pedido retenido / Rechazo" vs. "Posibilidad / Imposibilidad"). | No |
 | 7b | Definir **quién en CS Luquin** ejecuta el reembolso manual y con qué herramienta. | No |
 | 8.4 | Confirmar si los **estados logísticos de inversa** comparten catálogo con los de forward (7a) o son un set separado. | No |
