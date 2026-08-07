@@ -207,20 +207,34 @@ setup**. Tres tipos de incidente, cada uno con su flujo.
 
 **Definición:** el cliente se arrepiente o compró mal y quiere cancelar.
 
-**Entrada:** el cliente **contacta al Marketplace** (`sellers-soporte@sporting.com.ar`).
-**CS Marketplace** verifica el estado logístico en **PIM** y contacta a **CS del Seller**
-para intentar la cancelación.
+**Entrada:** el cliente **contacta al Marketplace** por cualquiera de los canales de
+atención habilitados de Sporting (mail, WhatsApp, redes, etc.) — **no** por
+`sellers-soporte@sporting.com.ar`, que **no es un canal de atención al cliente**: es el
+canal interno de comunicación entre el Marketplace y el seller. **CS Marketplace**
+verifica el estado logístico en **PIM** y, si hace falta coordinar la cancelación con el
+seller, lo contacta por `sellers-soporte@sporting.com.ar` al mail de contacto que el
+seller haya indicado.
+
+> **Mail de contacto del seller:** todo seller debe indicarnos un mail de contacto para
+> este canal — preferentemente uno dedicado, no una casilla personal (ver tarea de
+> onboarding en `docs/integracion-vtex-vtex.md`, Fase 1). Es un canal **acotado a
+> consultas puntuales**, no de comunicación general: temas operativos (si el seller hace
+> su propia logística), demoras en la preparación de un pedido, demoras en la aprobación
+> de una devolución, etc.
 
 **Árbol de decisión:**
 
 - **A · Cancelación posible**
-  - **A1 · Pedido no despachado** (VTEX: *Pago aprobado*) → el **Seller cancela desde su
-    VTEX** → impacta en el VTEX del Marketplace → **reembolso automático** (flujo Fase 6).
-  - **A2 · Pedido despachado, el seller lo retiene** → el seller retiene/cancela → reembolso.
+  - **A1 · Pedido no despachado** (VTEX: *Pago aprobado* o *En preparación*) → el
+    **Seller cancela desde su VTEX** → impacta en el VTEX del Marketplace →
+    **reembolso automático** (flujo Fase 6).
+  - **A2 · Pedido despachado, el seller lo retiene** → el seller **informa al
+    Marketplace** por `sellers-soporte@sporting.com.ar` → **CS Luquin hace el
+    reembolso desde PIM** (manual, no automático como en A1).
 - **B · Cancelación imposible** (el seller informa que no es factible) → **CS Marketplace**
   comunica al cliente y le ofrece **dos opciones**:
   - **B1 · Rechazar el paquete** en el momento de la entrega.
-  - **B2 · Recibir y gestionar la devolución** por el **portal de cambios** (→ Fase 8).
+  - **B2 · Recibir y gestionar la devolución** por el **Portal de Pedidos** (→ Fase 8).
 
 **Regla:** no se aceptan cancelaciones parciales. **SLA:** el cliente tiene **30 días** para
 solicitar la cancelación.
@@ -258,18 +272,19 @@ solicitar la cancelación.
   que el producto vuelva al CD.
 - **Reembolsos — dos vías distintas:**
   - **Automático** (VTEX) cuando la cancelación se hace en el VTEX del seller (caso A1).
-  - **Manual, por CS Luquin**, tras recibir el informe del seller (dirección incorrecta y
-    lost-in-transit).
+  - **Manual, por CS Luquin desde PIM**, tras el informe del seller (casos A2,
+    dirección incorrecta y lost-in-transit).
 - **Costo lost-in-transit:** se reclama al **Carrier** (transportista responsable); el
   reclamo lo presenta quien contrató al carrier (seller en modo A, Marketplace en modo B).
-- **Contacto CS:** `sellers-soporte@sporting.com.ar`.
+- **Canal Marketplace↔Seller:** `sellers-soporte@sporting.com.ar` — **no** es el canal de
+  contacto del cliente (ver "Entrada" en 7b.1).
 
 ---
 
 ## Fase 8 — Logística inversa / devoluciones
 
-Cómo el cliente devuelve un producto de un seller. Todo pasa por el **Portal de Cambios y
-Devoluciones** (self-service). Trae de vuelta **tareas de setup** (configurar el portal,
+Cómo el cliente devuelve un producto de un seller. Todo pasa por el **Portal de Pedidos**
+(self-service). Trae de vuelta **tareas de setup** (configurar el portal,
 redactar T&C, carrier de inversa) más un **automatismo clave**: un botón que dispara tres
 acciones a la vez. Las tareas de setup son las que se ejecutan durante el onboarding (paso
 5 del roadmap en `docs/integracion-vtex-vtex.md`); el resto de esta fase es el runbook que
@@ -283,7 +298,7 @@ queda operando después.
 
 #### Flujo del portal (self-service del cliente — runtime)
 
-1. El cliente accede al **Portal de Cambios y Devoluciones** (válido hasta **180 días** desde
+1. El cliente accede al **Portal de Pedidos** (válido hasta **180 días** desde
    el pedido).
 2. Ingresa **DNI + N.º de pedido/orden**.
 3. El **número de orden determina si el pedido es del Seller o del Marketplace**.
@@ -314,8 +329,8 @@ Al confirmar, el botón dispara **de una sola vez**:
 
 #### Reglas / Decisiones — Fase 8
 
-- **Canal único:** las devoluciones se hacen **sí o sí por el Portal de Cambios y
-  Devoluciones**. No hay otra vía.
+- **Canal único:** las devoluciones se hacen **sí o sí por el Portal de Pedidos**. No hay
+  otra vía.
 - **Identificación por N.º de orden:** el sistema detecta si el pedido es del seller o del
   Marketplace por el número de orden, y aplica las políticas correspondientes.
 - **Plazos:** portal válido hasta **180 días**; **Devolución** dentro de **60 días**;

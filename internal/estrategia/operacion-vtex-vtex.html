@@ -234,10 +234,11 @@
       <section id="f7b" class="section">
         <div class="section-head"><div class="section-title"><span>📭</span><h2>Fase 7b — Pedidos no entregados</h2></div><p class="section-desc">Casos en que la entrega no se concreta y hay que reembolsar. Flujo 100 % operativo, liderado por CS del Marketplace (Luquin).</p></div>
         <h3>7b.1 · Arrepentimiento de compra (cancelación del cliente)</h3>
-        <p>Entrada: el cliente contacta al MP (<code>sellers-soporte@sporting.com.ar</code>). CS MP verifica el estado en PIM y contacta a CS del seller.</p>
+        <p><strong>Entrada:</strong> el cliente contacta al MP por cualquiera de los canales de atención habilitados de Sporting (mail, WhatsApp, redes, etc.) — <strong>no</strong> por <code>sellers-soporte@sporting.com.ar</code>, que no es un canal de atención al cliente: es el canal interno de comunicación entre el Marketplace y el seller. CS MP verifica el estado en PIM y, si hace falta coordinar con el seller, lo contacta por <code>sellers-soporte@sporting.com.ar</code> al mail de contacto que el seller haya indicado.</p>
+        <div class="callout"><strong>Mail de contacto del seller:</strong> todo seller debe indicar un mail de contacto para este canal — preferentemente uno dedicado, no una casilla personal (tarea de onboarding 1.4). Es un canal <strong>acotado a consultas puntuales</strong>, no de comunicación general: temas operativos (si el seller hace su propia logística), demoras en la preparación de un pedido, demoras en la aprobación de una devolución, etc.</div>
         <div class="decision">
-          <div class="decision-box"><span class="tag info">A · Cancelación posible</span><p><strong>A1</strong> · No despachado (VTEX: Pago aprobado) → el seller cancela desde su VTEX → reembolso automático.<br><strong>A2</strong> · Despachado y el seller lo retiene → reembolso.</p></div>
-          <div class="decision-box b"><span class="tag warn">B · Cancelación imposible</span><p>El seller informa que no es factible → CS MP ofrece: <strong>B1</strong> rechazar el paquete, o <strong>B2</strong> recibir y devolver por el portal de cambios (Fase 8).</p></div>
+          <div class="decision-box"><span class="tag info">A · Cancelación posible</span><p><strong>A1</strong> · No despachado (VTEX: Pago aprobado o En preparación) → el seller cancela desde su VTEX → reembolso automático.<br><strong>A2</strong> · Despachado y el seller lo retiene → informa al MP por <code>sellers-soporte@sporting.com.ar</code> → CS Luquin hace el reembolso desde PIM (manual, no automático como en A1).</p></div>
+          <div class="decision-box b"><span class="tag warn">B · Cancelación imposible</span><p>El seller informa que no es factible → CS MP ofrece: <strong>B1</strong> rechazar el paquete, o <strong>B2</strong> recibir y devolver por el Portal de Pedidos (Fase 8).</p></div>
         </div>
         <p style="margin-top:10px"><strong>SLA:</strong> el cliente tiene 30 días para solicitar la cancelación. Sin cancelaciones parciales.</p>
         <h3>7b.2 · Falta de información / dirección incorrecta</h3>
@@ -255,20 +256,21 @@
         </ul>
         <h3>Reglas / SLA</h3>
         <ul>
-          <li><strong>Reembolsos, dos vías:</strong> automático (VTEX, al cancelar en el VTEX del seller) o manual (CS Luquin, tras el informe).</li>
+          <li><strong>Reembolsos, dos vías:</strong> automático (VTEX, al cancelar en el VTEX del seller, caso A1) o manual (CS Luquin desde PIM, tras el informe — casos A2, dirección incorrecta y lost-in-transit).</li>
           <li>SLAs: arrepentimiento 30 días · dirección incorrecta 4-5 días.</li>
+          <li><strong>Canal Marketplace↔Seller:</strong> <code>sellers-soporte@sporting.com.ar</code> — no es el canal de contacto del cliente (ver "Entrada" en 7b.1).</li>
         </ul>
       </section>
 
       <section id="f8" class="section">
-        <div class="section-head"><div class="section-title"><span>↩️</span><h2>Fase 8 — Logística inversa / devoluciones</h2></div><p class="section-desc">Todo pasa por el Portal de Cambios y Devoluciones (self-service). Vuelven las tareas de setup + el botón que dispara tres acciones.</p></div>
+        <div class="section-head"><div class="section-title"><span>↩️</span><h2>Fase 8 — Logística inversa / devoluciones</h2></div><p class="section-desc">Todo pasa por el Portal de Pedidos (self-service). Vuelven las tareas de setup + el botón que dispara tres acciones.</p></div>
         <div class="decision">
           <div class="decision-box"><span class="tag info">Modo A</span><h3>Inversa por el seller</h3><p>El seller indica su Carrier (tareas 8.2 / 8.3 / 8.4).</p></div>
           <div class="decision-box b"><span class="tag warn">Modo B</span><h3>Inversa por el Marketplace</h3><p>Ecomm consigue un contrato de retiro (tarea 8.5).</p></div>
         </div>
         <h3>Flujo del portal (self-service del cliente)</h3>
         <ul class="autolist">
-          <li>El cliente accede al Portal de Cambios y Devoluciones (hasta <strong>180 días</strong>).</li>
+          <li>El cliente accede al Portal de Pedidos (hasta <strong>180 días</strong>).</li>
           <li>Ingresa DNI + N.º de pedido/orden.</li>
           <li>El N.º de orden determina si es del seller o del MP → aplica las políticas del seller (T&amp;C).</li>
           <li><strong>Devolución</strong> (dentro de 60 días): producto → motivo → verificar datos. <strong>Garantía</strong> (hasta 180 días): producto → verificar datos (sin motivo).</li>

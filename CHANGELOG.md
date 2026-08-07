@@ -1,6 +1,17 @@
 # Changelog
 
-## 2026-08-06 - Define los 3 caminos de factura en el playbook de Operación VTEX↔VTEX
+## 2026-08-06 - Corrige el canal de contacto del cliente y unifica el nombre del portal de devoluciones
+
+Tipo de cambio: contenido de negocio (`docs/operacion-vtex-vtex.md`, `internal/estrategia/operacion-vtex-vtex.html`, `public/integracion/integracion-seller.html`, `docs/integracion-vtex-vtex.md`), más una corrección cruzada en Commerce Hub.
+
+El usuario corrigió el árbol de decisión de 7b.1 (arrepentimiento de compra):
+
+- **`sellers-soporte@sporting.com.ar` no es el canal de contacto del cliente** — el doc lo decía así. Es el canal interno de comunicación Marketplace↔Seller. El cliente contacta al Marketplace por los canales de atención habituales de Sporting (mail, WhatsApp, redes). Corregido en la sección "Entrada" de 7b.1.
+- **El seller siempre debe indicar un mail de contacto** para ese canal, preferentemente uno dedicado — es un canal acotado a consultas puntuales (operativas si el seller hace su propia logística, demoras en preparación o en aprobación de devoluciones), no de comunicación general. Se agrega como tarea de onboarding **1.4** en `docs/integracion-vtex-vtex.md` (Fase 1), ya que es un dato que se recolecta durante el alta.
+- **A1** ahora incluye el estado VTEX "En preparación" además de "Pago aprobado".
+- **A2** (pedido despachado que el seller retiene) se precisa: el seller informa al Marketplace por `sellers-soporte@sporting.com.ar`, y **CS Luquin hace el reembolso desde PIM** (manual, no automático como A1) — antes decía solo "reembolso", sin mecanismo. Se actualiza también la regla de "Reembolsos — dos vías" para incluir el caso A2.
+
+Al revisar el nombre del portal para esta corrección, el usuario aclaró que **"Portal de Cambios y Devoluciones" (VTEX↔VTEX) y "Portal de Pedidos" (Gestión Asistida) no son dos sistemas distintos** — es el mismo portal, donde el cliente consulta estado de pedidos y gestiona cambios/devoluciones. Esto revierte una conclusión de la auditoría del 2026-08-06 anterior, que asumió (sin preguntar) que eran sistemas separados. Se unifica el nombre a **"Portal de Pedidos"** en las tres fuentes de marketplace-portal y en `commerce-hub/src/data/documentacion/procesos.json` (dos menciones corregidas).
 
 Tipo de cambio: contenido de negocio (`docs/operacion-vtex-vtex.md`, `internal/estrategia/operacion-vtex-vtex.html`), sin cambios de código.
 

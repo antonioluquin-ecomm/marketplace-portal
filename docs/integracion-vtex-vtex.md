@@ -216,6 +216,7 @@ para qué sirve), no su uso recurrente sobre el catálogo completo.
 | 1.1 | Alta del seller | Ecomm crea el seller en **Gestión › Agregar seller** (tipo *Seller VTEX*), sobre el ambiente definido en 1.0. | Compartir su **cuenta de seller VTEX** (y de QA, si aplica). | Crear su propia política comercial (prerrequisito); completar el alta; activar cuando esté listo. | ✅ |
 | 1.2 | Solicitar política comercial (seller) | Necesaria para la tarea **2.9** (Fase 2) — no bloquea el alta (ver recuadro arriba). | Solicitar una nueva política comercial a su agencia. | — | ✅ |
 | 1.3 | Equipo de integración del seller | Contacto técnico de referencia para el resto del proceso. | Informar con qué integrador/agencia técnica trabaja (ej. Infracommerce, Suma, etc.). | Registrar el contacto. | ✅ |
+| 1.4 | Mail de contacto operativo | Canal para consultas puntuales durante la operación (ver `docs/operacion-vtex-vtex.md`, Fase 7b) — distinto del contacto técnico de 1.3. | Indicar un mail de contacto — preferentemente uno dedicado, no una casilla personal. | Registrar el mail para usarlo desde `sellers-soporte@sporting.com.ar`. | ✅ |
 
 #### Reglas / Decisiones — Fase 1
 
