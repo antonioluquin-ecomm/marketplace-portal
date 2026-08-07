@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-08-07 - Corrige el topbar de las páginas seller: el botón "Cerrar sesión" se caía a una línea flotante
+
+Tipo de cambio: bug visual de CSS compartido (`assets/css/pages/public-seller.css`, `assets/css/pages/public-seller-shell.css`), sin cambios de contenido.
+
+En anchos de escritorio intermedios (~1500-1700px), el chip de usuario del topbar (`.user-chip`, nombre + "← Portal" + "Cambiar contraseña" + "Cerrar sesión") tenía `flex-wrap: wrap`, así que cuando la fila completa (marca + nav de 7 ítems + chip) no entraba, el último botón se caía a una segunda línea sin fondo propio — se veía como una píldora "Cerrar sesión" flotando sobre el hero, desprendida del header. Reproducido en `public/integracion/integracion-seller.html` (y compartido por las 6 páginas del flujo seller que usan el mismo header).
+
+Dos cambios, porque uno solo dejaba una zona angosta (~1200-1500px) donde el nav y el chip se solapaban en vez de caerse:
+
+- `.user-chip` pasa a `flex-wrap: nowrap` y `.user-chip-name` trunca con ellipsis (`max-width: 150px`) en vez de forzar el wrap del último botón.
+- El breakpoint que oculta la nav central del topbar (`public-seller-shell.css`) sube de `max-width: 1200px` a `1500px` — por debajo de ese ancho la fila completa (marca + 7 links de nav + chip sin truncar) no entra, así que ahora la nav se oculta antes de que haya colisión, en vez de después.
+
+Se bumpea el query param de cache-busting de ambos CSS (`public-seller.css` a `v=1.4.74`, `public-seller-shell.css` a `v=1.4.38`) en las 6-7 páginas que los referencian.
+
 ## 2026-08-06 - Corrige el canal de contacto del cliente y unifica el nombre del portal de devoluciones
 
 Tipo de cambio: contenido de negocio (`docs/operacion-vtex-vtex.md`, `internal/estrategia/operacion-vtex-vtex.html`, `public/integracion/integracion-seller.html`, `docs/integracion-vtex-vtex.md`), más una corrección cruzada en Commerce Hub.

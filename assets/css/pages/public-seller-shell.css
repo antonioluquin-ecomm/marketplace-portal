@@ -98,7 +98,7 @@ body[data-public-page] > .portal-topbar > .user-chip {
   margin: 0 !important;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1500px) {
   body[data-public-page] > .portal-topbar.portal-topbar {
     grid-template-columns: minmax(0, 1fr) auto !important;
   }
