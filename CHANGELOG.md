@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-07 - Link "Volver al Hub" en el sidebar interno
+
+Tipo de cambio: nueva funcionalidad transversal (`index.html`, 16 páginas de `internal/`, `assets/css/internal-components.css`).
+
+Ninguna app interna del ecosistema (`vtex-control-center`, `commerce-hub`, `customer-service-control-center`, `project-control-center`, ahora Marketplace Portal) tenía forma de volver a **eCommerce Hub** (`https://antonioluquin-ecomm.github.io/ecomm-hub/`) salvo el botón "atrás" del navegador — estándar nuevo documentado en `project-standards/navigation_standard.md §6`.
+
+Se agrega un link fijo "Hub" (ícono grid + texto), primer elemento del sidebar, en las 17 páginas que usan el sidebar canónico `.portal-sidebar` (`index.html` + 16 de `internal/`). La regla compartida vive en `internal-components.css` bajo `.portal-sidebar .hub-link`; `internal/simuladores/simulador-economico.html` usa un sidebar propio (`.col-nav`, no `.portal-sidebar`) y recibió la misma regla en su `<style>` local.
+
+**`public/` queda excluido a propósito** — son las páginas que ve el seller externo, con su propia identidad visual (verde Sporting) y sin relación con las herramientas internas del equipo Luquin.
+
 ## 2026-08-07 - Corrige el topbar de las páginas seller: el botón "Cerrar sesión" se caía a una línea flotante
 
 Tipo de cambio: bug visual de CSS compartido (`assets/css/pages/public-seller.css`, `assets/css/pages/public-seller-shell.css`), sin cambios de contenido.
