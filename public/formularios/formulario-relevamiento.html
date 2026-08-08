@@ -180,13 +180,6 @@
         background: rgba(37, 182, 12, 0.22);
         border-color: rgba(37, 182, 12, 0.5);
       }
-      .section-nav-center {
-        font-size: 10px;
-        color: rgba(17, 24, 39, 0.25);
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
 
       .section-completion {
         font-size: 11px;
@@ -698,7 +691,6 @@
           </div>
 
           <div class="section-nav">
-            <span class="section-nav-center">1 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -839,7 +831,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">2 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -1098,7 +1089,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">3 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -1391,7 +1381,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">4 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -1662,7 +1651,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">5 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -1980,7 +1968,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">6 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -2182,7 +2169,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">7 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -2420,7 +2406,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">8 / 9</span>
             <button
               type="button"
               class="section-nav-btn next"
@@ -2494,7 +2479,6 @@
             >
               ← Anterior
             </button>
-            <span class="section-nav-center">9 / 9</span>
           </div>
         </section>
 
@@ -2824,9 +2808,6 @@
         const badge = document.getElementById("badgeSecciones");
         if (badge) badge.textContent = "📂 " + total + " secciones";
         visible.forEach((sec, idx) => {
-          const pos = idx + 1;
-          const center = sec.querySelector(".section-nav-center");
-          if (center) center.textContent = pos + " / " + total;
           const prevBtn = sec.querySelector(".section-nav-btn.prev");
           const nextBtn = sec.querySelector(".section-nav-btn.next");
           const prevSec = visible[idx - 1];

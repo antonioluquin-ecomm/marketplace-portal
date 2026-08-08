@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-08 - Saca el contador "X / 9" de los botones Anterior/Siguiente en Relevamiento
+
+Tipo de cambio: ajuste de UI (`public/formularios/formulario-relevamiento.html`).
+
+El contador del medio (`.section-nav-center`, "2 / 9") quedaba flotando solo en un espacio vacío grande, con bajo contraste, y encima duplicaba información que la barra sticky de arriba ya muestra (el pill de sección activo). Se saca el contador de las 9 secciones, el CSS que ya no se usa y la línea de JS (`renumberVisibleSections`) que lo actualizaba — quedan solo los dos botones, cada uno en su extremo.
+
 ## 2026-08-08 - Corrige contraste de la barra de progreso de Relevamiento y Calificación
 
 Tipo de cambio: bug visual + bug funcional menor (`public/formularios/formulario-relevamiento.html`, `public/formularios/formulario-calificacion.html`).
