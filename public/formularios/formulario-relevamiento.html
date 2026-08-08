@@ -64,37 +64,42 @@
         margin-top: 10px;
         flex-wrap: wrap;
       }
+      /* .progress-box tiene fondo oscuro (rgba(17,24,39,.93)) a propósito —
+         estos pills usaban tonos oscuros pensados para un contenedor claro
+         (rgba(17,24,39,X)), quedando texto casi negro sobre fondo casi negro.
+         Se invierten a tonos claros; los estados verdes (.active/.done) ya
+         contrastaban bien y no se tocan. */
       .progress-section-dot {
         display: flex;
         align-items: center;
         gap: 5px;
         padding: 4px 9px;
         border-radius: 999px;
-        background: rgba(17, 24, 39, 0.06);
-        border: 1px solid rgba(17, 24, 39, 0.08);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
         cursor: pointer;
         transition: all 0.18s;
         font-size: 10.5px;
         font-weight: 600;
-        color: rgba(17, 24, 39, 0.35);
+        color: rgba(255, 255, 255, 0.55);
         letter-spacing: 0.03em;
         white-space: nowrap;
         user-select: none;
       }
       .progress-section-dot:hover {
-        background: rgba(17, 24, 39, 0.1);
-        color: rgba(17, 24, 39, 0.7);
-        border-color: rgba(17, 24, 39, 0.18);
+        background: rgba(255, 255, 255, 0.14);
+        color: rgba(255, 255, 255, 0.9);
+        border-color: rgba(255, 255, 255, 0.28);
       }
       .progress-section-dot.active {
-        background: rgba(37, 182, 12, 0.15);
-        border-color: rgba(37, 182, 12, 0.35);
-        color: var(--primary-hover, #1e9209);
+        background: rgba(37, 182, 12, 0.22);
+        border-color: rgba(37, 182, 12, 0.45);
+        color: #8be07a;
       }
       .progress-section-dot.done {
-        background: rgba(37, 182, 12, 0.12);
-        border-color: rgba(37, 182, 12, 0.25);
-        color: var(--primary-hover, #1e9209);
+        background: rgba(37, 182, 12, 0.18);
+        border-color: rgba(37, 182, 12, 0.35);
+        color: #8be07a;
       }
       .progress-section-dot.done::after {
         content: "✓";
@@ -102,9 +107,9 @@
         opacity: 0.8;
       }
       .progress-section-dot.partial {
-        background: rgba(37, 182, 12, 0.07);
-        border-color: rgba(37, 182, 12, 0.18);
-        color: rgba(17, 24, 39, 0.45);
+        background: rgba(37, 182, 12, 0.1);
+        border-color: rgba(37, 182, 12, 0.22);
+        color: rgba(255, 255, 255, 0.7);
       }
       .psec-num {
         font-size: 9px;
@@ -2594,11 +2599,20 @@
                 .forEach((p) => p.classList.remove("active"));
               const pill = document.getElementById("dot-sec-" + n);
               if (pill) pill.classList.add("active");
-              // Update label in progress box
+              // Update label in progress box — posición secuencial entre las
+              // secciones visibles (no el número fijo de data-section), y el
+              // total dinámico: antes decía "/9" fijo aunque el modelo del
+              // seller redujera el formulario a menos secciones (ver
+              // applyModeloRelevamiento / HIDDEN_SECTIONS_BY_MODELO).
               const lbl = document.getElementById("progressLabel");
-              if (lbl)
+              if (lbl) {
+                const visibles = Array.from(
+                  document.querySelectorAll(".section[data-section]"),
+                ).filter((s) => !s.classList.contains("hidden"));
+                const pos = visibles.findIndex((s) => s.dataset.section === n) + 1;
                 lbl.textContent =
-                  (SECTION_LABELS[n] || "Sección " + n) + " (" + n + "/9)";
+                  (SECTION_LABELS[n] || "Sección " + n) + " (" + (pos || n) + "/" + (visibles.length || 9) + ")";
+              }
             }
           });
         },

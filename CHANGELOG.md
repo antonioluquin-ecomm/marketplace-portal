@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-08 - Corrige contraste de la barra de progreso de Relevamiento
+
+Tipo de cambio: bug visual + bug funcional menor (`public/formularios/formulario-relevamiento.html`).
+
+La barra sticky de progreso (`.progress-box`) tiene fondo oscuro a propósito, pero los pills de sección sin completar (`.progress-section-dot`) usaban colores oscuros pensados para un contenedor claro (`rgba(17,24,39,X)`) — texto casi negro sobre fondo casi negro, ilegible salvo el pill activo/completo (verde, sí contrastaba). Se invierten a tonos claros (`rgba(255,255,255,X)`), y el verde de "activo"/"completo" pasa a un verde más claro (`#8be07a`) para mantener contraste sobre el fondo oscuro.
+
+De paso, encontrado revisando la misma zona: la etiqueta de la barra ("DATOS GENERALES (1/9)") tenía el total fijo en "/9", así que después del recorte a 4 secciones para VTEX↔VTEX seguía mostrando "/9" — se corrige a un total dinámico según las secciones realmente visibles.
+
 ## 2026-08-08 - Suma 3 definiciones operativas y recorta Relevamiento para VTEX↔VTEX
 
 Tipo de cambio: ampliación de feature + recorte de formulario (`apps-script/Schema.gs`, `apps-script/PlantillasGanttDefiniciones.gs`, `apps-script/Relevamientos.gs`, `public/integracion/definiciones-operativas.html`, `internal/backlog/gestion-sellers.html`, `public/formularios/formulario-relevamiento.html`, `docs/definiciones-operativas.md`).
