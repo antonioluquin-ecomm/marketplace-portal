@@ -18,14 +18,15 @@
    Al hacer un cambio funcional visible: sumar una entrada NUEVA al inicio
    de CHANGELOG (más reciente primero) y actualizar VERSION.number/date. */
 const VERSION = {
-  number: '1.4.84',
+  number: '1.4.85',
   date:   '2026-08-08',
-  notes:  'Definiciones operativas: generación automática de tareas de Gantt por seller (v1, VTEX↔VTEX)',
+  notes:  'Definiciones operativas: 3 campos nuevos + Relevamiento recortado para VTEX↔VTEX',
 };
 
 /* Máximo 10 entradas (project-standards/application_shell.md §8.5) — descripción breve,
  * de una línea. Al agregar una versión nueva, quitar la más antigua del final. */
 const CHANGELOG = [
+  { v: '1.4.85', date: '2026-08-08', desc: 'Definiciones operativas suma 3 campos (cuenta VTEX de QA, condiciones de devolución, destinos excluidos). Relevamiento se recorta para sellers VTEX↔VTEX: de 9 secciones a 4 (Datos generales, Contactos, Catálogo, Observaciones) — el resto queda cubierto por Definiciones Operativas.' },
   { v: '1.4.84', date: '2026-08-08', desc: 'Nueva sección "Definiciones operativas" (Backlog de Sellers + guía pública del seller): respuestas puntuales (facturación, logística directa/inversa, precio, stock) que generan y desbloquean tareas de Gantt automáticamente. Nuevo link "Definiciones operativas" en el sidebar de las 16 páginas internas, dentro de "Vista de sellers".' },
   { v: '1.4.83', date: '2026-08-08', desc: 'Guía pública de integración: se audita "Lo que tenés que preparar" contra docs/integracion-vtex-vtex.md y docs/operacion-vtex-vtex.md. Se agrega el ítem de mail de contacto operativo (tarea 1.4, faltaba); se corrige la card de Facturación (los sellers VTEX↔VTEX ya operan y ya facturan — lo que hace falta es cargar esa factura en el pedido de VTEX vía invoiceUrl, sin marco de "bloqueante" porque existen otros caminos); se suaviza la afirmación sobre nota de crédito, que no está definida en ningún doc fuente.' },
   { v: '1.4.82', date: '2026-08-07', desc: 'Guía pública de integración: nueva sección "Con quién vas a trabajar" antes del roadmap, con el equipo fijo de Sporting Marketplace (Gerente eCommerce, Comercial, Integración/Sistemas) que participa del kickoff y el seguimiento semanal, cada uno con una línea de qué hace. Avatar con iniciales, preparado para reemplazar por foto real.' },

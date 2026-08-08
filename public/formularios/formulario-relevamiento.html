@@ -2724,23 +2724,42 @@
       // Oculta secciones/campos que no aportan para el modelo del seller.
       // Por ahora solo VTEX ↔ VTEX tiene recorte definido; Gestión asistida y
       // Sistemas propios ven el relevamiento completo.
+      //
+      // 2026-08-08 — recorte ampliado (docs/definiciones-operativas.md): para
+      // sellers VTEX ↔ VTEX (pre-vetted, contacto con intención de avanzar,
+      // sin Calificación) se sacan las secciones que quedaron duplicadas o
+      // redundantes con la nueva "Definiciones operativas" (que responde lo
+      // mismo pero de forma progresiva y en vivo, no en un snapshot único) o
+      // con el hecho de que Sporting ya investigó al seller antes de
+      // contactarlo (no tiene sentido preguntarle si usa VTEX):
+      //   - 3 Tecnología: plataforma/ERP/API ya se sabe de antemano.
+      //   - 5 Stock y precios: llegan automáticos por API VTEX↔VTEX (ya se
+      //     ocultaba antes de este cambio).
+      //   - 6 Logística: cubierto por Definiciones Operativas
+      //     (logistica_directa, destinos_excluidos).
+      //   - 7 Devoluciones: cubierto por Definiciones Operativas
+      //     (logistica_inversa, condiciones_devolucion).
+      //   - 8 Facturación: cubierto por Definiciones Operativas
+      //     (carga_invoice_url) y por la card de Facturación de
+      //     integracion-seller.html.
+      // 4 Catálogo se deja VISIBLE a propósito — a diferencia de las de
+      // arriba, esa información (marcas, árbol de categorías, talles,
+      // especificaciones) no la sabe Sporting de antemano y no la cubre
+      // ningún otro mecanismo (Fase 2, docs/integracion-vtex-vtex.md).
       const HIDDEN_SECTIONS_BY_MODELO = {
-        "VTEX ↔ VTEX": [4, 5],
+        "VTEX ↔ VTEX": [3, 5, 6, 7, 8],
       };
       const HIDDEN_FIELDS_BY_MODELO = {
-        "VTEX ↔ VTEX": [
-          "erp",
-          "api",
-          "equipo_tec",
-          "recibe_pedidos_ext",
-          "informa_estados",
-          "informa_tracking",
-          "frec_actualizacion",
-        ],
+        // Vacío: antes acá vivían los campos sueltos de la sección 3
+        // (erp/api/equipo_tec/etc.) que se ocultaban uno por uno porque la
+        // sección entera quedaba visible; ahora que la sección 3 completa
+        // está en HIDDEN_SECTIONS_BY_MODELO, ocultarlos de nuevo acá sería
+        // redundante.
+        "VTEX ↔ VTEX": [],
       };
       const MODELO_NOTE = {
         "VTEX ↔ VTEX":
-          "Como tu operación es VTEX ↔ VTEX, catálogo, stock y precios se sincronizan automáticamente por el protocolo de integración de VTEX: achicamos el relevamiento a lo que sí necesitamos de vos.",
+          "Como tu operación es VTEX ↔ VTEX, ya conocemos tu plataforma y tu catálogo/stock/precios se sincronizan automáticamente por el protocolo de integración: achicamos el relevamiento a Datos generales, Contactos, Catálogo y Observaciones. El resto (facturación, logística, devoluciones) lo respondés a tu ritmo en la sección \"Definiciones operativas\" de tu guía de integración.",
       };
 
       function applyModeloRelevamiento(modelo) {

@@ -122,6 +122,12 @@
     // si se agrega/cambia un campo ahí, replicar acá).
     var DEFINICIONES_UI = [
       {
+        campo: 'tiene_cuenta_qa',
+        pregunta: '¿Tenés una cuenta VTEX de QA propia?',
+        hint: 'Define si probamos la conexión sobre tu QA o directo en producción.',
+        opciones: ['Sí', 'No'],
+      },
+      {
         campo: 'carga_invoice_url',
         pregunta: '¿Cargás la factura en el pedido de tu VTEX (invoiceUrl)?',
         hint: 'Definí si vas a poder facturar antes de despachar y cargar el comprobante en tu VTEX.',
@@ -150,6 +156,18 @@
         pregunta: '¿Vas a usar un almacén nuevo (stock diferenciado) o el que ya usás?',
         hint: 'Definí si el stock del Marketplace se maneja por separado.',
         opciones: ['Nuevo', 'Existente'],
+      },
+      {
+        campo: 'condiciones_devolucion',
+        pregunta: '¿Ya nos mandaste tus condiciones de devolución (plazos, categorías no habilitadas)?',
+        hint: 'Marcá esta opción una vez que nos hayas mandado el detalle — no hace falta cargarlo acá.',
+        opciones: ['Sí, ya las mandé'],
+      },
+      {
+        campo: 'destinos_excluidos',
+        pregunta: '¿Ya nos mandaste tus destinos excluidos (a los que no despachás)?',
+        hint: 'Marcá esta opción una vez que nos hayas mandado el detalle — no hace falta cargarlo acá.',
+        opciones: ['Sí, ya los mandé'],
       },
     ];
 

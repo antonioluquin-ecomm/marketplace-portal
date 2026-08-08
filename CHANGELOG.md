@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-08-08 - Suma 3 definiciones operativas y recorta Relevamiento para VTEX↔VTEX
+
+Tipo de cambio: ampliación de feature + recorte de formulario (`apps-script/Schema.gs`, `apps-script/PlantillasGanttDefiniciones.gs`, `apps-script/Relevamientos.gs`, `public/integracion/definiciones-operativas.html`, `internal/backlog/gestion-sellers.html`, `public/formularios/formulario-relevamiento.html`, `docs/definiciones-operativas.md`).
+
+**3 definiciones nuevas** en la plantilla VTEX↔VTEX: `tiene_cuenta_qa` (gatea el ambiente de conexión, Fase 1.0 — el hueco más importante detectado, era la primera decisión de todo el proceso y no estaba trackeada), `condiciones_devolucion` y `destinos_excluidos` (confirmaciones de que el dato ya llegó, no bifurcaciones — usan `tareaUnica` en vez de `ramas`, porque un "No" ahí significa lo mismo que "sin responder").
+
+**Relevamiento recortado para VTEX↔VTEX**: se amplió el mecanismo de ocultamiento dinámico por modelo que ya existía en `formulario-relevamiento.html` (no destructivo, oculta con CSS) — de 2 secciones ocultas pasó a 5 (Tecnología, Stock y precios, Logística, Devoluciones, Facturación), dejando solo Datos generales/Contactos/Catálogo/Observaciones. De paso se corrigió que la config anterior ocultaba Catálogo (hacía falta) y no ocultaba Tecnología (redundante, ya se sabe que usan VTEX).
+
+**Bug evitado**: el cálculo de `completitud` en `Relevamientos.gs` contaba contra los 90 campos del formulario completo — sin corregirlo, ningún seller VTEX↔VTEX hubiera podido pasar de ~29%. Se corrigió resolviendo el modelo del seller desde `sellers` y excluyendo del cálculo los campos ocultos (`CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX`, Schema.gs).
+
+Detalle completo en `docs/definiciones-operativas.md`. Pendiente de deploy junto con el resto de `apps-script/` de este día.
+
 ## 2026-08-08 - Definiciones operativas → generación automática de tareas de Gantt (v1, VTEX↔VTEX)
 
 Tipo de cambio: feature nueva, backend + 2 páginas (`apps-script/Schema.gs`, `apps-script/DefinicionesOperativas.gs` nuevo, `apps-script/PlantillasGanttDefiniciones.gs` nuevo, `apps-script/Code.gs`, `apps-script/Users.gs`, `public/integracion/definiciones-operativas.html` nuevo, `internal/backlog/gestion-sellers.html`, `index.html` + 15 páginas internas (nav), `assets/js/auth-seller.js`, `docs/definiciones-operativas.md` nuevo).

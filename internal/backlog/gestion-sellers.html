@@ -344,11 +344,14 @@
     // y apps-script/PlantillasGanttDefiniciones.gs — si se agrega/cambia un
     // campo en alguno de los tres lugares, replicar en los otros dos.
     const DEFINICIONES_UI = [
+      { campo:"tiene_cuenta_qa", pregunta:"¿Tiene una cuenta VTEX de QA propia?", opciones:["Sí","No"] },
       { campo:"carga_invoice_url", pregunta:"¿Carga la factura en el pedido de su VTEX (invoiceUrl)?", opciones:["Sí","No"] },
       { campo:"logistica_directa", pregunta:"¿Quién hace el despacho: seller o Marketplace?", opciones:["Seller","Marketplace"] },
       { campo:"logistica_inversa", pregunta:"¿Quién gestiona la devolución: seller o Marketplace?", opciones:["Seller","Marketplace"] },
       { campo:"fuente_precio", pregunta:"¿Lista de precios actual o nueva para el Marketplace?", opciones:["Actual","Nueva"] },
       { campo:"stock_diferenciado", pregunta:"¿Almacén nuevo (stock diferenciado) o el que ya usa?", opciones:["Nuevo","Existente"] },
+      { campo:"condiciones_devolucion", pregunta:"¿Ya mandó sus condiciones de devolución (plazos, categorías no habilitadas)?", opciones:["Sí, ya las mandó"] },
+      { campo:"destinos_excluidos", pregunta:"¿Ya mandó sus destinos excluidos?", opciones:["Sí, ya los mandó"] },
     ];
 
     async function mostrarDefinicionesOperativas(sellerId, row){

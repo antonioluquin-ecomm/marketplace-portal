@@ -7,6 +7,20 @@
 // ───────────────────────────────────────────────
 // FORMULARIO 2 — RELEVAMIENTOS
 // ───────────────────────────────────────────────
+// Modelo de integración del seller, para saber qué campos de
+// HEADERS_RELEVAMIENTO no aplican (ver CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX,
+// Schema.gs). Se lee de "sellers" — no de `d.metodo_integracion`, porque ese
+// campo vive justamente en la sección que se oculta para VTEX ↔ VTEX, así
+// que llegaría vacío en el propio submit que estamos evaluando.
+function _modeloIntegracionSeller(ss, sellerId) {
+  const seller = buscarUltimoRegistroPorSeller(ss, HOJA_SELLERS, sellerId);
+  return seller.modelo_integracion_estimado || "";
+}
+
+function _camposIgnoradosRelevamientoPorModelo(modelo) {
+  return modelo === "VTEX ↔ VTEX" ? CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX : [];
+}
+
 function escribirEnRelevamientos(sellerId, d) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   const ws = obtenerHojaConHeaders(ss, HOJA_RELEVAMIENTO, HEADERS_RELEVAMIENTO);
@@ -17,12 +31,13 @@ function escribirEnRelevamientos(sellerId, d) {
     "yyyy-MM-dd HH:mm:ss",
   );
 
+  const modelo = _modeloIntegracionSeller(ss, sellerId);
   const completitud = calcularCompletitudPorHeaders(d, HEADERS_RELEVAMIENTO, [
     "seller_id",
     "fecha_envio",
     "estado_relevamiento",
     "completitud",
-  ]);
+  ].concat(_camposIgnoradosRelevamientoPorModelo(modelo)));
 
   const estadoRelevamiento = obtenerEstado(completitud);
 
@@ -176,7 +191,8 @@ function upsertPerfilRelevamiento(data) {
 
   aplicarProgresoClientePerfil(finalObj, data && data.client_progress);
 
-  const completitud = calcularCompletitudPerfil(finalObj);
+  const modelo = _modeloIntegracionSeller(ss, sellerId);
+  const completitud = calcularCompletitudPerfil(finalObj, modelo);
   finalObj.completitud = completitud + "%";
   finalObj.estado_relevamiento = obtenerEstadoPerfil(completitud, modoGuardado);
 
@@ -292,8 +308,9 @@ function buscarFilaPerfilSeller(ws, sellerId) {
   return null;
 }
 
-function calcularCompletitudPerfil(profileObj) {
-  const campos = obtenerCamposPermitidosPerfil();
+function calcularCompletitudPerfil(profileObj, modelo) {
+  const ocultos = _camposIgnoradosRelevamientoPorModelo(modelo);
+  const campos = obtenerCamposPermitidosPerfil().filter((campo) => ocultos.indexOf(campo) === -1);
   const total = campos.length;
   if (!total) return 0;
 

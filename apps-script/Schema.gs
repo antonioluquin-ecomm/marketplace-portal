@@ -353,6 +353,37 @@ const CAMPOS_MANUALES_DEFINICION = [
   "observaciones",
 ];
 
+// Campos de HEADERS_RELEVAMIENTO que el formulario público oculta para
+// sellers VTEX ↔ VTEX (public/formularios/formulario-relevamiento.html,
+// HIDDEN_SECTIONS_BY_MODELO) — quedan cubiertos por Definiciones Operativas
+// o son redundantes (Sporting ya sabe que usan VTEX). Se usa para excluirlos
+// del cálculo de completitud server-side; si no se excluyeran, ningún seller
+// VTEX ↔ VTEX podría pasar de ~29% aunque complete todo lo que ve, porque el
+// cálculo seguiría contando contra el total de 90 campos del formulario
+// completo. Si se cambia HIDDEN_SECTIONS_BY_MODELO en el HTML, replicar acá.
+const CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX = [
+  // Sección 3 — Tecnología e integración
+  "plataforma", "erp", "erp_cual", "api", "api_alcance", "metodo_integracion",
+  "equipo_tec", "recibe_pedidos_ext", "informa_estados", "informa_tracking",
+  "frec_actualizacion", "obs_tecnologia",
+  // Sección 5 — Stock y precios
+  "stock_tipo", "stock_exclusivo_mkt", "stock_seguridad", "stock_minimo_seguridad",
+  "frec_stock", "gestion_stock", "stock_separado", "gestion_precios", "frec_precios",
+  "precios_iva", "precios_canal", "promos", "promos_det",
+  // Sección 6 — Logística
+  "entrega_pais", "zonas", "localidad_despacho", "despacho_origen", "operador_logistico",
+  "multi_operador_logistico", "dias_despacho", "tiempo_despacho", "cumple_sla_despacho",
+  "tracking", "impresora", "etiquetado_requerido", "retiro_tienda", "puntos_retiro",
+  "stock_retiro_tienda", "retiro_ops", "obs_logistica",
+  // Sección 7 — Devoluciones y postventa
+  "acepta_devol", "log_devol", "resp_log_inv", "deposito_devol", "resp_validacion_devol",
+  "tiempo_devol", "restr_devol", "restr_devol_det", "nota_credito", "condiciones_postventa",
+  // Sección 8 — Facturación y condiciones comerciales
+  "emite_factura", "factura_auto", "tipo_factura", "factura_formato", "nc_devol",
+  "ticket_promedio", "gmv_estimado", "cuotas", "comision_mkt", "costo_financiero",
+  "restricciones_com", "restricciones_com_det",
+];
+
 // ───────────────────────────────────────────────
 // HEADERS — DEFINICIONES OPERATIVAS
 // ───────────────────────────────────────────────
@@ -365,11 +396,14 @@ const CAMPOS_MANUALES_DEFINICION = [
 const HEADERS_DEFINICIONES_OPERATIVAS = [
   "seller_id",
   "modelo_integracion",
+  "tiene_cuenta_qa",
   "carga_invoice_url",
   "logistica_directa",
   "logistica_inversa",
   "fuente_precio",
   "stock_diferenciado",
+  "condiciones_devolucion",
+  "destinos_excluidos",
   "actualizado_por",
   "actualizado_en",
 ];
@@ -378,9 +412,12 @@ const HEADERS_DEFINICIONES_OPERATIVAS = [
 // payload de saveDefinicionOperativa y para que PlantillasGanttDefiniciones.gs
 // sepa qué campos disparan evaluación de tareas de Gantt.
 const CAMPOS_DEFINICIONES_OPERATIVAS = [
+  "tiene_cuenta_qa",
   "carga_invoice_url",
   "logistica_directa",
   "logistica_inversa",
   "fuente_precio",
   "stock_diferenciado",
+  "condiciones_devolucion",
+  "destinos_excluidos",
 ];

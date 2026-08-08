@@ -24,6 +24,16 @@ const PREFIJO_COMENTARIO_BLOQUEO_DEFINICION = "Bloqueada por definición pendien
 // con su propia plantilla, sin rediseño del mecanismo.
 const PLANTILLA_TAREAS_VTEX_VTEX = [
   {
+    campo: "tiene_cuenta_qa",
+    pregunta: "¿Tenés una cuenta VTEX de QA propia?",
+    fase: "Conexión",
+    hito: "Ambiente de conexión",
+    ramas: {
+      si: { tarea: "Conectar sobre tu cuenta de QA", area_responsable: "eCommerce", entorno: "QA" },
+      no: { tarea: "Conectar directo sobre tu cuenta de producción", area_responsable: "eCommerce", entorno: "Productivo" },
+    },
+  },
+  {
     campo: "carga_invoice_url",
     pregunta: "¿Cargás la factura en el pedido de tu VTEX (invoiceUrl)?",
     fase: "Pedido",
@@ -70,6 +80,27 @@ const PLANTILLA_TAREAS_VTEX_VTEX = [
       nuevo: { tarea: "Crear almacén dedicado en VTEX", area_responsable: "Seller", entorno: "Productivo" },
       // "existente" no genera tarea — informativo, no requiere configuración nueva.
     },
+  },
+  {
+    // Sin ramas a propósito (no es Sí/No): no es una bifurcación, es una
+    // confirmación de que el dato ya llegó. Mientras el campo esté vacío la
+    // tarea sigue "Bloqueado"; cualquier valor no vacío la desbloquea con la
+    // misma tarea única — evita el caso raro de "No" comportándose distinto
+    // de "sin responder" cuando en realidad significan lo mismo (todavía
+    // no llegó el dato).
+    campo: "condiciones_devolucion",
+    pregunta: "¿Ya nos mandaste tus condiciones de devolución (plazos, categorías no habilitadas)?",
+    fase: "Devoluciones",
+    hito: "Condiciones del seller",
+    tareaUnica: { tarea: "Redactar T&C con las condiciones de devolución del seller", area_responsable: "eCommerce", entorno: "Productivo" },
+  },
+  {
+    // Mismo criterio que condiciones_devolucion — confirmación, no bifurcación.
+    campo: "destinos_excluidos",
+    pregunta: "¿Ya nos mandaste tus destinos excluidos (a los que no despachás)?",
+    fase: "Envíos",
+    hito: "Destinos excluidos",
+    tareaUnica: { tarea: "Sumar destinos excluidos del seller a los T&C", area_responsable: "eCommerce", entorno: "Productivo" },
   },
 ];
 
