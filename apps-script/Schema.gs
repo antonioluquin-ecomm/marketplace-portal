@@ -19,6 +19,7 @@ const HOJA_TIMELINE_COMENTARIOS = "timeline_comentarios";
 const HOJA_TARIFAS = "tarifas";
 const HOJA_OVERRIDES = "overrides";
 const HOJA_SC_ROADMAP = "sc_roadmap";
+const HOJA_DEFINICIONES_OPERATIVAS = "definiciones_operativas";
 
 // PAT de GitHub para subir logos via Apps Script (logo_upload).
 // Fine-grained token con permisos contents:write sobre antonioluquin-ecomm/marketplace-portal.
@@ -350,4 +351,36 @@ const CAMPOS_MANUALES_DEFINICION = [
   "fecha_estimada_inicio",
   "fecha_estimada_go_live",
   "observaciones",
+];
+
+// ───────────────────────────────────────────────
+// HEADERS — DEFINICIONES OPERATIVAS
+// ───────────────────────────────────────────────
+// Distinto de HEADERS_DEFINICION_TECNICA (dossier auto-generado desde
+// Relevamiento, sin UI). Esta hoja es chica, formato ancho (una fila por
+// seller), pensada para respuestas puntuales que el seller (o un agente
+// interno) completa de a una por vez — dispara generarTareasBaseGantt /
+// evaluarYDesbloquearTareasGantt (PlantillasGanttDefiniciones.gs).
+// Ver docs/definiciones-operativas.md para el detalle de cada campo.
+const HEADERS_DEFINICIONES_OPERATIVAS = [
+  "seller_id",
+  "modelo_integracion",
+  "carga_invoice_url",
+  "logistica_directa",
+  "logistica_inversa",
+  "fuente_precio",
+  "stock_diferenciado",
+  "actualizado_por",
+  "actualizado_en",
+];
+
+// Campos respondibles (excluye identidad/metadata) — usado para validar el
+// payload de saveDefinicionOperativa y para que PlantillasGanttDefiniciones.gs
+// sepa qué campos disparan evaluación de tareas de Gantt.
+const CAMPOS_DEFINICIONES_OPERATIVAS = [
+  "carga_invoice_url",
+  "logistica_directa",
+  "logistica_inversa",
+  "fuente_precio",
+  "stock_diferenciado",
 ];

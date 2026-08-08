@@ -52,6 +52,7 @@ var AUTH_SESSION_ACTIONS = [
   "getRelevamientos",
   "getRelevamientoProfile",
   "getCatalogoSellerProducts",
+  "getDefinicionesOperativas",
 ];
 
 var AUTH_ADMIN_ACTIONS = [
@@ -115,6 +116,7 @@ function routeAuthAction(data) {
     case "getRelevamientos": return getRelevamientosAction(data);
     case "getRelevamientoProfile": return getRelevamientoProfileAction(data);
     case "getCatalogoSellerProducts": return getCatalogoSellerProductsAction(data);
+    case "getDefinicionesOperativas": return getDefinicionesOperativasAction(data);
   }
 
   return { ok: false, error: "Acción no implementada: " + action, code: 400 };

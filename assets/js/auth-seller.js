@@ -111,6 +111,7 @@ const PUBLIC_FLOW_ITEMS = [
   { id: 'relevamiento', label: 'Relevamiento', path: 'formularios/formulario-relevamiento.html', group: 'onboarding' },
   { id: 'gantt',        label: 'Gantt',        path: 'gantt/gantt-seller.html',                  group: 'onboarding' },
   { id: 'integracion',  label: 'Integración',  path: 'integracion/integracion-seller.html',       group: 'onboarding' },
+  { id: 'definiciones', label: 'Definiciones', path: 'integracion/definiciones-operativas.html',  group: 'onboarding' },
   { id: 'catalogo',     label: 'Catálogo',     path: 'catalogo/catalogo-seller.html',             group: 'tools' },
 ];
 

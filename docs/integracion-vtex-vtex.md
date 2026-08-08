@@ -90,7 +90,7 @@ en el runbook operativo — su detalle de tareas vive en Fase 8 de
 | 4 | **Envíos** | Fase 4 (parte seller) | Seller | Costos, plazos, destinos excluidos. |
 | 5 | **Devoluciones** | Fase 8 (ver Operación) | Seller + Agente PIM | Logística inversa y condiciones de devolución — tareas de setup detalladas en `docs/operacion-vtex-vtex.md`. |
 | 6 | **Configuración en PIM** | Fase 5 | Agente PIM | Tienda + depósito + asociación VTEX↔PIM. **Puede correr en paralelo a los pasos 2-5**, pero **bloquea** el paso 7 (sin esto el pedido no ingresa bien a PIM). |
-| 7 | **Validación en QA** | — | Seller + Ecomm | Flujo completo end-to-end: catálogo → aprobación → pedido → despacho → devolución, sobre el ambiente de prueba. |
+| 7 | **Validación en QA** | — | Seller + Ecomm | Flujo completo end-to-end: catálogo → aprobación → pedido → factura (`invoiceUrl`) → despacho → devolución, sobre el ambiente de prueba. |
 | 8 | **Conexión y réplica en Producción** | Fase 1 (repetida) | Seller + Ecomm | Se repite la configuración ya validada en QA, ahora sobre la cuenta de producción. |
 | 9 | **Prueba piloto en Producción** | — | Seller + Ecomm | Validar con un set acotado de productos antes de abrir todo el catálogo. |
 | 10 | **Go Live** | Fase 2 | — | El seller queda **"Activo"**; el catálogo es visible en el sitio (regla: solo con precio y stock). A partir de acá, la operación diaria pasa a regirse por `docs/operacion-vtex-vtex.md`. |
@@ -170,6 +170,15 @@ arma automáticamente la **URL de fulfillment**:
 > **Contacto de integración:** Gabriel Luna — `gabriel.luna@luquin.com.ar`. Es un contacto
 > **distinto** del operativo del runbook (`sellers-soporte@sporting.com.ar`), que es para
 > incidencias de pedidos ya en marcha, no para arrancar una integración.
+
+> **Equipo que ve el seller en el kickoff:** la guía pública
+> (`public/integracion/integracion-seller.html`, sección "Con quién vas a trabajar")
+> presenta al equipo fijo de Sporting Marketplace — mismo para todos los sellers, no varía
+> por cuenta: **Luis Pérez Hernández** (Gerente eCommerce — referencia para decisiones
+> estratégicas y prioridad de la marca en el canal), **Rafael Nieto** (Comercial —
+> condiciones comerciales, catálogo y negociación del día a día) y **Gabriel Luna**
+> (Integración / Sistemas — mismo contacto de integración de arriba; lidera la integración
+> técnica, presente en todas las reuniones y a cargo del seguimiento semanal con el seller).
 
 > **Equipo de integración del seller:** al kickoff, preguntarle con qué integrador/agencia
 > técnica trabaja su VTEX (ej. **Infracommerce**, **Suma**, u otro). Puede coincidir con
@@ -443,6 +452,7 @@ Sellers" — la separación acá formaliza una distinción que el ecosistema ya 
 **Dónde buscar cada tema** (por si no aparece donde se esperaría):
 - **Cupones, giftcards y políticas de precios** → Fase 3 (son reglas de precio/pago, no de front).
 - **Cancelación, fulfillment, pedidos no entregados, devoluciones** → `docs/operacion-vtex-vtex.md`.
+- **Facturación (`invoiceUrl`, caminos alternativos, nota de crédito)** → `docs/operacion-vtex-vtex.md`, Fase 7a. El seller ya factura por su cuenta (no es parte del onboarding); lo único nuevo es cargar la factura en el pedido de su VTEX antes de despachar.
 
 **Decisiones bifurcantes** que se definen acá pero cuyo detalle operativo vive en el runbook:
 - Logística **directa** — seller vs. Marketplace (detalle en Operación, Fase 7a).

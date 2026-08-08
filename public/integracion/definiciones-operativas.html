@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Definiciones Operativas | Marketplace Sporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../assets/css/tokens.css"/>
+  <link rel="stylesheet" href="../../assets/css/internal-components.css"/>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller.css?v=1.4.74"/>
+  <style>
+    :root{
+      --g:var(--primary, #25b60c);--g2:var(--primary-hover, #1e9209);--g3:#187007;
+      --g-dim:rgba(37,182,12,.12);--g-brd:rgba(37,182,12,.28);
+      --k:var(--bg, #f0f2f7);--k2:#e8ebf2;--k3:var(--card, #ffffff);
+      --t1:var(--text, #111827);--t2:#374151;--t3:var(--muted, #6b7280);--t4:#9ca3af;
+      --bdr:rgba(17,24,39,.08);--bdr2:rgba(17,24,39,.05);
+      --warn:#92400e;--warn-dim:rgba(217,119,6,.12);--warn-brd:rgba(217,119,6,.3);
+      --r:10px;--rl:16px;
+    }
+    body{font-family:var(--font);background:var(--k);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    a{text-decoration:none;color:inherit}
+
+    .seller-id-chip{display:none;align-items:center;gap:8px;padding-left:16px;border-left:1px solid var(--bdr)}
+    .seller-id-chip.show{display:flex}
+    .seller-id-chip strong{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--t2)}
+
+    #hero{position:relative;padding:52px 36px 40px;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 75% 20%,rgba(37,182,12,.13),transparent 55%),var(--k);z-index:0}
+    .hero-bg-line{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent)}
+    .hero-inner{position:relative;z-index:2;width:100%;max-width:1080px;margin:0 auto}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;font-size:10px;font-weight:900;letter-spacing:.24em;text-transform:uppercase;color:var(--g)}
+    .hero-eyebrow::before{content:"";width:28px;height:2px;background:var(--g)}
+    h1{font-family:var(--font);font-size:clamp(34px,5.5vw,58px);font-weight:900;text-transform:uppercase;letter-spacing:.01em;line-height:.98;margin-bottom:20px}
+    h1 em{color:transparent;-webkit-text-stroke:2px var(--g);font-style:normal}
+    .hero-lead{font-size:16px;line-height:1.7;color:var(--t3);max-width:680px}
+    .hero-lead strong{color:var(--t1)}
+    .unavailable-notice{display:none;max-width:680px;margin-top:24px;padding:18px 20px;border:1px solid var(--g-brd);border-left:4px solid var(--g);border-radius:var(--r);background:var(--g-dim);color:var(--t2);line-height:1.6}
+    .unavailable-notice.show{display:block}
+
+    .section{padding:56px 36px;border-bottom:1px solid var(--bdr2)}
+    .inner{width:100%;max-width:1080px;margin:0 auto}
+    .section-lead{font-size:14.5px;line-height:1.7;color:var(--t3);max-width:640px;margin-bottom:34px}
+
+    .def-list{display:flex;flex-direction:column;gap:14px}
+    .def-card{background:var(--k3);border:1px solid var(--bdr);border-radius:var(--rl);padding:22px 24px;display:grid;grid-template-columns:1fr 220px 130px;gap:20px;align-items:center}
+    .def-q{font-size:14.5px;font-weight:700;color:var(--t1);line-height:1.5}
+    .def-hint{font-size:12px;color:var(--t4);margin-top:4px}
+    .def-select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--bdr);background:var(--k);color:var(--t1);font-family:var(--font);font-size:13.5px}
+    .def-status{justify-self:end;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:6px 12px;border-radius:999px;white-space:nowrap}
+    .def-status.pendiente{background:var(--warn-dim);border:1px solid var(--warn-brd);color:var(--warn)}
+    .def-status.respondida{background:var(--g-dim);border:1px solid var(--g-brd);color:var(--g3)}
+    .def-status.saving{background:var(--bdr2);border:1px solid var(--bdr);color:var(--t3)}
+
+    @media(max-width:760px){
+      .def-card{grid-template-columns:1fr;gap:12px}
+      .def-status{justify-self:start}
+      .section{padding:40px 20px}
+      #hero{padding:40px 20px 32px}
+    }
+    @media(max-width:600px){
+      .portal-topbar .crumb{display:none}
+      #topSeller{display:none !important}
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/css/pages/public-seller-shell.css?v=1.4.38" />
+</head>
+<body data-public-page="definiciones">
+
+  <!-- TOPBAR -->
+  <header class="topbar portal-topbar">
+    <div class="brand">
+      <span class="logo">SPORTING <span>MARKETPLACE</span></span>
+      <div class="crumb">DEFINICIONES OPERATIVAS</div>
+      <div id="topSeller" class="seller-id-chip">
+        <strong id="topSellerName"></strong>
+      </div>
+    </div>
+    <nav class="public-flow-nav" data-public-nav aria-label="Navegación pública seller"></nav>
+    <div class="tb-right">
+      <div class="user-chip">
+        <span class="user-chip-name" id="user-chip-name"></span>
+        <a class="button ghost btn-sm" href="../index.html">← Portal</a>
+        <button type="button" class="button secondary btn-sm" onclick="_showSellerChangePasswordModal()">Cambiar contraseña</button>
+        <button type="button" class="button ghost btn-sm" onclick="logoutSeller()">Cerrar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="seller-page-shell">
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"><div class="hero-bg-line"></div></div>
+    <div class="hero-inner seller-page-container">
+      <div class="hero-eyebrow">Antes del Go Live</div>
+      <nav class="public-flow-nav hero-public-nav" data-public-nav aria-label="Navegación pública seller"></nav>
+      <h1>Definiciones<br><em>operativas.</em></h1>
+      <p class="hero-lead" id="defLead"><strong id="heroSellerName">Tu marca</strong>: respondé estas preguntas a medida que tengas el dato — no hace falta completarlas todas de una vez. Cada respuesta activa la tarea correspondiente en tu Gantt.</p>
+      <div class="unavailable-notice" id="unavailableNotice" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- DEFINICIONES -->
+  <section id="defSection" class="section" style="display:none">
+    <div class="inner seller-page-container">
+      <p class="section-lead">Estas respuestas determinan qué tareas concretas corresponden a tu integración. Podés dejarla a medias y volver cuando tengas el dato — se guarda automáticamente al elegir una opción.</p>
+      <div class="def-list" id="defList"></div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer style="padding:30px 36px;text-align:center;color:var(--t4);font-size:12px;border-top:1px solid var(--bdr)">Marketplace Sporting · Definiciones operativas</footer>
+
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/auth-seller.js"></script>
+  <script>
+    // Universo de definiciones v1 — solo modelo VTEX ↔ VTEX (coincide con
+    // PLANTILLA_TAREAS_VTEX_VTEX en apps-script/PlantillasGanttDefiniciones.gs;
+    // si se agrega/cambia un campo ahí, replicar acá).
+    var DEFINICIONES_UI = [
+      {
+        campo: 'carga_invoice_url',
+        pregunta: '¿Cargás la factura en el pedido de tu VTEX (invoiceUrl)?',
+        hint: 'Definí si vas a poder facturar antes de despachar y cargar el comprobante en tu VTEX.',
+        opciones: ['Sí', 'No'],
+      },
+      {
+        campo: 'logistica_directa',
+        pregunta: '¿Quién hace el despacho: vos o el Marketplace?',
+        hint: 'Logística directa — quién entrega el pedido al cliente.',
+        opciones: ['Seller', 'Marketplace'],
+      },
+      {
+        campo: 'logistica_inversa',
+        pregunta: '¿Quién gestiona la devolución: vos o el Marketplace?',
+        hint: 'Logística inversa — quién retira el producto devuelto.',
+        opciones: ['Seller', 'Marketplace'],
+      },
+      {
+        campo: 'fuente_precio',
+        pregunta: '¿Usás tu lista de precios actual o creás una nueva para el Marketplace?',
+        hint: 'Fuente del precio que viaja por API a tu integración.',
+        opciones: ['Actual', 'Nueva'],
+      },
+      {
+        campo: 'stock_diferenciado',
+        pregunta: '¿Vas a usar un almacén nuevo (stock diferenciado) o el que ya usás?',
+        hint: 'Definí si el stock del Marketplace se maneja por separado.',
+        opciones: ['Nuevo', 'Existente'],
+      },
+    ];
+
+    var _sellerId = '';
+    var _modeloIntegracion = '';
+
+    function renderDefiniciones(respuestas) {
+      var list = document.getElementById('defList');
+      list.innerHTML = '';
+      DEFINICIONES_UI.forEach(function (def) {
+        var valorActual = respuestas[def.campo] || '';
+        var card = document.createElement('div');
+        card.className = 'def-card';
+
+        var qWrap = document.createElement('div');
+        var q = document.createElement('div');
+        q.className = 'def-q';
+        q.textContent = def.pregunta;
+        var hint = document.createElement('div');
+        hint.className = 'def-hint';
+        hint.textContent = def.hint;
+        qWrap.appendChild(q);
+        qWrap.appendChild(hint);
+
+        var select = document.createElement('select');
+        select.className = 'def-select';
+        select.setAttribute('data-campo', def.campo);
+        var optVacio = document.createElement('option');
+        optVacio.value = '';
+        optVacio.textContent = 'Sin responder';
+        select.appendChild(optVacio);
+        def.opciones.forEach(function (op) {
+          var o = document.createElement('option');
+          o.value = op;
+          o.textContent = op;
+          if (op === valorActual) o.selected = true;
+          select.appendChild(o);
+        });
+
+        var status = document.createElement('span');
+        status.className = 'def-status ' + (valorActual ? 'respondida' : 'pendiente');
+        status.textContent = valorActual ? 'Respondida' : 'Pendiente';
+
+        select.addEventListener('change', function () {
+          guardarDefinicion(def.campo, select.value, status);
+        });
+
+        card.appendChild(qWrap);
+        card.appendChild(select);
+        card.appendChild(status);
+        list.appendChild(card);
+      });
+    }
+
+    function guardarDefinicion(campo, valor, statusEl) {
+      statusEl.className = 'def-status saving';
+      statusEl.textContent = 'Guardando…';
+      var campos = {};
+      campos[campo] = valor;
+      _apiSellerPost({
+        action: 'saveDefinicionOperativa',
+        seller_id: _sellerId,
+        modelo_integracion: _modeloIntegracion,
+        campos: campos,
+      }).then(function () {
+        statusEl.className = 'def-status ' + (valor ? 'respondida' : 'pendiente');
+        statusEl.textContent = valor ? 'Respondida' : 'Pendiente';
+      }).catch(function (error) {
+        statusEl.className = 'def-status pendiente';
+        statusEl.textContent = 'Error al guardar';
+        alert('No se pudo guardar: ' + (error.message || error));
+      });
+    }
+
+    function mostrarNoDisponible(detalle) {
+      document.getElementById('unavailableNotice').textContent = detalle;
+      document.getElementById('unavailableNotice').classList.add('show');
+      document.getElementById('defSection').style.display = 'none';
+    }
+
+    initPortalPage(function () {
+      _sellerId = SellerSESSION.sellerId;
+      var topSeller = document.getElementById('topSeller');
+      var topName = document.getElementById('topSellerName');
+      var heroName = document.getElementById('heroSellerName');
+
+      if (!_sellerId) {
+        mostrarNoDisponible('Seleccioná un seller en la barra de administrador para ver sus definiciones.');
+        return;
+      }
+      if (topSeller) topSeller.classList.add('show');
+
+      Promise.all([
+        _apiSellerPost({ action: 'getSellers' }),
+        _apiSellerPost({ action: 'getDefinicionesOperativas' }),
+      ]).then(function (results) {
+        var sellerRow = (results[0].data || [])[0];
+        var marca = (sellerRow && (sellerRow.seller_nombre || _sellerId)) || _sellerId;
+        if (topName) topName.textContent = marca;
+        if (heroName) heroName.textContent = marca;
+
+        _modeloIntegracion = sellerRow ? (sellerRow.modelo_integracion_definido || sellerRow.modelo_integracion_estimado || '') : '';
+        if (_modeloIntegracion.indexOf('VTEX') === -1) {
+          mostrarNoDisponible('Esta lista de definiciones aplica hoy solo a sellers con integración VTEX ↔ VTEX.');
+          return;
+        }
+
+        var defRow = (results[1].data || [])[0] || {};
+        document.getElementById('defSection').style.display = '';
+        renderDefiniciones(defRow);
+      }).catch(function (error) {
+        mostrarNoDisponible('No pudimos cargar tus definiciones. Actualizá la página o contactá al equipo. ' + (error.message || ''));
+      });
+    }, function () {
+      mostrarNoDisponible('Usá la barra inferior para elegir el seller cuyas definiciones querés ver.');
+    });
+  </script>
+</body>
+</html>

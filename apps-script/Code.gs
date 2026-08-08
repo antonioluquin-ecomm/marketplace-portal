@@ -29,6 +29,7 @@ var WRITE_ACTIONS = [
   "addChecklistItem", "toggleChecklistItem", "deleteChecklistItem", "addComentarioGantt",
   "updateTarifas", "updateOverrides", "uploadLogo",
   "updateCatalogoSellerPrice", "updateCatalogoSellerStock", "importCatalogoSellerBulk",
+  "saveDefinicionOperativa", "generarTareasGanttDefiniciones",
 ];
 
 // Escrituras internas (staff) → el rol debe poder editar alguno de estos módulos.
@@ -37,6 +38,10 @@ var WRITE_ACTIONS = [
 // sellers (checklist/comentarios visibles y editables por el seller en sus
 // propias tareas, Etapa 12), y el ownership se resuelve en Gantt.gs
 // (_verificarOwnershipTareaGantt), no acá.
+// saveDefinicionOperativa queda fuera del mapa a propósito, mismo criterio
+// que updateGanttTask: la puede escribir tanto un seller (sus propias
+// respuestas) como un agente interno — el ownership se resuelve en
+// DefinicionesOperativas.gs (_guardDefinicionOperativaAccess), no acá.
 var ACTION_MODULE_MAP = {
   saveSeller:       ["backlog"],
   createGanttTask:  ["gantt"],
@@ -44,6 +49,7 @@ var ACTION_MODULE_MAP = {
   updateTarifas:    ["simuladores"],
   updateOverrides:  ["simuladores"],
   uploadLogo:       ["backlog"],
+  generarTareasGanttDefiniciones: ["gantt", "backlog"],
 };
 
 function routeAction(data, action) {
@@ -87,6 +93,8 @@ function routeAction(data, action) {
     case "updateCatalogoSellerPrice":  return _handleUpdateCatalogoSellerPrice(data);
     case "updateCatalogoSellerStock":  return _handleUpdateCatalogoSellerStock(data);
     case "importCatalogoSellerBulk":   return _handleImportCatalogoSellerBulk(data);
+    case "saveDefinicionOperativa":         return _handleSaveDefinicionOperativa(data);
+    case "generarTareasGanttDefiniciones":  return _handleGenerarTareasGanttDefiniciones(data);
   }
   return { ok: false, error: "Acción no implementada: " + action, code: 400 };
 }
@@ -241,6 +249,24 @@ function _handleUpdateOverrides(data) {
   var r = actualizarOverridesSeller(data);
   writeAuditLog("updateOverrides", "overrides", String(data.seller_id || ""), "", data._sesEmail);
   return r;
+}
+
+function _handleSaveDefinicionOperativa(data) {
+  var r = guardarDefinicionOperativa(data);
+  var camposTxt = (r.updated || []).map(function (u) { return u.campo; }).join(",");
+  writeAuditLog("saveDefinicionOperativa", "definiciones_operativas", r.seller_id, camposTxt, data._sesEmail);
+  return r;
+}
+
+function _handleGenerarTareasGanttDefiniciones(data) {
+  var sellerId = String(data.seller_id || "").trim();
+  if (!sellerId) throw new Error("Falta seller_id");
+  var modelo = String(data.modelo_integracion || "").trim();
+  if (!modelo) throw new Error("Falta modelo_integracion");
+  var r = generarTareasBaseGantt(sellerId, modelo, data.seller_nombre || "", data._sesEmail);
+  var taskIdsTxt = (r.creadas || []).map(function (c) { return c.task_id; }).join(",");
+  writeAuditLog("generarTareasGanttDefiniciones", "timeline", sellerId, taskIdsTxt, data._sesEmail);
+  return { ok: true, seller_id: sellerId, creadas: r.creadas, ya_existentes: r.ya_existentes };
 }
 
 function _handleUploadLogo(data) {

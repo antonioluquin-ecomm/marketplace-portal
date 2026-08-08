@@ -98,6 +98,7 @@
       <a class="nav" data-page="ext_simulador" href="../../public/simuladores/simulador-seller.html">Simulador seller <span>↗</span></a>
       <a class="nav" data-page="ext_gantt" href="../../public/gantt/gantt-seller.html">Gantt del seller <span>↗</span></a>
       <a class="nav" data-page="ext_integracion" href="../../public/integracion/integracion-seller.html">Guía de integración <span>↗</span></a>
+      <a class="nav" data-page="ext_definiciones" href="../../public/integracion/definiciones-operativas.html">Definiciones operativas <span>↗</span></a>
       <a class="nav" data-page="ext_catalogo" href="../../public/catalogo/catalogo-seller.html">Catálogo (Taika) <span>↗</span></a>
     </div>
 
@@ -207,6 +208,15 @@
             <button class="button secondary" onclick="resetForm()" type="button">Limpiar</button>
           </div>
         </form>
+
+        <div class="section" id="defOperativasSection" style="display:none">
+          <div class="section-title">5. Definiciones operativas</div>
+          <div class="help" style="margin-bottom:12px">Respuestas puntuales que el seller (o vos) va completando de a una — cada respuesta activa o desbloquea la tarea correspondiente en el Gantt. Solo disponible para modelo VTEX ↔ VTEX (v1). Guardado automático al cambiar cada campo.</div>
+          <div class="form-grid" id="defOperativasList"></div>
+          <div class="actions" style="margin-top:16px">
+            <button class="button secondary" type="button" onclick="generarPlantillaGantt()">Generar plantilla de tareas de Gantt</button>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -298,7 +308,7 @@
     function toAbsolute(path){ return (CFG.toAbsoluteUrl ? CFG.toAbsoluteUrl(path) : FALLBACK_CONFIG.toAbsoluteUrl(path)); }
     async function loadSellers(){ try{ setStatus("loading","Cargando sellers…"); const json = await _apiAuthPost({action:"getSellers"}); SELLERS = json.data || []; SELLERS_LOADED = true; buildExistingSelect(); setStatus("ok",`${SELLERS.length} sellers cargados`); }catch(e){ console.warn(e); SELLERS=[]; SELLERS_LOADED = false; buildExistingSelect(); setStatus("err","No se pudo cargar sellers"); showAlert("No se pudo leer la hoja de sellers. Para evitar IDs duplicados, no crees un seller nuevo hasta corregir la conexión."); } }
     function buildExistingSelect(){ const s=$("existingSeller"); const sorted=[...SELLERS].sort((a,b)=>String(valueFromRow(a,"seller_nombre")).localeCompare(String(valueFromRow(b,"seller_nombre")),"es")); s.innerHTML='<option value="">Crear nuevo seller</option>'+sorted.map(row=>{const id=valueFromRow(row,"seller_id") || row.seller_id; const name=valueFromRow(row,"seller_nombre")||id||"Seller"; const group=valueFromRow(row,"empresa_grupo"); const label = group && norm(group)!==norm(name) ? `${name} · ${group}` : name; return `<option value="${escapeSellerHtml(id)}">${escapeSellerHtml(label)}${id?" · "+escapeSellerHtml(id):""}</option>`}).join(""); }
-    function loadSelectedSeller(){ const id=$("existingSeller").value; if(!id){ resetForm(false); return; } const row=SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id)); if(!row){ showAlert("No se encontró el seller seleccionado."); return; } EDITING_ORIGINAL_ID=id; SELLER_FIELDS.forEach(f=>{ if($(f)){ let v=valueFromRow(row,f); if(f==="modelo_integracion_estimado" && norm(v)==="seller center") v="Gestión asistida"; if(f==="estado_pipeline") v=normalizeEstadoPipeline(v); $(f).value = v; } }); if(!$("activo").value) $("activo").value="SI"; updatePreview(); clearAlert(); showToast("Seller cargado para editar"); }
+    function loadSelectedSeller(){ const id=$("existingSeller").value; if(!id){ resetForm(false); return; } const row=SELLERS.find(r=>norm(valueFromRow(r,"seller_id") || r.seller_id)===norm(id)); if(!row){ showAlert("No se encontró el seller seleccionado."); return; } EDITING_ORIGINAL_ID=id; SELLER_FIELDS.forEach(f=>{ if($(f)){ let v=valueFromRow(row,f); if(f==="modelo_integracion_estimado" && norm(v)==="seller center") v="Gestión asistida"; if(f==="estado_pipeline") v=normalizeEstadoPipeline(v); $(f).value = v; } }); if(!$("activo").value) $("activo").value="SI"; updatePreview(); clearAlert(); showToast("Seller cargado para editar"); mostrarDefinicionesOperativas(id, row); }
     function loadSellerById(idFromUrl){
       const id = normalizeSellerId(idFromUrl);
       if(!id) return false;
@@ -327,7 +337,80 @@
     }
     function getSavedResponsable(){ return localStorage.getItem("mp_responsable_seller") || ""; }
     function saveResponsable(v){ const val=clean(v); if(val) localStorage.setItem("mp_responsable_seller", val); }
-    function resetForm(resetSelect=true){ $("sellerForm").reset(); $("seller_id").value=nextSellerId(); $("estado_pipeline").value="identificados"; $("prioridad").value="Media"; $("sitio_objetivo").value="Sporting"; $("activo").value="SI"; $("responsable").value=getSavedResponsable(); EDITING_ORIGINAL_ID=""; if(resetSelect) $("existingSeller").value=""; clearAlert(); updatePreview(); }
+    function resetForm(resetSelect=true){ $("sellerForm").reset(); $("seller_id").value=nextSellerId(); $("estado_pipeline").value="identificados"; $("prioridad").value="Media"; $("sitio_objetivo").value="Sporting"; $("activo").value="SI"; $("responsable").value=getSavedResponsable(); EDITING_ORIGINAL_ID=""; if(resetSelect) $("existingSeller").value=""; clearAlert(); updatePreview(); $("defOperativasSection").style.display="none"; }
+
+    // ── Definiciones operativas (v1 — solo VTEX ↔ VTEX) ─────────
+    // Mismo universo de campos que public/integracion/definiciones-operativas.html
+    // y apps-script/PlantillasGanttDefiniciones.gs — si se agrega/cambia un
+    // campo en alguno de los tres lugares, replicar en los otros dos.
+    const DEFINICIONES_UI = [
+      { campo:"carga_invoice_url", pregunta:"¿Carga la factura en el pedido de su VTEX (invoiceUrl)?", opciones:["Sí","No"] },
+      { campo:"logistica_directa", pregunta:"¿Quién hace el despacho: seller o Marketplace?", opciones:["Seller","Marketplace"] },
+      { campo:"logistica_inversa", pregunta:"¿Quién gestiona la devolución: seller o Marketplace?", opciones:["Seller","Marketplace"] },
+      { campo:"fuente_precio", pregunta:"¿Lista de precios actual o nueva para el Marketplace?", opciones:["Actual","Nueva"] },
+      { campo:"stock_diferenciado", pregunta:"¿Almacén nuevo (stock diferenciado) o el que ya usa?", opciones:["Nuevo","Existente"] },
+    ];
+
+    async function mostrarDefinicionesOperativas(sellerId, row){
+      const modelo = valueFromRow(row,"modelo_integracion_estimado") || "";
+      const section = $("defOperativasSection");
+      // Solo VTEX ↔ VTEX en v1 (única plantilla implementada en
+      // PlantillasGanttDefiniciones.gs) — acepta cualquier separador entre
+      // las dos apariciones de "VTEX" en el texto del modelo.
+      const esVtexVtex = (norm(modelo).match(/vtex/g)||[]).length >= 2;
+      if(!esVtexVtex){ section.style.display="none"; return; }
+
+      section.style.display="";
+      $("defOperativasList").innerHTML = '<div class="help">Cargando definiciones…</div>';
+      let respuestas = {};
+      try{
+        const json = await _apiAuthPost({action:"getDefinicionesOperativas", target_seller_id: sellerId});
+        respuestas = (json.data && json.data[0]) || {};
+      }catch(e){
+        console.warn(e);
+      }
+      renderDefOperativas(sellerId, modelo, respuestas);
+    }
+
+    function renderDefOperativas(sellerId, modelo, respuestas){
+      const list = $("defOperativasList");
+      list.innerHTML = "";
+      DEFINICIONES_UI.forEach(def=>{
+        const valorActual = respuestas[def.campo] || "";
+        const field = document.createElement("div");
+        field.className = "field";
+        const label = document.createElement("label");
+        label.textContent = def.pregunta;
+        const select = document.createElement("select");
+        select.className = "sel";
+        select.innerHTML = '<option value="">Sin responder</option>' + def.opciones.map(op=>`<option${op===valorActual?" selected":""}>${op}</option>`).join("");
+        const help = document.createElement("div");
+        help.className = "help";
+        help.textContent = valorActual ? "Respondida" : "Pendiente";
+        select.addEventListener("change", ()=>guardarDefinicionOperativaInterno(sellerId, modelo, def.campo, select.value, help));
+        field.appendChild(label); field.appendChild(select); field.appendChild(help);
+        list.appendChild(field);
+      });
+    }
+
+    function guardarDefinicionOperativaInterno(sellerId, modelo, campo, valor, helpEl){
+      helpEl.textContent = "Guardando…";
+      const campos = {}; campos[campo] = valor;
+      fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"saveDefinicionOperativa", session_token:SESSION.token, seller_id:sellerId, modelo_integracion:modelo, campos})})
+        .then(()=>{ helpEl.textContent = valor ? "Respondida" : "Pendiente"; showToast("Definición guardada"); })
+        .catch(e=>{ console.error(e); helpEl.textContent = "Error al guardar"; });
+    }
+
+    function generarPlantillaGantt(){
+      const sellerId = EDITING_ORIGINAL_ID;
+      if(!sellerId){ showAlert("Elegí un seller existente antes de generar la plantilla de tareas."); return; }
+      const modelo = $("modelo_integracion_estimado").value;
+      const sellerNombre = $("seller_nombre").value;
+      if(!confirm(`¿Generar la plantilla base de tareas de Gantt para ${sellerId} (${modelo})? No duplica tareas ya creadas.`)) return;
+      fetch(APPS_SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"generarTareasGanttDefiniciones", session_token:SESSION.token, seller_id:sellerId, modelo_integracion:modelo, seller_nombre:sellerNombre})})
+        .then(()=>showSuccess("Plantilla de tareas enviada — revisá el Gantt en unos segundos para confirmar."))
+        .catch(e=>{ console.error(e); showAlert("No se pudo generar la plantilla de tareas."); });
+    }
     function formToObject(){ const o={ action:"saveSeller" }; SELLER_FIELDS.forEach(f=>{ if($(f)) o[f]=clean($(f).value); }); o.seller_id = normalizeSellerId(o.seller_id); o.seller_nombre = o.seller_nombre || o.marca_seller_operativo || o.empresa_grupo; if(!o.marca_seller_operativo) o.marca_seller_operativo = o.seller_nombre; if(!o.activo) o.activo="SI"; if(EDITING_ORIGINAL_ID) o.seller_id_original = EDITING_ORIGINAL_ID; return o; }
     function validatePayload(o){ if(!o.seller_id) return "No se pudo generar el ID del seller. Recargá la página e intentá nuevamente."; if(!/^SPT-\d{3,}$/i.test(o.seller_id)) return "El ID generado debe tener formato SPT-001, SPT-016, etc."; if(!o.seller_nombre) return "Completá el nombre visible del seller."; if(!o.marca_seller_operativo) return "Completá la marca o seller operativo."; if(!o.responsable) return "Completá quién crea o gestiona este seller."; if(!EDITING_ORIGINAL_ID && !o.contacto_email) return "Completá el email del contacto principal. Se usará como usuario inicial del seller."; if(o.contacto_email && !/^\S+@\S+\.\S+$/.test(o.contacto_email)) return "El email de contacto no tiene un formato válido."; if(!EDITING_ORIGINAL_ID && !SELLERS_LOADED) return "No se pudo validar la secuencia de IDs porque no cargó la hoja de sellers. Revisá la conexión CSV antes de crear un seller nuevo."; if(o.url_seller && !/^https?:\/\//i.test(o.url_seller)) return "La URL del seller debe comenzar con http:// o https://."; return ""; }
     function updateLogo(box, sellerId, name){ const candidates=logoCandidates(sellerId); let i=0; box.classList.remove("logo-has-image"); if(!candidates.length){ box.innerHTML=`<span class="logo-fallback">${escapeSellerHtml(initials(name))}</span>`; return; } box.classList.add("logo-has-image"); box.innerHTML=`<img src="${escapeSellerHtml(candidates[0])}" alt="Logo">`; const img=box.querySelector("img"); img.onerror=()=>{ i++; if(i<candidates.length){ img.src=candidates[i]; } else { box.classList.remove("logo-has-image"); box.innerHTML=`<span class="logo-fallback">${escapeSellerHtml(initials(name))}</span>`; } }; }

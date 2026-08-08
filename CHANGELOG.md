@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-08-08 - Definiciones operativas → generación automática de tareas de Gantt (v1, VTEX↔VTEX)
+
+Tipo de cambio: feature nueva, backend + 2 páginas (`apps-script/Schema.gs`, `apps-script/DefinicionesOperativas.gs` nuevo, `apps-script/PlantillasGanttDefiniciones.gs` nuevo, `apps-script/Code.gs`, `apps-script/Users.gs`, `public/integracion/definiciones-operativas.html` nuevo, `internal/backlog/gestion-sellers.html`, `index.html` + 15 páginas internas (nav), `assets/js/auth-seller.js`, `docs/definiciones-operativas.md` nuevo).
+
+El Gantt operativo se cargaba 100% a mano — no había ningún template de onboarding (hueco ya señalado en `docs/handoff-post-v1.md`). Se agrega una hoja nueva `definiciones_operativas` (distinta de `definicion_tecnica`, que es un dossier auto-generado sin UI) con 5 preguntas puntuales por seller (facturación/`invoiceUrl`, logística directa, logística inversa, fuente de precio, stock diferenciado) que el seller o un agente interno responden de a una, cuando tienen el dato — guardado parcial por campo, mismo patrón que `actualizarOverridesSeller` (Tarifas.gs).
+
+Cada respuesta dispara, en el mismo request, la creación o el desbloqueo automático de la tarea de Gantt correspondiente (`generarTareasBaseGantt`/`evaluarYDesbloquearTareasGantt`, tabla de plantilla `PLANTILLA_TAREAS_VTEX_VTEX`). Las tareas sin respuesta se crean directamente en estado **"Bloqueado"** — se reutilizó el estado que ya existía en `gantt-operativo.html` (badge, KPI, fila roja), sin necesidad de tocar la UI del Gantt. Nunca se pisa una tarea que un agente ya movió de "Bloqueado" a mano; una definición corregida después de desbloquear solo deja constancia en `AUDIT_LOG`, no re-bloquea nada.
+
+Alcance de esta v1: solo modelo VTEX↔VTEX. Gestión Asistida queda para una plantilla nueva sobre el mismo mecanismo. Detalle completo del diseño en `docs/definiciones-operativas.md`.
+
+**Pendiente de deploy**: el código de `apps-script/` está en el repo pero no redeployado — hasta que se pegue en el editor de GAS y se redeploye, `saveDefinicionOperativa`/`generarTareasGanttDefiniciones`/`getDefinicionesOperativas` fallan en silencio (`no-cors`).
+
+## 2026-08-08 - Sincroniza docs/integracion-vtex-vtex.md con la guía pública del seller
+
+Tipo de cambio: documentación (`docs/integracion-vtex-vtex.md`, `docs/operacion-vtex-vtex.md`).
+
+`docs/integracion-vtex-vtex.md` declara ser la fuente de verdad desde la que se generan las páginas del portal — los últimos cambios a `integracion-seller.html` (equipo de contacto, card de Facturación) se habían hecho directo en el HTML sin volcarlos acá, quedando desincronizado. Se cierra esa brecha:
+
+- Roadmap paso 7 (Validación en QA): se agrega "factura (`invoiceUrl`)" a la lista de lo que se prueba end-to-end — faltaba, a pesar de que la página pública ya lo menciona.
+- Se agrega el bloque "Equipo que ve el seller en el kickoff" (Luis Pérez Hernández, Rafael Nieto, Gabriel Luna) junto al contacto de integración existente.
+- Se suma una entrada a "Dónde buscar cada tema" apuntando a Fase 7a de `operacion-vtex-vtex.md` para todo lo de facturación.
+- En `operacion-vtex-vtex.md` se registra en el "Registro de agujeros" el hueco de la **nota de crédito** (no está definida en ningún doc fuente) — detectado auditando la guía del seller, para que quede trazado y no se pierda como pendiente real de negocio.
+
 ## 2026-08-08 - Audita "Lo que tenés que preparar" contra la fuente de verdad del proceso
 
 Tipo de cambio: corrección de contenido (`public/integracion/integracion-seller.html`, modelo VTEX↔VTEX).

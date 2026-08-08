@@ -351,6 +351,7 @@ Al confirmar, el botón dispara **de una sola vez**:
 | 7b | Definir **quién en CS Luquin** ejecuta el reembolso manual y con qué herramienta. | No |
 | 8.4 | Confirmar si los **estados logísticos de inversa** comparten catálogo con los de forward (7a) o son un set separado. | No |
 | 8 | Confirmar la diferencia operativa entre **Devolución (60 d)** y **Devolución por Garantía (180 d)** más allá del plazo (garantía no pide motivo). | No |
+| 8 (nota de crédito) | **Nota de crédito** ante devolución o cancelación posterior a la factura: no está mencionada en ningún doc fuente (ni acá ni en `integracion-vtex-vtex.md`). Falta definir quién la emite (por norma AFIP, el mismo CUIT que facturó — eso sí es un hecho, no una decisión), en qué plazo y con qué disparador. Detectado el 2026-08-08 auditando la guía pública del seller. | No |
 
 > El registro de agujeros de Fases 1-5 (onboarding) vive en `docs/integracion-vtex-vtex.md`.
 
