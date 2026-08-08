@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-08 - Segunda pasada de recorte de Relevamiento para VTEX↔VTEX: ~35 preguntas a ~16
+
+Tipo de cambio: recorte de formulario (`apps-script/Schema.gs`, `public/formularios/formulario-relevamiento.html`, `docs/definiciones-operativas.md`).
+
+Dentro de las 4 secciones que quedaron visibles para VTEX↔VTEX tras el recorte anterior, se audita campo por campo con el criterio "¿esto gatea alguna tarea real o es un dato que Sporting ya tiene, o es puro relleno?". Se ocultan 14 campos más vía `HIDDEN_FIELDS_BY_MODELO` (mismo mecanismo no destructivo de siempre): 5 en Datos generales (`web`, `pais_provincia`, `tipo_empresa`, `canal_principal`, `opera_marketplaces`), 8 en Catálogo (`variantes`, `gestion_catalogo`, `catalogo_excel`, `info_prod_completa`, `atributos_tecnicos`, `imagenes`, `imagenes_variante`, `codigos_sku_ean`), 1 en Observaciones (`comentarios`, se fusiona con `particularidades`). Contactos queda sin cambios — es la única sección que ya era 100% dato real sin duplicar nada.
+
+Resultado: de ~35 preguntas visibles después del primer recorte, quedan ~16. El badge de tiempo estimado pasa de "15-20 min" a "5-8 min" para VTEX↔VTEX. Mismo ajuste de completitud server-side que la vez anterior (los 14 campos se suman a `CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX`, Schema.gs). Detalle campo por campo en `docs/definiciones-operativas.md`.
+
 ## 2026-08-08 - Saca el contador "X / 9" de los botones Anterior/Siguiente en Relevamiento
 
 Tipo de cambio: ajuste de UI (`public/formularios/formulario-relevamiento.html`).

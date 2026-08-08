@@ -99,6 +99,38 @@ dejando visibles solo **Datos generales, Contactos, Catálogo y Observaciones**.
   vacíos, así que ese dossier queda con sugerencias más genéricas/vacías para
   este modelo. No se tocó `DefinicionTecnica.gs` en este cambio.
 
+### Segunda pasada — recorte campo por campo (mismo día)
+
+Dentro de las 4 secciones que quedan visibles para VTEX ↔ VTEX, se ocultaron
+además los campos puntuales que no gatean ninguna tarea ni son un dato que
+Sporting no tenga ya (criterio: ¿esto cambia qué hace alguien después, o es
+solo "nice to know"?). De ~35 preguntas visibles después del primer recorte,
+quedan **~16**:
+
+- **1. Datos generales** (9→4): quedan `nombre`, `razon_social`, `cuit`,
+  `categorias` (dato legal no conocido, u obligatorio). Se ocultan `web`
+  (duplica `sellers.url_seller`), `pais_provincia`, `tipo_empresa`,
+  `canal_principal`, `opera_marketplaces` (inteligencia comercial genérica,
+  no alimenta ningún proceso de integración).
+- **2. Contactos**: sin cambios — es la sección con menos grasa, todo dato
+  real que nadie más tiene.
+- **4. Catálogo** (13→6): quedan `skus_estimados`, `tabla_talles`,
+  `productos_variantes`, `productos_en_sporting`, `restricciones_cat` (+
+  detalle), `obs_catalogo`. Se ocultan `variantes` (redundante con
+  `skus_estimados`), `gestion_catalogo`/`catalogo_excel` (ya se sabe que es
+  VTEX; el catálogo no se manda por Excel en este modelo),
+  `info_prod_completa`/`atributos_tecnicos`/`imagenes`/`imagenes_variante`
+  (el dato llega igual desde el VTEX del seller, la respuesta no cambia el
+  flujo — Fase 2, `docs/integracion-vtex-vtex.md`), `codigos_sku_ean` (no lo
+  pide ningún proceso documentado).
+- **9. Observaciones** (3→2): se oculta `comentarios`, que se solapaba con
+  `particularidades` (las dos preguntan "algo más que agregar"). Queda
+  `limitaciones_actuales` + `particularidades`.
+- El badge de tiempo estimado (`TIEMPO_ESTIMADO_BY_MODELO`) y la nota que ve
+  el seller se actualizan acorde (de "15-20 min" a "5-8 min" para VTEX ↔ VTEX).
+- Mismo criterio de completitud del punto anterior: los 14 campos nuevos
+  ocultos se suman a `CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX` (Schema.gs).
+
 ## Pendiente / fuera de alcance de esta v1
 
 - Plantilla para **Gestión Asistida** (mismo mecanismo, otra tabla en

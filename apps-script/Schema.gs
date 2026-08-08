@@ -382,6 +382,12 @@ const CAMPOS_RELEVAMIENTO_OCULTOS_VTEX_VTEX = [
   "emite_factura", "factura_auto", "tipo_factura", "factura_formato", "nc_devol",
   "ticket_promedio", "gmv_estimado", "cuotas", "comision_mkt", "costo_financiero",
   "restricciones_com", "restricciones_com_det",
+  // 2026-08-08 — segunda pasada: campos sueltos ocultos dentro de secciones
+  // que sí quedan visibles (1 Datos generales, 4 Catálogo, 9 Observaciones).
+  "web", "pais_provincia", "tipo_empresa", "canal_principal", "opera_marketplaces",
+  "variantes", "gestion_catalogo", "catalogo_excel", "info_prod_completa",
+  "atributos_tecnicos", "imagenes", "imagenes_variante", "codigos_sku_ean",
+  "comentarios",
 ];
 
 // ───────────────────────────────────────────────

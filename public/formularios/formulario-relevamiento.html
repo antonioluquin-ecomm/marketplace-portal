@@ -2751,17 +2751,32 @@
       const HIDDEN_SECTIONS_BY_MODELO = {
         "VTEX ↔ VTEX": [3, 5, 6, 7, 8],
       };
+      // 2026-08-08 — segunda pasada de recorte: dentro de las secciones que
+      // SÍ quedan visibles (1 Datos generales, 4 Catálogo, 9 Observaciones),
+      // se ocultan además los campos puntuales que no gatean ninguna tarea
+      // (Fase 1-5 / Definiciones Operativas) ni son un dato que Sporting no
+      // tenga ya. Detalle campo por campo en docs/definiciones-operativas.md.
       const HIDDEN_FIELDS_BY_MODELO = {
-        // Vacío: antes acá vivían los campos sueltos de la sección 3
-        // (erp/api/equipo_tec/etc.) que se ocultaban uno por uno porque la
-        // sección entera quedaba visible; ahora que la sección 3 completa
-        // está en HIDDEN_SECTIONS_BY_MODELO, ocultarlos de nuevo acá sería
-        // redundante.
-        "VTEX ↔ VTEX": [],
+        "VTEX ↔ VTEX": [
+          // Sección 1 — ya se sabe (Sporting vetea antes de contactar) o no
+          // alimenta ningún proceso de integración.
+          "web", "pais_provincia", "tipo_empresa", "canal_principal", "opera_marketplaces",
+          // Sección 4 — informativo (el dato llega igual desde el VTEX del
+          // seller, la respuesta no cambia el flujo) o no aplica al modelo
+          // (ej. catalogo_excel: en VTEX↔VTEX el catálogo no se manda por Excel).
+          "variantes", "gestion_catalogo", "catalogo_excel", "info_prod_completa",
+          "atributos_tecnicos", "imagenes", "imagenes_variante", "codigos_sku_ean",
+          // Sección 9 — se fusiona con "particularidades" (ambas preguntan
+          // "algo más que agregar"), queda un solo campo libre.
+          "comentarios",
+        ],
       };
       const MODELO_NOTE = {
         "VTEX ↔ VTEX":
-          "Como tu operación es VTEX ↔ VTEX, ya conocemos tu plataforma y tu catálogo/stock/precios se sincronizan automáticamente por el protocolo de integración: achicamos el relevamiento a Datos generales, Contactos, Catálogo y Observaciones. El resto (facturación, logística, devoluciones) lo respondés a tu ritmo en la sección \"Definiciones operativas\" de tu guía de integración.",
+          "Como tu operación es VTEX ↔ VTEX, ya conocemos tu plataforma y tu catálogo/stock/precios se sincronizan automáticamente por el protocolo de integración: te dejamos solo las preguntas que realmente necesitamos de vos. El resto (facturación, logística, devoluciones) lo respondés a tu ritmo en la sección \"Definiciones operativas\" de tu guía de integración.",
+      };
+      const TIEMPO_ESTIMADO_BY_MODELO = {
+        "VTEX ↔ VTEX": "⏱ Tiempo estimado: 5–8 min",
       };
 
       function applyModeloRelevamiento(modelo) {
@@ -2788,6 +2803,11 @@
         });
 
         renumberVisibleSections();
+
+        const tiempoEl = document.getElementById("badgeTiempo");
+        if (tiempoEl && TIEMPO_ESTIMADO_BY_MODELO[modelo]) {
+          tiempoEl.textContent = TIEMPO_ESTIMADO_BY_MODELO[modelo];
+        }
 
         const noteEl = document.getElementById("sellerModeloNote");
         if (noteEl) {
