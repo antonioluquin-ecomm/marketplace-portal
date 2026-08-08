@@ -49,13 +49,17 @@
       .progress-label {
         font-size: 12px;
         font-weight: 800;
-        color: var(--text);
+        /* var(--text)/(--muted) son #111827/#6b7280 — oscuros a propósito
+           para el resto de la página (fondo claro), pero acá el contenedor
+           (.progress-box) es oscuro: mismo bug de contraste que los pills
+           de abajo. Color fijo claro, no la variable del tema. */
+        color: #f4f6f2;
         letter-spacing: 0.06em;
         text-transform: uppercase;
       }
       .progress-percent {
         font-size: 12px;
-        color: var(--muted);
+        color: rgba(244, 246, 242, 0.65);
         font-weight: 700;
       }
       .progress-sections {

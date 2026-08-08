@@ -1,12 +1,15 @@
 # Changelog
 
-## 2026-08-08 - Corrige contraste de la barra de progreso de Relevamiento
+## 2026-08-08 - Corrige contraste de la barra de progreso de Relevamiento y Calificación
 
-Tipo de cambio: bug visual + bug funcional menor (`public/formularios/formulario-relevamiento.html`).
+Tipo de cambio: bug visual + bug funcional menor (`public/formularios/formulario-relevamiento.html`, `public/formularios/formulario-calificacion.html`).
 
-La barra sticky de progreso (`.progress-box`) tiene fondo oscuro a propósito, pero los pills de sección sin completar (`.progress-section-dot`) usaban colores oscuros pensados para un contenedor claro (`rgba(17,24,39,X)`) — texto casi negro sobre fondo casi negro, ilegible salvo el pill activo/completo (verde, sí contrastaba). Se invierten a tonos claros (`rgba(255,255,255,X)`), y el verde de "activo"/"completo" pasa a un verde más claro (`#8be07a`) para mantener contraste sobre el fondo oscuro.
+La barra sticky de progreso (`.progress-box`) tiene fondo oscuro a propósito, pero varios elementos adentro usaban colores de texto pensados para un contenedor claro — texto casi negro sobre fondo casi negro, ilegible. Encontrado y corregido en dos pasadas sobre la misma zona:
 
-De paso, encontrado revisando la misma zona: la etiqueta de la barra ("DATOS GENERALES (1/9)") tenía el total fijo en "/9", así que después del recorte a 4 secciones para VTEX↔VTEX seguía mostrando "/9" — se corrige a un total dinámico según las secciones realmente visibles.
+1. Los pills de sección sin completar (`.progress-section-dot`, solo en Relevamiento) usaban `rgba(17,24,39,X)`. Se invierten a `rgba(255,255,255,X)`, y el verde de "activo"/"completo" pasa a un verde más claro (`#8be07a`) para mantener contraste.
+2. El label ("AVANCE DEL FORMULARIO"/"DATOS GENERALES...") y el porcentaje usaban `var(--text)`/`var(--muted)` (`#111827`/`#6b7280`, oscuros a propósito para el resto de la página de fondo claro) — mismo bug, mismo fondo oscuro. Se fijan a un color claro explícito en vez de la variable del tema. Este segundo bug estaba **también en `formulario-calificacion.html`**, que comparte el mismo patrón de barra — se corrige ahí también.
+
+De paso, encontrado revisando la misma zona: la etiqueta de la barra de Relevamiento tenía el total fijo en "/9", así que después del recorte a 4 secciones para VTEX↔VTEX seguía mostrando "/9". Se corrige a un total dinámico según las secciones realmente visibles.
 
 ## 2026-08-08 - Suma 3 definiciones operativas y recorta Relevamiento para VTEX↔VTEX
 
