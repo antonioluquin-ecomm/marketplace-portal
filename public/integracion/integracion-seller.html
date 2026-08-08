@@ -229,7 +229,7 @@
         <li><span class="rm-num">4</span><div><strong>Envíos</strong><span>Cargás tus costos, plazos y destinos excluidos.</span></div></li>
         <li><span class="rm-num">5</span><div><strong>Devoluciones</strong><span>Definimos la logística inversa y tus condiciones de devolución.</span></div></li>
         <li><span class="rm-num rm-internal">6</span><div><strong>Configuración interna<span class="rm-tag">Nosotros</span></strong><span>Alta de tu tienda y depósito, y la asociación de pedidos en nuestro sistema (PIM).</span></div></li>
-        <li><span class="rm-num">7</span><div><strong>Validación en QA</strong><span>Probamos juntos el flujo completo: catálogo, pedido, factura (incluido el campo <code>invoiceUrl</code>), despacho y devolución (incluida la nota de crédito).</span></div></li>
+        <li><span class="rm-num">7</span><div><strong>Validación en QA</strong><span>Probamos juntos el flujo completo: catálogo, pedido, factura (incluido el campo <code>invoiceUrl</code>), despacho y devolución.</span></div></li>
         <li><span class="rm-num">8</span><div><strong>Conexión en Producción</strong><span>Replicamos sobre tu cuenta de producción todo lo ya validado en QA.</span></div></li>
         <li><span class="rm-num">9</span><div><strong>Prueba piloto</strong><span>Validamos en producción con un grupo acotado de productos antes de abrir todo el catálogo.</span></div></li>
         <li><span class="rm-num">10</span><div><strong>Go Live</strong><span>Tus productos, visibles y a la venta en el Marketplace.</span></div></li>
@@ -254,6 +254,7 @@
             <li>Compartinos tu <strong>cuenta de seller VTEX</strong> para darte de alta.</li>
             <li>En paralelo (no hace falta esperar), solicitá a tu agencia la creación de tu <strong>política comercial</strong> — la vas a necesitar para mandarnos productos.</li>
             <li>Contanos con qué <strong>integrador/agencia técnica</strong> trabajás (ej. Infracommerce, Suma, u otro) — nos sirve como contacto de referencia.</li>
+            <li>Indicanos un <strong>mail de contacto operativo</strong> — preferentemente uno dedicado, no una casilla personal, para consultas puntuales una vez que estés operando.</li>
           </ul>
         </div>
 
@@ -295,10 +296,10 @@
         <div class="area">
           <div class="area-ico">🧾</div>
           <h3>Facturación</h3>
-          <div class="area-sub">Facturás vos, desde tu propio VTEX</div>
+          <div class="area-sub">Facturás afuera, cargás en VTEX</div>
           <ul class="checks">
-            <li>Confirmá que tu VTEX tenga la <strong>facturación electrónica activa</strong> (punto de venta y tipo de comprobante habilitados) antes de la Validación en QA — sin esto no vas a poder cargar el campo <strong>invoiceUrl</strong>.</li>
-            <li>Como facturás vos mismo (ver "Cómo operás cada pedido"), también sos quien emite la <strong>nota de crédito</strong> ante una devolución o cancelación posterior a la factura.</li>
+            <li>Facturás con tu propio circuito (tu AFIP) — VTEX no factura por vos. Lo único que tenés que incorporar a tu operación es <strong>cargar esa factura en el pedido de tu VTEX</strong> (campo <strong>invoiceUrl</strong>) antes de despachar, para que la tomemos desde ahí.</li>
+            <li>Ante una devolución o cancelación posterior a la factura, la nota de crédito sale de tu mismo circuito de facturación — coordinamos el detalle en la etapa de Devoluciones.</li>
           </ul>
         </div>
 
@@ -346,7 +347,7 @@
         <div class="rule warn"><div class="rule-t">Sin cupones</div><div class="rule-d">No se aceptan cupones de descuento sobre productos de sellers.</div></div>
         <div class="rule warn"><div class="rule-t">Sin GiftCards</div><div class="rule-d">Las giftcards no se pueden usar en productos de sellers.</div></div>
         <div class="rule warn"><div class="rule-t">Sin factura A</div><div class="rule-d">No se aceptan facturas de tipo A para productos de sellers.</div></div>
-        <div class="rule"><div class="rule-t">Facturás con tu propio circuito</div><div class="rule-d">La factura y la nota de crédito (ante devoluciones o cancelaciones) salen de tu propia facturación electrónica, integrada a tu VTEX.</div></div>
+        <div class="rule"><div class="rule-t">Facturás con tu propio circuito</div><div class="rule-d">La factura sale de tu propia facturación electrónica, cargada en tu VTEX vía el campo invoiceUrl, antes de despachar.</div></div>
         <div class="rule"><div class="rule-t">Mail del cliente enmascarado</div><div class="rule-d">Recibís el correo del cliente enmascarado. Funciona igual (si le escribís, le llega) y dura 60 días.</div></div>
         <div class="rule"><div class="rule-t">Devoluciones por el portal</div><div class="rule-d">Toda devolución se gestiona por el Portal de Pedidos, con tus condiciones específicas.</div></div>
         <div class="rule"><div class="rule-t">Tus condiciones en los T&amp;C</div><div class="rule-d">Tus plazos, destinos excluidos y categorías no habilitadas quedan publicados en los Términos y Condiciones.</div></div>

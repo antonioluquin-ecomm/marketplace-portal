@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-08-08 - Audita "Lo que tenés que preparar" contra la fuente de verdad del proceso
+
+Tipo de cambio: corrección de contenido (`public/integracion/integracion-seller.html`, modelo VTEX↔VTEX).
+
+Se cruzó cada card de la sección "Preparar" contra `docs/integracion-vtex-vtex.md` y `docs/operacion-vtex-vtex.md` (las fuentes de verdad del proceso, que documentan tareas por fase y rol). Tres hallazgos:
+
+1. **Faltaba un ítem real**: la tarea 1.4 del onboarding (`docs/integracion-vtex-vtex.md`, estado ✅) pide al seller un mail de contacto operativo dedicado — estaba documentada pero nunca se agregó al checklist público de "Conexión". Se agrega.
+2. **La card "Facturación" (agregada 2026-08-07) tenía un dato inventado**: decía "confirmá que tu VTEX tenga la facturación electrónica activa (punto de venta y tipo de comprobante)", atribuyéndole a VTEX un concepto que no es suyo. El doc real (`operacion-vtex-vtex.md`, Fase 7a) dice algo más fuerte y verificable: si el seller no puede facturar por VTEX (`invoiceUrl`) antes de despachar, hoy **no existe ningún camino alternativo construido** (2A/2B), por lo que es "un bloqueante real para su Go Live". Se reescribe la card con ese hecho documentado en vez del dato inventado.
+3. **La línea de "nota de crédito" también fue una sobreafirmación**: se presentaba como un proceso ya resuelto ("sos quien emite la nota de crédito"), pero ni `integracion-vtex-vtex.md` ni `operacion-vtex-vtex.md` mencionan "nota de crédito" en ningún lado — es un vacío real, no una decisión tomada. Se reescribe para afirmar solo lo verificable (sale del mismo circuito que la factura, por norma AFIP) sin fingir que el proceso operativo ya está definido. Se replica la corrección en el paso 7 del roadmap y en la regla "Facturás con tu propio circuito".
+
+**Pendiente, no resuelto en este cambio**: `docs/integracion-vtex-vtex.md` declara ser la fuente de verdad desde la que se "generan" las páginas del portal, y pide no editarlas a mano en paralelo. Los agregados de Facturación y del equipo de contacto (2026-08-07) se hicieron directo en el HTML sin volcarlos a ese doc — queda desincronizado hasta que se decida si corresponde sumarlos ahí también.
+
+**Corrección posterior, el mismo día**: la card de Facturación seguía mal enfocada — todo seller VTEX↔VTEX ya está operando y ya factura, así que "confirmá que podés facturar" era otra vez una obviedad. Lo que sí hace falta que incorpore es el paso mecánico de **cargar** esa factura en el pedido de su VTEX (campo `invoiceUrl`), que es distinto de facturar (VTEX no factura, solo recibe el dato). También se saca el framing de "bloqueante para el Go Live" — corregido por el usuario: no es bloqueante porque existen los demás caminos (2A/2B).
+
 ## 2026-08-07 - Suma sección "Con quién vas a trabajar" a la guía de integración del seller
 
 Tipo de cambio: contenido de negocio (`public/integracion/integracion-seller.html`, ambos modelos — sección fuera del gate por modelo de integración, así que se muestra una sola vez para cualquier seller).
